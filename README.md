@@ -22,7 +22,6 @@ make install
 ```
 
 ## Contributing
-
 ```bash
 # [1] activate your local virtualenv
 source venv/bin/activate
@@ -30,7 +29,7 @@ source venv/bin/activate
 # [2] checkout a new branch and make your changes
 git checkout -b my-new-feature-branch
 
-# [3] make your contributions :)
+# [3] make your contributions
 
 # [4] fix formatting and imports
 make format
@@ -41,6 +40,8 @@ make format
 make
 # there are a few sub-commands in Makefile like `test`, `mypy` and `lint`
 # which you might want to use, but generally just `make` should be all you need
+
+# [6:-4] rinse and repeat from [3] until your feature is complete
 
 # [-3] commit 
 # [-2] push
