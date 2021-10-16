@@ -10,14 +10,51 @@ to run this project. Start off by cloning the repository like so:
 ```commandline
 git clone -b dev https://github.com/PathOfBuildingCommunity/PathOfBuilding-Python.git
 ```
+Setup your local development [virtual environment](https://docs.python.org/3.9/library/venv.html) or let your IDE do the plumbing for you. 
+```commandline
+cd PathOfBuilding-Python
+python3.9 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip setuptools
+```
+Afterwards you are ready to install dependencies and build PoB.
+```commandline
+make install
+```
+
+## Contributing
+
+You'll need to have `python 3.9`, `virtualenv`, `git`, and `make` installed.
+```
+# [1] activate your local virtualenv
+source venv/bin/activate
+
+# [2] checkout a new branch and make your changes
+git checkout -b my-new-feature-branch
+
+# [3] make your contributions :)
+
+# [4] fix formatting and imports
+make format
+# PoB uses black to enforce formatting and isort to fix imports
+# https://github.com/ambv/black, https://github.com/timothycrosley/isort
+
+# [5] run tests and linting
+make
+# there are a few sub-commands in Makefile like `test`, `mypy` and `lint`
+# which you might want to use, but generally just `make` should be all you need
+
+# [-3] commit 
+# [-2] push
+# [-1] create your pull request
+
+```
 
 ## Usage
 This project is WIP and not generally useful yet, except for developers.
 
-## Contributing
-Pull requests are welcome! This project is in its very early stages, so there
-are plenty of opportunities to contribute.
 
+Pull requests are welcome! 
 ## Maintainers
 [@ppoelzl](https://github.com/ppoelzl)
 
