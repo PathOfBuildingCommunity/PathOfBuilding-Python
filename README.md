@@ -5,27 +5,25 @@ from Lua to Python. Currently, it is mostly intended for exploring ideas on how 
 accomplish this.
 
 ## Install
-This project targets Python 3.9. You need to have Python 3.9 or later installed
-to run this project. Start off by cloning the repository like so:
-```commandline
+You'll need to have `python 3.9`, `virtualenv`, `git`, and `make` installed. Start off by cloning the repository like so:
+```bash
 git clone -b dev https://github.com/PathOfBuildingCommunity/PathOfBuilding-Python.git
 ```
 Setup your local development [virtual environment](https://docs.python.org/3.9/library/venv.html) or let your IDE do the plumbing for you. 
-```commandline
+```bash
 cd PathOfBuilding-Python
 python3.9 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip setuptools
 ```
 Afterwards you are ready to install dependencies and build PoB.
-```commandline
+```bash
 make install
 ```
 
 ## Contributing
 
-You'll need to have `python 3.9`, `virtualenv`, `git`, and `make` installed.
-```
+```bash
 # [1] activate your local virtualenv
 source venv/bin/activate
 
@@ -47,7 +45,6 @@ make
 # [-3] commit 
 # [-2] push
 # [-1] create your pull request
-
 ```
 
 ## Usage
