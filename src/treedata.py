@@ -27,8 +27,8 @@ class NodeData(BaseModel):
     group_identifier: Optional[int] = Field(default=None, alias="group")
     orbit: int = 0
     orbit_index: int = Field(default=0, alias="orbitIndex")
-    predecessors: Optional[list[int]] = Field(default=[], alias="in")
-    successors: Optional[list[int]] = Field(default=[], alias="out")
+    predecessors: list[int] = Field(default=[], alias="in")
+    successors: list[int] = Field(default=[], alias="out")
 
     @property
     def position(self) -> tuple[float, float]:
