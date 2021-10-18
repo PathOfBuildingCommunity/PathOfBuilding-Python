@@ -287,7 +287,7 @@ class TreeData:
 
 def main():
     parent_dir = os.path.dirname(__file__)
-    tree_316_json = os.path.join(parent_dir, 'data', 'tree', '3_16', 'data.json')
+    tree_316_json = os.path.join(parent_dir, "data", "tree", "3_16", "data.json")
     t = TreeData(file_path=tree_316_json)
     t.interactive_plot()
 
