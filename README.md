@@ -10,6 +10,18 @@ to run this project. Start off by cloning the repository like so:
 ```commandline
 git clone -b dev https://github.com/PathOfBuildingCommunity/PathOfBuilding-Python.git
 ```
+Create a virtual environment:
+```commandline
+cd PathOfBuilding-Python
+python3 -m venv ./env
+activate the venv:
+    Linux: "source ./env/bin/activate",
+    Windows: ".\env\Scripts\Activate.ps1"
+```
+Install requirements:
+```commandline
+pip3 install -r requirements.txt
+```
 
 ## Usage
 This project is WIP and not generally useful yet, except for developers.
