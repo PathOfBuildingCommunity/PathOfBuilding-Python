@@ -217,8 +217,10 @@ class TreeData:
         self.groups[group.identifier] = group
 
     def interactive_plot(self):
-        """temp interactive inspector as long as there is no UI"""
-        # noinspection PyTypeChecker
+        """temp interactive inspector as long as there is no UI
+
+        @ToDo svrNinety: remove function and plotly dependency once project has capable UI components
+        """
         import plotly.graph_objects as pgo
 
         # parse edges for scatter-line plot
