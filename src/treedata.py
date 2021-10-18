@@ -130,7 +130,7 @@ class TreeData:
         ), f"num_skills in orbit 4 mismatch: '{self._orbit_num_skills[4]}' expected but found '{len(self._orbit_angles[4])}' instead"
 
     def _compute_node_positions(self) -> None:
-        """compute positions on the tree; must be invoked after _nodes and _groups has been validated"""
+        """compute positions on the tree; must be invoked after _nodes and _groups have been validated"""
         for node in self.nodes.values():
             if node.group_identifier is not None:
                 # grab angle and distance from precomputed orbital values; see '_compute_orbit_angles'
