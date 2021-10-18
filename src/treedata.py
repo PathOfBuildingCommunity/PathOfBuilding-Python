@@ -73,7 +73,7 @@ class TreeData:
         self._y_position_offset: float = 0.0
         self._orbit_radii: List[int] = list()
         self._orbit_num_skills: List[int] = list()
-        self._orbit_angles_idx: Dict[int, List[float]] = dict()
+        self._orbit_angles: Dict[int, List[float]] = dict()
 
         # load json data and parse config & constants
         self._load_data()
@@ -120,16 +120,16 @@ class TreeData:
     def _compute_orbit_angles(self) -> None:
         """compute the orbital rad_angle of each index on each orbit; orbit 4 is the only orbit where the distance between two neighbours is not equidistant"""
         for orbit_index, num_skills in enumerate(self._orbit_num_skills):
-            self._orbit_angles_idx[orbit_index] = [math.radians(360 / num_skills * x) for x in range(num_skills)]
+            self._orbit_angles[orbit_index] = [math.radians(360 / num_skills * x) for x in range(num_skills)]
         # orbit 4 is an exception, since its neighbours are not equidistant: values of 10° and 45° up to 350 (inclusive)
-        self._orbit_angles_idx[4] = [math.radians(x) for x in range(0, 360, 5) if x % 45 == 0 or x % 10 == 0]
+        self._orbit_angles[4] = [math.radians(x) for x in range(0, 360, 5) if x % 45 == 0 or x % 10 == 0]
 
     def _compute_node_positions(self) -> None:
         """compute positions on the tree; must be invoked after _nodes and _groups has been validated"""
         for node in self.nodes.values():
             if node.group_identifier is not None:
                 # grab angle and distance from precomputed orbital values; see '_compute_orbit_angles'
-                _angle = self._orbit_angles_idx[node.orbit][node.orbit_index]
+                _angle = self._orbit_angles[node.orbit][node.orbit_index]
                 _dist = self._orbit_radii[node.orbit]
                 # calculate the position of each node by its group
                 parent_group = self.groups[node.group_identifier]
