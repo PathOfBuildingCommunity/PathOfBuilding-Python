@@ -103,7 +103,7 @@ class TreeData:
         assert "constants" in self._data.keys(), "Tree Data JSON must contain 'constants' key"
         _constants = self._data["constants"]
 
-        assert "orbitRadii" in _constants, "Tree Data JSON must contain 'orbitRadii'"
+        assert "orbitRadii" in _constants, "Tree Data JSON must contain 'orbitRadii' key"
         _orbit_radii = _constants["orbitRadii"]
         assert isinstance(_orbit_radii, list) and all(
             isinstance(x, int) for x in _orbit_radii
@@ -189,7 +189,7 @@ class TreeData:
         ), f"expected number of parsed nodes '{len(self._data['nodes']) - 1}' does not equal number of parsed nodes '{len(self.nodes)}'"
         assert len(self.groups) == len(
             self._data["groups"]
-        ), f"expected number of parsed groups '{len(self._data['groups'])}' does not equal number of parsed nodes '{len(self.groups)}'"
+        ), f"expected number of parsed groups '{len(self._data['groups'])}' does not equal number of parsed groups '{len(self.groups)}'"
 
         # assert that each node is part of its group (if group has been set)
         for node in self.nodes.values():
