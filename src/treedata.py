@@ -1,7 +1,7 @@
 import json
 import math
 import os
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Optional, Union
 
 import networkx as nx
 from pydantic import BaseModel, Field
@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 
 class MasteryEffectData(BaseModel):
     identifier: int = Field(alias="effect")
-    stats: List[str]  # ToDo @svrNinety: update once a separate stat class exists
+    stats: list[str]  # ToDo @svrNinety: update once a separate stat class exists
 
 
 class NodeData(BaseModel):
@@ -22,16 +22,16 @@ class NodeData(BaseModel):
     is_notable: bool = Field(default=False, alias="isNotable")
     is_mastery: bool = Field(default=False, alias="isMastery")
     is_proxy: bool = Field(default=False, alias="isProxy")
-    mastery_effects: List[MasteryEffectData] = Field(default=[], alias="masteryEffects")
-    stats: List[str]  # ToDo @svrNinety: update once a separate stat class exists
+    mastery_effects: list[MasteryEffectData] = Field(default=[], alias="masteryEffects")
+    stats: list[str]  # ToDo @svrNinety: update once a separate stat class exists
     group_identifier: Optional[int] = Field(default=None, alias="group")
     orbit: int = 0
     orbit_index: int = Field(default=0, alias="orbitIndex")
-    predecessors: Optional[List[int]] = Field(default=[], alias="in")
-    successors: Optional[List[int]] = Field(default=[], alias="out")
+    predecessors: Optional[list[int]] = Field(default=[], alias="in")
+    successors: Optional[list[int]] = Field(default=[], alias="out")
 
     @property
-    def position(self) -> Tuple[float, float]:
+    def position(self) -> tuple[float, float]:
         return self.x_position, self.y_position
 
 
@@ -39,8 +39,8 @@ class GroupData(BaseModel):
     identifier: int
     x_position: float = Field(alias="x")
     y_position: float = Field(alias="y")
-    orbits: List[int]
-    node_identifiers: List[int] = Field(alias="nodes")
+    orbits: list[int]
+    node_identifiers: list[int] = Field(alias="nodes")
 
 
 class TreeData:
@@ -64,16 +64,16 @@ class TreeData:
     """
 
     def __init__(self, file_path: Union[str, bytes, os.PathLike]):
-        self.nodes: Dict[int, NodeData] = dict()
-        self.groups: Dict[int, GroupData] = dict()
+        self.nodes: dict[int, NodeData] = dict()
+        self.groups: dict[int, GroupData] = dict()
         self.graph: nx.Graph = nx.Graph()
 
         self._file_path: Union[str, bytes, os.PathLike] = file_path
         self._x_position_offset: float = 0.0
         self._y_position_offset: float = 0.0
-        self._orbit_radii: List[int] = list()
-        self._orbit_num_skills: List[int] = list()
-        self._orbit_angles: Dict[int, List[float]] = dict()
+        self._orbit_radii: list[int] = list()
+        self._orbit_num_skills: list[int] = list()
+        self._orbit_angles: dict[int, list[float]] = dict()
 
         # load json data and parse config & constants
         self._load_data()
