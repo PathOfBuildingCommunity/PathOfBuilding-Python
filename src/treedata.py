@@ -121,8 +121,13 @@ class TreeData:
         """compute the orbital rad_angle of each index on each orbit; orbit 4 is the only orbit where the distance between two neighbours is not equidistant"""
         for orbit_index, num_skills in enumerate(self._orbit_num_skills):
             self._orbit_angles[orbit_index] = [math.radians(360 / num_skills * x) for x in range(num_skills)]
-        # orbit 4 is an exception, since its neighbours are not equidistant: values of 10° and 45° up to 350 (inclusive)
+
+        # orbit 4 is an exception, since its neighbours are not equidistant: all multiples of 10° and 45° up to 359°
         self._orbit_angles[4] = [math.radians(x) for x in range(0, 360, 5) if x % 45 == 0 or x % 10 == 0]
+        # assert that the 'hardcoded' orbit 4 structure still fits parsed num_skills in orbit
+        assert (
+            len(self._orbit_angles[4]) == self._orbit_num_skills[4]
+        ), f"num_skills in orbit 4 mismatch: '{self._orbit_num_skills[4]}' expected but found '{len(self._orbit_angles[4])}' instead"
 
     def _compute_node_positions(self) -> None:
         """compute positions on the tree; must be invoked after _nodes and _groups has been validated"""
