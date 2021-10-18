@@ -1,3 +1,4 @@
+import itertools
 import json
 import math
 import os
@@ -155,7 +156,7 @@ class TreeData:
 
         # add all edges
         for node_identifier, node in self.nodes.items():
-            for neighbour_identifier in node.successors + node.predecessors:
+            for neighbour_identifier in itertools.chain(node.successors, node.predecessors):
                 assert node_identifier != neighbour_identifier  # nobody is allowed to be a neighbour to himself
                 self.graph.add_edge(node_identifier, neighbour_identifier)
 
