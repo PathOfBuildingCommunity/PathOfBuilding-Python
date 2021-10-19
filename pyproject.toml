@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "pathofbuilding-python"
+version = "0.1.0"
+description = "Python port of Path of Building"
+authors = ["ppoelzl <33464174+ppoelzl@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.26.0"
+SLPP = "^1.2.3"
+
+[tool.poetry.dev-dependencies]
+black = "^21.9b0"
+isort = "^5.9.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
