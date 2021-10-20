@@ -206,8 +206,8 @@ class TreeData:
         # assert that each group contains nodes that have the group.identifier set to group
         for group in self.groups.values():
             for node_identifier in group.node_identifiers:
-                assert node_identifier in self.nodes, f""
-                assert self.nodes[node_identifier].group_identifier == group.identifier
+                assert node_identifier in self.nodes, f"{group!r} contains reference to node with '{node_identifier=}' which does not exist"
+                assert self.nodes[node_identifier].group_identifier == group.identifier, f"{group!r} states that '{node_identifier}' is located in group, yet node is part of group_identifier='{self.nodes[node_identifier].group_identifier}'"
 
     def _add_node(self, node: NodeData) -> None:
         assert node.identifier not in self.nodes, f"{node!r} already exists; duplicates are must not occur"
