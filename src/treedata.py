@@ -210,11 +210,11 @@ class TreeData:
                 assert self.nodes[node_identifier].group_identifier == group.identifier, f"{group!r} states that '{node_identifier}' is located in group, yet node is part of group_identifier='{self.nodes[node_identifier].group_identifier}'"
 
     def _add_node(self, node: NodeData) -> None:
-        assert node.identifier not in self.nodes, f"{node!r} already exists; duplicates are must not occur"
+        assert node.identifier not in self.nodes, f"{node!r} already exists; duplicates must not occur"
         self.nodes[node.identifier] = node
 
     def _add_group(self, group: GroupData) -> None:
-        assert group.identifier not in self.groups, f"{group!r} already exists; duplicates are must not occur"
+        assert group.identifier not in self.groups, f"{group!r} already exists; duplicates must not occur"
         self.groups[group.identifier] = group
 
     def interactive_plot(self):
