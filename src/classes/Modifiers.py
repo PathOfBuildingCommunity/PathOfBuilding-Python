@@ -2,7 +2,7 @@
 
 from Dependency import addDependency
 
-class Mod:
+class Modifier:
     def __init__(self, name: str, type: str, value, source: str, tags: dict = {}):
         self.name = name
         self.type = type
@@ -15,8 +15,11 @@ class Mod:
         if 'type' in self.tags.keys() and self.tags['type'] == "Multiplier":
             addDependency(self.tags['var'].lower(), f"{self.type.lower()}_{self.name.lower()}")
 
+    def getValue(self):
+        return self.value
+
 def test():
-    Mod("Health", "BASE", 12, "", { "type": "Multiplier", "var": "Level" })
+    Modifier("Health", "BASE", 12, "", { "type": "Multiplier", "var": "Level" })
 
 if __name__ == "__main__":
     from Dependency import _dependencies

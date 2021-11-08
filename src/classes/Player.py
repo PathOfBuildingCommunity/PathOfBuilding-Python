@@ -7,6 +7,7 @@ from Dependency import Dependency, addDependency
 
 class Player(Dependency):
     def __init__(self, level, strength):
+        self.modDB = dict()
         self._level = level
         self._start_strength = strength
         self._flat_strength = 0
@@ -90,7 +91,7 @@ def test():
 
     player.level = 5
     print(f"{player.max_health}")
-    
+
     player.more_life = 100
     print(f"{player.max_health}")
 
