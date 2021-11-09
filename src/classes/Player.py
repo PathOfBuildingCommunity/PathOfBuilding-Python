@@ -49,7 +49,7 @@ class Player(Dependency):
 
     @cached_property
     def max_health(self):
-        ret = self.base_health * (1 + self.inc_health / 100) * (1 + self.more_health / 100)
+        ret = floor(self.base_health * (1 + self.inc_health / 100) * (1 + self.more_health / 100))
         print(f"Total Health calculated: {ret}")
         return ret
 
@@ -61,7 +61,7 @@ class Player(Dependency):
 
     @cached_property
     def max_strength(self):
-        ret = (self.base_strength + self.flat_strength) * (1 + self.inc_strength / 100) * (1 + self.more_strength / 100)
+        ret = floor((self.base_strength + self.flat_strength) * (1 + self.inc_strength / 100) * (1 + self.more_strength / 100))
         print(f"Total Strength calculated: {ret}")
         return ret
 
@@ -117,6 +117,9 @@ def test():
     print(f"{player.max_health}\n")
 
     player.addMod(Modifier("Strength", "FLAT", 100, ""))
+    player.addMod(Modifier("Strength", "INC", 30, ""))
+    player.addMod(Modifier("Strength", "MORE", 15, ""))
+    player.addMod(Modifier("Health", "FLAT", 500, ""))
     #print(f"{player.max_strength}\n")
     print(f"{player.max_health}\n")
 
