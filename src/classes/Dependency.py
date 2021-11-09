@@ -25,13 +25,13 @@ def getDependencies():
 
 class Dependency:
     def _reset_dependent_vars(self, name: str):
-        #print("REMOVING: " + name)
-        print(f"DEP\n{_dependencies}\n")
+        #print(f"DEP\n{_dependencies}")
         for var in _dependencies[name]:
-            print(f"{name} FOR: " + f"{var}")
+            #print(f"Resetting: {var} (due to {name})")
             try:
                 super().__delattr__(f"{var}")
             except:
+                #print(f"FAIL")
                 pass
             if var in _dependencies:
                 self._reset_dependent_vars(var)
@@ -43,4 +43,5 @@ class Dependency:
         if name in _dependencies:
             self._reset_dependent_vars(name)
             name = f"_{name}"
+        #print(f"Setting {name} to {value}")
         super().__setattr__(name, value)

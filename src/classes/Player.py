@@ -3,7 +3,7 @@
 from functools import cached_property
 from math import floor
 
-from Dependency import Dependency, addDependency, getDependencies
+from Dependency import Dependency, getDependencies
 from ModDB import ModifierDatabase
 from Modifiers import Modifier
 
@@ -11,10 +11,6 @@ class Player(Dependency):
     def __init__(self, level, strength):
         self.modDB = ModifierDatabase()
         self._level = level
-        self._base_health = None
-        self._max_health = None
-        self._base_strength = None
-        self._max_strength = None
 
         '''
         addDependency("level", "base_health")
@@ -35,22 +31,27 @@ class Player(Dependency):
         self.addMod(Modifier("Strength", "BASE", strength, "Starting"))
 
     def addMod(self, mod: Modifier):
-        #print("REMOVING: " + f"{mod.type.lower()}_{mod.name.lower()}")
-        self._reset_dependent_vars(f"{mod.type.lower()}_{mod.name.lower()}")
         self.modDB.addEntry(mod)
-        #print(getDependencies())
+        attr = f"{mod.type.lower()}_{mod.name.lower()}"
+        try:
+            self.__delattr__(f"{attr}")
+        except:
+            #print("FAIL")
+            pass
+        if attr in getDependencies():
+            self._reset_dependent_vars(attr)
 
     @cached_property
     def base_health(self):
         print("Base Health calculated")
-        return 38 + self.level * 12 + floor(self.max_strength / 2) + self.flat_life
+        return 38 + self.level * 12 + floor(self.max_strength / 2) + self.flat_health
 
     @cached_property
     def max_health(self):
         print("Max Health calculated")
-        return self.base_health * (1 + self.inc_life / 100) * (1 + self.more_life / 100)
+        return self.base_health * (1 + self.inc_health / 100) * (1 + self.more_health / 100)
 
-    @property
+    @cached_property
     def base_strength(self):
         print("Base Strength calculated")
         return self.modDB.getBase("Strength")
@@ -64,32 +65,32 @@ class Player(Dependency):
     def level(self):
         return self._level
 
-    @property
-    def flat_life(self):
+    @cached_property
+    def flat_health(self):
         print("Flat Health calculated")
         return self.modDB.getFlat("Health")
 
-    @property
-    def more_life(self):
+    @cached_property
+    def more_health(self):
         print("More Health calculated")
         return self.modDB.getMore("Health")
 
-    @property
-    def inc_life(self):
+    @cached_property
+    def inc_health(self):
         print("Inc Health calculated")
         return self.modDB.getInc("Health")
 
-    @property
+    @cached_property
     def flat_strength(self):
         print("Flat Strength calculated")
         return self.modDB.getFlat("Strength")
 
-    @property
+    @cached_property
     def more_strength(self):
         print("More Strength calculated")
         return self.modDB.getMore("Strength")
 
-    @property
+    @cached_property
     def inc_strength(self):
         print("Inc Strength calculated")
         return self.modDB.getInc("Strength")
@@ -106,7 +107,7 @@ def test():
     print(f"{player.max_health}")
 
     player.addMod(Modifier("Strength", "FLAT", 100, ""))
-    print(f"{player.max_strength}")
+    #print(f"{player.max_strength}")
     print(f"{player.max_health}")
 
 if __name__ == "__main__":
