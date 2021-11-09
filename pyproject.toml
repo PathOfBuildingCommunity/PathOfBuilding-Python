@@ -9,6 +9,7 @@ license = "MIT"
 python = "^3.9"
 requests = "^2.26.0"
 SLPP = "^1.2.3"
+matplotlib = "^3.4.3"
 
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"
