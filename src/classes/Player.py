@@ -43,23 +43,27 @@ class Player(Dependency):
 
     @cached_property
     def base_health(self):
-        print("Base Health calculated")
-        return 38 + self.level * 12 + floor(self.max_strength / 2) + self.flat_health
+        ret = 38 + self.level * 12 + floor(self.max_strength / 2) + self.flat_health
+        print(f"BASE Health calculated: {ret}")
+        return ret
 
     @cached_property
     def max_health(self):
-        print("Max Health calculated")
-        return self.base_health * (1 + self.inc_health / 100) * (1 + self.more_health / 100)
+        ret = self.base_health * (1 + self.inc_health / 100) * (1 + self.more_health / 100)
+        print(f"Total Health calculated: {ret}")
+        return ret
 
     @cached_property
     def base_strength(self):
-        print("Base Strength calculated")
-        return self.modDB.getBase("Strength")
+        ret = self.modDB.getBase("Strength")
+        print(f"BASE Strength calculated: {ret}")
+        return ret
 
     @cached_property
     def max_strength(self):
-        print("Max Strength calculated")
-        return (self.base_strength + self.flat_strength) * (1 + self.inc_strength / 100) * (1 + self.more_strength / 100)
+        ret = (self.base_strength + self.flat_strength) * (1 + self.inc_strength / 100) * (1 + self.more_strength / 100)
+        print(f"Total Strength calculated: {ret}")
+        return ret
 
     @property
     def level(self):
@@ -67,48 +71,54 @@ class Player(Dependency):
 
     @cached_property
     def flat_health(self):
-        print("Flat Health calculated")
-        return self.modDB.getFlat("Health")
+        ret = self.modDB.getFlat("Health")
+        print(f"FLAT Health calculated: {ret}")
+        return ret
 
     @cached_property
     def more_health(self):
-        print("More Health calculated")
-        return self.modDB.getMore("Health")
+        ret = self.modDB.getMore("Health")
+        print(f"MORE Health calculated: {ret}")
+        return ret
 
     @cached_property
     def inc_health(self):
-        print("Inc Health calculated")
-        return self.modDB.getInc("Health")
+        ret = self.modDB.getInc("Health")
+        print(f"INC Health calculated: {ret}")
+        return ret
 
     @cached_property
     def flat_strength(self):
-        print("Flat Strength calculated")
-        return self.modDB.getFlat("Strength")
+        ret = self.modDB.getFlat("Strength")
+        print(f"FLAT Strength calculated: {ret}")
+        return ret
 
     @cached_property
     def more_strength(self):
-        print("More Strength calculated")
-        return self.modDB.getMore("Strength")
+        ret = self.modDB.getMore("Strength")
+        print(f"MORE Strength calculated: {ret}")
+        return ret
 
     @cached_property
     def inc_strength(self):
-        print("Inc Strength calculated")
-        return self.modDB.getInc("Strength")
+        ret = self.modDB.getInc("Strength")
+        print(f"INC Strength calculated: {ret}")
+        return ret
 
 def test():
     player = Player(1, 20)
-    #print(f"{player.base_health}")
-    print(f"{player.max_health}")
+    #print(f"{player.base_health}\n")
+    print(f"{player.max_health}\n")
 
     player.level = 5
-    print(f"{player.max_health}")
+    print(f"{player.max_health}\n")
 
     player.addMod(Modifier("Health", "MORE", 100, ""))
-    print(f"{player.max_health}")
+    print(f"{player.max_health}\n")
 
     player.addMod(Modifier("Strength", "FLAT", 100, ""))
-    #print(f"{player.max_strength}")
-    print(f"{player.max_health}")
+    #print(f"{player.max_strength}\n")
+    print(f"{player.max_health}\n")
 
 if __name__ == "__main__":
     test()
