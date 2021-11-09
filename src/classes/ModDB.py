@@ -23,7 +23,7 @@ class ModifierDatabase:
             for entry in self.db[name]["BASE"]:
                 retVal += entry.getValue()
             return retVal
-        return 1
+        return 0
 
     def getFlat(self, name: str):
         retVal = 0
@@ -31,7 +31,7 @@ class ModifierDatabase:
             for entry in self.db[name]["FLAT"]:
                 retVal += entry.getValue()
             return retVal
-        return 1
+        return 0
 
     def getInc(self, name: str):
         retVal = 0
@@ -39,7 +39,7 @@ class ModifierDatabase:
             for entry in self.db[name]["INC"]:
                 retVal += entry.getValue()
             return retVal
-        return 1
+        return retVal
 
     def getMore(self, name: str):
         retVal = 0
@@ -47,7 +47,7 @@ class ModifierDatabase:
             for entry in self.db[name]["MORE"]:
                 retVal += entry.getValue()
             return retVal
-        return 1
+        return retVal
 
     def clear(self):
         self.db = dict()
