@@ -4,11 +4,12 @@ from Dependency import addDependency, _dependencies
 from math import floor
 
 class Modifier:
-    def __init__(self, name: str, type: str, value, source: str, tags: dict = {}):
+    def __init__(self, name: str, type: str, value, source: str, conditionals: set = set(), tags: dict = {}):
         self.name = name
         self.type = type
         self.value = value
         self.source = source
+        self.conditionals = conditionals
         self.tags = tags
         self.process()
 
@@ -30,11 +31,14 @@ class Modifier:
         return self.value
 
     def __repr__(self):
-        ret = f"{self.tags} -- {self.source}"
+        ret = f"{self.name}:{self.type}\n"
+        ret += f"Value: {self.value}\n"
+        ret += f"{self.tags} -- {self.source}"
         return ret
 
 def test():
-    Modifier("Health", "BASE", 12, "", { "type": "Multiplier", "var": "Level" })
+    m = Modifier("Health", "BASE", 12, "", tags = { "type": "Multiplier", "var": "Level" })
+    print(m)
 
 if __name__ == "__main__":
     test()
