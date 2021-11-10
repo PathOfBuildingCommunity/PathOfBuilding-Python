@@ -9,22 +9,8 @@ from Modifiers import Modifier
 
 class Player(Dependency):
     def __init__(self, level, strength):
-        self.modDB = ModifierDatabase()
+        self.modDB = ModifierDatabase(self)
         self._level = level
-
-        '''
-        addDependency("level", "base_health")
-        addDependency("start_strength", "base_strength")
-        addDependency("flat_strength", "base_strength")
-        addDependency("base_strength", "max_strength")
-        addDependency("more_strength", "max_strength")
-        addDependency("inc_strength", "max_strength")
-        addDependency("max_strength", "base_health")
-        addDependency("flat_life", "base_health")
-        addDependency("base_health", "max_health")
-        addDependency("more_life", "max_health")
-        addDependency("inc_life", "max_health")
-        '''
 
         self.addMod(Modifier("Health", "BASE", 12, "Base Per Level", { "type": "Multiplier", "var": "Level" }))
         self.addMod(Modifier("Health", "BASE", 0.5, "Base Per Strength", { "type": "Multiplier", "var": "Max_Strength"}))
@@ -43,7 +29,8 @@ class Player(Dependency):
 
     @cached_property
     def base_health(self):
-        ret = 38 + self.level * 12 + floor(self.max_strength / 2) + self.flat_health
+        #ret = 38 + self.level * 12 + floor(self.max_strength / 2) + self.flat_health
+        ret = 38 + self.modDB.getBase("Health") + self.flat_health
         print(f"BASE Health calculated: {ret}")
         return ret
 

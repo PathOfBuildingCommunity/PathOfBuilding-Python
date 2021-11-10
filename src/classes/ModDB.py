@@ -3,7 +3,8 @@
 from Modifiers import Modifier
 
 class ModifierDatabase:
-    def __init__(self):
+    def __init__(self, owner = None):
+        self.owner = owner
         self.clear()
 
     def addEntry(self, entry: Modifier):
@@ -21,7 +22,7 @@ class ModifierDatabase:
         retVal = 0
         if name in self.db.keys() and "BASE" in self.db[name].keys():
             for entry in self.db[name]["BASE"]:
-                retVal += entry.getValue()
+                retVal += entry.getValue(self.owner)
             return retVal
         return 0
 
@@ -29,7 +30,7 @@ class ModifierDatabase:
         retVal = 0
         if name in self.db.keys() and "FLAT" in self.db[name].keys():
             for entry in self.db[name]["FLAT"]:
-                retVal += entry.getValue()
+                retVal += entry.getValue(self.owner)
             return retVal
         return 0
 
@@ -37,7 +38,7 @@ class ModifierDatabase:
         retVal = 0
         if name in self.db.keys() and "INC" in self.db[name].keys():
             for entry in self.db[name]["INC"]:
-                retVal += entry.getValue()
+                retVal += entry.getValue(self.owner)
             return retVal
         return retVal
 
@@ -45,7 +46,7 @@ class ModifierDatabase:
         retVal = 0
         if name in self.db.keys() and "MORE" in self.db[name].keys():
             for entry in self.db[name]["MORE"]:
-                retVal += entry.getValue()
+                retVal += entry.getValue(self.owner)
             return retVal
         return retVal
 
