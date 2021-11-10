@@ -55,7 +55,7 @@ class ModifierDatabase:
 
 def test():
     db = ModifierDatabase()
-    mod1 = Modifier("Health", "BASE", 12, "", { "type": "Multiplier", "var": "Level" })
+    mod1 = Modifier("Health", "BASE", 12, "", tags = { "type": "Multiplier", "var": "Level" })
     mod2 = Modifier("Health", "BASE", 13, "")
     db.addEntry(mod1)
     db.addEntry(mod2)

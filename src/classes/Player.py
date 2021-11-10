@@ -12,8 +12,8 @@ class Player(Dependency):
         self.modDB = ModifierDatabase(self)
         self._level = level
 
-        self.addMod(Modifier("Health", "BASE", 12, "Base Per Level", { "type": "Multiplier", "var": "Level" }))
-        self.addMod(Modifier("Health", "BASE", 0.5, "Base Per Strength", { "type": "Multiplier", "var": "Max_Strength"}))
+        self.addMod(Modifier("Health", "BASE", 12, "Base Per Level", tags = { "type": "Multiplier", "var": "Level" }))
+        self.addMod(Modifier("Health", "BASE", 0.5, "Base Per Strength", tags = { "type": "Multiplier", "var": "Max_Strength"}))
         self.addMod(Modifier("Strength", "BASE", strength, "Starting"))
 
     def addMod(self, mod: Modifier):
