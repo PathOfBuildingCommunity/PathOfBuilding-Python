@@ -17,7 +17,7 @@
 [class] Tree
     [str] version
     [dict] All Nodes (addressable by Node ID)
-    [dict] Selected Nodes (addressable by Node ID)
+    [dict] Allocated Nodes (addressable by Node ID)
 
 [class] Player
     [enum] Class Selection
