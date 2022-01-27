@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-# Build Class
-#
-# Contains:
-# [class] Build
-#     [ref] Tree
-#     [ref] Player
+"""
+Build Class
+
+[class] Build
+    [ref] Tree
+    [ref] Player
+"""
 
 import Tree
 import Player

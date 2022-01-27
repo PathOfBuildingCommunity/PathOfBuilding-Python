@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
-# Tree Class
-#
-# [class] Tree
-#     [str] version
-#     [dict] All Nodes (addressable by Node ID)
-#     [dict] Allocated Nodes (addressable by Node ID)
+"""
+Tree Class
+
+[class] Tree
+    [str] version
+    [set] All Nodes (addressable by Node ID)
+    [set] Allocated Nodes (addressable by Node ID)
+"""
 
 _VERSION_ = "3.17"
 
@@ -13,8 +15,8 @@ _VERSION_ = "3.17"
 class Tree:
     def __init__(self, version: str = _VERSION_) -> None:
         self.version = version
-        self.tree_nodes = dict()
-        self.allocated_nodes = dict()
+        self.tree_nodes = set()
+        self.allocated_nodes = set()
 
     def __repr__(self) -> str:
         ret_str = f"[TREE]: version '{self.version}'\n"

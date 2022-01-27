@@ -8,7 +8,7 @@
   -- can return applicable list based on item type
 
 [class] Environment
-    [dict] Environment Configuration
+    [set] Environment Configuration
 
 [class] Build
     [ref] Tree
@@ -16,16 +16,16 @@
 
 [class] Tree
     [str] version
-    [dict] All Nodes (addressable by Node ID)
-    [dict] Allocated Nodes (addressable by Node ID)
+    [set] All Nodes (addressable by Node ID)
+    [set] Allocated Nodes (addressable by Node ID)
 
 [class] Player
     [enum] Class Selection
     [enum] Ascendancy Selection
-    [dict] Stats (e.g. Str/Dex/Int, Hit/Crit, Life/Mana, Block/Spell Block/Evade/Dodge, etc.)
-    [dict] Item Slots
+    [set] Stats (e.g. Str/Dex/Int, Hit/Crit, Life/Mana, Block/Spell Block/Evade/Dodge, etc.)
+    [set] Item Sets
         [per slot ref] Item
-    [optional list] Minions
+    [optional set] Minions
 
 [class] Item
     [dict] Attribute requirements
@@ -43,24 +43,26 @@
 
 [class] Minion
     [ref] Player
-    [dict] Stats
+    [set] Stats
     [ref list] Items
     [ref list] Skills
     [int] Quantity
 
 [class] EnemyModel (e.g. Shaper, Maven)
-    [dict] Stats (e.g. Str/Dex/Int, Hit/Crit, Life/Mana, Block/Spell Block/Evade/Dodge, etc.)
+    [str] Name
+    [set] Stats (e.g. Str/Dex/Int, Hit/Crit, Life/Mana, Block/Spell Block/Evade/Dodge, etc.)
 
 [class] Simulator
     [ref] Environment(s)
     [ref list] Build(s)
     [ref] Enemy Model(s)
 
-[class] Analytics Module
+[module] Analytics Module
     [func] Node Comparison
     [func] Item Comparison
     [func] Gem Comparison
+    [func] Minion Comparison
 
-[list] Saved Builds
+[set] Saved Builds
 
 [dict] UI API imports/exports
