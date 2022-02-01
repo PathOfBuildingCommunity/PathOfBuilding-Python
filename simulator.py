@@ -5,39 +5,45 @@ import time
 from concurrent.futures import ProcessPoolExecutor
 import secrets
 
+
+def log(msg: str) -> None:
+    print(msg)
+
+
 class Simulator:
-    def __init__(self, runAmount: int = 5, runTime: float = 100.0):
+    def __init__(self, runAmount: int = 5, runTime: float = 100.0) -> None:
         self.runIndex = 0
         self.runAmount = runAmount
         self.runTime = runTime
 
-    def runSingle(self, runID: int):
+    def runSingle(self, runID: int) -> int:
         self.runIndex = runID
-        print("Starting run {} of {}".format(self.runIndex + 1, self.runAmount))
         sr = SimulationRun(self.runTime * secrets.randbelow(100))
+        log(f"Starting run {self.runIndex + 1} of {self.runAmount}")
         ret = sr.run()
-        print("Completed run {} of {}".format(self.runIndex + 1, self.runAmount))
+        log(f"Completed run {self.runIndex + 1} of {self.runAmount}")
         return ret
 
-    def runParallel(self, numWorkers: int = 5):
+    def runParallel(self, numWorkers: int = 5) -> int:
         with ProcessPoolExecutor(numWorkers) as executor:
             results = executor.map(self.runSingle, range(self.runAmount))
         return sum([x for x in results])
 
-    def runAll(self):
+    def runAll(self) -> None:
         self.runParallel(5)
 
 
 class SimulationRun:
-    def __init__(self, runTime: float):
+    def __init__(self, runTime: float) -> None:
         self.runTime = runTime
-        print(f'RUN TIME: {self.runTime}')
+        log(f"RUN TIME: {self.runTime}")
 
-    def run(self):
+    def run(self) -> int:
         time = 0.0
         while time < self.runTime:
             time += GV.SERVER_TICK_INTERVAL
         return 1
+
 
 if __name__ == "__main__":
     x = Simulator()
