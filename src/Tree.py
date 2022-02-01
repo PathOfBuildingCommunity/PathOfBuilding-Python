@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
-
 """
 Tree Class
 
-[class] Tree
-    [str] version
-    [set] All Nodes (addressable by Node ID)
-    [set] Allocated Nodes (addressable by Node ID)
+This class represents an instance of the Passive Tree for a given Build.
+Multiple Trees can exist in a single Build (at various progress levels;
+at different Jewel/Cluster itemizations, etc.)
+
+A Tree is tied to a Version of the Tree as released by GGG and thus older Trees
+need to be supported for backwards compatibility reason.
+
 """
 
 _VERSION_ = "3.17"

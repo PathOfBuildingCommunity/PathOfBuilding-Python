@@ -1,16 +1,11 @@
-#!/usr/bin/env python3
-
 """
 Player Class
 
-[class] Player
-     [enum] Class Selection
-     [enum] Ascendancy Selection
-     [set] Stats (e.g. Str/Dex/Int, Hit/Crit, Life/Mana,
-                  Block/Spell Block/Evade/Dodge, etc.)
-     [set] Item Sets
-         [per slot ref] Item
-     [optional set] Minions
+The Player represents an in-game character at a specific point in their
+leveling progress.
+
+A unique Player is defined by: level, class selection, ascendancy selection,
+skill selection, and itemization across the item sets.
 """
 
 from Enumerations import PlayerClasses, PlayerAscendancies
@@ -27,6 +22,7 @@ class Player:
         self.ascendancy = ascendancy
         self.level = level
         self.stats = set()
+        self.skills = list()
         self.item_sets = set()
         self.minions = set()
 

@@ -23,6 +23,7 @@
     [enum] Class Selection
     [enum] Ascendancy Selection
     [set] Stats (e.g. Str/Dex/Int, Hit/Crit, Life/Mana, Block/Spell Block/Evade/Dodge, etc.)
+    [list] Skills
     [set] Item Sets
         [per slot ref] Item
     [optional set] Minions
