@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PathOfBuilding>
+	<Misc theme="light" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1" nodePowerTheme="RED/BLUE" connectionProtocol="nil" thousandsSeparator="," betaTest="false" decimalSeparator="." defaultGemQuality="0" showThousandsSeparators="true" buildSortMode="NAME"></Misc>
+</PathOfBuilding>
