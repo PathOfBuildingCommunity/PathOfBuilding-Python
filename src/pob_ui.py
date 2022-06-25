@@ -33,6 +33,14 @@ class Ui_MainWindow(object):
         self.actionSave.setObjectName(u"actionSave")
         self.actionExit = QAction(MainWindow)
         self.actionExit.setObjectName(u"actionExit")
+        icon = QIcon()
+        iconThemeName = u"application-exit"
+        if QIcon.hasThemeIcon(iconThemeName):
+            icon = QIcon.fromTheme(iconThemeName)
+        else:
+            icon.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
+        
+        self.actionExit.setIcon(icon)
         self.actionOpen = QAction(MainWindow)
         self.actionOpen.setObjectName(u"actionOpen")
         self.actionTree = QAction(MainWindow)
@@ -65,6 +73,8 @@ class Ui_MainWindow(object):
         self.actionFusion.setObjectName(u"actionFusion")
         self.actionStandard = QAction(MainWindow)
         self.actionStandard.setObjectName(u"actionStandard")
+        self.actionDarcula = QAction(MainWindow)
+        self.actionDarcula.setObjectName(u"actionDarcula")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayout = QHBoxLayout(self.centralwidget)
@@ -137,6 +147,7 @@ class Ui_MainWindow(object):
         self.menuView.addAction(self.actionLight)
         self.menuView.addAction(self.actionDark)
         self.menuView.addAction(self.actionStandard)
+        self.menuView.addAction(self.actionDarcula)
 
         self.retranslateUi(MainWindow)
 
@@ -223,6 +234,10 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.actionStandard.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+0", None))
 #endif // QT_CONFIG(shortcut)
+        self.actionDarcula.setText(QCoreApplication.translate("MainWindow", u"Dracula", None))
+#if QT_CONFIG(whatsthis)
+        self.actionDarcula.setWhatsThis(QCoreApplication.translate("MainWindow", u"Windows", None))
+#endif // QT_CONFIG(whatsthis)
 #if QT_CONFIG(accessibility)
         self.tabWidget.setAccessibleName("")
 #endif // QT_CONFIG(accessibility)

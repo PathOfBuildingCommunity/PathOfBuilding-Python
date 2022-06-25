@@ -63,6 +63,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "dracula"
+version = "0.1.3"
+description = "Dracula colors palette, becaue why not"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "idna"
 version = "3.3"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -244,7 +252,7 @@ python-versions = ">=3.4"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.11"
-content-hash = "2c220b68742a5398a0892eec5df26e323f28bba96702490ce0d83ef6e6d7f84a"
+content-hash = "15e95bf0da51df296264c1b5d9a1e1dde353fcf9a3b4568bfa5a18def318b727"
 
 [metadata.files]
 black = [
@@ -266,6 +274,10 @@ click = [
 colorama = [
     {file = "colorama-0.4.5-py2.py3-none-any.whl", hash = "sha256:854bf444933e37f5824ae7bfc1e98d5bce2ebe4160d46b5edf346a89358e99da"},
     {file = "colorama-0.4.5.tar.gz", hash = "sha256:e6c6b4334fc50988a639d9b98aa429a0b57da6e17b9a44f0451f930b6967b7a4"},
+]
+dracula = [
+    {file = "dracula-0.1.3-py2.py3-none-any.whl", hash = "sha256:cb36222e888df279d1209fb1756619aa6b8fc0c15048b24cfce20d5af11f784a"},
+    {file = "dracula-0.1.3.tar.gz", hash = "sha256:12046a7ef4b0559036491181e9ddbc3d8c39e6629b79cf601e9926fddf6b10dc"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},

@@ -3,8 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.swp
+
+# Developer specific
 *.orig
 *.bak
+settings.xml
 
 # C extensions
 *.so

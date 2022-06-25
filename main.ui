@@ -151,6 +151,7 @@
     <addaction name="actionLight"/>
     <addaction name="actionDark"/>
     <addaction name="actionStandard"/>
+    <addaction name="actionDarcula"/>
    </widget>
    <addaction name="menuWidget"/>
    <addaction name="menuView"/>
@@ -183,6 +184,10 @@
    </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset theme="application-exit">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
@@ -322,6 +327,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionDarcula">
+   <property name="text">
+    <string>Dracula</string>
+   </property>
+   <property name="whatsThis">
+    <string>Windows</string>
    </property>
   </action>
  </widget>
