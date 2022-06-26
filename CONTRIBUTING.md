@@ -2,8 +2,8 @@
 
 ## Setting up a development installation
 
-* This project targets Python 3.9. You can install it from
-[here](https://www.python.org/downloads/release/python-390/).
+* This project targets Python 3.10. You can install it from
+[here](https://www.python.org/downloads/release/python-3100/).
 * For dependency management, we use [poetry](https://python-poetry.org/).
 Install it like so (Powershell):
     ```shell
