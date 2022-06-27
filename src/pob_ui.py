@@ -1,251 +1,353 @@
-# -*- coding: utf-8 -*-
+"""
+Path of Building UI class
 
-################################################################################
-## Form generated from reading UI file 'PoB.ui'
-##
-## Created by: Qt User Interface Compiler version 6.3.1
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
+Sets up and connects UI components
+"""
+import qdarktheme
+from qdarktheme.qtpy.QtCore import QSize, QDir, QRect, Qt, Slot, QCoreApplication
+from qdarktheme.qtpy.QtGui import QAction, QActionGroup, QFont, QIcon
+from qdarktheme.qtpy.QtWidgets import (
+    QApplication,
+    QColorDialog,
+    QComboBox,
+    QDockWidget,
+    QFileDialog,
+    QFontComboBox,
+    QFontDialog,
+    QFrame,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QMenuBar,
+    QMessageBox,
+    QScrollArea,
+    QSizePolicy,
+    QSpacerItem,
+    QSpinBox,
+    QSplitter,
+    QStackedWidget,
+    QStatusBar,
+    QTabWidget,
+    QTextEdit,
+    QToolBar,
+    QToolBox,
+    QToolButton,
+    QVBoxLayout,
+    QWidget,
+)
+from qdarktheme.util import get_qdarktheme_root_path
+from qdarktheme.widget_gallery.ui.dock_ui import DockUI
+from qdarktheme.widget_gallery.ui.frame_ui import FrameUI
+from qdarktheme.widget_gallery.ui.widgets_ui import WidgetsUI
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QMainWindow,
-    QMenu, QMenuBar, QSizePolicy, QSplitter,
-    QStatusBar, QTabWidget, QWidget)
+from pob_config import Config, color_codes
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        if not MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 600)
-        MainWindow.setMinimumSize(QSize(800, 600))
-        MainWindow.setWindowTitle(u"Path of Building")
-        self.actionNew = QAction(MainWindow)
-        self.actionNew.setObjectName(u"actionNew")
-        self.actionSave = QAction(MainWindow)
-        self.actionSave.setObjectName(u"actionSave")
-        self.actionExit = QAction(MainWindow)
-        self.actionExit.setObjectName(u"actionExit")
-        icon = QIcon()
-        iconThemeName = u"application-exit"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon = QIcon.fromTheme(iconThemeName)
+
+class DockUI:
+    """The ui class of dock window."""
+
+    def setup_ui(self, win: QWidget) -> None:
+        """Set up ui."""
+        # Widgets
+        left_dock = QDockWidget("Left dock")
+        right_dock = QDockWidget("Right dock")
+        top_dock = QDockWidget("Top dock")
+        bottom_dock = QDockWidget("Bottom dock")
+
+        # Setup widgets
+        left_dock.setWidget(QTextEdit("This is the left widget."))
+        right_dock.setWidget(QTextEdit("This is the right widget."))
+        top_dock.setWidget(QTextEdit("This is the top widget."))
+        bottom_dock.setWidget(QTextEdit("This is the bottom widget."))
+        for dock in (left_dock, right_dock, top_dock, bottom_dock):
+            dock.setAllowedAreas(
+                Qt.DockWidgetArea.LeftDockWidgetArea
+                | Qt.DockWidgetArea.RightDockWidgetArea
+                | Qt.DockWidgetArea.BottomDockWidgetArea
+                | Qt.DockWidgetArea.TopDockWidgetArea
+            )
+
+        # Layout
+        main_win = QMainWindow()
+        main_win.setCentralWidget(QTextEdit("This is the central widget."))
+        main_win.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, left_dock)
+        main_win.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, right_dock)
+        main_win.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea, top_dock)
+        main_win.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, bottom_dock)
+
+        layout = QVBoxLayout()
+        layout.addWidget(main_win)
+        layout.setContentsMargins(0, 0, 0, 0)
+
+
+class RightPane:
+    """The ui class of dock window."""
+
+    def __init__(self, win: QTabWidget) -> None:
+
+        # def setup_ui(self, win: QTabWidget) -> None:
+        """Set up ui."""
+
+        # Tree tab
+        self.tabTree = QWidget()
+        win.addTab(
+            self.tabTree, QCoreApplication.translate("MainWindow", "&Tree", None)
+        )
+
+        # Skills tab
+        self.tabSkills = QWidget()
+        win.addTab(
+            self.tabSkills, QCoreApplication.translate("MainWindow", "&Skills", None)
+        )
+
+        # Items tab
+        self.tabItems = QWidget()
+        win.addTab(
+            self.tabItems, QCoreApplication.translate("MainWindow", "&Items", None)
+        )
+
+        # Notes tab
+        self.notes_text_edit = QTextEdit()
+        self.notes_text_edit.setLineWrapMode(QTextEdit.NoWrap)
+        self.defaultTextColour = self.notes_text_edit.textColor()
+
+        self.nt_widget = QWidget()
+        self.nt_layout = QVBoxLayout()
+
+        self.font_layout = QHBoxLayout()
+        self.font_layout.setObjectName("font_layout")
+        self.font_combo_box = QFontComboBox(self.nt_widget)
+        self.font_combo_box.setObjectName("font_combo_box")
+        self.font_combo_box.setMinimumSize(QSize(200, 0))
+        self.font_combo_box.editable = False
+        self.font_combo_box.setCurrentText("Times New Roman")
+        self.font_layout.addWidget(self.font_combo_box)
+        self.font_spin_box = QSpinBox(self.nt_widget)
+        self.font_spin_box.setObjectName("spinBox")
+        self.font_spin_box.setMinimumSize(QSize(35, 0))
+        self.font_spin_box.setMaximum(50)
+        self.font_spin_box.setMinimum(3)
+        self.font_spin_box.setValue(10)
+        self.font_layout.addWidget(self.font_spin_box)
+        self.colour_combo_box = QComboBox(self.nt_widget)
+        self.colour_combo_box.setObjectName("colourComboBox")
+        self.colour_combo_box.setMinimumSize(QSize(140, 0))
+        self.colour_combo_box.addItems(color_codes.keys())
+        self.font_layout.addWidget(self.colour_combo_box)
+        self.horizontal_spacer = QSpacerItem(
+            88, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+        self.font_layout.addItem(self.horizontal_spacer)
+        self.nt_layout.addLayout(self.font_layout)
+
+        self.nt_layout.addWidget(
+            self.notes_text_edit, 0, Qt.AlignHCenter & Qt.AlignVCenter
+        )
+        self.nt_widget.setLayout(self.nt_layout)
+        win.addTab(self.nt_widget, "&Notes")
+
+        self.font_combo_box.currentFontChanged.connect(self.set_notes_font)
+        self.font_spin_box.valueChanged.connect(self.set_notes_font_size)
+        self.colour_combo_box.currentTextChanged.connect(self.set_notes_font_colour)
+        # tab indexes are 0 based
+        self.tab_focus = {
+            0: self.tabTree,
+            1: self.tabSkills,
+            2: self.tabItems,
+            3: self.notes_text_edit,
+        }
+
+    # build_notes_tab
+
+    # don't use native signals/slot, so focus can be set back to edit box
+    @Slot()
+    def set_notes_font_size(self, size):
+        self.notes_text_edit.setFontPointSize(size)
+        self.notes_text_edit.setFocus()
+
+    # don't use native signals/slot, so focus can be set back to edit box
+    @Slot()
+    def set_notes_font_colour(self, colour_name):
+        if colour_name == "NORMAL":
+            self.notes_text_edit.setTextColor(self.defaultTextColour)
         else:
-            icon.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
-        self.actionExit.setIcon(icon)
-        self.actionOpen = QAction(MainWindow)
-        self.actionOpen.setObjectName(u"actionOpen")
-        self.actionTree = QAction(MainWindow)
-        self.actionTree.setObjectName(u"actionTree")
-        self.actionTree.setEnabled(True)
-        self.actionTree.setAutoRepeat(False)
-        self.actionTree.setVisible(True)
-        self.actionSkills = QAction(MainWindow)
-        self.actionSkills.setObjectName(u"actionSkills")
-        self.actionSkills.setEnabled(True)
-        self.actionSkills.setAutoRepeat(False)
-        self.actionSkills.setVisible(True)
-        self.actionItems = QAction(MainWindow)
-        self.actionItems.setObjectName(u"actionItems")
-        self.actionItems.setEnabled(True)
-        self.actionItems.setAutoRepeat(False)
-        self.actionItems.setVisible(True)
-        self.actionNotes = QAction(MainWindow)
-        self.actionNotes.setObjectName(u"actionNotes")
-        self.actionNotes.setEnabled(True)
-        self.actionNotes.setAutoRepeat(False)
-        self.actionNotes.setVisible(True)
-        self.actionFive = QAction(MainWindow)
-        self.actionFive.setObjectName(u"actionFive")
-        self.actionLight = QAction(MainWindow)
-        self.actionLight.setObjectName(u"actionLight")
-        self.actionDark = QAction(MainWindow)
-        self.actionDark.setObjectName(u"actionDark")
-        self.actionFusion = QAction(MainWindow)
-        self.actionFusion.setObjectName(u"actionFusion")
-        self.actionStandard = QAction(MainWindow)
-        self.actionStandard.setObjectName(u"actionStandard")
-        self.actionDarcula = QAction(MainWindow)
-        self.actionDarcula.setObjectName(u"actionDarcula")
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName(u"centralwidget")
-        self.horizontalLayout = QHBoxLayout(self.centralwidget)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.mainsplitter = QSplitter(self.centralwidget)
-        self.mainsplitter.setObjectName(u"mainsplitter")
-        self.mainsplitter.setAutoFillBackground(False)
-        self.mainsplitter.setStyleSheet(u"")
-        self.mainsplitter.setOrientation(Qt.Horizontal)
-        self.frame = QFrame(self.mainsplitter)
-        self.frame.setObjectName(u"frame")
+            self.notes_text_edit.setTextColor(color_codes[colour_name])
+        self.notes_text_edit.setFocus()
+
+    # don't use native signals/slot, so focus can be set back to edit box
+    @Slot()
+    def set_notes_font(self):
+        action = self.sender()
+        self.notes_text_edit.setCurrentFont(action.currentFont())
+        self.notes_text_edit.setFocus()
+
+
+class LeftPane:
+    # def __init__(self) -> None:
+    #     super().__init__("Build Info")
+    def setup_ui(self, win: QWidget) -> None:
+        # Widgets
+        toolbox = QToolBox()
+        # self.groupBox = QGroupBox(win)
+        # self.groupBox.setGeometry(QRect(50, 70, 271, 80))
+        label = QLabel()
+        label.setGeometry(QRect(10, 30, 42, 22))
+        toolbox.addItem(label, "Bandits:")
+        comboBox = QComboBox()
+        comboBox.setGeometry(QRect(60, 30, 150, 22))
+        comboBox.setMinimumSize(QSize(350, 0))
+        toolbox.addItem(comboBox, "Bandits comboBox")
+
+        # slider = QSlider(Qt.Orientation.Horizontal)
+        # dial_ticks = QDial()
+        # progressbar = QProgressBar()
+        # lcd_number = QLCDNumber()
+        #
+        # # Setup widgets
+        # self.setCheckable(True)
+        # toolbox.addItem(slider, "Slider")
+        # toolbox.addItem(dial_ticks, "Dial")
+        # toolbox.addItem(progressbar, "Progress Bar")
+        # toolbox.addItem(lcd_number, "LCD Number")
+        # slider.setValue(50)
+        # dial_ticks.setNotchesVisible(True)
+        # progressbar.setValue(50)
+        # lcd_number.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
+        # lcd_number.display(123)
+        #
+        # # Layout
+        # v_layout = QVBoxLayout(self)
+        # v_layout.addWidget(toolbox)
+
+
+class PoB_UI:
+    def setup_ui(self, main_win: QMainWindow, config: Config):
+        # ######################  STATUS BAR  ######################
+        statusbar = QStatusBar()
+        main_win.setStatusBar(statusbar)
+
+        # ######################  MENU BAR  ######################
+        menubar = QMenuBar()
+        # Remove the space that the icon reserves. If you want check boxes or icons, then delete this section
+        menubar.setStyleSheet(
+            "QMenu::item {"
+            "padding: 2px 6px 2px 6px;"
+            "}"
+            "QMenu::item:selected {"
+            "background-color: rgb(0, 85, 127);"
+            "color: rgb(255, 255, 255);"
+            "}"
+        )
+
+        # Builds Menu
+        self.action_new = QAction("Ne&w")
+        self.action_new.setShortcut("Ctrl+N")
+        self.action_open = QAction("&Open ...")
+        self.action_open.setShortcut("Ctrl+O")
+        self.action_save = QAction("Sa&ve")
+        self.action_save.setShortcut("Ctrl+S")
+        self.action_exit = QAction("E&xit")
+        self.action_exit.setShortcut("Ctrl+X")
+        self.menu_builds = menubar.addMenu("&Builds")
+        self.menu_builds.addActions(
+            (self.action_new, self.action_open, self.action_save)
+        )
+        self.menu_builds.addSeparator()
+        self.menu_builds.addAction(self.action_exit)
+        self.menu_builds.addSeparator()
+        self.actions_recent_builds = [
+            QAction(rb, main_win)
+            for rb in [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+            ]
+        ]
+        self.menu_builds.addActions(self.actions_recent_builds)
+        self.set_recent_builds(config)
+        # Room for "recent" builds
+        # recents = config.recentBuilds()
+        # for value in recents.values():
+        #     print("value: %s" % value)
+        #     if value != "":
+        #         self.ui.menu_builds.addAction(value)
+
+        # Theme Menu Actions
+        self.actions_theme = [QAction(theme, main_win) for theme in ["dark", "light"]]
+        menu_theme = menubar.addMenu("&Theme")
+        menu_theme.addActions(self.actions_theme)
+        menu_theme.addSeparator()
+        # Tech Demo. Switch just one entry
+        self.actions_theme_dark_light = QAction(
+            "Light"
+        )  # opposite of the default theme
+        self.actions_theme_dark_light.setShortcut("Ctrl+0")
+        menu_theme.addAction(self.actions_theme_dark_light)
+
+        main_win.setMenuBar(menubar)
+
+        # Next menu
+
+        self.central_window = QMainWindow()
+
+        h_splitter_1 = QSplitter(Qt.Orientation.Horizontal)
+        h_splitter_1.setMinimumHeight(350)  # Fix bug layout crush
+
+        # Layout
+        container = QWidget()
+        left_pane = LeftPane()
+        left_pane.setup_ui(container)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
-        self.frame.setSizePolicy(sizePolicy)
-        self.frame.setMinimumSize(QSize(180, 600))
-        self.frame.setMaximumSize(QSize(400, 2000))
-        self.frame.setSizeIncrement(QSize(10, 0))
-        self.frame.setBaseSize(QSize(200, 0))
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.mainsplitter.addWidget(self.frame)
-        self.tabWidget = QTabWidget(self.mainsplitter)
-        self.tabWidget.setObjectName(u"tabWidget")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy1.setHorizontalStretch(2)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
-        self.tabWidget.setSizePolicy(sizePolicy1)
-        self.tabWidget.setMinimumSize(QSize(600, 500))
-        self.tabWidget.setStyleSheet(u"")
-        self.tabTree = QWidget()
-        self.tabTree.setObjectName(u"tabTree")
-        self.tabWidget.addTab(self.tabTree, "")
-        self.tabSkills = QWidget()
-        self.tabSkills.setObjectName(u"tabSkills")
-        self.tabWidget.addTab(self.tabSkills, "")
-        self.tabItems = QWidget()
-        self.tabItems.setObjectName(u"tabItems")
-        self.tabWidget.addTab(self.tabItems, "")
-        self.mainsplitter.addWidget(self.tabWidget)
+        container.setSizePolicy(sizePolicy)
+        container.setMinimumSize(QSize(180, 600))
+        container.setMaximumSize(QSize(400, 0))
+        h_splitter_1.addWidget(container)
 
-        self.horizontalLayout.addWidget(self.mainsplitter)
+        container = QTabWidget()
+        right_pane = RightPane(container)
+        # right_pane.setup_ui(container)
+        sizePolicy.setHorizontalStretch(2)
+        container.setSizePolicy(sizePolicy)
+        container.setMinimumSize(QSize(600, 500))
+        h_splitter_1.addWidget(container)
 
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(MainWindow)
-        self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 600, 22))
-        self.menubar.setMinimumSize(QSize(400, 0))
-        self.menubar.setMaximumSize(QSize(600, 24))
-        self.menuWidget = QMenu(self.menubar)
-        self.menuWidget.setObjectName(u"menuWidget")
-        self.menuView = QMenu(self.menubar)
-        self.menuView.setObjectName(u"menuView")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(MainWindow)
-        self.statusbar.setObjectName(u"statusbar")
-        self.statusbar.setEnabled(True)
-        MainWindow.setStatusBar(self.statusbar)
+        # Notes Tab Actions
+        # right_pane.font_combo_box.currentFontChanged.connect(
+        #     right_pane.set_notes_font
+        # )  #
+        # right_pane.font_spin_box.valueChanged.connect(right_pane.set_notes_font_size)  #
+        # right_pane.colour_combo_box.currentTextChanged.connect(
+        #     right_pane.set_notes_font_colour
+        # )  #
+        # # tab indexes are 0 based
+        # right_pane.tab_focus = {
+        #     0: right_pane.tabTree,
+        #     1: right_pane.tabSkills,
+        #     2: right_pane.tabItems,
+        #     3: right_pane.notes_text_edit,
+        # }
 
-        self.menubar.addAction(self.menuWidget.menuAction())
-        self.menubar.addAction(self.menuView.menuAction())
-        self.menuWidget.addAction(self.actionNew)
-        self.menuWidget.addAction(self.actionOpen)
-        self.menuWidget.addAction(self.actionSave)
-        self.menuWidget.addSeparator()
-        self.menuWidget.addAction(self.actionExit)
-        self.menuWidget.addSeparator()
-        self.menuView.addAction(self.actionLight)
-        self.menuView.addAction(self.actionDark)
-        self.menuView.addAction(self.actionStandard)
-        self.menuView.addAction(self.actionDarcula)
+        self.central_window.setCentralWidget(h_splitter_1)
+        main_win.setCentralWidget(self.central_window)
+        main_win.setMenuBar(menubar)
+        main_win.setStatusBar(statusbar)
+        # setup_ui
 
-        self.retranslateUi(MainWindow)
+    def set_recent_builds(self, config: Config):
+        recents = config.recentBuilds()
+        for x in range(5):
+            print(x)
+            action = self.actions_recent_builds[x]
+            recent = recents[format("r%d" % x)]
+            if recent != "-":
+                action.setVisible(True)
+                action.setText(recent)
+            else:
+                action.setVisible(False)
 
-        self.tabWidget.setCurrentIndex(0)
-
-
-        QMetaObject.connectSlotsByName(MainWindow)
-    # setupUi
-
-    def retranslateUi(self, MainWindow):
-        self.actionNew.setText(QCoreApplication.translate("MainWindow", u"New", None))
-#if QT_CONFIG(tooltip)
-        self.actionNew.setToolTip(QCoreApplication.translate("MainWindow", u"Start a new build", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(shortcut)
-        self.actionNew.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+N", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionSave.setText(QCoreApplication.translate("MainWindow", u"Save", None))
-#if QT_CONFIG(tooltip)
-        self.actionSave.setToolTip(QCoreApplication.translate("MainWindow", u"Save this build", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(shortcut)
-        self.actionSave.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+S", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionExit.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
-#if QT_CONFIG(tooltip)
-        self.actionExit.setToolTip(QCoreApplication.translate("MainWindow", u"Exit Path of Building", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(shortcut)
-        self.actionExit.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+X", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionOpen.setText(QCoreApplication.translate("MainWindow", u"Open", None))
-#if QT_CONFIG(shortcut)
-        self.actionOpen.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionTree.setText(QCoreApplication.translate("MainWindow", u"Tree", None))
-#if QT_CONFIG(tooltip)
-        self.actionTree.setToolTip(QCoreApplication.translate("MainWindow", u"Switch Tabs", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(shortcut)
-        self.actionTree.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+1", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionSkills.setText(QCoreApplication.translate("MainWindow", u"Skills", None))
-#if QT_CONFIG(tooltip)
-        self.actionSkills.setToolTip(QCoreApplication.translate("MainWindow", u"Switch Tabs", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(shortcut)
-        self.actionSkills.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+2", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionItems.setText(QCoreApplication.translate("MainWindow", u"Items", None))
-#if QT_CONFIG(tooltip)
-        self.actionItems.setToolTip(QCoreApplication.translate("MainWindow", u"Switch Tabs", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(shortcut)
-        self.actionItems.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+3", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionNotes.setText(QCoreApplication.translate("MainWindow", u"Notes", None))
-#if QT_CONFIG(tooltip)
-        self.actionNotes.setToolTip(QCoreApplication.translate("MainWindow", u"Switch Tabs", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(shortcut)
-        self.actionNotes.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+4", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionFive.setText(QCoreApplication.translate("MainWindow", u"Five", None))
-#if QT_CONFIG(shortcut)
-        self.actionFive.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+5", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionLight.setText(QCoreApplication.translate("MainWindow", u"Light", None))
-#if QT_CONFIG(whatsthis)
-        self.actionLight.setWhatsThis(QCoreApplication.translate("MainWindow", u"light", None))
-#endif // QT_CONFIG(whatsthis)
-        self.actionDark.setText(QCoreApplication.translate("MainWindow", u"Dark", None))
-#if QT_CONFIG(whatsthis)
-        self.actionDark.setWhatsThis(QCoreApplication.translate("MainWindow", u"dark", None))
-#endif // QT_CONFIG(whatsthis)
-        self.actionFusion.setText(QCoreApplication.translate("MainWindow", u"Fusion", None))
-#if QT_CONFIG(whatsthis)
-        self.actionFusion.setWhatsThis(QCoreApplication.translate("MainWindow", u"Fusion", None))
-#endif // QT_CONFIG(whatsthis)
-        self.actionStandard.setText(QCoreApplication.translate("MainWindow", u"Standard", None))
-#if QT_CONFIG(whatsthis)
-        self.actionStandard.setWhatsThis("")
-#endif // QT_CONFIG(whatsthis)
-#if QT_CONFIG(shortcut)
-        self.actionStandard.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+0", None))
-#endif // QT_CONFIG(shortcut)
-        self.actionDarcula.setText(QCoreApplication.translate("MainWindow", u"Dracula", None))
-#if QT_CONFIG(whatsthis)
-        self.actionDarcula.setWhatsThis(QCoreApplication.translate("MainWindow", u"Windows", None))
-#endif // QT_CONFIG(whatsthis)
-#if QT_CONFIG(accessibility)
-        self.tabWidget.setAccessibleName("")
-#endif // QT_CONFIG(accessibility)
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabTree), QCoreApplication.translate("MainWindow", u"&Tree", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabSkills), QCoreApplication.translate("MainWindow", u"&Skills", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabItems), QCoreApplication.translate("MainWindow", u"&Items", None))
-        self.menuWidget.setTitle(QCoreApplication.translate("MainWindow", u"&Builds", None))
-        self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"&View", None))
-        pass
-    # retranslateUi
-
+    # PoB_UI

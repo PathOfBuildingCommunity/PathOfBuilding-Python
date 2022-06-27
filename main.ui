@@ -96,6 +96,48 @@
         <attribute name="title">
          <string>&amp;Tree</string>
         </attribute>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>70</y>
+           <width>271</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <widget class="QComboBox" name="comboBox">
+          <property name="geometry">
+           <rect>
+            <x>60</x>
+            <y>30</y>
+            <width>150</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>42</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Bandits:</string>
+          </property>
+         </widget>
+        </widget>
        </widget>
        <widget class="QWidget" name="tabSkills">
         <attribute name="title">

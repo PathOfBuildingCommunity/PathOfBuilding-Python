@@ -6,10 +6,13 @@ Defines reading and writing the setting xml ass well as the settings therein
 
 import sys
 import os
+
+from qdarktheme.qtpy.QtCore import QDir, QSize, Qt, Slot
+
 import pob_xml
 
 # Default config incase the settings file doesn't exist
-defaultConfig = {
+default_config = {
     "PathOfBuilding": {
         "Misc": {
             "theme": "Fusion",
@@ -25,7 +28,14 @@ defaultConfig = {
             "defaultGemQuality": "0",
             "showThousandsSeparators": "true",
             "buildSortMode": "NAME",
-        }
+        },
+        "recentBuilds": {
+            "r0": "-",
+            "r1": "-",
+            "r2": "-",
+            "r3": "-",
+            "r4": "-",
+        },
     }
 }
 
@@ -113,7 +123,7 @@ def str2bool(in_str):
 
 
 class Config:
-    def __init__(self):
+    def __init__(self) -> None:
         self.config = {}
         self.exeDir = os.path.dirname(os.path.abspath(sys.argv[0]))
         self.buildPath = os.path.join(self.exeDir, "builds")
@@ -126,9 +136,10 @@ class Config:
             self.config = pob_xml.read_xml(self.settingsFile)
             # print(self.config)
         if self.config is None:
-            self.config = defaultConfig
+            self.config = default_config
 
     def write_config(self):
+        # print(self.config)
         pob_xml.write_xml(self.settingsFile, self.config)
 
     def theme(self):
@@ -217,3 +228,35 @@ class Config:
 
     def set_betaMode(self, new_bool):
         self.config["PathOfBuilding"]["Misc"]["betaMode"] = str(new_bool)
+
+    def recentBuilds(self):
+        output = dict()
+        try:
+            output = self.config["PathOfBuilding"]["recentBuilds"]
+        except:
+            print("recentBuilds exception")
+            output = {
+                "r0": "",
+                "r1": "",
+                "r2": "",
+                "r3": "",
+                "r4": "",
+            }
+        self.config["PathOfBuilding"]["recentBuilds"] = output
+        return output
+
+    def size(self):
+        try:
+            width = int(self.config["PathOfBuilding"]["size"]["width"])
+            height = int(self.config["PathOfBuilding"]["size"]["height"])
+        except:
+            width = 800
+            height = 600
+            self.set_size(QSize(width, height))
+        return QSize(width, height)
+
+    def set_size(self, new_size: QSize):
+        self.config["PathOfBuilding"]["size"] = {
+            "width": new_size.width(),
+            "height": new_size.height(),
+        }

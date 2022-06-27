@@ -5,7 +5,7 @@ from PySide6 import QtWidgets, QtCore
 from pob_config import Config, color_codes
 
 # pyside6-uic main.ui -o pob_ui.py
-from pob_ui import Ui_MainWindow
+from pob_main_ui import Ui_MainWindow
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -123,7 +123,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def set_tab_focus(self, index):
         self.tab_focus.get(index).setFocus()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(MainWindow, self).__init__()
         self.font_combo_box = None
         self.colour_combo_box = None

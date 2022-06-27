@@ -7,6 +7,13 @@ import os
 import xmltodict
 
 
+# checkout
+# using with statement
+# with open('file_path', 'w') as file:
+# 	file.write('hello world !')
+# ensures proper file closure if an exception occurs
+
+
 def read_xml(filename):
     file_ptr = None
     ordered_dict = None
@@ -15,8 +22,8 @@ def read_xml(filename):
             file_ptr = open(filename, "r")
             xml_content = file_ptr.read()
             ordered_dict = xmltodict.parse(xml_content)
-        except:
-            print("Unable to open file %s" % filename)
+        # except:
+        #     print("Unable to open file %s" % filename)
         finally:
             file_ptr.close()
     return ordered_dict
