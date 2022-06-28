@@ -83,10 +83,8 @@ class DockUI:
 
 class RightPane:
     """The ui class of dock window."""
-
     def __init__(self, win: QTabWidget) -> None:
-
-        # def setup_ui(self, win: QTabWidget) -> None:
+        super().__init__()
         """Set up ui."""
 
         # Tree tab
@@ -147,9 +145,9 @@ class RightPane:
         self.nt_widget.setLayout(self.nt_layout)
         win.addTab(self.nt_widget, "&Notes")
 
-        self.font_combo_box.currentFontChanged.connect(self.set_notes_font)
-        self.font_spin_box.valueChanged.connect(self.set_notes_font_size)
-        self.colour_combo_box.currentTextChanged.connect(self.set_notes_font_colour)
+        # self.font_combo_box.currentFontChanged.connect(self.set_notes_font)
+        # self.font_spin_box.valueChanged.connect(self.set_notes_font_size)
+        # self.colour_combo_box.currentTextChanged.connect(self.set_notes_font_colour)
         # tab indexes are 0 based
         self.tab_focus = {
             0: self.tabTree,
@@ -158,34 +156,12 @@ class RightPane:
             3: self.notes_text_edit,
         }
 
-    # build_notes_tab
-
-    # don't use native signals/slot, so focus can be set back to edit box
-    @Slot()
-    def set_notes_font_size(self, size):
-        self.notes_text_edit.setFontPointSize(size)
-        self.notes_text_edit.setFocus()
-
-    # don't use native signals/slot, so focus can be set back to edit box
-    @Slot()
-    def set_notes_font_colour(self, colour_name):
-        if colour_name == "NORMAL":
-            self.notes_text_edit.setTextColor(self.defaultTextColour)
-        else:
-            self.notes_text_edit.setTextColor(color_codes[colour_name])
-        self.notes_text_edit.setFocus()
-
-    # don't use native signals/slot, so focus can be set back to edit box
-    @Slot()
-    def set_notes_font(self):
-        action = self.sender()
-        self.notes_text_edit.setCurrentFont(action.currentFont())
-        self.notes_text_edit.setFocus()
-
 
 class LeftPane:
+    def __init__(self, win: QWidget) -> None:
+        super().__init__()
+        """Set up ui."""
     # def __init__(self) -> None:
-    #     super().__init__("Build Info")
     def setup_ui(self, win: QWidget) -> None:
         # Widgets
         toolbox = QToolBox()
@@ -222,7 +198,10 @@ class LeftPane:
 
 
 class PoB_UI:
-    def setup_ui(self, main_win: QMainWindow, config: Config):
+    def __init__(self, main_win: QMainWindow, config: Config) -> None:
+        super().__init__()
+        """Set up ui."""
+    # def setup_ui(self, main_win: QMainWindow, config: Config):
         # ######################  STATUS BAR  ######################
         statusbar = QStatusBar()
         main_win.setStatusBar(statusbar)
@@ -289,8 +268,7 @@ class PoB_UI:
 
         main_win.setMenuBar(menubar)
 
-        # Next menu
-
+        # Main Window
         self.central_window = QMainWindow()
 
         h_splitter_1 = QSplitter(Qt.Orientation.Horizontal)
@@ -298,45 +276,49 @@ class PoB_UI:
 
         # Layout
         container = QWidget()
-        left_pane = LeftPane()
-        left_pane.setup_ui(container)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(1)
-        sizePolicy.setVerticalStretch(0)
-        container.setSizePolicy(sizePolicy)
+        container.setObjectName("Build Info")
+        self.left_pane = LeftPane(container)
+        size_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        size_policy.setHorizontalStretch(1)
+        size_policy.setVerticalStretch(0)
+        container.setSizePolicy(size_policy)
         container.setMinimumSize(QSize(180, 600))
         container.setMaximumSize(QSize(400, 0))
         h_splitter_1.addWidget(container)
 
-        container = QTabWidget()
-        right_pane = RightPane(container)
-        # right_pane.setup_ui(container)
-        sizePolicy.setHorizontalStretch(2)
-        container.setSizePolicy(sizePolicy)
-        container.setMinimumSize(QSize(600, 500))
-        h_splitter_1.addWidget(container)
+        self.tabs = QTabWidget()
+        self.right_pane = RightPane(self.tabs)
+        size_policy.setHorizontalStretch(2)
+        self.tabs.setSizePolicy(size_policy)
+        self.tabs.setMinimumSize(QSize(600, 500))
+        h_splitter_1.addWidget(self.tabs)
+
+        self.tabs.currentChanged.connect(self.set_tab_focus)
 
         # Notes Tab Actions
-        # right_pane.font_combo_box.currentFontChanged.connect(
-        #     right_pane.set_notes_font
-        # )  #
-        # right_pane.font_spin_box.valueChanged.connect(right_pane.set_notes_font_size)  #
-        # right_pane.colour_combo_box.currentTextChanged.connect(
-        #     right_pane.set_notes_font_colour
-        # )  #
-        # # tab indexes are 0 based
-        # right_pane.tab_focus = {
-        #     0: right_pane.tabTree,
-        #     1: right_pane.tabSkills,
-        #     2: right_pane.tabItems,
-        #     3: right_pane.notes_text_edit,
-        # }
+        self.right_pane.font_combo_box.currentFontChanged.connect(
+            self.set_notes_font
+        )  #
+        self.right_pane.font_spin_box.valueChanged.connect(self.set_notes_font_size)  #
+        self.right_pane.colour_combo_box.currentTextChanged.connect(
+            self.set_notes_font_colour
+        )  #
+        # tab indexes are 0 based
+        self.tab_focus = {
+            0: self.right_pane.tabTree,
+            1: self.right_pane.tabSkills,
+            2: self.right_pane.tabItems,
+            3: self.right_pane.notes_text_edit,
+        }
 
         self.central_window.setCentralWidget(h_splitter_1)
         main_win.setCentralWidget(self.central_window)
         main_win.setMenuBar(menubar)
         main_win.setStatusBar(statusbar)
         # setup_ui
+
+    def set_tab_focus(self, index):
+        self.tab_focus.get(index).setFocus()
 
     def set_recent_builds(self, config: Config):
         recents = config.recentBuilds()
@@ -349,5 +331,33 @@ class PoB_UI:
                 action.setText(recent)
             else:
                 action.setVisible(False)
+
+    # don't use native signals/slot, so focus can be set back to edit box
+    @Slot()
+    def set_notes_font_size(self, size):
+        # print("set_notes_font_size")
+        # print(type(self).__name__)
+        self.right_pane.notes_text_edit.setFontPointSize(size)
+        self.right_pane.notes_text_edit.setFocus()
+
+    # don't use native signals/slot, so focus can be set back to edit box
+    @Slot()
+    def set_notes_font_colour(self, colour_name):
+        # print("set_notes_font_colour")
+        # print(type(self).__name__)
+        if colour_name == "NORMAL":
+            self.right_pane.notes_text_edit.setTextColor(self.defaultTextColour)
+        else:
+            self.right_pane.notes_text_edit.setTextColor(color_codes[colour_name])
+        self.right_pane.notes_text_edit.setFocus()
+
+    # don't use native signals/slot, so focus can be set back to edit box
+    @Slot()
+    def set_notes_font(self):
+        # print("set_notes_font")
+        # print(type(self).__name__)
+        # action = self.sender()
+        self.right_pane.notes_text_edit.setCurrentFont(self.right_pane.font_combo_box.currentFont())
+        self.right_pane.notes_text_edit.setFocus()
 
     # PoB_UI

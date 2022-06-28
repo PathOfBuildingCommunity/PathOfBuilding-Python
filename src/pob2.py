@@ -44,8 +44,7 @@ class MainWindow(QMainWindow):
         atexit.register(self.exit_handler)
         # enable again if you want icons,
         # QDir.addSearchPath("icons", f"{get_qdarktheme_root_path().as_posix()}/widget_gallery/svg")
-        self._ui = PoB_UI()
-        self._ui.setup_ui(self, self.config)
+        self._ui = PoB_UI(self, self.config)
         self._theme = "dark"
         self._border_radius = "rounded"
         self.build = Build()
@@ -101,8 +100,8 @@ class MainWindow(QMainWindow):
             app.tr("Build Files (*.xml)"),
         )
         if filename != "":
-            print("filename: %s" % filename)
-            print("selected_filter: %s" % selected_filter)
+            # print("filename: %s" % filename)
+            # print("selected_filter: %s" % selected_filter)
             # open the file
             self.build.load_build(filename)
 
@@ -117,7 +116,7 @@ class MainWindow(QMainWindow):
         )
         if filename != "":
             print("filename: %s" % filename)
-            print("selected_filter: %s" % selected_filter)
+            # print("selected_filter: %s" % selected_filter)
             # write the file
             # build.save_build(filename)
 
@@ -126,7 +125,7 @@ class MainWindow(QMainWindow):
     def _change_theme(self) -> None:
         action = self.sender()
         self._theme = action.text()
-        print(action.text())
+        # print(action.text())
         QApplication.instance().setStyleSheet(
             qdarktheme.load_stylesheet(self._theme, self._border_radius)
         )
@@ -141,8 +140,6 @@ class MainWindow(QMainWindow):
         else:
             self._theme = "light"
             action.setText("Dark")
-        print(self._theme)
-        print(action.text())
         QApplication.instance().setStyleSheet(
             qdarktheme.load_stylesheet(self._theme, self._border_radius)
         )
