@@ -1,3 +1,9 @@
+"""
+Path of Building main class
+
+Sets up and connects external components.
+External components are the status bar, toolbar (if exists), menus
+"""
 import sys  # Only needed for access to command line arguments
 import atexit
 
@@ -48,6 +54,7 @@ class MainWindow(QMainWindow):
         self._theme = "dark"
         self._border_radius = "rounded"
         self.build = Build()
+        self._ui.build = self.build
 
         # Connect actions
         for action in self._ui.actions_theme:
