@@ -14,6 +14,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QFileDialog,
     QFontComboBox,
     QFontDialog,
+    QFormLayout,
     QFrame,
     QGroupBox,
     QHBoxLayout,
@@ -87,24 +88,28 @@ class RightPane:
         super().__init__()
         """Set up ui."""
 
+        ############################################
         # Tree tab
         self.tabTree = QWidget()
         win.addTab(
             self.tabTree, QCoreApplication.translate("MainWindow", "&Tree", None)
         )
 
+        ############################################
         # Skills tab
         self.tabSkills = QWidget()
         win.addTab(
             self.tabSkills, QCoreApplication.translate("MainWindow", "&Skills", None)
         )
 
+        ############################################
         # Items tab
         self.tabItems = QWidget()
         win.addTab(
             self.tabItems, QCoreApplication.translate("MainWindow", "&Items", None)
         )
 
+        ############################################
         # Notes tab
         self.notes_text_edit = QTextEdit()
         self.notes_text_edit.setLineWrapMode(QTextEdit.NoWrap)
@@ -144,57 +149,45 @@ class RightPane:
         )
         self.nt_widget.setLayout(self.nt_layout)
         win.addTab(self.nt_widget, "&Notes")
-
-        # self.font_combo_box.currentFontChanged.connect(self.set_notes_font)
-        # self.font_spin_box.valueChanged.connect(self.set_notes_font_size)
-        # self.colour_combo_box.currentTextChanged.connect(self.set_notes_font_colour)
-        # tab indexes are 0 based
-        self.tab_focus = {
-            0: self.tabTree,
-            1: self.tabSkills,
-            2: self.tabItems,
-            3: self.notes_text_edit,
-        }
+        # RightPane
 
 
 class LeftPane:
-    def __init__(self, win: QWidget) -> None:
+    def __init__(self, win: QFrame) -> None:
         super().__init__()
         """Set up ui."""
     # def __init__(self) -> None:
-    def setup_ui(self, win: QWidget) -> None:
-        # Widgets
-        toolbox = QToolBox()
-        # self.groupBox = QGroupBox(win)
-        # self.groupBox.setGeometry(QRect(50, 70, 271, 80))
-        label = QLabel()
-        label.setGeometry(QRect(10, 30, 42, 22))
-        toolbox.addItem(label, "Bandits:")
-        comboBox = QComboBox()
-        comboBox.setGeometry(QRect(60, 30, 150, 22))
-        comboBox.setMinimumSize(QSize(350, 0))
-        toolbox.addItem(comboBox, "Bandits comboBox")
+    # def setup_ui(self, win: QWidget) -> None:
+        size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        size_policy.setHorizontalStretch(1)
+        size_policy.setVerticalStretch(0)
+        win.setSizePolicy(size_policy)
+        win.setMinimumSize(QSize(180, 600))
+        win.setMaximumSize(QSize(400, 10000))
+        win.setSizeIncrement(QSize(10, 0))
+        win.setFrameShape(QFrame.StyledPanel)
+        win.setFrameShadow(QFrame.Raised)
+        self.formLayout = QFormLayout(win)
+        self.formLayout.setContentsMargins(0, 0, 0, 0)
 
-        # slider = QSlider(Qt.Orientation.Horizontal)
-        # dial_ticks = QDial()
-        # progressbar = QProgressBar()
-        # lcd_number = QLCDNumber()
-        #
-        # # Setup widgets
-        # self.setCheckable(True)
-        # toolbox.addItem(slider, "Slider")
-        # toolbox.addItem(dial_ticks, "Dial")
-        # toolbox.addItem(progressbar, "Progress Bar")
-        # toolbox.addItem(lcd_number, "LCD Number")
-        # slider.setValue(50)
-        # dial_ticks.setNotchesVisible(True)
-        # progressbar.setValue(50)
-        # lcd_number.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
-        # lcd_number.display(123)
-        #
-        # # Layout
-        # v_layout = QVBoxLayout(self)
-        # v_layout.addWidget(toolbox)
+        bandit_label = QLabel(win)
+        bandit_label.setText(QCoreApplication.translate("MainWindow", u"Bandits:", None))
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, bandit_label)
+
+        self.bandit_comboBox = QComboBox(win)
+        self.bandit_comboBox.addItem("Item1")
+        self.bandit_comboBox.addItem("Item2")
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.bandit_comboBox)
+
+        major_god_label = QLabel(win)
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, major_god_label)
+        major_god_label.setText(QCoreApplication.translate("MainWindow", u"Major Gods:", None))
+        self.major_god_comboBox = QComboBox(win)
+        self.major_god_comboBox.addItem("God1")
+        self.major_god_comboBox.addItem("God2")
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.major_god_comboBox)
+
+        # LeftPane
 
 
 class PoB_UI:
@@ -276,15 +269,25 @@ class PoB_UI:
 
         # Layout
         container = QWidget()
-        container.setObjectName("Build Info")
-        self.left_pane = LeftPane(container)
+        self.frame = QFrame(h_splitter_1)
+        self.left_pane = LeftPane(self.frame)
+        # container.setObjectName("Build Info")
+        # self.left_pane = LeftPane(container)
         size_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         size_policy.setHorizontalStretch(1)
         size_policy.setVerticalStretch(0)
-        container.setSizePolicy(size_policy)
-        container.setMinimumSize(QSize(180, 600))
-        container.setMaximumSize(QSize(400, 0))
-        h_splitter_1.addWidget(container)
+        # self.frame.setSizePolicy(size_policy)
+        # self.frame.setMinimumSize(QSize(180, 600))
+        # self.frame.setMaximumSize(QSize(400, 0))
+        # self.frame.setSizeIncrement(QSize(10, 0))
+        # self.frame.setBaseSize(QSize(200, 0))
+        # self.frame.setFrameShape(QFrame.StyledPanel)
+        # self.frame.setFrameShadow(QFrame.Raised)
+
+        # container.setSizePolicy(size_policy)
+        # container.setMinimumSize(QSize(180, 600))
+        # container.setMaximumSize(QSize(400, 0))
+        # h_splitter_1.addWidget(container)
 
         self.tabs = QTabWidget()
         self.right_pane = RightPane(self.tabs)

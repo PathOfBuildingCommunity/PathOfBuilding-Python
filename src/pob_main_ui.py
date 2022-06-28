@@ -16,7 +16,7 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGroupBox,
+from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QFrame,
     QHBoxLayout, QLabel, QMainWindow, QMenu,
     QMenuBar, QSizePolicy, QSplitter, QStatusBar,
     QTabWidget, QWidget)
@@ -98,6 +98,23 @@ class Ui_MainWindow(object):
         self.frame.setBaseSize(QSize(200, 0))
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
+        self.widget = QWidget(self.frame)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(10, 10, 150, 24))
+        self.formLayout = QFormLayout(self.widget)
+        self.formLayout.setObjectName(u"formLayout")
+        self.formLayout.setContentsMargins(0, 0, 0, 0)
+        self.label = QLabel(self.widget)
+        self.label.setObjectName(u"label")
+
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label)
+
+        self.comboBox = QComboBox(self.widget)
+        self.comboBox.setObjectName(u"comboBox")
+        self.comboBox.setMinimumSize(QSize(100, 0))
+
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.comboBox)
+
         self.mainsplitter.addWidget(self.frame)
         self.tabWidget = QTabWidget(self.mainsplitter)
         self.tabWidget.setObjectName(u"tabWidget")
@@ -110,16 +127,6 @@ class Ui_MainWindow(object):
         self.tabWidget.setStyleSheet(u"")
         self.tabTree = QWidget()
         self.tabTree.setObjectName(u"tabTree")
-        self.groupBox = QGroupBox(self.tabTree)
-        self.groupBox.setObjectName(u"groupBox")
-        self.groupBox.setGeometry(QRect(50, 70, 271, 80))
-        self.comboBox = QComboBox(self.groupBox)
-        self.comboBox.setObjectName(u"comboBox")
-        self.comboBox.setGeometry(QRect(60, 30, 150, 22))
-        self.comboBox.setMinimumSize(QSize(150, 0))
-        self.label = QLabel(self.groupBox)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(10, 30, 42, 22))
         self.tabWidget.addTab(self.tabTree, "")
         self.tabSkills = QWidget()
         self.tabSkills.setObjectName(u"tabSkills")
@@ -249,11 +256,10 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(whatsthis)
         self.actionDarcula.setWhatsThis(QCoreApplication.translate("MainWindow", u"Windows", None))
 #endif // QT_CONFIG(whatsthis)
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Bandits:", None))
 #if QT_CONFIG(accessibility)
         self.tabWidget.setAccessibleName("")
 #endif // QT_CONFIG(accessibility)
-        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"GroupBox", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Bandits:", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabTree), QCoreApplication.translate("MainWindow", u"&Tree", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabSkills), QCoreApplication.translate("MainWindow", u"&Skills", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabItems), QCoreApplication.translate("MainWindow", u"&Items", None))
