@@ -1,0 +1,33 @@
+OpenSuSE defaults python v3 to v3.6
+If you don't want to alter your system to change the default just use "python3.9" instead of "python" or "python3"
+
+<pre>ll /usr/bin/python*
+lrwxrwxrwx 1 root root     9 Mar 22 18:41 <font color="#00AAAA">/usr/bin/python</font> -&gt; <font color="#00AA00">python2.7</font>
+lrwxrwxrwx 1 root root     9 Mar 22 18:41 <font color="#00AAAA">/usr/bin/python2</font> -&gt; <font color="#00AA00">python2.7</font>
+-rwxr-xr-x 1 root root  6304 Mar 22 18:41 <font color="#00AA00">/usr/bin/python2.7</font>
+lrwxrwxrwx 1 root root     9 Mar 16 16:17 <font color="#00AAAA">/usr/bin/python3</font> -&gt; <font color="#00AA00">python3.6</font>
+-rwxr-xr-x 2 root root 10584 Mar 16 16:17 <font color="#00AA00">/usr/bin/python3.6</font>
+-rwxr-xr-x 2 root root 10584 Mar 16 16:17 <font color="#00AA00">/usr/bin/python3.6m</font>
+-rwxr-xr-x 1 root root  6416 Jun 21 09:08 <font color="#00AA00">/usr/bin/python3.9</font>
+</pre>
+
+Do not install python3-QDarkStyle as it depends on Qt5
+
+zypper in -y python39
+
+Open a terminal and change directory to where you cloned PathofBuilding
+cd ~/PoB/
+
+Install poetry and install dependencies. The cache location will be shown on screen, note this.
+pip3.9 install poetry
+user@localhost:~/PoB> poetry install
+	Creating virtualenv pathofbuilding-python--fqlIKOQ-py3.9 in /home/user/.cache/pypoetry/virtualenvs
+	Installing dependencies from lock file
+
+	Package operations: 22 installs, 0 updates, 0 removals
+	...
+
+#activate the virtual environment
+poetry shell
+
+(pathofbuilding-python--fqlIKOQ-py3.9) user@localhost:~/PoB> python3.9 src/pob2.py 

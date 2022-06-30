@@ -1,0 +1,30 @@
+Download https://www.python.org/ftp/python/3.9.0/python-3.9.0-embed-amd64.zip
+Extract it somewhere you can find it again. EG: c:\Python39
+
+Add this location to your path, in Win10 this has been buried in settings
+Open Settings, Click on System
+Scroll down to About. 
+On the right hand side, under "Releated Settings", select "Advanced System Settings"
+	This will popup a system properties window, with the "Advanced" tab selected
+Select the "Environment Variables" button near the bottom of this window
+Add two paths. The main python directory and the scripts directory
+EG:
+	C:\Python39\
+	C:\Python39\Scripts\
+
+Open a command prompt and change directory to where you cloned PathofBuilding
+
+Install poetry and install dependencies. The cache location will be shown on screen, note this.
+pip3.9 install poetry
+poetry install
+	Creating virtualenv pathofbuilding-python--IwoLpd0E in c:\Users\Peter\AppData\Local\pypoetry\Cache
+	Installing dependencies from lock file
+
+	Package operations: 22 installs, 0 updates, 0 removals
+	...
+
+Switch to the virtual environment
+poetry shell
+
+Run pob2
+(pathofbuilding-python--fqlIKOQ-py3.9) user@localhost:~/PoB> python3.9 src/pob2.py 
