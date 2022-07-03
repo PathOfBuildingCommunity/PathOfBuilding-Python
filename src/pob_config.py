@@ -14,7 +14,7 @@ import pob_xml
 default_config = {
     "PathOfBuilding": {
         "Misc": {
-            "theme": "Fusion",
+            "theme": "Dark",
             "slotOnlyTooltips": "true",
             "showTitlebarName": "true",
             "showWarnings": "true",
@@ -225,7 +225,20 @@ class Config:
         self.config["PathOfBuilding"]["Misc"]["betaMode"] = str(new_bool)
 
     def recentBuilds(self):
-        return self.config["PathOfBuilding"]["recentBuilds"]
+        output = dict()
+        try:
+            output = self.config["PathOfBuilding"]["recentBuilds"]
+        except:
+            print("recentBuilds exception")
+            output = {
+                "r0": "",
+                "r1": "",
+                "r2": "",
+                "r3": "",
+                "r4": "",
+            }
+        self.config["PathOfBuilding"]["recentBuilds"] = output
+        return output
 
     def size(self):
         try:
