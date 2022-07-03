@@ -15,7 +15,7 @@ import pob_xml
 default_config = {
     "PathOfBuilding": {
         "Misc": {
-            "theme": "Fusion",
+            "theme": "Dark",
             "slotOnlyTooltips": "true",
             "showTitlebarName": "true",
             "showWarnings": "true",
@@ -143,7 +143,11 @@ class Config:
         pob_xml.write_xml(self.settingsFile, self.config)
 
     def theme(self):
-        return self.config["PathOfBuilding"]["Misc"]["theme"]
+        try:
+            _theme = self.config["PathOfBuilding"]["Misc"]["theme"]
+        except KeyError:
+            _theme = "Dark"
+        return _theme
 
     def set_theme(self, new_theme):
         self.config["PathOfBuilding"]["Misc"]["theme"] = new_theme
@@ -233,7 +237,7 @@ class Config:
         output = dict()
         try:
             output = self.config["PathOfBuilding"]["recentBuilds"]
-        except:
+        except KeyError:
             print("recentBuilds exception")
             output = {
                 "r0": "",
@@ -249,7 +253,7 @@ class Config:
         try:
             width = int(self.config["PathOfBuilding"]["size"]["width"])
             height = int(self.config["PathOfBuilding"]["size"]["height"])
-        except:
+        except KeyError:
             width = 800
             height = 600
             self.set_size(QSize(width, height))
