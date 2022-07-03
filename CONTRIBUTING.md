@@ -9,6 +9,10 @@ Install it like so (Powershell):
     ```shell
     (Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py -UseBasicParsing).Content | python -
     ```
+  or so (Curl):
+    ```shell
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    ```
 * Run this command to clone the repository:
     ```shell
     git clone -b dev https://github.com/PathOfBuildingCommunity/PathOfBuilding.git

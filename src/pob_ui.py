@@ -43,37 +43,30 @@ from qdarktheme.widget_gallery.ui.frame_ui import FrameUI
 from qdarktheme.widget_gallery.ui.widgets_ui import WidgetsUI
 
 from pob_config import Config, color_codes
-from Build import Build
+from build import Build
 
 
 class RightPane:
     """The ui class of dock window."""
+
     def __init__(self, win: QTabWidget) -> None:
         super().__init__()
         """Set up ui."""
-
-        ############################################
         # Tree tab
         self.tabTree = QWidget()
         win.addTab(
             self.tabTree, QCoreApplication.translate("MainWindow", "&Tree", None)
         )
-
-        ############################################
         # Skills tab
         self.tabSkills = QWidget()
         win.addTab(
             self.tabSkills, QCoreApplication.translate("MainWindow", "&Skills", None)
         )
-
-        ############################################
         # Items tab
         self.tabItems = QWidget()
         win.addTab(
             self.tabItems, QCoreApplication.translate("MainWindow", "&Items", None)
         )
-
-        ############################################
         # Notes tab
         self.notes_text_edit = QTextEdit()
         self.notes_text_edit.setLineWrapMode(QTextEdit.NoWrap)
@@ -118,10 +111,10 @@ class RightPane:
 
 class LeftPane:
     def __init__(self, win: QFrame) -> None:
-        super().__init__()
         """Set up ui."""
-    # def __init__(self) -> None:
-    # def setup_ui(self, win: QWidget) -> None:
+        super().__init__()
+        # def __init__(self) -> None:
+        # def setup_ui(self, win: QWidget) -> None:
         size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         size_policy.setHorizontalStretch(1)
         size_policy.setVerticalStretch(0)
@@ -135,7 +128,7 @@ class LeftPane:
         self.formLayout.setContentsMargins(0, 0, 0, 0)
 
         bandit_label = QLabel(win)
-        bandit_label.setText(QCoreApplication.translate("MainWindow", u"Bandits:", None))
+        bandit_label.setText(QCoreApplication.translate("MainWindow", "Bandits:", None))
         self.formLayout.setWidget(0, QFormLayout.LabelRole, bandit_label)
 
         self.bandit_comboBox = QComboBox(win)
@@ -145,7 +138,9 @@ class LeftPane:
 
         major_god_label = QLabel(win)
         self.formLayout.setWidget(1, QFormLayout.LabelRole, major_god_label)
-        major_god_label.setText(QCoreApplication.translate("MainWindow", u"Major Gods:", None))
+        major_god_label.setText(
+            QCoreApplication.translate("MainWindow", "Major Gods:", None)
+        )
         self.major_god_comboBox = QComboBox(win)
         self.major_god_comboBox.addItem("God1")
         self.major_god_comboBox.addItem("God2")
@@ -154,17 +149,13 @@ class LeftPane:
         # LeftPane
 
 
-class PoB_UI:
+class PobUi:
     def __init__(self, main_win: QMainWindow, config: Config) -> None:
         super().__init__()
         """Set up ui."""
         self.build = None
-
-        # ######################  STATUS BAR  ######################
         statusbar = QStatusBar()
         main_win.setStatusBar(statusbar)
-
-        # ######################  MENU BAR  ######################
         menubar = QMenuBar()
         # Remove the space that the icon reserves. If you want check boxes or icons, then delete this section
         menubar.setStyleSheet(
@@ -289,12 +280,10 @@ class PoB_UI:
         self.tab_focus.get(index).setFocus()
 
     def set_recent_builds(self, config: Config):
-        recents = config.recentBuilds()
+        recent_builds = config.recentBuilds()
         for x in range(5):
-            print(x)
             action = self.actions_recent_builds[x]
-            recent = recents[format("r%d" % x)]
-            if recent != "-":
+            if recent := recent_builds[f"r{x}"]:
                 action.setVisible(True)
                 action.setText(recent)
             else:
@@ -303,16 +292,12 @@ class PoB_UI:
     # don't use native signals/slot, so focus can be set back to edit box
     @Slot()
     def set_notes_font_size(self, size):
-        # print("set_notes_font_size")
-        # print(type(self).__name__)
         self.right_pane.notes_text_edit.setFontPointSize(size)
         self.right_pane.notes_text_edit.setFocus()
 
     # don't use native signals/slot, so focus can be set back to edit box
     @Slot()
     def set_notes_font_colour(self, colour_name):
-        # print("set_notes_font_colour")
-        # print(type(self).__name__)
         if colour_name == "NORMAL":
             self.right_pane.notes_text_edit.setTextColor(self.defaultTextColour)
         else:
@@ -322,10 +307,10 @@ class PoB_UI:
     # don't use native signals/slot, so focus can be set back to edit box
     @Slot()
     def set_notes_font(self):
-        # print("set_notes_font")
-        # print(type(self).__name__)
         # action = self.sender()
-        self.right_pane.notes_text_edit.setCurrentFont(self.right_pane.font_combo_box.currentFont())
+        self.right_pane.notes_text_edit.setCurrentFont(
+            self.right_pane.font_combo_box.currentFont()
+        )
         self.right_pane.notes_text_edit.setFocus()
 
     # PoB_UI

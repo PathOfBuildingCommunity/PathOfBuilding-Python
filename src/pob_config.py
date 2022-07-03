@@ -3,15 +3,14 @@ Configuration Class
 
 Defines reading and writing the setting xml ass well as the settings therein
 """
-
+import pathlib
 import sys
-import os
 
-from qdarktheme.qtpy.QtCore import QDir, QSize, Qt, Slot
+from qdarktheme.qtpy.QtCore import QSize
 
 import pob_xml
 
-# Default config incase the settings file doesn't exist
+# Default config in case the settings file doesn't exist
 default_config = {
     "PathOfBuilding": {
         "Misc": {
@@ -30,11 +29,11 @@ default_config = {
             "buildSortMode": "NAME",
         },
         "recentBuilds": {
-            "r0": "-",
-            "r1": "-",
-            "r2": "-",
-            "r3": "-",
-            "r4": "-",
+            "r0": "",
+            "r1": "",
+            "r2": "",
+            "r3": "",
+            "r4": "",
         },
     }
 }
@@ -115,53 +114,53 @@ color_codes["RAGE"] = color_codes["WARNING"]
 color_codes["PHYS"] = color_codes["NORMAL"]
 
 
-# return a boolean from a string. As the settings could be manipulated by a human, we can't trust eval()
-# EG: eval('os.system(‘rm -rf /’)')
-# return True if it looks like it could be true, otherwise false
-def str2bool(in_str):
-    return in_str.lower() in ("yes", "true", "t", "1", "on")
+def str_to_bool(text: str) -> bool:
+    """Convert a string to a boolean.
+
+    As the settings could be manipulated by a human, we can't trust eval().
+    EG: eval('os.system(‘rm -rf /’)')
+    return True if it looks like it could be true, otherwise false.
+    """
+    return text.lower() in {"yes", "true", "t", "1", "on"}
 
 
 class Config:
     def __init__(self) -> None:
         self.config = {}
-        self.exeDir = os.path.dirname(os.path.abspath(sys.argv[0]))
-        self.buildPath = os.path.join(self.exeDir, "builds")
-        self.settingsFile = os.path.join(self.exeDir, "settings.xml")
-        if not os.path.exists(self.buildPath):
-            os.makedirs(self.buildPath)
+        self.exe_dir = pathlib.Path(sys.argv[0]).absolute().parent
+        self.build_path = self.exe_dir / "builds"
+        self.settings_path = self.exe_dir / "settings.xml"
+        self.build_path.mkdir(exist_ok=True)
 
-    def read_config(self):
-        if os.path.exists(self.settingsFile):
-            self.config = pob_xml.read_xml(self.settingsFile)
-            # print(self.config)
-        if self.config is None:
-            self.config = default_config
+    def read(self) -> None:
+        config = pob_xml.read_xml(self.settings_path)
+        self.config = config if config is not None else default_config
 
-    def write_config(self):
-        # print(self.config)
-        pob_xml.write_xml(self.settingsFile, self.config)
+    def write(self) -> None:
+        pob_xml.write_xml(self.settings_path, self.config)
 
+    @property
     def theme(self):
         return self.config["PathOfBuilding"]["Misc"]["theme"]
 
-    def set_theme(self, new_theme):
+    @theme.setter
+    def theme(self, new_theme):
         self.config["PathOfBuilding"]["Misc"]["theme"] = new_theme
 
     def slotOnlyTooltips(self):
-        return str2bool(self.config["PathOfBuilding"]["Misc"]["slotOnlyTooltips"])
+        return str_to_bool(self.config["PathOfBuilding"]["Misc"]["slotOnlyTooltips"])
 
     def set_slotOnlyTooltips(self, new_bool):
         self.config["PathOfBuilding"]["Misc"]["slotOnlyTooltips"] = str(new_bool)
 
     def showTitlebarName(self):
-        return str2bool(self.config["PathOfBuilding"]["Misc"]["showTitlebarName"])
+        return str_to_bool(self.config["PathOfBuilding"]["Misc"]["showTitlebarName"])
 
     def set_showTitlebarName(self, new_bool):
         self.config["PathOfBuilding"]["Misc"]["showTitlebarName"] = str(new_bool)
 
     def showWarnings(self):
-        return str2bool(self.config["PathOfBuilding"]["Misc"]["showWarnings"])
+        return str_to_bool(self.config["PathOfBuilding"]["Misc"]["showWarnings"])
 
     def set_showWarnings(self, new_bool):
         self.config["PathOfBuilding"]["Misc"]["showWarnings"] = str(new_bool)
@@ -170,9 +169,7 @@ class Config:
         return int(self.config["PathOfBuilding"]["Misc"]["defaultCharLevel"])
 
     def set_defaultCharLevel(self, new_int):
-        self.config["PathOfBuilding"]["Misc"]["defaultCharLevel"] = format(
-            "%d" % new_int
-        )
+        self.config["PathOfBuilding"]["Misc"]["defaultCharLevel"] = str(new_int)
 
     def nodePowerTheme(self):
         return self.config["PathOfBuilding"]["Misc"]["nodePowerTheme"]
@@ -200,7 +197,7 @@ class Config:
         self.config["PathOfBuilding"]["Misc"]["thousandsSeparator"] = new_sep
 
     def showThousandsSeparators(self):
-        return str2bool(
+        return str_to_bool(
             self.config["PathOfBuilding"]["Misc"]["showThousandsSeparators"]
         )
 
@@ -213,9 +210,7 @@ class Config:
     def set_defaultGemQuality(self, new_int):
         if new_int < 0 or new_int > 20:
             new_int = 0
-        self.config["PathOfBuilding"]["Misc"]["defaultGemQuality"] = format(
-            "%d" % new_int
-        )
+        self.config["PathOfBuilding"]["Misc"]["defaultGemQuality"] = str(new_int)
 
     def buildSortMode(self):
         return self.config["PathOfBuilding"]["Misc"]["buildSortMode"]
@@ -230,26 +225,13 @@ class Config:
         self.config["PathOfBuilding"]["Misc"]["betaMode"] = str(new_bool)
 
     def recentBuilds(self):
-        output = dict()
-        try:
-            output = self.config["PathOfBuilding"]["recentBuilds"]
-        except:
-            print("recentBuilds exception")
-            output = {
-                "r0": "",
-                "r1": "",
-                "r2": "",
-                "r3": "",
-                "r4": "",
-            }
-        self.config["PathOfBuilding"]["recentBuilds"] = output
-        return output
+        return self.config["PathOfBuilding"]["recentBuilds"]
 
     def size(self):
         try:
             width = int(self.config["PathOfBuilding"]["size"]["width"])
             height = int(self.config["PathOfBuilding"]["size"]["height"])
-        except:
+        except KeyError:
             width = 800
             height = 600
             self.set_size(QSize(width, height))

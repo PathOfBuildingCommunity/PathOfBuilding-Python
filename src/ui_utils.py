@@ -1,40 +1,14 @@
-"""
-Utilities for the UI that do not have dependencies on MainWindow
+"""Utilities for the UI that do not have dependencies on MainWindow."""
 
-"""
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QColorDialog,
-    QDialogButtonBox,
-    QFileDialog,
-    QFontDialog,
-    QLabel,
-    QMainWindow,
-    QMenuBar,
-    QMessageBox,
-    QSizePolicy,
-    QStackedWidget,
-    QStatusBar,
-    QToolBar,
-    QToolButton,
-    QWidget,
-)
+from qdarktheme.qtpy.QtWidgets import QMessageBox
 
 
-# ui_utils.yes_no_dialog(self, app.tr("Save build"), app.tr("build name goes here"))
-# ui_utils.critical_dialog(self, app.tr("Save build"), app.tr("build name goes here"), app.tr("Close"))
-# ui_utils.ok_dialog(self, app.tr("Save build"), app.tr("build name goes here"))
-
-#
 def yes_no_dialog(win, title, text):
     button = QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No)
-    if button == QMessageBox.Yes:
-        return True
-    else:
-        return False
+    return button == QMessageBox.Yes
 
 
-def ok_dialog(win, title, text, btn_text = "OK"):
+def ok_dialog(win, title, text, btn_text="OK"):
     dlg = QMessageBox(win)
     dlg.setWindowTitle(title)
     dlg.setText(text)
@@ -43,7 +17,7 @@ def ok_dialog(win, title, text, btn_text = "OK"):
     dlg.exec_()
 
 
-def critical_dialog(win, title, text, btn_text = "Close"):
+def critical_dialog(win, title, text, btn_text="Close"):
     dlg = QMessageBox(win)
     dlg.setWindowTitle(title)
     dlg.setText(text)

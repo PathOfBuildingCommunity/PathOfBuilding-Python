@@ -1,16 +1,15 @@
 import atexit
-import qdarktheme
-import sys
-from PySide6 import QtWidgets, QtCore
-from pob_config import Config, color_codes
 
-# pyside6-uic main.ui -o pob_ui.py
+from PySide6 import QtWidgets, QtCore
+import qdarktheme
+
+from pob_config import Config, color_codes
 from pob_main_ui import Ui_MainWindow
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def exit_handler(self):
-        self.config.write_config()
+        self.config.write()
         # Logic for checking we need to save and save if needed, goes here...
         # filePtr = open("edit.html", "w")
         # try:
@@ -25,34 +24,34 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Logic for checking we need to save and save if needed, goes here...
         dialog = QtWidgets.QFileDialog(self)
         dialog.setNameFilter("Builds (*.xml)")
-        dialog.setDirectory(self.config.buildPath)
+        dialog.setDirectory(self.config.build_path)
         if dialog.exec():
             filename = dialog.selectedFiles()
-            print("filenames: %s" % filename)
+            print(f"filenames: {filename}")
             # open the file
 
     def build_save_as(self):
         # Logic for checking we need to save and save if needed, goes here...
         dialog = QtWidgets.QFileDialog(self)
         dialog.setNameFilter("Builds (*.xml)")
-        dialog.setDirectory(self.config.buildPath)
+        dialog.setDirectory(self.config.build_path)
         dialog.setDefaultSuffix("xml")
         if dialog.exec():
             filename = dialog.selectedFiles()
-            print("filename: %s" % filename)
+            print(f"filename: {filename}")
             # write the file
 
     def set_theme(self, _action):
         action = self.sender()
         text = action.whatsThis()
         print(text)
-        if text == "":
+        if text in ["light", "dark"]:
+            app.setStyleSheet(qdarktheme.load_stylesheet(text))
+        elif text:
+            app.setStyle(text)
+        else:
             app.setStyleSheet("")
             app.setStyle("Fusion")
-        elif text == "light" or text == "dark":
-            app.setStyleSheet(qdarktheme.load_stylesheet(text))
-        else:
-            app.setStyle(text)
 
     # don't use native signals/slot, so focus can be set back to edit box
     def set_notes_font_size(self, size):
@@ -117,21 +116,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         font_spin_box.valueChanged.connect(self.set_notes_font_size)  #
         self.colour_combo_box.currentTextChanged.connect(self.set_notes_font_colour)  #
         # tab indexes are 0 based
-        self.tab_focus = {0: self.tabWidget, 1: self.tabWidget, 2: self.tabWidget, 3: self.notes_text_edit}
+        self.tab_focus = {
+            0: self.tabWidget,
+            1: self.tabWidget,
+            2: self.tabWidget,
+            3: self.notes_text_edit,
+        }
         # build_notes_tab
 
     def set_tab_focus(self, index):
         self.tab_focus.get(index).setFocus()
 
     def __init__(self) -> None:
-        super(MainWindow, self).__init__()
+        super().__init__()
         self.font_combo_box = None
         self.colour_combo_box = None
         self.tab_focus = None
         self.notes_text_edit = None
         self.setupUi(self)
         self.config = Config()
-        self.config.read_config()
+        self.config.read()
         atexit.register(self.exit_handler)
 
         # Now do all things that QT Designer can't do
@@ -146,13 +150,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # QT Designer can't add a layout as a tab
         self.build_notes_tab()
         self.defaultTextColour = self.notes_text_edit.textColor()
-        # print(self.notes_text_edit.textColor().getRgb())
-        # print(self.defaultTextColour)
 
 
-app = QtWidgets.QApplication(sys.argv)
-# print(Config.theme())
+if __name__ == "__main__":
+    import sys
 
-window = MainWindow()
-window.show()
-app.exec()
+    app = QtWidgets.QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec()
