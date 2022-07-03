@@ -124,7 +124,7 @@ def str2bool(in_str):
 
 class Config:
     def __init__(self) -> None:
-        self.config = {}
+        self.config = None
         self.exeDir = os.path.dirname(os.path.abspath(sys.argv[0]))
         self.buildPath = os.path.join(self.exeDir, "builds")
         self.settingsFile = os.path.join(self.exeDir, "settings.xml")
