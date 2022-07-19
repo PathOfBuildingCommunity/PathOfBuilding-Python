@@ -1,5 +1,5 @@
 # Python Object Enumeration Thoughts
-
+```
 [dict] All GGPK Extracted Gems { act_str, act_dex, act_int, sup_str, sup_dex, sup_str }
   -- addressable by name
 
@@ -64,3 +64,4 @@
 [list] Saved Builds
 
 [dict] UI API imports/exports
+```
