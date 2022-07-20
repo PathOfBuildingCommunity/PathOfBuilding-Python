@@ -1,0 +1,12 @@
+when adding items, translate Node x,y into setOffset
+
+TreeGraphicsItem.setPixmap(node.sprites(f"{node.type}{node.active}")
+
+Find where to put switch_class in
+
+limit zoom (0.5 -> 0.08)
+
+
+function DrawImage(imgHandle, left, top, width, height, tcLeft, tcTop, tcRight, tcBottom) end
+
+Does writing json(loadstring()) work

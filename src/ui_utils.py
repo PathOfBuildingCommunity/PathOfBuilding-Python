@@ -1,11 +1,32 @@
-"""Utilities for the UI that do not have dependencies on MainWindow."""
+"""
+Utilities for the UI that do not have dependencies on MainWindow
+"""
+from qdarktheme.qtpy.QtWidgets import (
+    QApplication,
+    QColorDialog,
+    QDialogButtonBox,
+    QFileDialog,
+    QFontDialog,
+    QLabel,
+    QMainWindow,
+    QMenuBar,
+    QMessageBox,
+    QSizePolicy,
+    QStackedWidget,
+    QStatusBar,
+    QToolBar,
+    QToolButton,
+    QWidget,
+)
 
-from qdarktheme.qtpy.QtWidgets import QMessageBox
 
+# ui_utils.yes_no_dialog(self, app.tr("Save build"), app.tr("build name goes here"))
+# ui_utils.critical_dialog(self, app.tr("Save build"), app.tr("build name goes here"), app.tr("Close"))
+# ui_utils.ok_dialog(self, app.tr("Save build"), app.tr("build name goes here"))
 
+#
 def yes_no_dialog(win, title, text):
-    button = QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No)
-    return button == QMessageBox.Yes
+    return QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No) == QMessageBox.Yes
 
 
 def ok_dialog(win, title, text, btn_text="OK"):

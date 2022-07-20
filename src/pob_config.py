@@ -1,16 +1,33 @@
 """
 Configuration Class
 
-Defines reading and writing the setting xml ass well as the settings therein
+Defines reading and writing the settings xml as well as the settings therein
+The variables that come from the lua version of Path of Building retain their current naming
+
+As the settings.xml can be altered by humans, care must be taken to ensure data integrity, where possible
+
+This is a base PoB class. It doesn't import any other PoB ui classes
+Imports pob_file
 """
-import pathlib
-import sys
+
+from pathlib import Path
+from collections import OrderedDict
+from enum import Enum
 
 from qdarktheme.qtpy.QtCore import QSize
 
-import pob_xml
+import pob_file
 
-# Default config in case the settings file doesn't exist
+program_title = "Path of Building"
+
+"""global_scale_factor
+this is used to divide all x and y data coming in from the tree.json, but not Height and Width.
+without this, items are too far apart and items are far too small on screen.
+All values should nly be scaled on point of entry, ie: when they are first processed out of the json
+"""
+global_scale_factor=1
+
+# Default config incase the settings file doesn't exist
 default_config = {
     "PathOfBuilding": {
         "Misc": {
@@ -27,6 +44,7 @@ default_config = {
             "defaultGemQuality": "0",
             "showThousandsSeparators": "true",
             "buildSortMode": "NAME",
+            "numRecentBuilds": "5",
         },
         "recentBuilds": {
             "r0": "",
@@ -38,197 +56,366 @@ default_config = {
     }
 }
 
-custom_colours = {
-    "Custom1": "#282A36",
-    "Custom2": "#F8F8F2",
-    "Custom3": "#44475A",
-    "Custom4": "#6272A4",
-    "Custom5": "#8BE9FD",
-    "Custom6": "#50FA7B",
-    "Custom7": "#FFB86C",
-    "Custom8": "#FF79C6",
-    "Custom9": "#BD93F9",
+
+class ColourCodes(Enum):
+    NORMAL = 0x000000
+    MAGIC = 0x8888FF
+    RARE = 0xFFFF77
+    UNIQUE = 0xAF6025
+    RELIC = 0x60C060
+    GEM = 0x1AA29B
+    PROPHECY = 0xB54BFF
+    CURRENCY = 0xAA9E82
+    CRAFTED = 0xB8DAF1
+    CUSTOM = 0x5CF0BB
+    SOURCE = 0x88FFFF
+    UNSUPPORTED = 0xF05050
+    WARNING = 0xFF9922
+    TIP = 0x80A080
+    FIRE = 0xB97123
+    COLD = 0x3F6DB3
+    LIGHTNING = 0xADAA47
+    CHAOS = 0xD02090
+    POSITIVE = 0x33FF77
+    NEGATIVE = 0xDD0022
+    OFFENCE = 0xE07030
+    DEFENCE = 0x8080E0
+    SCION = 0xFFF0F0
+    MARAUDER = 0xE05030
+    RANGER = 0x70FF70
+    WITCH = 0x7070FF
+    DUELIST = 0xE0E070
+    TEMPLAR = 0xC040FF
+    SHADOW = 0x30C0D0
+    MAINHAND = 0x50FF50
+    MAINHANDBG = 0x071907
+    OFFHAND = 0xB7B7FF
+    OFFHANDBG = 0x070719
+    SHAPER = 0x55BBFF
+    ELDER = 0xAA77CC
+    FRACTURED = 0xA29160
+    ADJUDICATOR = 0xE9F831
+    BASILISK = 0x00CB3A
+    CRUSADER = 0x2946FC
+    EYRIE = 0xAAB7B8
+    CLEANSING = 0xF24141
+    TANGLE = 0x038C8C
+    CHILLBG = 0x151E26
+    FREEZEBG = 0x0C262B
+    SHOCKBG = 0x191732
+    SCORCHBG = 0x270B00
+    BRITTLEBG = 0x00122B
+    SAPBG = 0x261500
+    SCOURGE = 0xFF6E25
+    STRENGTH = MARAUDER
+    DEXTERITY = RANGER
+    INTELLIGENCE = WITCH
+    LIFE = MARAUDER
+    MANA = WITCH
+    ES = SOURCE
+    WARD = RARE
+    EVASION = POSITIVE
+    RAGE = WARNING
+    PHYS = NORMAL
+
+
+class PlayerClasses(Enum):
+    SCION = 0
+    MARAUDER = 1
+    RANGER = 2
+    WITCH = 3
+    DUELIST = 4
+    TEMPLAR = 5
+    SHADOW = 6
+
+
+class_backgrounds = {
+    PlayerClasses.SCION: {"n": "", "x": 0, "y": 0},
+    # PlayerClasses.MARAUDER: {"n": "BackgroundStr", "x": -2750/global_scale_factor, "y": 1600/global_scale_factor},
+    PlayerClasses.MARAUDER: {"n": "BackgroundStr", "x": -3000/global_scale_factor, "y": 1000/global_scale_factor},
+    PlayerClasses.RANGER: {"n": "BackgroundDex", "x": 2550/global_scale_factor, "y": 1600/global_scale_factor},
+    PlayerClasses.WITCH: {"n": "BackgroundInt", "x": -250/global_scale_factor, "y": -2200/global_scale_factor},
+    PlayerClasses.DUELIST: {"n": "BackgroundStrDex", "x": -150/global_scale_factor, "y": 2350/global_scale_factor},
+    PlayerClasses.TEMPLAR: {"n": "BackgroundStrInt", "x": -2100/global_scale_factor, "y": -1500/global_scale_factor},
+    PlayerClasses.SHADOW: {"n": "BackgroundDexInt", "x": 2350/global_scale_factor, "y": -1950/global_scale_factor},
 }
 
-color_codes = {
-    "NORMAL": "#000000",
-    "MAGIC": "#8888FF",
-    "RARE": "#FFFF77",
-    "UNIQUE": "#AF6025",
-    "RELIC": "#60C060",
-    "GEM": "#1AA29B",
-    "PROPHECY": "#B54BFF",
-    "CURRENCY": "#AA9E82",
-    "CRAFTED": "#B8DAF1",
-    "CUSTOM": "#5CF0BB",
-    "SOURCE": "#88FFFF",
-    "UNSUPPORTED": "#F05050",
-    "WARNING": "#FF9922",
-    "TIP": "#80A080",
-    "FIRE": "#B97123",
-    "COLD": "#3F6DB3",
-    "LIGHTNING": "#ADAA47",
-    "CHAOS": "#D02090",
-    "POSITIVE": "#33FF77",
-    "NEGATIVE": "#DD0022",
-    "OFFENCE": "#E07030",
-    "DEFENCE": "#8080E0",
-    "SCION": "#FFF0F0",
-    "MARAUDER": "#E05030",
-    "RANGER": "#70FF70",
-    "WITCH": "#7070FF",
-    "DUELIST": "#E0E070",
-    "TEMPLAR": "#C040FF",
-    "SHADOW": "#30C0D0",
-    "MAINHAND": "#50FF50",
-    "MAINHANDBG": "#071907",
-    "OFFHAND": "#B7B7FF",
-    "OFFHANDBG": "#070719",
-    "SHAPER": "#55BBFF",
-    "ELDER": "#AA77CC",
-    "FRACTURED": "#A29160",
-    "ADJUDICATOR": "#E9F831",
-    "BASILISK": "#00CB3A",
-    "CRUSADER": "#2946FC",
-    "EYRIE": "#AAB7B8",
-    "CLEANSING": "#F24141",
-    "TANGLE": "#038C8C",
-    "CHILLBG": "#151e26",
-    "FREEZEBG": "#0c262b",
-    "SHOCKBG": "#191732",
-    "SCORCHBG": "#270b00",
-    "BRITTLEBG": "#00122b",
-    "SAPBG": "#261500",
-    "SCOURGE": "#FF6E25",
+class_centres = {
+    PlayerClasses.SCION: {"n": "centerScion", "x": 0, "y": 0},
+    PlayerClasses.MARAUDER: {"n": "centerMarauder", "x": -2750/global_scale_factor, "y": 1600/global_scale_factor},
+    PlayerClasses.RANGER: {"n": "centerRanger", "x": 2550/global_scale_factor, "y": 1600/global_scale_factor},
+    PlayerClasses.WITCH: {"n": "centerWitch", "x": -250/global_scale_factor, "y": -2200/global_scale_factor},
+    PlayerClasses.DUELIST: {"n": "centerDuelist", "x": -150/global_scale_factor, "y": 2350/global_scale_factor},
+    PlayerClasses.TEMPLAR: {"n": "centerTemplar", "x": -2100/global_scale_factor, "y": -1500/global_scale_factor},
+    PlayerClasses.SHADOW: {"n": "centerShadow", "x": 2350/global_scale_factor, "y": -1950/global_scale_factor},
 }
-color_codes["STRENGTH"] = color_codes["MARAUDER"]
-color_codes["DEXTERITY"] = color_codes["RANGER"]
-color_codes["INTELLIGENCE"] = color_codes["WITCH"]
 
-color_codes["LIFE"] = color_codes["MARAUDER"]
-color_codes["MANA"] = color_codes["WITCH"]
-color_codes["ES"] = color_codes["SOURCE"]
-color_codes["WARD"] = color_codes["RARE"]
-color_codes["EVASION"] = color_codes["POSITIVE"]
-color_codes["RAGE"] = color_codes["WARNING"]
-color_codes["PHYS"] = color_codes["NORMAL"]
-
-
-def str_to_bool(text: str) -> bool:
-    """Convert a string to a boolean.
-
-    As the settings could be manipulated by a human, we can't trust eval().
-    EG: eval('os.system(‘rm -rf /’)')
-    return True if it looks like it could be true, otherwise false.
+nodeOverlay = {
+    "Normal": {
+        "artWidth": "40",
+        "alloc": "PSSkillFrameActive",
+        "path": "PSSkillFrameHighlighted",
+        "unalloc": "PSSkillFrame",
+        "allocAscend": "AscendancyFrameSmallAllocated",
+        "pathAscend": "AscendancyFrameSmallCanAllocate",
+        "unallocAscend": "AscendancyFrameSmallNormal"
+    },
+    "Notable": {
+        "artWidth": "58",
+        "alloc": "NotableFrameAllocated",
+        "path": "NotableFrameCanAllocate",
+        "unalloc": "NotableFrameUnallocated",
+        "allocAscend": "AscendancyFrameLargeAllocated",
+        "pathAscend": "AscendancyFrameLargeCanAllocate",
+        "unallocAscend": "AscendancyFrameLargeNormal",
+        "allocBlighted": "BlightedNotableFrameAllocated",
+        "pathBlighted": "BlightedNotableFrameCanAllocate",
+        "unallocBlighted": "BlightedNotableFrameUnallocated",
+    },
+    "Keystone": {
+        "artWidth": "84",
+        "alloc": "KeystoneFrameAllocated",
+        "path": "KeystoneFrameCanAllocate",
+        "unalloc": "KeystoneFrameUnallocated"
+    },
+    "Socket": {
+        "artWidth": "58",
+        "alloc": "JewelFrameAllocated",
+        "path": "JewelFrameCanAllocate",
+        "unalloc": "JewelFrameUnallocated",
+        "allocAlt": "JewelSocketAltActive",
+        "pathAlt": "JewelSocketAltCanAllocate",
+        "unallocAlt": "JewelSocketAltNormal",
+    },
+    "Mastery": {
+        "artWidth": "65",
+        "alloc": "AscendancyFrameLargeAllocated",
+        "path": "AscendancyFrameLargeCanAllocate",
+        "unalloc": "AscendancyFrameLargeNormal"
+    },
+}
+for _type in nodeOverlay:
     """
-    return text.lower() in {"yes", "true", "t", "1", "on"}
+    From PassiveTree.lua file. Setting as the same scope as the 'constant'
+    """
+    data = nodeOverlay[_type]
+    size = int(data["artWidth"]) * 1.33
+    data["size"] = size
+    data["rsq"] = size * size
+
+
+class PlayerAscendancies(Enum):
+    NONE = None
+
+
+_VERSION = 3.18
+
+
+def str_to_bool(in_str):
+    """
+    Return a boolean from a string. As the settings could be manipulated by a human, we can't trust eval()
+      EG: eval('os.system(`rm -rf /`)')
+    :returns: True if it looks like it could be true, otherwise false
+    """
+    return in_str.lower() in ("yes", "true", "t", "1", "on")
 
 
 class Config:
-    def __init__(self) -> None:
-        self.config = {}
-        self.exe_dir = pathlib.Path(sys.argv[0]).absolute().parent
-        self.build_path = self.exe_dir / "builds"
-        self.settings_path = self.exe_dir / "settings.xml"
-        self.build_path.mkdir(exist_ok=True)
+    def __init__(self, _win, _app) -> None:
+        # To reduce circular references, have the app and main window references here
+        self.win = _win
+        self.app = _app
+        self.config = None
 
-    def read(self) -> None:
-        config = pob_xml.read_xml(self.settings_path)
-        self.config = config if config is not None else default_config
+        self.exeDir = Path.cwd()
+        self.settingsFile = Path(self.exeDir, "settings.xml")
+        self.buildPath = Path(self.exeDir, "builds")
+        if not self.buildPath.exists():
+            self.buildPath.mkdir()
+        self.tree_data_path = Path(self.exeDir, "TreeData")
+        if not self.tree_data_path.exists():
+            self.tree_data_path.mkdir()
+        self.misc = {}
+        self.read()
 
-    def write(self) -> None:
-        pob_xml.write_xml(self.settings_path, self.config)
+    def read(self):
+        """Set self.config with the contents of the settings file"""
+        if self.settingsFile.exists():
+            # try:
+                self.config = OrderedDict(pob_file.read_xml(self.settingsFile))
+                self.misc = self.config["PathOfBuilding"]["Misc"]
+                # print(self.misc)
+            # except:
+            #     self.config = None
+        if self.config is None:
+            self.config = default_config
+
+    def write(self):
+        """Write the settings file"""
+        pob_file.write_xml(self.settingsFile, self.config)
 
     @property
     def theme(self):
-        return self.config["PathOfBuilding"]["Misc"]["theme"]
+        _theme = self.misc.get("theme", "Dark")
+        if _theme not in ("Dark", "Light"):
+            _theme = "Dark"
+        return _theme
 
     @theme.setter
     def theme(self, new_theme):
-        self.config["PathOfBuilding"]["Misc"]["theme"] = new_theme
+        self.misc["theme"] = new_theme
 
+    @property
     def slotOnlyTooltips(self):
-        return str_to_bool(self.config["PathOfBuilding"]["Misc"]["slotOnlyTooltips"])
+        return str_to_bool(self.misc.get("slotOnlyTooltips", True))
 
-    def set_slotOnlyTooltips(self, new_bool):
-        self.config["PathOfBuilding"]["Misc"]["slotOnlyTooltips"] = str(new_bool)
+    @slotOnlyTooltips.setter
+    def slotOnlyTooltips(self, new_bool):
+        self.misc["slotOnlyTooltips"] = str(new_bool)
 
+    @property
     def showTitlebarName(self):
-        return str_to_bool(self.config["PathOfBuilding"]["Misc"]["showTitlebarName"])
+        return str_to_bool(self.misc.get("showTitlebarName", True))
 
-    def set_showTitlebarName(self, new_bool):
-        self.config["PathOfBuilding"]["Misc"]["showTitlebarName"] = str(new_bool)
+    @showTitlebarName.setter
+    def showTitlebarName(self, new_bool):
+        self.misc["showTitlebarName"] = str(new_bool)
 
+    @property
     def showWarnings(self):
-        return str_to_bool(self.config["PathOfBuilding"]["Misc"]["showWarnings"])
+        return str_to_bool(self.misc.get("showWarnings", True))
 
-    def set_showWarnings(self, new_bool):
-        self.config["PathOfBuilding"]["Misc"]["showWarnings"] = str(new_bool)
+    @showWarnings.setter
+    def showWarnings(self, new_bool):
+        self.misc["showWarnings"] = str(new_bool)
 
+    @property
+    # fmt: off
     def defaultCharLevel(self):
-        return int(self.config["PathOfBuilding"]["Misc"]["defaultCharLevel"])
+        _defaultCharLevel = self.misc.get("defaultCharLevel", 1)
+        if _defaultCharLevel < 1:
+            _defaultCharLevel = 1
+            self.misc["defaultCharLevel"] = f"{_defaultCharLevel}"
+        if _defaultCharLevel > 100:
+            _defaultCharLevel = 100
+            self.misc["defaultCharLevel"] = f"{_defaultCharLevel}"
+        return _defaultCharLevel
+    # fmt: on
 
-    def set_defaultCharLevel(self, new_int):
-        self.config["PathOfBuilding"]["Misc"]["defaultCharLevel"] = str(new_int)
+    @defaultCharLevel.setter
+    def defaultCharLevel(self, new_int):
+        self.misc["defaultCharLevel"] = f"{new_int}"
 
+    @property
     def nodePowerTheme(self):
-        return self.config["PathOfBuilding"]["Misc"]["nodePowerTheme"]
+        return self.misc.get("nodePowerTheme", "RED/BLUE")
 
-    def set_NodePowerTheme(self, new_theme):
-        self.config["PathOfBuilding"]["Misc"]["nodePowerTheme"] = new_theme
+    @nodePowerTheme.setter
+    def nodePowerTheme(self, new_theme):
+        self.misc["nodePowerTheme"] = new_theme
 
+    @property
     def connectionProtocol(self):
-        return self.config["PathOfBuilding"]["Misc"]["connectionProtocol"]
+        return self.misc.get("connectionProtocol", "nil")
 
-    def set_connectionProtocol(self, new_conn):
+    @connectionProtocol.setter
+    def connectionProtocol(self, new_conn):
         # what is this for
-        self.config["PathOfBuilding"]["Misc"]["connectionProtocol"] = new_conn
+        self.misc["connectionProtocol"] = new_conn
 
+    @property
     def decimalSeparator(self):
-        return self.config["PathOfBuilding"]["Misc"]["decimalSeparator"]
+        return self.misc.get("decimalSeparator", ".")
 
-    def set_decimalSeparator(self, new_sep):
-        self.config["PathOfBuilding"]["Misc"]["decimalSeparator"] = new_sep
+    @decimalSeparator.setter
+    def decimalSeparator(self, new_sep):
+        self.misc["decimalSeparator"] = new_sep
 
+    @property
     def thousandsSeparator(self):
-        return self.config["PathOfBuilding"]["Misc"]["thousandsSeparator"]
+        return self.misc.get("thousandsSeparator", ",")
 
-    def set_thousandsSeparator(self, new_sep):
-        self.config["PathOfBuilding"]["Misc"]["thousandsSeparator"] = new_sep
+    @thousandsSeparator.setter
+    def thousandsSeparator(self, new_sep):
+        self.misc["thousandsSeparator"] = new_sep
 
+    @property
     def showThousandsSeparators(self):
-        return str_to_bool(
-            self.config["PathOfBuilding"]["Misc"]["showThousandsSeparators"]
-        )
+        return str_to_bool(self.misc.get("showThousandsSeparators", True))
 
-    def set_showThousandsSeparators(self, new_bool):
-        self.config["PathOfBuilding"]["Misc"]["showThousandsSeparators"] = str(new_bool)
+    @showThousandsSeparators.setter
+    def showThousandsSeparators(self, new_bool):
+        self.misc["showThousandsSeparators"] = str(new_bool)
 
+    @property
+    # fmt: off
     def defaultGemQuality(self):
-        return self.config["PathOfBuilding"]["Misc"]["defaultGemQuality"]
+        _defaultGemQuality = self.misc.get("defaultGemQuality", 1)
+        if _defaultGemQuality < 0:
+            _defaultGemQuality = 0
+            self.misc["defaultGemQuality"] = f"{_defaultGemQuality}"
+        if _defaultGemQuality > 20:
+            _defaultGemQuality = 0
+            self.misc["defaultGemQuality"] = f"{_defaultGemQuality}"
+        return _defaultGemQuality
+    # fmt: on
 
-    def set_defaultGemQuality(self, new_int):
-        if new_int < 0 or new_int > 20:
-            new_int = 0
-        self.config["PathOfBuilding"]["Misc"]["defaultGemQuality"] = str(new_int)
+    @defaultGemQuality.setter
+    def defaultGemQuality(self, new_int):
+        self.misc["defaultGemQuality"] = f"{new_int}"
 
+    @property
     def buildSortMode(self):
-        return self.config["PathOfBuilding"]["Misc"]["buildSortMode"]
+        return self.misc.get("buildSortMode", "NAME")
 
-    def set_buildSortMode(self, new_mode):
-        self.config["PathOfBuilding"]["Misc"]["buildSortMode"] = new_mode
+    @buildSortMode.setter
+    def buildSortMode(self, new_mode):
+        self.misc["buildSortMode"] = new_mode
 
+    @property
     def betaMode(self):
-        return self.config["PathOfBuilding"]["Misc"]["betaMode"]
+        return str_to_bool(self.misc.get("betaMode", False))
 
-    def set_betaMode(self, new_bool):
-        self.config["PathOfBuilding"]["Misc"]["betaMode"] = str(new_bool)
+    @betaMode.setter
+    def betaMode(self, new_bool):
+        self.misc["betaMode"] = str(new_bool)
 
-    def recentBuilds(self):
+    @property
+    def size(self):
+        """
+        Return the window size as they were last written. This ensures the user has the same experience.
+        800 x 600 was chosen as it has been learn't with the lua version,
+          that some users in the world have small screen laptops
+        :returns: a QSize(width, height)
+        """
+        try:
+            width = int(self.config["PathOfBuilding"]["size"]["width"])
+            if width < 800:
+                width = 800
+            height = int(self.config["PathOfBuilding"]["size"]["height"])
+            if height < 600:
+                height = 600
+        except KeyError:
+            width = 800
+            height = 600
+        return QSize(width, height)
+
+    @size.setter
+    def size(self, new_size: QSize):
+        self.config["PathOfBuilding"]["size"] = {
+            "width": new_size.width(),
+            "height": new_size.height(),
+        }
+
+    def recent_builds(self):
+        """
+        Recent builds are a list of xml's that have been opened, to a maximum of 10 entries
+        :returns: an Ordered dictionary list of recent builds
+        """
         output = dict()
         try:
             output = self.config["PathOfBuilding"]["recentBuilds"]
-        except:
+        except KeyError:
             print("recentBuilds exception")
             output = {
                 "r0": "",
@@ -238,20 +425,18 @@ class Config:
                 "r4": "",
             }
         self.config["PathOfBuilding"]["recentBuilds"] = output
-        return output
+        return OrderedDict(output)
 
-    def size(self):
-        try:
-            width = int(self.config["PathOfBuilding"]["size"]["width"])
-            height = int(self.config["PathOfBuilding"]["size"]["height"])
-        except KeyError:
-            width = 800
-            height = 600
-            self.set_size(QSize(width, height))
-        return QSize(width, height)
-
-    def set_size(self, new_size: QSize):
-        self.config["PathOfBuilding"]["size"] = {
-            "width": new_size.width(),
-            "height": new_size.height(),
-        }
+    def add_recent_build(self, filename):
+        """
+        Adds one build to the list of recent builds
+        :param filename: str(): name of build xml
+        :returns: n/a
+        """
+        if filename not in self.config["PathOfBuilding"]["recentBuilds"].values():
+            for idx in [3, 2, 1, 0]:
+                # fmt: off
+                self.config["PathOfBuilding"]["recentBuilds"][f"r{idx + 1}" ]\
+                    = self.config["PathOfBuilding"]["recentBuilds"][f"r{idx}"]
+                # fmt: on
+            self.config["PathOfBuilding"]["recentBuilds"]["r0"] = filename

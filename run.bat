@@ -1,5 +1,3 @@
-REM Assume PoB_UI.py needs rebuilding
-REM Simple way to ensure you don't forget.
-
-pyside6-uic main.ui -o src/pob_main_ui.py
-python src/PathOfBuilding.py
+pyside6-uic Assets\PoB_Main_Window.ui -o src\PoB_Main_Window.py
+python src\PathOfBuilding.py 
+pause
