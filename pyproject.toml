@@ -6,12 +6,17 @@ authors = ["ppoelzl <33464174+ppoelzl@users.noreply.github.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.11"
 requests = "^2.26.0"
 SLPP = "^1.2.3"
-
+PySide6 = "6.3.1"
+PySide6-Addons = "6.3.1"
+PySide6-Essentials = "6.3.1"
+xmltodict = "0.13.0"
+pyqtdarktheme = "1.1.0"
+ 
 [tool.poetry.dev-dependencies]
-black = "^21.9b0"
+black = "^22.3.0"
 isort = "^5.9.3"
 
 [build-system]
