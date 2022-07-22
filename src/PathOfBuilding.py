@@ -62,10 +62,14 @@ from qdarktheme.util import get_qdarktheme_root_path
 from qdarktheme.widget_gallery.ui.dock_ui import DockUI
 from qdarktheme.widget_gallery.ui.frame_ui import FrameUI
 from qdarktheme.widget_gallery.ui.widgets_ui import WidgetsUI
-from pob_config import Config, ColourCodes, _VERSION, program_title, PlayerClasses
-# from build import Build
+
+# from pob_config import Config, ColourCodes, _VERSION, program_title, PlayerClasses
+from pob_config import *
+from build import Build
+
 # from tree import Tree
-# from tree_view import TreeView
+from tree_view import TreeView
+
 # from tree_graphics_item import TreeGraphicsItem
 
 # pyside6-uic main.ui -o pob_ui.py
@@ -73,37 +77,98 @@ from PoB_Main_Window import Ui_MainWindow
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    def __init__(self) -> None:
+    def __init__(self, _app) -> None:
+        # def __init__(self, screen_rect) -> None:
         super(MainWindow, self).__init__()
         self.setupUi(self)
-        # self.scroll = QScrollArea()
-        # self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        # self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        # self.setCentralWidget(self.scroll)
 
         self._theme = "dark"
         self._border_radius = "rounded"
         self._curr_class = PlayerClasses.SCION
         self.startPos = None
-
-        self.config = Config(app, self)
-        self.config.read()
-        self.set_theme(self.config.theme == "Dark")
-
         atexit.register(self.exit_handler)
         self.setWindowTitle(program_title)  # Do not translate
+
+        self.config = Config(self, _app)
+        self.config.read()
         self.resize(self.config.size)
 
-        # Add content to Colour Combo
-        self.combo_Notes_Colour.addItems([colour.name.title() for colour in ColourCodes])
+        self.set_theme(self.config.theme == "Dark")
+        self.action_Theme.setChecked(self.config.theme == "Dark")
+
+        # Start with an empty build
+        self.build = Build(self.config)
+
+        """ Start: Do what the QT Cannot yet do """
+        # add widgets to the Toolbar
+        toolbar_spacer1 = QWidget()
+        self.toolBar_MainWindow.insertWidget(self.action_Theme, toolbar_spacer1)
+        self.label_points = QLabel()
+        self.label_points.setMinimumSize(100, 0)
+        self.label_points.setText(" 0 / 123  0 / 8 ")
+        self.label_points.setAlignment(Qt.AlignCenter)
+        self.toolBar_MainWindow.addWidget(self.label_points)
+        label_level = QLabel()
+        label_level.setText("Level: ")
+        self.toolBar_MainWindow.addWidget(label_level)
+        self.spin_level = QSpinBox()
+        self.spin_level.setMinimum(1)
+        self.spin_level.setMaximum(100)
+        self.toolBar_MainWindow.addWidget(self.spin_level)
+        self.combo_classes = QComboBox()
+        self.combo_classes.setMinimumSize(100, 0)
+        self.combo_classes.setDuplicatesEnabled(False)
+        # self.combo_classes.setInsertPolicy(QComboBox.InsertAlphabetically)
+        for idx in PlayerClasses:
+            self.combo_classes.addItem(idx.name.title(), idx.value)
+
+        toolbar_spacer1 = QWidget()
+        toolbar_spacer1.setMinimumSize(50, 0)
+        self.toolBar_MainWindow.addWidget(toolbar_spacer1)
+        self.toolBar_MainWindow.addWidget(self.combo_classes)
+        self.combo_ascendancy = QComboBox()
+        self.combo_ascendancy.setMinimumSize(100, 0)
+        self.combo_ascendancy.setDuplicatesEnabled(False)
+        self.combo_ascendancy.addItem("None", "None")
+        self.toolBar_MainWindow.addWidget(self.combo_ascendancy)
+
+        # I am unable to yet 'promote' graphicsView to TreeView in the QT Designer
+        # So dump the placeholder tab and add our own
+        self.graphicsView_PlaceHolder.setParent(None)
+        self.tabTree.setParent(None)
+        self.tabTree = TreeView(self.config, self.build)
+        self.tabWidget.setTabWhatsThis(
+            self.tabWidget.insertTab(0, self.tabTree, "&Tree"), "TREE"
+        )
+        """ End: Do what the QT Cannot yet do """
+
+        self.set_current_tab()
+
+        self.combo_Bandits.clear()
+        for name in bandits.keys():
+            self.combo_Bandits.addItem(bandits[name], name)
+        self.combo_MajorGods.clear()
+        for name in pantheon_major_gods.keys():
+            self.combo_MajorGods.addItem(pantheon_major_gods[name], name)
+        self.combo_MinorGods.clear()
+        for name in pantheon_minor_gods.keys():
+            self.combo_MinorGods.addItem(pantheon_minor_gods[name], name)
+
+        # Add content to Colour ComboBox
+        self.combo_Notes_Colour.addItems(
+            [colour.name.title() for colour in ColourCodes]
+        )
 
         # get the initial colour of the edit box for later use as 'NORMAL'
-        self.defaultTextColour = self.textEdit_Notes.textColor()
+        self.default_notes_text_colour = self.textEdit_Notes.textColor()
 
         # set the ComboBox dropdown width.
         self.combo_Bandits.view().setMinimumWidth(
             self.combo_Bandits.minimumSizeHint().width()
         )
+
+        self.menu_Builds.addSeparator()
+        self.set_recent_builds_menu_items(self.config)
 
         # Connect our Actions
         self.combo_Notes_Font.currentFontChanged.connect(self.set_notes_font)
@@ -114,9 +179,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_New.triggered.connect(self.build_new)
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save_as)
+        self.combo_ascendancy.currentTextChanged.connect(self.change_ascendancy)
+        self.combo_classes.currentTextChanged.connect(self.change_class)
 
     def exit_handler(self):
         self.config.size = self.size()
+
         self.config.write()
         # Logic for checking we need to save and save if needed, goes here...
         # filePtr = open("edit.html", "w")
@@ -130,15 +198,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @Slot()
     def build_new(self):
+        """
+        React to the New action
+        :return:
+        """
         # Logic for checking we need to save and save if needed, goes here...
         # if build.needs_saving:
         # if ui_utils.yes_no_dialog(app.tr("Save build"), app.tr("build name goes here"))
         if self.build.build is not None:
-            if self.build.ask_for_save_if_modified():
-                self.build.new()
+            if not self.build.ask_for_save_if_modified():
+                return
+        self.build.new(empty_build)
+        self.build_loader("New")
 
     @Slot()
     def build_open(self):
+        """
+        React to the Open action and prompt the user to open a build
+        :return: N/A
+        """
         # Logic for checking we need to save and save if needed, goes here...
         # if build.needs_saving:
         # if ui_utils.yes_no_dialog(app.tr("Save build"), app.tr("build name goes here"))
@@ -149,10 +227,65 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             f"{app.tr('Build Files')} (*.xml)",
         )
         if filename != "":
-            # open the file
+            self.build_loader(filename)
+
+    # Open a previous build as shown on the Build Menu
+    @Slot()
+    def _open_previous_build(self, checked, value, index):
+        """
+        React to a previous build being selected from the "Build" menu
+        :param checked: Boolean: a value for if it's checked or not, always False
+        :param value: String: Fullpath name of the build to load
+        :param index: Integer: index of chosen menu item
+        :return: N/A
+        """
+        # Or does the logic for checking we need to save and save if needed, go here ???
+        # if self.build.needs_saving:
+        # if ui_utils.save_yes_no(app.tr("Save build"), app.tr("build name goes here"))
+
+        # open the file using the filename in the build.
+        self.build_loader(value)
+
+    def build_loader(self, filename):
+        """
+        Common actions for when we are loading a build
+        :param filename: String: the filename of file that was loaded, or "New" if called from the New action
+        :return: N/A
+        """
+        # open the file
+        new = filename == "New"
+        if not new:
             self.build.load(filename)
-            if self.build.build is not None:
+        if self.build.build is not None:
+            if not new:
                 self.config.add_recent_build(filename)
+            self.set_current_tab()
+            self.spin_level.setValue(self.build.level)
+            self.combo_classes.setCurrentText(self.build.className)
+            self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
+            # print(f"{self.build.bandit}, {self.build.pantheonMajorGod}, {self.build.pantheonMinorGod}")
+            self.combo_Bandits.setCurrentText(self.build.bandit)
+            self.combo_MajorGods.setCurrentText(self.build.pantheonMajorGod)
+            self.combo_MinorGods.setCurrentText(self.build.pantheonMinorGod)
+            for i in range(self.combo_Bandits.count()):
+                if self.combo_Bandits.itemData(i) == self.build.bandit:
+                    self.combo_Bandits.setCurrentIndex(i)
+                    break
+            for i in range(self.combo_MajorGods.count()):
+                if self.combo_MajorGods.itemData(i) == self.build.pantheonMajorGod:
+                    self.combo_MajorGods.setCurrentIndex(i)
+                    break
+            for i in range(self.combo_MinorGods.count()):
+                if self.combo_MinorGods.itemData(i) == self.build.pantheonMinorGod:
+                    self.combo_MinorGods.setCurrentIndex(i)
+                    break
+
+    def set_current_tab(self):
+        for i in range(self.tabWidget.count()):
+            if self.tabWidget.tabWhatsThis(i) == self.build.viewMode:
+                self.tabWidget.setCurrentIndex(i)
+                return
+        self.tabWidget.setCurrentIndex(0)
 
     @Slot()
     def build_save_as(self):
@@ -188,7 +321,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
         if colour_name == "NORMAL":
-            self.textEdit_Notes.setTextColor(self.defaultTextColour)
+            self.textEdit_Notes.setTextColor(self.default_notes_text_colour)
         else:
             self.textEdit_Notes.setTextColor(ColourCodes[colour_name.upper()].value)
         self.textEdit_Notes.setFocus()
@@ -209,24 +342,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return self._curr_class
 
     @curr_class.setter
-    def curr_class(self, new_class):
+    def curr_class(self, new_class, new_ascendancy=None):
         """
         Actions required for changing classes
         :param new_class: Integer representing the PlayerClasses enumerations
+        :param new_ascendancy: Integer representing the PlayerClasses enumerations
         :return:
         """
         # GUI Changes
-        _class = self.right_pane.current_tree.classes[new_class]
+        _class = self.build.current_tree.classes[new_class]
         # Changing the ascendancy combobox, will trigger it's signal/slot.
         # This is good as it will set the ascendancy back to None
-        self.ascendancy_combobox.clear()
-        self.ascendancy_combobox.addItem("None", "None")
+        self.combo_ascendancy.clear()
+        self.combo_ascendancy.addItem("None", "None")
         for _ascendancy in _class["ascendancies"]:
-            self.ascendancy_combobox.addItem(_ascendancy["name"])
+            self.combo_ascendancy.addItem(_ascendancy["name"])
         # build changes
         self._curr_class = new_class
         self.build.curr_class = new_class
-        self.right_pane.tabTree.switch_class(new_class)
+        self.tabTree.switch_class(new_class)
 
     @Slot()
     def change_class(self, selected_class):
@@ -235,7 +369,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param selected_class: String of the selected text
         :return:
         """
-        self.curr_class = self.classes_combobox.currentData()
+        self.curr_class = self.combo_classes.currentData()
 
     @Slot()
     def change_ascendancy(self, selected_ascendancy):
@@ -253,17 +387,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             print(f"change_ascendancy: {selected_ascendancy}")
 
-    # Open a previous build as shown on the Build Menu
-    @Slot()
-    def _open_previous_build(self, bool, value, index):
-        # Or does the logic for checking we need to save and save if needed, go here ???
-        # if self.build.needs_saving:
-        # if ui_utils.save_yes_no(app.tr("Save build"), app.tr("build name goes here"))
-        # action = self.menubar.sender()
-        # print(type(action))
-        # open the file using the filename in the build.
-        self.build.load(value)
-
     @Slot()
     def set_tab_focus(self, index):
         """
@@ -272,24 +395,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
         # tab indexes are 0 based. Used by set_tab_focus
-        self.tab_focus = {
+        tab_focus = {
             0: self.tabWidget,
             1: self.list_Skills,
             2: self.tabWidget,
             3: self.textEdit_Notes,
+            4: self.tabWidget,
+            5: self.tabWidget,
         }
 
-        self.tab_focus.get(index).setFocus()
+        tab_focus.get(index).setFocus()
+        self.build.current_tab = self.tabWidget.tabWhatsThis(
+            self.tabWidget.currentIndex()
+        )
 
     # Do all actions needed to change between light and dark
     @Slot()
     def set_theme(self, new_theme):
         """
         Set the new theme based on the state of the action.
-        The text of the action has a capital letter but the qdarktheme styles are all lowercase
+        The text of the action has a capital letter but the qdarktheme styles are lowercase
         :param new_theme: Boolean state of the action
         :return: N/A
         """
+        print(new_theme)
         if new_theme:
             self._theme = "dark"
             self.action_Theme.setText("Light")
@@ -324,8 +453,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 idx += 1
 
 
+# Start here
 app = QApplication(sys.argv)
+font = QFont()
+font.setFamily("Lucida Sans Typewriter")
+app.setFont(font)
 
-window = MainWindow()
+window = MainWindow(app)
 window.show()
 app.exec()

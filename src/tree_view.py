@@ -73,22 +73,26 @@ from qdarktheme.qtpy.QtWidgets import (
 )
 
 import pob_file, ui_utils
-from pob_config import Config, ColourCodes, PlayerClasses, class_backgrounds, global_scale_factor
+from pob_config import (
+    Config,
+    ColourCodes,
+    PlayerClasses,
+    class_backgrounds,
+    global_scale_factor,
+)
 from tree import Tree
 from tree_graphics_item import TreeGraphicsItem
+from build import Build
 
 
 class TreeView(QGraphicsView):
-    def __init__(self, _config: Config, _tree: Tree) -> None:
+    def __init__(self, _config: Config, _build: Build) -> None:
         super(TreeView, self).__init__()
         self.config = _config
-        self.tree = _tree
+        self.build = _build
 
         self.ui = None
-        self._scene = QGraphicsScene(self.tree.size)
-        # self._scene = QGraphicsScene(
-        #     self, self.tree.min_x, self.tree.min_y, self.tree.max_x, self.tree.max_y
-        # )
+        self._scene = QGraphicsScene(self.build.current_tree.size)
 
         self.setScene(self._scene)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
@@ -197,8 +201,8 @@ class TreeView(QGraphicsView):
 
     def add_picture(self, pixmap, x, y, z=0, selectable=True):
         """
-        Add a picture represented. If a pixmap, then ox,oy must be used
-        :param pixmap: string or pixmap to be added
+        Add a picture or pixmap
+        :param pixmap: string or GraphicsItem to be added
         :param x, y: it's position in the scene
         :param z: which layer to use:  -2: background, -1: connectors, 0: inactive,
                                         1: active (overwriting its inactive equivalent ???)
@@ -211,9 +215,14 @@ class TreeView(QGraphicsView):
         return image
 
     def switch_class(self, _class):
-        # if self.tree.char_class != _class
+        """
+        Changes for this Class() to deal with a PoB class change
+        :param _class:
+        :return:
+        """
+        # if self.build.current_tree.char_class != _class
         # Alert for wiping your tree
-        self.tree.char_class = _class
+        self.build.current_tree.char_class = _class
         self.add_tree_images()
 
     def add_tree_images(self):
@@ -223,25 +232,28 @@ class TreeView(QGraphicsView):
         It is expected another function will be called to created selected nodes and connecting lines
         :return:
         """
-        if self.tree is None:
+        if self.build.current_tree is None:
             return
+
+        tree = self.build.current_tree
 
         def renderGroup(self, group):
             if group.get("ascendancyName", None) is not None:
-                if group.get("isAscendancyStart", None) is not None:
+                if group.get("isAscendancyStart", False):
                     # This is the ascendancy circles around the outside of the tree
                     # print(group["ascendancyName"])
-                    name=f"center{group['ascendancyName']}"
+                    name = f"center{group['ascendancyName']}"
                     self.add_picture(
-                        self.tree.assets[f"Classes{group['ascendancyName']}"],
+                        tree.assets[f"Classes{group['ascendancyName']}"],
                         group["x"],
                         group["y"],
                         -2,
                         False,
                     )
             elif group["oo"].get(3, None) is not None:
+                # This needs to duplicated and mirrored
                 self.add_picture(
-                    self.tree.assets["GroupBackgroundLargeHalfAlt"],
+                    tree.assets["GroupBackgroundLargeHalfAlt"],
                     group["x"],
                     group["y"],
                     -2,
@@ -249,7 +261,7 @@ class TreeView(QGraphicsView):
                 )
             elif group["oo"].get(2, None) is not None:
                 self.add_picture(
-                    self.tree.assets["GroupBackgroundMediumAlt"],
+                    tree.assets["GroupBackgroundMediumAlt"],
                     group["x"],
                     group["y"],
                     -2,
@@ -257,7 +269,7 @@ class TreeView(QGraphicsView):
                 )
             elif group["oo"].get(1, None) is not None:
                 self.add_picture(
-                    self.tree.assets["GroupBackgroundSmallAlt"],
+                    tree.assets["GroupBackgroundSmallAlt"],
                     group["x"],
                     group["y"],
                     -2,
@@ -269,28 +281,24 @@ class TreeView(QGraphicsView):
 
         # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet
         image = None
-        if self.tree.char_class != PlayerClasses.SCION:
-            c = class_backgrounds[self.tree.char_class]
+        if tree.char_class != PlayerClasses.SCION.value:
+            c = class_backgrounds[PlayerClasses(tree.char_class)]
             self._char_class_bkgnd_image = self.add_picture(
-                self.tree.assets[c["n"]], c["x"], c["y"], -2, False
+                tree.assets[c["n"]], c["x"], c["y"], -2, False
             )
 
         # Draw the group backgrounds
-        for g in self.tree.groups:
-            group = self.tree.groups[g]
-            is_proxy = group.get("isProxy", False)
-            is_ascendancy_start = group.get("isAscendancyStart", False)
-            ascendancy_name = group.get("ascendancyName", None)
-            # if not is_proxy and is_ascendancy_start and ascendancy_name is not None:
+        for g in tree.groups:
+            group = tree.groups[g]
             if not group.get("isProxy", False):
                 renderGroup(self, group)
 
-        for image in self.tree.graphics_items:
+        for image in tree.graphics_items:
             self._scene.addItem(image)
 
-        for n in self.tree.nodes:
+        for n in tree.nodes:
             # print(n)
-            node = self.tree.nodes[n]
+            node = tree.nodes[n]
             _type = node.type
             # keystoneActive, mastery, normalActive, notableActive
             # print(f"{n}: {_type}: {node.sprites}")
@@ -298,7 +306,7 @@ class TreeView(QGraphicsView):
             hoverNode = None
             # isAlloc = True
             isAlloc = False
-            state = "unalloc" # could also be Alloc and Path
+            state = "unalloc"  # could also be Alloc and Path
             overlay = ""
             base = None
             if _type == "ClassStart":
@@ -313,18 +321,30 @@ class TreeView(QGraphicsView):
                     # This is the icon that appears in the center of many groups
                     if node.masteryEffects:
                         if isAlloc:
-                            base = node.masterySprites["activeIcon"]["masteryActiveSelected"]
-                            effect = node.masterySprites["activeEffectImage"]["masteryActiveEffect"]
+                            base = node.masterySprites["activeIcon"][
+                                "masteryActiveSelected"
+                            ]
+                            effect = node.masterySprites["activeEffectImage"][
+                                "masteryActiveEffect"
+                            ]
                         elif node == hoverNode:
-                            base = node.masterySprites["inactiveIcon"]["masteryConnected"]
+                            base = node.masterySprites["inactiveIcon"][
+                                "masteryConnected"
+                            ]
                         else:
-                            base = node.masterySprites["inactiveIcon"]["masteryInactive"]
+                            base = node.masterySprites["inactiveIcon"][
+                                "masteryInactive"
+                            ]
                     else:
                         base = node.sprites["mastery"]
                 else:
                     # Normal node (includes keystones and notables)
-                    base = node.sprites[f"{_type.lower()}{(isAlloc and 'Active' or 'Inactive')}"]
-                    overlay = node.overlay[f"{state}{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}"]
+                    base = node.sprites[
+                        f"{_type.lower()}{(isAlloc and 'Active' or 'Inactive')}"
+                    ]
+                    overlay = node.overlay[
+                        f"{state}{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}"
+                    ]
             # print(f"base: {base}")
             # print(f"overlay: {overlay}")
 
@@ -338,3 +358,5 @@ class TreeView(QGraphicsView):
                     image.filename = node.name
                     # image.filename = base["name"]
                     image.data = base["name"]
+
+    # add_tree_images

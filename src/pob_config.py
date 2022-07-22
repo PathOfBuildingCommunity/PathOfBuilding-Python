@@ -25,7 +25,9 @@ this is used to divide all x and y data coming in from the tree.json, but not He
 without this, items are too far apart and items are far too small on screen.
 All values should nly be scaled on point of entry, ie: when they are first processed out of the json
 """
-global_scale_factor=1
+global_scale_factor = 1
+
+_VERSION = 3.18
 
 # Default config incase the settings file doesn't exist
 default_config = {
@@ -54,6 +56,250 @@ default_config = {
             "r4": "",
         },
     }
+}
+
+empty_build = {
+    "PathOfBuilding": {
+        "Build": {
+            "@level": "1",
+            "@targetVersion": "3_0",
+            "@pantheonMajorGod": "None",
+            "@bandit": "None",
+            "@className": "Scion",
+            "@ascendClassName": "None",
+            "@mainSocketGroup": "1",
+            "@viewMode": "TREE",
+            "@pantheonMinorGod": "None",
+            "PlayerStat": [
+                {"@stat": "AverageHit", "@value": ""},
+                {"@stat": "Speed", "@value": ""},
+                {"@stat": "HitSpeed", "@value": ""},
+                {"@stat": "PreEffectiveCritChance", "@value": ""},
+                {"@stat": "CritChance", "@value": ""},
+                {"@stat": "CritMultiplier", "@value": ""},
+                {"@stat": "TotalDPS", "@value": ""},
+                {"@stat": "TotalDot", "@value": ""},
+                {"@stat": "WithBleedDPS", "@value": ""},
+                {"@stat": "WithIgniteDPS", "@value": ""},
+                {"@stat": "WithPoisonDPS", "@value": ""},
+                {"@stat": "TotalDotDPS", "@value": ""},
+                {"@stat": "CullingDPS", "@value": ""},
+                {"@stat": "CombinedDPS", "@value": ""},
+                {"@stat": "Cooldown", "@value": ""},
+                {"@stat": "AreaOfEffectRadius", "@value": ""},
+                {"@stat": "ManaCost", "@value": ""},
+                {"@stat": "LifeCost", "@value": ""},
+                {"@stat": "ESCost", "@value": ""},
+                {"@stat": "RageCost", "@value": ""},
+                {"@stat": "ManaPercentCost", "@value": ""},
+                {"@stat": "LifePercentCost", "@value": ""},
+                {"@stat": "ManaPerSecondCost", "@value": ""},
+                {"@stat": "LifePerSecondCost", "@value": ""},
+                {"@stat": "ManaPercentPerSecondCost", "@value": ""},
+                {"@stat": "LifePercentPerSecondCost", "@value": ""},
+                {"@stat": "ESPerSecondCost", "@value": ""},
+                {"@stat": "ESPercentPerSecondCost", "@value": ""},
+                {"@stat": "Str", "@value": ""},
+                {"@stat": "Dex", "@value": ""},
+                {"@stat": "Int", "@value": ""},
+                {"@stat": "Omni", "@value": ""},
+                {"@stat": "ReqOmni", "@value": ""},
+                {"@stat": "Devotion", "@value": ""},
+                {"@stat": "TotalEHP", "@value": ""},
+                {"@stat": "SecondMinimalMaximumHitTaken", "@value": ""},
+                {"@stat": "Life", "@value": ""},
+                {"@stat": "Spec:LifeInc", "@value": ""},
+                {"@stat": "LifeUnreserved", "@value": ""},
+                {"@stat": "LifeUnreservedPercent", "@value": ""},
+                {"@stat": "LifeRegen", "@value": ""},
+                {"@stat": "LifeLeechGainRate", "@value": ""},
+                {"@stat": "Mana", "@value": ""},
+                {"@stat": "Spec:ManaInc", "@value": ""},
+                {"@stat": "ManaUnreserved", "@value": ""},
+                {"@stat": "ManaUnreservedPercent", "@value": ""},
+                {"@stat": "ManaRegen", "@value": ""},
+                {"@stat": "ManaLeechGainRate", "@value": ""},
+                {"@stat": "Ward", "@value": ""},
+                {"@stat": "EnergyShield", "@value": ""},
+                {"@stat": "Spec:EnergyShieldInc", "@value": ""},
+                {"@stat": "EnergyShieldRegen", "@value": ""},
+                {"@stat": "EnergyShieldLeechGainRate", "@value": ""},
+                {"@stat": "Evasion", "@value": ""},
+                {"@stat": "Spec:EvasionInc", "@value": ""},
+                {"@stat": "MeleeEvadeChance", "@value": ""},
+                {"@stat": "ProjectileEvadeChance", "@value": ""},
+                {"@stat": "Armour", "@value": ""},
+                {"@stat": "Spec:ArmourInc", "@value": ""},
+                {"@stat": "PhysicalDamageReduction", "@value": ""},
+                {"@stat": "EffectiveMovementSpeedMod", "@value": ""},
+                {"@stat": "BlockChance", "@value": ""},
+                {"@stat": "SpellBlockChance", "@value": ""},
+                {"@stat": "AttackDodgeChance", "@value": ""},
+                {"@stat": "SpellDodgeChance", "@value": ""},
+                {"@stat": "SpellSuppressionChance", "@value": ""},
+                {"@stat": "FireResist", "@value": ""},
+                {"@stat": "FireResistOverCap", "@value": ""},
+                {"@stat": "ColdResist", "@value": ""},
+                {"@stat": "ColdResistOverCap", "@value": ""},
+                {"@stat": "LightningResist", "@value": ""},
+                {"@stat": "LightningResistOverCap", "@value": ""},
+                {"@stat": "ChaosResist", "@value": ""},
+                {"@stat": "ChaosResistOverCap", "@value": ""},
+                {"@stat": "FullDPS", "@value": ""},
+                {"@stat": "PowerCharges", "@value": ""},
+                {"@stat": "PowerChargesMax", "@value": ""},
+                {"@stat": "FrenzyCharges", "@value": ""},
+                {"@stat": "FrenzyChargesMax", "@value": ""},
+                {"@stat": "EnduranceCharges", "@value": ""},
+                {"@stat": "EnduranceChargesMax", "@value": ""},
+            ],
+            "FullDPSSkill": [
+                {
+                    "@skillPart": "",
+                    "@source": "",
+                    "@stat": "Herald of Thunder",
+                    "@value": "",
+                },
+                {
+                    "@skillPart": "",
+                    "@source": "",
+                    "@stat": "Full Culling DPS",
+                    "@value": "",
+                },
+                {"@skillPart": "", "@source": "", "@stat": "Storm Brand", "@value": ""},
+                {
+                    "@skillPart": "",
+                    "@source": "",
+                    "@stat": "Orb of Storms",
+                    "@value": "",
+                },
+            ],
+        },
+        "Import": {
+            "@lastAccountHash": "",
+            "@lastRealm": "PC",
+            "@lastCharacterHash": "",
+        },
+        "Calcs": {
+            "Input": [
+                {"@name": "misc_buffMode", "@string": "EFFECTIVE"},
+                {"@name": "skill_number", "@number": "1"},
+            ],
+            "Section": [
+                {"@collapsed": "false", "@id": "SkillSelect"},
+                {"@collapsed": "false", "@id": "HitDamage"},
+                {"@collapsed": "false", "@id": "Warcries"},
+                {"@collapsed": "false", "@id": "Dot"},
+                {"@collapsed": "false", "@id": "Speed"},
+                {"@collapsed": "false", "@id": "Crit"},
+                {"@collapsed": "false", "@id": "Impale"},
+                {"@collapsed": "false", "@id": "SkillTypeStats"},
+                {"@collapsed": "false", "@id": "HitChance"},
+                {"@collapsed": "false", "@id": "Bleed"},
+                {"@collapsed": "false", "@id": "Poison"},
+                {"@collapsed": "false", "@id": "Ignite"},
+                {"@collapsed": "false", "@id": "Decay"},
+                {"@collapsed": "false", "@id": "LeechGain"},
+                {"@collapsed": "false", "@id": "EleAilments"},
+                {"@collapsed": "false", "@id": "MiscEffects"},
+                {"@collapsed": "false", "@id": "Attributes"},
+                {"@collapsed": "false", "@id": "Life"},
+                {"@collapsed": "false", "@id": "Mana"},
+                {"@collapsed": "false", "@id": "EnergyShield"},
+                {"@collapsed": "false", "@id": "Ward"},
+                {"@collapsed": "false", "@id": "Armour"},
+                {"@collapsed": "false", "@id": "Evasion"},
+                {"@collapsed": "false", "@id": "Resist"},
+                {"@collapsed": "false", "@id": "Block"},
+                {"@collapsed": "false", "@id": "MiscDefences"},
+                {"@collapsed": "false", "@id": "DamageTaken"},
+            ],
+        },
+        "Skills": {
+            "@sortGemsByDPSField": "CombinedDPS",
+            "@matchGemLevelToCharacterLevel": "false",
+            "@sortGemsByDPS": "true",
+            "@defaultGemQuality": "0",
+            "@defaultGemLevel": "20",
+            "@showSupportGemTypes": "ALL",
+            "@showAltQualityGems": "false",
+        },
+        "Tree": {
+            "@activeSpec": "1",
+            "Spec": {
+                "@ascendClassId": "0",
+                "@masteryEffects": "",
+                "@nodes": "",
+                "@treeVersion": "",
+                "@classId": "0",
+                "EditedNodes": None,
+                "URL": "https://www.pathofexile.com/passive-skill-tree/3.18.1/AAAABgAAAAAA",
+                "Sockets": None,
+            },
+        },
+        "Notes": None,
+        "NotesHTML": None,
+        "TreeView": {
+            "@searchStr": "",
+            "@zoomY": "",
+            "@showHeatMap": "false",
+            "@zoomLevel": "1",
+            "@showStatDifferences": "true",
+            "@zoomX": "",
+        },
+        "Items": {
+            "@activeItemSet": "1",
+            "@useSecondWeaponSet": "false",
+            "Slot": [
+                {"@name": "Weapon 1", "@itemId": ""},
+                {"@name": "Flask 3", "@itemId": ""},
+                {"@name": "Gloves", "@itemId": ""},
+                {"@name": "Belt", "@itemId": ""},
+                {"@name": "Flask 5", "@itemId": ""},
+                {"@name": "Helmet", "@itemId": ""},
+                {"@name": "Flask 1", "@itemId": ""},
+                {"@name": "Belt Abyssal Socket 1", "@itemId": ""},
+                {"@name": "Flask 4", "@itemId": ""},
+                {"@name": "Flask 2", "@itemId": ""},
+                {"@name": "Weapon 2 Swap", "@itemId": ""},
+                {"@name": "Weapon 1 Swap", "@itemId": ""},
+                {"@name": "Ring 2", "@itemId": ""},
+                {"@name": "Body Armour", "@itemId": ""},
+                {"@name": "Ring 1", "@itemId": ""},
+                {"@name": "Boots", "@itemId": ""},
+                {"@name": "Amulet", "@itemId": ""},
+            ],
+            "ItemSet": {"@useSecondWeaponSet": "false", "@id": "1"},
+        },
+        "Config": None,
+    }
+}
+
+bandits = {
+    "None": "2 Passives Points",
+    "Oak": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)",
+    "Kraityn": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)",
+    "Alira": "Alira (Mana Regen, Crit Multiplier, Resists)",
+}
+
+pantheon_major_gods = {
+    "None": "Godless",
+    "TheBrineKing": "Soul of the Brine King",
+    "Lunaris": "Soul of Lunaris",
+    "Solaris": "Soul of Solaris",
+    "Arakaali": "Soul of Arakaali",
+}
+
+pantheon_minor_gods = {
+    "None": "Godless",
+    "Gruthkul": "Soul of Gruthkul",
+    "Yugul": "Soul of Yugul",
+    "Abberath": "Soul of Abberath",
+    "Tukohama": "Soul of Tukohama",
+    "Garukhan": "Soul of Garukhan",
+    "Ralakesh": "Soul of Ralakesh",
+    "Ryslatha": "Soul of Ryslatha",
+    "Shakari": "Soul of Shakari",
 }
 
 
@@ -132,22 +378,70 @@ class PlayerClasses(Enum):
 class_backgrounds = {
     PlayerClasses.SCION: {"n": "", "x": 0, "y": 0},
     # PlayerClasses.MARAUDER: {"n": "BackgroundStr", "x": -2750/global_scale_factor, "y": 1600/global_scale_factor},
-    PlayerClasses.MARAUDER: {"n": "BackgroundStr", "x": -3000/global_scale_factor, "y": 1000/global_scale_factor},
-    PlayerClasses.RANGER: {"n": "BackgroundDex", "x": 2550/global_scale_factor, "y": 1600/global_scale_factor},
-    PlayerClasses.WITCH: {"n": "BackgroundInt", "x": -250/global_scale_factor, "y": -2200/global_scale_factor},
-    PlayerClasses.DUELIST: {"n": "BackgroundStrDex", "x": -150/global_scale_factor, "y": 2350/global_scale_factor},
-    PlayerClasses.TEMPLAR: {"n": "BackgroundStrInt", "x": -2100/global_scale_factor, "y": -1500/global_scale_factor},
-    PlayerClasses.SHADOW: {"n": "BackgroundDexInt", "x": 2350/global_scale_factor, "y": -1950/global_scale_factor},
+    PlayerClasses.MARAUDER: {
+        "n": "BackgroundStr",
+        "x": -3000 / global_scale_factor,
+        "y": 1000 / global_scale_factor,
+    },
+    PlayerClasses.RANGER: {
+        "n": "BackgroundDex",
+        "x": 2550 / global_scale_factor,
+        "y": 1600 / global_scale_factor,
+    },
+    PlayerClasses.WITCH: {
+        "n": "BackgroundInt",
+        "x": -250 / global_scale_factor,
+        "y": -2200 / global_scale_factor,
+    },
+    PlayerClasses.DUELIST: {
+        "n": "BackgroundStrDex",
+        "x": -150 / global_scale_factor,
+        "y": 2350 / global_scale_factor,
+    },
+    PlayerClasses.TEMPLAR: {
+        "n": "BackgroundStrInt",
+        "x": -2100 / global_scale_factor,
+        "y": -1500 / global_scale_factor,
+    },
+    PlayerClasses.SHADOW: {
+        "n": "BackgroundDexInt",
+        "x": 2350 / global_scale_factor,
+        "y": -1950 / global_scale_factor,
+    },
 }
 
 class_centres = {
     PlayerClasses.SCION: {"n": "centerScion", "x": 0, "y": 0},
-    PlayerClasses.MARAUDER: {"n": "centerMarauder", "x": -2750/global_scale_factor, "y": 1600/global_scale_factor},
-    PlayerClasses.RANGER: {"n": "centerRanger", "x": 2550/global_scale_factor, "y": 1600/global_scale_factor},
-    PlayerClasses.WITCH: {"n": "centerWitch", "x": -250/global_scale_factor, "y": -2200/global_scale_factor},
-    PlayerClasses.DUELIST: {"n": "centerDuelist", "x": -150/global_scale_factor, "y": 2350/global_scale_factor},
-    PlayerClasses.TEMPLAR: {"n": "centerTemplar", "x": -2100/global_scale_factor, "y": -1500/global_scale_factor},
-    PlayerClasses.SHADOW: {"n": "centerShadow", "x": 2350/global_scale_factor, "y": -1950/global_scale_factor},
+    PlayerClasses.MARAUDER: {
+        "n": "centerMarauder",
+        "x": -2750 / global_scale_factor,
+        "y": 1600 / global_scale_factor,
+    },
+    PlayerClasses.RANGER: {
+        "n": "centerRanger",
+        "x": 2550 / global_scale_factor,
+        "y": 1600 / global_scale_factor,
+    },
+    PlayerClasses.WITCH: {
+        "n": "centerWitch",
+        "x": -250 / global_scale_factor,
+        "y": -2200 / global_scale_factor,
+    },
+    PlayerClasses.DUELIST: {
+        "n": "centerDuelist",
+        "x": -150 / global_scale_factor,
+        "y": 2350 / global_scale_factor,
+    },
+    PlayerClasses.TEMPLAR: {
+        "n": "centerTemplar",
+        "x": -2100 / global_scale_factor,
+        "y": -1500 / global_scale_factor,
+    },
+    PlayerClasses.SHADOW: {
+        "n": "centerShadow",
+        "x": 2350 / global_scale_factor,
+        "y": -1950 / global_scale_factor,
+    },
 }
 
 nodeOverlay = {
@@ -158,7 +452,7 @@ nodeOverlay = {
         "unalloc": "PSSkillFrame",
         "allocAscend": "AscendancyFrameSmallAllocated",
         "pathAscend": "AscendancyFrameSmallCanAllocate",
-        "unallocAscend": "AscendancyFrameSmallNormal"
+        "unallocAscend": "AscendancyFrameSmallNormal",
     },
     "Notable": {
         "artWidth": "58",
@@ -176,7 +470,7 @@ nodeOverlay = {
         "artWidth": "84",
         "alloc": "KeystoneFrameAllocated",
         "path": "KeystoneFrameCanAllocate",
-        "unalloc": "KeystoneFrameUnallocated"
+        "unalloc": "KeystoneFrameUnallocated",
     },
     "Socket": {
         "artWidth": "58",
@@ -191,7 +485,7 @@ nodeOverlay = {
         "artWidth": "65",
         "alloc": "AscendancyFrameLargeAllocated",
         "path": "AscendancyFrameLargeCanAllocate",
-        "unalloc": "AscendancyFrameLargeNormal"
+        "unalloc": "AscendancyFrameLargeNormal",
     },
 }
 for _type in nodeOverlay:
@@ -206,9 +500,6 @@ for _type in nodeOverlay:
 
 class PlayerAscendancies(Enum):
     NONE = None
-
-
-_VERSION = 3.18
 
 
 def str_to_bool(in_str):
@@ -226,6 +517,7 @@ class Config:
         self.win = _win
         self.app = _app
         self.config = None
+        self.screen_rect = self.app.primaryScreen().size()
 
         self.exeDir = Path.cwd()
         self.settingsFile = Path(self.exeDir, "settings.xml")
@@ -242,11 +534,8 @@ class Config:
         """Set self.config with the contents of the settings file"""
         if self.settingsFile.exists():
             # try:
-                self.config = OrderedDict(pob_file.read_xml(self.settingsFile))
-                self.misc = self.config["PathOfBuilding"]["Misc"]
-                # print(self.misc)
-            # except:
-            #     self.config = None
+            self.config = OrderedDict(pob_file.read_xml(self.settingsFile))
+            self.misc = self.config["PathOfBuilding"]["Misc"]
         if self.config is None:
             self.config = default_config
 
@@ -263,7 +552,8 @@ class Config:
 
     @theme.setter
     def theme(self, new_theme):
-        self.misc["theme"] = new_theme
+        self.misc["theme"] = new_theme and "Dark" or "Light"
+        # self.misc["theme"] = new_theme
 
     @property
     def slotOnlyTooltips(self):
@@ -383,9 +673,11 @@ class Config:
     @property
     def size(self):
         """
-        Return the window size as they were last written. This ensures the user has the same experience.
-        800 x 600 was chosen as it has been learn't with the lua version,
-          that some users in the world have small screen laptops
+        Return the window size as they were last written to settings. This ensures the user has the same experience.
+        800 x 600 was chosen as the default as it has been learnt, with the lua version,
+          that some users in the world have small screen laptops.
+        Attempt to protect against silliness by limiting size to the screen size.
+          This could happen if someone changes their desktop size or copy program from another machine.
         :returns: a QSize(width, height)
         """
         try:
@@ -398,6 +690,12 @@ class Config:
         except KeyError:
             width = 800
             height = 600
+        if width > self.screen_rect.width():
+            print(f"Width: {width} is bigger than {self.screen_rect}. Correcting ...")
+            _size = self.screen_rect
+        if height > self.screen_rect.height():
+            print(f"Height: {height} is bigger than {self.screen_rect}. Correcting ...")
+            _size = self.screen_rect
         return QSize(width, height)
 
     @size.setter
@@ -412,7 +710,6 @@ class Config:
         Recent builds are a list of xml's that have been opened, to a maximum of 10 entries
         :returns: an Ordered dictionary list of recent builds
         """
-        output = dict()
         try:
             output = self.config["PathOfBuilding"]["recentBuilds"]
         except KeyError:
@@ -436,7 +733,7 @@ class Config:
         if filename not in self.config["PathOfBuilding"]["recentBuilds"].values():
             for idx in [3, 2, 1, 0]:
                 # fmt: off
-                self.config["PathOfBuilding"]["recentBuilds"][f"r{idx + 1}" ]\
+                self.config["PathOfBuilding"]["recentBuilds"][f"r{idx + 1}"]\
                     = self.config["PathOfBuilding"]["recentBuilds"][f"r{idx}"]
                 # fmt: on
             self.config["PathOfBuilding"]["recentBuilds"]["r0"] = filename

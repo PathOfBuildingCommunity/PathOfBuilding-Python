@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1269</width>
-    <height>765</height>
+    <width>1121</width>
+    <height>804</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,380 +17,109 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string notr="true">Path of Building</string>
-  </property>
-  <property name="windowIcon">
-   <iconset resource="PoB.qrc">
-    <normaloff>:/Art/Icons/PathOfBuilding.ico</normaloff>:/Art/Icons/PathOfBuilding.ico</iconset>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
-     <widget class="QSplitter" name="mainsplitter">
-      <property name="autoFillBackground">
-       <bool>false</bool>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
       </property>
-      <property name="styleSheet">
-       <string notr="true"/>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+      <property name="widgetResizable">
+       <bool>true</bool>
       </property>
-      <widget class="QFrame" name="frame">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>1</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>1119</width>
+         <height>725</height>
+        </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>220</width>
-         <height>600</height>
+         <width>1100</width>
+         <height>700</height>
         </size>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>300</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>10</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_Bandits">
-          <property name="text">
-           <string>Bandits:</string>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <property name="leftMargin">
+         <number>3</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSplitter" name="splitter_MainWindow">
+          <property name="autoFillBackground">
+           <bool>false</bool>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QComboBox" name="combo_Bandits">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
+          <property name="lineWidth">
+           <number>8</number>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>280</width>
-            <height>16777215</height>
-           </size>
+          <property name="midLineWidth">
+           <number>10</number>
           </property>
-          <property name="sizeAdjustPolicy">
-           <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="minimumContentsLength">
-           <number>60</number>
-          </property>
-          <property name="placeholderText">
-           <string>Make  a Selection</string>
-          </property>
-          <property name="modelColumn">
-           <number>0</number>
-          </property>
-          <item>
-           <property name="text">
-            <string extracomment="None">2 Passives Points</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Oak">Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Kraityn">Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Alira">Alira (Mana Regen, Crit Multiplier, Resists)</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_Pantheon">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>The Pantheon:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QComboBox" name="combo_MajorGods">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>280</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="placeholderText">
-           <string>Make  a Selection</string>
-          </property>
-          <item>
-           <property name="text">
-            <string extracomment="None">Nothing</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="BrineKing">Soul of the Brine King</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Lunaris">Soul of Lunaris</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Solaris">Soul of Solaris</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Arakaali">Soul of Arakaali</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QComboBox" name="combo_MinorGods">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>280</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="placeholderText">
-           <string>Make  a Selection</string>
-          </property>
-          <item>
-           <property name="text">
-            <string extracomment="None">Nothing</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Gruthkul">Soul of Gruthkul</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Yugul">Soul of Yugul</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Abberath">Soul of Abberath</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Tukohama">Soul of Tukohama</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Garukhan">Soul of Garukhan</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Ralakesh">Soul of Ralakesh</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Ryslatha">Soul of Ryslatha</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Shakari">Soul of Shakari</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="label_MainSkill">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Main Skill:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QComboBox" name="combo_MainSkill">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>280</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="placeholderText">
-           <string>Skill</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0">
-         <widget class="QComboBox" name="combo_MainSkillActive">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>280</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="placeholderText">
-           <string>Skill</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QListWidget" name="listStatistics">
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>2</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>600</width>
-         <height>500</height>
-        </size>
-       </property>
-       <property name="accessibleName">
-        <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="currentIndex">
-        <number>1</number>
-       </property>
-       <widget class="QWidget" name="tabTree">
-        <attribute name="title">
-         <string>&amp;Tree</string>
-        </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QGraphicsView" name="graphicsView"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tabSkills">
-        <attribute name="title">
-         <string>&amp;Skills</string>
-        </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QFrame" name="frame_SkillsTabLeft">
+          <widget class="QFrame" name="frame_Left">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>4</horstretch>
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>1</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
-             <width>400</width>
+             <width>190</width>
+             <height>600</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>300</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>10</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>200</width>
              <height>0</height>
             </size>
            </property>
@@ -400,1316 +129,2505 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <widget class="QLabel" name="label_SocketGroups">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>40</y>
-              <width>100</width>
-              <height>22</height>
-             </rect>
+           <layout class="QGridLayout" name="gridLayout">
+            <property name="leftMargin">
+             <number>2</number>
             </property>
-            <property name="text">
-             <string>Socket Groups:</string>
+            <property name="topMargin">
+             <number>2</number>
             </property>
-           </widget>
-           <widget class="QLabel" name="label_SkillSet">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>10</y>
-              <width>100</width>
-              <height>22</height>
-             </rect>
+            <property name="rightMargin">
+             <number>2</number>
             </property>
-            <property name="text">
-             <string>Skill Set: </string>
+            <property name="bottomMargin">
+             <number>2</number>
             </property>
-           </widget>
-           <widget class="QComboBox" name="combo_SkillSet">
-            <property name="geometry">
-             <rect>
-              <x>110</x>
-              <y>10</y>
-              <width>180</width>
-              <height>22</height>
-             </rect>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btn_SkillsManage">
-            <property name="geometry">
-             <rect>
-              <x>310</x>
-              <y>10</y>
-              <width>75</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Manage</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btn_SkillsDelete">
-            <property name="geometry">
-             <rect>
-              <x>210</x>
-              <y>40</y>
-              <width>75</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Delete</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btn_SkillsDeleteAll">
-            <property name="geometry">
-             <rect>
-              <x>310</x>
-              <y>40</y>
-              <width>75</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Delete All</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btn_SkillsNew">
-            <property name="geometry">
-             <rect>
-              <x>110</x>
-              <y>40</y>
-              <width>75</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>New</string>
-            </property>
-           </widget>
-           <widget class="QListWidget" name="list_Skills">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>70</y>
-              <width>375</width>
-              <height>311</height>
-             </rect>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_Usage_Hints">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>385</y>
-              <width>375</width>
-              <height>91</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Usage Hints:&lt;br&gt;- You can copy/paste socket groups using Ctrl-C and Ctrl-V.&lt;br&gt;- Ctrl-Left click to enable and disable socket groups.&lt;br&gt;- Ctrl-Right click to include/exclude in FullDPS calculations.&lt;br&gt;- Right click to set as the Main skill group.&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QGroupBox" name="group_SkillTabLeft">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>480</y>
-              <width>400</width>
-              <height>165</height>
-             </rect>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>375</width>
-              <height>165</height>
-             </size>
-            </property>
-            <property name="title">
-             <string>Gem Options</string>
-            </property>
-            <widget class="QLabel" name="label">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>15</y>
-               <width>170</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Sort Gems by DPS</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-            <widget class="QLabel" name="label_2">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>40</y>
-               <width>170</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Match Gems to Character Level</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-            <widget class="QLabel" name="label_3">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>65</y>
-               <width>170</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Default Gem Level</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-            <widget class="QLabel" name="label_4">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>90</y>
-               <width>170</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Default Gem Quality</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-            <widget class="QLabel" name="label_5">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>115</y>
-               <width>170</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Show Support Gems</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-            <widget class="QLabel" name="label_6">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>140</y>
-               <width>170</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Show Gem Quality Variants</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="comboBox_2">
-             <property name="geometry">
-              <rect>
-               <x>220</x>
-               <y>15</y>
-               <width>171</width>
-               <height>22</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QCheckBox" name="check_MatchToLevel">
-             <property name="geometry">
-              <rect>
-               <x>190</x>
-               <y>40</y>
-               <width>75</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_DefaultGemLevel">
-             <property name="geometry">
-              <rect>
-               <x>190</x>
-               <y>65</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_DefaultGemQuality">
-             <property name="geometry">
-              <rect>
-               <x>190</x>
-               <y>90</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_ShowSupportGems">
-             <property name="geometry">
-              <rect>
-               <x>190</x>
-               <y>115</y>
-               <width>202</width>
-               <height>22</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QCheckBox" name="check_ShowGemQualityVariants">
-             <property name="geometry">
-              <rect>
-               <x>190</x>
-               <y>140</y>
-               <width>75</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-            <widget class="QCheckBox" name="check_SortByDPS">
-             <property name="geometry">
-              <rect>
-               <x>190</x>
-               <y>15</y>
-               <width>75</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </widget>
-           <widget class="QWidget" name="widget_4" native="true">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>190</y>
-              <width>500</width>
-              <height>40</height>
-             </rect>
-            </property>
-            <widget class="QCheckBox" name="check_GemEnabled4">
-             <property name="geometry">
-              <rect>
-               <x>9</x>
-               <y>13</y>
-               <width>16</width>
-               <height>16</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemList4">
-             <property name="geometry">
-              <rect>
-               <x>30</x>
-               <y>10</y>
-               <width>170</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>170</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemLevel4">
-             <property name="geometry">
-              <rect>
-               <x>210</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>42</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemQuality4">
-             <property name="geometry">
-              <rect>
-               <x>260</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>42</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemVariant4">
-             <property name="geometry">
-              <rect>
-               <x>310</x>
-               <y>10</y>
-               <width>80</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_Bandits">
               <property name="text">
-               <string>Default</string>
+               <string>Bandits:</string>
               </property>
-             </item>
-             <item>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QComboBox" name="combo_Bandits">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>180</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>280</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+              </property>
+              <property name="minimumContentsLength">
+               <number>60</number>
+              </property>
+              <property name="placeholderText">
+               <string>Make  a Selection</string>
+              </property>
+              <property name="modelColumn">
+               <number>0</number>
+              </property>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="None">2 Passives Points</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Oak">Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Kraityn">Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Alira">Alira (Mana Regen, Crit Multiplier, Resists)</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_Pantheon">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
-               <string>Anomolous</string>
+               <string>The Pantheon:</string>
               </property>
-             </item>
-            </widget>
-            <widget class="QCheckBox" name="check_GemEnabled4_2">
-             <property name="geometry">
-              <rect>
-               <x>415</x>
-               <y>13</y>
-               <width>16</width>
-               <height>16</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemCount4">
-             <property name="geometry">
-              <rect>
-               <x>450</x>
-               <y>9</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-           </widget>
-           <widget class="QComboBox" name="combo_SocketedIn">
-            <property name="geometry">
-             <rect>
-              <x>480</x>
-              <y>40</y>
-              <width>171</width>
-              <height>22</height>
-             </rect>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_Variant">
-            <property name="geometry">
-             <rect>
-              <x>710</x>
-              <y>80</y>
-              <width>40</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Variant</string>
-            </property>
-           </widget>
-           <widget class="QCheckBox" name="check_SocketGroupEnabled">
-            <property name="geometry">
-             <rect>
-              <x>660</x>
-              <y>40</y>
-              <width>75</width>
-              <height>20</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Enabled</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_SocketedIn">
-            <property name="geometry">
-             <rect>
-              <x>410</x>
-              <y>40</y>
-              <width>71</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Socketed In:</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_Enabled">
-            <property name="geometry">
-             <rect>
-              <x>800</x>
-              <y>80</y>
-              <width>41</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Enabled</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_Count">
-            <property name="geometry">
-             <rect>
-              <x>850</x>
-              <y>80</y>
-              <width>40</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Count</string>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="lineEdit_SkillLabel">
-            <property name="geometry">
-             <rect>
-              <x>480</x>
-              <y>10</y>
-              <width>391</width>
-              <height>22</height>
-             </rect>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_SkillLabel">
-            <property name="geometry">
-             <rect>
-              <x>410</x>
-              <y>10</y>
-              <width>61</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Skill Label:</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_Level">
-            <property name="geometry">
-             <rect>
-              <x>610</x>
-              <y>80</y>
-              <width>40</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Level:</string>
-            </property>
-           </widget>
-           <widget class="QWidget" name="widget" native="true">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>100</y>
-              <width>500</width>
-              <height>40</height>
-             </rect>
-            </property>
-            <widget class="QCheckBox" name="check_GemEnabled1">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemList1">
-             <property name="geometry">
-              <rect>
-               <x>30</x>
-               <y>10</y>
-               <width>171</width>
-               <height>22</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemLevel1">
-             <property name="geometry">
-              <rect>
-               <x>210</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemQuality1">
-             <property name="geometry">
-              <rect>
-               <x>260</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemVariant1">
-             <property name="geometry">
-              <rect>
-               <x>310</x>
-               <y>10</y>
-               <width>80</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <item>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QComboBox" name="combo_MajorGods">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>180</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>280</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Make  a Selection</string>
+              </property>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="None">Godless</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="TheBrineKing">Soul of the Brine King</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Lunaris">Soul of Lunaris</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Solaris">Soul of Solaris</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Arakaali">Soul of Arakaali</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QComboBox" name="combo_MinorGods">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>180</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>280</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Make  a Selection</string>
+              </property>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="None">Godless</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Gruthkul">Soul of Gruthkul</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Yugul">Soul of Yugul</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Abberath">Soul of Abberath</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Tukohama">Soul of Tukohama</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Garukhan">Soul of Garukhan</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Ralakesh">Soul of Ralakesh</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Ryslatha">Soul of Ryslatha</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Shakari">Soul of Shakari</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_MainSkill">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
-               <string>Default</string>
+               <string>Main Skill:</string>
               </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Anomolous</string>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QComboBox" name="combo_MainSkill">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-             </item>
-            </widget>
-            <widget class="QCheckBox" name="check_GemEnabled1_2">
-             <property name="geometry">
-              <rect>
-               <x>415</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemCount1">
-             <property name="geometry">
-              <rect>
-               <x>450</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-           </widget>
-           <widget class="QLabel" name="label_GemName">
-            <property name="geometry">
-             <rect>
-              <x>430</x>
-              <y>80</y>
-              <width>70</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Gem Name:</string>
-            </property>
-           </widget>
-           <widget class="QCheckBox" name="check_SocketGroup_FullDPS">
-            <property name="geometry">
-             <rect>
-              <x>750</x>
-              <y>40</y>
-              <width>130</width>
-              <height>20</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Include in Full DPS</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-           <widget class="QWidget" name="widget_3" native="true">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>160</y>
-              <width>500</width>
-              <height>40</height>
-             </rect>
-            </property>
-            <widget class="QCheckBox" name="check_GemEnabled3">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemList3">
-             <property name="geometry">
-              <rect>
-               <x>30</x>
-               <y>10</y>
-               <width>171</width>
-               <height>22</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemLevel3">
-             <property name="geometry">
-              <rect>
-               <x>210</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemQuality3">
-             <property name="geometry">
-              <rect>
-               <x>260</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemVariant3">
-             <property name="geometry">
-              <rect>
-               <x>310</x>
-               <y>10</y>
-               <width>80</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <item>
-              <property name="text">
-               <string>Default</string>
+              <property name="minimumSize">
+               <size>
+                <width>180</width>
+                <height>0</height>
+               </size>
               </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Anomolous</string>
+              <property name="maximumSize">
+               <size>
+                <width>280</width>
+                <height>16777215</height>
+               </size>
               </property>
-             </item>
-            </widget>
-            <widget class="QCheckBox" name="check_GemEnabled3_2">
-             <property name="geometry">
-              <rect>
-               <x>415</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemCount3">
-             <property name="geometry">
-              <rect>
-               <x>450</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-           </widget>
-           <widget class="QWidget" name="widget_2" native="true">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>130</y>
-              <width>500</width>
-              <height>40</height>
-             </rect>
-            </property>
-            <widget class="QCheckBox" name="check_GemEnabled2">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemList2">
-             <property name="geometry">
-              <rect>
-               <x>30</x>
-               <y>10</y>
-               <width>171</width>
-               <height>22</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemLevel2">
-             <property name="geometry">
-              <rect>
-               <x>210</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemQuality2">
-             <property name="geometry">
-              <rect>
-               <x>260</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemVariant2">
-             <property name="geometry">
-              <rect>
-               <x>310</x>
-               <y>10</y>
-               <width>80</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <item>
-              <property name="text">
-               <string>Default</string>
+              <property name="placeholderText">
+               <string>&lt;empty&gt;</string>
               </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Anomolous</string>
+              <property name="duplicatesEnabled">
+               <bool>true</bool>
               </property>
-             </item>
-            </widget>
-            <widget class="QCheckBox" name="check_GemEnabled2_2">
-             <property name="geometry">
-              <rect>
-               <x>415</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemCount2">
-             <property name="geometry">
-              <rect>
-               <x>450</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-           </widget>
-           <widget class="QLabel" name="label_Quality">
-            <property name="geometry">
-             <rect>
-              <x>660</x>
-              <y>80</y>
-              <width>40</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Quality</string>
-            </property>
-           </widget>
-           <widget class="QWidget" name="widget_5" native="true">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>220</y>
-              <width>500</width>
-              <height>40</height>
-             </rect>
-            </property>
-            <widget class="QCheckBox" name="check_GemEnabled5">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemList5">
-             <property name="geometry">
-              <rect>
-               <x>30</x>
-               <y>10</y>
-               <width>171</width>
-               <height>22</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemLevel5">
-             <property name="geometry">
-              <rect>
-               <x>210</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemQuality5">
-             <property name="geometry">
-              <rect>
-               <x>260</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemVariant5">
-             <property name="geometry">
-              <rect>
-               <x>310</x>
-               <y>10</y>
-               <width>80</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <item>
-              <property name="text">
-               <string>Default</string>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QComboBox" name="combo_MainSkillActive">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Anomolous</string>
+              <property name="minimumSize">
+               <size>
+                <width>180</width>
+                <height>0</height>
+               </size>
               </property>
-             </item>
-            </widget>
-            <widget class="QCheckBox" name="check_GemEnabled5_2">
-             <property name="geometry">
-              <rect>
-               <x>415</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemCount5">
-             <property name="geometry">
-              <rect>
-               <x>450</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-           </widget>
-           <widget class="QWidget" name="widget_6" native="true">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>250</y>
-              <width>500</width>
-              <height>40</height>
-             </rect>
-            </property>
-            <widget class="QCheckBox" name="check_GemEnabled6">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemList6">
-             <property name="geometry">
-              <rect>
-               <x>30</x>
-               <y>10</y>
-               <width>171</width>
-               <height>22</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemLevel6">
-             <property name="geometry">
-              <rect>
-               <x>210</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemQuality6">
-             <property name="geometry">
-              <rect>
-               <x>260</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-            <widget class="QComboBox" name="combo_GemVariant6">
-             <property name="geometry">
-              <rect>
-               <x>310</x>
-               <y>10</y>
-               <width>80</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <item>
-              <property name="text">
-               <string>Default</string>
+              <property name="maximumSize">
+               <size>
+                <width>280</width>
+                <height>16777215</height>
+               </size>
               </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Anomolous</string>
+              <property name="placeholderText">
+               <string>&lt;empty&gt;</string>
               </property>
-             </item>
-            </widget>
-            <widget class="QCheckBox" name="check_GemEnabled6_2">
-             <property name="geometry">
-              <rect>
-               <x>415</x>
-               <y>10</y>
-               <width>20</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spin_GemCount6">
-             <property name="geometry">
-              <rect>
-               <x>450</x>
-               <y>10</y>
-               <width>42</width>
-               <height>22</height>
-              </rect>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>20</number>
-             </property>
-            </widget>
-           </widget>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QListWidget" name="list_Statistics">
+              <property name="minimumSize">
+               <size>
+                <width>180</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tabItems">
-        <attribute name="title">
-         <string>&amp;Items</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="tabNotes">
-        <attribute name="title">
-         <string>&amp;Notes</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QFontComboBox" name="combo_Notes_Font">
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
+          <widget class="QTabWidget" name="tabWidget">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>2</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="accessibleName">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="currentIndex">
+            <number>1</number>
+           </property>
+           <widget class="QWidget" name="tabTree">
+            <attribute name="title">
+             <string>&amp;Tree</string>
+            </attribute>
+            <attribute name="whatsThis">
+             <string notr="true">TREE</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="leftMargin">
+              <number>0</number>
              </property>
-             <property name="editable">
-              <bool>false</bool>
+             <property name="topMargin">
+              <number>0</number>
              </property>
-             <property name="currentText">
-              <string>Times New Roman</string>
+             <property name="rightMargin">
+              <number>0</number>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="spin_Notes_FontSize">
-             <property name="minimumSize">
-              <size>
-               <width>35</width>
-               <height>0</height>
-              </size>
+             <property name="bottomMargin">
+              <number>0</number>
              </property>
-             <property name="minimum">
+             <item>
+              <widget class="QGraphicsView" name="graphicsView_PlaceHolder"/>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabSkills">
+            <attribute name="title">
+             <string>S&amp;kills</string>
+            </attribute>
+            <attribute name="whatsThis">
+             <string notr="true">SKILLS</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frame_SkillsTab">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>4</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>910</width>
+                 <height>655</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="QLabel" name="label_SocketGroups">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>40</y>
+                  <width>90</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Socket Groups:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_SkillSet">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>10</y>
+                  <width>90</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Skill Set:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+               <widget class="QComboBox" name="combo_SkillSet">
+                <property name="geometry">
+                 <rect>
+                  <x>110</x>
+                  <y>10</y>
+                  <width>180</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="placeholderText">
+                 <string>&lt;empty&gt;</string>
+                </property>
+                <property name="duplicatesEnabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="btn_SkillsManage">
+                <property name="geometry">
+                 <rect>
+                  <x>310</x>
+                  <y>10</y>
+                  <width>75</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Manage ...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="btn_SkillsDelete">
+                <property name="geometry">
+                 <rect>
+                  <x>210</x>
+                  <y>40</y>
+                  <width>75</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Delete</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="btn_SkillsDeleteAll">
+                <property name="geometry">
+                 <rect>
+                  <x>310</x>
+                  <y>40</y>
+                  <width>75</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Delete All</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="btn_SkillsNew">
+                <property name="geometry">
+                 <rect>
+                  <x>110</x>
+                  <y>40</y>
+                  <width>75</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>New</string>
+                </property>
+               </widget>
+               <widget class="QListWidget" name="list_Skills">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>70</y>
+                  <width>375</width>
+                  <height>311</height>
+                 </rect>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_Usage_Hints">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>385</y>
+                  <width>375</width>
+                  <height>91</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Usage Hints:&lt;br&gt;- You can copy/paste socket groups using Ctrl-C and Ctrl-V.&lt;br&gt;- Ctrl-Left click to enable and disable socket groups.&lt;br&gt;- Ctrl-Right click to include/exclude in FullDPS calculations.&lt;br&gt;- Right click to set as the Main skill group.&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
+               </widget>
+               <widget class="QGroupBox" name="group_SkillTabLeft">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>480</y>
+                  <width>400</width>
+                  <height>165</height>
+                 </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>375</width>
+                  <height>165</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>Gem Options</string>
+                </property>
+                <widget class="QLabel" name="label_SortByDPS">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>15</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Sort Gems by DPS</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_MatchToLevel">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>40</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Match Gems to Character Level</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_DefaultGemLevel">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>65</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Default Gem Level</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_DefaultGemQuality">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>90</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Default Gem Quality</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ShowSupportGems">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>115</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Show Support Gems</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ShowGemQualityVariants">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>140</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Show Gem Quality Variants</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_SortByDPS">
+                 <property name="geometry">
+                  <rect>
+                   <x>220</x>
+                   <y>15</y>
+                   <width>171</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string extracomment="FullDPS">Full DPS</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="CombinedDPS">Combined DPS</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="TotalDPS">Total DPS</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="AverageDamage">Average Hit</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="TotalDot">DoT DPS</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="BleedDPS">Bleed DPS</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="IgniteDPS">Ignite DPS</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="TotalPoisonDPS">Poison DPS</string>
+                  </property>
+                 </item>
+                </widget>
+                <widget class="QCheckBox" name="check_MatchToLevel">
+                 <property name="geometry">
+                  <rect>
+                   <x>190</x>
+                   <y>40</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_DefaultGemLevel">
+                 <property name="geometry">
+                  <rect>
+                   <x>190</x>
+                   <y>65</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>25</number>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_DefaultGemQuality">
+                 <property name="geometry">
+                  <rect>
+                   <x>190</x>
+                   <y>90</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="maximum">
+                  <number>40</number>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ShowSupportGems">
+                 <property name="geometry">
+                  <rect>
+                   <x>190</x>
+                   <y>115</y>
+                   <width>202</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string extracomment="ALL">All</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="NORMAL">Non-Awakened</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="AWAKENED">Awakened</string>
+                  </property>
+                 </item>
+                </widget>
+                <widget class="QCheckBox" name="check_ShowGemQualityVariants">
+                 <property name="geometry">
+                  <rect>
+                   <x>190</x>
+                   <y>140</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+                <widget class="QCheckBox" name="check_SortByDPS">
+                 <property name="geometry">
+                  <rect>
+                   <x>190</x>
+                   <y>15</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QWidget" name="gem4" native="true">
+                <property name="geometry">
+                 <rect>
+                  <x>400</x>
+                  <y>190</y>
+                  <width>500</width>
+                  <height>40</height>
+                 </rect>
+                </property>
+                <widget class="QCheckBox" name="check_GemRemove4">
+                 <property name="geometry">
+                  <rect>
+                   <x>9</x>
+                   <y>13</y>
+                   <width>16</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemList4">
+                 <property name="geometry">
+                  <rect>
+                   <x>30</x>
+                   <y>10</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>170</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemLevel4">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>42</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemQuality4">
+                 <property name="geometry">
+                  <rect>
+                   <x>260</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>42</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximum">
+                  <number>40</number>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemVariant4">
+                 <property name="geometry">
+                  <rect>
+                   <x>310</x>
+                   <y>10</y>
+                   <width>80</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Default">Default</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate1">Anomalous</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate2">Divergent</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate3">Phantasmal</string>
+                  </property>
+                 </item>
+                </widget>
+                <widget class="QCheckBox" name="check_GemEnabled4">
+                 <property name="geometry">
+                  <rect>
+                   <x>415</x>
+                   <y>13</y>
+                   <width>16</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemCount4">
+                 <property name="geometry">
+                  <rect>
+                   <x>450</x>
+                   <y>9</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QComboBox" name="combo_SocketedIn">
+                <property name="geometry">
+                 <rect>
+                  <x>480</x>
+                  <y>40</y>
+                  <width>171</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="placeholderText">
+                 <string>&lt;empty&gt;</string>
+                </property>
+                <property name="duplicatesEnabled">
+                 <bool>false</bool>
+                </property>
+                <item>
+                 <property name="text">
+                  <string extracomment="None">None</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Weapon 1">Weapon 1</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Weapon 2">Weapon 2</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Weapon 1 Swap">Weapon 1 (Swap)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Weapon 2 Swap">Weapon 2 (Swap)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Helmet">Helmet</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Body Armour">Body Armour</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Gloves">Gloves</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Boots">Boots</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Amulet">Amulet</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Ring 1">Ring 1</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Ring 2">Ring 2</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string extracomment="Belt">Belt</string>
+                 </property>
+                </item>
+               </widget>
+               <widget class="QLabel" name="label_Variant">
+                <property name="geometry">
+                 <rect>
+                  <x>710</x>
+                  <y>80</y>
+                  <width>40</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Variant</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="check_SocketGroupEnabled">
+                <property name="geometry">
+                 <rect>
+                  <x>660</x>
+                  <y>40</y>
+                  <width>75</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Enabled</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_SocketedIn">
+                <property name="geometry">
+                 <rect>
+                  <x>410</x>
+                  <y>40</y>
+                  <width>71</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Socketed In:</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_Enabled">
+                <property name="geometry">
+                 <rect>
+                  <x>800</x>
+                  <y>80</y>
+                  <width>41</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Enabled</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_Count">
+                <property name="geometry">
+                 <rect>
+                  <x>850</x>
+                  <y>80</y>
+                  <width>40</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Count</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="lineEdit_SkillLabel">
+                <property name="geometry">
+                 <rect>
+                  <x>480</x>
+                  <y>10</y>
+                  <width>391</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_SkillLabel">
+                <property name="geometry">
+                 <rect>
+                  <x>410</x>
+                  <y>10</y>
+                  <width>61</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Skill Label:</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_Level">
+                <property name="geometry">
+                 <rect>
+                  <x>610</x>
+                  <y>80</y>
+                  <width>40</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Level:</string>
+                </property>
+               </widget>
+               <widget class="QFrame" name="gem1">
+                <property name="geometry">
+                 <rect>
+                  <x>400</x>
+                  <y>100</y>
+                  <width>500</width>
+                  <height>40</height>
+                 </rect>
+                </property>
+                <widget class="QCheckBox" name="check_GemRemove1">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemList1">
+                 <property name="geometry">
+                  <rect>
+                   <x>30</x>
+                   <y>10</y>
+                   <width>171</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemLevel1">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemQuality1">
+                 <property name="geometry">
+                  <rect>
+                   <x>260</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="maximum">
+                  <number>40</number>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemVariant1">
+                 <property name="geometry">
+                  <rect>
+                   <x>310</x>
+                   <y>10</y>
+                   <width>80</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Default">Default</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate1">Anomalous</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate2">Divergent</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate3">Phantasmal</string>
+                  </property>
+                 </item>
+                </widget>
+                <widget class="QCheckBox" name="check_GemEnabled1">
+                 <property name="geometry">
+                  <rect>
+                   <x>415</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemCount1">
+                 <property name="geometry">
+                  <rect>
+                   <x>450</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QLabel" name="label_GemName">
+                <property name="geometry">
+                 <rect>
+                  <x>430</x>
+                  <y>80</y>
+                  <width>70</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Gem Name:</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="check_SocketGroup_FullDPS">
+                <property name="geometry">
+                 <rect>
+                  <x>750</x>
+                  <y>40</y>
+                  <width>121</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Include in Full DPS</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+               <widget class="QWidget" name="gem3" native="true">
+                <property name="geometry">
+                 <rect>
+                  <x>400</x>
+                  <y>160</y>
+                  <width>500</width>
+                  <height>40</height>
+                 </rect>
+                </property>
+                <widget class="QCheckBox" name="check_GemRemove3">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemList3">
+                 <property name="geometry">
+                  <rect>
+                   <x>30</x>
+                   <y>10</y>
+                   <width>171</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemLevel3">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemQuality3">
+                 <property name="geometry">
+                  <rect>
+                   <x>260</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="maximum">
+                  <number>40</number>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemVariant3">
+                 <property name="geometry">
+                  <rect>
+                   <x>310</x>
+                   <y>10</y>
+                   <width>80</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Default">Default</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate1">Anomalous</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate2">Divergent</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate3">Phantasmal</string>
+                  </property>
+                 </item>
+                </widget>
+                <widget class="QCheckBox" name="check_GemEnabled3">
+                 <property name="geometry">
+                  <rect>
+                   <x>415</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemCount3">
+                 <property name="geometry">
+                  <rect>
+                   <x>450</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QFrame" name="gem2">
+                <property name="geometry">
+                 <rect>
+                  <x>400</x>
+                  <y>130</y>
+                  <width>500</width>
+                  <height>40</height>
+                 </rect>
+                </property>
+                <widget class="QCheckBox" name="check_GemRemove2">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemList2">
+                 <property name="geometry">
+                  <rect>
+                   <x>30</x>
+                   <y>10</y>
+                   <width>171</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemLevel2">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemQuality2">
+                 <property name="geometry">
+                  <rect>
+                   <x>260</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="maximum">
+                  <number>40</number>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemVariant2">
+                 <property name="geometry">
+                  <rect>
+                   <x>310</x>
+                   <y>10</y>
+                   <width>80</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Default">Default</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate1">Anomalous</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate2">Divergent</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate3">Phantasmal</string>
+                  </property>
+                 </item>
+                </widget>
+                <widget class="QCheckBox" name="check_GemEnabled2">
+                 <property name="geometry">
+                  <rect>
+                   <x>415</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemCount2">
+                 <property name="geometry">
+                  <rect>
+                   <x>450</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QLabel" name="label_Quality">
+                <property name="geometry">
+                 <rect>
+                  <x>660</x>
+                  <y>80</y>
+                  <width>40</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Quality</string>
+                </property>
+               </widget>
+               <widget class="QWidget" name="gem5" native="true">
+                <property name="geometry">
+                 <rect>
+                  <x>400</x>
+                  <y>220</y>
+                  <width>500</width>
+                  <height>40</height>
+                 </rect>
+                </property>
+                <widget class="QCheckBox" name="check_GemRemove5">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemList5">
+                 <property name="geometry">
+                  <rect>
+                   <x>30</x>
+                   <y>10</y>
+                   <width>171</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemLevel5">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemQuality5">
+                 <property name="geometry">
+                  <rect>
+                   <x>260</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="maximum">
+                  <number>40</number>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemVariant5">
+                 <property name="geometry">
+                  <rect>
+                   <x>310</x>
+                   <y>10</y>
+                   <width>80</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Default">Default</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate1">Anomalous</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate2">Divergent</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate3">Phantasmal</string>
+                  </property>
+                 </item>
+                </widget>
+                <widget class="QCheckBox" name="check_GemEnabled5">
+                 <property name="geometry">
+                  <rect>
+                   <x>415</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemCount5">
+                 <property name="geometry">
+                  <rect>
+                   <x>450</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QWidget" name="gem6" native="true">
+                <property name="geometry">
+                 <rect>
+                  <x>400</x>
+                  <y>250</y>
+                  <width>500</width>
+                  <height>40</height>
+                 </rect>
+                </property>
+                <widget class="QCheckBox" name="check_GemRemove6">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemList6">
+                 <property name="geometry">
+                  <rect>
+                   <x>30</x>
+                   <y>10</y>
+                   <width>171</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemLevel6">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemQuality6">
+                 <property name="geometry">
+                  <rect>
+                   <x>260</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="maximum">
+                  <number>40</number>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_GemVariant6">
+                 <property name="geometry">
+                  <rect>
+                   <x>310</x>
+                   <y>10</y>
+                   <width>80</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Default">Default</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate1">Anomalous</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate2">Divergent</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string extracomment="Alternate3">Phantasmal</string>
+                  </property>
+                 </item>
+                </widget>
+                <widget class="QCheckBox" name="check_GemEnabled6">
+                 <property name="geometry">
+                  <rect>
+                   <x>415</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QSpinBox" name="spin_GemCount6">
+                 <property name="geometry">
+                  <rect>
+                   <x>450</x>
+                   <y>10</y>
+                   <width>42</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabItems">
+            <attribute name="title">
+             <string>&amp;Items</string>
+            </attribute>
+            <attribute name="whatsThis">
+             <string notr="true">ITEMS</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frame">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="QPushButton" name="btn_SkillsManage_2">
+                <property name="geometry">
+                 <rect>
+                  <x>248</x>
+                  <y>11</y>
+                  <width>75</width>
+                  <height>24</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Manage ...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_ItemSet">
+                <property name="geometry">
+                 <rect>
+                  <x>11</x>
+                  <y>11</y>
+                  <width>46</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Item Set:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+               <widget class="QComboBox" name="combo_SkillSet_2">
+                <property name="geometry">
+                 <rect>
+                  <x>130</x>
+                  <y>12</y>
+                  <width>76</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="placeholderText">
+                 <string>&lt;empty&gt;</string>
+                </property>
+                <property name="duplicatesEnabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
+               <widget class="QGroupBox" name="groupBox">
+                <property name="geometry">
+                 <rect>
+                  <x>11</x>
+                  <y>41</y>
+                  <width>350</width>
+                  <height>438</height>
+                 </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>350</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="title">
+                 <string>Equipped Items:</string>
+                </property>
+                <widget class="QLabel" name="label_ItemLoc_">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>20</y>
+                   <width>56</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Weapon 1:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>20</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_1">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>48</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_1">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>48</y>
+                   <width>56</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Weapon 2:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>76</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>76</y>
+                   <width>42</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Helmet:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>104</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>104</y>
+                   <width>74</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Body Armour:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_4">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>132</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_4">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>132</y>
+                   <width>38</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Gloves:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_5">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>160</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_5">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>160</y>
+                   <width>33</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Boots:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_6">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>188</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_6">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>188</y>
+                   <width>42</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Amulet:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_7">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>216</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_7">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>216</y>
+                   <width>36</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Ring 1:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_8">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>244</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_8">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>244</y>
+                   <width>36</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Ring 2:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_9">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>272</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_9">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>272</y>
+                   <width>23</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Belt:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_10">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>300</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_10">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>300</y>
+                   <width>38</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Flask 1:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_11">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>328</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_11">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>328</y>
+                   <width>38</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Flask 2:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_12">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>356</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_12">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>356</y>
+                   <width>38</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Flask 3:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_13">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>384</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_13">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>384</y>
+                   <width>38</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Flask 4:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ItemLoc_14">
+                 <property name="geometry">
+                  <rect>
+                   <x>84</x>
+                   <y>412</y>
+                   <width>76</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="placeholderText">
+                  <string>&lt;empty&gt;</string>
+                 </property>
+                 <property name="duplicatesEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ItemLoc_14">
+                 <property name="geometry">
+                  <rect>
+                   <x>4</x>
+                   <y>412</y>
+                   <width>38</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Flask 5:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabNotes">
+            <attribute name="title">
+             <string>&amp;Notes</string>
+            </attribute>
+            <attribute name="whatsThis">
+             <string notr="true">NOTES</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
               <number>3</number>
              </property>
-             <property name="maximum">
-              <number>50</number>
+             <property name="rightMargin">
+              <number>0</number>
              </property>
-             <property name="value">
-              <number>15</number>
+             <property name="bottomMargin">
+              <number>0</number>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="combo_Notes_Colour">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::MinimumExpanding</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>90</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QTextEdit" name="textEdit_Notes">
-           <property name="lineWrapMode">
-            <enum>QTextEdit::NoWrap</enum>
-           </property>
+             <item>
+              <layout class="QHBoxLayout" name="hLayout_Notes">
+               <item>
+                <widget class="QFontComboBox" name="combo_Notes_Font">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="editable">
+                  <bool>false</bool>
+                 </property>
+                 <property name="currentText">
+                  <string>Lucida Sans Typewriter</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="spin_Notes_FontSize">
+                 <property name="minimumSize">
+                  <size>
+                   <width>35</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="minimum">
+                  <number>3</number>
+                 </property>
+                 <property name="maximum">
+                  <number>50</number>
+                 </property>
+                 <property name="value">
+                  <number>15</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="combo_Notes_Colour">
+                 <property name="minimumSize">
+                  <size>
+                   <width>140</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="hSpacer_Notes">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::MinimumExpanding</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>90</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QTextEdit" name="textEdit_Notes">
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="lineWrapMode">
+                <enum>QTextEdit::NoWrap</enum>
+               </property>
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabCalcs">
+            <property name="font">
+             <font>
+              <family>Lucida Sans Typewriter</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <attribute name="title">
+             <string>C&amp;alcs</string>
+            </attribute>
+            <attribute name="whatsThis">
+             <string notr="true">CALCS</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="tabConfig">
+            <attribute name="title">
+             <string>C&amp;onfig</string>
+            </attribute>
+            <attribute name="whatsThis">
+             <string notr="true">CONFIG</string>
+            </attribute>
+           </widget>
           </widget>
-         </item>
-        </layout>
-       </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="menuBar_MainWindow">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1269</width>
+     <width>1121</width>
      <height>22</height>
     </rect>
    </property>
-   <property name="minimumSize">
-    <size>
-     <width>400</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>16777215</width>
-     <height>16777215</height>
-    </size>
-   </property>
    <widget class="QMenu" name="menu_Builds">
     <property name="title">
-     <string>&amp;Builds</string>
+     <string>Builds</string>
     </property>
     <addaction name="action_New"/>
     <addaction name="action_Open"/>
@@ -1720,24 +2638,23 @@
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
-     <string>&amp;View</string>
+     <string>View</string>
     </property>
     <addaction name="action_Theme"/>
    </widget>
    <addaction name="menu_Builds"/>
    <addaction name="menu_View"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="toolBar">
+  <widget class="QStatusBar" name="statusBar_MainWindow"/>
+  <widget class="QToolBar" name="toolBar_MainWindow">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
    <property name="allowedAreas">
     <set>Qt::BottomToolBarArea|Qt::TopToolBarArea</set>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -1750,7 +2667,6 @@
    <addaction name="action_Save"/>
    <addaction name="separator"/>
    <addaction name="action_Theme"/>
-   <addaction name="separator"/>
   </widget>
   <action name="action_New">
    <property name="icon">
@@ -1758,13 +2674,16 @@
      <normaloff>:/Art/Icons/add-folder.png</normaloff>:/Art/Icons/add-folder.png</iconset>
    </property>
    <property name="text">
-    <string>New</string>
+    <string>&amp;New</string>
    </property>
    <property name="toolTip">
     <string>Start a new build</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_Save">
@@ -1773,13 +2692,16 @@
      <normaloff>:/Art/Icons/downloads-folder.png</normaloff>:/Art/Icons/downloads-folder.png</iconset>
    </property>
    <property name="text">
-    <string>Save</string>
+    <string>&amp;Save</string>
    </property>
    <property name="toolTip">
     <string>Save this build</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_Exit">
@@ -1788,13 +2710,16 @@
      <normaloff>:/Art/Icons/door-open-out.png</normaloff>:/Art/Icons/door-open-out.png</iconset>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>E&amp;xit</string>
    </property>
    <property name="toolTip">
     <string>Exit Path of Building</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_Open">
@@ -1803,10 +2728,13 @@
      <normaloff>:/Art/Icons/opened-folder.png</normaloff>:/Art/Icons/opened-folder.png</iconset>
    </property>
    <property name="text">
-    <string>Open</string>
+    <string>&amp;Open</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_Theme">
@@ -1821,13 +2749,16 @@
      <normaloff>:/Art/Icons/yin-yang.png</normaloff>:/Art/Icons/yin-yang.png</iconset>
    </property>
    <property name="text">
-    <string>Light</string>
+    <string>Light &amp;Theme</string>
    </property>
    <property name="toolTip">
     <string>Change the theme between the light and the dark</string>
    </property>
    <property name="whatsThis">
     <string>light</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
  </widget>
@@ -1846,8 +2777,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>634</x>
-     <y>382</y>
+     <x>560</x>
+     <y>401</y>
     </hint>
    </hints>
   </connection>

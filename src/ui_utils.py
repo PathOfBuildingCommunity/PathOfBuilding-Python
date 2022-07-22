@@ -26,7 +26,10 @@ from qdarktheme.qtpy.QtWidgets import (
 
 #
 def yes_no_dialog(win, title, text):
-    return QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No) == QMessageBox.Yes
+    return (
+        QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No)
+        == QMessageBox.Yes
+    )
 
 
 def ok_dialog(win, title, text, btn_text="OK"):

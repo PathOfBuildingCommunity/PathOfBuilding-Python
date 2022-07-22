@@ -5,6 +5,7 @@ This is a base PoB class. It doesn't import any other PoB classes
 """
 
 from pathlib import Path
+from bs4 import BeautifulSoup
 import xmltodict
 import json
 

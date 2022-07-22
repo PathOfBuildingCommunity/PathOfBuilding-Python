@@ -11,66 +11,52 @@ associated with a Player.
 """
 
 from pathlib import Path
+from bs4 import BeautifulSoup as soup
 
-from pob_config import Config, ColourCodes, program_title, PlayerClasses, _VERSION
+from pob_config import (
+    Config,
+    ColourCodes,
+    program_title,
+    PlayerClasses,
+    _VERSION,
+    empty_build,
+)
 import pob_file
 import ui_utils
 from tree import Tree
-
-default_build = {
-    "PathOfBuilding": {
-        "Build": {
-            "version": "p1",
-            "level": "1",
-            "targetVersion": "3_0",
-            "pantheonMajorGod": "None",
-            "bandit": "None",
-            "className": "Templar",
-            "ascendClassName": "Inquisitor",
-            "mainSocketGroup": "5",
-            "viewMode": "NOTES",
-            "pantheonMinorGod": "None",
-        },
-        "Import": {
-            "lastAccountHash": "c80de930a45ad8c2ad7ca55c18682fc5a64eb85a",
-            "lastRealm": "PC",
-            "lastCharacterHash": "5ea56ce0e8798eb62dbac4a1dbec23f435637af6",
-        },
-        "Calcs": {},
-        "Skills": {},
-        "Tree": {},
-        "Notes": "",
-        "TreeView": {
-            "searchStr": "",
-            "zoomY": "245.25",
-            "showHeatMap": "false",
-            "zoomLevel": "2",
-            "showStatDifferences": "true",
-            "zoomX": "-54.5",
-        },
-        "Items": {},
-        "Config": {},
-    }
-}
+from PoB_Main_Window import Ui_MainWindow
 
 
 class Build:
     def __init__(self, _config: Config, __name: str = "New") -> None:
-        self.config = _config
+        self.pob_config = _config
         self._name = __name
+        self.ui: Ui_MainWindow = self.pob_config.win
         # self.player = player.Player()
         self.filename = ""
-        self.build = None
-        # self.trees = {_VERSION: Tree(self.config)}
-        # self.current_tree = self.tree[_VERSION]
-        # self.curr_tree = Tree(self.config)
+        self.current_tab = "Tree"
+        self.trees = {_VERSION: Tree(self.pob_config)}
+        self.current_tree = self.trees.get(_VERSION)
         self.ui = None
         self.need_saving = False
-        self._current_class = PlayerClasses.SCION
+
+        # variables from the xml
+        self.build = None
+        self.import_field = None
+        self.calcs = None
+        self.skills = None
+        self.tree = None
+        self.notes = None
+        self.notes_html = None
+        self.tree_view = None
+        self.items = None
+        self.config = None
+
+        self.new(empty_build)
 
     def __repr__(self) -> str:
         ret_str = f"[BUILD]: '{self.name}'\n"
-        # ret_str += f"{self.tree}"
+        ret_str += f"{self.current_tree.version}"
         # ret_str += f"{self.player}"
         return ret_str
 
@@ -81,24 +67,34 @@ class Build:
     @name.setter
     def name(self, new_name):
         self._name = new_name
-        self.config.win.setWindowTitle(f"{program_title} - {new_name}")
+        self.pob_config.win.setWindowTitle(f"{program_title} - {new_name}")
 
     @property
     def current_class(self):
-        return self._current_class
+        return self.current_tree.char_class
 
     @current_class.setter
-    def curr_class(self, new_class):
+    def current_class(self, new_class):
         """
         Actions required for changing classes
         :param new_class: Integer representing the PlayerClasses enumerations
         :return:
         """
-        self._current_class = new_class
+        self.current_tree.char_class = new_class
+        self.ui.classes_combobox.setCurrentIndex(new_class)
 
-    def new(self):
-        self.build = default_build
+    def new(self, _build):
         self.name = "New"
+        self.build = _build["PathOfBuilding"]["Build"]
+        self.import_field = _build["PathOfBuilding"]["Import"]
+        self.calcs = _build["PathOfBuilding"]["Calcs"]
+        self.skills = _build["PathOfBuilding"]["Skills"]
+        self.tree = _build["PathOfBuilding"]["Tree"]
+        self.notes = _build["PathOfBuilding"]["Notes"]
+        self.notes_html = _build["PathOfBuilding"].get("NotesHTML", None)
+        self.tree_view = _build["PathOfBuilding"]["TreeView"]
+        self.items = _build["PathOfBuilding"]["Items"]
+        self.config = _build["PathOfBuilding"]["Items"]
 
     def load(self, filename):
         """
@@ -107,25 +103,26 @@ class Build:
         :return: N/A
         """
         _name = "New"
-        self.build = pob_file.read_xml(filename)
-        if self.build is None:
+        _build_pob = pob_file.read_xml(filename)
+        print(_build_pob)
+        if _build_pob is None:
+            tr = self.pob_config.app
             ui_utils.critical_dialog(
-                self.config.win,
-                self.config.app.tr("Load Build"),
-                f"{self.config.app.tr('An error occurred to trying load')}:\n{filename}",
-                self.config.app.tr("Close"),
+                self.pob_config.win,
+                tr("Load Build"),
+                f"{tr('An error occurred to trying load')}:\n{filename}",
+                tr("Close"),
             )
-            self.new()
         else:
+            # How do we want to deal with corrupt builds
             self.filename = filename
-            _name = Path(Path(filename).name).stem
-        self.name = _name
-        # split out the trees in a dict of Assigned_Nodes classes
-        self.curr_class = self.current_tree.char_class
+            self.new(_build_pob)
+            # print(self.build["PlayerStat"][:])
+            self.name = Path(Path(filename).name).stem
 
     def save(self):
         """
-        Save the build tothe filename recorded in the build Class
+        Save the build to the filename recorded in the build Class
         :return: N/A
         """
         pob_file.write_xml(self.filename, self.build)
@@ -146,3 +143,83 @@ class Build:
         :return: False if build save was refused by the user
         """
         return True
+
+    @property
+    def ascendClassName(self):
+        return self.build["@ascendClassName"]
+
+    @ascendClassName.setter
+    def ascendClassName(self, new_name):
+        self.build["@ascendClassName"] = new_name
+
+    @property
+    def bandit(self):
+        return self.build["@bandit"]
+
+    @bandit.setter
+    def bandit(self, new_name):
+        self.build["@bandit"] = new_name
+
+    @property
+    def className(self):
+        return self.build["@className"]
+
+    @className.setter
+    def className(self, new_name):
+        self.build["@className"] = new_name
+
+    @property
+    def level(self):
+        return int(self.build["@level"])
+
+    @level.setter
+    def level(self, new_level):
+        self.build["@level"] = f"{new_level}"
+
+    @property
+    def mainSocketGroup(self):
+        return self.build["@mainSocketGroup"]
+
+    @mainSocketGroup.setter
+    def mainSocketGroup(self, new_name):
+        self.build["@mainSocketGroup"] = new_name
+
+    @property
+    def pantheonMajorGod(self):
+        return self.build["@pantheonMajorGod"]
+
+    @pantheonMajorGod.setter
+    def pantheonMajorGod(self, new_name):
+        self.build["@pantheonMajorGod"] = new_name
+
+    @property
+    def pantheonMinorGod(self):
+        return self.build["@pantheonMinorGod"]
+
+    @pantheonMinorGod.setter
+    def pantheonMinorGod(self, new_name):
+        self.build["@pantheonMinorGod"] = new_name
+
+    @property
+    def targetVersion(self):
+        return self.build["@targetVersion"]
+
+    @targetVersion.setter
+    def targetVersion(self, new_name):
+        self.build["@targetVersion"] = new_name
+
+    @property
+    def viewMode(self):
+        return self.build["@viewMode"]
+
+    @viewMode.setter
+    def viewMode(self, curr_tab):
+        self.build["@viewMode"] = curr_tab.upper
+
+    # @property
+    # def (self):
+    #     return self.build[""]
+    #
+    # @.setter
+    # def (self, new_name):
+    #     self.build[""] = new_name

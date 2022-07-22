@@ -10,3 +10,12 @@ limit zoom (0.5 -> 0.08)
 function DrawImage(imgHandle, left, top, width, height, tcLeft, tcTop, tcRight, tcBottom) end
 
 Does writing json(loadstring()) work
+
+Try add toolbar to Tree Tab
+Add widgets to main Toolbar manually as QT designer won't do it.
+
+Promote graphicsview to my treeview
+Edit: For those trying to do this in the future, make sure that when you put in the python file into the header input, you don't put the .py at the end, as it literally takes that letter for letter and converts it to an import statement when you convert the ui to a py file.
+https://www.pythonguis.com/tutorials/pyside-embed-pyqtgraph-custom-widgets/
+
+

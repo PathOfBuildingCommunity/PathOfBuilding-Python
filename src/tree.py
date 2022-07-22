@@ -20,13 +20,21 @@ from qdarktheme.qtpy.QtCore import QRect
 from qdarktheme.qtpy.QtGui import QPixmap
 
 import pob_file, ui_utils
-from pob_config import Config, ColourCodes, PlayerClasses, _VERSION, nodeOverlay, global_scale_factor
+from pob_config import (
+    Config,
+    ColourCodes,
+    PlayerClasses,
+    _VERSION,
+    nodeOverlay,
+    global_scale_factor,
+)
 from tree_graphics_item import TreeGraphicsItem
 from node import Node
 
 # from Build import Build
 
 
+# fmt: off
 def calc_orbit_angles(nodes_in_orbit):
     orbit_angles = {}
     if nodes_in_orbit == 16:
@@ -35,18 +43,23 @@ def calc_orbit_angles(nodes_in_orbit):
     elif nodes_in_orbit == 40:
         # Every 10 and 45 degrees
         orbit_angles = [0, 10, 20, 30, 40, 45, 50, 60, 70, 80, 90, 100, 110, 120, 130, 135, 140, 150, 160, 170, 180,
-                       190, 200, 210, 220, 225, 230, 240, 250, 260, 270, 280, 290, 300, 310, 315, 320, 330, 340,
-                       350]
+                        190, 200, 210, 220, 225, 230, 240, 250, 260, 270, 280, 290, 300, 310, 315, 320, 330, 340,
+                        350]
     else:
         # Uniformly spaced
+        orbit_angles[0] = 0
         for i in range(nodes_in_orbit):
-            orbit_angles[i] = 360 * i / nodes_in_orbit
+            orbit_angles[i+1] = 360 * i / nodes_in_orbit
 
+    # print(f"\n{len(orbit_angles)}")
+    # print(f"{orbit_angles}")
     for i in range(len(orbit_angles)):
         orbit_angles[i] = math.radians(orbit_angles[i])
+        # print(f"{i} {orbit_angles[i]}")
 
     return orbit_angles
     # calc_orbit_angles
+# fmt: on
 
 
 class Tree:
@@ -55,8 +68,9 @@ class Tree:
         self.config = _config
         self.version = _version
 
-        # self._char_class = PlayerClasses.SCION  # can't use class here
-        self._char_class = PlayerClasses.MARAUDER  # can't use class here
+        self.name = "new"
+        # self._char_class = PlayerClasses.SCION.value  # can't use class here
+        self._char_class = PlayerClasses.MARAUDER.value  # can't use class here
         self.ui = None
         self.allocated_nodes = set()
         self.assets = {}
@@ -137,11 +151,12 @@ class Tree:
         print(f"Loading Tree: {vers}")
         json_dict = pob_file.read_json(self.json_file_path)
         if json_dict is None:
+            tr = self.config.app.tr
             ui_utils.critical_dialog(
                 self.config.win,
-                "f{self.config.app.tr('Load Tree')}: v{self.version}",
-                "f{self.config.app.tr('An error occurred to trying load')}:\n{self.json_file_path}",
-                self.config.app.tr("Close"),
+                f"{tr('Load Tree')}: v{self.version}",
+                f"{tr('An error occurred to trying load')}:\n{self.json_file_path}",
+                tr("Close"),
             )
             return
 
@@ -168,10 +183,11 @@ class Tree:
         self.orbitRadii = self.constants["orbitRadii"]
         self.orbit_anglesByOrbit = {}
         orbit = 0
+        # print(f"self.skillsPerOrbit: {self.skillsPerOrbit}")
         for skillsInOrbit in self.skillsPerOrbit:
             self.orbit_anglesByOrbit[orbit] = calc_orbit_angles(skillsInOrbit)
             orbit += 1
-
+        # print(f"self.orbit_anglesByOrbit: {self.orbit_anglesByOrbit}")
         class_name_map = {}
         ascend_name_map = {}
         class_notables = {}
@@ -220,8 +236,8 @@ class Tree:
         for g in self.groups:
             group = self.groups[g]
             group["n"] = group["nodes"]
-            group["x"] = group["x"]/global_scale_factor
-            group["y"] = group["y"]/global_scale_factor
+            group["x"] = group["x"] / global_scale_factor
+            group["y"] = group["y"] / global_scale_factor
             group["oo"] = {}
             for orbit in group["orbits"]:
                 group["oo"][orbit] = True
@@ -251,7 +267,14 @@ class Tree:
 
             with open(f"temp/{node.id}.txt", "w") as fout:
                 # pprint(vars(node), fout)
-                pprint(dict((name, getattr(node, name)) for name in dir(node) if not name.startswith('__')), fout)
+                pprint(
+                    dict(
+                        (name, getattr(node, name))
+                        for name in dir(node)
+                        if not name.startswith("__")
+                    ),
+                    fout,
+                )
 
         # load
 
@@ -267,7 +290,9 @@ class Tree:
             node.sprites = self.spriteMap[node.icon]
         if not node.sprites:
             # error("missing sprite "..node.icon)
-            node.sprites = self.spriteMap["Art/2DArt/SkillIcons/passives/MasteryBlank.png"]
+            node.sprites = self.spriteMap[
+                "Art/2DArt/SkillIcons/passives/MasteryBlank.png"
+            ]
         node.overlay = nodeOverlay.get(node.type, None)
         if node.overlay:
             node.rsq = node.overlay["rsq"]
@@ -277,17 +302,29 @@ class Tree:
         # print(self.orbitRadii)
         # Derive the true position of the node
         if node.group:
-            # print(f"node.o: {node.o}, node.oidx: {node.oidx}")
-            node.angle = self.orbit_anglesByOrbit[node.o][node.oidx]
+            # node.angle = self.orbit_anglesByOrbit[node.o][node.oidx]
             orbit_radius = self.orbitRadii[node.o]
-            # print(f"{node.angle}, {orbit_radius}")
-            # print(f"{math.sin(node.angle)}, {math.cos(node.angle)}")
+            # print(self.orbitRadii)
+            # print(f"node: {node.dn}, node.o: {node.o}, node.oidx: {node.oidx}")
+            if node.o in (2, 3, 4):
+                # print(f"{node.dn}: {self.orbit_anglesByOrbit[node.o][node.oidx]}")
+                node.angle = self.orbit_anglesByOrbit[node.o][node.oidx]
+            else:
+                # print(f"{node.dn}: {self.orbit_anglesByOrbit[node.o][node.oidx + 1]}")
+                node.angle = self.orbit_anglesByOrbit[node.o][node.oidx + 1]
+            # print(f"node.angle: {node.angle}, orbit_radius: {orbit_radius}")
+            # print(f"sin: {math.sin(node.angle)}, cos: {math.cos(node.angle)}")
             # node.x = node.group["x"]/global_scale_factor + math.sin(node.angle) * orbit_radius
             # node.y = node.group["y"]/global_scale_factor - math.cos(node.angle) * orbit_radius
-            node.x = (node.group["x"] + math.sin(node.angle) * orbit_radius)/global_scale_factor
-            node.y = (node.group["y"] - math.cos(node.angle) * orbit_radius)/global_scale_factor
+            node.x = (
+                node.group["x"] + (math.sin(node.angle) * orbit_radius)
+            ) / global_scale_factor
+            node.y = (
+                node.group["y"] - (math.cos(node.angle) * orbit_radius)
+            ) / global_scale_factor
 
             # print(f"node.x,y: {node.id}: {node.x},{node.y}")
+
     # process_node
 
     def set_node_type(self, node: Node, ascend_name_map, class_notables):
@@ -362,6 +399,7 @@ class Tree:
                 class_notables[
                     ascend_name_map[node.ascendancyName]["class"]["name"]
                 ] = node.dn
+
     # set_node_type
 
     def process_sprite_map(self, sprite_list, sprite_map, sprite_path, index):
@@ -410,12 +448,14 @@ class Tree:
                     "3": (x + w) / w,
                     "4": (y + h) / h,
                 }
+
     # process_sprite_map
 
-# def test(config: Config) -> None:
-#     tree = Tree(config)
-#     print(tree)
-#
-#
-# if __name__ == "__main__":
-#     test(Config.config)
+
+def test(config: Config) -> None:
+    tree = Tree(config)
+    print(tree.version)
+
+
+if __name__ == "__test__":
+    test(Config(None, None))

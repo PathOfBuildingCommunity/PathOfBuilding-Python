@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 *.swp
 
+# build generated python files
+PoB_rc.py
+PoB_Main_Window.py
+
 # Developer specific
 *.orig
 *.bak
