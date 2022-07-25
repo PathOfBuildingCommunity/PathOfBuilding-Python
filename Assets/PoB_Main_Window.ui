@@ -423,8 +423,8 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>0</width>
-             <height>0</height>
+             <width>910</width>
+             <height>655</height>
             </size>
            </property>
            <property name="accessibleName">
@@ -434,16 +434,22 @@
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="tabTree">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <attribute name="title">
              <string>&amp;Tree</string>
             </attribute>
             <attribute name="whatsThis">
              <string notr="true">TREE</string>
             </attribute>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -457,7 +463,46 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QGraphicsView" name="graphicsView_PlaceHolder"/>
+              <layout class="QVBoxLayout" name="vLayout_tabTree">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QGraphicsView" name="graphicsView_PlaceHolder"/>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_TreeTools">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Box</enum>
+                 </property>
+                 <widget class="QComboBox" name="comboTrees">
+                  <property name="geometry">
+                   <rect>
+                    <x>4</x>
+                    <y>4</y>
+                    <width>180</width>
+                    <height>22</height>
+                   </rect>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>180</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>
@@ -1995,7 +2040,7 @@
                 <property name="title">
                  <string>Equipped Items:</string>
                 </property>
-                <widget class="QLabel" name="label_ItemLoc_">
+                <widget class="QLabel" name="label_Weapon1">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2011,7 +2056,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_">
+                <widget class="QComboBox" name="combo_Weapon1">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2027,7 +2072,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_1">
+                <widget class="QComboBox" name="combo_Weapon2">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2043,7 +2088,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_1">
+                <widget class="QLabel" name="label_Weapon2">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2059,7 +2104,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_2">
+                <widget class="QComboBox" name="combo_Helmet">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2075,7 +2120,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_2">
+                <widget class="QLabel" name="label_Helmet">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2091,7 +2136,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_3">
+                <widget class="QComboBox" name="combo_BodyArmour">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2107,7 +2152,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_3">
+                <widget class="QLabel" name="label_BodyArmour">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2123,7 +2168,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_4">
+                <widget class="QComboBox" name="combo_Gloves">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2139,7 +2184,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_4">
+                <widget class="QLabel" name="label_Gloves">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2155,7 +2200,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_5">
+                <widget class="QComboBox" name="combo_Boots">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2171,7 +2216,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_5">
+                <widget class="QLabel" name="label_Boots">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2187,7 +2232,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_6">
+                <widget class="QComboBox" name="combo_Amulet">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2203,7 +2248,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_6">
+                <widget class="QLabel" name="label_Amulet">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2219,7 +2264,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_7">
+                <widget class="QComboBox" name="combo_Ring1">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2235,7 +2280,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_7">
+                <widget class="QLabel" name="label_Ring1">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2251,7 +2296,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_8">
+                <widget class="QComboBox" name="combo_Ring2">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2267,7 +2312,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_8">
+                <widget class="QLabel" name="label_Ring2">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2283,7 +2328,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_9">
+                <widget class="QComboBox" name="combo_Belt">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2299,7 +2344,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_9">
+                <widget class="QLabel" name="label_Belt">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2315,7 +2360,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_10">
+                <widget class="QComboBox" name="combo_Flask1">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2331,7 +2376,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_10">
+                <widget class="QLabel" name="label_Flask1">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2347,7 +2392,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_11">
+                <widget class="QComboBox" name="combo_Flask2">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2363,7 +2408,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_11">
+                <widget class="QLabel" name="label_Flask2">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2379,7 +2424,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_12">
+                <widget class="QComboBox" name="combo_Flask3">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2395,7 +2440,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_12">
+                <widget class="QLabel" name="label_Flask3">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2411,7 +2456,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_13">
+                <widget class="QComboBox" name="combo_Flask4">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2427,7 +2472,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_13">
+                <widget class="QLabel" name="label_Flask4">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2443,7 +2488,7 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_ItemLoc_14">
+                <widget class="QComboBox" name="combo_Flask5">
                  <property name="geometry">
                   <rect>
                    <x>84</x>
@@ -2459,7 +2504,7 @@
                   <bool>true</bool>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ItemLoc_14">
+                <widget class="QLabel" name="label_Flask5">
                  <property name="geometry">
                   <rect>
                    <x>4</x>
@@ -2481,6 +2526,12 @@
             </layout>
            </widget>
            <widget class="QWidget" name="tabNotes">
+            <property name="minimumSize">
+             <size>
+              <width>910</width>
+              <height>655</height>
+             </size>
+            </property>
             <attribute name="title">
              <string>&amp;Notes</string>
             </attribute>

@@ -12,7 +12,7 @@ Imports pob_file
 
 from pathlib import Path
 from collections import OrderedDict
-from enum import Enum
+from enum import Enum, IntEnum
 
 from qdarktheme.qtpy.QtCore import QSize
 
@@ -23,9 +23,9 @@ program_title = "Path of Building"
 """global_scale_factor
 this is used to divide all x and y data coming in from the tree.json, but not Height and Width.
 without this, items are too far apart and items are far too small on screen.
-All values should nly be scaled on point of entry, ie: when they are first processed out of the json
+All values should only be scaled on point of entry, ie: when they are first processed out of the json
 """
-global_scale_factor = 1
+global_scale_factor = 2
 
 _VERSION = 3.18
 
@@ -303,6 +303,15 @@ pantheon_minor_gods = {
 }
 
 
+class Layers(IntEnum):
+    backgrounds = -3
+    group = -2
+    connectors = -1
+    inactive = 0
+    active = 1
+    small_overlays = 2
+    key_overlays = 3
+
 class ColourCodes(Enum):
     NORMAL = 0x000000
     MAGIC = 0x8888FF
@@ -444,6 +453,28 @@ class_centres = {
     },
 }
 
+ascendancy_positions = {
+    "Ascendant": {"x": -7800.0 / global_scale_factor, "y": 7200 / global_scale_factor},
+    "Berserker": {"x": -10400 / global_scale_factor, "y": 3700 / global_scale_factor},
+    "Chieftain": {"x": -10400 / global_scale_factor, "y": 2200 / global_scale_factor},  # data Error
+    "Juggernaut": {"x": -10400 / global_scale_factor, "y": 5200 / global_scale_factor},
+    "Deadeye": {"x": 10200 / global_scale_factor, "y": 2200 / global_scale_factor},
+    "Pathfinder": {"x": 10200 / global_scale_factor, "y": 3700 / global_scale_factor},
+    "Raider": {"x": 10200 / global_scale_factor, "y": 5200 / global_scale_factor},
+    "Elementalist": {"x": 0 / global_scale_factor, "y": -9850 / global_scale_factor},
+    "Occultist": {"x": -1500 / global_scale_factor, "y": -9850 / global_scale_factor},
+    "Necromancer": {"x": 1500 / global_scale_factor, "y": -9850 / global_scale_factor},
+    "Champion": {"x": 0 / global_scale_factor, "y": 9800 / global_scale_factor},
+    "Gladiator": {"x": -1500 / global_scale_factor, "y": 9800 / global_scale_factor},
+    "Slayer": {"x": 1500 / global_scale_factor, "y": 9800 / global_scale_factor},
+    "Guardian": {"x": -10400 / global_scale_factor, "y": -5200 / global_scale_factor},
+    "Hierophant": {"x": -10400 / global_scale_factor, "y": -3700 / global_scale_factor},
+    "Inquisitor": {"x": -10400 / global_scale_factor, "y": -2200 / global_scale_factor},  # data Error
+    "Assassin": {"x": 10200 / global_scale_factor, "y": -5200 / global_scale_factor},
+    "Saboteur": {"x": 10200 / global_scale_factor, "y": -2200 / global_scale_factor},
+    "Trickster": {"x": 10200 / global_scale_factor, "y": -3700 / global_scale_factor},
+}
+
 nodeOverlay = {
     "Normal": {
         "artWidth": "40",
@@ -516,7 +547,7 @@ class Config:
         # To reduce circular references, have the app and main window references here
         self.win = _win
         self.app = _app
-        self.config = None
+        self.config = None  # this is the dictionary representing the xml, not a pointer to itself
         self.screen_rect = self.app.primaryScreen().size()
 
         self.exeDir = Path.cwd()
@@ -553,7 +584,6 @@ class Config:
     @theme.setter
     def theme(self, new_theme):
         self.misc["theme"] = new_theme and "Dark" or "Light"
-        # self.misc["theme"] = new_theme
 
     @property
     def slotOnlyTooltips(self):

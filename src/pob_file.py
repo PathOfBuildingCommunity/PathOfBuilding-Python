@@ -6,6 +6,7 @@ This is a base PoB class. It doesn't import any other PoB classes
 
 from pathlib import Path
 from bs4 import BeautifulSoup
+from pprint import pprint
 import xmltodict
 import json
 
@@ -74,3 +75,21 @@ def write_json(filename, _dict):
             json.dump(_dict, json_file)
     except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
         print(f"Unable to write to {_fn}")
+
+
+# # Why don't these work ?
+# def dump_class_to_text(filename, _class):
+#     with open(filename, "a") as f_out:
+#         pprint(
+#             dict(
+#                 (name, getattr(_class, name))
+#                 for name in dir(_class)
+#                 if not name.startswith("__")
+#             ),
+#             f_out,
+#         )
+#
+# # Why don't these work ?
+# def dump_dict_to_text(filename, _dict):
+#     with open(filename, "a") as f_out:
+#         print(_dict, f_out)

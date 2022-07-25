@@ -10,6 +10,11 @@ from pob_config import _VERSION
 
 class Node:
     def __init__(self, _node, _version: str = _VERSION) -> None:
+        """
+        init
+        :param _node: a copy of the dictionary for this node only
+        :param _version:
+        """
         # declare variables that are set in functions
         self.version = _version
         self._active = False
@@ -32,10 +37,11 @@ class Node:
         self.group = {}
         self.isBlighted = False
 
-        # values from the passed in dictionary
+        """values from the passed in dictionary"""
         self.name = _node.get("name", None)
         self.dn = _node.get("name", None)
         self._id = _node.get("skill", 0)
+        self.skill = _node.get("skill", 0)
         self.group_id = _node.get("group", -1)
         self.g = _node.get("group", -1)
         self.orbit = _node.get("orbit", 0)
@@ -47,23 +53,26 @@ class Node:
         self.sd = _node.get("stats", None)
         self.reminderText = _node.get("reminderText", None)
         self.ascendancyName = _node.get("ascendancyName", None)
-        self.icon = _node.get("icon", None)
         self.nodes_in = _node.get("in", None)
         self.nodes_out = _node.get("out", None)
         self.recipe = _node.get("recipe", None)
-        self.classStartIndex = _node.get("classStartIndex", None)
+        self.classStartIndex = _node.get("classStartIndex", -1)
+        self.masteryEffects = _node.get("masteryEffects", None)
         self.isNotable = _node.get("isNotable", False)
         self.isAscendancyStart = _node.get("isAscendancyStart", False)
         self.isMastery = _node.get("isMastery", False)
-        self.inactiveIcon = _node.get("inactiveIcon", None)
-        self.activeIcon = _node.get("activeIcon", None)
-        self.activeEffectImage = _node.get("activeEffectImage", None)
-        self.masteryEffects = _node.get("masteryEffects", None)
         self.isJewelSocket = _node.get("isJewelSocket", False)
         self.expansionJewel = _node.get("expansionJewel", None)
         self.isProxy = _node.get("isProxy", False)
         self.isKeystone = _node.get("isKeystone", False)
         self.flavourText = _node.get("flavourText", None)
+
+        """ These value are text items indicating the name of a file. 
+            We will overwrite them with a handle to an image"""
+        self.icon = _node.get("icon", None)
+        self.inactiveIcon = _node.get("inactiveIcon", None)
+        self.activeIcon = _node.get("activeIcon", None)
+        self.activeEffectImage = _node.get("activeEffectImage", None)
 
     @property
     def id(self):
@@ -76,7 +85,7 @@ class Node:
     @property
     def active(self):
         """
-        Used for determining the right
+        Used for determining the right icon to display ?? The build should have a separate list managing that
         :return:
         """
         if self._active:
@@ -106,11 +115,7 @@ class Node:
         self._reminderText = self._reminderText.strip()
 
     @property
-    # def ntype(self, lower_case=False):
     def type(self):
-        # if lower_case:
-        #     return self._type.lower
-        # else:
         return self._type
 
     @type.setter

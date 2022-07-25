@@ -16,6 +16,7 @@ from qdarktheme.qtpy.QtCore import (
     QSize,
     QDir,
     QPoint,
+    QPointF,
     QRect,
     QRectF,
     Qt,
@@ -31,6 +32,7 @@ from qdarktheme.qtpy.QtGui import (
     QDrag,
     QFont,
     QIcon,
+    QImage,
     QMouseEvent,
     QPixmap,
     QPainter,
@@ -73,13 +75,15 @@ from qdarktheme.qtpy.QtWidgets import (
 )
 
 import pob_file, ui_utils
-from pob_config import (
-    Config,
-    ColourCodes,
-    PlayerClasses,
-    class_backgrounds,
-    global_scale_factor,
-)
+from pob_config import *
+
+# from pob_config import (
+#     Config,
+#     ColourCodes,
+#     PlayerClasses,
+#     class_backgrounds,
+#     global_scale_factor,
+# )
 from tree import Tree
 from tree_graphics_item import TreeGraphicsItem
 from build import Build
@@ -103,7 +107,7 @@ class TreeView(QGraphicsView):
         self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
 
         self._char_class_bkgnd_image = None
-        self.add_tree_images()
+        self.add_tree_images(PlayerClasses.SCION.value)
         # self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.drag = False
         self.start_pos = None
@@ -153,7 +157,7 @@ class TreeView(QGraphicsView):
         if self.start_pos is not None:
             delta = self.start_pos - event.pos()
             rect = self.scene().sceneRect()
-            # # limit the amount it moves.
+            # limit the amount it moves.
             # !!!! This might need adjusting to account for zoom (0.08 = out, 0.5 = in)
             # x = delta.x()
             # y = delta.y()
@@ -173,8 +177,9 @@ class TreeView(QGraphicsView):
             rect.setTopLeft(rect.topLeft() + delta)
             rect.setBottomRight(rect.bottomRight() + delta)
             self.scene().setSceneRect(rect)
-        else:
-            super(TreeView, self).mouseMoveEvent(event)
+            self.updateSceneRect(rect)
+        # else:
+        super(TreeView, self).mouseMoveEvent(event)
 
     # Inherited, don't change definition
     def mouseReleaseEvent(self, event) -> None:
@@ -199,16 +204,22 @@ class TreeView(QGraphicsView):
         else:
             self.scale(factor, factor)
 
-    def add_picture(self, pixmap, x, y, z=0, selectable=True):
+    def add_picture(self, pixmap, x, y, z=0, selectable=False):
         """
         Add a picture or pixmap
-        :param pixmap: string or GraphicsItem to be added
+        :param pixmap: string or pixmap to be added
         :param x, y: it's position in the scene
         :param z: which layer to use:  -2: background, -1: connectors, 0: inactive,
+                                        1: sprite overlay
                                         1: active (overwriting its inactive equivalent ???)
         :param selectable: Can the user select this.
         :return: ptr to the created TreeGraphicsItem
         """
+        if pixmap is None or pixmap == "":
+            print(
+                f"tree_view.add_picture called with information. pixmap: {pixmap},  x:{x}, y: {y}"
+            )
+            return None
         image = TreeGraphicsItem(self.config, pixmap, z, selectable)
         image.setPos(x, y)
         self._scene.addItem(image)
@@ -223,9 +234,9 @@ class TreeView(QGraphicsView):
         # if self.build.current_tree.char_class != _class
         # Alert for wiping your tree
         self.build.current_tree.char_class = _class
-        self.add_tree_images()
+        self.add_tree_images(_class)
 
-    def add_tree_images(self):
+    def add_tree_images(self, new_class):
         """
         Used when swapping tree's in a build.
         It will remove all assets, including selected nodes and connecting lines and present an empty tree
@@ -237,85 +248,130 @@ class TreeView(QGraphicsView):
 
         tree = self.build.current_tree
 
-        def renderGroup(self, group):
-            if group.get("ascendancyName", None) is not None:
-                if group.get("isAscendancyStart", False):
+        def renderGroup(self, _group, g):
+            _image = None
+            scale = 1
+            if _group.get("ascendancyName", None) is not None:
+                if g == "7":
+                    print(_group)
+                    print(_group.get("isAscendancyStart", False))
+                if _group.get("isAscendancyStart", False):
                     # This is the ascendancy circles around the outside of the tree
-                    # print(group["ascendancyName"])
-                    name = f"center{group['ascendancyName']}"
-                    self.add_picture(
-                        tree.assets[f"Classes{group['ascendancyName']}"],
-                        group["x"],
-                        group["y"],
-                        -2,
-                        False,
-                    )
-            elif group["oo"].get(3, None) is not None:
-                # This needs to duplicated and mirrored
-                self.add_picture(
-                    tree.assets["GroupBackgroundLargeHalfAlt"],
-                    group["x"],
-                    group["y"],
-                    -2,
-                    False,
+                    _name = _group["ascendancyName"]
+                    if _name == "Ascendant":
+                        _image = self.add_picture(
+                            tree.spriteMap[f"Classes{_name}"]["handle"],
+                            _group["x"],
+                            _group["y"],
+                            Layers.backgrounds,
+                        )
+                        _image.setScale(2.5 / global_scale_factor)
+                        _image.setPos(
+                            _group["x"] - (_image.width / 2),
+                            _group["y"] - (_image.height / 2),
+                        )
+                    else:
+                        _image = self.add_picture(
+                            tree.spriteMap[f"Classes{_name}"]["handle"],
+                            ascendancy_positions[_name]["x"],
+                            ascendancy_positions[_name]["y"],
+                            Layers.backgrounds,
+                        )
+                        _image.setScale(2.5 / global_scale_factor)
+                        _image.setPos(
+                            ascendancy_positions[_name]["x"] - (_image.width / 2),
+                            ascendancy_positions[_name]["y"] - (_image.height / 2),
+                        )
+                    _image.filename = f"Classes{_name}"
+            elif _group["oo"].get(3, False):
+                _image = self.add_picture(
+                    tree.spriteMap["GroupBackgroundLargeHalfAlt"]["handle"],
+                    _group["x"],
+                    _group["y"],
+                    Layers.group,
                 )
-            elif group["oo"].get(2, None) is not None:
-                self.add_picture(
-                    tree.assets["GroupBackgroundMediumAlt"],
-                    group["x"],
-                    group["y"],
-                    -2,
-                    False,
+                _image.filename = f"{g} GroupBackgroundLargeHalfAlt"
+                _image.setScale(1.9 / global_scale_factor)
+                _image.setPos(
+                    _group["x"] - (_image.width / 2), _group["y"] - (_image.height / 2)
                 )
-            elif group["oo"].get(1, None) is not None:
-                self.add_picture(
-                    tree.assets["GroupBackgroundSmallAlt"],
-                    group["x"],
-                    group["y"],
-                    -2,
-                    False,
+            elif _group["oo"].get(2, False):
+                _image = self.add_picture(
+                    tree.spriteMap["GroupBackgroundMediumAlt"]["handle"],
+                    _group["x"],
+                    _group["y"],
+                    Layers.group,
+                )
+                _image.filename = f"{g} GroupBackgroundMediumAlt"
+                _image.setScale(1.9 / global_scale_factor)
+                _image.setPos(
+                    _group["x"] - (_image.width / 2), _group["y"] - (_image.height / 2)
+                )
+            elif group["oo"].get(1, False):
+                _image = self.add_picture(
+                    tree.spriteMap["GroupBackgroundSmallAlt"]["handle"],
+                    _group["x"],
+                    _group["y"],
+                    Layers.group,
+                )
+                _image.filename = f"{g} GroupBackgroundSmallAlt"
+                _image.setScale(1.9 / global_scale_factor)
+                _image.setPos(
+                    _group["x"] - (_image.width / 2), _group["y"] - (_image.height / 2)
                 )
 
-        for item in self.items():
-            self._scene.removeItem(item)
+        self._scene.clear()
+        # ToDo: Only clear items if we change tree versions
+        #  else wise just remove the selected nodes/connectors and readd new ones (separate function)
+        # for item in self.items():
+        #     self._scene.removeItem(item)
+        print("tree.graphics_items", len(tree.graphics_items))
+        # ToDo: all this needs to be moved to the tree Class, so then this line will work
+        for image in tree.graphics_items:
+            self._scene.addItem(image)
 
         # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet
         image = None
-        if tree.char_class != PlayerClasses.SCION.value:
+        if new_class != PlayerClasses.SCION.value:
             c = class_backgrounds[PlayerClasses(tree.char_class)]
-            self._char_class_bkgnd_image = self.add_picture(
-                tree.assets[c["n"]], c["x"], c["y"], -2, False
+            image = self._char_class_bkgnd_image = self.add_picture(
+                tree.spriteMap[c["n"]]["handle"], c["x"], c["y"], Layers.backgrounds
             )
+            image.filename = c["n"]
 
-        # Draw the group backgrounds
+        # Add the group backgrounds
         for g in tree.groups:
             group = tree.groups[g]
             if not group.get("isProxy", False):
-                renderGroup(self, group)
-
-        for image in tree.graphics_items:
-            self._scene.addItem(image)
+                renderGroup(self, group, g)
 
         for n in tree.nodes:
             # print(n)
             node = tree.nodes[n]
-            _type = node.type
-            # keystoneActive, mastery, normalActive, notableActive
+            # Skip nodes with no group id. They appear to be clusters at the moment (2022-07-24)
+            if node.g < 1:
+                continue
+            group = tree.groups[str(node.g)]
+            _type = (
+                node.type
+            )  # eg: keystoneActive, mastery, normalActive, notableActive
             # print(f"{n}: {_type}: {node.sprites}")
-            # temporary
+            # ToDo: temporary
             hoverNode = None
             # isAlloc = True
             isAlloc = False
             state = "unalloc"  # could also be Alloc and Path
+            # ToDo: temporary
             overlay = ""
             base = None
             if _type == "ClassStart":
                 overlay = isAlloc and node.startArt or "PSStartNodeBackgroundInactive"
-                # print(f"{n}: {_type}: {overlay}")
+                # node.x, node.y = group["x"], group["y"]
             elif _type == "AscendClassStart":
                 overlay = "AscendancyMiddle"
             else:
                 if _type == "Socket":
+                    # ToDo: Sockets
                     pass
                 elif _type == "Mastery":
                     # This is the icon that appears in the center of many groups
@@ -337,26 +393,47 @@ class TreeView(QGraphicsView):
                             ]
                     else:
                         base = node.sprites["mastery"]
+                        node.x = group["x"]
+                        node.y = group["y"]
                 else:
                     # Normal node (includes keystones and notables)
-                    base = node.sprites[
-                        f"{_type.lower()}{(isAlloc and 'Active' or 'Inactive')}"
-                    ]
-                    overlay = node.overlay[
-                        f"{state}{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}"
-                    ]
-            # print(f"base: {base}")
-            # print(f"overlay: {overlay}")
+                    base = node.sprites.get(
+                        f"{_type.lower()}{(isAlloc and 'Active' or 'Inactive')}", None
+                    )
+                    overlay = node.overlay.get(
+                        f"{state}{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
+                        "",
+                    )
 
             if base is not None:
+                if n == "24704":
+                    print(n, node)
                 # print(f"{n}: {_type}: {base}")
                 pixmap = base.get("handle", None)
                 if pixmap is not None:
-                    image = self.add_picture(pixmap, node.x, node.y, 1, True)
-                    image.width = base["width"]
-                    image.height = base["height"]
-                    image.filename = node.name
-                    # image.filename = base["name"]
+                    image = self.add_picture(
+                        pixmap, node.x, node.y, Layers.inactive, True
+                    )
+                    image.filename = f"{n}, {node.name}"
                     image.data = base["name"]
+
+            """'overlay': {'alloc': 'AscendancyFrameLargeAllocated',
+                        'artWidth': '65',
+                        'path': 'AscendancyFrameLargeCanAllocate',
+                        'rsq': 7473.602500000001,
+                        'size': 86.45,
+                        'unalloc': 'AscendancyFrameLargeNormal'},"""
+            if overlay != "":
+                # print(f"{n}: {_type}: {node.name}: {overlay}")
+                _overlay = tree.spriteMap.get(overlay, None)
+                _layer = (
+                    _type == "Notable" and Layers.key_overlays or Layers.small_overlays
+                )
+                if _overlay is not None:
+                    pixmap = _overlay.get("handle", None)
+                    if pixmap is not None:
+                        image = self.add_picture(pixmap, node.x - 8, node.y - 8, _layer)
+                        image.filename = node.name
+                        image.data = overlay
 
     # add_tree_images

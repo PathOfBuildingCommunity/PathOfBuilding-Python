@@ -104,7 +104,7 @@ class Build:
         """
         _name = "New"
         _build_pob = pob_file.read_xml(filename)
-        print(_build_pob)
+        # print(_build_pob)
         if _build_pob is None:
             tr = self.pob_config.app
             ui_utils.critical_dialog(

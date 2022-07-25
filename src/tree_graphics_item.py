@@ -101,16 +101,16 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         _config: Config,
         _image: str,
         z_value=0,
-        selectable=True,
+        selectable=False,
     ) -> None:
         super(TreeGraphicsItem, self).__init__()
         self.config = _config
         self.filename = ""
         self.data = None
-        if type(_image) == QPixmap:
-            self.setPixmap(_image)
-        else:
-            self.setPixmap(QPixmap(_image))
+        self.setPixmap(_image)
+        if not type(_image) == QPixmap:
+            # self.setPixmap(QPixmap(_image))
+            # self.setPixmap(_image)
             self.filename = str(_image)
             self.data = _image
         self.width = self.pixmap().size().width()
@@ -128,12 +128,19 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         # turn all those data's into properties ?
 
     # Inherited, don't change definition
-    def paint(self, painter, option, widget):
-        super(TreeGraphicsItem, self).paint(painter, option, widget)
+    # def paint(self, painter, option, widget):
+    #     super(TreeGraphicsItem, self).paint(painter, option, widget)
 
+    # Inherited, don't change definition
+    def setScale(self, scale: int = 1):
+        super(TreeGraphicsItem, self).setScale(scale)
+        self.width = self.width * scale
+        self.height = self.height * scale
+
+    # Inherited, don't change definition
     def hoverEnterEvent(self, event):
         # this will be text associated with the node
-        if self.filename:
+        if self.filename != "":
             self.setToolTip(self.filename)
 
     #     pass
@@ -144,7 +151,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
 
     # Inherited, don't change definition
     def mousePressEvent(self, event) -> None:
-        print(f"TreeGraphicsItem.mousePressEvent: {self.filename}")
+        print(f"TreeGraphicsItem.mousePressEvent: {self.filename}, {self.data}")
         # AltModifier (altKey), ControlModifier(crtlKey)
         # pprint(event)
         # self.setCursor(Qt.ClosedHandCursor)

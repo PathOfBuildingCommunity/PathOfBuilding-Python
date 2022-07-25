@@ -11,7 +11,7 @@ import sys, re
 from pathlib import Path
 from pprint import pprint
 import qdarktheme
-from qdarktheme.qtpy.QtCore import QSize, QDir, QRect, QRectF, Qt, Slot, QEvent
+from qdarktheme.qtpy.QtCore import QCoreApplication, QDir, QRect, QRectF, QSize, Qt, Slot
 from qdarktheme.qtpy.QtGui import (
     QAction,
     QActionGroup,
@@ -24,6 +24,7 @@ from qdarktheme.qtpy.QtGui import (
 )
 from qdarktheme.qtpy.QtWidgets import (
     QApplication,
+    QCheckBox,
     QColorDialog,
     QComboBox,
     QDockWidget,
@@ -42,6 +43,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QMainWindow,
     QMenuBar,
     QMessageBox,
+    QPushButton,
     QScrollArea,
     QSizePolicy,
     QSpacerItem,
@@ -72,7 +74,7 @@ from tree_view import TreeView
 
 # from tree_graphics_item import TreeGraphicsItem
 
-# pyside6-uic main.ui -o pob_ui.py
+# pyside6-uic Assets\PoB_Main_Window.ui -o src\PoB_Main_Window.py
 from PoB_Main_Window import Ui_MainWindow
 
 
@@ -99,7 +101,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Start with an empty build
         self.build = Build(self.config)
 
-        """ Start: Do what the QT Cannot yet do """
+        """ Start: Do what the QT Designer cannot yet do """
         # add widgets to the Toolbar
         toolbar_spacer1 = QWidget()
         self.toolBar_MainWindow.insertWidget(self.action_Theme, toolbar_spacer1)
@@ -132,15 +134,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_ascendancy.addItem("None", "None")
         self.toolBar_MainWindow.addWidget(self.combo_ascendancy)
 
-        # I am unable to yet 'promote' graphicsView to TreeView in the QT Designer
-        # So dump the placeholder tab and add our own
+        # Dump the placeholder tab and add our own
+        self.gviewTree = TreeView(self.config, self.build)
+        self.vLayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gviewTree)
         self.graphicsView_PlaceHolder.setParent(None)
-        self.tabTree.setParent(None)
-        self.tabTree = TreeView(self.config, self.build)
-        self.tabWidget.setTabWhatsThis(
-            self.tabWidget.insertTab(0, self.tabTree, "&Tree"), "TREE"
-        )
-        """ End: Do what the QT Cannot yet do """
+
+        """ End: Do what the QT Designer cannot yet do """
 
         self.set_current_tab()
 
@@ -360,7 +359,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # build changes
         self._curr_class = new_class
         self.build.curr_class = new_class
-        self.tabTree.switch_class(new_class)
+        self.gviewTree.switch_class(new_class)
 
     @Slot()
     def change_class(self, selected_class):
@@ -418,7 +417,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param new_theme: Boolean state of the action
         :return: N/A
         """
-        print(new_theme)
         if new_theme:
             self._theme = "dark"
             self.action_Theme.setText("Light")
@@ -442,16 +440,67 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
 
         recent_builds = config.recent_builds()
-        idx = 0
-        for value in recent_builds.values():
+        for idx, value in enumerate(recent_builds.values()):
             if value is not None and value != "":
                 fn = re.sub(
                     ".xml", "", str(Path(value).relative_to(self.config.buildPath))
                 )
                 _action = self.menu_Builds.addAction(f"&{idx}.  {fn}")
                 make_connection(value, idx)
-                idx += 1
 
+    def setup_tree_tool_ui(self, layout_form):
+        layout_form.setContentsMargins(0, 0, 0, 0)
+
+        self.combo_ManageTree = QComboBox(self.widget_TreeTools)
+        self.combo_ManageTree.setMinimumSize(QSize(180, 0))
+        self.combo_ManageTree.setMaximumSize(QSize(300, 16777215))
+        layout_form.addWidget(self.combo_ManageTree)
+
+        # self.hLayout_Compare = QHBoxLayout()
+        # self.label_Compare = QLabel(self.widget_TreeTools)
+        # self.label_Compare.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        # self.hLayout_Compare.addWidget(self.label_Compare)
+        # self.check_Compare = QCheckBox(self.widget_TreeTools)
+        # self.check_Compare.setMinimumSize(QSize(20, 0))
+        # self.check_Compare.setMaximumSize(QSize(20, 16777215))
+        # self.hLayout_Compare.addWidget(self.check_Compare)
+        # self.combo_Compare = QComboBox(self.widget_TreeTools)
+        # self.combo_Compare.setMinimumSize(QSize(180, 0))
+        # self.combo_Compare.setMaximumSize(QSize(300, 16777215))
+        # self.combo_Compare.setVisible(False)
+        # self.hLayout_Compare.addWidget(self.combo_Compare)
+        # layout_form.addChildLayout(self.hLayout_Compare)
+        #
+        # self.btn_Reset = QPushButton(self.widget_TreeTools)
+        # self.btn_Import = QPushButton(self.widget_TreeTools)
+        # self.btn_Export = QPushButton(self.widget_TreeTools)
+        # self.btn_Reset.setText(QCoreApplication.translate("MainWindow", u"Manage ...", None))
+        # self.btn_Import.setText(QCoreApplication.translate("MainWindow", u"Manage ...", None))
+        # self.btn_Export.setText(QCoreApplication.translate("MainWindow", u"Manage ...", None))
+        # layout_form.addWidget(self.btn_Reset)
+        # layout_form.addWidget(self.btn_Import)
+        # layout_form.addWidget(self.btn_Export)
+        #
+        #
+        # self.hLayout_ShowNodePower = QHBoxLayout()
+        # self.label_ShowNodePower = QLabel(self.widget_TreeTools)
+        # self.label_ShowNodePower.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        # self.hLayout_ShowNodePower.addWidget(self.label_ShowNodePower)
+        # self.check_ShowNodePower = QCheckBox(self.widget_TreeTools)
+        # self.check_ShowNodePower.setMinimumSize(QSize(20, 0))
+        # self.check_ShowNodePower.setMaximumSize(QSize(20, 16777215))
+        # self.hLayout_ShowNodePower.addWidget(self.check_ShowNodePower)
+        # self.combo_ShowNodePower = QComboBox(self.widget_TreeTools)
+        # self.combo_ShowNodePower.setMinimumSize(QSize(180, 0))
+        # self.combo_ShowNodePower.setMaximumSize(QSize(180, 16777215))
+        # self.hLayout_ShowNodePower.addWidget(self.combo_ShowNodePower)
+        # layout_form.addChildLayout(self.hLayout_ShowNodePower)
+        # self.btn_ShowPowerReport = QPushButton(self.widget_TreeTools)
+        # self.btn_ShowPowerReport.setText(QCoreApplication.translate("MainWindow", u"Show Power Report ...", None))
+        # layout_form.addWidget(self.btn_ShowPowerReport)
+        #
+        # self.label_.setText(QCoreApplication.translate("MainWindow", u"Amulet:", None))
+        # self.btn_.setText(QCoreApplication.translate("MainWindow", u"Manage ...", None))
 
 # Start here
 app = QApplication(sys.argv)
