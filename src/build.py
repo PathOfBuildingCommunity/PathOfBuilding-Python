@@ -10,6 +10,7 @@ numerous Passive Trees (at various Player Levels, or various Cluster Jewels)
 associated with a Player.
 """
 
+import re
 from pathlib import Path
 from bs4 import BeautifulSoup as soup
 
@@ -28,17 +29,20 @@ from PoB_Main_Window import Ui_MainWindow
 
 
 class Build:
-    def __init__(self, _config: Config, __name: str = "New") -> None:
+    def __init__(self, _config: Config) -> None:
         self.pob_config = _config
-        self._name = __name
+        self._name = "Default"
         self.ui: Ui_MainWindow = self.pob_config.win
         # self.player = player.Player()
         self.filename = ""
-        self.current_tab = "Tree"
+        self.ui = None
+        self.need_saving = True
+        self.current_tab = "TREE"
         self.trees = {_VERSION: Tree(self.pob_config)}
         self.current_tree = self.trees.get(_VERSION)
-        self.ui = None
-        self.need_saving = False
+        self.specs = []
+        self.activeSpec = 1
+        self.current_spec = None
 
         # variables from the xml
         self.build = None
@@ -52,6 +56,7 @@ class Build:
         self.items = None
         self.config = None
 
+        # Now fill out everything above out with a new build
         self.new(empty_build)
 
     def __repr__(self) -> str:
@@ -84,17 +89,28 @@ class Build:
         self.ui.classes_combobox.setCurrentIndex(new_class)
 
     def new(self, _build):
-        self.name = "New"
+        self.name = "Default"
         self.build = _build["PathOfBuilding"]["Build"]
         self.import_field = _build["PathOfBuilding"]["Import"]
         self.calcs = _build["PathOfBuilding"]["Calcs"]
         self.skills = _build["PathOfBuilding"]["Skills"]
-        self.tree = _build["PathOfBuilding"]["Tree"]
         self.notes = _build["PathOfBuilding"]["Notes"]
         self.notes_html = _build["PathOfBuilding"].get("NotesHTML", None)
         self.tree_view = _build["PathOfBuilding"]["TreeView"]
         self.items = _build["PathOfBuilding"]["Items"]
         self.config = _build["PathOfBuilding"]["Items"]
+        self.tree = _build["PathOfBuilding"]["Tree"]
+        self.specs.clear()
+
+        # Get Specs.
+        # One Spec appears as a dictionary, but multiple appear as a list
+        if type(self.tree["Spec"]) == list:
+            for spec in self.tree["Spec"][:]:
+                self.specs.append(Spec(spec))
+        else:
+            self.specs.append(Spec(self.tree["Spec"]))
+        self.activeSpec = int(self.tree.get("@activeSpec", 1))
+        self.current_spec = self.specs[self.activeSpec-1]
 
     def load(self, filename):
         """
@@ -102,7 +118,6 @@ class Build:
         :param filename: str() XML file to load
         :return: N/A
         """
-        _name = "New"
         _build_pob = pob_file.read_xml(filename)
         # print(_build_pob)
         if _build_pob is None:
@@ -223,3 +238,16 @@ class Build:
     # @.setter
     # def (self, new_name):
     #     self.build[""] = new_name
+
+
+class Spec:
+    def __init__(self, _spec) -> None:
+        self.title = _spec.get("@title", "Default")
+        self.ascendClassId = _spec.get("@ascendClassId", 0)
+        self.masteryEffects = _spec.get("@masteryEffects", None)
+        self.nodes = _spec.get("@nodes", None)
+        self.treeVersion = _spec.get("@treeVersion", re.sub("\.", "_", str(_VERSION)))
+        self.classId = _spec.get("@classId", 0)
+        self.EditedNodes = _spec.get("", None)
+        self.URL = _spec.get("", "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA")
+        self.Sockets = _spec.get("", 1)

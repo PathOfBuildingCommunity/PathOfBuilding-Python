@@ -467,6 +467,12 @@
                <property name="spacing">
                 <number>0</number>
                </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
                <item>
                 <widget class="QGraphicsView" name="graphicsView_PlaceHolder"/>
                </item>
@@ -475,20 +481,20 @@
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
-                   <height>30</height>
+                   <height>60</height>
                   </size>
                  </property>
                  <property name="styleSheet">
                   <string notr="true"/>
                  </property>
                  <property name="frameShape">
-                  <enum>QFrame::Box</enum>
+                  <enum>QFrame::StyledPanel</enum>
                  </property>
-                 <widget class="QComboBox" name="comboTrees">
+                 <widget class="QComboBox" name="combo_Tree">
                   <property name="geometry">
                    <rect>
-                    <x>4</x>
-                    <y>4</y>
+                    <x>2</x>
+                    <y>2</y>
                     <width>180</width>
                     <height>22</height>
                    </rect>
@@ -497,6 +503,12 @@
                    <size>
                     <width>180</width>
                     <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>300</width>
+                    <height>16777215</height>
                    </size>
                   </property>
                  </widget>

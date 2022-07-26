@@ -10,6 +10,7 @@ This is a base PoB class. It doesn't import any other PoB ui classes
 Imports pob_file
 """
 
+import re
 from pathlib import Path
 from collections import OrderedDict
 from enum import Enum, IntEnum
@@ -228,12 +229,12 @@ empty_build = {
             "@activeSpec": "1",
             "Spec": {
                 "@ascendClassId": "0",
-                "@masteryEffects": "",
-                "@nodes": "",
-                "@treeVersion": "",
+                "@masteryEffects": None,
+                "@nodes": None,
+                "@treeVersion": re.sub("\.", "_", str(_VERSION)),
                 "@classId": "0",
                 "EditedNodes": None,
-                "URL": "https://www.pathofexile.com/passive-skill-tree/3.18.1/AAAABgAAAAAA",
+                "URL": "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA",
                 "Sockets": None,
             },
         },

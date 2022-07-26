@@ -68,6 +68,7 @@ from qdarktheme.widget_gallery.ui.widgets_ui import WidgetsUI
 # from pob_config import Config, ColourCodes, _VERSION, program_title, PlayerClasses
 from pob_config import *
 from build import Build
+from ui_utils import FlowLayout
 
 # from tree import Tree
 from tree_view import TreeView
@@ -139,9 +140,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vLayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gviewTree)
         self.graphicsView_PlaceHolder.setParent(None)
 
+        # self.layout_TreeTools = FlowLayout(self.widget_TreeTools)
+        # self.setup_tree_tool_ui(self.layout_TreeTools)
         """ End: Do what the QT Designer cannot yet do """
 
-        self.set_current_tab()
+        self.build_loader("Default")
+        # self.set_current_tab()
 
         self.combo_Bandits.clear()
         for name in bandits.keys():
@@ -207,8 +211,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.build.build is not None:
             if not self.build.ask_for_save_if_modified():
                 return
-        self.build.new(empty_build)
-        self.build_loader("New")
+        self.build_loader("Default")
 
     @Slot()
     def build_open(self):
@@ -247,18 +250,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def build_loader(self, filename):
         """
-        Common actions for when we are loading a build
-        :param filename: String: the filename of file that was loaded, or "New" if called from the New action
+        Common actions for UI components when we are loading a build
+        :param filename: String: the filename of file that was loaded, or "Default" if called from the New action
         :return: N/A
         """
         # open the file
-        new = filename == "New"
+        new = filename == "Default"
         if not new:
             self.build.load(filename)
+        else:
+            self.build.new(empty_build)
+
         if self.build.build is not None:
             if not new:
                 self.config.add_recent_build(filename)
             self.set_current_tab()
+            self.set_current_tree()
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
@@ -285,6 +292,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.tabWidget.setCurrentIndex(i)
                 return
         self.tabWidget.setCurrentIndex(0)
+
+    def set_current_tree(self):
+        self.combo_Tree.clear()
+        print("set_current_tree")
+        for idx, spec in enumerate(self.build.specs):
+            self.combo_Tree.addItem(spec.title, idx)
+        self.combo_Tree.setCurrentIndex(self.build.activeSpec-1)
+
+        # print(self.build.tree)
+        # for idx, tree in enumerate(self.build.tree.items()):
+        #     # if idx == 0:
+        #         print(idx, tree)
+        #     # self.combo_classes.addItem(idx.name.title(), idx.value)
 
     @Slot()
     def build_save_as(self):
@@ -450,19 +470,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def setup_tree_tool_ui(self, layout_form):
         layout_form.setContentsMargins(0, 0, 0, 0)
+        # layout_form.setContentsMargins(1, 1, 1, 1)
 
-        self.combo_ManageTree = QComboBox(self.widget_TreeTools)
-        self.combo_ManageTree.setMinimumSize(QSize(180, 0))
-        self.combo_ManageTree.setMaximumSize(QSize(300, 16777215))
-        layout_form.addWidget(self.combo_ManageTree)
+        # self.combo_ManageTree = QComboBox(self.widget_TreeTools)
+        # self.combo_ManageTree.setGeometry(100, 4, 280, 22)
+        # self.combo_ManageTree.setGeometry(QRect(100, 4, 280, 22))
+        # self.combo_ManageTree.setMinimumSize(QSize(180, 0))
+        # self.combo_ManageTree.setMaximumSize(QSize(300, 16777215))
+        # self.combo_ManageTree.setObjectName("combo_ManageTree")
+        # layout_form.addWidget(self.combo_ManageTree)
 
         # self.hLayout_Compare = QHBoxLayout()
-        # self.label_Compare = QLabel(self.widget_TreeTools)
-        # self.label_Compare.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        # self.hLayout_Compare.addWidget(self.label_Compare)
-        # self.check_Compare = QCheckBox(self.widget_TreeTools)
-        # self.check_Compare.setMinimumSize(QSize(20, 0))
-        # self.check_Compare.setMaximumSize(QSize(20, 16777215))
+        self.label_Compare = QLabel(self.widget_TreeTools)
+        self.label_Compare.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_Compare.setObjectName("label_Compare")
+        self.label_Compare.setText(QCoreApplication.translate("MainWindow", u"This is some text", None))
+        layout_form.addWidget(self.label_Compare)
+        self.check_Compare = QCheckBox(self.widget_TreeTools)
+        self.check_Compare.setMinimumSize(QSize(20, 0))
+        self.check_Compare.setMaximumSize(QSize(20, 16777215))
+        self.check_Compare.setObjectName("check_Compare")
+        layout_form.addWidget(self.check_Compare)
+
         # self.hLayout_Compare.addWidget(self.check_Compare)
         # self.combo_Compare = QComboBox(self.widget_TreeTools)
         # self.combo_Compare.setMinimumSize(QSize(180, 0))

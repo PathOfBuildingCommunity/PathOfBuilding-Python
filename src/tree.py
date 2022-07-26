@@ -66,7 +66,7 @@ class Tree:
         self.config = _config
         self.version = _version
 
-        self.name = "new"
+        self.name = "Default"
         self._char_class = PlayerClasses.SCION.value  # can't use class here
         self.ui = None
         self.allocated_nodes = set()
