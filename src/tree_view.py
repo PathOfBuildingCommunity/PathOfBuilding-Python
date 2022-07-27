@@ -34,6 +34,7 @@ from qdarktheme.qtpy.QtGui import (
     QIcon,
     QImage,
     QMouseEvent,
+    QPen,
     QPixmap,
     QPainter,
 )
@@ -47,6 +48,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QFontDialog,
     QFormLayout,
     QFrame,
+    QGraphicsEllipseItem,
     QGraphicsItem,
     QGraphicsLineItem,
     QGraphicsPixmapItem,
@@ -107,7 +109,7 @@ class TreeView(QGraphicsView):
         self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
 
         self._char_class_bkgnd_image = None
-        self.add_tree_images(PlayerClasses.SCION.value)
+        self.add_tree_images()
         # self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.drag = False
         self.start_pos = None
@@ -229,14 +231,23 @@ class TreeView(QGraphicsView):
         """
         Changes for this Class() to deal with a PoB class change
         :param _class:
-        :return:
+        :return: N/A
         """
         # if self.build.current_tree.char_class != _class
         # Alert for wiping your tree
-        self.build.current_tree.char_class = _class
-        self.add_tree_images(_class)
+        # self.build.current_tree.char_class = _class
+        # self.build.current_class = _class
+        self.add_tree_images()
 
-    def add_tree_images(self, new_class):
+    def switch_tree(self):
+        """
+        Changes for this Class() to deal with a PoB tree change
+        :param  N/A
+        :return: N/A
+        """
+        self.add_tree_images()
+
+    def add_tree_images(self):
         """
         Used when swapping tree's in a build.
         It will remove all assets, including selected nodes and connecting lines and present an empty tree
@@ -252,37 +263,47 @@ class TreeView(QGraphicsView):
             _image = None
             scale = 1
             if _group.get("ascendancyName", None) is not None:
-                if g == "7":
-                    print(_group)
-                    print(_group.get("isAscendancyStart", False))
+                _name = _group["ascendancyName"]
+                # ToDo: Accommodate a bug that makes Chieftain disappear
+                if _name == "Chieftain":
+                    _group["isAscendancyStart"] = True
                 if _group.get("isAscendancyStart", False):
                     # This is the ascendancy circles around the outside of the tree
-                    _name = _group["ascendancyName"]
+                    # Ascendant position in the json is good, everyone is need hard coding
                     if _name == "Ascendant":
-                        _image = self.add_picture(
-                            tree.spriteMap[f"Classes{_name}"]["handle"],
-                            _group["x"],
-                            _group["y"],
-                            Layers.backgrounds,
-                        )
-                        _image.setScale(2.5 / global_scale_factor)
-                        _image.setPos(
-                            _group["x"] - (_image.width / 2),
-                            _group["y"] - (_image.height / 2),
-                        )
+                        _x, _y = _group["x"], _group["y"]
                     else:
-                        _image = self.add_picture(
-                            tree.spriteMap[f"Classes{_name}"]["handle"],
+                        _x, _y = (
                             ascendancy_positions[_name]["x"],
                             ascendancy_positions[_name]["y"],
-                            Layers.backgrounds,
                         )
-                        _image.setScale(2.5 / global_scale_factor)
-                        _image.setPos(
-                            ascendancy_positions[_name]["x"] - (_image.width / 2),
-                            ascendancy_positions[_name]["y"] - (_image.height / 2),
-                        )
+
+                    # add the picture and shift it by half itself to line up with the nodes
+                    _image = self.add_picture(
+                        tree.spriteMap[f"Classes{_name}"]["handle"],
+                        _x,
+                        _y,
+                        Layers.backgrounds,
+                    )
+                    _image.setScale(2.5 / global_scale_factor)
+                    _image.setPos(
+                        _x - (_image.width / 2),
+                        _y - (_image.height / 2),
+                    )
                     _image.filename = f"Classes{_name}"
+                    # Add a circle if this Ascendancy is the chosen one
+                    # ToDo: find a way to darken and lighten images
+                    if _name == self.build.ascendClassName:
+                        _circle = QGraphicsEllipseItem(
+                            _image.pos().x() - 10,
+                            _image.pos().y() - 10,
+                            _image.width + 10,
+                            _image.height + 10,
+                        )
+                        _circle.setPen(QPen(QColor(Qt.darkGreen), 15, Qt.SolidLine))
+                        _circle.setZValue(Layers.group)
+                        self._scene.addItem(_circle)
+
             elif _group["oo"].get(3, False):
                 _image = self.add_picture(
                     tree.spriteMap["GroupBackgroundLargeHalfAlt"]["handle"],
@@ -325,19 +346,24 @@ class TreeView(QGraphicsView):
         #  else wise just remove the selected nodes/connectors and readd new ones (separate function)
         # for item in self.items():
         #     self._scene.removeItem(item)
-        print("tree.graphics_items", len(tree.graphics_items))
+        # print("tree.graphics_items", len(tree.graphics_items))
         # ToDo: all this needs to be moved to the tree Class, so then this line will work
         for image in tree.graphics_items:
             self._scene.addItem(image)
 
         # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet
         image = None
-        if new_class != PlayerClasses.SCION.value:
-            c = class_backgrounds[PlayerClasses(tree.char_class)]
-            image = self._char_class_bkgnd_image = self.add_picture(
-                tree.spriteMap[c["n"]]["handle"], c["x"], c["y"], Layers.backgrounds
+        if self.build.current_class != PlayerClasses.SCION:
+            print(self.build.current_class, type(self.build.current_class))
+            bkgnd = class_backgrounds[self.build.current_class]
+            print(bkgnd)
+            self._char_class_bkgnd_image = self.add_picture(
+                tree.spriteMap[bkgnd["n"]]["handle"],
+                bkgnd["x"],
+                bkgnd["y"],
+                Layers.backgrounds,
             )
-            image.filename = c["n"]
+            self._char_class_bkgnd_image.filename = bkgnd["n"]
 
         # Add the group backgrounds
         for g in tree.groups:
@@ -358,10 +384,13 @@ class TreeView(QGraphicsView):
             # print(f"{n}: {_type}: {node.sprites}")
             # ToDo: temporary
             hoverNode = None
-            # isAlloc = True
-            isAlloc = False
             state = "unalloc"  # could also be Alloc and Path
+
             # ToDo: temporary
+            isAlloc = False
+            if self.build.current_spec.nodes is not None:
+                isAlloc = n in self.build.current_spec.nodes
+
             overlay = ""
             base = None
             if _type == "ClassStart":

@@ -11,7 +11,15 @@ import sys, re
 from pathlib import Path
 from pprint import pprint
 import qdarktheme
-from qdarktheme.qtpy.QtCore import QCoreApplication, QDir, QRect, QRectF, QSize, Qt, Slot
+from qdarktheme.qtpy.QtCore import (
+    QCoreApplication,
+    QDir,
+    QRect,
+    QRectF,
+    QSize,
+    Qt,
+    Slot,
+)
 from qdarktheme.qtpy.QtGui import (
     QAction,
     QActionGroup,
@@ -123,7 +131,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_classes.setDuplicatesEnabled(False)
         # self.combo_classes.setInsertPolicy(QComboBox.InsertAlphabetically)
         for idx in PlayerClasses:
-            self.combo_classes.addItem(idx.name.title(), idx.value)
+            self.combo_classes.addItem(idx.name.title(), idx)
 
         toolbar_spacer1 = QWidget()
         toolbar_spacer1.setMinimumSize(50, 0)
@@ -136,8 +144,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toolBar_MainWindow.addWidget(self.combo_ascendancy)
 
         # Dump the placeholder tab and add our own
-        self.gviewTree = TreeView(self.config, self.build)
-        self.vLayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gviewTree)
+        self.gview_Tree = TreeView(self.config, self.build)
+        self.vLayout_tabTree.replaceWidget(
+            self.graphicsView_PlaceHolder, self.gview_Tree
+        )
         self.graphicsView_PlaceHolder.setParent(None)
 
         # self.layout_TreeTools = FlowLayout(self.widget_TreeTools)
@@ -184,6 +194,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Save.triggered.connect(self.build_save_as)
         self.combo_ascendancy.currentTextChanged.connect(self.change_ascendancy)
         self.combo_classes.currentTextChanged.connect(self.change_class)
+        self.combo_Tree.currentTextChanged.connect(self.change_tree)
+        # setup Scion by default, and this will trigger it's correct ascendancy to appear in combo_ascendancy
+        self.change_class("Scion")
 
     def exit_handler(self):
         self.config.size = self.size()
@@ -265,14 +278,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not new:
                 self.config.add_recent_build(filename)
             self.set_current_tab()
-            self.set_current_tree()
+            self.fill_current_tree_combo()
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
             # print(f"{self.build.bandit}, {self.build.pantheonMajorGod}, {self.build.pantheonMinorGod}")
-            self.combo_Bandits.setCurrentText(self.build.bandit)
-            self.combo_MajorGods.setCurrentText(self.build.pantheonMajorGod)
-            self.combo_MinorGods.setCurrentText(self.build.pantheonMinorGod)
+            # self.combo_Bandits.setCurrentText(self.build.bandit)
+            # self.combo_MajorGods.setCurrentText(self.build.pantheonMajorGod)
+            # self.combo_MinorGods.setCurrentText(self.build.pantheonMinorGod)
             for i in range(self.combo_Bandits.count()):
                 if self.combo_Bandits.itemData(i) == self.build.bandit:
                     self.combo_Bandits.setCurrentIndex(i)
@@ -285,26 +298,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.combo_MinorGods.itemData(i) == self.build.pantheonMinorGod:
                     self.combo_MinorGods.setCurrentIndex(i)
                     break
-
-    def set_current_tab(self):
-        for i in range(self.tabWidget.count()):
-            if self.tabWidget.tabWhatsThis(i) == self.build.viewMode:
-                self.tabWidget.setCurrentIndex(i)
-                return
-        self.tabWidget.setCurrentIndex(0)
-
-    def set_current_tree(self):
-        self.combo_Tree.clear()
-        print("set_current_tree")
-        for idx, spec in enumerate(self.build.specs):
-            self.combo_Tree.addItem(spec.title, idx)
-        self.combo_Tree.setCurrentIndex(self.build.activeSpec-1)
-
-        # print(self.build.tree)
-        # for idx, tree in enumerate(self.build.tree.items()):
-        #     # if idx == 0:
-        #         print(idx, tree)
-        #     # self.combo_classes.addItem(idx.name.title(), idx.value)
 
     @Slot()
     def build_save_as(self):
@@ -356,20 +349,41 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit_Notes.setCurrentFont(action.currentFont())
         self.textEdit_Notes.setFocus()
 
+    def set_current_tab(self):
+        for i in range(self.tabWidget.count()):
+            if self.tabWidget.tabWhatsThis(i) == self.build.viewMode:
+                self.tabWidget.setCurrentIndex(i)
+                return
+        self.tabWidget.setCurrentIndex(0)
+
+    def fill_current_tree_combo(self):
+        # let's protect activeSpec as the next part will erase it
+        active_spec = self.build.activeSpec
+        self.combo_Tree.clear()
+        for idx, spec in enumerate(self.build.specs):
+            self.combo_Tree.addItem(spec.title, idx)
+        # reset activeSpec
+        self.combo_Tree.setCurrentIndex(active_spec)
+
+    @Slot()
+    def change_tree(self):
+        self.build.change_tree(self.combo_Tree.currentData())
+        self.gview_Tree.add_tree_images()
+
     @property
     def curr_class(self):
         return self._curr_class
 
     @curr_class.setter
-    def curr_class(self, new_class, new_ascendancy=None):
+    def curr_class(self, new_class):
         """
         Actions required for changing classes
-        :param new_class: Integer representing the PlayerClasses enumerations
-        :param new_ascendancy: Integer representing the PlayerClasses enumerations
+        :param new_class:PlayerClasses. Current class
         :return:
         """
         # GUI Changes
-        _class = self.build.current_tree.classes[new_class]
+        # get the dictionary associated with this class
+        _class = self.build.current_tree.classes[new_class.value]
         # Changing the ascendancy combobox, will trigger it's signal/slot.
         # This is good as it will set the ascendancy back to None
         self.combo_ascendancy.clear()
@@ -377,34 +391,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for _ascendancy in _class["ascendancies"]:
             self.combo_ascendancy.addItem(_ascendancy["name"])
         # build changes
-        self._curr_class = new_class
-        self.build.curr_class = new_class
-        self.gviewTree.switch_class(new_class)
+        self.build.current_class = new_class
+        # self.build.curr_class = new_class
+        self.gview_Tree.switch_class(new_class)
 
     @Slot()
     def change_class(self, selected_class):
         """
-        Slot for the Classes combobox
+        Slot for the Classes combobox. Triggers the curr_class property actions
         :param selected_class: String of the selected text
         :return:
         """
         self.curr_class = self.combo_classes.currentData()
+        self.build.className = selected_class
 
     @Slot()
     def change_ascendancy(self, selected_ascendancy):
         """
         Actions required for changing ascendancies
-        :param selected_ascendancy: String of the selected text
+        :param  selected_ascendancy: String of the selected text
+                "None" will occur when refilling the combobox or when the user chooses it
+                "" will occur during a combobox clear
         :return:
         """
         # "" will occur during a combobox clear
         if selected_ascendancy == "":
             return
-        # "None" will occur when refilling the combobox or when the user chooses it
-        if selected_ascendancy == "None":
-            print(f"change_ascendancy: {selected_ascendancy}")
-        else:
-            print(f"change_ascendancy: {selected_ascendancy}")
+        self.build.current_spec.ascendClassId = self.combo_ascendancy.currentData()
+        self.build.ascendClassName = selected_ascendancy
+        self.gview_Tree.add_tree_images()
 
     @Slot()
     def set_tab_focus(self, index):
@@ -482,9 +497,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # self.hLayout_Compare = QHBoxLayout()
         self.label_Compare = QLabel(self.widget_TreeTools)
-        self.label_Compare.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_Compare.setAlignment(
+            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter
+        )
         self.label_Compare.setObjectName("label_Compare")
-        self.label_Compare.setText(QCoreApplication.translate("MainWindow", u"This is some text", None))
+        self.label_Compare.setText(
+            QCoreApplication.translate("MainWindow", "This is some text", None)
+        )
         layout_form.addWidget(self.label_Compare)
         self.check_Compare = QCheckBox(self.widget_TreeTools)
         self.check_Compare.setMinimumSize(QSize(20, 0))
@@ -530,6 +549,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #
         # self.label_.setText(QCoreApplication.translate("MainWindow", u"Amulet:", None))
         # self.btn_.setText(QCoreApplication.translate("MainWindow", u"Manage ...", None))
+
 
 # Start here
 app = QApplication(sys.argv)

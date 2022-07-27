@@ -313,6 +313,7 @@ class Layers(IntEnum):
     small_overlays = 2
     key_overlays = 3
 
+
 class ColourCodes(Enum):
     NORMAL = 0x000000
     MAGIC = 0x8888FF
@@ -457,7 +458,10 @@ class_centres = {
 ascendancy_positions = {
     "Ascendant": {"x": -7800.0 / global_scale_factor, "y": 7200 / global_scale_factor},
     "Berserker": {"x": -10400 / global_scale_factor, "y": 3700 / global_scale_factor},
-    "Chieftain": {"x": -10400 / global_scale_factor, "y": 2200 / global_scale_factor},  # data Error
+    "Chieftain": {
+        "x": -10400 / global_scale_factor,
+        "y": 2200 / global_scale_factor,
+    },  # data Error
     "Juggernaut": {"x": -10400 / global_scale_factor, "y": 5200 / global_scale_factor},
     "Deadeye": {"x": 10200 / global_scale_factor, "y": 2200 / global_scale_factor},
     "Pathfinder": {"x": 10200 / global_scale_factor, "y": 3700 / global_scale_factor},
@@ -470,7 +474,10 @@ ascendancy_positions = {
     "Slayer": {"x": 1500 / global_scale_factor, "y": 9800 / global_scale_factor},
     "Guardian": {"x": -10400 / global_scale_factor, "y": -5200 / global_scale_factor},
     "Hierophant": {"x": -10400 / global_scale_factor, "y": -3700 / global_scale_factor},
-    "Inquisitor": {"x": -10400 / global_scale_factor, "y": -2200 / global_scale_factor},  # data Error
+    "Inquisitor": {
+        "x": -10400 / global_scale_factor,
+        "y": -2200 / global_scale_factor,
+    },  # data Error
     "Assassin": {"x": 10200 / global_scale_factor, "y": -5200 / global_scale_factor},
     "Saboteur": {"x": 10200 / global_scale_factor, "y": -2200 / global_scale_factor},
     "Trickster": {"x": 10200 / global_scale_factor, "y": -3700 / global_scale_factor},
@@ -548,7 +555,9 @@ class Config:
         # To reduce circular references, have the app and main window references here
         self.win = _win
         self.app = _app
-        self.config = None  # this is the dictionary representing the xml, not a pointer to itself
+        self.config = (
+            None  # this is the dictionary representing the xml, not a pointer to itself
+        )
         self.screen_rect = self.app.primaryScreen().size()
 
         self.exeDir = Path.cwd()

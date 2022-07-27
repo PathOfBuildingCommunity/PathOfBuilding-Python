@@ -13,6 +13,7 @@ associated with a Player.
 import re
 from pathlib import Path
 from bs4 import BeautifulSoup as soup
+from qdarktheme.qtpy.QtCore import Slot
 
 from pob_config import (
     Config,
@@ -76,7 +77,7 @@ class Build:
 
     @property
     def current_class(self):
-        return self.current_tree.char_class
+        return self.current_spec.classId
 
     @current_class.setter
     def current_class(self, new_class):
@@ -85,8 +86,8 @@ class Build:
         :param new_class: Integer representing the PlayerClasses enumerations
         :return:
         """
-        self.current_tree.char_class = new_class
-        self.ui.classes_combobox.setCurrentIndex(new_class)
+        self.current_spec.classId = new_class
+        # self.ui.combo_classes.setCurrentIndex(new_class.value)
 
     def new(self, _build):
         self.name = "Default"
@@ -109,8 +110,9 @@ class Build:
                 self.specs.append(Spec(spec))
         else:
             self.specs.append(Spec(self.tree["Spec"]))
-        self.activeSpec = int(self.tree.get("@activeSpec", 1))
-        self.current_spec = self.specs[self.activeSpec-1]
+        # In the xml, is 1 based, but python indexes are 0 based, so we subtract 1
+        self.activeSpec = int(self.tree.get("@activeSpec", 1)) - 1
+        self.current_spec = self.specs[self.activeSpec]
 
     def load(self, filename):
         """
@@ -119,7 +121,6 @@ class Build:
         :return: N/A
         """
         _build_pob = pob_file.read_xml(filename)
-        # print(_build_pob)
         if _build_pob is None:
             tr = self.pob_config.app
             ui_utils.critical_dialog(
@@ -159,21 +160,12 @@ class Build:
         """
         return True
 
-    @property
-    def ascendClassName(self):
-        return self.build["@ascendClassName"]
-
-    @ascendClassName.setter
-    def ascendClassName(self, new_name):
-        self.build["@ascendClassName"] = new_name
-
-    @property
-    def bandit(self):
-        return self.build["@bandit"]
-
-    @bandit.setter
-    def bandit(self, new_name):
-        self.build["@bandit"] = new_name
+    def change_tree(self, tree_id):
+        print("build: change_tree: tree_id", tree_id)
+        if tree_id is None:
+            return
+        self.activeSpec = tree_id
+        self.current_spec = self.specs[tree_id]
 
     @property
     def className(self):
@@ -184,12 +176,28 @@ class Build:
         self.build["@className"] = new_name
 
     @property
+    def ascendClassName(self):
+        return self.build["@ascendClassName"]
+
+    @ascendClassName.setter
+    def ascendClassName(self, new_name):
+        self.build["@ascendClassName"] = new_name
+
+    @property
     def level(self):
         return int(self.build["@level"])
 
     @level.setter
     def level(self, new_level):
         self.build["@level"] = f"{new_level}"
+
+    @property
+    def bandit(self):
+        return self.build["@bandit"]
+
+    @bandit.setter
+    def bandit(self, new_name):
+        self.build["@bandit"] = new_name
 
     @property
     def mainSocketGroup(self):
@@ -245,9 +253,11 @@ class Spec:
         self.title = _spec.get("@title", "Default")
         self.ascendClassId = _spec.get("@ascendClassId", 0)
         self.masteryEffects = _spec.get("@masteryEffects", None)
-        self.nodes = _spec.get("@nodes", None)
+        self.nodes = _spec.get("@nodes", [0])
         self.treeVersion = _spec.get("@treeVersion", re.sub("\.", "_", str(_VERSION)))
-        self.classId = _spec.get("@classId", 0)
+        self.classId = PlayerClasses(int(_spec.get("@classId", PlayerClasses.SCION)))
         self.EditedNodes = _spec.get("", None)
-        self.URL = _spec.get("", "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA")
+        self.URL = _spec.get(
+            "", "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA"
+        )
         self.Sockets = _spec.get("", 1)

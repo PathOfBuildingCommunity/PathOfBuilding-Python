@@ -67,7 +67,7 @@ class Tree:
         self.version = _version
 
         self.name = "Default"
-        self._char_class = PlayerClasses.SCION.value  # can't use class here
+        # self._char_class = PlayerClasses.SCION.value  # can't use class here
         self.ui = None
         self.allocated_nodes = set()
         self.assets = {}
@@ -102,13 +102,13 @@ class Tree:
         ret_str = f"[TREE]: version '{self.version}'\n"
         return ret_str
 
-    @property
-    def char_class(self):
-        return self._char_class
-
-    @char_class.setter
-    def char_class(self, new_class):
-        self._char_class = new_class
+    # @property
+    # def char_class(self):
+    #     return self._char_class
+    #
+    # @char_class.setter
+    # def char_class(self, new_class):
+    #     self._char_class = new_class
 
     @property
     def version(self):
@@ -178,7 +178,9 @@ class Tree:
 
         self.skillsPerOrbit = self.constants["skillsPerOrbit"]
         self.orbitRadii = self.constants["orbitRadii"]
-        self.orbitRadii = [i / global_scale_factor for i in self.constants["orbitRadii"]]
+        self.orbitRadii = [
+            i / global_scale_factor for i in self.constants["orbitRadii"]
+        ]
 
         self.orbit_anglesByOrbit = {}
         for orbit, skillsInOrbit in enumerate(self.skillsPerOrbit):
@@ -193,7 +195,9 @@ class Tree:
             class_name_map[_class.get("name")] = class_id
             # create the first entry as "0" = None
             _class.update({0: {"name": "None"}})
-            for ascend_class_id, _ascend_class in enumerate(_class.get("ascendancies", None)):
+            for ascend_class_id, _ascend_class in enumerate(
+                _class.get("ascendancies", None)
+            ):
                 ascend_name_map[_ascend_class.get("name")] = {
                     "classId": class_id,
                     "class": _class,
@@ -312,7 +316,7 @@ class Tree:
         # print(self.orbitRadii)
         # Derive the true position of the node
         if node.group:
-            """ orbit_radius, x and y have already been scaled"""
+            """orbit_radius, x and y have already been scaled"""
             node.angle = self.orbit_anglesByOrbit[node.o][node.oidx]
             orbit_radius = self.orbitRadii[node.o]
             _a_name = node.ascendancyName
@@ -322,8 +326,14 @@ class Tree:
                 node.x = node.group["x"] + math.sin(node.angle) * orbit_radius
                 node.y = node.group["y"] - math.cos(node.angle) * orbit_radius
             else:
-                node.x = ascendancy_positions[_a_name]["x"] + math.sin(node.angle) * orbit_radius
-                node.y = ascendancy_positions[_a_name]["y"] - math.cos(node.angle) * orbit_radius
+                node.x = (
+                    ascendancy_positions[_a_name]["x"]
+                    + math.sin(node.angle) * orbit_radius
+                )
+                node.y = (
+                    ascendancy_positions[_a_name]["y"]
+                    - math.cos(node.angle) * orbit_radius
+                )
 
     # process_node
 
@@ -372,10 +382,19 @@ class Tree:
                     self.notableMap[node.dn.lower()] = node
             else:
                 self.ascendancyMap[node.dn.lower()] = node
-                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
-                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
+                if (
+                    class_notables.get(
+                        ascend_name_map[node.ascendancyName]["class"]["name"], None
+                    )
+                    is None
+                ):
+                    class_notables[
+                        ascend_name_map[node.ascendancyName]["class"]["name"]
+                    ] = {}
                 if ascend_name_map[node.ascendancyName]["class"]["name"] != "Scion":
-                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
+                    class_notables[
+                        ascend_name_map[node.ascendancyName]["class"]["name"]
+                    ] = node.dn
         else:
             node.type = "Normal"
             if (
@@ -386,9 +405,18 @@ class Tree:
                 and "Passive" not in node.dn
             ):
                 self.ascendancyMap[node.dn.lower()] = node
-                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
-                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
-                class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
+                if (
+                    class_notables.get(
+                        ascend_name_map[node.ascendancyName]["class"]["name"], None
+                    )
+                    is None
+                ):
+                    class_notables[
+                        ascend_name_map[node.ascendancyName]["class"]["name"]
+                    ] = {}
+                class_notables[
+                    ascend_name_map[node.ascendancyName]["class"]["name"]
+                ] = node.dn
 
     # set_node_type
 
@@ -437,6 +465,7 @@ class Tree:
                     "3": (x + w) / w,
                     "4": (y + h) / h,
                 }
+
     # process_sprite_map
 
     def process_assets(self, sprite_list):
@@ -458,7 +487,7 @@ class Tree:
                 # This needs to duplicated and mirrored.
                 # ToDo: Fix me. Remove when it is displayed properly
                 _source = QImage(f":/Art/TreeData/{name}.png")
-                _result = QPixmap(_source.width(), _source.height()*2)
+                _result = QPixmap(_source.width(), _source.height() * 2)
                 _result.height()
                 _result.fill(Qt.transparent)
                 painter = QPainter()
