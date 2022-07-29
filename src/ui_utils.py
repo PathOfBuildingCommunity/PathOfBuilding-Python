@@ -53,104 +53,146 @@ def critical_dialog(win, title, text, btn_text="Close"):
     dlg.setIcon(QMessageBox.Critical)
     dlg.exec_()
 
-"""This doesn't work and needs fixing"""
+
 class FlowLayout(QLayout):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, parent=None, margin=0, spacing=-1):
+        """
+        Initialize layout
+        """
+        super(FlowLayout, self).__init__(parent)
 
         if parent is not None:
-            self.setContentsMargins(QMargins(0, 0, 0, 0))
+            self.setContentsMargins(margin, margin, margin, margin)
 
-        self._item_list = []
+        self.setSpacing(spacing)
+        self.margin = margin
+
+        # spaces between each item
+        self.spaceX = 5
+        self.spaceY = 5
+
+        # Internal list of contained widgets
+        self.itemList = []
 
     def __del__(self):
+        """
+        Internal delete function
+        :return: N/A
+        """
         item = self.takeAt(0)
         while item:
             item = self.takeAt(0)
 
     def addItem(self, item):
-        self._item_list.append(item)
+        """
+        Adds a widget to the layout
+        :return: N/A
+        """
+        self.itemList.append(item)
 
     def count(self):
-        return len(self._item_list)
+        """
+        Count.
+        :return: Integer: Number of widgets in layout
+        """
+        return len(self.itemList)
 
     def itemAt(self, index):
-        if 0 <= index < len(self._item_list):
-            return self._item_list[index]
+        """
+        Return a reference to a widget in the layout
+        :return: Return a reference to a widget in the layout, or None
+        """
+        if index >= 0 and index < len(self.itemList):
+            return self.itemList[index]
 
         return None
 
     def takeAt(self, index):
-        if 0 <= index < len(self._item_list):
-            return self._item_list.pop(index)
+        """
+        Remove a widget
+        :return: Return a reference to a widget in the layout, or None
+        """
+        if index >= 0 and index < len(self.itemList):
+            return self.itemList.pop(index)
 
         return None
 
     def expandingDirections(self):
-        return Qt.Orientation(0)
+        """
+        Actually set parents geometry based on out version of doLayout
+        :return: N/A
+        """
+        return Qt.Orientations(Qt.Orientation(0))
 
     def hasHeightForWidth(self):
+        """
+        Ask the layout if there is a valid heightForWidth() function
+        :return: Booean: True
+        """
         return True
 
     def heightForWidth(self, width):
-        height = self._do_layout(QRect(0, 0, width, 0), True)
+        """
+        Test doLayout and return what the height will be.
+        :return: Integer: Expected height of the parent
+        """
+        height = self.doLayout(QRect(0, 0, width, 0), True)
         return height
 
     def setGeometry(self, rect):
+        """
+        Actually set parents geometry based on out version of doLayout
+        :return: N/A
+        """
         super(FlowLayout, self).setGeometry(rect)
-        self._do_layout(rect, False)
+        self.doLayout(rect, False)
 
     def sizeHint(self):
+        """
+        Return the maximum value of all the widget's minimum size
+        :return: QSize
+        """
         return self.minimumSize()
 
     def minimumSize(self):
+        """
+        Return the maximum value of all the widget's minimum size
+        :return: QSize
+        """
         size = QSize()
 
-        for item in self._item_list:
+        for item in self.itemList:
             size = size.expandedTo(item.minimumSize())
 
-        size += QSize(2 * self.contentsMargins().top(), 2 * self.contentsMargins().top())
+        size += QSize(2 * self.margin, 2 * self.margin)
         return size
 
-    def _do_layout(self, rect, test_only):
-        x = min(4, rect.x())
-        y = min(4, rect.y())
-        print(rect, x, y)
-        line_height = 0
-        spacing = self.spacing()
-        for idx, item in enumerate(self._item_list):
-            print(type(item), type(item.widget()), item.widget().objectName(), )
-            # pprint(
-            #     dict(
-            #         (name, getattr(item.widget(), name))
-            #         for name in dir(item.widget())
-            #         if not name.startswith("__")
-            #     ))
-            style = item.widget().style()
-            layout_spacing_x = style.layoutSpacing(
-                QSizePolicy.PushButton, QSizePolicy.PushButton, Qt.Horizontal
-            )
-            layout_spacing_y = style.layoutSpacing(
-                QSizePolicy.PushButton, QSizePolicy.PushButton, Qt.Vertical
-            )
-            space_x = spacing + layout_spacing_x
-            space_y = spacing + layout_spacing_y
-            # space_x = spacing
-            # space_y = spacing
-            next_x = x + item.sizeHint().width() + space_x
-            if next_x - space_x > rect.right() and line_height > 0:
+    def doLayout(self, rect, testOnly):
+        """
+        Process each visible widget's width, and decide how many rows will be occupied.
+        Also sets the location of the widgets
+         sizeHint() knows if the item is visble or not
+        :param rect: size of parent.
+        :param testOnly: processes everything but will not alter the position of widgets.
+        :return: integer: The height that the parent should be
+        """
+        x = rect.x()
+        y = rect.y()
+        lineHeight = 0
+
+        for item in self.itemList:
+            wid = item.widget()
+            nextX = x + item.sizeHint().width() + self.spaceX
+            if nextX - self.spaceX > rect.right() and lineHeight > 0:
                 x = rect.x()
-                y = y + line_height + space_y
-                next_x = x + item.sizeHint().width() + space_x
-                line_height = 0
+                y = y + lineHeight + self.spaceY
+                nextX = x + item.sizeHint().width() + self.spaceX
+                lineHeight = 0
 
-            # if not test_only:
-                # print(x, y, item.widget().name())
-                # print(x, y)
-                # item.setGeometry(QRect(QPoint(x, y), item.sizeHint()))
-                # item.widget().setPos(QPoint(x, y))
+            if not testOnly:
+                item.setGeometry(QRect(QPoint(x, y), item.sizeHint()))
 
-            x = next_x
-            line_height = max(line_height, item.sizeHint().height())
+            x = nextX
+            lineHeight = max(lineHeight, item.sizeHint().height())
 
-        return y + line_height - rect.y()
+        return y + lineHeight - rect.y()

@@ -187,12 +187,10 @@ class Tree:
             self.orbit_anglesByOrbit[orbit] = calc_orbit_angles(skillsInOrbit)
 
         """Build maps of class name -> class table"""
-        class_name_map = {}
         ascend_name_map = {}
         class_notables = {}
         # loop though each class
         for class_id, _class in enumerate(self.classes):
-            class_name_map[_class.get("name")] = class_id
             # create the first entry as "0" = None
             _class.update({0: {"name": "None"}})
             for ascend_class_id, _ascend_class in enumerate(
@@ -215,7 +213,7 @@ class Tree:
 
         """Now do the legion sprite import"""
         legion_sprites = pob_file.read_json(Path(self.legion_path, "tree-legion.json"))
-        if legion_sprites is None:
+        if not legion_sprites:
             ui_utils.critical_dialog(
                 self.config.win,
                 "f{self.config.app.tr('Load File')}",
@@ -228,7 +226,7 @@ class Tree:
                 legion_sprites["legionSprites"], sprite_sheets, self.legion_path, 0
             )
 
-        """Now do the other assets import"""
+        """Now do the other asset's import"""
         self.process_assets(self.assets)
 
         """ Migrate groups to old format. To be evaluated if this is needed
@@ -242,9 +240,9 @@ class Tree:
             for orbit in group["orbits"]:
                 group["oo"][orbit] = True
 
-        """ Create a dictionary list of nodes or class Node
-            self.nodes = dictionary from the json
-            make the root node go away"""
+        """ Create a dictionary list of nodes of class Node()
+            self.nodes = dictionary from the json"""
+        # make the root node go away
         del self.nodes["root"]
         for n in self.nodes:
             node = Node(self.nodes[n])
@@ -302,12 +300,16 @@ class Tree:
             }
         else:
             node.sprites = self.spriteMap[node.icon]
+        # setting this to "if node.sprites is not None:" makes the sprites disappear
+        #       if x is not None # which works only on None
         if not node.sprites:
             # print(f"error: {node.id} missing sprite {node.icon}")
             node.sprites = self.spriteMap[
                 "Art/2DArt/SkillIcons/passives/MasteryBlank.png"
             ]
         node.overlay = nodeOverlay.get(node.type, None)
+        if node.id == "24704":
+            print(node.id, node.overlay)
         if node.overlay:
             node.rsq = node.overlay["rsq"]
             node.size = node.overlay["size"]
@@ -319,13 +321,15 @@ class Tree:
             """orbit_radius, x and y have already been scaled"""
             node.angle = self.orbit_anglesByOrbit[node.o][node.oidx]
             orbit_radius = self.orbitRadii[node.o]
-            _a_name = node.ascendancyName
 
             """ Move all Ascendancy nodes to the correct location"""
-            if _a_name is None or _a_name == "Ascendant":
+            # Ascendant position in the json is good ...
+            _a_name = node.ascendancyName
+            if _a_name == "" or _a_name == "Ascendant":
                 node.x = node.group["x"] + math.sin(node.angle) * orbit_radius
                 node.y = node.group["y"] - math.cos(node.angle) * orbit_radius
             else:
+                # ... everyone else needs hard coding
                 node.x = (
                     ascendancy_positions[_a_name]["x"]
                     + math.sin(node.angle) * orbit_radius
@@ -346,8 +350,8 @@ class Tree:
         :return:
         """
         if node.classStartIndex >= 0:
-            node.startArt = f"center{PlayerClasses(node.classStartIndex).name.lower()}"
             node.type = "ClassStart"
+            node.startArt = f"center{PlayerClasses(node.classStartIndex).name.lower()}"
             _class = self.classes[node.classStartIndex]
             _class["startNodeId"] = node.id
         elif node.isAscendancyStart:
@@ -359,7 +363,7 @@ class Tree:
             if node.masteryEffects:
                 for effect in node.masteryEffects:
                     _id = str(effect["effect"])
-                    if not self.masteryEffects.get(_id, None):
+                    if self.masteryEffects.get(_id, None) is not None:
                         self.masteryEffects[_id] = {"id": _id, "sd": effect["stats"]}
                         # self.ProcessStats(self.masteryEffects[_id])
         elif node.isJewelSocket:
@@ -372,7 +376,7 @@ class Tree:
         elif node.isNotable:
             node.type = "Notable"
             # print(node.ascendancyName)
-            if node.ascendancyName is None:
+            if node.ascendancyName == "":
                 # Some nodes have duplicate names in the tree data for some reason, even though they're not on the tree
                 # Only add them if they're actually part of a group (i.e. in the tree)
                 # Add everything otherwise, because cluster jewel notables don't have a group
@@ -382,21 +386,17 @@ class Tree:
                     self.notableMap[node.dn.lower()] = node
             else:
                 self.ascendancyMap[node.dn.lower()] = node
-                if (
-                    class_notables.get(
-                        ascend_name_map[node.ascendancyName]["class"]["name"], None
-                    )
-                    is None
-                ):
+                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
                     class_notables[
                         ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = {}
+                        ] = {}
                 if ascend_name_map[node.ascendancyName]["class"]["name"] != "Scion":
                     class_notables[
                         ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = node.dn
+                        ] = node.dn
         else:
             node.type = "Normal"
+            # Add all notables in the Scion Ascendancy, by excluding all the little nodes
             if (
                 node.ascendancyName == "Ascendant"
                 and "Dexterity" not in node.dn
@@ -405,15 +405,10 @@ class Tree:
                 and "Passive" not in node.dn
             ):
                 self.ascendancyMap[node.dn.lower()] = node
-                if (
-                    class_notables.get(
-                        ascend_name_map[node.ascendancyName]["class"]["name"], None
-                    )
-                    is None
-                ):
+                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
                     class_notables[
                         ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = {}
+                        ] = {}
                 class_notables[
                     ascend_name_map[node.ascendancyName]["class"]["name"]
                 ] = node.dn
@@ -453,6 +448,7 @@ class Tree:
                 # Get a copy of the original image, cropped to coords()
                 image = pixmap.copy(x, y, w, h)
                 # ToDo: How much of this is needed.
+                # 1..4 was tcLeft, tcTop, tcRight, tcBottom in lua's DrawImage
                 self.spriteMap[name][_type] = {
                     "handle": image,
                     "name": name,
@@ -465,7 +461,6 @@ class Tree:
                     "3": (x + w) / w,
                     "4": (y + h) / h,
                 }
-
     # process_sprite_map
 
     def process_assets(self, sprite_list):
@@ -483,9 +478,7 @@ class Tree:
             # print(name)
             self.spriteMap[name] = {}
             if name == "GroupBackgroundLargeHalfAlt":
-                # print(name)
-                # This needs to duplicated and mirrored.
-                # ToDo: Fix me. Remove when it is displayed properly
+                # This needs to mirrored.
                 _source = QImage(f":/Art/TreeData/{name}.png")
                 _result = QPixmap(_source.width(), _source.height() * 2)
                 _result.height()
@@ -499,8 +492,6 @@ class Tree:
                 painter.end()
             else:
                 _result = QPixmap(f":/Art/TreeData/{name}.png")
-            # print(name, type(_result))
-            # self.spriteMap[name]["asset"] = {
             self.spriteMap[name] = {
                 "handle": _result,
                 "name": name,

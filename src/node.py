@@ -30,16 +30,16 @@ class Node:
         self.sprites = {}
         self.x = 0
         self.y = 0
-        self._type = None
-        self.startArt = None
+        self._type = ""
+        self.startArt = ""
         self._reminderText = ""  # Do not use None
         self.masterySprites = {}
         self.group = {}
         self.isBlighted = False
 
         """values from the passed in dictionary"""
-        self.name = _node.get("name", None)
-        self.dn = _node.get("name", None)
+        self.name = _node.get("name", "")
+        self.dn = _node.get("name", "")
         self._id = _node.get("skill", 0)
         self.skill = _node.get("skill", 0)
         self.group_id = _node.get("group", -1)
@@ -49,30 +49,30 @@ class Node:
         self.orbitIndex = _node.get("orbitIndex", 0)
         self.oidx = _node.get("orbitIndex", 0)
         self.passivePointsGranted = _node.get("passivePointsGranted", 0)
-        self.stats = _node.get("stats", None)
-        self.sd = _node.get("stats", None)
-        self.reminderText = _node.get("reminderText", None)
-        self.ascendancyName = _node.get("ascendancyName", None)
-        self.nodes_in = _node.get("in", None)
-        self.nodes_out = _node.get("out", None)
-        self.recipe = _node.get("recipe", None)
+        self.stats = _node.get("stats", [])
+        self.sd = _node.get("stats", [])
+        self.reminderText = _node.get("reminderText", "")
+        self.ascendancyName = _node.get("ascendancyName", "")
+        self.nodes_in = _node.get("in", [])
+        self.nodes_out = _node.get("out", [])
+        self.recipe = _node.get("recipe", [])
         self.classStartIndex = _node.get("classStartIndex", -1)
-        self.masteryEffects = _node.get("masteryEffects", None)
+        self.masteryEffects = _node.get("masteryEffects", {})
         self.isNotable = _node.get("isNotable", False)
         self.isAscendancyStart = _node.get("isAscendancyStart", False)
         self.isMastery = _node.get("isMastery", False)
         self.isJewelSocket = _node.get("isJewelSocket", False)
-        self.expansionJewel = _node.get("expansionJewel", None)
+        self.expansionJewel = _node.get("expansionJewel", {})
         self.isProxy = _node.get("isProxy", False)
         self.isKeystone = _node.get("isKeystone", False)
-        self.flavourText = _node.get("flavourText", None)
+        self.flavourText = _node.get("flavourText", "")
 
         """ These value are text items indicating the name of a file. 
             We will overwrite them with a handle to an image"""
-        self.icon = _node.get("icon", None)
-        self.inactiveIcon = _node.get("inactiveIcon", None)
-        self.activeIcon = _node.get("activeIcon", None)
-        self.activeEffectImage = _node.get("activeEffectImage", None)
+        self.icon = _node.get("icon", "")
+        self.inactiveIcon = _node.get("inactiveIcon", "")
+        self.activeIcon = _node.get("activeIcon", "")
+        self.activeEffectImage = _node.get("activeEffectImage", "")
 
     @property
     def id(self):

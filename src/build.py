@@ -12,17 +12,9 @@ associated with a Player.
 
 import re
 from pathlib import Path
-from bs4 import BeautifulSoup as soup
-from qdarktheme.qtpy.QtCore import Slot
 
-from pob_config import (
-    Config,
-    ColourCodes,
-    program_title,
-    PlayerClasses,
-    _VERSION,
-    empty_build,
-)
+from pob_config import *
+from pob_config import _VERSION
 import pob_file
 import ui_utils
 from tree import Tree
@@ -253,10 +245,14 @@ class Spec:
         self.title = _spec.get("@title", "Default")
         self.ascendClassId = _spec.get("@ascendClassId", 0)
         self.masteryEffects = _spec.get("@masteryEffects", None)
-        self.nodes = _spec.get("@nodes", [0])
+        # ToDo this includes ascendancy nodes (grrr)
+        self.nodes = {}
+        str_nodes = _spec.get('@nodes', '0')
+        if str_nodes:
+            self.nodes = str_nodes.split(',')
         self.treeVersion = _spec.get("@treeVersion", re.sub("\.", "_", str(_VERSION)))
         self.classId = PlayerClasses(int(_spec.get("@classId", PlayerClasses.SCION)))
-        self.EditedNodes = _spec.get("", None)
+        self.EditedNodes = _spec.get("EditedNodes", None)
         self.URL = _spec.get(
             "", "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA"
         )

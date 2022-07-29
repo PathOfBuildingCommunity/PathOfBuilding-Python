@@ -176,7 +176,7 @@
                <number>60</number>
               </property>
               <property name="placeholderText">
-               <string>Make  a Selection</string>
+               <string>Make a Selection</string>
               </property>
               <property name="modelColumn">
                <number>0</number>
@@ -237,7 +237,7 @@
                </size>
               </property>
               <property name="placeholderText">
-               <string>Make  a Selection</string>
+               <string>Make a Selection</string>
               </property>
               <item>
                <property name="text">
@@ -287,7 +287,7 @@
                </size>
               </property>
               <property name="placeholderText">
-               <string>Make  a Selection</string>
+               <string>Make a Selection</string>
               </property>
               <item>
                <property name="text">
@@ -481,7 +481,7 @@
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
-                   <height>60</height>
+                   <height>30</height>
                   </size>
                  </property>
                  <property name="styleSheet">
@@ -490,28 +490,6 @@
                  <property name="frameShape">
                   <enum>QFrame::StyledPanel</enum>
                  </property>
-                 <widget class="QComboBox" name="combo_Tree">
-                  <property name="geometry">
-                   <rect>
-                    <x>2</x>
-                    <y>2</y>
-                    <width>180</width>
-                    <height>22</height>
-                   </rect>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>180</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>300</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                 </widget>
                 </widget>
                </item>
               </layout>
@@ -702,38 +680,6 @@
                 <property name="title">
                  <string>Gem Options</string>
                 </property>
-                <widget class="QLabel" name="label_SortByDPS">
-                 <property name="geometry">
-                  <rect>
-                   <x>10</x>
-                   <y>15</y>
-                   <width>170</width>
-                   <height>22</height>
-                  </rect>
-                 </property>
-                 <property name="text">
-                  <string>Sort Gems by DPS</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-                <widget class="QLabel" name="label_MatchToLevel">
-                 <property name="geometry">
-                  <rect>
-                   <x>10</x>
-                   <y>40</y>
-                   <width>170</width>
-                   <height>22</height>
-                  </rect>
-                 </property>
-                 <property name="text">
-                  <string>Match Gems to Character Level</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
                 <widget class="QLabel" name="label_DefaultGemLevel">
                  <property name="geometry">
                   <rect>
@@ -782,28 +728,12 @@
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_ShowGemQualityVariants">
-                 <property name="geometry">
-                  <rect>
-                   <x>10</x>
-                   <y>140</y>
-                   <width>170</width>
-                   <height>22</height>
-                  </rect>
-                 </property>
-                 <property name="text">
-                  <string>Show Gem Quality Variants</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
                 <widget class="QComboBox" name="combo_SortByDPS">
                  <property name="geometry">
                   <rect>
-                   <x>220</x>
+                   <x>210</x>
                    <y>15</y>
-                   <width>171</width>
+                   <width>180</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -848,22 +778,6 @@
                   </property>
                  </item>
                 </widget>
-                <widget class="QCheckBox" name="check_MatchToLevel">
-                 <property name="geometry">
-                  <rect>
-                   <x>190</x>
-                   <y>40</y>
-                   <width>20</width>
-                   <height>20</height>
-                  </rect>
-                 </property>
-                 <property name="autoFillBackground">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
                 <widget class="QSpinBox" name="spin_DefaultGemLevel">
                  <property name="geometry">
                   <rect>
@@ -898,7 +812,7 @@
                   <rect>
                    <x>190</x>
                    <y>115</y>
-                   <width>202</width>
+                   <width>200</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -918,30 +832,55 @@
                   </property>
                  </item>
                 </widget>
-                <widget class="QCheckBox" name="check_ShowGemQualityVariants">
-                 <property name="geometry">
-                  <rect>
-                   <x>190</x>
-                   <y>140</y>
-                   <width>20</width>
-                   <height>20</height>
-                  </rect>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
                 <widget class="QCheckBox" name="check_SortByDPS">
                  <property name="geometry">
                   <rect>
-                   <x>190</x>
+                   <x>10</x>
                    <y>15</y>
-                   <width>20</width>
+                   <width>193</width>
                    <height>20</height>
                   </rect>
                  </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::RightToLeft</enum>
+                 </property>
                  <property name="text">
-                  <string/>
+                  <string>Sort Gems by DPS</string>
+                 </property>
+                </widget>
+                <widget class="QCheckBox" name="check_ShowGemQualityVariants">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>140</y>
+                   <width>193</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::RightToLeft</enum>
+                 </property>
+                 <property name="text">
+                  <string>Show Gem Quality Variants</string>
+                 </property>
+                </widget>
+                <widget class="QCheckBox" name="check_MatchToLevel">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>40</y>
+                   <width>193</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::RightToLeft</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Match Gems to Character Level </string>
                  </property>
                 </widget>
                </widget>
@@ -2730,6 +2669,7 @@ hr { height: 1px; border-width: 0; }
    <addaction name="action_Save"/>
    <addaction name="separator"/>
    <addaction name="action_Theme"/>
+   <addaction name="action_ManageTrees"/>
   </widget>
   <action name="action_New">
    <property name="icon">
@@ -2822,6 +2762,18 @@ hr { height: 1px; border-width: 0; }
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_ManageTrees">
+   <property name="icon">
+    <iconset resource="PoB.qrc">
+     <normaloff>:/Art/Icons/tree--pencil.png</normaloff>:/Art/Icons/tree--pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Manage Trees</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
    </property>
   </action>
  </widget>

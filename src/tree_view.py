@@ -262,21 +262,21 @@ class TreeView(QGraphicsView):
         def renderGroup(self, _group, g):
             _image = None
             scale = 1
-            if _group.get("ascendancyName", None) is not None:
+            # print("_group.get", _group.get("ascendancyName", None))
+            if _group.get("ascendancyName") != "":
                 _name = _group["ascendancyName"]
+                print("_name", _name)
                 # ToDo: Accommodate a bug that makes Chieftain disappear
                 if _name == "Chieftain":
                     _group["isAscendancyStart"] = True
                 if _group.get("isAscendancyStart", False):
                     # This is the ascendancy circles around the outside of the tree
-                    # Ascendant position in the json is good, everyone is need hard coding
+                    # Ascendant position in the json is good, everyone else needs hard coding
                     if _name == "Ascendant":
                         _x, _y = _group["x"], _group["y"]
                     else:
-                        _x, _y = (
-                            ascendancy_positions[_name]["x"],
-                            ascendancy_positions[_name]["y"],
-                        )
+                        _x = ascendancy_positions[_name]["x"]
+                        _y = ascendancy_positions[_name]["y"]
 
                     # add the picture and shift it by half itself to line up with the nodes
                     _image = self.add_picture(
@@ -352,7 +352,6 @@ class TreeView(QGraphicsView):
             self._scene.addItem(image)
 
         # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet
-        image = None
         if self.build.current_class != PlayerClasses.SCION:
             print(self.build.current_class, type(self.build.current_class))
             bkgnd = class_backgrounds[self.build.current_class]
@@ -385,10 +384,10 @@ class TreeView(QGraphicsView):
             # ToDo: temporary
             hoverNode = None
             state = "unalloc"  # could also be Alloc and Path
-
             # ToDo: temporary
+
             isAlloc = False
-            if self.build.current_spec.nodes is not None:
+            if self.build.current_spec.nodes:
                 isAlloc = n in self.build.current_spec.nodes
 
             overlay = ""

@@ -3,8 +3,9 @@ Configuration Class
 
 Defines reading and writing the settings xml as well as the settings therein
 The variables that come from the lua version of Path of Building retain their current naming
-
 As the settings.xml can be altered by humans, care must be taken to ensure data integrity, where possible
+
+Global constants as found in all locations in the lua version
 
 This is a base PoB class. It doesn't import any other PoB ui classes
 Imports pob_file
