@@ -9,84 +9,13 @@ A Tree instance is tied to a Version of the Tree as released by GGG and thus old
 need to be supported for backwards compatibility reason.
 
 """
-import os, re, json
-from pprint import pprint
-from pathlib import Path
-from qdarktheme.qtpy.QtCore import (
-    QSize,
-    QDir,
-    QPoint,
-    QPointF,
-    QRect,
-    QRectF,
-    Qt,
-    Slot,
-    QCoreApplication,
-)
-from qdarktheme.qtpy.QtGui import (
-    QAction,
-    QActionGroup,
-    QBrush,
-    QColor,
-    QCursor,
-    QDrag,
-    QFont,
-    QIcon,
-    QImage,
-    QMouseEvent,
-    QPen,
-    QPixmap,
-    QPainter,
-)
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QColorDialog,
-    QComboBox,
-    QDockWidget,
-    QFileDialog,
-    QFontComboBox,
-    QFontDialog,
-    QFormLayout,
-    QFrame,
-    QGraphicsEllipseItem,
-    QGraphicsItem,
-    QGraphicsLineItem,
-    QGraphicsPixmapItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QMainWindow,
-    QMenuBar,
-    QMessageBox,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QSpinBox,
-    QSplitter,
-    QStackedWidget,
-    QStatusBar,
-    QTabWidget,
-    QTextEdit,
-    QToolBar,
-    QToolBox,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
+from qdarktheme.qtpy.QtCore import QRectF, Qt
+from qdarktheme.qtpy.QtGui import QColor, QPen, QPainter
+from qdarktheme.qtpy.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView
 
 import pob_file, ui_utils
 from pob_config import *
 
-# from pob_config import (
-#     Config,
-#     ColourCodes,
-#     PlayerClasses,
-#     class_backgrounds,
-#     global_scale_factor,
-# )
-from tree import Tree
 from tree_graphics_item import TreeGraphicsItem
 from build import Build
 
@@ -262,10 +191,8 @@ class TreeView(QGraphicsView):
         def renderGroup(self, _group, g):
             _image = None
             scale = 1
-            # print("_group.get", _group.get("ascendancyName", None))
             if _group.get("ascendancyName") != "":
                 _name = _group["ascendancyName"]
-                print("_name", _name)
                 # ToDo: Accommodate a bug that makes Chieftain disappear
                 if _name == "Chieftain":
                     _group["isAscendancyStart"] = True
@@ -314,31 +241,34 @@ class TreeView(QGraphicsView):
                 _image.filename = f"{g} GroupBackgroundLargeHalfAlt"
                 _image.setScale(1.9 / global_scale_factor)
                 _image.setPos(
-                    _group["x"] - (_image.width / 2), _group["y"] - (_image.height / 2)
+                    _group["x"] - (_image.width / 2) + (34 / global_scale_factor),
+                    _group["y"] - (_image.height / 2) + (34 / global_scale_factor)
                 )
             elif _group["oo"].get(2, False):
                 _image = self.add_picture(
                     tree.spriteMap["GroupBackgroundMediumAlt"]["handle"],
-                    _group["x"],
-                    _group["y"],
+                    _group["x"] - 10,
+                    _group["y"] - 10,
                     Layers.group,
                 )
                 _image.filename = f"{g} GroupBackgroundMediumAlt"
                 _image.setScale(1.9 / global_scale_factor)
                 _image.setPos(
-                    _group["x"] - (_image.width / 2), _group["y"] - (_image.height / 2)
+                    _group["x"] - (_image.width / 2) + (32 / global_scale_factor),
+                    _group["y"] - (_image.height / 2) + (34 / global_scale_factor)
                 )
             elif group["oo"].get(1, False):
                 _image = self.add_picture(
                     tree.spriteMap["GroupBackgroundSmallAlt"]["handle"],
-                    _group["x"],
-                    _group["y"],
+                    _group["x"] - 10,
+                    _group["y"] - 10,
                     Layers.group,
                 )
                 _image.filename = f"{g} GroupBackgroundSmallAlt"
                 _image.setScale(1.9 / global_scale_factor)
                 _image.setPos(
-                    _group["x"] - (_image.width / 2), _group["y"] - (_image.height / 2)
+                    _group["x"] - (_image.width / 2) + (44 / global_scale_factor),
+                    _group["y"] - (_image.height / 2) + (44 / global_scale_factor)
                 )
 
         self._scene.clear()
@@ -353,9 +283,7 @@ class TreeView(QGraphicsView):
 
         # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet
         if self.build.current_class != PlayerClasses.SCION:
-            print(self.build.current_class, type(self.build.current_class))
             bkgnd = class_backgrounds[self.build.current_class]
-            print(bkgnd)
             self._char_class_bkgnd_image = self.add_picture(
                 tree.spriteMap[bkgnd["n"]]["handle"],
                 bkgnd["x"],
@@ -371,7 +299,6 @@ class TreeView(QGraphicsView):
                 renderGroup(self, group, g)
 
         for n in tree.nodes:
-            # print(n)
             node = tree.nodes[n]
             # Skip nodes with no group id. They appear to be clusters at the moment (2022-07-24)
             if node.g < 1:
@@ -380,7 +307,6 @@ class TreeView(QGraphicsView):
             _type = (
                 node.type
             )  # eg: keystoneActive, mastery, normalActive, notableActive
-            # print(f"{n}: {_type}: {node.sprites}")
             # ToDo: temporary
             hoverNode = None
             state = "unalloc"  # could also be Alloc and Path
@@ -434,9 +360,6 @@ class TreeView(QGraphicsView):
                     )
 
             if base is not None:
-                if n == "24704":
-                    print(n, node)
-                # print(f"{n}: {_type}: {base}")
                 pixmap = base.get("handle", None)
                 if pixmap is not None:
                     image = self.add_picture(
@@ -452,7 +375,6 @@ class TreeView(QGraphicsView):
                         'size': 86.45,
                         'unalloc': 'AscendancyFrameLargeNormal'},"""
             if overlay != "":
-                # print(f"{n}: {_type}: {node.name}: {overlay}")
                 _overlay = tree.spriteMap.get(overlay, None)
                 _layer = (
                     _type == "Notable" and Layers.key_overlays or Layers.small_overlays

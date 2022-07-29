@@ -73,12 +73,10 @@ from qdarktheme.widget_gallery.ui.dock_ui import DockUI
 from qdarktheme.widget_gallery.ui.frame_ui import FrameUI
 from qdarktheme.widget_gallery.ui.widgets_ui import WidgetsUI
 
-# from pob_config import Config, ColourCodes, _VERSION, program_title, PlayerClasses
 from pob_config import *
 from build import Build
-from ui_utils import FlowLayout
 
-# from tree import Tree
+from tree_ui import TreeUI
 from tree_view import TreeView
 
 # from tree_graphics_item import TreeGraphicsItem
@@ -95,7 +93,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self._theme = "dark"
         self._border_radius = "rounded"
-        self._curr_class = PlayerClasses.SCION
         self.startPos = None
         atexit.register(self.exit_handler)
         self.setWindowTitle(program_title)  # Do not translate
@@ -109,6 +106,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Start with an empty build
         self.build = Build(self.config)
+
+        # Setup UI Classes()
+        self.tree_ui = TreeUI(self.config, self.frame_TreeTools)
 
         """ Start: Do what the QT Designer cannot yet do """
         # add widgets to the Toolbar
@@ -154,8 +154,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.graphicsView_PlaceHolder.setParent(None)
 
-        self.layout_TreeTools = FlowLayout(self.frame_TreeTools, 2)
-        self.setup_tree_tool_ui(self.layout_TreeTools)
         """ End: Do what the QT Designer cannot yet do """
 
         self.build_loader("Default")
@@ -196,13 +194,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_New.triggered.connect(self.build_new)
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save_as)
-        self.combo_ascendancy.currentTextChanged.connect(self.change_ascendancy)
-        self.combo_classes.currentTextChanged.connect(self.change_class)
-        self.combo_manage_tree.currentTextChanged.connect(self.change_tree)
-        self.action_ManageTrees.triggered.connect(self.open_manage_trees)
+        self.combo_ascendancy.currentTextChanged.connect(self.tree_ui.change_ascendancy)
+        self.combo_classes.currentTextChanged.connect(self.tree_ui.change_class)
+        self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.tree_ui.change_tree)
+        self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
 
         # setup Scion by default, and this will trigger it's correct ascendancy to appear in combo_ascendancy
-        self.change_class("Scion")
+        self.tree_ui.change_class("Scion")
 
     def exit_handler(self):
         """
@@ -292,8 +290,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.build.build is not None:
             if not new:
                 self.config.add_recent_build(filename)
-            self.set_current_tab()
-            self.fill_current_tree_combo()
+            self.tree_ui.set_current_tab()
+            self.tree_ui.fill_current_tree_combo()
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
@@ -368,120 +366,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit_Notes.setCurrentFont(action.currentFont())
         self.textEdit_Notes.setFocus()
 
-    def set_current_tab(self):
-        """
-        Actions required when setting the current tab from the configuration xml file
-        :return: N/A
-        """
-        for i in range(self.tabWidget.count()):
-            if self.tabWidget.tabWhatsThis(i) == self.build.viewMode:
-                self.tabWidget.setCurrentIndex(i)
-                return
-        self.tabWidget.setCurrentIndex(0)
-
-    def fill_current_tree_combo(self):
-        """
-        Actions required to fill the combo_manage_tree widget. Usually when loading a build
-        :return: N/A
-        """
-        # let's protect activeSpec as the next part will erase it
-        active_spec = self.build.activeSpec
-        self.combo_manage_tree.clear()
-        self.combo_compare.clear()
-        for idx, spec in enumerate(self.build.specs):
-            self.combo_manage_tree.addItem(spec.title, idx)
-            self.combo_compare.addItem(spec.title, idx)
-        # reset activeSpec
-        self.combo_manage_tree.setCurrentIndex(active_spec)
-
-    @Slot()
-    def change_tree(self):
-        """
-        Actions required when the combo_manage_tree widget changes
-        :return: N/A
-        """
-        self.build.change_tree(self.combo_manage_tree.currentData())
-        self.gview_Tree.add_tree_images()
-        print(self.build.current_spec.nodes)
-        self.label_points.setText(f" {len(self.build.current_spec.nodes)} / 123  0 / 8 ")
-
-    @property
-    def curr_class(self):
-        return self._curr_class
-
-    @curr_class.setter
-    def curr_class(self, new_class):
-        """
-        Actions required for changing classes
-        :param new_class:PlayerClasses. Current class
-        :return: N/A
-        """
-        # GUI Changes
-        # get the dictionary associated with this class
-        _class = self.build.current_tree.classes[new_class.value]
-        # Changing the ascendancy combobox, will trigger it's signal/slot.
-        # This is good as it will set the ascendancy back to None
-        self.combo_ascendancy.clear()
-        self.combo_ascendancy.addItem("None", "None")
-        for _ascendancy in _class["ascendancies"]:
-            self.combo_ascendancy.addItem(_ascendancy["name"])
-        # build changes
-        self.build.current_class = new_class
-        # self.build.curr_class = new_class
-        self.gview_Tree.switch_class(new_class)
-
-    @Slot()
-    def change_class(self, selected_class):
-        """
-        Slot for the Classes combobox. Triggers the curr_class property actions
-        :param selected_class: String of the selected text
-        :return:
-        """
-        self.curr_class = self.combo_classes.currentData()
-        self.build.className = selected_class
-
-    @Slot()
-    def change_ascendancy(self, selected_ascendancy):
-        """
-        Actions required for changing ascendancies
-        :param  selected_ascendancy: String of the selected text
-                "None" will occur when refilling the combobox or when the user chooses it
-                "" will occur during a combobox clear
-        :return:
-        """
-        # "" will occur during a combobox clear
-        if selected_ascendancy == "":
-            return
-        self.build.current_spec.ascendClassId = self.combo_ascendancy.currentData()
-        self.build.ascendClassName = selected_ascendancy
-        self.gview_Tree.add_tree_images()
-
-    @Slot()
-    def set_tab_focus(self, index):
-        """
-        When switching to a tab, set the focus to a control in the tab
-        :param index: Which tab got selected (0 based)
-        :return: N/A
-        """
-        # tab indexes are 0 based. Used by set_tab_focus
-        tab_focus = {
-            0: self.tabWidget,
-            1: self.list_Skills,
-            2: self.tabWidget,
-            3: self.textEdit_Notes,
-            4: self.tabWidget,
-            5: self.tabWidget,
-        }
-
-        # Focus a Widget
-        tab_focus.get(index).setFocus()
-        # update the build
-        self.build.current_tab = self.tabWidget.tabWhatsThis(
-            self.tabWidget.currentIndex()
-        )
-        # Trun on / off actions as needed
-        self.action_ManageTrees.setVisible(self.build.current_tab == "TREE")
-
     # Do all actions needed to change between light and dark
     @Slot()
     def set_theme(self, new_theme):
@@ -502,19 +386,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QApplication.instance().setStyleSheet(
             qdarktheme.load_stylesheet(self._theme, self._border_radius)
         )
-
-    @Slot()
-    def set_combo_compare_visibility(self, checked_state):
-        """
-        Enable or disable the compare comboBox.
-        :param checked_state: Integer: 0 = unchecked, 2 = checked
-        :return: N/A
-        """
-        self.combo_compare.setVisible(checked_state >0)
-
-    @Slot()
-    def shortcut_CtrlM(self):
-        print("Ctrl-M", type(self))
 
     # Setup menu entries for all valid recent builds in the settings file
     def set_recent_builds_menu_items(self, config: Config):
@@ -539,67 +410,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 _action = self.menu_Builds.addAction(f"&{idx}.  {fn}")
                 make_connection(value, idx)
 
-    def open_manage_trees(self):
-        print("open_manage_trees")
-
-    def setup_tree_tool_ui(self, layout_form):
+    @Slot()
+    def set_tab_focus(self, index):
         """
-        Add Widgets to the tool bar at the bottom of the tree, using the fixed version of the PySide6 example Flow Layout
-        You can set size hints, but not setGeometry.
-        Should this not create the widgets but move the widgets from the placeholder
-        param: layout_form. The instantiated layout.
-        return: N/A
+        When switching to a tab, set the focus to a control in the tab
+        :param index: Which tab got selected (0 based)
+        :return: N/A
         """
-        self.action_ManageTrees.triggered.connect(self.shortcut_CtrlM)
+        # tab indexes are 0 based. Used by set_tab_focus
+        tab_focus = {
+            0: self.tabWidget,
+            1: self.list_Skills,
+            2: self.tabWidget,
+            3: self.textEdit_Notes,
+            4: self.tabWidget,
+            5: self.tabWidget,
+        }
 
-        self.combo_manage_tree = QComboBox()
-        self.combo_manage_tree.setMinimumSize(QSize(180, 22))
-        self.combo_manage_tree.setMaximumSize(QSize(300, 16777215))
-        layout_form.addWidget(self.combo_manage_tree)
-
-        self.label_Compare = QLabel()
-        self.label_Compare.setAlignment(
-            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter
+        # Focus a Widget
+        tab_focus.get(index).setFocus()
+        # update the build
+        self.build.current_tab = self.tabWidget.tabWhatsThis(
+            self.tabWidget.currentIndex()
         )
-        self.check_Compare = QCheckBox()
-        self.check_Compare.setMinimumSize(QSize(50, 22))
-        self.check_Compare.setText("Compare Tree")
-        self.check_Compare.setLayoutDirection(Qt.RightToLeft)
-        self.check_Compare.stateChanged.connect(self.set_combo_compare_visibility)
-        layout_form.addWidget(self.check_Compare)
-
-        self.combo_compare = QComboBox()
-        self.combo_compare.setMinimumSize(QSize(180, 22))
-        self.combo_compare.setMaximumSize(QSize(300, 16777215))
-        self.combo_compare.setVisible(False)
-        layout_form.addWidget(self.combo_compare)
-
-        self.btn_Reset = QPushButton()
-        self.btn_Import = QPushButton()
-        self.btn_Export = QPushButton()
-        self.btn_Reset.setText(QCoreApplication.translate("MainWindow", u"Reset Tree...", None))
-        self.btn_Import.setText(QCoreApplication.translate("MainWindow", u"Import Tree ...", None))
-        self.btn_Export.setText(QCoreApplication.translate("MainWindow", u"Export Tree...", None))
-        layout_form.addWidget(self.btn_Reset)
-        layout_form.addWidget(self.btn_Import)
-        layout_form.addWidget(self.btn_Export)
-
-        self.label_ShowNodePower = QLabel()
-        self.label_ShowNodePower.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.check_ShowNodePower = QCheckBox()
-        self.check_ShowNodePower.setMinimumSize(QSize(22, 22))
-        self.check_ShowNodePower.setMaximumSize(QSize(22, 16777215))
-        layout_form.addWidget(self.check_ShowNodePower)
-        self.combo_ShowNodePower = QComboBox()
-        self.combo_ShowNodePower.setMinimumSize(QSize(180, 22))
-        self.combo_ShowNodePower.setMaximumSize(QSize(180, 16777215))
-        layout_form.addWidget(self.combo_ShowNodePower)
-        self.btn_ShowPowerReport = QPushButton()
-        self.btn_ShowPowerReport.setText(QCoreApplication.translate("MainWindow", u"Show Power Report ...", None))
-        layout_form.addWidget(self.btn_ShowPowerReport)
-
-        # self.label_.setText(QCoreApplication.translate("MainWindow", u"Amulet:", None))
-        # self.btn_.setText(QCoreApplication.translate("MainWindow", u"Manage ...", None))
+        # Turn on / off actions as needed
+        self.action_ManageTrees.setVisible(self.build.current_tab == "TREE")
 
 
 # Start here

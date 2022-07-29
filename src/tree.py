@@ -308,14 +308,10 @@ class Tree:
                 "Art/2DArt/SkillIcons/passives/MasteryBlank.png"
             ]
         node.overlay = nodeOverlay.get(node.type, None)
-        if node.id == "24704":
-            print(node.id, node.overlay)
         if node.overlay:
             node.rsq = node.overlay["rsq"]
             node.size = node.overlay["size"]
 
-        # print(self.orbit_anglesByOrbit)
-        # print(self.orbitRadii)
         # Derive the true position of the node
         if node.group:
             """orbit_radius, x and y have already been scaled"""
@@ -355,7 +351,6 @@ class Tree:
             _class = self.classes[node.classStartIndex]
             _class["startNodeId"] = node.id
         elif node.isAscendancyStart:
-            # print(vars(node))
             node.type = "AscendClassStart"
             ascend_name_map[node.ascendancyName]["ascendClass"]["startNodeId"] = node.id
         elif node.isMastery:
@@ -375,7 +370,6 @@ class Tree:
             self.keystoneMap[node.dn.lower()] = node
         elif node.isNotable:
             node.type = "Notable"
-            # print(node.ascendancyName)
             if node.ascendancyName == "":
                 # Some nodes have duplicate names in the tree data for some reason, even though they're not on the tree
                 # Only add them if they're actually part of a group (i.e. in the tree)
@@ -470,12 +464,7 @@ class Tree:
         :return: N/A
         """
         # ToDo: remap these assets into locations and add them to self.graphics_items with x,y coords
-
-        # for n_id, assets in enumerate(sprite_list):
-        #     print(n_id, assets)
-
         for name in sprite_list:
-            # print(name)
             self.spriteMap[name] = {}
             if name == "GroupBackgroundLargeHalfAlt":
                 # This needs to mirrored.
@@ -499,7 +488,6 @@ class Tree:
                 "height": _result.height,
             }
 
-        # print(len(self.spriteMap))
         # with open("temp/spriteMap.txt", "a") as f_out:
         #     pprint(self.spriteMap, f_out)
 

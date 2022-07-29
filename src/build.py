@@ -153,7 +153,6 @@ class Build:
         return True
 
     def change_tree(self, tree_id):
-        print("build: change_tree: tree_id", tree_id)
         if tree_id is None:
             return
         self.activeSpec = tree_id
