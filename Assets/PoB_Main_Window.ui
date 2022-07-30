@@ -129,7 +129,7 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QGridLayout" name="gridLayout">
+           <layout class="QGridLayout" name="glayout_LeftFrame">
             <property name="leftMargin">
              <number>2</number>
             </property>
@@ -414,7 +414,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QTabWidget" name="tabWidget">
+          <widget class="QTabWidget" name="tab_main">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>2</horstretch>
@@ -434,9 +434,9 @@
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
-           <widget class="QWidget" name="tabTree">
+           <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -463,7 +463,7 @@
               <number>0</number>
              </property>
              <item>
-              <layout class="QVBoxLayout" name="vLayout_tabTree">
+              <layout class="QVBoxLayout" name="vlayout_tabTree">
                <property name="spacing">
                 <number>0</number>
                </property>
@@ -496,7 +496,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="tabSkills">
+           <widget class="QWidget" name="tab_Skills">
             <attribute name="title">
              <string>S&amp;kills</string>
             </attribute>
@@ -1178,7 +1178,7 @@
                  <string>Count</string>
                 </property>
                </widget>
-               <widget class="QLineEdit" name="lineEdit_SkillLabel">
+               <widget class="QLineEdit" name="lineedit_SkillLabel">
                 <property name="geometry">
                  <rect>
                   <x>480</x>
@@ -1895,7 +1895,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="tabItems">
+           <widget class="QWidget" name="tab_Items">
             <attribute name="title">
              <string>&amp;Items</string>
             </attribute>
@@ -1916,14 +1916,14 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frame">
+              <widget class="QFrame" name="frame_Items">
                <property name="frameShape">
                 <enum>QFrame::StyledPanel</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="QPushButton" name="btn_SkillsManage_2">
+               <widget class="QPushButton" name="btn_ItemManage">
                 <property name="geometry">
                  <rect>
                   <x>248</x>
@@ -1952,12 +1952,12 @@
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
-               <widget class="QComboBox" name="combo_SkillSet_2">
+               <widget class="QComboBox" name="combo_ItemSet">
                 <property name="geometry">
                  <rect>
-                  <x>130</x>
-                  <y>12</y>
-                  <width>76</width>
+                  <x>90</x>
+                  <y>10</y>
+                  <width>141</width>
                   <height>22</height>
                  </rect>
                 </property>
@@ -1968,7 +1968,7 @@
                  <bool>true</bool>
                 </property>
                </widget>
-               <widget class="QGroupBox" name="groupBox">
+               <widget class="QGroupBox" name="groupbox_Items">
                 <property name="geometry">
                  <rect>
                   <x>11</x>
@@ -1983,21 +1983,16 @@
                   <height>0</height>
                  </size>
                 </property>
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
                 <property name="title">
                  <string>Equipped Items:</string>
                 </property>
                 <widget class="QLabel" name="label_Weapon1">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>20</y>
-                   <width>56</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2010,9 +2005,9 @@
                 <widget class="QComboBox" name="combo_Weapon1">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>20</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2026,9 +2021,9 @@
                 <widget class="QComboBox" name="combo_Weapon2">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>48</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2042,10 +2037,10 @@
                 <widget class="QLabel" name="label_Weapon2">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>48</y>
-                   <width>56</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2058,9 +2053,9 @@
                 <widget class="QComboBox" name="combo_Helmet">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>76</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2074,10 +2069,10 @@
                 <widget class="QLabel" name="label_Helmet">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>76</y>
-                   <width>42</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2090,9 +2085,9 @@
                 <widget class="QComboBox" name="combo_BodyArmour">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>104</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2106,10 +2101,10 @@
                 <widget class="QLabel" name="label_BodyArmour">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>104</y>
-                   <width>74</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2122,9 +2117,9 @@
                 <widget class="QComboBox" name="combo_Gloves">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>132</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2138,10 +2133,10 @@
                 <widget class="QLabel" name="label_Gloves">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>132</y>
-                   <width>38</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2154,9 +2149,9 @@
                 <widget class="QComboBox" name="combo_Boots">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>160</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2170,10 +2165,10 @@
                 <widget class="QLabel" name="label_Boots">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>160</y>
-                   <width>33</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2186,9 +2181,9 @@
                 <widget class="QComboBox" name="combo_Amulet">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>188</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2202,10 +2197,10 @@
                 <widget class="QLabel" name="label_Amulet">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>188</y>
-                   <width>42</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2218,9 +2213,9 @@
                 <widget class="QComboBox" name="combo_Ring1">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>216</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2234,10 +2229,10 @@
                 <widget class="QLabel" name="label_Ring1">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>216</y>
-                   <width>36</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2250,9 +2245,9 @@
                 <widget class="QComboBox" name="combo_Ring2">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>244</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2266,10 +2261,10 @@
                 <widget class="QLabel" name="label_Ring2">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>244</y>
-                   <width>36</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2282,9 +2277,9 @@
                 <widget class="QComboBox" name="combo_Belt">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>272</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2298,10 +2293,10 @@
                 <widget class="QLabel" name="label_Belt">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>272</y>
-                   <width>23</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2314,9 +2309,9 @@
                 <widget class="QComboBox" name="combo_Flask1">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>300</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2330,10 +2325,10 @@
                 <widget class="QLabel" name="label_Flask1">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>300</y>
-                   <width>38</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2346,9 +2341,9 @@
                 <widget class="QComboBox" name="combo_Flask2">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>328</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2362,10 +2357,10 @@
                 <widget class="QLabel" name="label_Flask2">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>328</y>
-                   <width>38</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2378,9 +2373,9 @@
                 <widget class="QComboBox" name="combo_Flask3">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>356</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2394,10 +2389,10 @@
                 <widget class="QLabel" name="label_Flask3">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>356</y>
-                   <width>38</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2410,9 +2405,9 @@
                 <widget class="QComboBox" name="combo_Flask4">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>384</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2426,10 +2421,10 @@
                 <widget class="QLabel" name="label_Flask4">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>384</y>
-                   <width>38</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2442,9 +2437,9 @@
                 <widget class="QComboBox" name="combo_Flask5">
                  <property name="geometry">
                   <rect>
-                   <x>84</x>
+                   <x>85</x>
                    <y>412</y>
-                   <width>76</width>
+                   <width>250</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2458,10 +2453,10 @@
                 <widget class="QLabel" name="label_Flask5">
                  <property name="geometry">
                   <rect>
-                   <x>4</x>
+                   <x>1</x>
                    <y>412</y>
-                   <width>38</width>
-                   <height>16</height>
+                   <width>80</width>
+                   <height>22</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -2476,7 +2471,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="tabNotes">
+           <widget class="QWidget" name="tab_Notes">
             <property name="minimumSize">
              <size>
               <width>910</width>
@@ -2503,7 +2498,7 @@
               <number>0</number>
              </property>
              <item>
-              <layout class="QHBoxLayout" name="hLayout_Notes">
+              <layout class="QHBoxLayout" name="hlayout_Notes">
                <item>
                 <widget class="QFontComboBox" name="combo_Notes_Font">
                  <property name="minimumSize">
@@ -2568,7 +2563,7 @@
               </layout>
              </item>
              <item>
-              <widget class="QTextEdit" name="textEdit_Notes">
+              <widget class="QTextEdit" name="textedit_Notes">
                <property name="lineWidth">
                 <number>0</number>
                </property>
@@ -2587,7 +2582,7 @@ hr { height: 1px; border-width: 0; }
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="tabCalcs">
+           <widget class="QWidget" name="tab_Calcs">
             <property name="font">
              <font>
               <family>Lucida Sans Typewriter</family>
@@ -2601,7 +2596,7 @@ hr { height: 1px; border-width: 0; }
              <string notr="true">CALCS</string>
             </attribute>
            </widget>
-           <widget class="QWidget" name="tabConfig">
+           <widget class="QWidget" name="tab_Config">
             <attribute name="title">
              <string>C&amp;onfig</string>
             </attribute>
@@ -2618,7 +2613,7 @@ hr { height: 1px; border-width: 0; }
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar_MainWindow">
+  <widget class="QMenuBar" name="menubar_MainWindow">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -2647,8 +2642,8 @@ hr { height: 1px; border-width: 0; }
    <addaction name="menu_Builds"/>
    <addaction name="menu_View"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar_MainWindow"/>
-  <widget class="QToolBar" name="toolBar_MainWindow">
+  <widget class="QStatusBar" name="statusbar_MainWindow"/>
+  <widget class="QToolBar" name="toolbar_MainWindow">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>

@@ -63,13 +63,13 @@ default_config = {
 empty_build = {
     "PathOfBuilding": {
         "Build": {
-            "@level": "1",
+            "@level": 1,
             "@targetVersion": "3_0",
             "@pantheonMajorGod": "None",
             "@bandit": "None",
             "@className": "Scion",
             "@ascendClassName": "None",
-            "@mainSocketGroup": "1",
+            "@mainSocketGroup": 1,
             "@viewMode": "TREE",
             "@pantheonMinorGod": "None",
             "PlayerStat": [
@@ -229,11 +229,12 @@ empty_build = {
         "Tree": {
             "@activeSpec": "1",
             "Spec": {
-                "@ascendClassId": "0",
+                "@title": "Default",
+                "@ascendClassId": 0,
                 "@masteryEffects": None,
                 "@nodes": None,
                 "@treeVersion": re.sub("\.", "_", str(_VERSION)),
-                "@classId": "0",
+                "@classId": 0,
                 "EditedNodes": None,
                 "URL": "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA",
                 "Sockets": None,
@@ -250,7 +251,7 @@ empty_build = {
             "@zoomX": "",
         },
         "Items": {
-            "@activeItemSet": "1",
+            "@activeItemSet": 1,
             "@useSecondWeaponSet": "false",
             "Slot": [
                 {"@name": "Weapon 1", "@itemId": ""},
@@ -271,7 +272,7 @@ empty_build = {
                 {"@name": "Boots", "@itemId": ""},
                 {"@name": "Amulet", "@itemId": ""},
             ],
-            "ItemSet": {"@useSecondWeaponSet": "false", "@id": "1"},
+            "ItemSet": {"@useSecondWeaponSet": "false", "@id": 1},
         },
         "Config": None,
     }

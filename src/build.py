@@ -19,6 +19,7 @@ import pob_file
 import ui_utils
 from tree import Tree
 from PoB_Main_Window import Ui_MainWindow
+from qdarktheme.qtpy.QtCore import Slot
 
 
 class Build:
@@ -28,6 +29,7 @@ class Build:
         self.ui: Ui_MainWindow = self.pob_config.win
         # self.player = player.Player()
         self.filename = ""
+        self.search_text = ""
         self.ui = None
         self.need_saving = True
         self.current_tab = "TREE"
@@ -80,83 +82,6 @@ class Build:
         """
         self.current_spec.classId = new_class
         # self.ui.combo_classes.setCurrentIndex(new_class.value)
-
-    def new(self, _build):
-        self.name = "Default"
-        self.build = _build["PathOfBuilding"]["Build"]
-        self.import_field = _build["PathOfBuilding"]["Import"]
-        self.calcs = _build["PathOfBuilding"]["Calcs"]
-        self.skills = _build["PathOfBuilding"]["Skills"]
-        self.notes = _build["PathOfBuilding"]["Notes"]
-        self.notes_html = _build["PathOfBuilding"].get("NotesHTML", None)
-        self.tree_view = _build["PathOfBuilding"]["TreeView"]
-        self.items = _build["PathOfBuilding"]["Items"]
-        self.config = _build["PathOfBuilding"]["Items"]
-        self.tree = _build["PathOfBuilding"]["Tree"]
-        self.specs.clear()
-
-        # Get Specs.
-        # One Spec appears as a dictionary, but multiple appear as a list
-        if type(self.tree["Spec"]) == list:
-            for spec in self.tree["Spec"][:]:
-                self.specs.append(Spec(spec))
-        else:
-            self.specs.append(Spec(self.tree["Spec"]))
-        # In the xml, is 1 based, but python indexes are 0 based, so we subtract 1
-        self.activeSpec = int(self.tree.get("@activeSpec", 1)) - 1
-        self.current_spec = self.specs[self.activeSpec]
-
-    def load(self, filename):
-        """
-        Load a build
-        :param filename: str() XML file to load
-        :return: N/A
-        """
-        _build_pob = pob_file.read_xml(filename)
-        if _build_pob is None:
-            tr = self.pob_config.app
-            ui_utils.critical_dialog(
-                self.pob_config.win,
-                tr("Load Build"),
-                f"{tr('An error occurred to trying load')}:\n{filename}",
-                tr("Close"),
-            )
-        else:
-            # How do we want to deal with corrupt builds
-            self.filename = filename
-            self.new(_build_pob)
-            # print(self.build["PlayerStat"][:])
-            self.name = Path(Path(filename).name).stem
-
-    def save(self):
-        """
-        Save the build to the filename recorded in the build Class
-        :return: N/A
-        """
-        pob_file.write_xml(self.filename, self.build)
-
-    def save_as(self, filename):
-        """
-        Save the build to a new name
-        :param filename:
-        :return: N/A
-        """
-        self.filename = filename
-        pob_file.write_xml(filename, self.build)
-
-    def ask_for_save_if_modified(self):
-        """
-        Check if the build has been modified and if so, prompt for saving.
-        :return: True if build saved
-        :return: False if build save was refused by the user
-        """
-        return True
-
-    def change_tree(self, tree_id):
-        if tree_id is None:
-            return
-        self.activeSpec = tree_id
-        self.current_spec = self.specs[tree_id]
 
     @property
     def className(self):
@@ -238,21 +163,118 @@ class Build:
     # def (self, new_name):
     #     self.build[""] = new_name
 
+    def new(self, _build):
+        self.name = "Default"
+        self.build = _build["PathOfBuilding"]["Build"]
+        self.import_field = _build["PathOfBuilding"]["Import"]
+        self.calcs = _build["PathOfBuilding"]["Calcs"]
+        self.skills = _build["PathOfBuilding"]["Skills"]
+        self.notes = _build["PathOfBuilding"]["Notes"]
+        self.notes_html = _build["PathOfBuilding"].get("NotesHTML", None)
+        self.tree_view = _build["PathOfBuilding"]["TreeView"]
+        self.items = _build["PathOfBuilding"]["Items"]
+        self.config = _build["PathOfBuilding"]["Items"]
+        self.tree = _build["PathOfBuilding"]["Tree"]
+        self.specs.clear()
+
+        # Get Specs.
+        # One Spec appears as a dictionary, but multiple appear as a list
+        if type(self.tree["Spec"]) == list:
+            for spec in self.tree["Spec"][:]:
+                self.specs.append(Spec(spec))
+        else:
+            self.specs.append(Spec(self.tree["Spec"]))
+        # In the xml, is 1 based, but python indexes are 0 based, so we subtract 1
+        self.activeSpec = int(self.tree.get("@activeSpec", 1)) - 1
+        self.current_spec = self.specs[self.activeSpec]
+
+    def load(self, filename):
+        """
+        Load a build
+        :param filename: str() XML file to load
+        :return: N/A
+        """
+        _build_pob = pob_file.read_xml(filename)
+        if _build_pob is None:
+            tr = self.pob_config.app
+            ui_utils.critical_dialog(
+                self.pob_config.win,
+                tr("Load Build"),
+                f"{tr('An error occurred to trying load')}:\n{filename}",
+                tr("Close"),
+            )
+        else:
+            # How do we want to deal with corrupt builds
+            self.filename = filename
+            self.new(_build_pob)
+            # print(self.build["PlayerStat"][:])
+            self.name = Path(Path(filename).name).stem
+
+    def save(self):
+        """
+        Save the build to the filename recorded in the build Class
+        :return: N/A
+        """
+        pob_file.write_xml(self.filename, self.build)
+
+    def save_as(self, filename):
+        """
+        Save the build to a new name
+        :param filename:
+        :return: N/A
+        """
+        self.filename = filename
+        pob_file.write_xml(filename, self.build)
+
+    def ask_for_save_if_modified(self):
+        """
+        Check if the build has been modified and if so, prompt for saving.
+        :return: True if build saved
+        :return: False if build save was refused by the user
+        """
+        return True
+
+    def change_tree(self, tree_id):
+        print("build: change_tree", tree_id)
+        if tree_id is None:
+            return
+        self.activeSpec = tree_id
+        self.current_spec = self.specs[tree_id]
+
 
 class Spec:
     def __init__(self, _spec) -> None:
-        self.title = _spec.get("@title", "Default")
-        self.ascendClassId = _spec.get("@ascendClassId", 0)
+        print(_spec)
+        def_spec = empty_build["PathOfBuilding"]["Tree"]["Spec"]
+
+        self.title = _spec.get("@title", def_spec["@title"])
+        if not self.title:
+            self.title = def_spec["@title"]
+
+        self.classId = PlayerClasses(int(_spec.get("@classId", PlayerClasses.SCION)))
+        if not self.classId:
+            self.classId = PlayerClasses.SCION
+
+        self.ascendClassId: int = _spec.get("@ascendClassId", 0)
+        if not self.ascendClassId:
+            self.ascendClassId = 0
+        print(
+            "Spec 1",
+            _spec.get("@ascendClassId", 0),
+            type(_spec.get("@ascendClassId", 0)),
+        )
+        print("Spec 2", self.ascendClassId, type(self.ascendClassId))
+
         self.masteryEffects = _spec.get("@masteryEffects", None)
         # ToDo this includes ascendancy nodes (grrr)
         self.nodes = {}
-        str_nodes = _spec.get('@nodes', '0')
+        str_nodes = _spec.get("@nodes", "0")
         if str_nodes:
-            self.nodes = str_nodes.split(',')
+            self.nodes = str_nodes.split(",")
         self.treeVersion = _spec.get("@treeVersion", re.sub("\.", "_", str(_VERSION)))
-        self.classId = PlayerClasses(int(_spec.get("@classId", PlayerClasses.SCION)))
         self.EditedNodes = _spec.get("EditedNodes", None)
-        self.URL = _spec.get(
-            "", "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA"
-        )
-        self.Sockets = _spec.get("", 1)
+        self.URL = _spec.get("URL", def_spec["URL"])
+
+        self.Sockets = _spec.get("Sockets", 1)
+        if not self.Sockets:
+            self.Sockets = 1

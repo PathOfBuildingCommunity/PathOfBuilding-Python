@@ -2,11 +2,10 @@
 Tree Class
 
 This class represents an instance of the Passive Tree for **ONE** tree version.
-Multiple version of Trees can exist in a single Build (at various progress levels;
-at different Jewel/Cluster itemisations, etc.), so there could be multiple instantiations of this class
+Multiple versions of Trees can exist in a single Build (at various progress levels;
+at different Jewel/Cluster itemisations, etc.), so there could be multiple instantiations of this class.
 
-A Tree instance is tied to a Version of the Tree as released by GGG and thus older Trees
-need to be supported for backwards compatibility reason.
+A Tree instance is tied to a Version of the Tree as released by GGG (eg: 3.18).
 
 This holds in memory a copy of the tree data and doesn't know about any actively selected nodes.
   That's the Build class' job.
@@ -380,14 +379,19 @@ class Tree:
                     self.notableMap[node.dn.lower()] = node
             else:
                 self.ascendancyMap[node.dn.lower()] = node
-                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
+                if (
+                    class_notables.get(
+                        ascend_name_map[node.ascendancyName]["class"]["name"], None
+                    )
+                    is None
+                ):
                     class_notables[
                         ascend_name_map[node.ascendancyName]["class"]["name"]
-                        ] = {}
+                    ] = {}
                 if ascend_name_map[node.ascendancyName]["class"]["name"] != "Scion":
                     class_notables[
                         ascend_name_map[node.ascendancyName]["class"]["name"]
-                        ] = node.dn
+                    ] = node.dn
         else:
             node.type = "Normal"
             # Add all notables in the Scion Ascendancy, by excluding all the little nodes
@@ -399,10 +403,15 @@ class Tree:
                 and "Passive" not in node.dn
             ):
                 self.ascendancyMap[node.dn.lower()] = node
-                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
+                if (
+                    class_notables.get(
+                        ascend_name_map[node.ascendancyName]["class"]["name"], None
+                    )
+                    is None
+                ):
                     class_notables[
                         ascend_name_map[node.ascendancyName]["class"]["name"]
-                        ] = {}
+                    ] = {}
                 class_notables[
                     ascend_name_map[node.ascendancyName]["class"]["name"]
                 ] = node.dn
@@ -455,6 +464,7 @@ class Tree:
                     "3": (x + w) / w,
                     "4": (y + h) / h,
                 }
+
     # process_sprite_map
 
     def process_assets(self, sprite_list):

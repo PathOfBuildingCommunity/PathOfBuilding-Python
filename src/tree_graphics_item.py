@@ -106,13 +106,13 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         super(TreeGraphicsItem, self).__init__()
         self.config = _config
         self.filename = ""
-        self.data = None
+        self.data = ""
         self.setPixmap(_image)
         if not type(_image) == QPixmap:
             # self.setPixmap(QPixmap(_image))
             # self.setPixmap(_image)
             self.filename = str(_image)
-            self.data = _image
+            # self.data = _image
         self.width = self.pixmap().size().width()
         self.height = self.pixmap().size().height()
         # print(_image_name)
@@ -122,6 +122,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
 
         self.setFlag(QGraphicsItem.ItemIsSelectable, selectable)
         self.setAcceptTouchEvents(selectable)
+        # ToDo: Temporary
         self.setAcceptHoverEvents(True)
         # self.setAcceptHoverEvents(selectable)
 
@@ -141,7 +142,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
     def hoverEnterEvent(self, event):
         # this will be text associated with the node
         if self.filename != "":
-            self.setToolTip(self.filename)
+            self.setToolTip(f"{self.filename}\n{self.data}")
 
     #     pass
 

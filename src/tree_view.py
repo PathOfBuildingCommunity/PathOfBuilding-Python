@@ -11,7 +11,13 @@ need to be supported for backwards compatibility reason.
 """
 from qdarktheme.qtpy.QtCore import QRectF, Qt
 from qdarktheme.qtpy.QtGui import QColor, QPen, QPainter
-from qdarktheme.qtpy.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView
+from qdarktheme.qtpy.QtWidgets import (
+    QFrame,
+    QGraphicsPixmapItem,
+    QGraphicsEllipseItem,
+    QGraphicsScene,
+    QGraphicsView,
+)
 
 import pob_file, ui_utils
 from pob_config import *
@@ -121,11 +127,11 @@ class TreeView(QGraphicsView):
         :return: N/A
         """
         # print("TreeView.mouseReleaseEvent")
-        if self.itemAt(event.pos()) is None:
-            # self.setDragMode(QGraphicsView.NoDrag)
-            self.setCursor(Qt.ArrowCursor)
-            self.drag = False
-            self.start_pos = None
+        # if self.itemAt(event.pos()) is None:
+        # self.setDragMode(QGraphicsView.NoDrag)
+        self.setCursor(Qt.ArrowCursor)
+        self.drag = False
+        self.start_pos = None
         super(TreeView, self).mouseReleaseEvent(event)
 
     def fitInView(self, scale=True, factor=None):
@@ -183,13 +189,25 @@ class TreeView(QGraphicsView):
         It is expected another function will be called to created selected nodes and connecting lines
         :return:
         """
+
+        def draw_circle(_image: QGraphicsPixmapItem, colour, z_value, line_width=15):
+            _circle = QGraphicsEllipseItem(
+                _image.pos().x() - 10,
+                _image.pos().y() - 10,
+                _image.width + 10,
+                _image.height + 10,
+            )
+            _circle.setPen(QPen(QColor(colour), line_width, Qt.SolidLine))
+            _circle.setZValue(z_value)
+            return _circle
+
         if self.build.current_tree is None:
             return
 
         tree = self.build.current_tree
 
         def renderGroup(self, _group, g):
-            _image = None
+            __image = None
             scale = 1
             if _group.get("ascendancyName") != "":
                 _name = _group["ascendancyName"]
@@ -206,70 +224,73 @@ class TreeView(QGraphicsView):
                         _y = ascendancy_positions[_name]["y"]
 
                     # add the picture and shift it by half itself to line up with the nodes
-                    _image = self.add_picture(
+                    __image = self.add_picture(
                         tree.spriteMap[f"Classes{_name}"]["handle"],
                         _x,
                         _y,
                         Layers.backgrounds,
                     )
-                    _image.setScale(2.5 / global_scale_factor)
-                    _image.setPos(
-                        _x - (_image.width / 2),
-                        _y - (_image.height / 2),
+                    __image.setScale(2.5 / global_scale_factor)
+                    __image.setPos(
+                        _x - (__image.width / 2),
+                        _y - (__image.height / 2),
                     )
-                    _image.filename = f"Classes{_name}"
+                    __image.filename = f"Classes{_name}"
                     # Add a circle if this Ascendancy is the chosen one
-                    # ToDo: find a way to darken and lighten images
+                    # ToDo: find a way to darken and lighten images, rather than a circle
                     if _name == self.build.ascendClassName:
-                        _circle = QGraphicsEllipseItem(
-                            _image.pos().x() - 10,
-                            _image.pos().y() - 10,
-                            _image.width + 10,
-                            _image.height + 10,
+                        self._scene.addItem(
+                            draw_circle(__image, Qt.darkGreen, Layers.group)
                         )
-                        _circle.setPen(QPen(QColor(Qt.darkGreen), 15, Qt.SolidLine))
-                        _circle.setZValue(Layers.group)
-                        self._scene.addItem(_circle)
 
             elif _group["oo"].get(3, False):
-                _image = self.add_picture(
+                __image = self.add_picture(
                     tree.spriteMap["GroupBackgroundLargeHalfAlt"]["handle"],
                     _group["x"],
                     _group["y"],
                     Layers.group,
                 )
-                _image.filename = f"{g} GroupBackgroundLargeHalfAlt"
-                _image.setScale(1.9 / global_scale_factor)
-                _image.setPos(
-                    _group["x"] - (_image.width / 2) + (34 / global_scale_factor),
-                    _group["y"] - (_image.height / 2) + (34 / global_scale_factor)
+                __image.filename = f"{g} GroupBackgroundLargeHalfAlt"
+                __image.setScale(1.9 / global_scale_factor)
+                _group["x1"] = (
+                    _group["x"] - (__image.width / 2) + (34 / global_scale_factor)
                 )
+                _group["y1"] = (
+                    _group["y"] - (__image.height / 2) + (34 / global_scale_factor)
+                )
+                __image.setPos(_group["x1"], _group["y1"])
             elif _group["oo"].get(2, False):
-                _image = self.add_picture(
+                __image = self.add_picture(
                     tree.spriteMap["GroupBackgroundMediumAlt"]["handle"],
-                    _group["x"] - 10,
-                    _group["y"] - 10,
+                    _group["x"],
+                    _group["y"],
                     Layers.group,
                 )
-                _image.filename = f"{g} GroupBackgroundMediumAlt"
-                _image.setScale(1.9 / global_scale_factor)
-                _image.setPos(
-                    _group["x"] - (_image.width / 2) + (32 / global_scale_factor),
-                    _group["y"] - (_image.height / 2) + (34 / global_scale_factor)
+                __image.filename = f"{g} GroupBackgroundMediumAlt"
+                __image.setScale(1.9 / global_scale_factor)
+                _group["x1"] = (
+                    _group["x"] - (__image.width / 2) + (32 / global_scale_factor)
                 )
+                _group["y1"] = (
+                    _group["y"] - (__image.height / 2) + (32 / global_scale_factor)
+                )
+                __image.setPos(_group["x1"], _group["y1"])
             elif group["oo"].get(1, False):
-                _image = self.add_picture(
+                __image = self.add_picture(
                     tree.spriteMap["GroupBackgroundSmallAlt"]["handle"],
-                    _group["x"] - 10,
-                    _group["y"] - 10,
+                    _group["x"],
+                    _group["y"],
                     Layers.group,
                 )
-                _image.filename = f"{g} GroupBackgroundSmallAlt"
-                _image.setScale(1.9 / global_scale_factor)
-                _image.setPos(
-                    _group["x"] - (_image.width / 2) + (44 / global_scale_factor),
-                    _group["y"] - (_image.height / 2) + (44 / global_scale_factor)
+                __image.filename = f"{g} GroupBackgroundSmallAlt"
+                __image.setScale(1.9 / global_scale_factor)
+                _group["x1"] = (
+                    _group["x"] - (__image.width / 2) + (44 / global_scale_factor)
                 )
+                _group["y1"] = (
+                    _group["y"] - (__image.height / 2) + (44 / global_scale_factor)
+                )
+                __image.setPos(_group["x1"], _group["y1"])
 
         self._scene.clear()
         # ToDo: Only clear items if we change tree versions
@@ -320,7 +341,11 @@ class TreeView(QGraphicsView):
             base = None
             if _type == "ClassStart":
                 overlay = isAlloc and node.startArt or "PSStartNodeBackgroundInactive"
-                # node.x, node.y = group["x"], group["y"]
+                x = group.get("x1", -1)
+                y = group.get("y1", -1)
+                if x != -1 and y != -1:
+                    node.x = x
+                    node.y = y
             elif _type == "AscendClassStart":
                 overlay = "AscendancyMiddle"
             else:
@@ -345,10 +370,12 @@ class TreeView(QGraphicsView):
                             base = node.masterySprites["inactiveIcon"][
                                 "masteryInactive"
                             ]
+                        node.x = group["x"] - (54 / global_scale_factor)
+                        node.y = group["y"] - (54 / global_scale_factor)
                     else:
                         base = node.sprites["mastery"]
-                        node.x = group["x"]
-                        node.y = group["y"]
+                        node.x = group["x"] - (54 / global_scale_factor)
+                        node.y = group["y"] - (54 / global_scale_factor)
                 else:
                     # Normal node (includes keystones and notables)
                     base = node.sprites.get(
@@ -359,14 +386,20 @@ class TreeView(QGraphicsView):
                         "",
                     )
 
-            if base is not None:
+            if base:
                 pixmap = base.get("handle", None)
                 if pixmap is not None:
-                    image = self.add_picture(
+                    _image = self.add_picture(
                         pixmap, node.x, node.y, Layers.inactive, True
                     )
-                    image.filename = f"{n}, {node.name}"
-                    image.data = base["name"]
+                    _image.filename = f"{n}, {node.name}"
+                    _image.data = node.sd
+                    # Search indicator
+                    if self.build.search_text and (
+                        self.build.search_text in node.name
+                        or self.build.search_text in node.sd
+                    ):
+                        self._scene.addItem(draw_circle(_image, Qt.darkRed, 10, 8))
 
             """'overlay': {'alloc': 'AscendancyFrameLargeAllocated',
                         'artWidth': '65',
@@ -384,6 +417,5 @@ class TreeView(QGraphicsView):
                     if pixmap is not None:
                         image = self.add_picture(pixmap, node.x - 8, node.y - 8, _layer)
                         image.filename = node.name
-                        image.data = overlay
 
     # add_tree_images
