@@ -13,7 +13,6 @@ from qdarktheme.qtpy.QtCore import QRectF, Qt
 from qdarktheme.qtpy.QtGui import QColor, QPen, QPainter
 from qdarktheme.qtpy.QtWidgets import (
     QFrame,
-    QGraphicsPixmapItem,
     QGraphicsEllipseItem,
     QGraphicsScene,
     QGraphicsView,
@@ -187,10 +186,10 @@ class TreeView(QGraphicsView):
         Used when swapping tree's in a build.
         It will remove all assets, including selected nodes and connecting lines and present an empty tree
         It is expected another function will be called to created selected nodes and connecting lines
-        :return:
+        :return: N/A
         """
 
-        def draw_circle(_image: QGraphicsPixmapItem, colour, z_value, line_width=15):
+        def add_circle(_image: TreeGraphicsItem, colour, z_value, line_width=15):
             _circle = QGraphicsEllipseItem(
                 _image.pos().x() - 10,
                 _image.pos().y() - 10,
@@ -236,13 +235,12 @@ class TreeView(QGraphicsView):
                         _y - (__image.height / 2),
                     )
                     __image.filename = f"Classes{_name}"
-                    # Add a circle if this Ascendancy is the chosen one
-                    # ToDo: find a way to darken and lighten images, rather than a circle
-                    if _name == self.build.ascendClassName:
-                        self._scene.addItem(
-                            draw_circle(__image, Qt.darkGreen, Layers.group)
-                        )
+                    # Darken if this Ascendancy is not the chosen one
+                    #  Chieftain is brigher than the rest
+                    if _name != self.build.ascendClassName:
+                        __image.setOpacity(_name == "Chieftain" and 0.2 or 0.4)
 
+            # Large background
             elif _group["oo"].get(3, False):
                 __image = self.add_picture(
                     tree.spriteMap["GroupBackgroundLargeHalfAlt"]["handle"],
@@ -259,6 +257,8 @@ class TreeView(QGraphicsView):
                     _group["y"] - (__image.height / 2) + (34 / global_scale_factor)
                 )
                 __image.setPos(_group["x1"], _group["y1"])
+
+            # Medium background
             elif _group["oo"].get(2, False):
                 __image = self.add_picture(
                     tree.spriteMap["GroupBackgroundMediumAlt"]["handle"],
@@ -275,6 +275,8 @@ class TreeView(QGraphicsView):
                     _group["y"] - (__image.height / 2) + (32 / global_scale_factor)
                 )
                 __image.setPos(_group["x1"], _group["y1"])
+
+            # Small background
             elif group["oo"].get(1, False):
                 __image = self.add_picture(
                     tree.spriteMap["GroupBackgroundSmallAlt"]["handle"],
@@ -399,7 +401,7 @@ class TreeView(QGraphicsView):
                         self.build.search_text in node.name
                         or self.build.search_text in node.sd
                     ):
-                        self._scene.addItem(draw_circle(_image, Qt.darkRed, 10, 8))
+                        self._scene.addItem(add_circle(_image, Qt.darkRed, 10, 8))
 
             """'overlay': {'alloc': 'AscendancyFrameLargeAllocated',
                         'artWidth': '65',
