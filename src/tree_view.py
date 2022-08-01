@@ -10,7 +10,7 @@ need to be supported for backwards compatibility reason.
 
 """
 from qdarktheme.qtpy.QtCore import QRectF, Qt
-from qdarktheme.qtpy.QtGui import QColor, QPen, QPainter
+from qdarktheme.qtpy.QtGui import QColor, QCursor, QPen, QPainter
 from qdarktheme.qtpy.QtWidgets import (
     QFrame,
     QGraphicsEllipseItem,
@@ -44,10 +44,12 @@ class TreeView(QGraphicsView):
 
         self._char_class_bkgnd_image = None
         self.add_tree_images()
-        # self.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.drag = False
         self.start_pos = None
         self.fitInView(True, 0.1)
+
+        self.viewport().setCursor(Qt.ArrowCursor)
 
     # Inherited, don't change definition
     def wheelEvent(self, event):
@@ -64,76 +66,43 @@ class TreeView(QGraphicsView):
         event.accept()
 
     # Inherited, don't change definition
-    def mousePressEvent(self, event) -> None:
+    def enterEvent(self, event) -> None:
         """
-        Hack to allow a normal mouse pointer until the mouse is held down
-        This allows drag
-        :param event: Std param
+        Override the GraphicsView drag cursor
+        :param event: Internal event matrix
         :return: N/A
         """
-        if event.button() != Qt.LeftButton:
-            event.ignore()
-            return
-        # print("TreeView.mousePressEvent")
-        super(TreeView, self).mousePressEvent(event)
-        if self.itemAt(event.pos()) is None:
-            # self.setDragMode(QGraphicsView.ScrollHandDrag)
-            self.setCursor(Qt.ClosedHandCursor)
-            self.drag = True
-            self.start_pos = event.pos()
+        super(TreeView, self).enterEvent(event)
+        self.viewport().setCursor(Qt.ArrowCursor)
 
     # Inherited, don't change definition
-    def mouseMoveEvent(self, event) -> None:
+    def mousePressEvent(self, event) -> None:
         """
-        Drag the scene (aka pan)
-        limit the amount it moves to stop zoom "creep" (speeding up of zoom the longer it happens)
-        :param event:
-        :return:
+        Override the GraphicsView drag cursor
+        :param event: Internal event matrix
+        :return: N/A
         """
-        if self.start_pos is not None:
-            delta = self.start_pos - event.pos()
-            rect = self.scene().sceneRect()
-            # limit the amount it moves.
-            # !!!! This might need adjusting to account for zoom (0.08 = out, 0.5 = in)
-            # x = delta.x()
-            # y = delta.y()
-            # # print(f"a: {delta}, {x}, {y}")
-            # if x >= 0:
-            #     x = min(x, 20)
-            # else:
-            #     x = max(x, -20)
-            # if y >= 0:
-            #     y = min(y, 20)
-            # else:
-            #     y = max(y, -20)
-            # delta = QPoint(x, y)
-            # print(f"b: {delta}, {x}, {y}")
-
-            # adjust the viewing rectangle
-            rect.setTopLeft(rect.topLeft() + delta)
-            rect.setBottomRight(rect.bottomRight() + delta)
-            self.scene().setSceneRect(rect)
-            self.updateSceneRect(rect)
-        # else:
-        super(TreeView, self).mouseMoveEvent(event)
+        super(TreeView, self).mousePressEvent(event)
+        # ToDo : Do we want to allow thegrap cursor or just keep the arrow ?
+        # self.viewport().setCursor(Qt.ArrowCursor)
 
     # Inherited, don't change definition
     def mouseReleaseEvent(self, event) -> None:
         """
-        Hack to allow a normal mouse pointer until the mouse is held down
-        This releases drag
-        :param event: Std param
+        Override the GraphicsView drag cursor
+        :param event: Internal event matrix
         :return: N/A
         """
-        # print("TreeView.mouseReleaseEvent")
-        # if self.itemAt(event.pos()) is None:
-        # self.setDragMode(QGraphicsView.NoDrag)
-        self.setCursor(Qt.ArrowCursor)
-        self.drag = False
-        self.start_pos = None
         super(TreeView, self).mouseReleaseEvent(event)
+        self.viewport().setCursor(Qt.ArrowCursor)
 
     def fitInView(self, scale=True, factor=None):
+        """
+        Part of the zoom facility
+        :param scale: Not used.
+        :param factor: Scale factor.
+        :return: N/A
+        """
         unity = self.transform().mapRect(QRectF(0, 0, 1, 1))
         if factor is None:
             self.scale(1 / unity.width(), 1 / unity.height())
@@ -171,7 +140,7 @@ class TreeView(QGraphicsView):
         # Alert for wiping your tree
         # self.build.current_tree.char_class = _class
         # self.build.current_class = _class
-        self.add_tree_images()
+        return True
 
     def switch_tree(self):
         """
@@ -299,7 +268,6 @@ class TreeView(QGraphicsView):
         #  else wise just remove the selected nodes/connectors and readd new ones (separate function)
         # for item in self.items():
         #     self._scene.removeItem(item)
-        # print("tree.graphics_items", len(tree.graphics_items))
         # ToDo: all this needs to be moved to the tree Class, so then this line will work
         for image in tree.graphics_items:
             self._scene.addItem(image)
@@ -343,11 +311,8 @@ class TreeView(QGraphicsView):
             base = None
             if _type == "ClassStart":
                 overlay = isAlloc and node.startArt or "PSStartNodeBackgroundInactive"
-                x = group.get("x1", -1)
-                y = group.get("y1", -1)
-                if x != -1 and y != -1:
-                    node.x = x
-                    node.y = y
+                node.x = class_centres[PlayerClasses(node.classStartIndex)]["x"]
+                node.y = class_centres[PlayerClasses(node.classStartIndex)]["y"]
             elif _type == "AscendClassStart":
                 overlay = "AscendancyMiddle"
             else:

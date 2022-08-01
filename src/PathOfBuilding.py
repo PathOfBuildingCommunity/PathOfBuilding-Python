@@ -44,6 +44,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # def __init__(self, screen_rect) -> None:
         super(MainWindow, self).__init__()
         self.setupUi(self)
+        self.refresh_tree = (
+            True  # When False stop all the images being deleted and being recreated
+        )
 
         self._theme = "dark"
         self._border_radius = "rounded"
@@ -107,7 +110,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_ascendancy = QComboBox()
         self.combo_ascendancy.setMinimumSize(100, 0)
         self.combo_ascendancy.setDuplicatesEnabled(False)
-        self.combo_ascendancy.addItem("None", "None")
+        self.combo_ascendancy.addItem("None", 0)
+        self.combo_ascendancy.addItem("Ascendant", 1)
         self.toolbar_MainWindow.addWidget(self.combo_ascendancy)
 
         # Dump the placeholder Graphics View and add our own
@@ -160,8 +164,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
         self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
 
-        self.combo_classes.currentTextChanged.connect(self.tree_ui.change_class)
-        self.combo_ascendancy.currentTextChanged.connect(self.tree_ui.change_ascendancy)
+        self.combo_classes.currentTextChanged.connect(self.change_class)
+        self.combo_ascendancy.currentTextChanged.connect(self.change_ascendancy)
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
         self.tree_ui.textEdit_Search.textChanged.connect(self.search_text_changed)
         self.tree_ui.textEdit_Search.returnPressed.connect(self.search_return_pressed)
@@ -169,7 +173,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # setup Scion by default, and this will trigger it's correct ascendancy to appear in combo_ascendancy
         # ToDo: check to see if there is a previous build to load and load it before this
         self.build_loader("Default")
-        self.tree_ui.change_class("Scion")
 
     def exit_handler(self):
         """
@@ -265,7 +268,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.tree_ui.set_current_tab()
             self.tree_ui.fill_current_tree_combo()
             self.spin_level.setValue(self.build.level)
-            print(self.build.className, self.build.ascendClassName)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
             for i in range(self.combo_Bandits.count()):
@@ -305,25 +307,85 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Actions required when the combo_manage_tree widget changes
         :param tree_id: Current text string. We don't use it.
+                "" will occur during a combobox clear
         :return: N/A
         """
+        # "" will occur during a combobox clear
+        if not tree_id:
+            return
+
         self.build.change_tree(self.tree_ui.combo_manage_tree.currentData())
-        self.gview_Tree.add_tree_images()
+
         # update label_points
         self.change_bandits(self.combo_Bandits.currentText())
-        # ToDo: change class...
-        self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
-        print(
-            "change_tree",
-            self.build.current_spec.ascendClassId,
-            type(self.build.current_spec.ascendClassId),
-        )
 
-        self.combo_ascendancy.setCurrentIndex(
-            self.build.current_spec.ascendClassId is None
-            and 0
-            or int(self.build.current_spec.ascendClassId)
-        )
+        _current_class = self.combo_classes.currentData()
+        if self.build.current_spec.classId == _current_class:
+            # update the ascendancy combo in case it's different
+            self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
+            return
+
+        # stop the tree from being updated mulitple times during the class / ascendancy combo changes
+        # Also stops updating build.current_spec
+        self.refresh_tree = False
+
+        # Protect the ascendancy value as it will get clobbered ...
+        _ascendClassId = self.build.current_spec.ascendClassId
+        # .. when this refreshes the Ascendancy combo box ...
+        self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
+        # ... so we need to reset it's index
+        self.combo_ascendancy.setCurrentIndex(_ascendClassId)
+
+        self.refresh_tree = True
+        self.gview_Tree.add_tree_images()
+
+    @Slot()
+    def change_class(self, selected_class):
+        """
+        Slot for the Classes combobox. Triggers the curr_class property actions
+        :param selected_class: String of the selected text
+        :return:
+        """
+        new_class = self.combo_classes.currentData()
+        if self.build.current_spec.classId == new_class and self.refresh_tree:
+            return
+        # ToDo: Who should do the check against clearing your tree and how do we stop it during loading a build or tree swap ?
+        # if not self.gview_Tree.switch_class(new_class):
+        #     return
+
+        # GUI Changes
+        # Changing the ascendancy combobox, will trigger it's signal/slot.
+        # This is good as it will set the ascendancy back to None
+        self.combo_ascendancy.clear()
+        self.combo_ascendancy.addItem("None", 0)
+        _class = self.build.current_tree.classes[new_class.value]
+        for idx, _ascendancy in enumerate(_class["ascendancies"]):
+            self.combo_ascendancy.addItem(_ascendancy["name"], idx+1)
+
+        if self.refresh_tree:
+            # build changes
+            self.build.current_spec.classId = self.combo_classes.currentData()
+            self.build.current_class = self.combo_classes.currentData()
+            self.build.className = selected_class
+            self.build.current_class = new_class
+            self.gview_Tree.add_tree_images()
+
+    @Slot()
+    def change_ascendancy(self, selected_ascendancy):
+        """
+        Actions required for changing ascendancies
+        :param  selected_ascendancy: String of the selected text
+                "None" will occur when refilling the combobox or when the user chooses it
+                "" will occur during a combobox clear
+        :return:
+        """
+        # "" will occur during a combobox clear
+        if selected_ascendancy == "":
+            return
+        if self.refresh_tree:
+            self.build.current_spec.ascendClassId = self.combo_ascendancy.currentData()
+            self.build.ascendClassName = selected_ascendancy
+            self.gview_Tree.add_tree_images()
 
     @Slot()
     def change_bandits(self, bandit_id):
@@ -445,11 +507,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def search_text_changed(self):
         self.build.search_text = self.tree_ui.textEdit_Search.text()
-        print("search_text_changed", self.build.search_text)
 
     def search_return_pressed(self):
         self.gview_Tree.add_tree_images()
-        print("search_return_pressed", self.build.search_text)
 
 
 # Start here
@@ -459,5 +519,6 @@ font.setFamily("Lucida Sans Typewriter")
 app.setFont(font)
 
 window = MainWindow(app)
+# app.instance().setOverrideCursor(QCursor(Qt.ArrowCursor))
 window.show()
 app.exec()

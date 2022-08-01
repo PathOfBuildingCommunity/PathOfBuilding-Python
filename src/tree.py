@@ -46,11 +46,8 @@ def calc_orbit_angles(nodes_in_orbit):
         for i in range(nodes_in_orbit):
             orbit_angles[i + 1] = 360 * i / nodes_in_orbit
 
-    # print(f"\n{len(orbit_angles)}")
-    # print(f"{orbit_angles}")
     for i in range(len(orbit_angles)):
         orbit_angles[i] = math.radians(orbit_angles[i])
-        # print(f"{i} {orbit_angles[i]}")
 
     return orbit_angles
     # calc_orbit_angles
@@ -256,20 +253,13 @@ class Tree:
                 if group is not None:
                     group["ascendancyName"] = node.ascendancyName
                     group["isAscendancyStart"] = node.isAscendancyStart
+                    group["classStartIndex"] = node.classStartIndex
                     node.group = group
             elif node.type == "Notable" or node.type == "Keystone":
                 self.clusterNodeMap[node.dn] = node
-            if n == "24704" and node.group_id == 7:
-                group = self.groups.get(str(node.group_id), None)
-                print(n, node.isAscendancyStart)
-                print("2", node.group["isAscendancyStart"], group["isAscendancyStart"])
 
             # Finally the node will get an x,y value. Now we can show it.
             self.process_node(node)
-            if n == "24704" and node.group_id == 7:
-                group = self.groups.get(str(node.group_id), None)
-                print(n, node.isAscendancyStart)
-                print("3", node.group["isAscendancyStart"], group["isAscendancyStart"])
 
             # ToDo: Temporary code for data checking purposes
             # ToDo: Leave in place until all coding, including calcs are complete
@@ -302,7 +292,6 @@ class Tree:
         # setting this to "if node.sprites is not None:" makes the sprites disappear
         #       if x is not None # which works only on None
         if not node.sprites:
-            # print(f"error: {node.id} missing sprite {node.icon}")
             node.sprites = self.spriteMap[
                 "Art/2DArt/SkillIcons/passives/MasteryBlank.png"
             ]

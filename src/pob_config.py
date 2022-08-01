@@ -388,75 +388,84 @@ class PlayerClasses(Enum):
     SHADOW = 6
 
 
+# Background artwork behind the tree
 class_backgrounds = {
     PlayerClasses.SCION: {"n": "", "x": 0, "y": 0},
-    # PlayerClasses.MARAUDER: {"n": "BackgroundStr", "x": -2750/global_scale_factor, "y": 1600/global_scale_factor},
     PlayerClasses.MARAUDER: {
         "n": "BackgroundStr",
-        "x": -3000 / global_scale_factor,
-        "y": 1000 / global_scale_factor,
+        "x": -3500 / global_scale_factor,
+        "y": 350 / global_scale_factor,
     },
     PlayerClasses.RANGER: {
         "n": "BackgroundDex",
-        "x": 2550 / global_scale_factor,
-        "y": 1600 / global_scale_factor,
+        "x": 1850 / global_scale_factor,
+        "y": 250 / global_scale_factor,
     },
     PlayerClasses.WITCH: {
         "n": "BackgroundInt",
-        "x": -250 / global_scale_factor,
-        "y": -2200 / global_scale_factor,
+        "x": -1200 / global_scale_factor,
+        "y": -3050 / global_scale_factor,
     },
     PlayerClasses.DUELIST: {
         "n": "BackgroundStrDex",
-        "x": -150 / global_scale_factor,
-        "y": 2350 / global_scale_factor,
+        "x": -1400 / global_scale_factor,
+        "y": 1350 / global_scale_factor,
     },
     PlayerClasses.TEMPLAR: {
         "n": "BackgroundStrInt",
-        "x": -2100 / global_scale_factor,
-        "y": -1500 / global_scale_factor,
+        "x": -2950 / global_scale_factor,
+        "y": -2600 / global_scale_factor,
     },
     PlayerClasses.SHADOW: {
         "n": "BackgroundDexInt",
-        "x": 2350 / global_scale_factor,
-        "y": -1950 / global_scale_factor,
+        "x": 1350 / global_scale_factor,
+        "y": -3050 / global_scale_factor,
     },
 }
 
+
+# The start point for each class
+# ToDo: The start points need to be fixed
 class_centres = {
-    PlayerClasses.SCION: {"n": "centerScion", "x": 0, "y": 0},
+    PlayerClasses.SCION: {
+        "n": "centerScion",
+        "x": -150 / global_scale_factor,
+        "y": -150 / global_scale_factor,
+    },
     PlayerClasses.MARAUDER: {
         "n": "centerMarauder",
-        "x": -2750 / global_scale_factor,
-        "y": 1600 / global_scale_factor,
+        "x": -2970 / global_scale_factor,
+        "y": 1490 / global_scale_factor,
     },
     PlayerClasses.RANGER: {
         "n": "centerRanger",
-        "x": 2550 / global_scale_factor,
-        "y": 1600 / global_scale_factor,
+        "x": 2690 / global_scale_factor,
+        "y": 1490 / global_scale_factor,
     },
     PlayerClasses.WITCH: {
         "n": "centerWitch",
-        "x": -250 / global_scale_factor,
-        "y": -2200 / global_scale_factor,
+        "x": -150 / global_scale_factor,
+        "y": -3340 / global_scale_factor,
     },
     PlayerClasses.DUELIST: {
         "n": "centerDuelist",
         "x": -150 / global_scale_factor,
-        "y": 2350 / global_scale_factor,
+        "y": 3040 / global_scale_factor,
     },
     PlayerClasses.TEMPLAR: {
         "n": "centerTemplar",
-        "x": -2100 / global_scale_factor,
-        "y": -1500 / global_scale_factor,
+        "x": -2990 / global_scale_factor,
+        "y": -1780 / global_scale_factor,
     },
     PlayerClasses.SHADOW: {
         "n": "centerShadow",
-        "x": 2350 / global_scale_factor,
-        "y": -1950 / global_scale_factor,
+        "x": 2690 / global_scale_factor,
+        "y": -1780 / global_scale_factor,
     },
 }
 
+
+""" Ascendancy circles around the outside of the tree """
 ascendancy_positions = {
     "Ascendant": {"x": -7800.0 / global_scale_factor, "y": 7200 / global_scale_factor},
     "Berserker": {"x": -10400 / global_scale_factor, "y": 3700 / global_scale_factor},
@@ -484,6 +493,7 @@ ascendancy_positions = {
     "Saboteur": {"x": 10200 / global_scale_factor, "y": -2200 / global_scale_factor},
     "Trickster": {"x": 10200 / global_scale_factor, "y": -3700 / global_scale_factor},
 }
+
 
 nodeOverlay = {
     "Normal": {

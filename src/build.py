@@ -158,7 +158,7 @@ class Build:
     # @property
     # def (self):
     #     return self.build[""]
-    #
+
     # @.setter
     # def (self, new_name):
     #     self.build[""] = new_name
@@ -235,7 +235,11 @@ class Build:
         return True
 
     def change_tree(self, tree_id):
-        print("build: change_tree", tree_id)
+        """
+        Process changing a tree inside a build
+        :param tree_id: index into self.specs which comesfrom the data of combo_ManageTree
+        :return: N/A
+        """
         if tree_id is None:
             return
         self.activeSpec = tree_id
@@ -244,26 +248,12 @@ class Build:
 
 class Spec:
     def __init__(self, _spec) -> None:
-        print(_spec)
         def_spec = empty_build["PathOfBuilding"]["Tree"]["Spec"]
 
         self.title = _spec.get("@title", def_spec["@title"])
-        if not self.title:
-            self.title = def_spec["@title"]
 
         self.classId = PlayerClasses(int(_spec.get("@classId", PlayerClasses.SCION)))
-        if not self.classId:
-            self.classId = PlayerClasses.SCION
-
-        self.ascendClassId: int = _spec.get("@ascendClassId", 0)
-        if not self.ascendClassId:
-            self.ascendClassId = 0
-        print(
-            "Spec 1",
-            _spec.get("@ascendClassId", 0),
-            type(_spec.get("@ascendClassId", 0)),
-        )
-        print("Spec 2", self.ascendClassId, type(self.ascendClassId))
+        self.ascendClassId = int(_spec.get("@ascendClassId", 0))
 
         self.masteryEffects = _spec.get("@masteryEffects", None)
         # ToDo this includes ascendancy nodes (grrr)
@@ -271,10 +261,8 @@ class Spec:
         str_nodes = _spec.get("@nodes", "0")
         if str_nodes:
             self.nodes = str_nodes.split(",")
-        self.treeVersion = _spec.get("@treeVersion", re.sub("\.", "_", str(_VERSION)))
+        self.treeVersion = _spec.get("@treeVersion", def_spec["@treeVersion"])
         self.EditedNodes = _spec.get("EditedNodes", None)
         self.URL = _spec.get("URL", def_spec["URL"])
 
         self.Sockets = _spec.get("Sockets", 1)
-        if not self.Sockets:
-            self.Sockets = 1

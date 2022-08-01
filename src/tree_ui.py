@@ -130,9 +130,6 @@ class TreeUI:
         )
         self.layout_tree_tools.addWidget(self.btn_show_power_report)
 
-        # self.label_.setText(QCoreApplication.translate("MainWindow", u"Amulet:", None))
-        # self.btn_.setText(QCoreApplication.translate("MainWindow", u"Manage ...", None))
-
     def __repr__(self) -> str:
         return (
             f"Level {self.level} {self.player_class.name}" f" {self.ascendancy.value}\n"
@@ -163,45 +160,8 @@ class TreeUI:
         :param new_class:PlayerClasses. Current class
         :return: N/A
         """
-        # GUI Changes
         # get the dictionary associated with this class
         _class = self.build.current_tree.classes[new_class.value]
-        # Changing the ascendancy combobox, will trigger it's signal/slot.
-        # This is good as it will set the ascendancy back to None
-        self.win.combo_ascendancy.clear()
-        self.win.combo_ascendancy.addItem("None", "None")
-        for _ascendancy in _class["ascendancies"]:
-            self.win.combo_ascendancy.addItem(_ascendancy["name"])
-        # build changes
-        self.build.current_class = new_class
-        # self.build.curr_class = new_class
-        self.win.gview_Tree.switch_class(new_class)
-
-    @Slot()
-    def change_class(self, selected_class):
-        """
-        Slot for the Classes combobox. Triggers the curr_class property actions
-        :param selected_class: String of the selected text
-        :return:
-        """
-        self.curr_class = self.win.combo_classes.currentData()
-        self.build.className = selected_class
-
-    @Slot()
-    def change_ascendancy(self, selected_ascendancy):
-        """
-        Actions required for changing ascendancies
-        :param  selected_ascendancy: String of the selected text
-                "None" will occur when refilling the combobox or when the user chooses it
-                "" will occur during a combobox clear
-        :return:
-        """
-        # "" will occur during a combobox clear
-        if selected_ascendancy == "":
-            return
-        self.build.current_spec.ascendClassId = self.win.combo_ascendancy.currentData()
-        self.build.ascendClassName = selected_ascendancy
-        self.win.gview_Tree.add_tree_images()
 
     @Slot()
     def set_combo_compare_visibility(self, checked_state):
@@ -229,7 +189,7 @@ class TreeUI:
         :return: N/A
         """
         print("Ctrl-M", type(self))
-        self.open_manage_trees
+        self.open_manage_trees()
 
     def open_manage_trees(self):
         print("open_manage_trees")

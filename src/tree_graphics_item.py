@@ -4,68 +4,11 @@ TreeItem Class
 This class represents a graphical instance of one visual element of a Passive Tree for a given tree version.
 
 """
-import os, re, json
-from pprint import pprint
-from pathlib import Path
-from qdarktheme.qtpy.QtCore import (
-    QSize,
-    QDir,
-    QPoint,
-    QRect,
-    QRectF,
-    Qt,
-    Slot,
-    QCoreApplication,
-)
-from qdarktheme.qtpy.QtGui import (
-    QAction,
-    QActionGroup,
-    QBrush,
-    QColor,
-    QFont,
-    QIcon,
-    QPainter,
-    QPixmap,
-)
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QColorDialog,
-    QComboBox,
-    QDockWidget,
-    QFileDialog,
-    QFontComboBox,
-    QFontDialog,
-    QFormLayout,
-    QFrame,
-    QGraphicsItem,
-    QGraphicsPixmapItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QMainWindow,
-    QMenuBar,
-    QMessageBox,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QSpinBox,
-    QSplitter,
-    QStackedWidget,
-    QStatusBar,
-    QStyle,
-    QTabWidget,
-    QTextEdit,
-    QToolBar,
-    QToolBox,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
+from qdarktheme.qtpy.QtCore import Qt
+from qdarktheme.qtpy.QtGui import QPixmap
+from qdarktheme.qtpy.QtWidgets import QGraphicsPixmapItem
 
-import pob_file, ui_utils
-from pob_config import Config, ColourCodes, PlayerClasses
+from pob_config import *
 
 """
 Example data
@@ -109,28 +52,18 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         self.data = ""
         self.setPixmap(_image)
         if not type(_image) == QPixmap:
-            # self.setPixmap(QPixmap(_image))
-            # self.setPixmap(_image)
             self.filename = str(_image)
-            # self.data = _image
         self.width = self.pixmap().size().width()
         self.height = self.pixmap().size().height()
-        # print(_image_name)
-        # print(self.width)
-        # print(self.height)
         self.setZValue(z_value)
 
-        self.setFlag(QGraphicsItem.ItemIsSelectable, selectable)
+        # self.setFlag(QGraphicsItem.ItemIsSelectable, selectable)
         self.setAcceptTouchEvents(selectable)
         # ToDo: Temporary
         self.setAcceptHoverEvents(True)
         # self.setAcceptHoverEvents(selectable)
 
         # turn all those data's into properties ?
-
-    # Inherited, don't change definition
-    # def paint(self, painter, option, widget):
-    #     super(TreeGraphicsItem, self).paint(painter, option, widget)
 
     # Inherited, don't change definition
     def setScale(self, scale: int = 1):
@@ -144,8 +77,6 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         if self.filename != "":
             self.setToolTip(f"{self.filename}\n{self.data}")
 
-    #     pass
-
     # not sure if this is needed
     # def hoverLeaveEvent(self, event):
     #     pass
@@ -154,14 +85,10 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
     def mousePressEvent(self, event) -> None:
         print(f"TreeGraphicsItem.mousePressEvent: {self.filename}, {self.data}")
         # AltModifier (altKey), ControlModifier(crtlKey)
-        # pprint(event)
-        # self.setCursor(Qt.ClosedHandCursor)
         event.accept()
 
     # Inherited, don't change definition
     def mouseReleaseEvent(self, event) -> None:
         print(f"TreeGraphicsItem.mouseReleaseEvent: {self.filename}")
         # AltModifier (altKey), ControlModifier(crtlKey)
-        # pprint(event)
-        # self.setCursor(Qt.OpenHandCursor)
         event.accept()
