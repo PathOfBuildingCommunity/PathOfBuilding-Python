@@ -66,12 +66,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Setup UI Classes()
         self.stats = PlayerStats(self.config)
-        self.calcs_ui = CalcsUI(self.config)
-        self.config_ui = ConfigUI(self.config)
-        self.items_ui = ItemsUI(self.config)
-        self.notes_ui = NotesUI(self.config)
-        self.skills_ui = SkillsUI(self.config)
-        self.tree_ui = TreeUI(self.config, self.frame_TreeTools)
+        self.calcs_ui = CalcsUI(self.config, self)
+        self.config_ui = ConfigUI(self.config, self)
+        self.items_ui = ItemsUI(self.config, self)
+        self.notes_ui = NotesUI(self.config, self)
+        self.skills_ui = SkillsUI(self.config, self)
+        self.tree_ui = TreeUI(self.config, self.frame_TreeTools, self)
 
         """
             Start: Do what the QT Designer cannot yet do 
@@ -289,18 +289,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Actions required to get a filename to save a build to. Should call build_save() if user doesn't cancel
         return: N/A
         """
-        filename, selected_filter = QFileDialog.getSaveFileName(
-            self,
-            app.tr("Save File"),
-            app.tr("Save build"),
-            self.config.buildPath,
-            app.tr("Build Files (*.xml)"),
-        )
-        if filename != "":
-            print("filename: %s" % filename)
-            # print("selected_filter: %s" % selected_filter)
-            # write the file
-            # build.save_build(filename)
+        # filename, selected_filter = QFileDialog.getSaveFileName(
+        #     self,
+        #     app.tr("Save File"),
+        #     app.tr("Save build"),
+        #     self.config.buildPath,
+        #     app.tr("Build Files (*.xml)"),
+        # )
+        # if filename != "":
+        #     print(f"filename: {filename}")
+        self.build.save()
+        # print("selected_filter: %s" % selected_filter)
+        # write the file
+        # build.save_build(filename)
 
     @Slot()
     def change_tree(self, tree_id):
@@ -360,7 +361,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_ascendancy.addItem("None", 0)
         _class = self.build.current_tree.classes[new_class.value]
         for idx, _ascendancy in enumerate(_class["ascendancies"]):
-            self.combo_ascendancy.addItem(_ascendancy["name"], idx+1)
+            self.combo_ascendancy.addItem(_ascendancy["name"], idx + 1)
 
         if self.refresh_tree:
             # build changes

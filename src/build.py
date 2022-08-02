@@ -10,8 +10,7 @@ numerous Passive Trees (at various Player Levels, or various Cluster Jewels)
 associated with a Player.
 """
 
-import re
-from pathlib import Path
+from qdarktheme.qtpy.QtCore import Slot
 
 from pob_config import *
 from pob_config import _VERSION
@@ -19,18 +18,16 @@ import pob_file
 import ui_utils
 from tree import Tree
 from PoB_Main_Window import Ui_MainWindow
-from qdarktheme.qtpy.QtCore import Slot
 
 
 class Build:
     def __init__(self, _config: Config) -> None:
         self.pob_config = _config
         self._name = "Default"
-        self.ui: Ui_MainWindow = self.pob_config.win
+        self.win: Ui_MainWindow = self.pob_config.win
         # self.player = player.Player()
         self.filename = ""
         self.search_text = ""
-        self.ui = None
         self.need_saving = True
         self.current_tab = "TREE"
         self.trees = {_VERSION: Tree(self.pob_config)}
@@ -81,7 +78,7 @@ class Build:
         :return:
         """
         self.current_spec.classId = new_class
-        # self.ui.combo_classes.setCurrentIndex(new_class.value)
+        # self.win.combo_classes.setCurrentIndex(new_class.value)
 
     @property
     def className(self):
@@ -155,6 +152,18 @@ class Build:
     def viewMode(self, curr_tab):
         self.build["@viewMode"] = curr_tab.upper
 
+    @property
+    def current_spec(self):
+        """
+        Manage the currently chosen spec in the config class so it can be used by many other classes
+        :return:
+        """
+        return self.pob_config.current_spec
+
+    @current_spec.setter
+    def current_spec(self, new_spec):
+        self.pob_config.current_spec = new_spec
+
     # @property
     # def (self):
     #     return self.build[""]
@@ -164,33 +173,42 @@ class Build:
     #     self.build[""] = new_name
 
     def new(self, _build):
+        """
+        common function to load internal variables from the dictionary
+        :param _build: Dictionary fromloading the source XML or the default one
+        :return: N/A
+        """
         self.name = "Default"
-        self.build = _build["PathOfBuilding"]["Build"]
-        self.import_field = _build["PathOfBuilding"]["Import"]
-        self.calcs = _build["PathOfBuilding"]["Calcs"]
-        self.skills = _build["PathOfBuilding"]["Skills"]
-        self.notes = _build["PathOfBuilding"]["Notes"]
-        self.notes_html = _build["PathOfBuilding"].get("NotesHTML", None)
-        self.tree_view = _build["PathOfBuilding"]["TreeView"]
-        self.items = _build["PathOfBuilding"]["Items"]
-        self.config = _build["PathOfBuilding"]["Items"]
-        self.tree = _build["PathOfBuilding"]["Tree"]
-        self.specs.clear()
+        pob = _build.get("PathOfBuilding", None)
+        if pob:
+            self.build = pob["Build"]
+            self.import_field = pob["Import"]
+            self.calcs = pob["Calcs"]
+            self.skills = pob["Skills"]
+            self.notes = pob.get("Notes", "")
+            self.notes_html = pob.get("NotesHTML", None)
+            self.tree_view = pob["TreeView"]
+            self.items = pob["Items"]
+            self.config = pob["Items"]
+            self.tree = pob["Tree"]
+            self.specs.clear()
 
-        # Get Specs.
-        # One Spec appears as a dictionary, but multiple appear as a list
-        if type(self.tree["Spec"]) == list:
-            for spec in self.tree["Spec"][:]:
-                self.specs.append(Spec(spec))
-        else:
-            self.specs.append(Spec(self.tree["Spec"]))
-        # In the xml, is 1 based, but python indexes are 0 based, so we subtract 1
-        self.activeSpec = int(self.tree.get("@activeSpec", 1)) - 1
-        self.current_spec = self.specs[self.activeSpec]
+            # Get Specs.
+            # One Spec appears as a dictionary, but multiple appear as a list
+            if type(self.tree["Spec"]) == list:
+                for spec in self.tree["Spec"][:]:
+                    self.specs.append(Spec(spec))
+            else:
+                self.specs.append(Spec(self.tree["Spec"]))
+            # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
+            self.activeSpec = int(self.tree.get("@activeSpec", 1)) - 1
+            self.current_spec = self.specs[self.activeSpec]
+
+    # new
 
     def load(self, filename):
         """
-        Load a build
+        Load a build. Use new() as a common function
         :param filename: str() XML file to load
         :return: N/A
         """
@@ -209,12 +227,14 @@ class Build:
             self.new(_build_pob)
             # print(self.build["PlayerStat"][:])
             self.name = Path(Path(filename).name).stem
+            self.win.notes_ui.load(self.notes_html, self.notes)
 
     def save(self):
         """
         Save the build to the filename recorded in the build Class
         :return: N/A
         """
+        self.win.notes_ui.save(self.notes_html, self.notes)
         pob_file.write_xml(self.filename, self.build)
 
     def save_as(self, filename):
@@ -247,8 +267,10 @@ class Build:
 
 
 class Spec:
-    def __init__(self, _spec) -> None:
+    def __init__(self, _spec=None) -> None:
         def_spec = empty_build["PathOfBuilding"]["Tree"]["Spec"]
+        if _spec is None:
+            _spec = def_spec
 
         self.title = _spec.get("@title", def_spec["@title"])
 
@@ -257,6 +279,7 @@ class Spec:
 
         self.masteryEffects = _spec.get("@masteryEffects", None)
         # ToDo this includes ascendancy nodes (grrr)
+        # self.nodes = _spec.get("@nodes", "0")
         self.nodes = {}
         str_nodes = _spec.get("@nodes", "0")
         if str_nodes:

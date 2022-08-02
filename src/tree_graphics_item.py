@@ -6,7 +6,7 @@ This class represents a graphical instance of one visual element of a Passive Tr
 """
 from qdarktheme.qtpy.QtCore import Qt
 from qdarktheme.qtpy.QtGui import QPixmap
-from qdarktheme.qtpy.QtWidgets import QGraphicsPixmapItem
+from qdarktheme.qtpy.QtWidgets import QGraphicsPixmapItem, QGraphicsItem
 
 from pob_config import *
 
@@ -50,6 +50,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         self.config = _config
         self.filename = ""
         self.data = ""
+        self.node_id = 0
         self.setPixmap(_image)
         if not type(_image) == QPixmap:
             self.filename = str(_image)
@@ -57,6 +58,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         self.height = self.pixmap().size().height()
         self.setZValue(z_value)
 
+        # ToDo: Do we need selectable ?
         # self.setFlag(QGraphicsItem.ItemIsSelectable, selectable)
         self.setAcceptTouchEvents(selectable)
         # ToDo: Temporary
@@ -68,27 +70,27 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
     # Inherited, don't change definition
     def setScale(self, scale: int = 1):
         super(TreeGraphicsItem, self).setScale(scale)
-        self.width = self.width * scale
-        self.height = self.height * scale
+        self.width *= scale
+        self.height *= scale
 
     # Inherited, don't change definition
     def hoverEnterEvent(self, event):
         # this will be text associated with the node
         if self.filename != "":
-            self.setToolTip(f"{self.filename}\n{self.data}")
+            self.setToolTip(f"{self.filename}, {self.node_id}\n{self.data}")
 
     # not sure if this is needed
     # def hoverLeaveEvent(self, event):
     #     pass
 
     # Inherited, don't change definition
-    def mousePressEvent(self, event) -> None:
-        print(f"TreeGraphicsItem.mousePressEvent: {self.filename}, {self.data}")
-        # AltModifier (altKey), ControlModifier(crtlKey)
-        event.accept()
+    # def mousePressEvent(self, event) -> None:
+    #     print(f"TreeGraphicsItem.mousePressEvent: {self.filename}, {self.data}, {self.node_id}")
+    #     # AltModifier (altKey), ControlModifier(crtlKey)
+    #     event.accept()
 
     # Inherited, don't change definition
-    def mouseReleaseEvent(self, event) -> None:
-        print(f"TreeGraphicsItem.mouseReleaseEvent: {self.filename}")
-        # AltModifier (altKey), ControlModifier(crtlKey)
-        event.accept()
+    # def mouseReleaseEvent(self, event) -> None:
+    #     print(f"TreeGraphicsItem.mouseReleaseEvent: {self.filename}, {self.node_id}")
+    #     # AltModifier (altKey), ControlModifier(crtlKey)
+    #     event.accept()

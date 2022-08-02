@@ -66,10 +66,9 @@ from pob_config import _VERSION
 
 
 class SkillsUI:
-    def __init__(self, _config: Config) -> None:
+    def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
-        self.win = self.pob_config.win
-        self.build = self.win.build
+        self.win = _win
 
     def __repr__(self) -> str:
         return (

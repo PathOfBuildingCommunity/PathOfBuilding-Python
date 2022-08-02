@@ -78,9 +78,9 @@ class Node:
     def id(self):
         return self._id
 
-    @id.setter
-    def id(self, new_id):
-        self._id = new_id
+    # @id.setter
+    # def id(self, new_id):
+    #     self._id = new_id
 
     @property
     def active(self):

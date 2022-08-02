@@ -9,7 +9,7 @@ A Tree instance is tied to a Version of the Tree as released by GGG and thus old
 need to be supported for backwards compatibility reason.
 
 """
-from qdarktheme.qtpy.QtCore import QRectF, Qt
+from qdarktheme.qtpy.QtCore import QRect, QRectF, Qt
 from qdarktheme.qtpy.QtGui import QColor, QCursor, QPen, QPainter
 from qdarktheme.qtpy.QtWidgets import (
     QFrame,
@@ -32,7 +32,7 @@ class TreeView(QGraphicsView):
         self.build = _build
 
         self.ui = None
-        self._scene = QGraphicsScene(self.build.current_tree.size)
+        self._scene = QGraphicsScene()
 
         self.setScene(self._scene)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
@@ -50,6 +50,10 @@ class TreeView(QGraphicsView):
         self.fitInView(True, 0.1)
 
         self.viewport().setCursor(Qt.ArrowCursor)
+        # add a margin to make panning the view seem comfortable
+        rect = self.sceneRect()
+        rect.adjust(-1000.0, -1000.0, 1000.0, 1000.0)
+        self.setSceneRect(rect)
 
     # Inherited, don't change definition
     def wheelEvent(self, event):
@@ -83,8 +87,18 @@ class TreeView(QGraphicsView):
         :return: N/A
         """
         super(TreeView, self).mousePressEvent(event)
-        # ToDo : Do we want to allow thegrap cursor or just keep the arrow ?
+        # ToDo : Do we want to allow the grap cursor or just keep the arrow ?
         # self.viewport().setCursor(Qt.ArrowCursor)
+        _item: TreeGraphicsItem = self.itemAt(event.pos())
+        if _item:
+            print("tree_view: mouseReleaseEvent", _item.node_id, _item.filename)
+        if _item and _item.node_id != 0:
+            print(self.build.current_spec.nodes)
+            if _item.node_id in self.build.current_spec.nodes:
+                self.build.current_spec.nodes.remove(_item.node_id)
+            else:
+                self.build.current_spec.nodes.append(_item.node_id)
+            self.add_tree_images()
 
     # Inherited, don't change definition
     def mouseReleaseEvent(self, event) -> None:
@@ -93,9 +107,11 @@ class TreeView(QGraphicsView):
         :param event: Internal event matrix
         :return: N/A
         """
+        print("tree_view: mouseReleaseEvent")
         super(TreeView, self).mouseReleaseEvent(event)
         self.viewport().setCursor(Qt.ArrowCursor)
 
+    # Function Overridden
     def fitInView(self, scale=True, factor=None):
         """
         Part of the zoom facility
@@ -162,8 +178,8 @@ class TreeView(QGraphicsView):
             _circle = QGraphicsEllipseItem(
                 _image.pos().x() - 10,
                 _image.pos().y() - 10,
-                _image.width + 10,
-                _image.height + 10,
+                _image.width + 25,
+                _image.height + 25,
             )
             _circle.setPen(QPen(QColor(colour), line_width, Qt.SolidLine))
             _circle.setZValue(z_value)
@@ -359,8 +375,9 @@ class TreeView(QGraphicsView):
                     _image = self.add_picture(
                         pixmap, node.x, node.y, Layers.inactive, True
                     )
-                    _image.filename = f"{n}, {node.name}"
+                    _image.filename = node.name
                     _image.data = node.sd
+                    _image.node_id = n
                     # Search indicator
                     if self.build.search_text and (
                         self.build.search_text in node.name
@@ -382,7 +399,10 @@ class TreeView(QGraphicsView):
                 if _overlay is not None:
                     pixmap = _overlay.get("handle", None)
                     if pixmap is not None:
-                        image = self.add_picture(pixmap, node.x - 8, node.y - 8, _layer)
+                        # image = self.add_picture(pixmap, node.x, node.y, _layer)
+                        image = self.add_picture(pixmap, node.x - 7, node.y - 7, _layer)
                         image.filename = node.name
+                        # Add the node id to the overlay as it sometimes get's clciked instead of the centre graphic
+                        image.node_id = n
 
     # add_tree_images

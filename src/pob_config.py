@@ -232,7 +232,7 @@ empty_build = {
                 "@title": "Default",
                 "@ascendClassId": 0,
                 "@masteryEffects": None,
-                "@nodes": None,
+                "@nodes": "0",
                 "@treeVersion": re.sub("\.", "_", str(_VERSION)),
                 "@classId": 0,
                 "EditedNodes": None,
@@ -571,6 +571,8 @@ class Config:
             None  # this is the dictionary representing the xml, not a pointer to itself
         )
         self.screen_rect = self.app.primaryScreen().size()
+
+        self.current_spec = empty_build["PathOfBuilding"]["Tree"]["Spec"]
 
         self.exeDir = Path.cwd()
         self.settingsFile = Path(self.exeDir, "settings.xml")

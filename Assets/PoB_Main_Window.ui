@@ -434,7 +434,7 @@
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>3</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -690,10 +690,13 @@
                   </rect>
                  </property>
                  <property name="text">
-                  <string>Default Gem Level</string>
+                  <string>Default Gem &amp;Level</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>spin_DefaultGemLevel</cstring>
                  </property>
                 </widget>
                 <widget class="QLabel" name="label_DefaultGemQuality">
@@ -706,10 +709,13 @@
                   </rect>
                  </property>
                  <property name="text">
-                  <string>Default Gem Quality</string>
+                  <string>Default Gem &amp;Quality</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>spin_DefaultGemQuality</cstring>
                  </property>
                 </widget>
                 <widget class="QLabel" name="label_ShowSupportGems">
@@ -722,10 +728,13 @@
                   </rect>
                  </property>
                  <property name="text">
-                  <string>Show Support Gems</string>
+                  <string>&amp;Show Support Gems</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>combo_ShowSupportGems</cstring>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_SortByDPS">
@@ -845,7 +854,7 @@
                   <enum>Qt::RightToLeft</enum>
                  </property>
                  <property name="text">
-                  <string>Sort Gems by DPS</string>
+                  <string>Sort Gems by &amp;DPS</string>
                  </property>
                 </widget>
                 <widget class="QCheckBox" name="check_ShowGemQualityVariants">
@@ -861,7 +870,7 @@
                   <enum>Qt::RightToLeft</enum>
                  </property>
                  <property name="text">
-                  <string>Show Gem Quality Variants</string>
+                  <string>Show Gem Quality &amp;Variants</string>
                  </property>
                 </widget>
                 <widget class="QCheckBox" name="check_MatchToLevel">
@@ -880,7 +889,7 @@
                   <bool>false</bool>
                  </property>
                  <property name="text">
-                  <string>Match Gems to Character Level </string>
+                  <string>&amp;Match Gems to Character Level </string>
                  </property>
                 </widget>
                </widget>
@@ -2498,7 +2507,10 @@
               <number>0</number>
              </property>
              <item>
-              <layout class="QHBoxLayout" name="hlayout_Notes">
+              <layout class="QHBoxLayout" name="hlayout_Notes" stretch="0,0,0,0,0">
+               <property name="spacing">
+                <number>16</number>
+               </property>
                <item>
                 <widget class="QFontComboBox" name="combo_Notes_Font">
                  <property name="minimumSize">
@@ -2531,6 +2543,19 @@
                  </property>
                  <property name="value">
                   <number>15</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_NotesColour">
+                 <property name="text">
+                  <string>&amp;Colour:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>combo_Notes_Colour</cstring>
                  </property>
                 </widget>
                </item>
@@ -2637,7 +2662,13 @@ hr { height: 1px; border-width: 0; }
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="action_Theme"/>
+    <widget class="QMenu" name="menuTheme">
+     <property name="title">
+      <string>Theme</string>
+     </property>
+     <addaction name="action_Theme"/>
+    </widget>
+    <addaction name="menuTheme"/>
    </widget>
    <addaction name="menu_Builds"/>
    <addaction name="menu_View"/>
@@ -2663,7 +2694,6 @@ hr { height: 1px; border-width: 0; }
    <addaction name="action_Open"/>
    <addaction name="action_Save"/>
    <addaction name="separator"/>
-   <addaction name="action_Theme"/>
    <addaction name="action_ManageTrees"/>
   </widget>
   <action name="action_New">
@@ -2769,6 +2799,11 @@ hr { height: 1px; border-width: 0; }
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionplace">
+   <property name="text">
+    <string>place</string>
    </property>
   </action>
  </widget>

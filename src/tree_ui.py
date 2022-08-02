@@ -49,9 +49,9 @@ from ui_utils import FlowLayout
 
 
 class TreeUI:
-    def __init__(self, _config: Config, frame_TreeTools) -> None:
+    def __init__(self, _config: Config, frame_TreeTools, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
-        self.win = self.pob_config.win
+        self.win = _win
         self.build = self.win.build
         self.layout_tree_tools = FlowLayout(frame_TreeTools, 2)
         self._curr_class = PlayerClasses.SCION
@@ -192,6 +192,10 @@ class TreeUI:
         self.open_manage_trees()
 
     def open_manage_trees(self):
+        """
+        and we need a dialog ...
+        :return:
+        """
         print("open_manage_trees")
 
     def fill_current_tree_combo(self):
