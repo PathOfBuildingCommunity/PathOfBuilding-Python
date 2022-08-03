@@ -189,7 +189,7 @@ class Build:
             self.notes_html = pob.get("NotesHTML", None)
             self.tree_view = pob["TreeView"]
             self.items = pob["Items"]
-            self.config = pob["Items"]
+            self.config = pob["Config"]
             self.tree = pob["Tree"]
             self.specs.clear()
 
@@ -234,8 +234,20 @@ class Build:
         Save the build to the filename recorded in the build Class
         :return: N/A
         """
-        self.win.notes_ui.save(self.notes_html, self.notes)
-        pob_file.write_xml(self.filename, self.build)
+        pob = {'PathOfBuilding': {}}
+        pob["PathOfBuilding"]["Build"] = self.build
+        pob["PathOfBuilding"]["Import"] = self.import_field
+        pob["PathOfBuilding"]["Calcs"] = self.calcs
+        pob["PathOfBuilding"]["Skills"] = self.skills
+        self.notes, self.notes_html = self.win.notes_ui.save()
+        pob["PathOfBuilding"]["Notes"] = self.notes
+        pob["PathOfBuilding"]["NotesHTML"] = self.notes_html
+        pob["PathOfBuilding"]["TreeView"] = self.tree_view
+        pob["PathOfBuilding"]["Items"] = self.items
+        pob["PathOfBuilding"]["Config"] = self.config
+        pob["PathOfBuilding"]["Tree"] = self.tree
+        pob_file.write_xml('builds/test.xml', pob)
+        # pob_file.write_xml(self.filename, pob)
 
     def save_as(self, filename):
         """
@@ -244,7 +256,7 @@ class Build:
         :return: N/A
         """
         self.filename = filename
-        pob_file.write_xml(filename, self.build)
+        self.save()
 
     def ask_for_save_if_modified(self):
         """

@@ -12,6 +12,7 @@ class NotesUI:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
         self.win = _win
+        self.modified = False
 
     # def __repr__(self) -> str:
     #     return (
@@ -33,12 +34,15 @@ class NotesUI:
         else:
             self.win.textedit_Notes.setPlainText(_notes)
 
-    def save(self, _notes_html, _notes):
+    def save(self):
         """
         Save internal structures back to the build object
+        :return: two strings represnting the plain text and the html text
         """
-        _notes_html = f"<![CDATA[{self.win.textedit_Notes.document().toHtml()}]]>"
+        _notes_html = self.win.textedit_Notes.document().toHtml()
         _notes = self.win.textedit_Notes.document().toPlainText()
+        self.modified = False
+        return _notes, _notes_html
 
 
 # def test() -> None:
