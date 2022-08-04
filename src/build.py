@@ -12,6 +12,7 @@ associated with a Player.
 
 from qdarktheme.qtpy.QtCore import Slot
 
+from constants import *
 from pob_config import *
 from pob_config import _VERSION
 import pob_file
@@ -228,6 +229,7 @@ class Build:
             # print(self.build["PlayerStat"][:])
             self.name = Path(Path(filename).name).stem
             self.win.notes_ui.load(self.notes_html, self.notes)
+            self.win.stats.load(self.build)
 
     def save(self):
         """

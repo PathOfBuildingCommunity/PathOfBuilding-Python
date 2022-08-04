@@ -10,7 +10,7 @@ import atexit
 import sys
 import qdarktheme
 from qdarktheme.qtpy.QtCore import Qt, Slot
-from qdarktheme.qtpy.QtGui import QFont
+from qdarktheme.qtpy.QtGui import QFont, QColor
 from qdarktheme.qtpy.QtWidgets import (
     QApplication,
     QComboBox,
@@ -21,6 +21,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QWidget,
 )
 
+from constants import *
 from pob_config import *
 from build import Build
 
@@ -65,7 +66,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.build = Build(self.config)
 
         # Setup UI Classes()
-        self.stats = PlayerStats(self.config)
+        self.stats = PlayerStats(self.config, self)
         self.calcs_ui = CalcsUI(self.config, self)
         self.config_ui = ConfigUI(self.config, self)
         self.items_ui = ItemsUI(self.config, self)
@@ -142,7 +143,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
 
         # get the initial colour of the edit box for later use as 'NORMAL'
-        self.default_notes_text_colour = self.textedit_Notes.textColor()
+        self.config.default_notes_text_colour = self.textedit_Notes.textColor()
 
         # set the ComboBox dropdown width.
         self.combo_Bandits.view().setMinimumWidth(
@@ -419,10 +420,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param colour_name: String of the selected text
         :return: N/A
         """
-        if colour_name == "NORMAL":
-            self.textedit_Notes.setTextColor(self.default_notes_text_colour)
-        else:
-            self.textedit_Notes.setTextColor(ColourCodes[colour_name.upper()].value)
+        self.textedit_Notes.setTextColor(ColourCodes[colour_name.upper()].value)
         self.textedit_Notes.setFocus()
 
     # don't use native signals/slot, so focus can be set back to edit box

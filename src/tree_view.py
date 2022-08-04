@@ -18,7 +18,8 @@ from qdarktheme.qtpy.QtWidgets import (
     QGraphicsView,
 )
 
-import pob_file, ui_utils
+from constants import *
+from constants import _VERSION
 from pob_config import *
 
 from tree_graphics_item import TreeGraphicsItem
@@ -119,8 +120,14 @@ class TreeView(QGraphicsView):
         :param factor: Scale factor.
         :return: N/A
         """
-        unity = self.transform().mapRect(QRectF(0, 0, 1, 1))
+        current_scale_factor = self.transform().m11()
+        # Limit Zoom by reversing the factor if needed
+        if current_scale_factor > 1.0:
+            factor = 0.8
+        if current_scale_factor < 0.08:
+            factor = 1.25
         if factor is None:
+            unity = self.transform().mapRect(QRectF(0, 0, 1, 1))
             self.scale(1 / unity.width(), 1 / unity.height())
         else:
             self.scale(factor, factor)
@@ -129,7 +136,8 @@ class TreeView(QGraphicsView):
         """
         Add a picture or pixmap
         :param pixmap: string or pixmap to be added
-        :param x, y: it's position in the scene
+        :param x: it's position in the scene
+        :param y: it's position in the scene
         :param z: which layer to use:  -2: background, -1: connectors, 0: inactive,
                                         1: sprite overlay
                                         1: active (overwriting its inactive equivalent ???)

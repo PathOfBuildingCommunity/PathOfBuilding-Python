@@ -43,8 +43,9 @@ from qdarktheme.qtpy.QtWidgets import (
 )
 
 from PoB_Main_Window import Ui_MainWindow
+from constants import *
+from constants import _VERSION
 from pob_config import *
-from pob_config import _VERSION
 from ui_utils import FlowLayout
 
 

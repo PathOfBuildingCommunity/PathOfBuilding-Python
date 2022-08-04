@@ -101,7 +101,7 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>190</width>
+             <width>240</width>
              <height>600</height>
             </size>
            </property>
@@ -142,69 +142,8 @@
             <property name="bottomMargin">
              <number>2</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_Bandits">
-              <property name="text">
-               <string>Bandits:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QComboBox" name="combo_Bandits">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>180</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>280</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="sizeAdjustPolicy">
-               <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-              </property>
-              <property name="minimumContentsLength">
-               <number>60</number>
-              </property>
-              <property name="placeholderText">
-               <string>Make a Selection</string>
-              </property>
-              <property name="modelColumn">
-               <number>0</number>
-              </property>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="None">2 Passives Points</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Oak">Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Kraityn">Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Alira">Alira (Mana Regen, Crit Multiplier, Resists)</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_Pantheon">
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_MainSkill">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -212,58 +151,8 @@
                </size>
               </property>
               <property name="text">
-               <string>The Pantheon:</string>
+               <string>Main Skill:</string>
               </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QComboBox" name="combo_MajorGods">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>180</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>280</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="placeholderText">
-               <string>Make a Selection</string>
-              </property>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="None">Godless</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="TheBrineKing">Soul of the Brine King</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Lunaris">Soul of Lunaris</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Solaris">Soul of Solaris</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Arakaali">Soul of Arakaali</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="4" column="0">
@@ -336,16 +225,132 @@
               </item>
              </widget>
             </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_MainSkill">
+            <item row="3" column="0">
+             <widget class="QComboBox" name="combo_MajorGods">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>0</width>
+                <width>180</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="text">
-               <string>Main Skill:</string>
+              <property name="maximumSize">
+               <size>
+                <width>280</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Make a Selection</string>
+              </property>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="None">Godless</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="TheBrineKing">Soul of the Brine King</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Lunaris">Soul of Lunaris</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Solaris">Soul of Solaris</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Arakaali">Soul of Arakaali</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QComboBox" name="combo_Bandits">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>180</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>280</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+              </property>
+              <property name="minimumContentsLength">
+               <number>60</number>
+              </property>
+              <property name="placeholderText">
+               <string>Make a Selection</string>
+              </property>
+              <property name="modelColumn">
+               <number>0</number>
+              </property>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="None">2 Passives Points</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Oak">Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Kraityn">Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true" extracomment="Alira">Alira (Mana Regen, Crit Multiplier, Resists)</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QComboBox" name="combo_MainSkillActive">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>180</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>280</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>&lt;empty&gt;</string>
               </property>
              </widget>
             </item>
@@ -377,38 +382,30 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
-             <widget class="QComboBox" name="combo_MainSkillActive">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_Bandits">
+              <property name="text">
+               <string>Bandits:</string>
               </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_Pantheon">
               <property name="minimumSize">
                <size>
-                <width>180</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>280</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="placeholderText">
-               <string>&lt;empty&gt;</string>
+              <property name="text">
+               <string>The Pantheon:</string>
               </property>
              </widget>
             </item>
             <item row="8" column="0">
-             <widget class="QListWidget" name="list_Statistics">
-              <property name="minimumSize">
-               <size>
-                <width>180</width>
-                <height>0</height>
-               </size>
+             <widget class="QTextEdit" name="textedit_Statistics">
+              <property name="lineWrapMode">
+               <enum>QTextEdit::NoWrap</enum>
               </property>
              </widget>
             </item>
