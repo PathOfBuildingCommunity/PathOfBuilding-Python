@@ -5,15 +5,15 @@ This is a base PoB class. It doesn't import any other PoB classes
 """
 
 from pathlib import Path
-from bs4 import BeautifulSoup
-from pprint import pprint
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
 import xmltodict
 import json
 
 
-def read_xml(filename):
+def read_xml_as_dict(filename):
     """
-    Reads an XML file
+    Reads a XML file
     :param filename: Name of xml to be read
     :returns: A dictionary of the contents of the file
     """
@@ -29,9 +29,42 @@ def read_xml(filename):
     return None
 
 
-def write_xml(filename, _dict):
+def read_xml(filename):
     """
-    Write an XML file
+    Reads a XML file
+    :param filename: Name of xml to be read
+    :returns: A xml tree of the contents of the file
+    """
+    _fn = Path(filename)
+    if _fn.exists():
+        try:
+            with _fn.open("r") as xml_file:
+                tree = ET.parse(_fn)
+                return tree
+        except (EnvironmentError, ET.ParseError):  # parent of IOError, OSError *and* WindowsError where available
+            print(f"Unable to open {_fn}")
+    return None
+
+
+def write_xml(filename, _tree):
+    """
+    Write a XML file
+    :param filename: Name of xml to be written
+    :param _tree: New contents of the file as a xml tree
+    :returns: N/A
+    """
+    _fn = Path(filename)
+    try:
+        with _fn.open("wb") as xml_file:
+            ET.indent(_tree)
+            _tree.write(xml_file, encoding="utf-8")
+    except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
+        print(f"Unable to write to {_fn}")
+
+
+def write_xml_as_dict(filename, _dict):
+    """
+    Write a XML file
     :param filename: Name of xml to be written
     :param _dict: New contents of the file
     :returns: N/A

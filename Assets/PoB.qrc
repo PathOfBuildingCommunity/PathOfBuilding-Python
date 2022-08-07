@@ -171,4 +171,7 @@
     <file>TreeData/VerdantOil.png</file>
     <file>TreeData/VioletOil.png</file>
   </qresource>
+  <qresource prefix="Font">
+    <file>Font/LuxiMono.ttf</file>
+  </qresource>
 </RCC>

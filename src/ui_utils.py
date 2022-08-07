@@ -54,6 +54,22 @@ def critical_dialog(win, title, text, btn_text="Close"):
     dlg.exec_()
 
 
+def set_combo_index_by_data(combo, data):
+    """
+    Set a combo box current index based on it's data field
+    :param combo: the combo box
+    :param data: the data. There is no type to this, so the passed in type should match what the combo has
+    :return: int: the index of the combobox or -1 if not found
+    """
+    if data is None:
+        data = "None"
+    for i in range(combo.count()):
+        if combo.itemData(i) == data:
+            combo.setCurrentIndex(i)
+            return i
+    return -1
+
+
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=0, spacing=-1):
         """

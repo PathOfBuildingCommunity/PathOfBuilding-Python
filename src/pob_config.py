@@ -1,4 +1,3 @@
-
 """
 Configuration Class
 
@@ -14,6 +13,8 @@ Imports pob_file
 
 from pathlib import Path
 from collections import OrderedDict
+import xml.etree.ElementTree as ET
+import traceback
 
 from qdarktheme.qtpy.QtCore import QSize
 
@@ -21,6 +22,10 @@ import pob_file
 from constants import *
 from constants import _VERSION
 
+
+def print_call_stack():
+    for line in traceback.format_stack():
+        print(line.strip())
 
 def str_to_bool(in_str):
     """
@@ -36,14 +41,15 @@ class Config:
         # To reduce circular references, have the app and main window references here
         self.win = _win
         self.app = _app
-        self.config = (
-            None  # this is the dictionary representing the xml, not a pointer to itself
-        )
         self.screen_rect = self.app.primaryScreen().size()
 
-        self.current_spec = empty_build["PathOfBuilding"]["Tree"]["Spec"]
-        self.default_notes_text_colour = None
+        # this is the xml tree representing the xml
+        self.root = None
+        self.tree = None
+        # easy access to the Misc tag
+        self.misc = None
 
+        # Path and directory variables
         self.exeDir = Path.cwd()
         self.settingsFile = Path(self.exeDir, "settings.xml")
         self.buildPath = Path(self.exeDir, "builds")
@@ -52,21 +58,31 @@ class Config:
         self.tree_data_path = Path(self.exeDir, "TreeData")
         if not self.tree_data_path.exists():
             self.tree_data_path.mkdir()
-        self.misc = {}
         self.read()
 
     def read(self):
-        """Set self.config with the contents of the settings file"""
+        """Set self.root with the contents of the settings file"""
         if self.settingsFile.exists():
-            # try:
-            self.config = OrderedDict(pob_file.read_xml(self.settingsFile))
-            self.misc = self.config["PathOfBuilding"]["Misc"]
-        if self.config is None:
-            self.config = default_config
+            try:
+                self.tree = pob_file.read_xml(self.settingsFile)
+            except ET.ParseError:
+                self.tree = ET.ElementTree(ET.fromstring(default_config))
+        else:
+            self.tree = ET.ElementTree(ET.fromstring(default_config))
+
+        if self.tree is None:
+            self.tree = ET.ElementTree(ET.fromstring(default_config))
+
+        self.root = self.tree.getroot()
+        self.misc = self.root.find("Misc")
+        if self.misc is None:
+            print("Misc not found")
+            self.misc = ET.Element("Misc")
+            self.root.append(self.misc)
 
     def write(self):
         """Write the settings file"""
-        pob_file.write_xml(self.settingsFile, self.config)
+        pob_file.write_xml(self.settingsFile, self.tree)
 
     @property
     def theme(self):
@@ -77,7 +93,7 @@ class Config:
 
     @theme.setter
     def theme(self, new_theme):
-        self.misc["theme"] = new_theme and "Dark" or "Light"
+        self.misc.set("theme",new_theme and "Dark" or "Light")
 
     @property
     def slotOnlyTooltips(self):
@@ -85,7 +101,7 @@ class Config:
 
     @slotOnlyTooltips.setter
     def slotOnlyTooltips(self, new_bool):
-        self.misc["slotOnlyTooltips"] = str(new_bool)
+        self.misc.set("slotOnlyTooltips", str(new_bool))
 
     @property
     def showTitlebarName(self):
@@ -93,7 +109,7 @@ class Config:
 
     @showTitlebarName.setter
     def showTitlebarName(self, new_bool):
-        self.misc["showTitlebarName"] = str(new_bool)
+        self.misc.set("showTitlebarName", f"{new_bool}")
 
     @property
     def showWarnings(self):
@@ -101,7 +117,7 @@ class Config:
 
     @showWarnings.setter
     def showWarnings(self, new_bool):
-        self.misc["showWarnings"] = str(new_bool)
+        self.misc.set("showWarnings", str(new_bool))
 
     @property
     # fmt: off
@@ -109,16 +125,16 @@ class Config:
         _defaultCharLevel = self.misc.get("defaultCharLevel", 1)
         if _defaultCharLevel < 1:
             _defaultCharLevel = 1
-            self.misc["defaultCharLevel"] = f"{_defaultCharLevel}"
+            self.misc.set("defaultCharLevel", f"{_defaultCharLevel}")
         if _defaultCharLevel > 100:
             _defaultCharLevel = 100
-            self.misc["defaultCharLevel"] = f"{_defaultCharLevel}"
+            self.misc.set("defaultCharLevel", f"{_defaultCharLevel}")
         return _defaultCharLevel
     # fmt: on
 
     @defaultCharLevel.setter
     def defaultCharLevel(self, new_int):
-        self.misc["defaultCharLevel"] = f"{new_int}"
+        self.misc.set("defaultCharLevel", f"{new_int}")
 
     @property
     def nodePowerTheme(self):
@@ -126,7 +142,7 @@ class Config:
 
     @nodePowerTheme.setter
     def nodePowerTheme(self, new_theme):
-        self.misc["nodePowerTheme"] = new_theme
+        self.misc.set("nodePowerTheme", new_theme)
 
     @property
     def connectionProtocol(self):
@@ -135,7 +151,7 @@ class Config:
     @connectionProtocol.setter
     def connectionProtocol(self, new_conn):
         # what is this for
-        self.misc["connectionProtocol"] = new_conn
+        self.misc.set("connectionProtocol", new_conn)
 
     @property
     def decimalSeparator(self):
@@ -143,7 +159,7 @@ class Config:
 
     @decimalSeparator.setter
     def decimalSeparator(self, new_sep):
-        self.misc["decimalSeparator"] = new_sep
+        self.misc.set("decimalSeparator", new_sep)
 
     @property
     def thousandsSeparator(self):
@@ -151,7 +167,7 @@ class Config:
 
     @thousandsSeparator.setter
     def thousandsSeparator(self, new_sep):
-        self.misc["thousandsSeparator"] = new_sep
+        self.misc.set("thousandsSeparator", new_sep)
 
     @property
     def showThousandsSeparators(self):
@@ -159,7 +175,7 @@ class Config:
 
     @showThousandsSeparators.setter
     def showThousandsSeparators(self, new_bool):
-        self.misc["showThousandsSeparators"] = str(new_bool)
+        self.misc.set("showThousandsSeparators", str(new_bool))
 
     @property
     # fmt: off
@@ -167,16 +183,16 @@ class Config:
         _defaultGemQuality = self.misc.get("defaultGemQuality", 1)
         if _defaultGemQuality < 0:
             _defaultGemQuality = 0
-            self.misc["defaultGemQuality"] = f"{_defaultGemQuality}"
+            self.misc.set("defaultGemQuality", f"{_defaultGemQuality}")
         if _defaultGemQuality > 20:
             _defaultGemQuality = 0
-            self.misc["defaultGemQuality"] = f"{_defaultGemQuality}"
+            self.misc.set("defaultGemQuality", f"{_defaultGemQuality}")
         return _defaultGemQuality
     # fmt: on
 
     @defaultGemQuality.setter
     def defaultGemQuality(self, new_int):
-        self.misc["defaultGemQuality"] = f"{new_int}"
+        self.misc.set("defaultGemQuality", f"{new_int}")
 
     @property
     def buildSortMode(self):
@@ -184,7 +200,7 @@ class Config:
 
     @buildSortMode.setter
     def buildSortMode(self, new_mode):
-        self.misc["buildSortMode"] = new_mode
+        self.misc.set("buildSortMode", new_mode)
 
     @property
     def betaMode(self):
@@ -192,7 +208,7 @@ class Config:
 
     @betaMode.setter
     def betaMode(self, new_bool):
-        self.misc["betaMode"] = str(new_bool)
+        self.misc.set("betaMode", str(new_bool))
 
     @property
     def size(self):
@@ -201,63 +217,59 @@ class Config:
         800 x 600 was chosen as the default as it has been learnt, with the lua version,
           that some users in the world have small screen laptops.
         Attempt to protect against silliness by limiting size to the screen size.
-          This could happen if someone changes their desktop size or copy program from another machine.
+          This could happen if someone changes their desktop size or copies the program from another machine.
         :returns: a QSize(width, height)
         """
-        try:
-            width = int(self.config["PathOfBuilding"]["size"]["width"])
-            if width < 800:
-                width = 800
-            height = int(self.config["PathOfBuilding"]["size"]["height"])
-            if height < 600:
-                height = 600
-        except KeyError:
+        _size = self.root.find("size")
+        width = int(_size.get("width", 800))
+        height = int(_size.get("height", 600))
+        if width < 800:
             width = 800
+        if height < 600:
             height = 600
         if width > self.screen_rect.width():
             print(f"Width: {width} is bigger than {self.screen_rect}. Correcting ...")
-            _size = self.screen_rect
+            width = self.screen_rect.width()
         if height > self.screen_rect.height():
             print(f"Height: {height} is bigger than {self.screen_rect}. Correcting ...")
-            _size = self.screen_rect
+            height = self.screen_rect.height()
         return QSize(width, height)
 
     @size.setter
     def size(self, new_size: QSize):
-        self.config["PathOfBuilding"]["size"] = {
-            "width": new_size.width(),
-            "height": new_size.height(),
-        }
+        _size = self.root.find("size")
+        _size.set("width", f"{new_size.width()}")
+        _size.set("height", f"{new_size.height()}")
 
     def recent_builds(self):
         """
         Recent builds are a list of xml's that have been opened, to a maximum of 10 entries
         :returns: an Ordered dictionary list of recent builds
         """
-        try:
-            output = self.config["PathOfBuilding"]["recentBuilds"]
-        except KeyError:
-            print("recentBuilds exception")
-            output = {
-                "r0": "",
-                "r1": "",
-                "r2": "",
-                "r3": "",
-                "r4": "",
-            }
-        self.config["PathOfBuilding"]["recentBuilds"] = output
-        return OrderedDict(output)
+        output = []
+        _recent = self.root.find("recentBuilds")
+        if _recent is None:
+            print("recentBuilds not found")
+            self.root.append(ET.Element("recentBuilds"))
+            return output
+        # get all builds into an object so we can delete them from the live xml tree without crashing
+        builds = _recent.findall("build")
+        for idx, build in enumerate(builds):
+            if idx < 10:
+                output.append(build.text)
+            else:
+                _recent.remove(build)
+        return output
 
     def add_recent_build(self, filename):
         """
         Adds one build to the list of recent builds
-        :param filename: str(): name of build xml
+        :param filename: string: name of build xml
         :returns: n/a
         """
-        if filename not in self.config["PathOfBuilding"]["recentBuilds"].values():
-            for idx in [3, 2, 1, 0]:
-                # fmt: off
-                self.config["PathOfBuilding"]["recentBuilds"][f"r{idx + 1}"]\
-                    = self.config["PathOfBuilding"]["recentBuilds"][f"r{idx}"]
-                # fmt: on
-            self.config["PathOfBuilding"]["recentBuilds"]["r0"] = filename
+        _recent = self.root.find("recentBuilds")
+        found = [element for element in _recent.iter() if element.text == filename]
+        if len(found) == 0:
+            build = ET.Element("build")
+            build.text = filename
+            _recent.insert(0, build)

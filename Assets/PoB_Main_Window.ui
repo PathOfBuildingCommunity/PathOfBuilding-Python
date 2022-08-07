@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1121</width>
+    <width>1220</width>
     <height>804</height>
    </rect>
   </property>
@@ -52,7 +52,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1119</width>
+         <width>1218</width>
          <height>725</height>
         </rect>
        </property>
@@ -178,51 +178,6 @@
               <property name="placeholderText">
                <string>Make a Selection</string>
               </property>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="None">Godless</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Gruthkul">Soul of Gruthkul</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Yugul">Soul of Yugul</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Abberath">Soul of Abberath</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Tukohama">Soul of Tukohama</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Garukhan">Soul of Garukhan</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Ralakesh">Soul of Ralakesh</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Ryslatha">Soul of Ryslatha</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Shakari">Soul of Shakari</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="3" column="0">
@@ -248,31 +203,6 @@
               <property name="placeholderText">
                <string>Make a Selection</string>
               </property>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="None">Godless</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="TheBrineKing">Soul of the Brine King</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Lunaris">Soul of Lunaris</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Solaris">Soul of Solaris</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Arakaali">Soul of Arakaali</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="1" column="0">
@@ -307,26 +237,6 @@
               <property name="modelColumn">
                <number>0</number>
               </property>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="None">2 Passives Points</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Oak">Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Kraityn">Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true" extracomment="Alira">Alira (Mana Regen, Crit Multiplier, Resists)</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="7" column="0">
@@ -404,6 +314,11 @@
             </item>
             <item row="8" column="0">
              <widget class="QTextEdit" name="textedit_Statistics">
+              <property name="font">
+               <font>
+                <family>Luxi Mono</family>
+               </font>
+              </property>
               <property name="lineWrapMode">
                <enum>QTextEdit::NoWrap</enum>
               </property>
@@ -431,7 +346,7 @@
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>3</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -743,53 +658,13 @@
                    <height>22</height>
                   </rect>
                  </property>
-                 <item>
-                  <property name="text">
-                   <string extracomment="FullDPS">Full DPS</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="CombinedDPS">Combined DPS</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="TotalDPS">Total DPS</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="AverageDamage">Average Hit</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="TotalDot">DoT DPS</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="BleedDPS">Bleed DPS</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="IgniteDPS">Ignite DPS</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="TotalPoisonDPS">Poison DPS</string>
-                  </property>
-                 </item>
                 </widget>
                 <widget class="QSpinBox" name="spin_DefaultGemLevel">
                  <property name="geometry">
                   <rect>
                    <x>190</x>
                    <y>65</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -822,21 +697,6 @@
                    <height>22</height>
                   </rect>
                  </property>
-                 <item>
-                  <property name="text">
-                   <string extracomment="ALL">All</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="NORMAL">Non-Awakened</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string extracomment="AWAKENED">Awakened</string>
-                  </property>
-                 </item>
                 </widget>
                 <widget class="QCheckBox" name="check_SortByDPS">
                  <property name="geometry">
@@ -895,24 +755,24 @@
                  <rect>
                   <x>400</x>
                   <y>190</y>
-                  <width>500</width>
+                  <width>520</width>
                   <height>40</height>
                  </rect>
                 </property>
                 <widget class="QCheckBox" name="check_GemRemove4">
                  <property name="geometry">
                   <rect>
-                   <x>9</x>
-                   <y>13</y>
-                   <width>16</width>
-                   <height>16</height>
+                   <x>10</x>
+                   <y>10</y>
+                   <width>20</width>
+                   <height>20</height>
                   </rect>
                  </property>
                  <property name="text">
                   <string/>
                  </property>
                  <property name="checked">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_GemList4">
@@ -936,7 +796,7 @@
                   <rect>
                    <x>210</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -956,9 +816,9 @@
                 <widget class="QSpinBox" name="spin_GemQuality4">
                  <property name="geometry">
                   <rect>
-                   <x>260</x>
+                   <x>270</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -975,7 +835,7 @@
                 <widget class="QComboBox" name="combo_GemVariant4">
                  <property name="geometry">
                   <rect>
-                   <x>310</x>
+                   <x>330</x>
                    <y>10</y>
                    <width>80</width>
                    <height>22</height>
@@ -1005,10 +865,10 @@
                 <widget class="QCheckBox" name="check_GemEnabled4">
                  <property name="geometry">
                   <rect>
-                   <x>415</x>
+                   <x>430</x>
                    <y>13</y>
-                   <width>16</width>
-                   <height>16</height>
+                   <width>20</width>
+                   <height>20</height>
                   </rect>
                  </property>
                  <property name="text">
@@ -1021,9 +881,9 @@
                 <widget class="QSpinBox" name="spin_GemCount4">
                  <property name="geometry">
                   <rect>
-                   <x>450</x>
+                   <x>465</x>
                    <y>9</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1119,7 +979,7 @@
                <widget class="QLabel" name="label_Variant">
                 <property name="geometry">
                  <rect>
-                  <x>710</x>
+                  <x>730</x>
                   <y>80</y>
                   <width>40</width>
                   <height>22</height>
@@ -1161,7 +1021,7 @@
                <widget class="QLabel" name="label_Enabled">
                 <property name="geometry">
                  <rect>
-                  <x>800</x>
+                  <x>810</x>
                   <y>80</y>
                   <width>41</width>
                   <height>22</height>
@@ -1174,7 +1034,7 @@
                <widget class="QLabel" name="label_Count">
                 <property name="geometry">
                  <rect>
-                  <x>850</x>
+                  <x>870</x>
                   <y>80</y>
                   <width>40</width>
                   <height>22</height>
@@ -1189,7 +1049,7 @@
                  <rect>
                   <x>480</x>
                   <y>10</y>
-                  <width>391</width>
+                  <width>400</width>
                   <height>22</height>
                  </rect>
                 </property>
@@ -1225,7 +1085,7 @@
                  <rect>
                   <x>400</x>
                   <y>100</y>
-                  <width>500</width>
+                  <width>520</width>
                   <height>40</height>
                  </rect>
                 </property>
@@ -1260,7 +1120,7 @@
                   <rect>
                    <x>210</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1274,9 +1134,9 @@
                 <widget class="QSpinBox" name="spin_GemQuality1">
                  <property name="geometry">
                   <rect>
-                   <x>260</x>
+                   <x>270</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1287,7 +1147,7 @@
                 <widget class="QComboBox" name="combo_GemVariant1">
                  <property name="geometry">
                   <rect>
-                   <x>310</x>
+                   <x>330</x>
                    <y>10</y>
                    <width>80</width>
                    <height>22</height>
@@ -1317,7 +1177,7 @@
                 <widget class="QCheckBox" name="check_GemEnabled1">
                  <property name="geometry">
                   <rect>
-                   <x>415</x>
+                   <x>430</x>
                    <y>10</y>
                    <width>20</width>
                    <height>20</height>
@@ -1333,9 +1193,9 @@
                 <widget class="QSpinBox" name="spin_GemCount1">
                  <property name="geometry">
                   <rect>
-                   <x>450</x>
+                   <x>465</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1365,7 +1225,7 @@
                  <rect>
                   <x>750</x>
                   <y>40</y>
-                  <width>121</width>
+                  <width>130</width>
                   <height>20</height>
                  </rect>
                 </property>
@@ -1381,7 +1241,7 @@
                  <rect>
                   <x>400</x>
                   <y>160</y>
-                  <width>500</width>
+                  <width>520</width>
                   <height>40</height>
                  </rect>
                 </property>
@@ -1398,7 +1258,7 @@
                   <string/>
                  </property>
                  <property name="checked">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_GemList3">
@@ -1416,7 +1276,7 @@
                   <rect>
                    <x>210</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1430,9 +1290,9 @@
                 <widget class="QSpinBox" name="spin_GemQuality3">
                  <property name="geometry">
                   <rect>
-                   <x>260</x>
+                   <x>270</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1443,7 +1303,7 @@
                 <widget class="QComboBox" name="combo_GemVariant3">
                  <property name="geometry">
                   <rect>
-                   <x>310</x>
+                   <x>330</x>
                    <y>10</y>
                    <width>80</width>
                    <height>22</height>
@@ -1473,7 +1333,7 @@
                 <widget class="QCheckBox" name="check_GemEnabled3">
                  <property name="geometry">
                   <rect>
-                   <x>415</x>
+                   <x>430</x>
                    <y>10</y>
                    <width>20</width>
                    <height>20</height>
@@ -1489,9 +1349,9 @@
                 <widget class="QSpinBox" name="spin_GemCount3">
                  <property name="geometry">
                   <rect>
-                   <x>450</x>
+                   <x>465</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1508,7 +1368,7 @@
                  <rect>
                   <x>400</x>
                   <y>130</y>
-                  <width>500</width>
+                  <width>520</width>
                   <height>40</height>
                  </rect>
                 </property>
@@ -1525,7 +1385,7 @@
                   <string/>
                  </property>
                  <property name="checked">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_GemList2">
@@ -1543,7 +1403,7 @@
                   <rect>
                    <x>210</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1557,9 +1417,9 @@
                 <widget class="QSpinBox" name="spin_GemQuality2">
                  <property name="geometry">
                   <rect>
-                   <x>260</x>
+                   <x>270</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1570,7 +1430,7 @@
                 <widget class="QComboBox" name="combo_GemVariant2">
                  <property name="geometry">
                   <rect>
-                   <x>310</x>
+                   <x>330</x>
                    <y>10</y>
                    <width>80</width>
                    <height>22</height>
@@ -1600,7 +1460,7 @@
                 <widget class="QCheckBox" name="check_GemEnabled2">
                  <property name="geometry">
                   <rect>
-                   <x>415</x>
+                   <x>430</x>
                    <y>10</y>
                    <width>20</width>
                    <height>20</height>
@@ -1616,9 +1476,9 @@
                 <widget class="QSpinBox" name="spin_GemCount2">
                  <property name="geometry">
                   <rect>
-                   <x>450</x>
+                   <x>465</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1633,7 +1493,7 @@
                <widget class="QLabel" name="label_Quality">
                 <property name="geometry">
                  <rect>
-                  <x>660</x>
+                  <x>670</x>
                   <y>80</y>
                   <width>40</width>
                   <height>22</height>
@@ -1648,7 +1508,7 @@
                  <rect>
                   <x>400</x>
                   <y>220</y>
-                  <width>500</width>
+                  <width>520</width>
                   <height>40</height>
                  </rect>
                 </property>
@@ -1665,7 +1525,7 @@
                   <string/>
                  </property>
                  <property name="checked">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_GemList5">
@@ -1683,7 +1543,7 @@
                   <rect>
                    <x>210</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1697,9 +1557,9 @@
                 <widget class="QSpinBox" name="spin_GemQuality5">
                  <property name="geometry">
                   <rect>
-                   <x>260</x>
+                   <x>270</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1710,7 +1570,7 @@
                 <widget class="QComboBox" name="combo_GemVariant5">
                  <property name="geometry">
                   <rect>
-                   <x>310</x>
+                   <x>330</x>
                    <y>10</y>
                    <width>80</width>
                    <height>22</height>
@@ -1740,7 +1600,7 @@
                 <widget class="QCheckBox" name="check_GemEnabled5">
                  <property name="geometry">
                   <rect>
-                   <x>415</x>
+                   <x>430</x>
                    <y>10</y>
                    <width>20</width>
                    <height>20</height>
@@ -1756,9 +1616,9 @@
                 <widget class="QSpinBox" name="spin_GemCount5">
                  <property name="geometry">
                   <rect>
-                   <x>450</x>
+                   <x>465</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1775,7 +1635,7 @@
                  <rect>
                   <x>400</x>
                   <y>250</y>
-                  <width>500</width>
+                  <width>520</width>
                   <height>40</height>
                  </rect>
                 </property>
@@ -1792,7 +1652,7 @@
                   <string/>
                  </property>
                  <property name="checked">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_GemList6">
@@ -1810,7 +1670,7 @@
                   <rect>
                    <x>210</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1824,9 +1684,9 @@
                 <widget class="QSpinBox" name="spin_GemQuality6">
                  <property name="geometry">
                   <rect>
-                   <x>260</x>
+                   <x>270</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1837,7 +1697,7 @@
                 <widget class="QComboBox" name="combo_GemVariant6">
                  <property name="geometry">
                   <rect>
-                   <x>310</x>
+                   <x>330</x>
                    <y>10</y>
                    <width>80</width>
                    <height>22</height>
@@ -1867,7 +1727,7 @@
                 <widget class="QCheckBox" name="check_GemEnabled6">
                  <property name="geometry">
                   <rect>
-                   <x>415</x>
+                   <x>430</x>
                    <y>10</y>
                    <width>20</width>
                    <height>20</height>
@@ -1883,9 +1743,9 @@
                 <widget class="QSpinBox" name="spin_GemCount6">
                  <property name="geometry">
                   <rect>
-                   <x>450</x>
+                   <x>465</x>
                    <y>10</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -2640,7 +2500,7 @@ hr { height: 1px; border-width: 0; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1121</width>
+     <width>1220</width>
      <height>22</height>
     </rect>
    </property>

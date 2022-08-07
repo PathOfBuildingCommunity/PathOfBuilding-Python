@@ -51,7 +51,7 @@ class TreeView(QGraphicsView):
         self.fitInView(True, 0.1)
 
         self.viewport().setCursor(Qt.ArrowCursor)
-        # add a margin to make panning the view seem comfortable
+        # add a margin to make panning the view seem more comfortable
         rect = self.sceneRect()
         rect.adjust(-1000.0, -1000.0, 1000.0, 1000.0)
         self.setSceneRect(rect)

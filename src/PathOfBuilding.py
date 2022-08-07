@@ -6,11 +6,12 @@ External components are the status bar, toolbar (if exists), menus
 
 Icons by  Yusuke Kamiyamane (https://p.yusukekamiyamane.com/)
 """
+import platform
 import atexit
 import sys
 import qdarktheme
 from qdarktheme.qtpy.QtCore import Qt, Slot
-from qdarktheme.qtpy.QtGui import QFont, QColor
+from qdarktheme.qtpy.QtGui import QFont, QColor, QFontDatabase
 from qdarktheme.qtpy.QtWidgets import (
     QApplication,
     QComboBox,
@@ -23,6 +24,7 @@ from qdarktheme.qtpy.QtWidgets import (
 
 from constants import *
 from pob_config import *
+from ui_utils import *
 from build import Build
 
 from player_stats import PlayerStats
@@ -42,25 +44,26 @@ from PoB_Main_Window import Ui_MainWindow
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, _app) -> None:
-        # def __init__(self, screen_rect) -> None:
         super(MainWindow, self).__init__()
+
+        print(program_title, ", running on", platform.system(), platform.release(), platform.version())
+        self._os = platform.system()
+        # ToDo investigate if some settings need to be changed be o/s
+
         self.setupUi(self)
-        self.refresh_tree = (
-            True  # When False stop all the images being deleted and being recreated
-        )
+        # When False stop all the images being deleted and being recreated
+        self.refresh_tree = True
 
         self._theme = "dark"
         self._border_radius = "rounded"
         self.start_pos = None
-        atexit.register(self.exit_handler)
-        self.setWindowTitle(program_title)  # Do not translate
 
         self.config = Config(self, _app)
-        self.config.read()
         self.resize(self.config.size)
-
         self.set_theme(self.config.theme == "Dark")
         self.action_Theme.setChecked(self.config.theme == "Dark")
+        atexit.register(self.exit_handler)
+        self.setWindowTitle(program_title)  # Do not translate
 
         # Start with an empty build
         self.build = Build(self.config)
@@ -77,6 +80,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
             Start: Do what the QT Designer cannot yet do 
         """
+        # Remove the space that the icon reserves. If you want check boxes or icons, then delete this section
+        self.menubar_MainWindow.setStyleSheet(
+            "QMenu::item {"
+            "padding: 0px 6px 2px 6px;"
+            "}"
+            "QMenu::item:selected {"
+            "background-color: rgb(0, 85, 127);"
+            "color: rgb(255, 255, 255);"
+            "}"
+        )
         # add widgets to the Toolbar
         widget_spacer = QWidget()  # spacers cannot go into the toolbar, only Widgets
         widget_spacer.setMinimumSize(10, 0)
@@ -123,6 +136,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # destroy the old object
         self.graphicsView_PlaceHolder.setParent(None)
 
+        # set the ComboBox dropdown width.
+        self.combo_Bandits.view().setMinimumWidth(
+            self.combo_Bandits.minimumSizeHint().width()
+        )
+
         """
             End: Do what the QT Designer cannot yet do 
         """
@@ -143,12 +161,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
 
         # get the initial colour of the edit box for later use as 'NORMAL'
-        self.config.default_notes_text_colour = self.textedit_Notes.textColor()
-
-        # set the ComboBox dropdown width.
-        self.combo_Bandits.view().setMinimumWidth(
-            self.combo_Bandits.minimumSizeHint().width()
-        )
+        # self.config.default_notes_text_colour = self.textedit_Notes.textColor()
 
         self.menu_Builds.addSeparator()
         self.set_recent_builds_menu_items(self.config)
@@ -163,8 +176,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save_as)
         self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
-        self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
 
+        self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
         self.combo_classes.currentTextChanged.connect(self.change_class)
         self.combo_ascendancy.currentTextChanged.connect(self.change_ascendancy)
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
@@ -172,6 +185,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tree_ui.textEdit_Search.returnPressed.connect(self.search_return_pressed)
 
         # setup Scion by default, and this will trigger it's correct ascendancy to appear in combo_ascendancy
+        # and other ui's to display properly
         # ToDo: check to see if there is a previous build to load and load it before this
         self.build_loader("Default")
 
@@ -259,9 +273,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # open the file
         new = filename == "Default"
         if not new:
-            self.build.load(filename)
+            self.build.load(filename, self)
         else:
-            self.build.new(empty_build)
+            self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
 
         if self.build.build is not None:
             if not new:
@@ -271,18 +285,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
-            for i in range(self.combo_Bandits.count()):
-                if self.combo_Bandits.itemData(i) == self.build.bandit:
-                    self.combo_Bandits.setCurrentIndex(i)
-                    break
-            for i in range(self.combo_MajorGods.count()):
-                if self.combo_MajorGods.itemData(i) == self.build.pantheonMajorGod:
-                    self.combo_MajorGods.setCurrentIndex(i)
-                    break
-            for i in range(self.combo_MinorGods.count()):
-                if self.combo_MinorGods.itemData(i) == self.build.pantheonMinorGod:
-                    self.combo_MinorGods.setCurrentIndex(i)
-                    break
+            set_combo_index_by_data(self.combo_Bandits, self.build.bandit)
+            set_combo_index_by_data(self.combo_MajorGods, self.build.pantheonMajorGod)
+            set_combo_index_by_data(self.combo_MinorGods, self.build.pantheonMinorGod)
 
     @Slot()
     def build_save_as(self):
@@ -299,7 +304,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # )
         # if filename != "":
         #     print(f"filename: {filename}")
-        self.build.save()
+        self.build.save(self)
         # print("selected_filter: %s" % selected_filter)
         # write the file
         # build.save_build(filename)
@@ -496,7 +501,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
 
         recent_builds = config.recent_builds()
-        for idx, value in enumerate(recent_builds.values()):
+        for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
                 fn = re.sub(
                     ".xml", "", str(Path(value).relative_to(self.config.buildPath))
@@ -513,11 +518,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 # Start here
 app = QApplication(sys.argv)
-font = QFont()
-font.setFamily("Lucida Sans Typewriter")
-app.setFont(font)
+font = QFontDatabase.addApplicationFont(":/Font/Font/LuxiMono.ttf")
 
 window = MainWindow(app)
-# app.instance().setOverrideCursor(QCursor(Qt.ArrowCursor))
 window.show()
 app.exec()

@@ -209,8 +209,9 @@ class TreeUI:
         self.combo_manage_tree.clear()
         self.combo_compare.clear()
         for idx, spec in enumerate(self.build.specs):
-            self.combo_manage_tree.addItem(spec.title, idx)
-            self.combo_compare.addItem(spec.title, idx)
+            if spec is not None:
+                self.combo_manage_tree.addItem(spec.title, idx)
+                self.combo_compare.addItem(spec.title, idx)
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)
 

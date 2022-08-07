@@ -2,10 +2,9 @@
 This Class if communicating between the calculation Classes and the UI Classes
 """
 
-from qdarktheme.qtpy.QtWidgets import QHBoxLayout, QLabel, QLayout, QListWidgetItem, QWidget
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import *
-from constants import *
+from constants import stats_list
 
 
 class PlayerStats:
@@ -13,89 +12,10 @@ class PlayerStats:
         self.config = _config
         self.win = _win
         self.build = self.win.build
-        self.stats = {}
+        self.build_root = self.build.root
 
-        # self.AverageHit = ""
-        # self.Speed = ""
-        # self.HitSpeed = ""
-        # self.PreEffectiveCritChance = ""
-        # self.CritChance = ""
-        # self.CritMultiplier = ""
-        # self.TotalDPS = ""
-        # self.TotalDot = ""
-        # self.WithBleedDPS = ""
-        # self.WithIgniteDPS = ""
-        # self.WithPoisonDPS = ""
-        # self.TotalDotDPS = ""
-        # self.CullingDPS = ""
-        # self.CombinedDPS = ""
-        # self.Cooldown = ""
-        # self.AreaOfEffectRadius = ""
-        # self.ManaCost = ""
-        # self.LifeCost = ""
-        # self.ESCost = ""
-        # self.RageCost = ""
-        # self.ManaPercentCost = ""
-        # self.LifePercentCost = ""
-        # self.ManaPerSecondCost = ""
-        # self.LifePerSecondCost = ""
-        # self.ManaPercentPerSecondCost = ""
-        # self.LifePercentPerSecondCost = ""
-        # self.ESPerSecondCost = ""
-        # self.ESPercentPerSecondCost = ""
-        # self.Str = ""
-        # self.Dex = ""
-        # self.Int = ""
-        # self.Omni = ""
-        # self.ReqOmni = ""
-        # self.Devotion = ""
-        # self.TotalEHP = ""
-        # self.SecondMinimalMaximumHitTaken = ""
-        # self.Life = ""
-        # self.Spec_LifeInc = ""
-        # self.LifeUnreserved = ""
-        # self.LifeUnreservedPercent = ""
-        # self.LifeRegen = ""
-        # self.LifeLeechGainRate = ""
-        # self.Mana = ""
-        # self.Spec_ManaInc = ""
-        # self.ManaUnreserved = ""
-        # self.ManaUnreservedPercent = ""
-        # self.ManaRegen = ""
-        # self.ManaLeechGainRate = ""
-        # self.Ward = ""
-        # self.EnergyShield = ""
-        # self.Spec_EnergyShieldInc = ""
-        # self.EnergyShieldRegen = ""
-        # self.EnergyShieldLeechGainRate = ""
-        # self.Evasion = ""
-        # self.Spec_EvasionInc = ""
-        # self.MeleeEvadeChance = ""
-        # self.ProjectileEvadeChance = ""
-        # self.Armour = ""
-        # self.Spec_ArmourInc = ""
-        # self.PhysicalDamageReduction = ""
-        # self.EffectiveMovementSpeedMod = ""
-        # self.BlockChance = ""
-        # self.SpellBlockChance = ""
-        # self.AttackDodgeChance = ""
-        # self.SpellDodgeChance = ""
-        # self.SpellSuppressionChance = ""
-        # self.FireResist = ""
-        # self.FireResistOverCap = ""
-        # self.ColdResist = ""
-        # self.ColdResistOverCap = ""
-        # self.LightningResist = ""
-        # self.LightningResistOverCap = ""
-        # self.ChaosResist = ""
-        # self.ChaosResistOverCap = ""
-        # self.FullDPS = ""
-        # self.PowerCharges = ""
-        # self.PowerChargesMax = ""
-        # self.FrenzyCharges = ""
-        # self.FrenzyChargesMax = ""
-        # self.EnduranceCharges = ""
-        # self.EnduranceChargesMax = ""
+        # dictionary lists of the stat elements
+        self.stats = {}
 
     # def __repr__(self) -> str:
     #     return (
@@ -108,34 +28,38 @@ class PlayerStats:
         """
         Load internal structures from the build object
         """
-        for idx, stat in enumerate(build["PlayerStat"]):
-            _stat = stat["@stat"]
-            _value = stat["@value"]
-            self.stats[_stat] = _value
-            print(f' "{stat["@stat"]}": ": ",')
-            print(idx, stat["@stat"], stat["@value"])
+        # create a dictionary of stats. Still needed ?
         self.win.textedit_Statistics.clear()
-        for idx in stats_list:
-            _value = float(self.stats.get(idx, 0))
+        for stat in self.build.root.findall("PlayerStat"):
+            _stat = stat.get("stat")
+            _value = float(stat.get("value"))
+            # stat.set("value", 10)
+            self.stats[_stat] = stat
             if _value != 0:
-                _label = stats_list[idx].get("label")
-                print(idx, _label)
-                _label = "{0:>24}".format(_label)
-                _colour = stats_list[idx].get("colour", ColourCodes.NORMAL)
-                _fmt = stats_list[idx].get("fmt")
-                # if fmt is an int, force the value to be an int.
-                if "d" in _fmt:
-                    _value = int(self.stats.get(idx, 0))
-                if _value < 0:
-                    _str_value = f'<span style="color:{ColourCodes.NEGATIVE.value};">{_fmt.format(_value)}</span>'
-                else:
-                    _str_value = _fmt.format(_value)
-                self.win.textedit_Statistics.append(f'<span style="white-space: pre; color:{_colour.value};">{_label}:</span> {_str_value}')
+                try:
+                    _label = stats_list[_stat].get("label", "")
+                    _label = "{0:>24}".format(_label)
+                    _colour = stats_list[_stat].get("colour", ColourCodes.NORMAL)
+                    _fmt = stats_list[_stat].get("fmt")
+                    # if fmt is an int, force the value to be an int.
+                    if "d" in _fmt:
+                        _value = int(_value)
+                    if _value < 0:
+                        _str_value = f'<span style="color:{ColourCodes.NEGATIVE.value};">{_fmt.format(_value)}</span>'
+                    else:
+                        _str_value = _fmt.format(_value)
+                    self.win.textedit_Statistics.append(
+                        f'<span style="white-space: pre; color:{_colour.value};">{_label}:</span> {_str_value}'
+                    )
+                except KeyError:
+                    pass
 
     def save(self):
         """
         Save internal structures back to the build object
         """
+        #clear()
+        #then readd each element -> ET.Element("PlayerStat")
         pass
 
 
