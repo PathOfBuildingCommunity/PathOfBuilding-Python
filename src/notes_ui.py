@@ -5,7 +5,7 @@ This Class manages all the elements and owns some elements of the "NOTES" tab
 
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import *
-from pob_config import _VERSION
+from constants import _VERSION
 
 
 class NotesUI:
@@ -30,9 +30,9 @@ class NotesUI:
         :return: N/A
         """
         if _notes_html:
-            self.win.textedit_Notes.setHtml(_notes_html)
+            self.win.textedit_Notes.setHtml(_notes_html.strip())
         else:
-            self.win.textedit_Notes.setPlainText(_notes)
+            self.win.textedit_Notes.setPlainText(_notes.strip())
 
     def save(self):
         """

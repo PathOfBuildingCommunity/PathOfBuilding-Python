@@ -11,8 +11,6 @@ class PlayerStats:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
         self.config = _config
         self.win = _win
-        self.build = self.win.build
-        self.build_root = self.build.root
 
         # dictionary lists of the stat elements
         self.stats = {}
@@ -30,13 +28,13 @@ class PlayerStats:
         """
         # create a dictionary of stats. Still needed ?
         self.win.textedit_Statistics.clear()
-        for stat in self.build.root.findall("PlayerStat"):
+        for stat in build.findall("PlayerStat"):
             _stat = stat.get("stat")
             _value = float(stat.get("value"))
-            # stat.set("value", 10)
             self.stats[_stat] = stat
             if _value != 0:
                 try:
+                    # There are entries in the build that are not in our stats_list table
                     _label = stats_list[_stat].get("label", "")
                     _label = "{0:>24}".format(_label)
                     _colour = stats_list[_stat].get("colour", ColourCodes.NORMAL)
@@ -52,15 +50,26 @@ class PlayerStats:
                         f'<span style="white-space: pre; color:{_colour.value};">{_label}:</span> {_str_value}'
                     )
                 except KeyError:
+                    # There are entries in the build that are not in our stats_list table
                     pass
 
-    def save(self):
+    def save(self, build):
         """
         Save internal structures back to the build object
         """
-        #clear()
-        #then readd each element -> ET.Element("PlayerStat")
+        # There is no need to do anything as we update the stat element directly
         pass
+
+    def update_stat(self, stat_name, value):
+        """
+        Update a stat element witht he supplied value
+        :param stat_name: String: Teh string index into the stats dictionary
+        :param value: The value
+        :return: N/A
+        """
+        stat = self.stats[stat_name]
+        if stat is not None:
+            stat.set(stat_name, f"{value}")
 
 
 # def test() -> None:

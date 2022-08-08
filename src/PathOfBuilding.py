@@ -10,6 +10,7 @@ import platform
 import atexit
 import sys
 import qdarktheme
+import datetime
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtGui import QFont, QColor, QFontDatabase
 from qdarktheme.qtpy.QtWidgets import (
@@ -46,7 +47,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, _app) -> None:
         super(MainWindow, self).__init__()
 
-        print(program_title, ", running on", platform.system(), platform.release(), platform.version())
+        print(
+            f"{datetime.datetime.now()}. {program_title}, running on",
+            platform.system(),
+            platform.release(),
+            platform.version(),
+        )
         self._os = platform.system()
         # ToDo investigate if some settings need to be changed be o/s
 
@@ -117,7 +123,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_classes = QComboBox()
         self.combo_classes.setMinimumSize(100, 0)
         self.combo_classes.setDuplicatesEnabled(False)
-        # self.combo_classes.setInsertPolicy(QComboBox.InsertAlphabetically)
         for idx in PlayerClasses:
             self.combo_classes.addItem(idx.name.title(), idx)
         self.toolbar_MainWindow.addWidget(self.combo_classes)
@@ -180,13 +185,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
         self.combo_classes.currentTextChanged.connect(self.change_class)
         self.combo_ascendancy.currentTextChanged.connect(self.change_ascendancy)
+        # ToDO: this could be currentIndexChanged
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
         self.tree_ui.textEdit_Search.textChanged.connect(self.search_text_changed)
         self.tree_ui.textEdit_Search.returnPressed.connect(self.search_return_pressed)
 
         # setup Scion by default, and this will trigger it's correct ascendancy to appear in combo_ascendancy
         # and other ui's to display properly
-        # ToDo: check to see if there is a previous build to load and load it before this
+        # ToDo: check to see if there is a previous build to load and load it here
         self.build_loader("Default")
 
     def exit_handler(self):
@@ -204,6 +210,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     filePtr.write(self.textedit_Notes.toHtml())
         # finally:
         #     filePtr.close()
+        sys.stdout.close()
 
     @Slot()
     def close_app(self):
@@ -276,6 +283,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.build.load(filename, self)
         else:
             self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
+            self.skills_ui.load(self.build.skills)
 
         if self.build.build is not None:
             if not new:
@@ -397,7 +405,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def change_bandits(self, bandit_id):
         """
-        Actions required when the combo_manage_tree widget changes
+        Actions required when the change_bandits widget changes
         :param bandit_id: Current text string. We don't use it.
         :return: N/A
         """
@@ -517,6 +525,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 # Start here
+# sys.stdout = open("PathOfBuilding.log", 'a')
 app = QApplication(sys.argv)
 font = QFontDatabase.addApplicationFont(":/Font/Font/LuxiMono.ttf")
 

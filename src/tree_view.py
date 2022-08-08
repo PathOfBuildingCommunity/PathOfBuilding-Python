@@ -9,8 +9,8 @@ A Tree instance is tied to a Version of the Tree as released by GGG and thus old
 need to be supported for backwards compatibility reason.
 
 """
-from qdarktheme.qtpy.QtCore import QRect, QRectF, Qt
-from qdarktheme.qtpy.QtGui import QColor, QCursor, QPen, QPainter
+from qdarktheme.qtpy.QtCore import QRectF, Qt
+from qdarktheme.qtpy.QtGui import QColor, QPen, QPainter
 from qdarktheme.qtpy.QtWidgets import (
     QFrame,
     QGraphicsEllipseItem,
@@ -18,8 +18,8 @@ from qdarktheme.qtpy.QtWidgets import (
     QGraphicsView,
 )
 
-from constants import *
-from constants import _VERSION
+# from constants import *
+# from constants import _VERSION
 from pob_config import *
 
 from tree_graphics_item import TreeGraphicsItem
@@ -169,7 +169,7 @@ class TreeView(QGraphicsView):
     def switch_tree(self):
         """
         Changes for this Class() to deal with a PoB tree change
-        :param  N/A
+        :param:  N/A
         :return: N/A
         """
         self.add_tree_images()

@@ -41,7 +41,10 @@ def read_xml(filename):
             with _fn.open("r") as xml_file:
                 tree = ET.parse(_fn)
                 return tree
-        except (EnvironmentError, ET.ParseError):  # parent of IOError, OSError *and* WindowsError where available
+        except (
+            EnvironmentError,
+            ET.ParseError,
+        ):  # parent of IOError, OSError *and* WindowsError where available
             print(f"Unable to open {_fn}")
     return None
 
@@ -56,7 +59,7 @@ def write_xml(filename, _tree):
     _fn = Path(filename)
     try:
         with _fn.open("wb") as xml_file:
-            ET.indent(_tree)
+            ET.indent(_tree, "\t")
             _tree.write(xml_file, encoding="utf-8")
     except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
         print(f"Unable to write to {_fn}")

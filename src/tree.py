@@ -21,7 +21,7 @@ from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter
 
 import ui_utils
 from pob_config import *
-from pob_config import _VERSION
+from constants import _VERSION
 from pob_file import *
 
 # import pob_config

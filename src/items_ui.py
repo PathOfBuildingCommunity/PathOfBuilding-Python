@@ -62,7 +62,7 @@ from qdarktheme.qtpy.QtWidgets import (
 
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import *
-from pob_config import _VERSION
+from constants import _VERSION
 
 
 class ItemsUI:

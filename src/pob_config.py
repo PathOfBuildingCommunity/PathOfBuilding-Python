@@ -12,28 +12,47 @@ Imports pob_file
 """
 
 from pathlib import Path
-from collections import OrderedDict
 import xml.etree.ElementTree as ET
 import traceback
+from collections import OrderedDict
 
 from qdarktheme.qtpy.QtCore import QSize
 
 import pob_file
 from constants import *
-from constants import _VERSION
 
 
 def print_call_stack():
+    """
+    Ahh debug. It's wonderful
+    :return:
+    """
     for line in traceback.format_stack():
         print(line.strip())
+
 
 def str_to_bool(in_str):
     """
     Return a boolean from a string. As the settings could be manipulated by a human, we can't trust eval()
       EG: eval('os.system(`rm -rf /`)')
-    :returns: True if it looks like it could be true, otherwise false
+    :param: str: The setting to be evaluated
+    :returns: True if it looks like it could be true, otherwise False
     """
     return in_str.lower() in ("yes", "true", "t", "1", "on")
+
+
+def index_exists(_list_or_dict, index):
+    """
+    Test if a list contains a given index
+    :param _list_or_dict: object to be tested
+    :param index: index to be tested
+    :return: Boolean: True / False
+    """
+    try:
+        _l = _list_or_dict[index]
+        return True
+    except (IndexError, KeyError):
+        return False
 
 
 class Config:
@@ -93,7 +112,7 @@ class Config:
 
     @theme.setter
     def theme(self, new_theme):
-        self.misc.set("theme",new_theme and "Dark" or "Light")
+        self.misc.set("theme", new_theme and "Dark" or "Light")
 
     @property
     def slotOnlyTooltips(self):

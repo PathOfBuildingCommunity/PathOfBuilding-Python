@@ -5,7 +5,7 @@ This class represents one node of the Passive Tree.
 
 It is referenced by the Tree class
 """
-from pob_config import _VERSION
+from constants import _VERSION
 
 
 class Node:

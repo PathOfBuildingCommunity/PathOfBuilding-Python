@@ -13,8 +13,8 @@ associated with a Player.
 import xml.etree.ElementTree as ET
 
 from constants import *
+from constants import _VERSION
 from pob_config import *
-from pob_config import _VERSION
 import pob_file
 import ui_utils
 from tree import Tree
@@ -191,47 +191,24 @@ class Build:
         self.import_field = self.root.find("Import")
         self.calcs = self.root.find("Calcs")
         self.skills = self.root.find("Skills")
+        self.tree = self.root.find("Tree")
         self.notes = self.root.find("Notes")
         self.notes_html = self.root.find("NotesHTML")
+        # lua version doesn't have NotesHTML, expect it to be missing
         if self.notes_html is None:
             self.notes_html = ET.Element("NotesHTML")
             self.root.append(self.notes_html)
         self.tree_view = self.root.find("TreeView")
         self.items = self.root.find("Items")
         self.config = self.root.find("Config")
-        self.tree = self.root.find("Tree")
+
         self.specs.clear()
-        # self.specs.append(None)
         for spec in self.tree.findall("Spec"):
             self.specs.append(Spec(spec))
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
         self.current_spec = self.specs[self.activeSpec]
 
-        # pob = _build.get("PathOfBuilding", None)
-        # if pob:
-        #     self.build = pob["Build"]
-        #     self.import_field = pob["Import"]
-        #     self.calcs = pob["Calcs"]
-        #     self.skills = pob["Skills"]
-        #     self.notes = pob.get("Notes", "")
-        #     self.notes_html = pob.get("NotesHTML", None)
-        #     self.tree_view = pob["TreeView"]
-        #     self.items = pob["Items"]
-        #     self.config = pob["Config"]
-        #     self.tree = pob["Tree"]
-        #     self.specs.clear()
-        #
-        #     # Get Specs.
-        #     # One Spec appears as a dictionary, but multiple appear as a list
-        #     if type(self.tree["Spec"]) == list:
-        #         for spec in self.tree["Spec"][:]:
-        #             self.specs.append(Spec(spec))
-        #     else:
-        #         self.specs.append(Spec(self.tree["Spec"]))
-        #     # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
-        #     self.activeSpec = int(self.tree.get("@activeSpec", 1)) - 1
-        #     self.current_spec = self.specs[self.activeSpec]
     # new
 
     def load(self, filename, win: Ui_MainWindow):
@@ -258,7 +235,7 @@ class Build:
             self.name = Path(Path(filename).name).stem
             win.notes_ui.load(self.notes_html.text, self.notes.text)
             win.stats.load(self.build)
-            win.skills_ui.load(self.build_xml_tree)
+            win.skills_ui.load(self.skills)
 
     def save(self, win: Ui_MainWindow):
         """
@@ -271,6 +248,7 @@ class Build:
         # pob["PathOfBuilding"]["Calcs"] = self.calcs
         # pob["PathOfBuilding"]["Skills"] = self.skills
         self.notes.text, self.notes_html.text = win.notes_ui.save()
+        win.stats.save(self.build)
         # pob["PathOfBuilding"]["Notes"] = self.notes
         # pob["PathOfBuilding"]["NotesHTML"] = self.notes_html
         # pob["PathOfBuilding"]["TreeView"] = self.tree_view
