@@ -1,12 +1,13 @@
 """
 Utilities for the UI that do not have dependencies on MainWindow
 """
-from pprint import pprint
+import warnings
 
 from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
 from qdarktheme.qtpy.QtWidgets import (
     QApplication,
     QColorDialog,
+    QComboBox,
     QDialogButtonBox,
     QFileDialog,
     QFontDialog,
@@ -23,10 +24,13 @@ from qdarktheme.qtpy.QtWidgets import (
     QWidget,
 )
 
+from pob_config import *
+
 
 # ui_utils.yes_no_dialog(self, app.tr("Save build"), app.tr("build name goes here"))
 # ui_utils.critical_dialog(self, app.tr("Save build"), app.tr("build name goes here"), app.tr("Close"))
 # ui_utils.ok_dialog(self, app.tr("Save build"), app.tr("build name goes here"))
+
 
 #
 def yes_no_dialog(win, title, text):
@@ -54,23 +58,29 @@ def critical_dialog(win, title, text, btn_text="Close"):
     dlg.exec_()
 
 
-def set_combo_index_by_data(combo, data):
+def set_combo_index_by_data(combo: QComboBox, _data):
     """
     Set a combo box current index based on it's data field
     :param combo: the combo box
-    :param data: the data. There is no type to this, so the passed in type should match what the combo has
+    :param _data: the data. There is no type to this, so the passed in type should match what the combo has
     :return: int: the index of the combobox or -1 if not found
     """
-    if data is None:
-        data = "None"
+    if _data is None:
+        _data = "None"
+    # print_call_stack()
     for i in range(combo.count()):
-        if combo.itemData(i) == data:
+        if combo.itemData(i) == _data:
             combo.setCurrentIndex(i)
             return i
     return -1
 
 
 class FlowLayout(QLayout):
+    """
+    A layout to autoorganise widgets according the the size of the window around them
+    This is a compilation of many examples on the internet and PoB original content.
+    """
+
     def __init__(self, parent=None, margin=0, spacing=-1):
         """
         Initialize layout
@@ -99,6 +109,7 @@ class FlowLayout(QLayout):
         while item:
             item = self.takeAt(0)
 
+    # Inherited Function. Don't change name
     def addItem(self, item):
         """
         Adds a widget to the layout
@@ -113,33 +124,42 @@ class FlowLayout(QLayout):
         """
         return len(self.itemList)
 
+    # Inherited Function. Don't change name
     def itemAt(self, index):
         """
-        Return a reference to a widget in the layout
+        Return a reference to a widget in the layout.
         :return: Return a reference to a widget in the layout, or None
         """
-        if index >= 0 and index < len(self.itemList):
+        """
+        Python throws a RuntimeWarning warning about Groupbox. Disable Runtime warnings.
+        RuntimeWarning: Invalid return value in function QLayout.itemAt, expected PySide6.QtWidgets.QLayoutItem, 
+            got PySide6.QtWidgets.QGroupBox
+        """
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+        if 0 <= index < len(self.itemList):
             return self.itemList[index]
-
         return None
 
+    # Inherited Function. Don't change name
     def takeAt(self, index):
         """
         Remove a widget
         :return: Return a reference to a widget in the layout, or None
         """
-        if index >= 0 and index < len(self.itemList):
+        if 0 <= index < len(self.itemList):
             return self.itemList.pop(index)
 
         return None
 
+    # Inherited Function. Don't change name
     def expandingDirections(self):
         """
-        Actually set parents geometry based on out version of doLayout
+        Actually set parents geometry based on our version of do_layout
         :return: N/A
         """
         return Qt.Orientations(Qt.Orientation(0))
 
+    # Inherited Function. Don't change name
     def hasHeightForWidth(self):
         """
         Ask the layout if there is a valid heightForWidth() function
@@ -147,22 +167,25 @@ class FlowLayout(QLayout):
         """
         return True
 
+    # Inherited Function. Don't change name
     def heightForWidth(self, width):
         """
-        Test doLayout and return what the height will be.
+        Test do_layout and return what the height will be.
         :return: Integer: Expected height of the parent
         """
-        height = self.doLayout(QRect(0, 0, width, 0), True)
+        height = self.do_layout(QRect(0, 0, width, 0), True)
         return height
 
+    # Inherited Function. Don't change name
     def setGeometry(self, rect):
         """
-        Actually set parents geometry based on out version of doLayout
+        Actually set parents geometry based on out version of do_layout
         :return: N/A
         """
         super(FlowLayout, self).setGeometry(rect)
-        self.doLayout(rect, False)
+        self.do_layout(rect, False)
 
+    # Inherited Function. Don't change name
     def sizeHint(self):
         """
         Return the maximum value of all the widget's minimum size
@@ -170,45 +193,58 @@ class FlowLayout(QLayout):
         """
         return self.minimumSize()
 
+    # Inherited Function. Don't change name
     def minimumSize(self):
         """
         Return the maximum value of all the widget's minimum size
         :return: QSize
         """
-        size = QSize()
+        _size = QSize()
 
         for item in self.itemList:
-            size = size.expandedTo(item.minimumSize())
+            _size = _size.expandedTo(item.minimumSize())
 
-        size += QSize(2 * self.margin, 2 * self.margin)
-        return size
+        _size += QSize(2 * self.margin, 2 * self.margin)
+        return _size
 
-    def doLayout(self, rect, testOnly):
+    def do_layout(self, rect, test_only):
         """
         Process each visible widget's width, and decide how many rows will be occupied.
         Also sets the location of the widgets
-         sizeHint() knows if the item is visble or not
+          !!! Note the visible word. sizeHint() knows if the item is visble or not
         :param rect: size of parent.
-        :param testOnly: processes everything but will not alter the position of widgets.
+        :param test_only: processes everything but will not alter the position of widgets.
         :return: integer: The height that the parent should be
         """
         x = rect.x()
         y = rect.y()
-        lineHeight = 0
+        line_height = 0
 
         for item in self.itemList:
-            wid = item.widget()
-            nextX = x + item.sizeHint().width() + self.spaceX
-            if nextX - self.spaceX > rect.right() and lineHeight > 0:
+            try:
+                # GroupBoxes don't have sizeHint(), so just use their dimensions
+                # Our Groupboxes are marked as 'Fixed'.
+                # Some wighets don't have SizePolicy(), so we wrap this in a try/except
+                if item.sizePolicy().horizontalPolicy() == QSizePolicy.Policy.Fixed:
+                    width = item.width()
+                    height = item.height()
+                else:
+                    width = item.sizeHint().width()
+                    height = item.sizeHint().height()
+            except AttributeError:
+                width = item.sizeHint().width()
+                height = item.sizeHint().height()
+            next_x = x + width + self.spaceX
+            if next_x - self.spaceX > rect.right() and line_height > 0:
                 x = rect.x()
-                y = y + lineHeight + self.spaceY
-                nextX = x + item.sizeHint().width() + self.spaceX
-                lineHeight = 0
+                y = y + line_height + self.spaceY
+                next_x = x + width + self.spaceX
+                line_height = 0
 
-            if not testOnly:
+            if not test_only:
                 item.setGeometry(QRect(QPoint(x, y), item.sizeHint()))
 
-            x = nextX
-            lineHeight = max(lineHeight, item.sizeHint().height())
+            x = next_x
+            line_height = max(line_height, height)
 
-        return y + lineHeight - rect.y()
+        return y + line_height - rect.y()

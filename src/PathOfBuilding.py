@@ -64,9 +64,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._border_radius = "rounded"
         self.start_pos = None
 
+        self.max_points = 123
         self.config = Config(self, _app)
         self.resize(self.config.size)
-        self.set_theme(self.config.theme == "Dark")
+        self.switch_theme(self.config.theme == "Dark")
         self.action_Theme.setChecked(self.config.theme == "Dark")
         atexit.register(self.exit_handler)
         self.setWindowTitle(program_title)  # Do not translate
@@ -87,15 +88,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Start: Do what the QT Designer cannot yet do 
         """
         # Remove the space that the icon reserves. If you want check boxes or icons, then delete this section
-        self.menubar_MainWindow.setStyleSheet(
-            "QMenu::item {"
-            "padding: 0px 6px 2px 6px;"
-            "}"
-            "QMenu::item:selected {"
-            "background-color: rgb(0, 85, 127);"
-            "color: rgb(255, 255, 255);"
-            "}"
-        )
+        # This could be a pydarktheme issue as against the pyside6 / designer
+        # ToDo: Is it best to put this in QTdesigner or here (currently in designer)
+        # self.menubar_MainWindow.setStyleSheet(
+        #     "QMenu {padding-left: 0px;}"
+        #     "QMenu::item {padding-left: 0px;}"
+        #     "QMenu::item:selected {background-color: rgb(0, 85, 127);color: rgb(255, 255, 255);}"
+        #     "QAction {padding-left: 0px;}"
+        # )
         # add widgets to the Toolbar
         widget_spacer = QWidget()  # spacers cannot go into the toolbar, only Widgets
         widget_spacer.setMinimumSize(10, 0)
@@ -121,12 +121,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toolbar_MainWindow.addWidget(widget_spacer)
 
         self.combo_classes = QComboBox()
+        self.combo_classes.setObjectName("combo_classes")
         self.combo_classes.setMinimumSize(100, 0)
         self.combo_classes.setDuplicatesEnabled(False)
         for idx in PlayerClasses:
             self.combo_classes.addItem(idx.name.title(), idx)
         self.toolbar_MainWindow.addWidget(self.combo_classes)
         self.combo_ascendancy = QComboBox()
+        self.combo_ascendancy.setObjectName("combo_ascendancy")
         self.combo_ascendancy.setMinimumSize(100, 0)
         self.combo_ascendancy.setDuplicatesEnabled(False)
         self.combo_ascendancy.addItem("None", 0)
@@ -138,6 +140,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vlayout_tabTree.replaceWidget(
             self.graphicsView_PlaceHolder, self.gview_Tree
         )
+        # Add our FlowLayout to
+        self.layout_config = FlowLayout(None, 0)
+        self.frame_Config.setLayout(self.layout_config)
+        self.layout_config.addItem(self.grpbox_General)
+        self.layout_config.addItem(self.grpbox_Combat)
+        self.layout_config.addItem(self.grpbox_SkillOptions)
+        self.layout_config.addItem(self.grpbox_EffectiveDPS)
+        self.layout_config.addItem(self.grpbox_5)
+        self.layout_config.addItem(self.grpbox_6)
         # destroy the old object
         self.graphicsView_PlaceHolder.setParent(None)
 
@@ -151,8 +162,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
 
         self.combo_Bandits.clear()
-        for name in bandits.keys():
-            self.combo_Bandits.addItem(bandits[name], name)
+        for bandit in bandits.keys():
+            self.combo_Bandits.addItem(bandits[bandit], bandit)
         self.combo_MajorGods.clear()
         for name in pantheon_major_gods.keys():
             self.combo_MajorGods.addItem(pantheon_major_gods[name], name)
@@ -176,7 +187,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.spin_Notes_FontSize.valueChanged.connect(self.set_notes_font_size)
         self.combo_Notes_Colour.currentTextChanged.connect(self.set_notes_font_colour)
         self.tab_main.currentChanged.connect(self.set_tab_focus)
-        self.action_Theme.triggered.connect(self.set_theme)
+        self.action_Theme.triggered.connect(self.switch_theme)
         self.action_New.triggered.connect(self.build_new)
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save_as)
@@ -194,6 +205,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # and other ui's to display properly
         # ToDo: check to see if there is a previous build to load and load it here
         self.build_loader("Default")
+
+        """
+        From time to time, comboBoxes don't show the correct colours. It could be becuase of changing the
+            width of the dropdowns. Soreapply the current theme in an attempt to force the correct colours.
+        """
+        # don't use self.switch_theme
+        QApplication.instance().setStyleSheet(
+            qdarktheme.load_stylesheet(self._theme, self._border_radius)
+        )
 
     def exit_handler(self):
         """
@@ -283,19 +303,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.build.load(filename, self)
         else:
             self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
-            self.skills_ui.load(self.build.skills)
 
         if self.build.build is not None:
             if not new:
                 self.config.add_recent_build(filename)
-            self.tree_ui.set_current_tab()
-            self.tree_ui.fill_current_tree_combo()
-            self.spin_level.setValue(self.build.level)
-            self.combo_classes.setCurrentText(self.build.className)
-            self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
+            # these need to be set before the tree, as the change_tree function sets it also.
             set_combo_index_by_data(self.combo_Bandits, self.build.bandit)
             set_combo_index_by_data(self.combo_MajorGods, self.build.pantheonMajorGod)
             set_combo_index_by_data(self.combo_MinorGods, self.build.pantheonMinorGod)
+            self.tree_ui.set_current_tab()
+            self.tree_ui.fill_current_tree_combo()
+            self.skills_ui.load(self.build.skills)
+            self.notes_ui.load(self.build.notes_html.text, self.build.notes.text)
+            self.stats.load(self.build.build)
+            self.spin_level.setValue(self.build.level)
+            self.combo_classes.setCurrentText(self.build.className)
+            self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
 
     @Slot()
     def build_save_as(self):
@@ -410,9 +433,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
         self.build.bandit = self.combo_Bandits.currentData()
-        max_points = self.build.bandit == "None" and 123 or 121
+        self.max_points = self.build.bandit == "None" and 123 or 121
         self.label_points.setText(
-            f" {len(self.build.current_spec.nodes)} / {max_points}  0 / 8 "
+            f" {len(self.build.current_spec.nodes)} / {self.max_points}  0 / 8 "
         )
 
     # don't use native signals/slot, so focus can be set back to edit box
@@ -449,11 +472,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # Do all actions needed to change between light and dark
     @Slot()
-    def set_theme(self, new_theme):
+    def switch_theme(self, new_theme):
         """
         Set the new theme based on the state of the action.
         The text of the action has a capital letter but the qdarktheme styles are lowercase
-        :param new_theme: Boolean state of the action
+        :param new_theme: Boolean: state of the action
         :return: N/A
         """
         if new_theme:
@@ -478,7 +501,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # tab indexes are 0 based. Used by set_tab_focus
         tab_focus = {
             0: self.tab_main,
-            1: self.list_Skills,
+            1: self.list_SocketGroups,
             2: self.tab_main,
             3: self.textedit_Notes,
             4: self.tab_main,
@@ -503,18 +526,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Lambdas in python share the variable scope they're created in
         # so make a function containing just the lambda
-        def make_connection(v, i):
+        def make_connection(_idx, _filename):
+            """
+            Connect the menu item to _open_previous_build passing in extra information
+            :param _idx:
+            :param _filename:
+            :return:
+            """
             _action.triggered.connect(
-                lambda checked: self._open_previous_build(checked, v, i)
+                lambda checked: self._open_previous_build(checked, _idx, _filename)
             )
 
         recent_builds = config.recent_builds()
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
-                fn = re.sub(
+                filename = re.sub(
                     ".xml", "", str(Path(value).relative_to(self.config.buildPath))
                 )
-                _action = self.menu_Builds.addAction(f"&{idx}.  {fn}")
+                _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
 
     def search_text_changed(self):

@@ -31,9 +31,10 @@ default_spec = f'\
         <Sockets/>\
     </Spec>'
 
+default_view_mode = "SKILLS"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
-     mainSocketGroup="1" viewMode="TREE" pantheonMajorGod="None" pantheonMinorGod="None">\
+     mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">\
     </Build>\
     <Import/>\
     <Calcs/>\
@@ -143,6 +144,7 @@ class ColourCodes(enum.Enum):
     SAPBG = "#261500"
     SCOURGE = "#FF6E25"
     GRAY = "#D3D3D3"
+    LIGHTGRAY = "#808B96"
     STRENGTH = MARAUDER
     DEXTERITY = RANGER
     INTELLIGENCE = WITCH

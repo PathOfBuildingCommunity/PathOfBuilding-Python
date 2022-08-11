@@ -22,13 +22,20 @@ import pob_file
 from constants import *
 
 
-def print_call_stack():
+def print_call_stack(full=False):
     """
     Ahh debug. It's wonderful
+    :param: full: Bool: True if you want the full stack trace,
+            elsewise just print the parent caller of the function that called this
     :return:
     """
-    for line in traceback.format_stack():
-        print(line.strip())
+    lines = traceback.format_stack()
+    if full:
+        for line in lines:
+            print(line.strip())
+        print()
+    else:
+        print(lines[-3].strip())
 
 
 def str_to_bool(in_str):

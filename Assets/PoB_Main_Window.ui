@@ -19,6 +19,12 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QMenu {padding-left: 0px;}
+QMenu::item {padding-left: 0px;}
+QMenu::item:selected {background-color: rgb(0, 85, 127);color: rgb(255, 255, 255);}
+QAction {padding-left: 0px;}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="leftMargin">
@@ -142,104 +148,7 @@
             <property name="bottomMargin">
              <number>2</number>
             </property>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_MainSkill">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Main Skill:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QComboBox" name="combo_MinorGods">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>180</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>280</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="placeholderText">
-               <string>Make a Selection</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QComboBox" name="combo_MajorGods">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>180</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>280</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="placeholderText">
-               <string>Make a Selection</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QComboBox" name="combo_Bandits">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>180</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>280</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="sizeAdjustPolicy">
-               <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-              </property>
-              <property name="minimumContentsLength">
-               <number>60</number>
-              </property>
-              <property name="placeholderText">
-               <string>Make a Selection</string>
-              </property>
-              <property name="modelColumn">
-               <number>0</number>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
+            <item row="2" column="0">
              <widget class="QComboBox" name="combo_MainSkillActive">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -264,7 +173,7 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="1" column="0">
              <widget class="QComboBox" name="combo_MainSkill">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -292,27 +201,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_Bandits">
-              <property name="text">
-               <string>Bandits:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_Pantheon">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>The Pantheon:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
+            <item row="3" column="0">
              <widget class="QTextEdit" name="textedit_Statistics">
               <property name="font">
                <font>
@@ -321,6 +210,19 @@
               </property>
               <property name="lineWrapMode">
                <enum>QTextEdit::NoWrap</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_MainSkill">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Main Skill:</string>
               </property>
              </widget>
             </item>
@@ -415,7 +317,7 @@
             <attribute name="whatsThis">
              <string notr="true">SKILLS</string>
             </attribute>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <layout class="QHBoxLayout" name="hLayout_Skills">
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -447,6 +349,9 @@
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
                </property>
                <widget class="QLabel" name="label_SocketGroups">
                 <property name="geometry">
@@ -548,7 +453,7 @@
                  <string>New</string>
                 </property>
                </widget>
-               <widget class="QListWidget" name="list_Skills">
+               <widget class="QListWidget" name="list_SocketGroups">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -556,6 +461,9 @@
                   <width>375</width>
                   <height>311</height>
                  </rect>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
                 </property>
                </widget>
                <widget class="QLabel" name="label_Usage_Hints">
@@ -680,7 +588,7 @@
                   <rect>
                    <x>190</x>
                    <y>90</y>
-                   <width>42</width>
+                   <width>50</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -831,19 +739,6 @@
                  </property>
                 </item>
                </widget>
-               <widget class="QLabel" name="label_Variant">
-                <property name="geometry">
-                 <rect>
-                  <x>730</x>
-                  <y>80</y>
-                  <width>40</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Variant</string>
-                </property>
-               </widget>
                <widget class="QCheckBox" name="check_SocketGroupEnabled">
                 <property name="geometry">
                  <rect>
@@ -872,31 +767,8 @@
                 <property name="text">
                  <string>Socketed In:</string>
                 </property>
-               </widget>
-               <widget class="QLabel" name="label_Enabled">
-                <property name="geometry">
-                 <rect>
-                  <x>810</x>
-                  <y>80</y>
-                  <width>50</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Enabled</string>
-                </property>
-               </widget>
-               <widget class="QLabel" name="label_Count">
-                <property name="geometry">
-                 <rect>
-                  <x>870</x>
-                  <y>80</y>
-                  <width>40</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Count</string>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
                <widget class="QLineEdit" name="lineedit_SkillLabel">
@@ -921,31 +793,8 @@
                 <property name="text">
                  <string>Skill Label:</string>
                 </property>
-               </widget>
-               <widget class="QLabel" name="label_Level">
-                <property name="geometry">
-                 <rect>
-                  <x>610</x>
-                  <y>80</y>
-                  <width>40</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Level:</string>
-                </property>
-               </widget>
-               <widget class="QLabel" name="label_GemName">
-                <property name="geometry">
-                 <rect>
-                  <x>430</x>
-                  <y>80</y>
-                  <width>70</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Gem Name:</string>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
                <widget class="QCheckBox" name="check_SocketGroup_FullDPS">
@@ -964,17 +813,82 @@
                  <bool>false</bool>
                 </property>
                </widget>
+               <widget class="QLabel" name="label_Variant">
+                <property name="geometry">
+                 <rect>
+                  <x>730</x>
+                  <y>70</y>
+                  <width>40</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Variant</string>
+                </property>
+               </widget>
                <widget class="QLabel" name="label_Quality">
                 <property name="geometry">
                  <rect>
                   <x>670</x>
-                  <y>80</y>
+                  <y>70</y>
                   <width>45</width>
                   <height>22</height>
                  </rect>
                 </property>
                 <property name="text">
                  <string>Quality</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_Count">
+                <property name="geometry">
+                 <rect>
+                  <x>880</x>
+                  <y>70</y>
+                  <width>40</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Count</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_GemName">
+                <property name="geometry">
+                 <rect>
+                  <x>440</x>
+                  <y>70</y>
+                  <width>70</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Gem Name:</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_Enabled">
+                <property name="geometry">
+                 <rect>
+                  <x>820</x>
+                  <y>70</y>
+                  <width>50</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Enabled</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_Level">
+                <property name="geometry">
+                 <rect>
+                  <x>610</x>
+                  <y>70</y>
+                  <width>40</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Level:</string>
                 </property>
                </widget>
               </widget>
@@ -1705,6 +1619,441 @@ hr { height: 1px; border-width: 0; }
             <attribute name="whatsThis">
              <string notr="true">CONFIG</string>
             </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frame_Config">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="QGroupBox" name="grpbox_General">
+                <property name="geometry">
+                 <rect>
+                  <x>2</x>
+                  <y>2</y>
+                  <width>300</width>
+                  <height>300</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>300</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>General</string>
+                </property>
+                <widget class="QComboBox" name="combo_Bandits">
+                 <property name="geometry">
+                  <rect>
+                   <x>150</x>
+                   <y>40</y>
+                   <width>145</width>
+                   <height>26</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>145</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>280</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
+                 <property name="sizeAdjustPolicy">
+                  <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                 </property>
+                 <property name="minimumContentsLength">
+                  <number>60</number>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Make a Selection</string>
+                 </property>
+                 <property name="modelColumn">
+                  <number>0</number>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_MinorGods">
+                 <property name="geometry">
+                  <rect>
+                   <x>150</x>
+                   <y>100</y>
+                   <width>145</width>
+                   <height>26</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>145</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>280</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Make a Selection</string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_Bandits_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>5</x>
+                   <y>43</y>
+                   <width>140</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>&amp;Bandits:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_Pantheon_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>5</x>
+                   <y>73</y>
+                   <width>140</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Ma&amp;jor God:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_MajorGods">
+                 <property name="geometry">
+                  <rect>
+                   <x>150</x>
+                   <y>70</y>
+                   <width>145</width>
+                   <height>26</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>145</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>280</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Make a Selection</string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ResPenalty">
+                 <property name="geometry">
+                  <rect>
+                   <x>5</x>
+                   <y>13</y>
+                   <width>140</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>Resistance Penalty:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ResPenalty">
+                 <property name="geometry">
+                  <rect>
+                   <x>150</x>
+                   <y>10</y>
+                   <width>145</width>
+                   <height>26</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>145</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>280</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
+                 <property name="sizeAdjustPolicy">
+                  <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                 </property>
+                 <property name="minimumContentsLength">
+                  <number>60</number>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Make a Selection</string>
+                 </property>
+                 <property name="modelColumn">
+                  <number>0</number>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_Pantheon_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>5</x>
+                   <y>103</y>
+                   <width>140</width>
+                   <height>16</height>
+                  </rect>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Mi&amp;nor God:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QGroupBox" name="grpbox_SkillOptions">
+                <property name="geometry">
+                 <rect>
+                  <x>308</x>
+                  <y>2</y>
+                  <width>300</width>
+                  <height>300</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>300</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>Skill Options</string>
+                </property>
+               </widget>
+               <widget class="QGroupBox" name="grpbox_Combat">
+                <property name="geometry">
+                 <rect>
+                  <x>2</x>
+                  <y>308</y>
+                  <width>300</width>
+                  <height>300</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>300</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>When in Combat</string>
+                </property>
+               </widget>
+               <widget class="QGroupBox" name="grpbox_5">
+                <property name="geometry">
+                 <rect>
+                  <x>614</x>
+                  <y>2</y>
+                  <width>300</width>
+                  <height>300</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>300</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>GroupBox</string>
+                </property>
+               </widget>
+               <widget class="QGroupBox" name="grpbox_EffectiveDPS">
+                <property name="geometry">
+                 <rect>
+                  <x>308</x>
+                  <y>308</y>
+                  <width>300</width>
+                  <height>300</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>300</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>For Effective DPS</string>
+                </property>
+               </widget>
+               <widget class="QGroupBox" name="grpbox_6">
+                <property name="geometry">
+                 <rect>
+                  <x>614</x>
+                  <y>308</y>
+                  <width>300</width>
+                  <height>300</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>300</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>GroupBox</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </widget>
          </widget>

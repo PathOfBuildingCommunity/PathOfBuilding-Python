@@ -29,9 +29,9 @@ class NotesUI:
         :param _notes: String: Plain text version of notes
         :return: N/A
         """
-        if _notes_html:
+        if _notes_html is not None:
             self.win.textedit_Notes.setHtml(_notes_html.strip())
-        else:
+        if _notes is not None:
             self.win.textedit_Notes.setPlainText(_notes.strip())
 
     def save(self):

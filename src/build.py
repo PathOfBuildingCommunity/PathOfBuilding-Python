@@ -233,9 +233,6 @@ class Build:
             self.new(_build_pob)
             # print(self.build["PlayerStat"][:])
             self.name = Path(Path(filename).name).stem
-            win.notes_ui.load(self.notes_html.text, self.notes.text)
-            win.stats.load(self.build)
-            win.skills_ui.load(self.skills)
 
     def save(self, win: Ui_MainWindow):
         """
