@@ -1,22 +1,19 @@
 """
 Configuration Class
 
-Defines reading and writing the settings xml as well as the settings therein
-The variables that come from the lua version of Path of Building retain their current naming
+Read, Writes and manages the settings xml as well as the settings therein
 As the settings.xml can be altered by humans, care must be taken to ensure data integrity, where possible
 
-Global constants as found in all locations in the lua version
-
 This is a base PoB class. It doesn't import any other PoB ui classes
-Imports pob_file
 """
 
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import traceback
-from collections import OrderedDict
 
-from qdarktheme.qtpy.QtCore import QSize
+from qdarktheme.qtpy.QtCore import QSize, Slot
+from qdarktheme.qtpy.QtWidgets import QFileDialog, QDialogButtonBox
+from PySide6.QtUiTools import QUiLoader
 
 import pob_file
 from constants import *
@@ -81,6 +78,7 @@ class Config:
         self.win = _win
         self.app = _app
         self.screen_rect = self.app.primaryScreen().size()
+        self.loader = QUiLoader()
 
         # this is the xml tree representing the xml
         self.root = None
@@ -266,10 +264,16 @@ class Config:
 
     @property
     def default_item_affix_quality(self):
+        """Aways store the number as a float between 0 and 1.00 so stats and items can call it correctly"""
         return float(self.misc.get("defaultItemAffixQuality", ".50"))
 
     @default_item_affix_quality.setter
     def default_item_affix_quality(self, new_quality):
+        """Aways store the number as a float between 0 and 1.00 so stats and items can call it correctly"""
+        if new_quality < 0 or new_quality > 1.00:
+            new_quality /= 100
+        if new_quality < 0 or new_quality > 1.00:
+            new_quality = 0.50
         self.misc.set("defaultItemAffixQuality", f"{new_quality}")
 
     @property
@@ -355,3 +359,106 @@ class Config:
             build = ET.Element("build")
             build.text = filename
             _recent.insert(0, build)
+
+    @Slot()
+    def open_settings_dialog(self):
+        """
+        Load and Open the settings dialog. Save the results if needed.
+        :return:
+        """
+        # ToDo: Another function for loading the widgets, which can also setup a default settings, for use with a default settings button
+        # ToDo: show thousands separator for player stats
+
+        @Slot()
+        def setting_restore_defaults():
+            set_dialog(True)
+
+        @Slot()
+        def setting_show_affix_quality_value():
+            dlg.label_AffixQValue.setText(f"{dlg.slider_AffixQuality.value() / 100}")
+
+        @Slot()
+        def setting_set_build_path_tooltip():
+            dlg.lineedit_BuildPath.setToolTip(dlg.lineedit_BuildPath.text())
+
+        @Slot()
+        def setting_directory_dialog():
+            """
+            Open a directory only file dialog for setting the build path
+            :return: Path
+            """
+            print("setting_directory_dialog")
+            directory = QFileDialog.getExistingDirectory(self, "Select Build Path")
+            if directory != "":
+                dlg.lineedit_BuildPath.setText(directory)
+
+        @Slot()
+        def set_dialog(default=False):
+            """
+            Set dialog widgets with values.
+            :param default: If True, set widgets with default values
+            :return:
+            """
+            if default:
+                self.reset()
+            # print_a_xml_element(_config)
+            dlg.combo_Protocol.setCurrentIndex(self.connection_protocol)
+            # dlg.combo_Proxy.setCurrentIndex(config.p)
+            # dlg.lineedit_Proxy.setText(config.p)
+            dlg.lineedit_BuildPath.setText(str(self.build_path))
+            dlg.combo_NP_Colours.setCurrentIndex(self.node_power_theme)
+            dlg.check_Beta.setChecked(self.beta_mode)
+            dlg.check_ShowBuildName.setChecked(self.show_titlebar_name)
+            dlg.check_ShowThousandsSeparators.setChecked(self.show_thousands_separators)
+            dlg.lineedit_ThousandsSeparator.setText(self.thousands_separator)
+            dlg.lineedit_DecimalSeparator.setText(self.decimal_separator)
+            dlg.spin_GemQuality.setValue(self.default_gem_quality)
+            dlg.spin_Level.setValue(self.default_char_level)
+            dlg.slider_AffixQuality.setValue(int(self.default_item_affix_quality * 100))
+            dlg.check_BuildWarnings.setChecked(self.show_warnings)
+            dlg.check_Tooltips.setChecked(self.slot_only_tooltips)
+
+        dlg = self.loader.load(Path(self.exe_dir, "dlgConfig.ui"), self.win)
+        # Force discard to close the dialog
+        discard = dlg.btnBox.button(QDialogButtonBox.Discard)
+        discard.clicked.connect(dlg.reject)
+        discard.setToolTip("Abandon these setting. Change nothing.")
+
+        restore_defaults = dlg.btnBox.button(QDialogButtonBox.RestoreDefaults)
+        restore_defaults.clicked.connect(setting_restore_defaults)
+        restore_defaults.setToolTip("Load the original default settings.")
+        # For some reason this button comes up as default. Stop it
+        restore_defaults.setAutoDefault(False)
+
+        save = dlg.btnBox.button(QDialogButtonBox.Save)
+        save.setDefault(True)
+        save.setToolTip("Save the setting to current use and the settings file.")
+
+        dlg.btn_BuildPath.clicked.connect(setting_directory_dialog)
+        dlg.slider_AffixQuality.valueChanged.connect(setting_show_affix_quality_value)
+        dlg.lineedit_BuildPath.textChanged.connect(setting_set_build_path_tooltip)
+        # fill the fields
+        set_dialog()
+
+        # 0 is discard, 1 is save
+        _return = dlg.exec()
+        if _return:
+            # read the fields
+            self.connection_protocol = dlg.combo_Protocol.currentIndex()
+            self.build_path = dlg.lineedit_BuildPath.text()
+            self.node_power_theme = dlg.combo_NP_Colours.currentIndex()
+            self.beta_mode = dlg.check_Beta.isChecked()
+            self.show_titlebar_name = dlg.check_ShowBuildName.isChecked()
+            self.show_thousands_separators = dlg.check_ShowThousandsSeparators.isChecked()
+            self.thousands_separator = dlg.lineedit_ThousandsSeparator.text()
+            self.decimal_separator = dlg.lineedit_DecimalSeparator.text()
+            self.default_gem_quality = dlg.spin_GemQuality.value()
+            self.default_char_level = dlg.spin_Level.value()
+            self.default_item_affix_quality = dlg.slider_AffixQuality.value() / 100
+            self.show_warnings = dlg.check_BuildWarnings.isChecked()
+            self.slot_only_tooltips = dlg.check_Tooltips.isChecked()
+            self.write()
+        else:
+            """discard a changes"""
+            self.read()
+        del dlg

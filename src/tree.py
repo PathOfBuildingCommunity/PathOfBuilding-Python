@@ -14,22 +14,22 @@ It is referenced by the TreeView class to display the tree
 """
 import re
 import math
-from pprint import pprint
+from collections import OrderedDict
+
 from qdarktheme.qtpy.QtCore import QRect, Qt
 from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter
-
 
 import ui_utils
 from pob_config import *
 from constants import _VERSION
 from pob_file import *
 
-# import pob_config
 from tree_graphics_item import TreeGraphicsItem
 from node import Node
 
 
 # fmt: off
+# Formatting makes a mess of these structures
 def calc_orbit_angles(nodes_in_orbit):
     orbit_angles = {}
     if nodes_in_orbit == 16:
@@ -51,8 +51,6 @@ def calc_orbit_angles(nodes_in_orbit):
 
     return orbit_angles
     # calc_orbit_angles
-
-
 # fmt: on
 
 

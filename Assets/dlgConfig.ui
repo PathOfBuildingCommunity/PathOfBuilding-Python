@@ -336,7 +336,7 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
     <property name="buddy">
-     <cstring>lineedit_BuildPath</cstring>
+     <cstring>lineedit_ThousandsSeparator</cstring>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineedit_DecimalSeparator">
@@ -365,7 +365,7 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
     <property name="buddy">
-     <cstring>lineedit_BuildPath</cstring>
+     <cstring>lineedit_DecimalSeparator</cstring>
     </property>
    </widget>
    <widget class="QLabel" name="label_GemQuality">
@@ -384,7 +384,7 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
     <property name="buddy">
-     <cstring>lineedit_BuildPath</cstring>
+     <cstring>spin_GemQuality</cstring>
     </property>
    </widget>
    <widget class="QLabel" name="label_Level">
@@ -403,7 +403,7 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
     <property name="buddy">
-     <cstring>lineedit_BuildPath</cstring>
+     <cstring>spin_Level</cstring>
     </property>
    </widget>
    <widget class="QCheckBox" name="check_Tooltips">
@@ -460,7 +460,7 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
     <property name="buddy">
-     <cstring>lineedit_BuildPath</cstring>
+     <cstring>slider_AffixQuality</cstring>
     </property>
    </widget>
    <widget class="QSpinBox" name="spin_GemQuality">
@@ -492,7 +492,7 @@
      <number>100</number>
     </property>
    </widget>
-   <widget class="QSlider" name="hslider_AffixQuality">
+   <widget class="QSlider" name="slider_AffixQuality">
     <property name="geometry">
      <rect>
       <x>165</x>
@@ -511,6 +511,22 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
+   <widget class="QLabel" name="label_AffixQValue">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>187</y>
+      <width>30</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>nn</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <tabstops>
@@ -521,6 +537,15 @@
   <tabstop>btn_BuildPath</tabstop>
   <tabstop>combo_NP_Colours</tabstop>
   <tabstop>check_Beta</tabstop>
+  <tabstop>check_ShowBuildName</tabstop>
+  <tabstop>check_ShowThousandsSeparators</tabstop>
+  <tabstop>lineedit_ThousandsSeparator</tabstop>
+  <tabstop>lineedit_DecimalSeparator</tabstop>
+  <tabstop>spin_GemQuality</tabstop>
+  <tabstop>spin_Level</tabstop>
+  <tabstop>slider_AffixQuality</tabstop>
+  <tabstop>check_BuildWarnings</tabstop>
+  <tabstop>check_Tooltips</tabstop>
  </tabstops>
  <resources/>
  <connections>
