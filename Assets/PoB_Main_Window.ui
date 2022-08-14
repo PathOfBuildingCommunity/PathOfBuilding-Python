@@ -58,13 +58,13 @@ QAction {padding-left: 0px;}</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1218</width>
-         <height>725</height>
+         <width>1280</width>
+         <height>708</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>1100</width>
+         <width>1280</width>
          <height>700</height>
         </size>
        </property>
@@ -340,7 +340,7 @@ QAction {padding-left: 0px;}</string>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>910</width>
+                 <width>1000</width>
                  <height>655</height>
                 </size>
                </property>
@@ -440,7 +440,7 @@ QAction {padding-left: 0px;}</string>
                  <string>Delete All</string>
                 </property>
                </widget>
-               <widget class="QPushButton" name="btn_SkillsNew">
+               <widget class="QPushButton" name="btn_NewSocketGrp">
                 <property name="geometry">
                  <rect>
                   <x>110</x>
@@ -816,7 +816,7 @@ QAction {padding-left: 0px;}</string>
                <widget class="QLabel" name="label_Variant">
                 <property name="geometry">
                  <rect>
-                  <x>730</x>
+                  <x>820</x>
                   <y>70</y>
                   <width>40</width>
                   <height>22</height>
@@ -829,7 +829,7 @@ QAction {padding-left: 0px;}</string>
                <widget class="QLabel" name="label_Quality">
                 <property name="geometry">
                  <rect>
-                  <x>670</x>
+                  <x>760</x>
                   <y>70</y>
                   <width>45</width>
                   <height>22</height>
@@ -842,7 +842,7 @@ QAction {padding-left: 0px;}</string>
                <widget class="QLabel" name="label_Count">
                 <property name="geometry">
                  <rect>
-                  <x>880</x>
+                  <x>970</x>
                   <y>70</y>
                   <width>40</width>
                   <height>22</height>
@@ -855,7 +855,7 @@ QAction {padding-left: 0px;}</string>
                <widget class="QLabel" name="label_GemName">
                 <property name="geometry">
                  <rect>
-                  <x>440</x>
+                  <x>427</x>
                   <y>70</y>
                   <width>70</width>
                   <height>22</height>
@@ -868,7 +868,7 @@ QAction {padding-left: 0px;}</string>
                <widget class="QLabel" name="label_Enabled">
                 <property name="geometry">
                  <rect>
-                  <x>820</x>
+                  <x>910</x>
                   <y>70</y>
                   <width>50</width>
                   <height>22</height>
@@ -881,7 +881,7 @@ QAction {padding-left: 0px;}</string>
                <widget class="QLabel" name="label_Level">
                 <property name="geometry">
                  <rect>
-                  <x>610</x>
+                  <x>700</x>
                   <y>70</y>
                   <width>40</width>
                   <height>22</height>
@@ -2119,6 +2119,7 @@ hr { height: 1px; border-width: 0; }
    <addaction name="action_New"/>
    <addaction name="action_Open"/>
    <addaction name="action_Save"/>
+   <addaction name="action_Settings"/>
    <addaction name="separator"/>
    <addaction name="action_ManageTrees"/>
   </widget>
@@ -2227,9 +2228,16 @@ hr { height: 1px; border-width: 0; }
     <string>Ctrl+M</string>
    </property>
   </action>
-  <action name="actionplace">
+  <action name="action_Settings">
+   <property name="icon">
+    <iconset theme="application-exit" resource="PoB.qrc">
+     <normaloff>:/Art/Icons/construction.png</normaloff>:/Art/Icons/construction.png</iconset>
+   </property>
    <property name="text">
-    <string>place</string>
+    <string>Settings</string>
+   </property>
+   <property name="toolTip">
+    <string>Open Settings diaog</string>
    </property>
   </action>
  </widget>

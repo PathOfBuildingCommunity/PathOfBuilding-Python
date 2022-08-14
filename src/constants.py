@@ -1,6 +1,5 @@
 """Enumeration Data for Path of Exile constants."""
 
-import re
 import enum
 
 program_title = "Path of Building"
@@ -18,8 +17,9 @@ _VERSION_str = "3_18"
 # Default config incase the settings file doesn't exist
 default_config = '<PathOfBuilding>\
     <Misc theme="Dark" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1"\
-    nodePowerTheme="RED/BLUE" connectionProtocol="nil" thousandsSeparator="," decimalSeparator="."\
-    showThousandsSeparators="true" betaTest="false" defaultGemQuality="" buildSortMode="NAME" />\
+        nodePowerTheme="0" connectionProtocol="0" thousandsSeparator="" decimalSeparator=""\
+        showThousandsSeparators="true" betaTest="false" defaultGemQuality="0" buildSortMode="NAME"\
+        proxyURL="" buildPath="" />\
     <recentBuilds/>\
     <size width="800" height="600"/>\
     </PathOfBuilding>'
@@ -38,10 +38,10 @@ empty_build = f'<PathOfBuilding>\
     </Build>\
     <Import/>\
     <Calcs/>\
-    <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" sortGemsByDPS="true"\
-     defaultGemQuality="0" defaultGemLevel="20" showSupportGemTypes="ALL" showAltQualityGems="false">\
+    <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="0"\
+               sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="20" showSupportGemTypes="ALL"\
+               showAltQualityGems="false">\
         <SkillSet id="0" title="Default">\
-            <Skills/>\
         </SkillSet>\
     </Skills>\
     <Tree activeSpec="1">\
@@ -52,7 +52,13 @@ empty_build = f'<PathOfBuilding>\
     <TreeView searchStr="" zoomY="0" showHeatMap="nil" zoomLevel="3" showStatDifferences="true" zoomX="0"/>\
     <Items/>\
     <Config/>\
-    </PathOfBuilding>'
+</PathOfBuilding>'
+
+empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot=""\
+    mainActiveSkill="1"/>'
+
+empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="" gemId=""\
+    enabled="true" quality="0" count="1" nameSpec=""/>'
 
 bandits = {
     "None": "2 Passives Points",
@@ -335,605 +341,605 @@ class PlayerAscendancy(enum.Enum):
     NONE = None
 
 
-stats_list = {
-    "ActiveMinionLimit": {
+stats_list = [
+    {
         "stat": "ActiveMinionLimit",
         "label": "Active Minion Limit",
         "fmt": "{:d}",
     },
-    "AverageHit": {"stat": "AverageHit", "label": "Average Damage", "fmt": "{0:.2f}"},
-    "AverageDamage": {
+    {"stat": "AverageHit", "label": "Average Damage", "fmt": "{0:.2f}"},
+    {
         "stat": "AverageDamage",
         "label": "Average Damage",
         "fmt": "{:.1f}",
         "flag": "attack",
     },
-    "ServerTriggerRate": {
+    {
         "stat": "ServerTriggerRate",
         "label": "Trigger Rate",
         "fmt": "{:.2f}",
     },
-    "Speed": {
+    {
         "stat": "Speed",
         "label": "Attack Rate",
         "fmt": "{0:.2f}",
         "flag": "attack",
     },
-    "Speed": {"stat": "Speed", "label": "Cast Rate", "fmt": "{0:.2f}", "flag": "spell"},
-    "Speed": {"stat": "Speed", "label": "Effective Trigger Rate", "fmt": "{:.2f}"},
-    "WarcryCastTime": {
+    {"stat": "Speed", "label": "Cast Rate", "fmt": "{0:.2f}", "flag": "spell"},
+    {"stat": "Speed", "label": "Effective Trigger Rate", "fmt": "{:.2f}"},
+    {
         "stat": "WarcryCastTime",
         "label": "Cast Time",
         "fmt": ".2fs",
         "flag": "warcry",
     },
-    "HitSpeed": {"stat": "HitSpeed", "label": "Hit Rate", "fmt": "{:.2f}"},
-    "TrapThrowingTime": {
+    {"stat": "HitSpeed", "label": "Hit Rate", "fmt": "{:.2f}"},
+    {
         "stat": "TrapThrowingTime",
         "label": "Trap Throwing Time",
         "fmt": ".2fs",
     },
-    "TrapCooldown": {
+    {
         "stat": "TrapCooldown",
         "label": "Trap Cooldown",
         "fmt": ".3fs",
     },
-    "MineLayingTime": {
+    {
         "stat": "MineLayingTime",
         "label": "Mine Throwing Time",
         "fmt": ".2fs",
     },
-    "TotemPlacementTime": {
+    {
         "stat": "TotemPlacementTime",
         "label": "Totem Placement Time",
         "fmt": ".2fs",
     },
-    "PreEffectiveCritChance": {
+    {
         "stat": "PreEffectiveCritChance",
         "label": "Crit Chance",
         "fmt": "{0:.2g}%",
     },
-    "CritChance": {
+    {
         "stat": "CritChance",
         "label": "Effective Crit Chance",
         "fmt": "{0:.2g}%",
     },
-    "CritMultiplier": {
+    {
         "stat": "CritMultiplier",
         "label": "Crit Multiplier",
         "fmt": "{0:.2f}",
     },
-    "HitChance": {
+    {
         "stat": "HitChance",
         "label": "Hit Chance",
         "fmt": ".0f%",
         "flag": "attack",
     },
-    "TotalDPS": {
+    {
         "stat": "TotalDPS",
         "label": "Total DPS",
         "fmt": "{:.1f}",
         "flag": "notAverage",
     },
-    "TotalDPS": {
+    {
         "stat": "TotalDPS",
         "label": "Total DPS",
         "fmt": "{:.1f}",
         "flag": "showAverage",
     },
-    "TotalDot": {
+    {
         "stat": "TotalDot",
         "label": "DoT DPS",
         "fmt": "{:.1f}",
     },
-    "WithDotDPS": {
+    {
         "stat": "WithDotDPS",
         "label": "Total DPS inc. DoT",
         "fmt": "{:.1f}",
         "flag": "notAverage",
     },
-    "BleedDPS": {
+    {
         "stat": "BleedDPS",
         "label": "Bleed DPS",
         "fmt": "{:.1f}",
     },
-    "BleedDamage": {
+    {
         "stat": "BleedDamage",
         "label": "Total Damage per Bleed",
         "fmt": "{:.1f}",
         "flag": "showAverage",
     },
-    "WithBleedDPS": {
+    {
         "stat": "WithBleedDPS",
         "label": "Total DPS inc. Bleed",
         "fmt": "{0:.2f}",
     },
-    "IgniteDPS": {
+    {
         "stat": "IgniteDPS",
         "label": "Ignite DPS",
         "fmt": "{:.1f}",
     },
-    "IgniteDamage": {
+    {
         "stat": "IgniteDamage",
         "label": "Total Damage per Ignite",
         "fmt": "{:.1f}",
         "flag": "showAverage",
     },
-    "WithIgniteDPS": {
+    {
         "stat": "WithIgniteDPS",
         "label": "Total DPS inc. Ignite",
         "fmt": "{0:.2f}",
     },
-    "WithIgniteAverageDamage": {
+    {
         "stat": "WithIgniteAverageDamage",
         "label": "Average Dmg. inc. Ignite",
         "fmt": "{:.1f}",
     },
-    "PoisonDPS": {
+    {
         "stat": "PoisonDPS",
         "label": "Poison DPS",
         "fmt": "{:.1f}",
     },
-    "PoisonDamage": {
+    {
         "stat": "PoisonDamage",
         "label": "Total Damage per Poison",
         "fmt": "{:.1f}",
     },
-    "WithPoisonDPS": {
+    {
         "stat": "WithPoisonDPS",
         "label": "Total DPS inc. Poison",
         "fmt": "{0:.2f}",
     },
-    "DecayDPS": {
+    {
         "stat": "DecayDPS",
         "label": "Decay DPS",
         "fmt": "{:.1f}",
     },
-    "TotalDotDPS": {
+    {
         "stat": "TotalDotDPS",
         "label": "Total DPS inc. DoT",
         "fmt": "{0:.2f}",
     },
-    "ImpaleDPS": {
+    {
         "stat": "ImpaleDPS",
         "label": "Impale Damage",
         "fmt": "{:.1f}",
         "flag": ["impale", "showAverage"],
     },
-    "WithImpaleDPS": {
+    {
         "stat": "WithImpaleDPS",
         "label": "Damage inc. Impale",
         "fmt": "{:.1f}",
         "flag": ["impale", "showAverage"],
     },
-    "ImpaleDPS": {
+    {
         "stat": "ImpaleDPS",
         "label": "Impale DPS",
         "fmt": "{:.1f}",
         "flag": ["impale", "notAverage"],
     },
-    "WithImpaleDPS": {
+    {
         "stat": "WithImpaleDPS",
         "label": "Total DPS inc. Impale",
         "fmt": "{:.1f}",
         "flag": ["impale", "notAverage"],
     },
-    "MirageDPS": {"stat": "MirageDPS", "label": "Total Mirage DPS", "fmt": "{:.1f}"},
-    "CullingDPS": {"stat": "CullingDPS", "label": "Culling DPS", "fmt": "{0:.2f}"},
-    "CombinedDPS": {"stat": "CombinedDPS", "label": "Combined DPS", "fmt": "{0:.2f}"},
-    "CombinedAvg": {
+    {"stat": "MirageDPS", "label": "Total Mirage DPS", "fmt": "{:.1f}"},
+    {"stat": "CullingDPS", "label": "Culling DPS", "fmt": "{0:.2f}"},
+    {"stat": "CombinedDPS", "label": "Combined DPS", "fmt": "{0:.2f}"},
+    {
         "stat": "CombinedAvg",
         "label": "Combined Total Damage",
         "fmt": "{:.1f}",
         "flag": "showAverage",
     },
-    "Cooldown": {
+    {
         "stat": "Cooldown",
         "label": "Skill Cooldown",
         "fmt": ".3fs",
     },
-    "SealCooldown": {
+    {
         "stat": "SealCooldown",
         "label": "Seal Gain Frequency",
         "fmt": ".2fs",
     },
-    "SealMax": {"stat": "SealMax", "label": "Max Number of Seals", "fmt": "{:d}"},
-    "TimeMaxSeals": {
+    {"stat": "SealMax", "label": "Max Number of Seals", "fmt": "{:d}"},
+    {
         "stat": "TimeMaxSeals",
         "label": "Time to Gain Max Seals",
         "fmt": ".2fs",
     },
-    "AreaOfEffectRadius": {
+    {
         "stat": "AreaOfEffectRadius",
         "label": "AoE Radius",
         "fmt": "{0:.2f}",
     },
-    "BrandAttachmentRange": {
+    {
         "stat": "BrandAttachmentRange",
         "label": "Attachment Range",
         "fmt": "{:d}",
         "flag": "brand",
     },
-    "BrandTicks": {
+    {
         "stat": "BrandTicks",
         "label": "Activations per Brand",
         "fmt": "{:d}",
         "flag": "brand",
     },
-    "ManaCost": {
+    {
         "stat": "ManaCost",
         "label": "Mana Cost",
         "colour": ColourCodes.MANA,
         "fmt": "{0:.2f}",
     },
-    "LifeCost": {
+    {
         "stat": "LifeCost",
         "label": "Life Cost",
         "colour": ColourCodes.LIFE,
         "fmt": "{0:.2f}",
     },
-    "ESCost": {
+    {
         "stat": "ESCost",
         "label": "Energy Shield Cost",
         "colour": ColourCodes.ES,
         "fmt": "{0:.2f}",
     },
-    "RageCost": {
+    {
         "stat": "RageCost",
         "label": "Rage Cost",
         "colour": ColourCodes.RAGE,
         "fmt": "{0:.2f}",
     },
-    "ManaPercentCost": {
+    {
         "stat": "ManaPercentCost",
         "label": "Mana Cost",
         "colour": ColourCodes.MANA,
         "fmt": "{0:.2f}",
     },
-    "LifePercentCost": {
+    {
         "stat": "LifePercentCost",
         "label": "Life Cost",
         "colour": ColourCodes.LIFE,
         "fmt": "{0:.2f}",
     },
-    "ManaPerSecondCost": {
+    {
         "stat": "ManaPerSecondCost",
         "label": "Mana Cost",
         "colour": ColourCodes.MANA,
         "fmt": "{0:.2f}",
     },
-    "LifePerSecondCost": {
+    {
         "stat": "LifePerSecondCost",
         "label": "Life Cost",
         "colour": ColourCodes.LIFE,
         "fmt": "{0:.2f}",
     },
-    "ManaPercentPerSecondCost": {
+    {
         "stat": "ManaPercentPerSecondCost",
         "label": "Mana Cost",
         "colour": ColourCodes.MANA,
         "fmt": "{0:.2f}",
     },
-    "LifePercentPerSecondCost": {
+    {
         "stat": "LifePercentPerSecondCost",
         "label": "Life Cost",
         "colour": ColourCodes.LIFE,
         "fmt": "{0:.2f}",
     },
-    "ESPerSecondCost": {
+    {
         "stat": "ESPerSecondCost",
         "label": "Energy Shield Cost",
         "fmt": ".2f/s",
         "colour": ColourCodes.ES,
     },
-    "ESPercentPerSecondCost": {
+    {
         "stat": "ESPercentPerSecondCost",
         "label": "Energy Shield Cost",
         "fmt": ".2f%/s",
         "colour": ColourCodes.ES,
     },
-    "blank1": {"stat": "blank"},
-    "Str": {
+    {"stat": "blank"},
+    {
         "stat": "Str",
         "label": "Strength",
         "colour": ColourCodes.STRENGTH,
         "fmt": "{:d}",
     },
-    "ReqStr": {
+    {
         "stat": "ReqStr",
         "label": "Strength Required",
         "colour": ColourCodes.STRENGTH,
         "fmt": "{:d}",
     },
-    "Dex": {
+    {
         "stat": "Dex",
         "label": "Dexterity",
         "colour": ColourCodes.DEXTERITY,
         "fmt": "{:d}",
     },
-    "ReqDex": {
+    {
         "stat": "ReqDex",
         "label": "Dexterity Required",
         "colour": ColourCodes.DEXTERITY,
         "fmt": "{:d}",
     },
-    "Int": {
+    {
         "stat": "Int",
         "label": "Intelligence",
         "colour": ColourCodes.INTELLIGENCE,
         "fmt": "{:d}",
     },
-    "ReqInt": {
+    {
         "stat": "ReqInt",
         "label": "Intelligence Required",
         "colour": ColourCodes.INTELLIGENCE,
         "fmt": "{:d}",
     },
-    "Omni": {
+    {
         "stat": "Omni",
         "label": "Omniscience",
         "colour": ColourCodes.RARE,
         "fmt": "{:d}",
     },
-    "ReqOmni": {
+    {
         "stat": "ReqOmni",
         "label": "Omniscience Required",
         "colour": ColourCodes.RARE,
         "fmt": "{:d}",
     },
-    "blank2": {"stat": "blank"},
-    "Devotion": {
+    {"stat": "blank"},
+    {
         "stat": "Devotion",
         "label": "Devotion",
         "colour": ColourCodes.RARE,
         "fmt": "{:d}",
     },
-    "blank3": {"stat": "blank"},
-    "TotalEHP": {
+    {"stat": "blank"},
+    {
         "stat": "TotalEHP",
         "label": "Effective Hit Pool",
         "fmt": "{:.0f}",
     },
-    "SecondMinimalMaximumHitTaken": {
+    {
         "stat": "SecondMinimalMaximumHitTaken",
         "label": "Eff. Maximum Hit Taken",
         "fmt": "{:.0f}",
     },
-    "blank4": {"stat": "blank"},
-    "Life": {
+    {"stat": "blank"},
+    {
         "stat": "Life",
         "label": "Total Life",
         "fmt": "{:d}",
         "colour": ColourCodes.LIFE,
     },
-    "Spec:LifeInc": {
+    {
         "stat": "Spec:LifeInc",
         "label": "%Inc Life from Tree",
         "fmt": "{:d}%",
         "colour": ColourCodes.LIFE,
     },
-    "LifeUnreserved": {
+    {
         "stat": "LifeUnreserved",
         "label": "Unreserved Life",
         "fmt": "{:d}",
         "colour": ColourCodes.LIFE,
     },
-    "LifeUnreservedPercent": {
+    {
         "stat": "LifeUnreservedPercent",
         "label": "Unreserved Life",
         "fmt": "{:d}%",
         "colour": ColourCodes.LIFE,
     },
-    "LifeRegen": {"label": "Life Regen", "fmt": "{:.1f}", "colour": ColourCodes.LIFE},
-    "LifeLeechGainRate": {
+    {"label": "Life Regen", "fmt": "{:.1f}", "colour": ColourCodes.LIFE},
+    {
         "stat": "LifeLeechGainRate",
         "label": "Life Leech/On Hit Rate",
         "fmt": "{:.1f}",
         "colour": ColourCodes.LIFE,
     },
-    "LifeLeechGainPerHit": {
+    {
         "stat": "LifeLeechGainPerHit",
         "label": "Life Leech/Gain per Hit",
         "fmt": "{:.1f}",
         "colour": ColourCodes.LIFE,
     },
-    "blank5": {"stat": "blank"},
-    "TotalDegen": {
+    {"stat": "blank"},
+    {
         "stat": "TotalDegen",
         "label": "Total Degen",
         "fmt": "{:.1f}",
     },
-    "TotalNetRegen": {
+    {
         "stat": "TotalNetRegen",
         "label": "Total Net Regen",
         "fmt": "+{:.1f}",
     },
-    "NetLifeRegen": {
+    {
         "stat": "NetLifeRegen",
         "label": "Net Life Regen",
         "fmt": "+{:.1f}",
         "colour": ColourCodes.LIFE,
     },
-    "NetManaRegen": {
+    {
         "stat": "NetManaRegen",
         "label": "Net Mana Regen",
         "fmt": "+{:.1f}",
         "colour": ColourCodes.MANA,
     },
-    "NetEnergyShieldRegen": {
+    {
         "stat": "NetEnergyShieldRegen",
         "label": "Net Energy Shield Regen",
         "fmt": "+{:.1f}",
         "colour": ColourCodes.ES,
     },
-    "blank6": {"stat": "blank"},
-    "Ward": {
+    {"stat": "blank"},
+    {
         "stat": "Ward",
         "label": "Ward",
         "fmt": "{:d}",
         "colour": ColourCodes.WARD,
     },
-    "EnergyShield": {
+    {
         "stat": "EnergyShield",
         "label": "Energy Shield",
         "fmt": "{:d}",
         "colour": ColourCodes.ES,
     },
-    "EnergyShieldRecoveryCap": {
+    {
         "stat": "EnergyShieldRecoveryCap",
         "label": "Recoverable ES",
         "colour": ColourCodes.ES,
         "fmt": "{:d}",
     },
-    "Spec:EnergyShieldInc": {
+    {
         "stat": "Spec:EnergyShieldInc",
         "label": "%Inc ES from Tree",
         "colour": ColourCodes.ES,
         "fmt": "{:d}%",
     },
-    "EnergyShieldRegen": {
+    {
         "stat": "EnergyShieldRegen",
         "label": "Energy Shield Regen",
         "colour": ColourCodes.ES,
         "fmt": "{:.1f}",
     },
-    "EnergyShieldLeechGainRate": {
+    {
         "stat": "EnergyShieldLeechGainRate",
         "label": "ES Leech/On Hit Rate",
         "colour": ColourCodes.ES,
         "fmt": "{:.1f}",
     },
-    "EnergyShieldLeechGainPerHit": {
+    {
         "stat": "EnergyShieldLeechGainPerHit",
         "label": "ES Leech/Gain per Hit",
         "colour": ColourCodes.ES,
         "fmt": "{:.1f}",
     },
-    "blank7": {"stat": "blank"},
-    "Evasion": {
+    {"stat": "blank"},
+    {
         "stat": "stat",
         "label": "Evasion rating",
         "fmt": "{:d}",
         "colour": ColourCodes.EVASION,
     },
-    "Spec:EvasionInc": {
+    {
         "stat": "stat",
         "label": "%Inc Evasion from Tree",
         "colour": ColourCodes.EVASION,
         "fmt": "{:d}%",
     },
-    "EvadeChance": {
+    {
         "stat": "EvadeChance",
         "label": "Evade Chance",
         "fmt": "{:d}%",
         "colour": ColourCodes.EVASION,
     },
-    "MeleeEvadeChance": {
+    {
         "stat": "MeleeEvadeChance",
         "label": "Melee Evade Chance",
         "fmt": "{:d}%",
         "colour": ColourCodes.EVASION,
     },
-    "ProjectileEvadeChance": {
+    {
         "stat": "ProjectileEvadeChance",
         "label": "Projectile Evade Chance",
         "fmt": "{:d}%",
         "colour": ColourCodes.EVASION,
     },
-    "blank8": {"stat": "blank"},
-    "Armour": {
+    {"stat": "blank"},
+    {
         "stat": "Armour",
         "label": "Armour",
         "fmt": "{:d}",
     },
-    "Spec:ArmourInc": {
+    {
         "stat": "Spec:ArmourInc",
         "label": "%Inc Armour from Tree",
         "fmt": "{:d}%",
     },
-    "PhysicalDamageReduction": {
+    {
         "stat": "PhysicalDamageReduction",
         "label": "Phys. Damage Reduction",
         "fmt": "{:d}%",
     },
-    "blank9": {"stat": "blank"},
-    "EffectiveMovementSpeedMod": {
+    {"stat": "blank"},
+    {
         "stat": "EffectiveMovementSpeedMod",
         "label": "Movement Speed Modifier",
         "fmt": "{:.1f}%",
     },
-    "BlockChance": {
+    {
         "stat": "BlockChance",
         "label": "Block Chance",
         "fmt": "{:d}%",
     },
-    "SpellBlockChance": {
+    {
         "stat": "SpellBlockChance",
         "label": "Spell Block Chance",
         "fmt": "{:d}%",
     },
-    "AttackDodgeChance": {
+    {
         "stat": "AttackDodgeChance",
         "label": "Attack Dodge Chance",
         "fmt": "{:d}%",
     },
-    "SpellDodgeChance": {
+    {
         "stat": "SpellDodgeChance",
         "label": "Spell Dodge Chance",
         "fmt": "{:d}%",
     },
-    "SpellSuppressionChance": {
+    {
         "stat": "SpellSuppressionChance",
         "label": "Spell Suppression Chance",
         "fmt": "{:d}%",
     },
-    "blank10": {"stat": "blank"},
-    "FireResist": {
+    {"stat": "blank"},
+    {
         "stat": "FireResist",
         "label": "Fire Resistance",
         "fmt": "{:d}%",
         "colour": ColourCodes.FIRE,
     },
-    "FireResistOverCap": {
+    {
         "stat": "FireResistOverCap",
         "label": "Fire Res. Over Max",
         "fmt": "{:d}%",
         "hideStat": "true",
     },
-    "ColdResist": {
+    {
         "stat": "ColdResist",
         "label": "Cold Resistance",
         "fmt": "{:d}%",
         "colour": ColourCodes.COLD,
     },
-    "ColdResistOverCap": {
+    {
         "stat": "ColdResistOverCap",
         "label": "Cold Res. Over Max",
         "fmt": "{:d}%",
         "hideStat": "true",
     },
-    "LightningResist": {
+    {
         "stat": "LightningResist",
         "label": "Lightning Resistance",
         "fmt": "{:d}%",
         "colour": ColourCodes.LIGHTNING,
     },
-    "LightningResistOverCap": {
+    {
         "stat": "LightningResistOverCap",
         "label": "Lightning Res. Over Max",
         "fmt": "{:d}%",
         "hideStat": "true",
     },
-    "ChaosResist": {
+    {
         "stat": "ChaosResist",
         "label": "Chaos Resistance",
         "fmt": "{:d}%",
         "colour": ColourCodes.CHAOS,
     },
-    "ChaosResistOverCap": {
+    {
         "stat": "ChaosResistOverCap",
         "label": "Chaos Res. Over Max",
         "fmt": "{:d}%",
         "hideStat": "true",
     },
-}
+]

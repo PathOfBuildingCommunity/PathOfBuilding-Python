@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="Art">
+    <file>Icons/construction.png</file>
     <file>Icons/tree--pencil.png</file>
     <file>Icons/door-open-out.png</file>
     <file>Icons/yin-yang.png</file>

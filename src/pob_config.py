@@ -22,22 +22,6 @@ import pob_file
 from constants import *
 
 
-def print_call_stack(full=False):
-    """
-    Ahh debug. It's wonderful
-    :param: full: Bool: True if you want the full stack trace,
-            elsewise just print the parent caller of the function that called this
-    :return:
-    """
-    lines = traceback.format_stack()
-    if full:
-        for line in lines:
-            print(line.strip())
-        print()
-    else:
-        print(lines[-3].strip())
-
-
 def str_to_bool(in_str):
     """
     Return a boolean from a string. As the settings could be manipulated by a human, we can't trust eval()
@@ -62,6 +46,35 @@ def index_exists(_list_or_dict, index):
         return False
 
 
+def print_call_stack(full=False):
+    """
+    Ahh debug. It's wonderful
+    :param: full: Bool: True if you want the full stack trace,
+            elsewise just print the parent caller of the function that called this
+    :return:
+    """
+    lines = traceback.format_stack()
+    if full:
+        for line in lines:
+            print(line.strip())
+            print()
+    else:
+        print(lines[-3].strip())
+
+
+def print_a_xml_element(the_element):
+    """
+    Debug: Print the contents so you can see what happened and why 'it' isn't working.
+    Prints the parent caller to help track when there are many of them.
+    :param the_element: xml element
+    :return:
+    """
+    lines = traceback.format_stack()
+    print(lines[-2].strip())
+    print(ET.tostring(the_element, encoding='utf8').decode('utf8'))
+    print()
+
+
 class Config:
     def __init__(self, _win, _app) -> None:
         # To reduce circular references, have the app and main window references here
@@ -76,28 +89,34 @@ class Config:
         self.misc = None
 
         # Path and directory variables
-        self.exeDir = Path.cwd()
-        self.settingsFile = Path(self.exeDir, "settings.xml")
-        self.buildPath = Path(self.exeDir, "builds")
-        if not self.buildPath.exists():
-            self.buildPath.mkdir()
-        self.tree_data_path = Path(self.exeDir, "TreeData")
+        self.exe_dir = Path.cwd()
+        self.settings_file = Path(self.exe_dir, "settings.xml")
+        self.build_dir = Path(self.exe_dir, "builds")
+        if not self.build_dir.exists():
+            self.build_dir.mkdir()
+        self.tree_data_path = Path(self.exe_dir, "TreeData")
         if not self.tree_data_path.exists():
             self.tree_data_path.mkdir()
         self.read()
 
+    def reset(self):
+        """Reset to default config"""
+        self.tree = ET.ElementTree(ET.fromstring(default_config))
+        self.root = self.tree.getroot()
+        self.misc = self.root.find("Misc")
+
     def read(self):
         """Set self.root with the contents of the settings file"""
-        if self.settingsFile.exists():
+        if self.settings_file.exists():
             try:
-                self.tree = pob_file.read_xml(self.settingsFile)
+                self.tree = pob_file.read_xml(self.settings_file)
             except ET.ParseError:
-                self.tree = ET.ElementTree(ET.fromstring(default_config))
+                self.reset()
         else:
-            self.tree = ET.ElementTree(ET.fromstring(default_config))
+            self.reset()
 
         if self.tree is None:
-            self.tree = ET.ElementTree(ET.fromstring(default_config))
+            self.reset()
 
         self.root = self.tree.getroot()
         self.misc = self.root.find("Misc")
@@ -108,7 +127,7 @@ class Config:
 
     def write(self):
         """Write the settings file"""
-        pob_file.write_xml(self.settingsFile, self.tree)
+        pob_file.write_xml(self.settings_file, self.tree)
 
     @property
     def theme(self):
@@ -122,118 +141,154 @@ class Config:
         self.misc.set("theme", new_theme and "Dark" or "Light")
 
     @property
-    def slotOnlyTooltips(self):
-        return str_to_bool(self.misc.get("slotOnlyTooltips", True))
+    def slot_only_tooltips(self):
+        return str_to_bool(self.misc.get("slotOnlyTooltips", "True"))
 
-    @slotOnlyTooltips.setter
-    def slotOnlyTooltips(self, new_bool):
-        self.misc.set("slotOnlyTooltips", str(new_bool))
+    @slot_only_tooltips.setter
+    def slot_only_tooltips(self, new_bool):
+        self.misc.set("slotOnlyTooltips", f"{new_bool}")
 
     @property
-    def showTitlebarName(self):
-        return str_to_bool(self.misc.get("showTitlebarName", True))
+    def show_titlebar_name(self):
+        return str_to_bool(self.misc.get("showTitlebarName", "True"))
 
-    @showTitlebarName.setter
-    def showTitlebarName(self, new_bool):
+    @show_titlebar_name.setter
+    def show_titlebar_name(self, new_bool):
         self.misc.set("showTitlebarName", f"{new_bool}")
 
     @property
-    def showWarnings(self):
-        return str_to_bool(self.misc.get("showWarnings", True))
+    def show_warnings(self):
+        return str_to_bool(self.misc.get("showWarnings", "True"))
 
-    @showWarnings.setter
-    def showWarnings(self, new_bool):
-        self.misc.set("showWarnings", str(new_bool))
-
-    @property
-    # fmt: off
-    def defaultCharLevel(self):
-        _defaultCharLevel = self.misc.get("defaultCharLevel", 1)
-        if _defaultCharLevel < 1:
-            _defaultCharLevel = 1
-            self.misc.set("defaultCharLevel", f"{_defaultCharLevel}")
-        if _defaultCharLevel > 100:
-            _defaultCharLevel = 100
-            self.misc.set("defaultCharLevel", f"{_defaultCharLevel}")
-        return _defaultCharLevel
-    # fmt: on
-
-    @defaultCharLevel.setter
-    def defaultCharLevel(self, new_int):
-        self.misc.set("defaultCharLevel", f"{new_int}")
+    @show_warnings.setter
+    def show_warnings(self, new_bool):
+        self.misc.set("showWarnings", f"{new_bool}")
 
     @property
-    def nodePowerTheme(self):
-        return self.misc.get("nodePowerTheme", "RED/BLUE")
+    def default_char_level(self):
+        i = int(self.misc.get("defaultCharLevel", 0))
+        if 1 <= i <= 100:
+            return i
+        self.default_char_level = 1
+        return 1
 
-    @nodePowerTheme.setter
-    def nodePowerTheme(self, new_theme):
-        self.misc.set("nodePowerTheme", new_theme)
-
-    @property
-    def connectionProtocol(self):
-        return self.misc.get("connectionProtocol", "nil")
-
-    @connectionProtocol.setter
-    def connectionProtocol(self, new_conn):
-        # what is this for
-        self.misc.set("connectionProtocol", new_conn)
+    @default_char_level.setter
+    def default_char_level(self, new_level):
+        self.misc.set("defaultCharLevel", f"{new_level}")
 
     @property
-    def decimalSeparator(self):
+    def node_power_theme(self):
+        i = int(self.misc.get("nodePowerTheme", 0))
+        if 0 <= i <= 2:
+            return i
+        self.node_power_theme = 0
+        return 0
+
+    def node_power_theme_text(self):
+        text = ["RED/BLUE", "RED/GREEN", "GREEN/BLUE"]
+        return text[int(self.misc.get("nodePowerTheme", 0))]
+
+    @node_power_theme.setter
+    def node_power_theme(self, new_theme):
+        self.misc.set("nodePowerTheme", f"{new_theme}")
+
+    @property
+    def connection_protocol(self):
+        i = int(self.misc.get("connectionProtocol", 0))
+        if 0 <= i <= 2:
+            return i
+        self.connection_protocol = 0
+        return 0
+
+    @connection_protocol.setter
+    def connection_protocol(self, new_protocol):
+        self.misc.set("connectionProtocol", f"{new_protocol}")
+
+    @property
+    def decimal_separator(self):
+        # ToDo: Use locale
+        # c = self.misc.get("decimalSeparator", "")
+        # if c = "":
+            # use locale
         return self.misc.get("decimalSeparator", ".")
 
-    @decimalSeparator.setter
-    def decimalSeparator(self, new_sep):
+    @decimal_separator.setter
+    def decimal_separator(self, new_sep):
         self.misc.set("decimalSeparator", new_sep)
 
     @property
-    def thousandsSeparator(self):
+    def thousands_separator(self):
+        # ToDo: Use locale
+        # c = self.misc.get("thousandsSeparator", "")
+        # if c = "":
+            # use locale
         return self.misc.get("thousandsSeparator", ",")
 
-    @thousandsSeparator.setter
-    def thousandsSeparator(self, new_sep):
+    @thousands_separator.setter
+    def thousands_separator(self, new_sep):
         self.misc.set("thousandsSeparator", new_sep)
 
     @property
-    def showThousandsSeparators(self):
-        return str_to_bool(self.misc.get("showThousandsSeparators", True))
+    def show_thousands_separators(self):
+        return str_to_bool(self.misc.get("showThousandsSeparators", "True"))
 
-    @showThousandsSeparators.setter
-    def showThousandsSeparators(self, new_bool):
-        self.misc.set("showThousandsSeparators", str(new_bool))
-
-    @property
-    # fmt: off
-    def defaultGemQuality(self):
-        _defaultGemQuality = self.misc.get("defaultGemQuality", 1)
-        if _defaultGemQuality < 0:
-            _defaultGemQuality = 0
-            self.misc.set("defaultGemQuality", f"{_defaultGemQuality}")
-        if _defaultGemQuality > 20:
-            _defaultGemQuality = 0
-            self.misc.set("defaultGemQuality", f"{_defaultGemQuality}")
-        return _defaultGemQuality
-    # fmt: on
-
-    @defaultGemQuality.setter
-    def defaultGemQuality(self, new_int):
-        self.misc.set("defaultGemQuality", f"{new_int}")
+    @show_thousands_separators.setter
+    def show_thousands_separators(self, new_bool):
+        self.misc.set("showThousandsSeparators", f"{new_bool}")
 
     @property
-    def buildSortMode(self):
+    def default_gem_quality(self):
+        i = int(self.misc.get("defaultGemQuality", "0"))
+        if 0 <= i <= 20:
+            return i
+        self.default_gem_quality = 0
+        return 0
+
+    @default_gem_quality.setter
+    def default_gem_quality(self, new_quality):
+        self.misc.set("defaultGemQuality", f"{new_quality}")
+
+    @property
+    def build_sort_mode(self):
         return self.misc.get("buildSortMode", "NAME")
 
-    @buildSortMode.setter
-    def buildSortMode(self, new_mode):
+    @build_sort_mode.setter
+    def build_sort_mode(self, new_mode):
         self.misc.set("buildSortMode", new_mode)
 
     @property
-    def betaMode(self):
-        return str_to_bool(self.misc.get("betaMode", False))
+    def proxy_url(self):
+        return self.misc.get("proxyURL", "")
 
-    @betaMode.setter
-    def betaMode(self, new_bool):
+    @proxy_url.setter
+    def proxy_url(self, new_proxy):
+        self.misc.set("proxyURL", new_proxy)
+
+    @property
+    def default_item_affix_quality(self):
+        return float(self.misc.get("defaultItemAffixQuality", ".50"))
+
+    @default_item_affix_quality.setter
+    def default_item_affix_quality(self, new_quality):
+        self.misc.set("defaultItemAffixQuality", f"{new_quality}")
+
+    @property
+    def build_path(self):
+        _dir = self.misc.get("buildPath", "")
+        if _dir == "":
+            _dir = self.build_dir
+        return _dir
+
+    @build_path.setter
+    def build_path(self, new_path):
+        self.misc.set("buildPath", new_path)
+
+    @property
+    def beta_mode(self):
+        return str_to_bool(self.misc.get("betaMode", "False"))
+
+    @beta_mode.setter
+    def beta_mode(self, new_bool):
         self.misc.set("betaMode", str(new_bool))
 
     @property
@@ -259,6 +314,7 @@ class Config:
         if height > self.screen_rect.height():
             print(f"Height: {height} is bigger than {self.screen_rect}. Correcting ...")
             height = self.screen_rect.height()
+        self.size = QSize(width, height)
         return QSize(width, height)
 
     @size.setter

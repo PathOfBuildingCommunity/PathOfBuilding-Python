@@ -6,6 +6,7 @@ External components are the status bar, toolbar (if exists), menus
 
 Icons by  Yusuke Kamiyamane (https://p.yusukekamiyamane.com/)
 """
+import re
 import platform
 import atexit
 import sys
@@ -19,9 +20,11 @@ from qdarktheme.qtpy.QtWidgets import (
     QFileDialog,
     QLabel,
     QMainWindow,
+    QDialog,
     QSpinBox,
     QWidget,
 )
+from PySide6.QtUiTools import QUiLoader
 
 from constants import *
 from pob_config import *
@@ -46,7 +49,6 @@ from PoB_Main_Window import Ui_MainWindow
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, _app) -> None:
         super(MainWindow, self).__init__()
-
         print(
             f"{datetime.datetime.now()}. {program_title}, running on",
             platform.system(),
@@ -54,7 +56,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             platform.version(),
         )
         self._os = platform.system()
-        # ToDo investigate if some settings need to be changed be o/s
+        self.loader = QUiLoader()
+        # ToDo investigate if some settings need to be changed per o/s
 
         self.setupUi(self)
         # When False stop all the images being deleted and being recreated
@@ -192,6 +195,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save_as)
         self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
+        self.action_Settings.triggered.connect(self.open_settings_dialog)
 
         self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
         self.combo_classes.currentTextChanged.connect(self.change_class)
@@ -268,7 +272,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filename, selected_filter = QFileDialog.getOpenFileName(
             self,
             app.tr("Open a build"),
-            str(self.config.buildPath),
+            str(self.config.build_path),
             f"{app.tr('Build Files')} (*.xml)",
         )
         if filename != "":
@@ -330,7 +334,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     self,
         #     app.tr("Save File"),
         #     app.tr("Save build"),
-        #     self.config.buildPath,
+        #     self.config.build_path,
         #     app.tr("Build Files (*.xml)"),
         # )
         # if filename != "":
@@ -541,7 +545,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
                 filename = re.sub(
-                    ".xml", "", str(Path(value).relative_to(self.config.buildPath))
+                    ".xml", "", str(Path(value).relative_to(self.config.build_path))
                 )
                 _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
@@ -551,6 +555,100 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def search_return_pressed(self):
         self.gview_Tree.add_tree_images()
+
+    @Slot()
+    def open_settings_dialog(self):
+        """
+        Load and Open the settings dialog. Save the results if needed.
+        :return:
+        """
+        # ToDo: Another function for loading the widgets, which can also setup a default settings, for use with a default settings button
+        # ToDo: show thousands separator for player stats
+
+        @Slot()
+        def setting_restore_defaults():
+            print("setting_restore_defaults")
+            set_dialog(True)
+
+        @Slot()
+        def setting_directory_dialog():
+            """
+            Open a directory only file dialog for setting the build path
+            :return: Path
+            """
+            print("setting_directory_dialog")
+            directory = QFileDialog.getExistingDirectory(self, "Select Build Path")
+            if directory != "":
+                dlg.lineedit_BuildPath.setText(directory)
+
+        @Slot()
+        def set_dialog(default=False):
+            """
+            Set dialog widgets with values.
+            :param default: If True, set widgets with default values
+            :return:
+            """
+            self.config
+            if default:
+                print("default")
+                self.config.reset()
+                print("default", self.config.decimal_separator)
+                # _config = ET.fromstring(default_config)
+            # print_a_xml_element(_config)
+            dlg.combo_Protocol.setCurrentIndex(self.config.connection_protocol)
+            # dlg.combo_Proxy.setCurrentIndex(config.p)
+            # dlg.lineedit_Proxy.setText(config.p)
+            dlg.lineedit_BuildPath.setText(str(self.config.build_path))
+            dlg.combo_NP_Colours.setCurrentIndex(self.config.node_power_theme)
+            dlg.check_Beta.setChecked(self.config.beta_mode)
+            dlg.check_ShowBuildName.setChecked(self.config.show_titlebar_name)
+            dlg.check_ShowThousandsSeparators.setChecked(self.config.show_thousands_separators)
+            dlg.lineedit_ThousandsSeparator.setText(self.config.thousands_separator)
+            dlg.lineedit_DecimalSeparator.setText(self.config.decimal_separator)
+            dlg.spin_GemQuality.setValue(self.config.default_gem_quality)
+            dlg.spin_Level.setValue(self.config.default_char_level)
+            dlg.hslider_AffixQuality.setValue(self.config.default_item_affix_quality)
+            dlg.check_BuildWarnings.setChecked(self.config.show_warnings)
+            dlg.check_Tooltips.setChecked(self.config.slot_only_tooltips)
+
+        dlg = self.loader.load(Path(self.config.exe_dir, "dlgConfig.ui"), self)
+        # Force discard to close the dialog
+        discard = dlg.btnBox.button(QDialogButtonBox.Discard)
+        discard.clicked.connect(dlg.reject)
+        discard.setToolTip("Abandon these setting. Change nothing.")
+        restore_defaults = dlg.btnBox.button(QDialogButtonBox.RestoreDefaults)
+        restore_defaults.clicked.connect(setting_restore_defaults)
+        restore_defaults.setToolTip("Load the original default settings.")
+        restore_defaults.setAutoDefault(False)
+        save = dlg.btnBox.button(QDialogButtonBox.Save)
+        save.setDefault(True)
+        save.setToolTip("Save the setting to current use and the settings file.")
+        dlg.btn_BuildPath.clicked.connect(setting_directory_dialog)
+        # fill the fields
+        set_dialog()
+
+        # 0 is discard, 1 is save
+        _return = dlg.exec()
+        if _return:
+            # read the fields
+            self.config.connection_protocol = dlg.combo_Protocol.currentIndex()
+            self.config.build_path = dlg.lineedit_BuildPath.text()
+            self.config.node_power_theme = dlg.combo_NP_Colours.currentIndex()
+            self.config.beta_mode = dlg.check_Beta.isChecked()
+            self.config.show_titlebar_name = dlg.check_ShowBuildName.isChecked()
+            self.config.show_thousands_separators = dlg.check_ShowThousandsSeparators.isChecked()
+            self.config.thousands_separator = dlg.lineedit_ThousandsSeparator.text()
+            self.config.decimal_separator = dlg.lineedit_DecimalSeparator.text()
+            self.config.default_gem_quality = dlg.spin_GemQuality.value()
+            self.config.default_char_level = dlg.spin_Level.value()
+            self.config.default_item_affix_quality = dlg.hslider_AffixQuality.value()
+            self.config.show_warnings = dlg.check_BuildWarnings.isChecked()
+            self.config.slot_only_tooltips = dlg.check_Tooltips.isChecked()
+            self.config.write()
+        else:
+            """discard a changes"""
+            self.config.read()
+        del dlg
 
 
 # Start here
