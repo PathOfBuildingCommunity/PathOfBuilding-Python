@@ -559,6 +559,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # Start here
 # sys.stdout = open("PathOfBuilding.log", 'a')
 app = QApplication(sys.argv)
+# font for stats box. Toline things up, we need a Mono font. Font acquired from from Linux.
 font = QFontDatabase.addApplicationFont(":/Font/Font/LuxiMono.ttf")
 
 window = MainWindow(app)
