@@ -52,7 +52,9 @@ class PlayerStats:
                         if "d" in _fmt:
                             _value = int(_value)
                         if _value < 0:
-                            _str_value = f'<span style="color:{ColourCodes.NEGATIVE.value};">{_fmt.format(_value)}</span>'
+                            _str_value = (
+                                f'<span style="color:{ColourCodes.NEGATIVE.value};">{_fmt.format(_value)}</span>'
+                            )
                         else:
                             _str_value = _fmt.format(_value)
                         self.win.textedit_Statistics.append(

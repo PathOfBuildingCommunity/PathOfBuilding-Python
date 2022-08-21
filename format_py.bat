@@ -1,2 +1,3 @@
-black --force-exclude PoB_rc.py src\*.py
+REM Match pyCharm's width
+black --line-length 120 --force-exclude PoB_rc.py src\*.py
 pause

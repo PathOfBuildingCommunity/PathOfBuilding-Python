@@ -84,23 +84,15 @@ class TreeUI:
         self.btn_Reset = QPushButton()
         self.btn_Import = QPushButton()
         self.btn_Export = QPushButton()
-        self.btn_Reset.setText(
-            QCoreApplication.translate("MainWindow", "Reset Tree...", None)
-        )
-        self.btn_Import.setText(
-            QCoreApplication.translate("MainWindow", "Import Tree ...", None)
-        )
-        self.btn_Export.setText(
-            QCoreApplication.translate("MainWindow", "Export Tree...", None)
-        )
+        self.btn_Reset.setText(QCoreApplication.translate("MainWindow", "Reset Tree...", None))
+        self.btn_Import.setText(QCoreApplication.translate("MainWindow", "Import Tree ...", None))
+        self.btn_Export.setText(QCoreApplication.translate("MainWindow", "Export Tree...", None))
         self.layout_tree_tools.addWidget(self.btn_Reset)
         self.layout_tree_tools.addWidget(self.btn_Import)
         self.layout_tree_tools.addWidget(self.btn_Export)
 
         self.label_Search = QLabel()
-        self.label_Search.setAlignment(
-            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter
-        )
+        self.label_Search.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.label_Search.setMinimumSize(QSize(50, 22))
         self.label_Search.setText("Search:")
         self.layout_tree_tools.addWidget(self.label_Search)
@@ -111,13 +103,9 @@ class TreeUI:
 
         self.check_show_node_power = QCheckBox()
         self.check_show_node_power.setMinimumSize(QSize(50, 22))
-        self.check_show_node_power.setText(
-            QCoreApplication.translate("MainWindow", "Show Node Power:", None)
-        )
+        self.check_show_node_power.setText(QCoreApplication.translate("MainWindow", "Show Node Power:", None))
         self.check_show_node_power.setLayoutDirection(Qt.RightToLeft)
-        self.check_show_node_power.stateChanged.connect(
-            self.set_show_node_power_visibility
-        )
+        self.check_show_node_power.stateChanged.connect(self.set_show_node_power_visibility)
         self.layout_tree_tools.addWidget(self.check_show_node_power)
         self.combo_show_node_power = QComboBox()
         self.combo_show_node_power.setMinimumSize(QSize(180, 22))
@@ -126,9 +114,7 @@ class TreeUI:
         self.layout_tree_tools.addWidget(self.combo_show_node_power)
         self.btn_show_power_report = QPushButton()
         self.btn_show_power_report.setVisible(False)
-        self.btn_show_power_report.setText(
-            QCoreApplication.translate("MainWindow", "Show Power Report ...", None)
-        )
+        self.btn_show_power_report.setText(QCoreApplication.translate("MainWindow", "Show Power Report ...", None))
         self.layout_tree_tools.addWidget(self.btn_show_power_report)
 
     def __repr__(self) -> str:

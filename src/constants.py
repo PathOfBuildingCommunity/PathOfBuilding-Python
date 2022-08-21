@@ -11,7 +11,7 @@ All values should only be scaled on point of entry, ie: when they are first proc
 """
 global_scale_factor = 2
 
-_VERSION = "3.18"
+_VERSION = 3.18
 _VERSION_str = "3_18"
 
 # Default config incase the settings file doesn't exist

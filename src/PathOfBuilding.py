@@ -140,10 +140,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Dump the placeholder Graphics View and add our own
         self.gview_Tree = TreeView(self.config, self.build)
-        self.vlayout_tabTree.replaceWidget(
-            self.graphicsView_PlaceHolder, self.gview_Tree
-        )
-        # Add our FlowLayout to
+        self.vlayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gview_Tree)
+        # Add our FlowLayout too
         self.layout_config = FlowLayout(None, 0)
         self.frame_Config.setLayout(self.layout_config)
         self.layout_config.addItem(self.grpbox_General)
@@ -156,9 +154,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.graphicsView_PlaceHolder.setParent(None)
 
         # set the ComboBox dropdown width.
-        self.combo_Bandits.view().setMinimumWidth(
-            self.combo_Bandits.minimumSizeHint().width()
-        )
+        self.combo_Bandits.view().setMinimumWidth(self.combo_Bandits.minimumSizeHint().width())
 
         """
             End: Do what the QT Designer cannot yet do 
@@ -175,9 +171,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.combo_MinorGods.addItem(pantheon_minor_gods[name], name)
 
         # Add content to Colour ComboBox
-        self.combo_Notes_Colour.addItems(
-            [colour.name.title() for colour in ColourCodes]
-        )
+        self.combo_Notes_Colour.addItems([colour.name.title() for colour in ColourCodes])
 
         # get the initial colour of the edit box for later use as 'NORMAL'
         # self.config.default_notes_text_colour = self.textedit_Notes.textColor()
@@ -215,9 +209,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             width of the dropdowns. Soreapply the current theme in an attempt to force the correct colours.
         """
         # don't use self.switch_theme
-        QApplication.instance().setStyleSheet(
-            qdarktheme.load_stylesheet(self._theme, self._border_radius)
-        )
+        QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
 
     def exit_handler(self):
         """
@@ -437,9 +429,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         self.build.bandit = self.combo_Bandits.currentData()
         self.max_points = self.build.bandit == "None" and 123 or 121
-        self.label_points.setText(
-            f" {len(self.build.current_spec.nodes)} / {self.max_points}  0 / 8 "
-        )
+        self.label_points.setText(f" {len(self.build.current_spec.nodes)} / {self.max_points}  0 / 8 ")
 
     # don't use native signals/slot, so focus can be set back to edit box
     @Slot()
@@ -490,9 +480,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.action_Theme.setText("Dark")
 
         self.config.theme = new_theme
-        QApplication.instance().setStyleSheet(
-            qdarktheme.load_stylesheet(self._theme, self._border_radius)
-        )
+        QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
 
     @Slot()
     def set_tab_focus(self, index):
@@ -514,9 +502,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Focus a Widget
         tab_focus.get(index).setFocus()
         # update the build
-        self.build.current_tab = self.tab_main.tabWhatsThis(
-            self.tab_main.currentIndex()
-        )
+        self.build.current_tab = self.tab_main.tabWhatsThis(self.tab_main.currentIndex())
         # Turn on / off actions as needed
         self.action_ManageTrees.setVisible(self.build.current_tab == "TREE")
 
@@ -536,16 +522,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             :param _filename:
             :return:
             """
-            _action.triggered.connect(
-                lambda checked: self._open_previous_build(checked, _idx, _filename)
-            )
+            _action.triggered.connect(lambda checked: self._open_previous_build(checked, _idx, _filename))
 
         recent_builds = config.recent_builds()
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
-                filename = re.sub(
-                    ".xml", "", str(Path(value).relative_to(self.config.build_path))
-                )
+                filename = re.sub(".xml", "", str(Path(value).relative_to(self.config.build_path)))
                 _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
 
@@ -559,7 +541,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # Start here
 # sys.stdout = open("PathOfBuilding.log", 'a')
 app = QApplication(sys.argv)
-# font for stats box. Toline things up, we need a Mono font. Font acquired from from Linux.
+# font for stats box. To line things up, we need a Mono font. Font acquired from Linux.
 font = QFontDatabase.addApplicationFont(":/Font/Font/LuxiMono.ttf")
 
 window = MainWindow(app)

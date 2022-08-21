@@ -67,12 +67,14 @@ class Node:
         self.isKeystone = _node.get("isKeystone", False)
         self.flavourText = _node.get("flavourText", "")
 
-        """ These value are text items indicating the name of a file. 
+        """ These values are text items indicating the name of a file. 
             We will overwrite them with a handle to an image"""
         self.icon = _node.get("icon", "")
+        self.activeEffectImage = _node.get("activeEffectImage", "")
         self.inactiveIcon = _node.get("inactiveIcon", "")
         self.activeIcon = _node.get("activeIcon", "")
-        self.activeEffectImage = _node.get("activeEffectImage", "")
+        self.inactiveOverlay = None
+        self.activeOverlay = None
 
     @property
     def id(self):

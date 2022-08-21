@@ -15,6 +15,7 @@ It is referenced by the TreeView class to display the tree
 import re
 import math
 from collections import OrderedDict
+from pprint import pprint
 
 from qdarktheme.qtpy.QtCore import QRect, Qt
 from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter
@@ -29,11 +30,11 @@ from node import Node
 
 
 # fmt: off
-# Formatting makes a mess of these structures
+# Formatting makes a mess of these structures (unreadable)
 def calc_orbit_angles(nodes_in_orbit):
     orbit_angles = {}
     if nodes_in_orbit == 16:
-        # Every 30 and 45 degrees, per https://github.com/grindinggear/skilltree-export/blob/3.17.0/README.md
+        # Every 30 and 45 degrees, per https://github.com/grindinggear/skilltree-export
         orbit_angles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330]
     elif nodes_in_orbit == 40:
         # Every 10 and 45 degrees
@@ -61,7 +62,6 @@ class Tree:
         self.version = _version
 
         self.name = "Default"
-        # self._char_class = PlayerClasses.SCION.value  # can't use class here
         self.ui = None
         self.allocated_nodes = set()
         self.assets = {}
@@ -80,6 +80,8 @@ class Tree:
         self.orbitRadii = {}
         self.orbit_anglesByOrbit = {}
 
+        # sprite_sheets is a way of tracking what we've loaded. it is referenced by all Art loading procedures
+        self.sprite_sheets = {}
         self.ascendancyMap = {}
         self.clusterNodeMap = {}
         self.constants = {}
@@ -111,25 +113,26 @@ class Tree:
     @version.setter
     def version(self, new_vers):
         self._version = new_vers
-        self.tree_version_path = Path(
-            self.config.tree_data_path, re.sub("\.", "_", str(new_vers))
-        )
+        self.tree_version_path = Path(self.config.tree_data_path, re.sub("\.", "_", str(new_vers)))
         self.json_file_path = Path(self.tree_version_path, "tree.json")
         self.legion_path = Path(self.config.tree_data_path, "legion")
 
-    def add_picture(self, name, x, y, z=0):
+    def add_picture(self, name, x, y, ox, oy, z=0):
         """
         Add a picture
         :param name: string or pixmap to be added
-        :param x, y: it's position in the scene
-        :param z: which layer to use:  -2: background, -1: connectors, 0: inactive,
-                                        1: active (overwriting it's equivalent ???)
+        :param x: it's position in the scene
+        :param y: it's position in the scene
+        :param ox: it's position in the scene
+        :param oy: it's position in the scene
+        :param z: Layers: which layer to use:
+        :param node: Node: which node is this item:
         :return: ptr to the created TreeGraphicsItem
         """
         # if pixmap and not pixmap.isNull():
-        image = TreeGraphicsItem(self.config, name, z, False)
+        image = TreeGraphicsItem(self.config, name, z, True)
         image.setPos(x, y)
-        image.setZValue(z)
+        image.setOffset(ox, oy)
         self.graphics_items.append(image)
         return image
 
@@ -159,22 +162,25 @@ class Tree:
         self.total_points = json_dict["points"]["totalPoints"]
         self.ascendancy_points = json_dict["points"]["ascendancyPoints"]
         # and now split the file into dicts
-        self.assets = json_dict["assets"]
+        if self._version < 3.18:
+            self.assets = json_dict["assets"]
+            # this information is moved into self.spriteMap
+            skill_sprites = json_dict["skillSprites"]
+        else:
+            skill_sprites = json_dict["sprites"]
+            self.assets = self.spriteMap
         self.classes = json_dict["classes"]
         self.constants = json_dict["constants"]
         self.groups = json_dict["groups"]
         self.nodes = json_dict["nodes"]
-        # this information is moved into self.spriteMap
-        skill_sprites = json_dict["skillSprites"]
 
         # -1 one as the dictionaries are 0 based indexes
-        num_zoom_levels = len(json_dict["imageZoomLevels"]) - 1
+        # num_zoom_levels = len(json_dict["imageZoomLevels"]) - 1
+        zoom_text = f'{json_dict["imageZoomLevels"][-1]}'
 
         self.skillsPerOrbit = self.constants["skillsPerOrbit"]
         self.orbitRadii = self.constants["orbitRadii"]
-        self.orbitRadii = [
-            i / global_scale_factor for i in self.constants["orbitRadii"]
-        ]
+        self.orbitRadii = [i / global_scale_factor for i in self.constants["orbitRadii"]]
 
         self.orbit_anglesByOrbit = {}
         for orbit, skillsInOrbit in enumerate(self.skillsPerOrbit):
@@ -183,13 +189,11 @@ class Tree:
         """Build maps of class name -> class table"""
         ascend_name_map = {}
         class_notables = {}
-        # loop though each class
+        # loop through each class
         for class_id, _class in enumerate(self.classes):
-            # create the first entry as "0" = None
+            # create the first ascendancy for each class as; "0" = None
             _class.update({0: {"name": "None"}})
-            for ascend_class_id, _ascend_class in enumerate(
-                _class.get("ascendancies", None)
-            ):
+            for ascend_class_id, _ascend_class in enumerate(_class.get("ascendancies", None)):
                 ascend_name_map[_ascend_class.get("name")] = {
                     "classId": class_id,
                     "class": _class,
@@ -197,32 +201,29 @@ class Tree:
                     "ascendClass": _ascend_class,
                 }
 
-        """ The sprite_sheets variable is a way of tracking what we've downloaded.
-            might have thought the presence of the file would have done that."""
         sprite_sheets = {}
-        # Process a sprite map list for loading the image (downloading it too later)
-        self.process_sprite_map(
-            skill_sprites, sprite_sheets, self.tree_version_path, num_zoom_levels
-        )
+        # Process a sprite map list for loading the image
+        self.process_sprite_map(skill_sprites, sprite_sheets, self.tree_version_path, zoom_text)
 
-        """Now do the legion sprite import"""
-        legion_sprites = pob_file.read_json(Path(self.legion_path, "tree-legion.json"))
-        if not legion_sprites:
-            ui_utils.critical_dialog(
-                self.config.win,
-                "f{self.config.app.tr('Load File')}",
-                "f{self.config.app.tr('An error occurred to trying load')}:\n{self.legion_file_path}",
-                self.config.app.tr("Close"),
-            )
-        else:
-            # Process a sprite map list for loading the image (downloading it too later)
-            self.process_sprite_map(
-                legion_sprites["legionSprites"], sprite_sheets, self.legion_path, 0
-            )
-
-        """Now do the other asset's import"""
-        self.process_assets(self.assets)
-
+        # """Now do the legion sprite import"""
+        # legion_sprites = pob_file.read_json(Path(self.legion_path, "tree-legion.json"))
+        # if not legion_sprites:
+        #     ui_utils.critical_dialog(
+        #         self.config.win,
+        #         "f{self.config.app.tr('Load File')}",
+        #         "f{self.config.app.tr('An error occurred to trying load')}:\n{self.legion_file_path}",
+        #         self.config.app.tr("Close"),
+        #     )
+        # else:
+        #     # Process a sprite map list for loading the image (downloading it too later)
+        #     self.process_sprite_map(
+        #         legion_sprites["legionSprites"], sprite_sheets, self.legion_path, 0
+        #     )
+        #
+        # """Now do the other asset's import"""
+        # if self._version < 3.18:
+        #   self.process_assets(self.assets)
+        #
         """ Migrate groups to old format. To be evaluated if this is needed
             also scale x,y"""
         for g in self.groups:
@@ -234,8 +235,8 @@ class Tree:
             for orbit in group["orbits"]:
                 group["oo"][orbit] = True
 
-        """ Create a dictionary list of nodes of class Node()
-            self.nodes = dictionary from the json"""
+        # """ Create a dictionary list of nodes of class Node()
+        #     self.nodes = dictionary from the json"""
         # make the root node go away
         del self.nodes["root"]
         for n in self.nodes:
@@ -259,8 +260,15 @@ class Tree:
             # Finally the node will get an x,y value. Now we can show it.
             self.process_node(node)
 
+        # Add the group backgrounds
+        for g in self.groups:
+            group = self.groups[g]
+            if not group.get("isProxy", False):
+                self.render_group(group, g)
+
             # ToDo: Temporary code for data checking purposes
             # ToDo: Leave in place until all coding, including calcs are complete
+            # from pprint import pprint
             # _path = Path("temp")
             # if not _path.exists():
             #     _path.mkdir()
@@ -275,28 +283,60 @@ class Tree:
             #         fout,
             #     )
 
-        # load
+    # load
 
     def process_node(self, node: Node):
+        """
+
+        :param node:
+        :return:
+        """
+
+        def add_sprite(_sprite, _layer=Layers.inactive):
+            """
+            add a sprite to our graphics list
+            :param _sprite: the inactive sprite or overlay to be added
+            :param _layer: the layer this sprite is to be added in
+            :return: a reference to the tree graphic image added
+            """
+            sprite = self.add_picture(
+                _sprite["handle"],
+                node.x,
+                node.y,
+                _sprite["ox"],
+                _sprite["oy"],
+                _layer,
+            )
+            sprite.node_id = node.id
+            sprite.filename = node.icon
+            sprite.node_sd = node.sd
+            sprite.node_name = node.name
+            return sprite
+
+        inactive_sprite = None
         # Assign node artwork assets
-        if node.type == "Mastery" and node.masteryEffects:
-            node.masterySprites = {
-                "activeIcon": self.spriteMap[node.activeIcon],
-                "inactiveIcon": self.spriteMap[node.inactiveIcon],
-                "activeEffectImage": self.spriteMap[node.activeEffectImage],
-            }
+        if node.type == "Mastery":
+            # This is the icon that appears in the center of many groups
+            if node.masteryEffects:
+                node.masterySprites = {
+                    "activeIcon": self.spriteMap[node.activeIcon]["masteryActiveSelected"],
+                    "inactiveIcon": self.spriteMap[node.inactiveIcon]["masteryInactive"],
+                    "activeEffectImage": self.spriteMap[node.activeEffectImage]["masteryActiveEffect"],
+                }
+                inactive_sprite = self.spriteMap[node.inactiveIcon]["masteryInactive"]
+            else:
+                node.sprites = self.spriteMap[node.icon]["mastery"]
+                inactive_sprite = node.sprites
         else:
             node.sprites = self.spriteMap[node.icon]
+            if node.type not in ("Socket", "ClassStart"):
+                inactive_sprite = node.sprites[f"{node.type.lower()}Inactive"]
         # setting this to "if node.sprites is not None:" makes the sprites disappear
         #       if x is not None # which works only on None
-        if not node.sprites:
-            node.sprites = self.spriteMap[
-                "Art/2DArt/SkillIcons/passives/MasteryBlank.png"
-            ]
-        node.overlay = nodeOverlay.get(node.type, None)
-        if node.overlay:
-            node.rsq = node.overlay["rsq"]
-            node.size = node.overlay["size"]
+        if not node.sprites and not node.masterySprites:
+            node.sprites = self.spriteMap["Art/2DArt/SkillIcons/passives/MasteryBlank.png"]["normalInactive"]
+            inactive_sprite = node.sprites
+            print(node.type, inactive_sprite)
 
         # Derive the true position of the node
         if node.group:
@@ -304,22 +344,47 @@ class Tree:
             node.angle = self.orbit_anglesByOrbit[node.o][node.oidx]
             orbit_radius = self.orbitRadii[node.o]
 
-            """ Move all Ascendancy nodes to the correct location"""
-            # Ascendant position in the json is good ...
+            """ Move all nodes to the correct location"""
+            # _a_name == "" is a non ascendancy node
             _a_name = node.ascendancyName
+            # Ascendant position in the json is good ...
             if _a_name == "" or _a_name == "Ascendant":
                 node.x = node.group["x"] + math.sin(node.angle) * orbit_radius
                 node.y = node.group["y"] - math.cos(node.angle) * orbit_radius
             else:
-                # ... everyone else needs hard coding
-                node.x = (
-                    ascendancy_positions[_a_name]["x"]
-                    + math.sin(node.angle) * orbit_radius
-                )
-                node.y = (
-                    ascendancy_positions[_a_name]["y"]
-                    - math.cos(node.angle) * orbit_radius
-                )
+                # ... all other ascendancies else needs hard coding
+                node.x = ascendancy_positions[_a_name]["x"] + math.sin(node.angle) * orbit_radius
+                node.y = ascendancy_positions[_a_name]["y"] - math.cos(node.angle) * orbit_radius
+
+            # if node.type == "Mastery":
+            #     print(node.type, inactive_sprite)
+            if inactive_sprite and inactive_sprite.get("handle", None) is not None:
+                # if node.type == "Mastery":
+                #     print(node.type, inactive_sprite)
+                add_sprite(inactive_sprite)
+
+            # "ClassStart" might belong in treeView still depending on the size of the active asset
+            if node.type == "ClassStart":
+                node.inactiveOverlay = self.spriteMap["PSStartNodeBackgroundInactive"]["startNode"]
+                add_sprite(node.inactiveOverlay)
+            elif node.type == "AscendClassStart":
+                node.inactiveOverlay = self.spriteMap["AscendancyMiddle"]["ascendancy"]
+                add_sprite(node.inactiveOverlay)
+            else:
+                node.overlay = nodeOverlay.get(node.type, None)
+                # print(node.type, node.overlay)
+                if node.overlay:
+                    node.rsq = node.overlay["rsq"]
+                    node.size = node.overlay["size"]
+                    _layer = node.type == "Notable" and Layers.key_overlays or Layers.small_overlays
+                    overlay_name = node.overlay.get(
+                        f"unalloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
+                        "",
+                    )
+                    overlay_type = f"{'Ascendancy' in overlay_name and 'ascendancy' or 'frame'}"
+                    node.inactiveOverlay = self.spriteMap[overlay_name][overlay_type]
+                    overlay = add_sprite(node.inactiveOverlay, _layer)
+                    overlay.node_isoverlay = True
 
     # process_node
 
@@ -337,7 +402,8 @@ class Tree:
             _class = self.classes[node.classStartIndex]
             _class["startNodeId"] = node.id
         elif node.isAscendancyStart:
-            node.type = "AscendClassStart"
+            # node.type = "AscendClassStart"
+            node.type = "Normal"
             ascend_name_map[node.ascendancyName]["ascendClass"]["startNodeId"] = node.id
         elif node.isMastery:
             node.type = "Mastery"
@@ -366,19 +432,10 @@ class Tree:
                     self.notableMap[node.dn.lower()] = node
             else:
                 self.ascendancyMap[node.dn.lower()] = node
-                if (
-                    class_notables.get(
-                        ascend_name_map[node.ascendancyName]["class"]["name"], None
-                    )
-                    is None
-                ):
-                    class_notables[
-                        ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = {}
+                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
+                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
                 if ascend_name_map[node.ascendancyName]["class"]["name"] != "Scion":
-                    class_notables[
-                        ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = node.dn
+                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
         else:
             node.type = "Normal"
             # Add all notables in the Scion Ascendancy, by excluding all the little nodes
@@ -390,18 +447,9 @@ class Tree:
                 and "Passive" not in node.dn
             ):
                 self.ascendancyMap[node.dn.lower()] = node
-                if (
-                    class_notables.get(
-                        ascend_name_map[node.ascendancyName]["class"]["name"], None
-                    )
-                    is None
-                ):
-                    class_notables[
-                        ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = {}
-                class_notables[
-                    ascend_name_map[node.ascendancyName]["class"]["name"]
-                ] = node.dn
+                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
+                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
+                class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
 
     # set_node_type
 
@@ -412,45 +460,70 @@ class Tree:
         :param sprite_list: Incoming Dictionary from a json file
         :param sprite_map: Dictionary to stop duplicate loading of a GraphicItem, to be shared between instantiations
         :param sprite_path: The path where the images are stored
-        :param index: A number describing which set of values to use
+        :param index: str: The string repesenting the highest zoom level
         :return: N/A
         """
-        # _type will be like normalActive, normalInactive
+
+        def mirror_image(_image):
+            """
+            Mirror an image. Specifically GroupBackgroundLargeHalfAlt
+            :param: _source: the image to be mirrored
+            :return: the mirrored image
+            """
+            _source = _image.toImage()
+            _result = QPixmap(_source.width(), _source.height() * 2)
+            _result.fill(Qt.transparent)
+            painter = QPainter()
+            painter.begin(_result)
+            painter.setRenderHint(QPainter.Antialiasing)
+            painter.drawImage(0, 0, _source)
+            painter.setCompositionMode(QPainter.CompositionMode_SourceOver)
+            painter.drawImage(0, _source.height(), _source.mirrored())
+            painter.end()
+            return _result
+
+        # _type will be like normalActive, normalInactive, background
         for _type in sprite_list:
-            _data = sprite_list[_type][index]
-            # remap skill_sprites' filename attribute to a valid runtime filename
+            # We don't use a background tile
+            if _type == "background":
+                continue
+            _data = sprite_list[_type].get(index, None) or sprite_list[_type].get("1", None)
+            if _data is None:
+                continue
+            # overwrite skill_sprites' filename attribute to a valid runtime filename
             filename = Path(re.sub("(\?.*)$", "", _data["filename"])).name
             filename = Path(sprite_path, filename)
             _data["filename"] = filename
             pixmap = sprite_map.get(filename, None)
             if pixmap is None:
-                # As the source is a sprite sheet, x,y can be 0 as it won't be seen on screen as itself.
                 pixmap = QPixmap(filename)
                 sprite_map[filename] = pixmap
+            # name could be "Art/2DArt/SkillIcons/passives/2handeddamage.png", "ClassesAscendant"
             for name in _data["coords"]:
                 if self.spriteMap.get(name, None) is None:
                     self.spriteMap[name] = {}
                 coord = _data["coords"][name]
-                w = int(coord["w"])
-                h = int(coord["h"])
+                # these are coordinates into the sprite map, not the screen
                 x = int(coord["x"])
                 y = int(coord["y"])
+                w = int(coord["w"])
+                h = int(coord["h"])
                 # Get a copy of the original image, cropped to coords()
                 image = pixmap.copy(x, y, w, h)
-                # ToDo: How much of this is needed.
-                # 1..4 was tcLeft, tcTop, tcRight, tcBottom in lua's DrawImage
+                if name == "GroupBackgroundLargeHalfAlt" or name == "PSGroupBackground3":
+                    image = mirror_image(image)
+                    h *= 2
                 self.spriteMap[name][_type] = {
                     "handle": image,
                     "name": name,
                     "width": w,
                     "height": h,
-                    "ox": x,
-                    "oy": y,
-                    "1": x / w,
-                    "2": y / h,
-                    "3": (x + w) / w,
-                    "4": (y + h) / h,
+                    "ox": -w / 2,
+                    "oy": -h / 2,
                 }
+
+        # with open("temp/spriteMap.txt", "a") as f_out:
+        #     pprint(self.spriteMap, f_out)
 
     # process_sprite_map
 
@@ -489,6 +562,90 @@ class Tree:
         #     pprint(self.spriteMap, f_out)
 
     # process_assets
+
+    def render_group(self, _group, g, is_expansion=False):
+        __image = None
+        scale = 1
+        if _group.get("ascendancyName") != "":
+            _name = _group["ascendancyName"]
+            # ToDo: Accommodate a bug that makes Chieftain disappear
+            if _name == "Chieftain":
+                _group["isAscendancyStart"] = True
+            if _group.get("isAscendancyStart", False):
+                # This is the ascendancy circles around the outside of the tree
+                # Ascendant position in the json is good, everyone else needs hard coding
+                if _name == "Ascendant":
+                    _x, _y = _group["x"], _group["y"]
+                else:
+                    _x, _y = (
+                        ascendancy_positions[_name]["x"],
+                        ascendancy_positions[_name]["y"],
+                    )
+
+                # add the picture and shift it by half itself to line up with the nodes
+                sprite = self.spriteMap[f"Classes{_name}"]["ascendancyBackground"]
+                __image = self.add_picture(
+                    sprite["handle"],
+                    _x,
+                    _y,
+                    sprite["ox"],
+                    sprite["oy"],
+                    Layers.backgrounds,
+                )
+                __image.setScale(2.5 / global_scale_factor)
+                __image.filename = f"Classes{_name}"
+                # Darken if Ascendancy. Chieftain is brighter than the rest
+                __image.setOpacity(_name == "Chieftain" and 0.2 or 0.4)
+
+        # Large background
+        elif _group["oo"].get(3, False):
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundLargeHalfAlt" or "PSGroupBackground3"][
+                "groupBackground"
+            ]
+            __image = self.add_picture(
+                sprite["handle"],
+                _group["x"],
+                _group["y"],
+                sprite["ox"],
+                sprite["oy"],
+                Layers.group,
+            )
+            __image.filename = f"{g} GroupBackgroundLargeHalfAlt"
+            __image.setScale(2 / global_scale_factor)
+
+        # Medium background
+        elif _group["oo"].get(2, False):
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundMediumAlt" or "PSGroupBackground2"][
+                "groupBackground"
+            ]
+            __image = self.add_picture(
+                sprite["handle"],
+                _group["x"],
+                _group["y"],
+                sprite["ox"],
+                sprite["oy"],
+                Layers.group,
+            )
+            __image.filename = f"{g} GroupBackgroundMediumAlt"
+            __image.setScale(2 / global_scale_factor)
+
+        # Small background
+        elif _group["oo"].get(1, False):
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundSmallAlt" or "PSGroupBackground1"][
+                "groupBackground"
+            ]
+            __image = self.add_picture(
+                sprite["handle"],
+                _group["x"],
+                _group["y"],
+                sprite["ox"],
+                sprite["oy"],
+                Layers.group,
+            )
+            __image.filename = f"{g} GroupBackgroundSmallAlt"
+            __image.setScale(2.5 / global_scale_factor)
+
+    # render_group
 
 
 def test(config: Config) -> None:

@@ -68,7 +68,7 @@ def print_a_xml_element(the_element):
     """
     lines = traceback.format_stack()
     print(lines[-2].strip())
-    print(ET.tostring(the_element, encoding='utf8').decode('utf8'))
+    print(ET.tostring(the_element, encoding="utf8").decode("utf8"))
     print()
 
 
@@ -207,7 +207,7 @@ class Config:
         # ToDo: Use locale
         # c = self.misc.get("decimalSeparator", "")
         # if c = "":
-            # use locale
+        # use locale
         return self.misc.get("decimalSeparator", ".")
 
     @decimal_separator.setter
@@ -219,7 +219,7 @@ class Config:
         # ToDo: Use locale
         # c = self.misc.get("thousandsSeparator", "")
         # if c = "":
-            # use locale
+        # use locale
         return self.misc.get("thousandsSeparator", ",")
 
     @thousands_separator.setter

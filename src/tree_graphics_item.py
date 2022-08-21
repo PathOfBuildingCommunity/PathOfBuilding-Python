@@ -51,6 +51,9 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         self.filename = ""
         self.data = ""
         self.node_id = 0
+        self.node_sd = ""
+        self.node_name = ""
+        self.node_isoverlay = False
         self.setPixmap(_image)
         if not type(_image) == QPixmap:
             self.filename = str(_image)

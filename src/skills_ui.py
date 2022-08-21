@@ -115,33 +115,19 @@ class SkillsUI:
         :return: N/A
         """
         self.skills = _skills
-        self.win.check_SortByDPS.setChecked(
-            str_to_bool(self.skills.get("sortGemsByDPS", True))
-        )
-        self.win.check_MatchToLevel.setChecked(
-            str_to_bool(self.skills.get("matchGemLevelToCharacterLevel", False))
-        )
-        self.win.check_ShowGemQualityVariants.setChecked(
-            str_to_bool(self.skills.get("showAltQualityGems", False))
-        )
-        set_combo_index_by_data(
-            self.win.combo_SortByDPS, self.skills.get("sortGemsByDPSField", "FullDPS")
-        )
+        self.win.check_SortByDPS.setChecked(str_to_bool(self.skills.get("sortGemsByDPS", True)))
+        self.win.check_MatchToLevel.setChecked(str_to_bool(self.skills.get("matchGemLevelToCharacterLevel", False)))
+        self.win.check_ShowGemQualityVariants.setChecked(str_to_bool(self.skills.get("showAltQualityGems", False)))
+        set_combo_index_by_data(self.win.combo_SortByDPS, self.skills.get("sortGemsByDPSField", "FullDPS"))
         set_combo_index_by_data(
             self.win.combo_ShowSupportGems,
             self.skills.get("showSupportGemTypes", "ALL"),
         )
-        self.win.spin_DefaultGemLevel.setValue(
-            int(self.skills.get("defaultGemLevel", 20))
-        )
-        self.win.spin_DefaultGemQuality.setValue(
-            int(self.skills.get("defaultGemQuality", 0))
-        )
+        self.win.spin_DefaultGemLevel.setValue(int(self.skills.get("defaultGemLevel", 20)))
+        self.win.spin_DefaultGemQuality.setValue(int(self.skills.get("defaultGemQuality", 0)))
 
         # disconnect triggers
-        self.win.list_SocketGroups.currentRowChanged.disconnect(
-            self.change_socket_group
-        )
+        self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
         self.win.combo_SkillSet.currentIndexChanged.disconnect(self.change_skill_set)
 
         self.win.combo_SkillSet.clear()
@@ -150,9 +136,7 @@ class SkillsUI:
         if len(_sets) > 0:
             for idx, _set in enumerate(self.skills.findall("SkillSet")):
                 self.skill_sets.append(_set)
-                self.win.combo_SkillSet.addItem(
-                    _set.get("title", f"Default{idx + 1}"), idx
-                )
+                self.win.combo_SkillSet.addItem(_set.get("title", f"Default{idx + 1}"), idx)
         else:
             # The lua version won't create a <skillset> (socket group) if there is only one.
             # let's create one so we have code compatibility in all circumstances
@@ -197,9 +181,7 @@ class SkillsUI:
         :return:
         """
         # disconnect triggers
-        self.win.list_SocketGroups.currentRowChanged.disconnect(
-            self.change_socket_group
-        )
+        self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
         self.win.combo_SkillSet.currentIndexChanged.disconnect(self.change_skill_set)
 
         # unload the previous set, saving it's state
@@ -267,7 +249,12 @@ class SkillsUI:
         :param _index: index to display
         :return: N/A
         """
-        print("load_socket_group", _index, self.current_skill_set, len(self.current_skill_set))
+        print(
+            "load_socket_group",
+            _index,
+            self.current_skill_set,
+            len(self.current_skill_set),
+        )
         self.clear_gem_ui_list()
         if index_exists(self.current_skill_set, _index):
             self.current_socket_group = self.current_skill_set[_index]
@@ -314,9 +301,7 @@ class SkillsUI:
         ui: GemUI = self.gem_ui_list[index]
         ui.fill_gem_list(self.gems, index == 0)
 
-        ui.check_GemRemove.stateChanged.connect(
-            lambda checked: self.gem_remove_checkbox_selected(index)
-        )
+        ui.check_GemRemove.stateChanged.connect(lambda checked: self.gem_remove_checkbox_selected(index))
         return ui
 
     def remove_gem_ui(self, index):
@@ -475,9 +460,7 @@ class GemUI:
         :return:
         """
         self._index = new_index
-        self.frame.setGeometry(
-            400, 90 + (new_index * self.frame_height), 620, self.frame_height
-        )
+        self.frame.setGeometry(400, 90 + (new_index * self.frame_height), 620, self.frame_height)
 
     def load(self, gem):
         """
@@ -536,9 +519,7 @@ class GemUI:
             if support_only and gem_list[g].get("is_support", False):
                 self.combo_GemList.addItem(gem_list[g]["base_item"]["display_name"], g)
         # set the ComboBox dropdown width.
-        self.combo_GemList.view().setMinimumWidth(
-            self.combo_GemList.minimumSizeHint().width()
-        )
+        self.combo_GemList.view().setMinimumWidth(self.combo_GemList.minimumSizeHint().width())
         # ToDo: Sort by other methods
         # Sort Alphabetically
         self.combo_GemList.model().sort(0)
