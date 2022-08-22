@@ -13,22 +13,6 @@
   <property name="windowTitle">
    <string>Character Import</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>230</x>
-     <y>460</y>
-     <width>341</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Close</set>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_Import">
    <property name="geometry">
     <rect>
@@ -71,7 +55,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QComboBox" name="combo_Environment">
+  <widget class="QComboBox" name="combo_Realm">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -82,27 +66,27 @@
    </property>
    <item>
     <property name="text">
-     <string>PC</string>
+     <string notr="true">PC</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Xbox</string>
+     <string notr="true">Xbox</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>PS4</string>
+     <string notr="true">PS4</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Garena</string>
+     <string notr="true">Garena</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Tencent</string>
+     <string notr="true">Tencent</string>
     </property>
    </item>
   </widget>
@@ -116,7 +100,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="lineedit_Account">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -316,7 +300,7 @@
      <string>To import a build, enter URL or code here:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_BuildShare">
+   <widget class="QLineEdit" name="lineedit_BuildShare">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -360,40 +344,20 @@
     </property>
    </widget>
   </widget>
+  <widget class="QPushButton" name="btn_Close">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>470</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

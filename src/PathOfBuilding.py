@@ -39,6 +39,8 @@ from notes_ui import NotesUI
 from skills_ui import SkillsUI
 from tree_ui import TreeUI
 from tree_view import TreeView
+from import_dialog import ImportDlg
+from export_dialog import ExportDlg
 
 # from tree_graphics_item import TreeGraphicsItem
 
@@ -190,6 +192,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Save.triggered.connect(self.build_save_as)
         self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
         self.action_Settings.triggered.connect(self.config.open_settings_dialog)
+        self.action_Import.triggered.connect(self.open_import_dialog)
+        self.action_Export.triggered.connect(self.open_export_dialog)
 
         self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
         self.combo_classes.currentTextChanged.connect(self.change_class)
@@ -505,6 +509,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.build.current_tab = self.tab_main.tabWhatsThis(self.tab_main.currentIndex())
         # Turn on / off actions as needed
         self.action_ManageTrees.setVisible(self.build.current_tab == "TREE")
+
+    @Slot()
+    def open_import_dialog(self):
+        dlg = ImportDlg(self.build, self.config, self)
+        dlg.exec()
+
+    @Slot()
+    def open_export_dialog(self):
+        dlg = ExportDlg(self.build, self.config, self)
+        dlg.exec()
 
     # Setup menu entries for all valid recent builds in the settings file
     def set_recent_builds_menu_items(self, config: Config):

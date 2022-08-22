@@ -330,7 +330,7 @@ class Config:
     def recent_builds(self):
         """
         Recent builds are a list of xml's that have been opened, to a maximum of 10 entries
-        :returns: an Ordered dictionary list of recent builds
+        :returns: a list of recent builds
         """
         output = []
         _recent = self.root.find("recentBuilds")
@@ -359,6 +359,59 @@ class Config:
             build = ET.Element("build")
             build.text = filename
             _recent.insert(0, build)
+
+    @property
+    def last_account_name(self):
+        _accounts = self.root.find("Accounts")
+        return _accounts.get("lastaccountName", "")
+
+    @last_account_name.setter
+    def last_account_name(self, new_account_name):
+        _accounts = self.root.find("Accounts")
+        _accounts.set("lastaccountName", new_account_name)
+
+    @property
+    def last_realm(self):
+        _accounts = self.root.find("Accounts")
+        return _accounts.get("lastRealm", "PC")
+
+    @last_realm.setter
+    def last_realm(self, new_realm):
+        _accounts = self.root.find("Accounts")
+        _accounts.set("lastRealm", new_realm)
+
+    def accounts(self):
+        """
+        Recent accounts are a list of accounts that have been opened, to a maximum of 10 entries
+        :returns: a list of recent accounts
+        """
+        output = []
+        _accounts = self.root.find("Accounts")
+        if _accounts is None:
+            print("Accounts not found")
+            self.root.append(ET.Element("Accounts"))
+            return output
+        # get all builds into an object so we can delete them from the live xml tree without crashing
+        accounts = _accounts.findall("account")
+        for idx, account in enumerate(accounts):
+            if idx < 20:
+                output.append(account.text)
+            else:
+                _accounts.remove(account)
+        return output
+
+    def add_account(self, new_account):
+        """
+        Adds one account to the list of recent accounts
+        :param new_account: string: name of account
+        :returns: n/a
+        """
+        _account = self.root.find("Accounts")
+        found = [element for element in _account.iter() if element.text == new_account]
+        if len(found) == 0:
+            build = ET.Element("account")
+            build.text = new_account
+            _account.insert(0, build)
 
     @Slot()
     def open_settings_dialog(self):

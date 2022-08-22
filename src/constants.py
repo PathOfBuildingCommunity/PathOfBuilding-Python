@@ -14,6 +14,8 @@ global_scale_factor = 2
 _VERSION = 3.18
 _VERSION_str = "3_18"
 
+http_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'}
+
 # Default config incase the settings file doesn't exist
 default_config = '<PathOfBuilding>\
     <Misc theme="Dark" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1"\

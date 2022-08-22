@@ -20,10 +20,10 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMenu {padding-left: 0px;}
-QMenu::item {padding-left: 0px;}
+   <string notr="true">QMenu {padding-left: 2px;}
+QMenu::item {padding-left: 2px;}
 QMenu::item:selected {background-color: rgb(0, 85, 127);color: rgb(255, 255, 255);}
-QAction {padding-left: 0px;}</string>
+QAction {padding-left: 2px;}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -548,7 +548,7 @@ QAction {padding-left: 0px;}</string>
                   </rect>
                  </property>
                  <property name="text">
-                  <string>&amp;Show Support Gems</string>
+                  <string>Sho&amp;w Support Gems</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -760,7 +760,7 @@ QAction {padding-left: 0px;}</string>
                  <rect>
                   <x>410</x>
                   <y>40</y>
-                  <width>71</width>
+                  <width>65</width>
                   <height>22</height>
                  </rect>
                 </property>
@@ -786,7 +786,7 @@ QAction {padding-left: 0px;}</string>
                  <rect>
                   <x>410</x>
                   <y>10</y>
-                  <width>61</width>
+                  <width>65</width>
                   <height>22</height>
                  </rect>
                 </property>
@@ -2080,13 +2080,15 @@ hr { height: 1px; border-width: 0; }
     <addaction name="action_New"/>
     <addaction name="action_Open"/>
     <addaction name="action_Save"/>
+    <addaction name="action_Import"/>
+    <addaction name="action_Export"/>
     <addaction name="separator"/>
     <addaction name="action_Exit"/>
     <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menu_View">
+   <widget class="QMenu" name="menu_Settings">
     <property name="title">
-     <string>View</string>
+     <string>&amp;Settings</string>
     </property>
     <widget class="QMenu" name="menuTheme">
      <property name="title">
@@ -2094,10 +2096,11 @@ hr { height: 1px; border-width: 0; }
      </property>
      <addaction name="action_Theme"/>
     </widget>
+    <addaction name="action_Settings"/>
     <addaction name="menuTheme"/>
    </widget>
    <addaction name="menu_Builds"/>
-   <addaction name="menu_View"/>
+   <addaction name="menu_Settings"/>
   </widget>
   <widget class="QStatusBar" name="statusbar_MainWindow"/>
   <widget class="QToolBar" name="toolbar_MainWindow">
@@ -2119,6 +2122,8 @@ hr { height: 1px; border-width: 0; }
    <addaction name="action_New"/>
    <addaction name="action_Open"/>
    <addaction name="action_Save"/>
+   <addaction name="action_Import"/>
+   <addaction name="action_Export"/>
    <addaction name="action_Settings"/>
    <addaction name="separator"/>
    <addaction name="action_ManageTrees"/>
@@ -2185,6 +2190,9 @@ hr { height: 1px; border-width: 0; }
    <property name="text">
     <string>&amp;Open</string>
    </property>
+   <property name="toolTip">
+    <string>Open a build</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
@@ -2234,10 +2242,40 @@ hr { height: 1px; border-width: 0; }
      <normaloff>:/Art/Icons/construction.png</normaloff>:/Art/Icons/construction.png</iconset>
    </property>
    <property name="text">
-    <string>Settings</string>
+    <string>&amp;Settings ...</string>
    </property>
    <property name="toolTip">
     <string>Open Settings diaog</string>
+   </property>
+  </action>
+  <action name="action_Import">
+   <property name="icon">
+    <iconset resource="PoB.qrc">
+     <normaloff>:/Art/Icons/paper-plane-return.png</normaloff>:/Art/Icons/paper-plane-return.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Import ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Import a build</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="action_Export">
+   <property name="icon">
+    <iconset resource="PoB.qrc">
+     <normaloff>:/Art/Icons/paper-plane.png</normaloff>:/Art/Icons/paper-plane.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Export a build</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>
