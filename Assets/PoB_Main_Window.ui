@@ -208,6 +208,9 @@ QAction {padding-left: 2px;}</string>
                 <family>Luxi Mono</family>
                </font>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="lineWrapMode">
                <enum>QTextEdit::NoWrap</enum>
               </property>
@@ -240,6 +243,9 @@ QAction {padding-left: 2px;}</string>
              <width>910</width>
              <height>655</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
            </property>
            <property name="accessibleName">
             <string/>
@@ -758,9 +764,9 @@ QAction {padding-left: 2px;}</string>
                <widget class="QLabel" name="label_SocketedIn">
                 <property name="geometry">
                  <rect>
-                  <x>410</x>
+                  <x>400</x>
                   <y>40</y>
-                  <width>65</width>
+                  <width>75</width>
                   <height>22</height>
                  </rect>
                 </property>
@@ -1614,7 +1620,7 @@ hr { height: 1px; border-width: 0; }
            </widget>
            <widget class="QWidget" name="tab_Config">
             <attribute name="title">
-             <string>C&amp;onfig</string>
+             <string>&amp;Config</string>
             </attribute>
             <attribute name="whatsThis">
              <string notr="true">CONFIG</string>
@@ -1765,6 +1771,9 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Bandits</cstring>
+                 </property>
                 </widget>
                 <widget class="QLabel" name="label_Pantheon_2">
                  <property name="geometry">
@@ -1791,6 +1800,9 @@ hr { height: 1px; border-width: 0; }
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>combo_MajorGods</cstring>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_MajorGods">
@@ -1847,10 +1859,13 @@ hr { height: 1px; border-width: 0; }
                   <enum>Qt::LeftToRight</enum>
                  </property>
                  <property name="text">
-                  <string>Resistance Penalty:</string>
+                  <string>&amp;Resistance Penalty:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>combo_ResPenalty</cstring>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_ResPenalty">
@@ -1919,10 +1934,13 @@ hr { height: 1px; border-width: 0; }
                   </font>
                  </property>
                  <property name="text">
-                  <string>Mi&amp;nor God:</string>
+                  <string>Min&amp;or God:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>combo_MinorGods</cstring>
                  </property>
                 </widget>
                </widget>
@@ -2279,6 +2297,54 @@ hr { height: 1px; border-width: 0; }
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>combo_MainSkill</tabstop>
+  <tabstop>combo_MainSkillActive</tabstop>
+  <tabstop>combo_SkillSet</tabstop>
+  <tabstop>btn_SkillsManage</tabstop>
+  <tabstop>btn_NewSocketGrp</tabstop>
+  <tabstop>btn_SkillsDelete</tabstop>
+  <tabstop>btn_SkillsDeleteAll</tabstop>
+  <tabstop>list_SocketGroups</tabstop>
+  <tabstop>check_SortByDPS</tabstop>
+  <tabstop>combo_SortByDPS</tabstop>
+  <tabstop>check_MatchToLevel</tabstop>
+  <tabstop>spin_DefaultGemLevel</tabstop>
+  <tabstop>spin_DefaultGemQuality</tabstop>
+  <tabstop>combo_ShowSupportGems</tabstop>
+  <tabstop>check_ShowGemQualityVariants</tabstop>
+  <tabstop>lineedit_SkillLabel</tabstop>
+  <tabstop>combo_SocketedIn</tabstop>
+  <tabstop>check_SocketGroupEnabled</tabstop>
+  <tabstop>check_SocketGroup_FullDPS</tabstop>
+  <tabstop>combo_ItemSet</tabstop>
+  <tabstop>btn_ItemManage</tabstop>
+  <tabstop>combo_Weapon1</tabstop>
+  <tabstop>combo_Weapon2</tabstop>
+  <tabstop>combo_Helmet</tabstop>
+  <tabstop>combo_BodyArmour</tabstop>
+  <tabstop>combo_Gloves</tabstop>
+  <tabstop>combo_Boots</tabstop>
+  <tabstop>combo_Amulet</tabstop>
+  <tabstop>combo_Ring1</tabstop>
+  <tabstop>combo_Ring2</tabstop>
+  <tabstop>combo_Belt</tabstop>
+  <tabstop>combo_Flask1</tabstop>
+  <tabstop>combo_Flask2</tabstop>
+  <tabstop>combo_Flask3</tabstop>
+  <tabstop>combo_Flask4</tabstop>
+  <tabstop>combo_Flask5</tabstop>
+  <tabstop>combo_ResPenalty</tabstop>
+  <tabstop>combo_Bandits</tabstop>
+  <tabstop>combo_MajorGods</tabstop>
+  <tabstop>combo_MinorGods</tabstop>
+  <tabstop>textedit_Notes</tabstop>
+  <tabstop>combo_Notes_Font</tabstop>
+  <tabstop>combo_Notes_Colour</tabstop>
+  <tabstop>spin_Notes_FontSize</tabstop>
+  <tabstop>graphicsView_PlaceHolder</tabstop>
+ </tabstops>
  <resources>
   <include location="PoB.qrc"/>
  </resources>

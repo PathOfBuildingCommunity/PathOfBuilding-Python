@@ -65,7 +65,7 @@ def write_xml(filename, _tree):
         print(f"Unable to write to {_fn}")
 
 
-def write_xml_as_dict(filename, _dict):
+def write_xml_from_dict(filename, _dict):
     """
     Write a XML file
     :param filename: Name of xml to be written
@@ -79,6 +79,18 @@ def write_xml_as_dict(filename, _dict):
             xml_file.write(xml_content)
     except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
         print(f"Unable to write to {_fn}")
+
+
+def json_to_et(json_content):
+    """
+    Convert a json string into a ET.ElementTree
+    :param json_content: String: the json content
+    :return: ET.ElementTree
+    """
+    # convert via a dictionary
+    _dict = json.loads(json_content)
+    xml_content = xmltodict.unparse(_dict, pretty=True)
+    return ET.ElementTree(ET.fromstring(xml_content))
 
 
 def read_json(filename):

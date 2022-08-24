@@ -10,6 +10,10 @@ This is a base PoB class. It doesn't import any other PoB ui classes
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import traceback
+import base64
+import itertools
+import operator
+import zlib
 
 from qdarktheme.qtpy.QtCore import QSize, Slot
 from qdarktheme.qtpy.QtWidgets import QFileDialog, QDialogButtonBox
@@ -47,8 +51,8 @@ def print_call_stack(full=False):
     """
     Ahh debug. It's wonderful
     :param: full: Bool: True if you want the full stack trace,
-            elsewise just print the parent caller of the function that called this
-    :return:
+            elsewise just print the parent of the function that called this
+    :return: N/A
     """
     lines = traceback.format_stack()
     if full:
@@ -64,12 +68,43 @@ def print_a_xml_element(the_element):
     Debug: Print the contents so you can see what happened and why 'it' isn't working.
     Prints the parent caller to help track when there are many of them.
     :param the_element: xml element
-    :return:
+    :return: N/A
     """
     lines = traceback.format_stack()
     print(lines[-2].strip())
     print(ET.tostring(the_element, encoding="utf8").decode("utf8"))
     print()
+
+
+def unique_sorted(values):
+    """Return a sorted list of the given values, without duplicates."""
+    return map(operator.itemgetter(0), itertools.groupby(sorted(values)))
+
+
+def decode_base64_and_inflate(byte_array):
+    """
+    Decode a byte array and then zlib inflate it to make real characters
+    :param byte_array: an array like you get fro downloading from pastebin or pobb.in
+    :return: a string of real characters
+    """
+    try:
+        decoded_data = base64.b64decode(byte_array, "-_")
+        return zlib.decompress(decoded_data, 0)
+    except:
+        return None
+
+
+def deflate_and_base64_encode(string_val):
+    """
+    zlib compress a string of characters and base64 encoded them
+    :param string_val: a string or real characters
+    :return: a byte array or the compressed and encoded string_val
+    """
+    try:
+        zlibbed_str = zlib.compress( string_val )
+        return base64.b64encode(zlibbed_str, "-_")
+    except:
+        return None
 
 
 class Config:

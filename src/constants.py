@@ -14,7 +14,8 @@ global_scale_factor = 2
 _VERSION = 3.18
 _VERSION_str = "3_18"
 
-http_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'}
+# http_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'}
+http_headers = {"User-Agent": "Path of Building Community - Python", "Accept": ""}
 
 # Default config incase the settings file doesn't exist
 default_config = '<PathOfBuilding>\
@@ -29,7 +30,7 @@ default_config = '<PathOfBuilding>\
 default_spec = f'\
     <Spec title="Default" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}" classId="0">\
         <EditedNodes/>\
-        <URL>https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA</URL>\
+        <URL>https://www.pathofexile\.com/passive-skill-tree/AAAABgAAAAAA</URL>\
         <Sockets/>\
     </Spec>'
 
@@ -945,3 +946,38 @@ stats_list = [
         "hideStat": "true",
     },
 ]
+
+valid_websites = ["pastebin.com", "pastebinp.com", "pobb.in", "rentry.co", "poe.ninja"]
+website_list = {
+    "pastebin.com": {
+        "id": "Pastebin",
+        "downloadURL": "https://pastebin.com/raw/CODE",
+        "codeOut": "",
+        "postUrl": "https://pastebin.com/api/api_post.php",
+        "postFields": "api_dev_key=c4757f22e50e65e21c53892fd8e0a9ff&api_paste_private=1&api_option=paste&api_paste_code=",
+    },
+    "pastebinp.com": {
+        "id": "PastebinProxy",
+        "downloadURL": "https://pastebinp.com/raw/CODE",
+    },
+    "pobb.in": {
+        "id": "POBBin",
+        "downloadURL": "https://pobb.in/pob/CODE",
+        "codeOut": "https://pobb.in/",
+        "postUrl": "https://pobb.in/pob/",
+        "postFields": "",
+    },
+    "rentry.co": {
+        "id": "Rentry",
+        "downloadURL": "https://rentry.co/paste/CODE/raw",
+    },
+    "poeninja": {
+        "id": "PoeNinja",
+        "downloadURL": "https://poe.ninja/pob/raw/CODE",
+        "codeOut": "",
+        "postUrl": "https://poe.ninja/pob/api/api_post.php",
+        "postFields": "api_paste_code=",
+    },
+    "Error": {
+    },
+}

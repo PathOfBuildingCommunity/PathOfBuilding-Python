@@ -290,22 +290,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # open the file using the filename in the build.
         self.build_loader(value)
 
-    def build_loader(self, filename):
+    def build_loader(self, filename_or_et):
         """
         Common actions for UI components when we are loading a build
-        :param filename: String: the filename of file that was loaded, or "Default" if called from the New action
+        :param filename_or_et: String: the filename of file that was loaded, or "Default" if called from the New action
         :return: N/A
         """
-        # open the file
-        new = filename == "Default"
-        if not new:
-            self.build.load(filename, self)
+        new = True
+        if type(filename_or_et) is ET.ElementTree:
+            self.build.new(filename_or_et)
         else:
-            self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
+            # open the file
+            new = filename_or_et == "Default"
+            if not new:
+                self.build.load(filename_or_et)
+            else:
+                self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
 
         if self.build.build is not None:
+            print("build_loader")
             if not new:
-                self.config.add_recent_build(filename)
+                self.config.add_recent_build(filename_or_et)
             # these need to be set before the tree, as the change_tree function sets it also.
             set_combo_index_by_data(self.combo_Bandits, self.build.bandit)
             set_combo_index_by_data(self.combo_MajorGods, self.build.pantheonMajorGod)
@@ -514,6 +519,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def open_import_dialog(self):
         dlg = ImportDlg(self.build, self.config, self)
         dlg.exec()
+        if dlg.xml is not None:
+            self.build_loader(dlg.xml)
+
 
     @Slot()
     def open_export_dialog(self):

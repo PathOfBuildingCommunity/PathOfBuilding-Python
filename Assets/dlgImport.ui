@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>584</width>
-    <height>516</height>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,10 +49,16 @@
     </rect>
    </property>
    <property name="text">
-    <string>To start importing a character, enter the character's account name. Note: if the account name contains non-ASCII characters then it must be URL encoded first.  https://www.urlencoder.org/</string>
+    <string>To start importing a character, enter the character's account name. Note: if the account name contains non-ASCII characters then it must be URL encoded first : &lt;a href=&quot;https://www.urlencoder.org/&quot;&gt;www.urlencoder.org&lt;/a&gt;</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>
+   </property>
+   <property name="openExternalLinks">
+    <bool>true</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
    </property>
   </widget>
   <widget class="QComboBox" name="combo_Realm">
@@ -125,14 +131,14 @@
   </widget>
   <widget class="QGroupBox" name="grpbox_CharImport">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>120</y>
      <width>551</width>
-     <height>221</height>
+     <height>201</height>
     </rect>
    </property>
    <property name="title">
@@ -143,21 +149,24 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>49</width>
+      <width>65</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>League: </string>
+     <string>&amp;League: </string>
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="buddy">
+     <cstring>combo_League</cstring>
     </property>
    </widget>
    <widget class="QComboBox" name="combo_League">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>80</x>
       <y>30</y>
       <width>251</width>
       <height>22</height>
@@ -172,9 +181,9 @@
    <widget class="QComboBox" name="combo_CharList">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>80</x>
       <y>60</y>
-      <width>461</width>
+      <width>450</width>
       <height>22</height>
      </rect>
     </property>
@@ -187,40 +196,40 @@
    <widget class="QPushButton" name="btn_TreeJewels">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>190</x>
       <y>90</y>
       <width>181</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Import Passive Tree and Jewels</string>
+     <string>Import &amp;Passive Tree and Jewels</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_ItemsSkills">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>380</x>
       <y>90</y>
       <width>151</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Import Items and Skills</string>
+     <string>Import Items and S&amp;kills</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="check_DeleteJewels">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>130</y>
+      <x>20</x>
+      <y>120</y>
       <width>151</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Delete existing Jewels</string>
+     <string>Delete existing &amp;Jewels</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -229,14 +238,14 @@
    <widget class="QCheckBox" name="check_Items">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>150</y>
+      <x>380</x>
+      <y>120</y>
       <width>150</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Delete Existing Items</string>
+     <string>&amp;Delete Existing Items</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -245,14 +254,14 @@
    <widget class="QCheckBox" name="check_DeleteSkills">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>190</x>
       <y>120</y>
       <width>150</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Delete Existing Skills</string>
+     <string>Delete E&amp;xisting Skills</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -261,8 +270,8 @@
    <widget class="QLabel" name="label_Info_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>170</y>
+      <x>20</x>
+      <y>150</y>
       <width>500</width>
       <height>40</height>
      </rect>
@@ -274,12 +283,44 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="btn_ImportAll">
+    <property name="geometry">
+     <rect>
+      <x>79</x>
+      <y>90</y>
+      <width>101</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&amp;Import All</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_Characters">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>65</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>C&amp;haracters:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="buddy">
+     <cstring>combo_CharList</cstring>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="grpbox_BuildSharing">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>360</y>
+     <y>330</y>
      <width>551</width>
      <height>91</height>
     </rect>
@@ -297,7 +338,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>To import a build, enter URL or code here:</string>
+     <string>To import a build, enter &amp;URL or code here:</string>
+    </property>
+    <property name="buddy">
+     <cstring>lineedit_BuildShare</cstring>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineedit_BuildShare">
@@ -308,6 +352,9 @@
       <width>431</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>https://pobb.in/1LFyvUfab61D</string>
     </property>
    </widget>
    <widget class="QComboBox" name="combo_Import">
@@ -330,7 +377,10 @@
      </property>
     </item>
    </widget>
-   <widget class="QPushButton" name="btn_Import">
+   <widget class="QPushButton" name="btn_ImportBuildSharing">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>460</x>
@@ -348,7 +398,7 @@
    <property name="geometry">
     <rect>
      <x>480</x>
-     <y>470</y>
+     <y>430</y>
      <width>75</width>
      <height>24</height>
     </rect>
@@ -358,6 +408,24 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>combo_Realm</tabstop>
+  <tabstop>lineedit_Account</tabstop>
+  <tabstop>btn_StartImport</tabstop>
+  <tabstop>comboChar_History</tabstop>
+  <tabstop>combo_League</tabstop>
+  <tabstop>combo_CharList</tabstop>
+  <tabstop>btn_ImportAll</tabstop>
+  <tabstop>btn_TreeJewels</tabstop>
+  <tabstop>btn_ItemsSkills</tabstop>
+  <tabstop>check_DeleteJewels</tabstop>
+  <tabstop>check_DeleteSkills</tabstop>
+  <tabstop>check_Items</tabstop>
+  <tabstop>lineedit_BuildShare</tabstop>
+  <tabstop>combo_Import</tabstop>
+  <tabstop>btn_ImportBuildSharing</tabstop>
+  <tabstop>btn_Close</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

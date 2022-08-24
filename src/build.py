@@ -204,6 +204,7 @@ class Build:
 
         self.specs.clear()
         for spec in self.tree.findall("Spec"):
+            print("build.new", spec)
             self.specs.append(Spec(spec))
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
@@ -211,11 +212,10 @@ class Build:
 
     # new
 
-    def load(self, filename, win: Ui_MainWindow):
+    def load(self, filename):
         """
         Load a build. Use new() as a common function
         :param filename: str() XML file to load
-        :param win: A reference to the parent to access UI elements
         :return: N/A
         """
         _build_pob = pob_file.read_xml(filename)
@@ -252,8 +252,8 @@ class Build:
         # pob["PathOfBuilding"]["Items"] = self.items
         # pob["PathOfBuilding"]["Config"] = self.config
         # pob["PathOfBuilding"]["Tree"] = self.tree
-        # pob_file.write_xml_as_dict("builds/test.xml", pob)
-        # # pob_file.write_xml_as_dict(self.filename, pob)
+        # pob_file.write_xml_from_dict("builds/test.xml", pob)
+        # # pob_file.write_xml_from_dict(self.filename, pob)
 
         """Debug Please leave until build is mostly complete"""
         # print(ET.tostring(self.root, encoding='utf8').decode('utf8'))
@@ -269,6 +269,7 @@ class Build:
         # print(ET.tostring(self.config, encoding='utf8').decode('utf8'))
         """Debug Please leave until build is mostly complete"""
 
+        # Temporarily write to a test file to not corrupt the original and make for easy compare
         pob_file.write_xml("builds/test.xml", self.build_xml_tree)
         # pob_file.write_xml(self.filename, self.build_xml_tree)
 
