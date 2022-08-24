@@ -1,5 +1,7 @@
 #!/bin/sh
-pyside6-uic PoB_Main_Window.ui -o ../src/PoB_Main_Window.py
-pyside6-uic dlgConfig.ui -o ../src/dlg_Config.py
-pyside6-uic dlgImport.ui -o ../src/dlg_Import.py
-pyside6-uic dlgExport.ui -o ../src/dlg_Export.py
+poetry=$(find ~ -type f -iname poetry | head -n1)
+env=$($poetry env list --full-path | awk '/pathofbuilding-python/{print $1}')
+${env}/bin/pyside6-uic PoB_Main_Window.ui -o ../src/PoB_Main_Window.py
+${env}/bin/pyside6-uic dlgConfig.ui -o ../src/dlg_Config.py
+${env}/bin/pyside6-uic dlgImport.ui -o ../src/dlg_Import.py
+${env}/bin/pyside6-uic dlgExport.ui -o ../src/dlg_Export.py
