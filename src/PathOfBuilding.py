@@ -10,25 +10,27 @@ import re
 import platform
 import atexit
 import sys
-import qdarktheme
 import datetime
-from qdarktheme.qtpy.QtCore import Qt, Slot
-from qdarktheme.qtpy.QtGui import QFont, QColor, QFontDatabase
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QComboBox,
-    QFileDialog,
-    QLabel,
-    QMainWindow,
-    QDialog,
-    QSpinBox,
-    QWidget,
-)
-from PySide6.QtUiTools import QUiLoader
+from typing import Union
+import xml.etree.ElementTree as ET
+from pathlib import Path
 
-from constants import *
-from pob_config import *
-from ui_utils import *
+import qdarktheme
+from qdarktheme.qtpy.QtCore import Qt, Slot
+from qdarktheme.qtpy.QtGui import QFontDatabase
+from qdarktheme.qtpy.QtWidgets import QSpinBox, QMainWindow, QWidget, QLabel, QComboBox, QApplication, QFileDialog
+
+from constants import (
+    program_title,
+    PlayerClasses,
+    pantheon_major_gods,
+    pantheon_minor_gods,
+    bandits,
+    ColourCodes,
+    empty_build,
+)
+from pob_config import Config, _debug
+from ui_utils import FlowLayout, set_combo_index_by_data
 from build import Build
 
 from player_stats import PlayerStats
@@ -52,13 +54,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, _app) -> None:
         super(MainWindow, self).__init__()
         print(
-            f"{datetime.datetime.now()}. {program_title}, running on",
-            platform.system(),
-            platform.release(),
-            platform.version(),
+            f"{datetime.datetime.now()}. {program_title}, running on {platform.system()} {platform.release()}; {platform.version()}"
         )
         self._os = platform.system()
-        self.loader = QUiLoader()
+        # self.loader = QUiLoader()
         # ToDo investigate if some settings need to be changed per o/s
 
         self.setupUi(self)
@@ -290,27 +289,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # open the file using the filename in the build.
         self.build_loader(value)
 
-    def build_loader(self, filename_or_et):
+    def build_loader(self, xml=Union[str, Path, ET.ElementTree]):
         """
         Common actions for UI components when we are loading a build
-        :param filename_or_et: String: the filename of file that was loaded, or "Default" if called from the New action
+        :param xml: String|Path: the filename of file to be loaded, or "Default" if called from the New action
+        :param xml: ET.ElementTree: the xml of a file that was loaded or downloaded
         :return: N/A
         """
         new = True
-        if type(filename_or_et) is ET.ElementTree:
-            self.build.new(filename_or_et)
+        if type(xml) is ET.ElementTree:
+            self.build.new(xml)
         else:
-            # open the file
-            new = filename_or_et == "Default"
+            new = xml == "Default"
             if not new:
-                self.build.load(filename_or_et)
+                # open the file
+                self.build.load_from_file(xml)
             else:
                 self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
 
+        # if everything worked, lets update the UI
         if self.build.build is not None:
-            print("build_loader")
+            _debug("build_loader")
             if not new:
-                self.config.add_recent_build(filename_or_et)
+                self.config.add_recent_build(xml)
             # these need to be set before the tree, as the change_tree function sets it also.
             set_combo_index_by_data(self.combo_Bandits, self.build.bandit)
             set_combo_index_by_data(self.combo_MajorGods, self.build.pantheonMajorGod)
@@ -517,11 +518,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @Slot()
     def open_import_dialog(self):
+        """
+        Open the import dialog. The dialog will return with either dlg.xml being valid (from a build share import)
+         or dlg.character_data being valid (from a character download from PoE).
+        If neither are valid (both = None) then the user did nothing.
+        dlg.character_data is a dictionary of tree and items ({"tree": passive_tree, "items":  items})
+        dlg.xml is a ET.ElementTree instance of the xml downloaded
+        :return: N/A
+        """
         dlg = ImportDlg(self.build, self.config, self)
         dlg.exec()
         if dlg.xml is not None:
             self.build_loader(dlg.xml)
-
+        # if dlg.character_data is not None:
+        #     self.build_loader_json(dlg.xml)
 
     @Slot()
     def open_export_dialog(self):
@@ -554,6 +564,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 make_connection(value, idx)
 
     def search_text_changed(self):
+        """
+        Store the text of Search edit as it is typed.
+        Should we use this or just use the return_pressed function
+        """
         self.build.search_text = self.tree_ui.textEdit_Search.text()
 
     def search_return_pressed(self):

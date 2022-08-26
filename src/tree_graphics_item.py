@@ -4,11 +4,10 @@ TreeItem Class
 This class represents a graphical instance of one visual element of a Passive Tree for a given tree version.
 
 """
-from qdarktheme.qtpy.QtCore import Qt
 from qdarktheme.qtpy.QtGui import QPixmap
-from qdarktheme.qtpy.QtWidgets import QGraphicsPixmapItem, QGraphicsItem
+from qdarktheme.qtpy.QtWidgets import QGraphicsPixmapItem
 
-from pob_config import *
+from pob_config import Config
 
 """
 Example data

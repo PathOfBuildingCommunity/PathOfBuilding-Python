@@ -4,35 +4,9 @@ Utilities for the UI that do not have dependencies on MainWindow
 import warnings
 
 from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QColorDialog,
-    QComboBox,
-    QDialogButtonBox,
-    QFileDialog,
-    QFontDialog,
-    QLabel,
-    QLayout,
-    QMainWindow,
-    QMenuBar,
-    QMessageBox,
-    QSizePolicy,
-    QStackedWidget,
-    QStatusBar,
-    QToolBar,
-    QToolButton,
-    QWidget,
-)
-
-from pob_config import *
+from qdarktheme.qtpy.QtWidgets import QComboBox, QLayout, QMessageBox, QSizePolicy
 
 
-# ui_utils.yes_no_dialog(self, app.tr("Save build"), app.tr("build name goes here"))
-# ui_utils.critical_dialog(self, app.tr("Save build"), app.tr("build name goes here"), app.tr("Close"))
-# ui_utils.ok_dialog(self, app.tr("Save build"), app.tr("build name goes here"))
-
-
-#
 def yes_no_dialog(win, title, text):
     return QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No) == QMessageBox.Yes
 
@@ -67,6 +41,23 @@ def set_combo_index_by_data(combo: QComboBox, _data):
     # print_call_stack()
     for i in range(combo.count()):
         if combo.itemData(i) == _data:
+            combo.setCurrentIndex(i)
+            return i
+    return -1
+
+
+def set_combo_index_by_text(combo: QComboBox, _text):
+    """
+    Set a combo box current index based on it's data field
+    :param combo: the combo box
+    :param _text: the data. There is no type to this, so the passed in type should match what the combo has
+    :return: int: the index of the combobox or -1 if not found
+    """
+    if _text is None:
+        _text = "None"
+    # print_call_stack()
+    for i in range(combo.count()):
+        if combo.itemText(i) == _text:
             combo.setCurrentIndex(i)
             return i
     return -1

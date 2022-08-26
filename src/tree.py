@@ -15,15 +15,15 @@ It is referenced by the TreeView class to display the tree
 import re
 import math
 from collections import OrderedDict
-from pprint import pprint
+from pathlib import Path
 
 from qdarktheme.qtpy.QtCore import QRect, Qt
 from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter
 
 import ui_utils
-from pob_config import *
-from constants import _VERSION
-from pob_file import *
+from pob_config import Config
+from constants import _VERSION, global_scale_factor, Layers, ascendancy_positions, nodeOverlay, PlayerClasses
+import pob_file
 
 from tree_graphics_item import TreeGraphicsItem
 from node import Node

@@ -3,72 +3,17 @@ This Class manages all the elements and owns some elements of the "SKILLS" tab
 """
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
-from qdarktheme.qtpy.QtCore import (
-    QCoreApplication,
-    QDir,
-    QRect,
-    QRectF,
-    QSize,
-    Qt,
-    Slot,
-)
-from qdarktheme.qtpy.QtGui import (
-    QAction,
-    QActionGroup,
-    QFont,
-    QIcon,
-    QPixmap,
-    QBrush,
-    QColor,
-    QPainter,
-)
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QCheckBox,
-    QColorDialog,
-    QComboBox,
-    QDockWidget,
-    QFileDialog,
-    QFontComboBox,
-    QFontDialog,
-    QFormLayout,
-    QFrame,
-    QGraphicsLineItem,
-    QGraphicsPixmapItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QListWidgetItem,
-    QMainWindow,
-    QMenuBar,
-    QMessageBox,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QSpinBox,
-    QSplitter,
-    QStackedWidget,
-    QStatusBar,
-    QStyle,
-    QTabWidget,
-    QTextEdit,
-    QToolBar,
-    QToolBox,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
+from qdarktheme.qtpy.QtCore import QRect, Slot
+from qdarktheme.qtpy.QtGui import QColor
+from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QFrame, QListWidgetItem, QSpinBox
 
 from PoB_Main_Window import Ui_MainWindow
-from constants import *
-from constants import _VERSION
-from pob_config import *
-from pob_file import *
-from ui_utils import *
+from constants import ColourCodes, empty_socket_group, empty_gem
+from pob_config import Config, _debug, str_to_bool, index_exists
+from pob_file import read_json
+from ui_utils import set_combo_index_by_data, set_combo_index_by_text
 
 
 class SkillsUI:
@@ -119,10 +64,7 @@ class SkillsUI:
         self.win.check_MatchToLevel.setChecked(str_to_bool(self.skills.get("matchGemLevelToCharacterLevel", False)))
         self.win.check_ShowGemQualityVariants.setChecked(str_to_bool(self.skills.get("showAltQualityGems", False)))
         set_combo_index_by_data(self.win.combo_SortByDPS, self.skills.get("sortGemsByDPSField", "FullDPS"))
-        set_combo_index_by_data(
-            self.win.combo_ShowSupportGems,
-            self.skills.get("showSupportGemTypes", "ALL"),
-        )
+        set_combo_index_by_data(self.win.combo_ShowSupportGems, self.skills.get("showSupportGemTypes", "ALL"))
         self.win.spin_DefaultGemLevel.setValue(int(self.skills.get("defaultGemLevel", 20)))
         self.win.spin_DefaultGemQuality.setValue(int(self.skills.get("defaultGemQuality", 0)))
 
@@ -154,11 +96,12 @@ class SkillsUI:
         self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
         self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
 
-        active_set = int(self.skills.get("activeSkillSet", 0))
-        print("active_set", active_set, len(self.skill_sets))
-        if active_set > len(self.skill_sets) - 1:
-            active_set = 0
-        self.win.combo_SkillSet.setCurrentIndex(active_set)
+        active_skill_set = int(self.skills.get("activeSkillSet", 0))
+        # _debug("active_skill_set, len(self.skill_sets)", active_skill_set, len(self.skill_sets))
+        if active_skill_set > len(self.skill_sets) - 1:
+            active_skill_set = 0
+        # triggers change_skill_set
+        self.win.combo_SkillSet.setCurrentIndex(active_skill_set)
 
     @Slot()
     def change_skill_set(self, new_index):
@@ -169,16 +112,16 @@ class SkillsUI:
                -1 will occur during a combobox clear
         :return:
         """
-        print("change_skill_set", new_index)
-        if new_index >= 0:
-            self.load_skill_set(self.skill_sets[new_index])
-            # self.load_skill_set(self.skill_sets[self.win.combo_SkillSet.currentData()])
+        # _debug("new_index", new_index)
+        if 0 <= new_index < len(self.skill_sets):
+            self.show_skill_set(self.skill_sets[new_index])
 
-    def load_skill_set(self, _set):
+    def show_skill_set(self, _set, current_index=0):
         """
-
-        :param _set:
-        :return:
+        show a set of skills
+        :param _set: ElementTree.Element. This set of skills
+        :param current_index: set the current one active at the end of the function
+        :return: N/A
         """
         # disconnect triggers
         self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
@@ -197,12 +140,13 @@ class SkillsUI:
 
         # Find all Socket Groups (<Skill> in the xml) and add them to the Socket Group list
         socket_groups = _set.findall("Skill")
-        print("load_skill_set", len(socket_groups), socket_groups)
+        # _debug("len, socket_groups", len(socket_groups), socket_groups)
         if len(socket_groups) > 0:
             _label = ""
             enabled = False
             for group in socket_groups:
                 _label = group.get("label")
+                _debug("Socket group", _label, group)
                 enabled = str_to_bool(group.get("enabled"))
                 if _label == "":
                     for gem in group.findall("Gem"):
@@ -210,19 +154,17 @@ class SkillsUI:
                         if "Support" not in skill_id:
                             _label += f'{gem.get("nameSpec")}, '
                 enabled = enabled and _label != ""
-            if _label == "":
-                _label = "<no active skills>"
-            item = QListWidgetItem(_label.rstrip(", "))
-            if not enabled:
-                # change colour (dim) if it's disabled or no active skills
-                item.setForeground(QColor(ColourCodes.LIGHTGRAY.value))
-                item.setText(f"{_label.rstrip(', ')} (Disabled)")
-            self.win.list_SocketGroups.addItem(item)
+                if _label == "":
+                    _label = "<no active skills>"
+                # use a QListWidgetItem so we can manipulate the text as we want
+                item = QListWidgetItem(_label.rstrip(", "))
+                if not enabled:
+                    # change colour (dim) if it's disabled or no active skills
+                    item.setForeground(QColor(ColourCodes.LIGHTGRAY.value))
+                    item.setText(f"{_label.rstrip(', ')} (Disabled)")
+                _debug("Socket group", item.text())
+                self.win.list_SocketGroups.addItem(item)
 
-        # for idx, sg in enumerate(self.current_skill_set[0].findall("Gem")):
-        #     # print("load_skill_set", idx, sg.get("skillId"))
-        #     ui = self.create_gem_ui(idx, sg)
-        #     # print(ui.frame)
         if index_exists(self.current_skill_set, 0):
             self.load_socket_group(0)
 
@@ -231,7 +173,7 @@ class SkillsUI:
         self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
 
         # Trigger the filling out of the right hand side UI elements
-        self.win.list_SocketGroups.setCurrentRow(0)
+        self.win.list_SocketGroups.setCurrentRow(current_index)
 
     @Slot()
     def new_socket_group(self):
@@ -241,7 +183,7 @@ class SkillsUI:
         :return:
         """
         self.current_skill_set.append(ET.fromstring(empty_socket_group))
-        self.load_skill_set(self.current_skill_set)
+        self.show_skill_set(self.current_skill_set, len(self.current_skill_set) - 1)
 
     def load_socket_group(self, _index):
         """
@@ -249,20 +191,23 @@ class SkillsUI:
         :param _index: index to display
         :return: N/A
         """
-        print(
-            "load_socket_group",
-            _index,
-            self.current_skill_set,
-            len(self.current_skill_set),
-        )
+        # _debug("index", _index)
+        # _debug("self.current_skill_set, len", self.current_skill_set, len(self.current_skill_set))
         self.clear_gem_ui_list()
         if index_exists(self.current_skill_set, _index):
             self.current_socket_group = self.current_skill_set[_index]
-            print("load_socket_group", self.current_socket_group)
+            _debug("self.current_socket_group", self.current_socket_group)
             if self.current_socket_group is not None:
                 self.win.lineedit_SkillLabel.setText(self.current_socket_group.get("label"))
-                for idx, sg in enumerate(self.current_socket_group.findall("Gem")):
-                    self.create_gem_ui(idx, sg)
+                set_combo_index_by_text(self.win.combo_SocketedIn, self.current_socket_group.get("slot"))
+                self.win.check_SocketGroupEnabled.setChecked(
+                    str_to_bool(self.current_socket_group.get("enabled", "false"))
+                )
+                self.win.check_SocketGroup_FullDPS.setChecked(
+                    str_to_bool(self.current_socket_group.get("includeInFullDPS", "false"))
+                )
+                for idx, gem in enumerate(self.current_socket_group.findall("Gem")):
+                    self.create_gem_ui(idx, gem)
                 # Create an empty one at the end
                 self.create_gem_ui(len(self.gem_ui_list), None)
 
@@ -274,9 +219,7 @@ class SkillsUI:
                -1 will occur during a combobox clear
         :return: N/A
         """
-        # print("change_socket_group", new_skill)
-        # t = self.current_skill_set[new_skill]
-        # print("change_socket_group", t, t.get("label"))
+        # _debug("new_skill", new_skill)
         self.load_socket_group(new_skill)
 
     def save(self):
@@ -287,19 +230,19 @@ class SkillsUI:
 
     def create_gem_ui(self, index, gem=None):
         """
-        Create a new GemUI class and fill it
+        Create a new GemUI class and fill it. This is the dropdown on the right
         :param index: int: number of this gem in this skill group
         :param gem: the xml element if known
         :return: N/A
         """
-        # print("create_gem_ui", index, gem)
+        # _debug("create_gem_ui", index, gem)
         # In most cases this will be the first one autocreated
         if index_exists(self.gem_ui_list, index):
             self.gem_ui_list[index].load(gem)
         else:
             self.gem_ui_list[index] = GemUI(index, self.win.frame_SkillsTab, gem)
         ui: GemUI = self.gem_ui_list[index]
-        ui.fill_gem_list(self.gems, index == 0)
+        ui.fill_gem_list(self.gems, self.win.combo_ShowSupportGems.currentText())
 
         ui.check_GemRemove.stateChanged.connect(lambda checked: self.gem_remove_checkbox_selected(index))
         return ui
@@ -358,18 +301,12 @@ class SkillsUI:
     @Slot()
     def gem_remove_checkbox_selected(self, _key):
         """
-        Actions required for selecting the chackbox to the left of the GemUI()
-        :param _key: the index passed through to lambda, thisis actually the key into gem_ui_list
+        Actions required for selecting the checkbox to the left of the GemUI()
+        :param _key: the index passed through to lambda, this is actually the key into gem_ui_list
         :return:
         """
         if _key in self.gem_ui_list.keys():
             self.remove_gem_ui(_key)
-
-
-class SkillGroup:
-    def __init__(self, _group) -> None:
-        self.set = _group
-        print(_group)
 
 
 class GemUI:
@@ -492,11 +429,11 @@ class GemUI:
         """
         if self.gem is not None:
             self._level = self.spin_GemLevel.value()
-            self.gem.set("level", self._level)
+            self.gem.set("level", str(self._level))
             self._quality = self.spin_GemQuality.value()
-            self.gem.set("quality", self._quality)
+            self.gem.set("quality", str(self._quality))
             self._count = self.spin_GemCount.value()
-            self.gem.set("count", self._count)
+            self.gem.set("count", str(self._count))
 
             self._enabled = self.check_GemEnabled.isChecked() and "true" or "false"
             self.gem.set("enabled", self._enabled)
@@ -504,29 +441,34 @@ class GemUI:
             self.gem.set("qualityId", self._qualityId)
             self.gem.set("skillId", self._skillId)
 
-    def fill_gem_list(self, gem_list, active_only=True, support_only=True):
+    def fill_gem_list(self, gem_list, show_support_gems):
         """
         File the gem list combo
         :param gem_list: a list of curated gems available
-        :param active_only: if True, only add active gems
-        :param support_only: if True, only add support gems
+        :param show_support_gems: if True, only add non-awakened gems
         :return:
         """
-        # print("fill_gem_list", active_only, support_only)
-        for g in gem_list:
-            if active_only and not gem_list[g].get("is_support", False):
-                self.combo_GemList.addItem(gem_list[g]["base_item"]["display_name"], g)
-            if support_only and gem_list[g].get("is_support", False):
-                self.combo_GemList.addItem(gem_list[g]["base_item"]["display_name"], g)
+        if show_support_gems == "Awakened":
+            for g in gem_list:
+                display_name = gem_list[g]["base_item"]["display_name"]
+                if "Awakened" in display_name:
+                    self.combo_GemList.addItem(display_name, g)
+        else:
+            for g in gem_list:
+                display_name = gem_list[g]["base_item"]["display_name"]
+                if show_support_gems == "Normal" and "Awakened" in display_name:
+                    continue
+                self.combo_GemList.addItem(display_name, g)
         # set the ComboBox dropdown width.
         self.combo_GemList.view().setMinimumWidth(self.combo_GemList.minimumSizeHint().width())
         # ToDo: Sort by other methods
         # Sort Alphabetically
         self.combo_GemList.model().sort(0)
         if self.gem is not None and self._skillId != "":
-            set_combo_index_by_data(self.combo_GemList, self._skillId)
+            self.combo_GemList.setCurrentIndex(set_combo_index_by_data(self.combo_GemList, self._skillId))
         else:
             self.combo_GemList.setCurrentIndex(-1)
+            self.combo_GemList.showPopup()
 
 
 # def test() -> None:

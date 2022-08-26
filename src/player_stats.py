@@ -5,8 +5,8 @@ This Class if communicating between the calculation Classes and the UI Classes
 from operator import itemgetter
 
 from PoB_Main_Window import Ui_MainWindow
-from pob_config import *
-from constants import stats_list
+from pob_config import Config
+from constants import stats_list, ColourCodes
 
 
 class PlayerStats:

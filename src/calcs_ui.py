@@ -61,7 +61,7 @@ from qdarktheme.qtpy.QtWidgets import (
 )
 
 from PoB_Main_Window import Ui_MainWindow
-from pob_config import *
+from pob_config import Config
 from constants import _VERSION
 
 

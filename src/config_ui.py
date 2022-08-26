@@ -62,21 +62,15 @@ from qdarktheme.qtpy.QtWidgets import (
 
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import *
-from constants import _VERSION
-from ui_utils import FlowLayout
+
+# from constants import _VERSION
+# from ui_utils import FlowLayout
 
 
 class ConfigUI:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
         self.win = _win
-
-    def __repr__(self) -> str:
-        return (
-            f"Level {self.level} {self.player_class.name}" f" {self.ascendancy.value}\n"
-            if self.ascendancy.value is not None
-            else "\n"
-        )
 
     def load(self):
         """

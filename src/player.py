@@ -4,13 +4,13 @@ A unique Player is defined by: level, class selection, ascendancy selection,
 skill selection, and itemization across the item sets.
 """
 
-from constants import PlayerClass, PlayerAscendancy
+from constants import PlayerClasses, PlayerAscendancy
 
 
 class Player:
     def __init__(
         self,
-        player_class: PlayerClass = PlayerClass.SCION,
+        player_class: PlayerClasses = PlayerClasses.SCION,
         ascendancy: PlayerAscendancy = PlayerAscendancy.NONE,
         level: int = 1,
     ) -> None:

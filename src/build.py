@@ -11,10 +11,10 @@ associated with a Player.
 """
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
-from constants import *
-from constants import _VERSION
-from pob_config import *
+from constants import _VERSION, empty_build, program_title, default_spec, PlayerClasses
+from pob_config import _debug, Config
 import pob_file
 import ui_utils
 from tree import Tree
@@ -204,7 +204,8 @@ class Build:
 
         self.specs.clear()
         for spec in self.tree.findall("Spec"):
-            print("build.new", spec)
+            if spec.get("title", -1) == -1:
+                spec.set("title", "Default")
             self.specs.append(Spec(spec))
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
@@ -212,7 +213,7 @@ class Build:
 
     # new
 
-    def load(self, filename):
+    def load_from_file(self, filename):
         """
         Load a build. Use new() as a common function
         :param filename: str() XML file to load

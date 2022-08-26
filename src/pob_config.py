@@ -20,7 +20,7 @@ from qdarktheme.qtpy.QtWidgets import QFileDialog, QDialogButtonBox
 from PySide6.QtUiTools import QUiLoader
 
 import pob_file
-from constants import *
+from constants import pob_debug, default_config
 
 
 def str_to_bool(in_str):
@@ -63,6 +63,17 @@ def print_call_stack(full=False):
         print(lines[-3].strip())
 
 
+def _debug(*text):
+    """
+    print a debug line if debug is enabled
+    :param: text: list. The info to print
+    :return: N/A
+    """
+    if pob_debug:
+        lines = traceback.format_stack()
+        print(text, ":", lines[-2].strip().partition("\n")[0])
+
+
 def print_a_xml_element(the_element):
     """
     Debug: Print the contents so you can see what happened and why 'it' isn't working.
@@ -101,7 +112,7 @@ def deflate_and_base64_encode(string_val):
     :return: a byte array or the compressed and encoded string_val
     """
     try:
-        zlibbed_str = zlib.compress( string_val )
+        zlibbed_str = zlib.compress(string_val)
         return base64.b64encode(zlibbed_str, "-_")
     except:
         return None

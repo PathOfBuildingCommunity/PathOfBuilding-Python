@@ -6,7 +6,6 @@ This is a base PoB class. It doesn't import any other PoB classes
 
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from xml.dom import minidom
 import xmltodict
 import json
 

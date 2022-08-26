@@ -11,16 +11,10 @@ need to be supported for backwards compatibility reason.
 """
 from qdarktheme.qtpy.QtCore import QRectF, Qt
 from qdarktheme.qtpy.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
-from qdarktheme.qtpy.QtWidgets import (
-    QFrame,
-    QGraphicsEllipseItem,
-    QGraphicsScene,
-    QGraphicsView,
-)
+from qdarktheme.qtpy.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView
 
-# from constants import *
-# from constants import _VERSION
-from pob_config import *
+from constants import PlayerClasses, class_backgrounds, Layers
+from pob_config import Config, _debug
 
 from tree_graphics_item import TreeGraphicsItem
 from build import Build
@@ -94,14 +88,14 @@ class TreeView(QGraphicsView):
         # self.viewport().setCursor(Qt.ArrowCursor)
         _item: TreeGraphicsItem = self.itemAt(event.pos())
         # if _item:
-        #     print("tree_view: mousePressEvent1", _item.node_id, _item.filename)
+        #     _debug("tree_view: mousePressEvent1", _item.node_id, _item.filename)
         if _item and _item.node_id != 0:
-            # print("tree_view: mousePressEvent2", self.build.current_spec.nodes)
+            # _debug("tree_view: mousePressEvent2", self.build.current_spec.nodes)
             if _item.node_id in self.build.current_spec.nodes:
                 self.build.current_spec.nodes.remove(_item.node_id)
             else:
                 self.build.current_spec.nodes.append(_item.node_id)
-            # print("tree_view: mousePressEvent3", self.build.current_spec.nodes)
+            # _debug("tree_view: mousePressEvent3", self.build.current_spec.nodes)
             self.add_tree_images()
 
     # Inherited, don't change definition
@@ -111,7 +105,7 @@ class TreeView(QGraphicsView):
         :param event: Internal event matrix
         :return: N/A
         """
-        # print("tree_view: mouseReleaseEvent")
+        # _debug("tree_view: mouseReleaseEvent")
         super(TreeView, self).mouseReleaseEvent(event)
         self.viewport().setCursor(Qt.ArrowCursor)
 
@@ -204,7 +198,7 @@ class TreeView(QGraphicsView):
 
         # leave the print in till we have everything working.
         # It is what tells us how often the assets are being redrawn.
-        print("add_tree_images")
+        _debug("add_tree_images")
         if self.build.current_tree is None:
             return
 
@@ -235,6 +229,5 @@ class TreeView(QGraphicsView):
                 Layers.backgrounds,
             )
             self._char_class_bkgnd_image.filename = bkgnd["n"]
-            print(self._char_class_bkgnd_image)
 
     # add_tree_images

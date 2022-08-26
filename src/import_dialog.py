@@ -4,14 +4,15 @@ Import dialog
 Open a dialog for importing a character.
 """
 import re
-
 import requests
-import pprint
+import xml.etree.ElementTree as ET
+
 from qdarktheme.qtpy.QtWidgets import QDialog
+from qdarktheme.qtpy.QtCore import Qt, Slot
 
 from dlg_Import import Ui_Dialog
-from pob_config import *
-import pob_file
+from constants import valid_websites, website_list, http_headers
+from pob_config import Config, decode_base64_and_inflate, deflate_and_base64_encode, unique_sorted
 from build import Build
 
 realm_list = {
@@ -44,7 +45,7 @@ realm_list = {
 
 
 class ImportDlg(Ui_Dialog, QDialog):
-    """Import dialog."""
+    """Import dialog"""
 
     def __init__(self, _build: Build, _config: Config, parent=None):
         super().__init__(parent)
@@ -85,7 +86,7 @@ class ImportDlg(Ui_Dialog, QDialog):
         # Attempt to break up the text in lineedit control into a meaningful url.
         # get the website and the code as separate 'group' variables
         #   (1) is the website and (2) is the code (not used here)
-        m = re.search(r'http[s]?://(.*)/(.*)$', text)
+        m = re.search(r"http[s]?://(.*)/(.*)", text)
         if (m is not None and m.group(1) in valid_websites) or decode_base64_and_inflate(text) is not None:
             self.btn_ImportBuildSharing.setEnabled(True)
 
@@ -99,7 +100,7 @@ class ImportDlg(Ui_Dialog, QDialog):
         # Attempt to break up the text in lineedit control into a meaningful url.
         # get the website and the code as separate 'group' variables
         #   (1) is the website and (2) is the code
-        m = re.search(r'http[s]?://(.*)/(.*)$', text)
+        m = re.search(r"http[s]?://(.*)/(.*)$", text)
         if m is not None and m.group(1) in valid_websites:
             # if the text was a meaninful url and it was a supported url, let's get the code
             try:
@@ -119,6 +120,7 @@ class ImportDlg(Ui_Dialog, QDialog):
             # tree = ET.ElementTree(ET.fromstring(code))
             # print_a_xml_element(tree.getroot())
             self.xml = ET.ElementTree(ET.fromstring(code))
+            self.done(0)
 
     @Slot()
     def import_all(self, text):
@@ -194,15 +196,16 @@ class ImportDlg(Ui_Dialog, QDialog):
 
         # get passive tree
         passive_tree = None
+        response = None
         try:
             url = f"{realm_code['hostName']}character-window/get-passive-skills"
             response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             passive_tree = response.json()
-            # passive_tree = {'hashes': [487, 1203, 1325, 2913, 4378, 5152, 5197, 5233, 6289, 6446, 6580, 7162, 7285, 9695, 10143, 12247, 13009, 14056, 15405, 17201, 17735, 18025, 19711, 20010, 20551, 21435, 22285, 22356, 24083, 24914, 25011, 25933, 26523, 26866, 29547, 29933, 31471, 33287, 33740, 34031, 34400, 35859, 37800, 39725, 40653, 41472, 42009, 42293, 42800, 44429, 44606, 44908, 45696, 46910, 48287, 48438, 48807, 49109, 49254, 49806, 50288, 50862, 53118, 53793, 54340, 55485, 55649, 55676, 56001, 56359, 58449, 61198, 61262, 61471, 62017, 62817, 63649, 64587, 65034], 'hashes_ex': [], 'mastery_effects': ['4079782931', '3928020036', '4219298227'], 'items': [], 'jewel_data': {}}
             print(type(passive_tree))
         except requests.RequestException as e:
             print(f"Error retrieving account: {e}.")
-            print(vars(response))
+            if response:
+                print(vars(response))
 
         # get items
         items = None
@@ -218,7 +221,7 @@ class ImportDlg(Ui_Dialog, QDialog):
 
         # pprint.pprint(passive_tree)
         # pprint.pprint(items)
-        self.character_data = {"tree": passive_tree, "items":  items}
+        self.character_data = {"tree": passive_tree, "items": items}
 
     def fill_character_history(self):
         self.comboChar_History.clear()

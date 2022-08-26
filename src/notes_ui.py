@@ -4,8 +4,7 @@ This Class manages all the elements and owns some elements of the "NOTES" tab
 
 
 from PoB_Main_Window import Ui_MainWindow
-from pob_config import *
-from constants import _VERSION
+from pob_config import Config
 
 
 class NotesUI:

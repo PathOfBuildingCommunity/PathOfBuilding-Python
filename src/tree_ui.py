@@ -3,58 +3,21 @@ This Class manages all the elements and owns some elements of the "TREE" tab
 
 """
 
-from qdarktheme.qtpy.QtCore import QCoreApplication, Qt, Slot
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QCheckBox,
-    QColorDialog,
-    QComboBox,
-    QDockWidget,
-    QFontComboBox,
-    QFontDialog,
-    QFormLayout,
-    QFrame,
-    QGraphicsLineItem,
-    QGraphicsPixmapItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QMainWindow,
-    QMenuBar,
-    QMessageBox,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QSpinBox,
-    QSplitter,
-    QStatusBar,
-    QStyle,
-    QTabWidget,
-    QTextEdit,
-    QToolBar,
-    QToolBox,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
+from qdarktheme.qtpy.QtCore import QCoreApplication, Qt, Slot, QSize
+from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton
 
 from PoB_Main_Window import Ui_MainWindow
-from constants import *
-from constants import _VERSION
-from pob_config import *
+from constants import _VERSION, PlayerClasses
+from pob_config import Config
 from ui_utils import FlowLayout
 
 
 class TreeUI:
-    def __init__(self, _config: Config, frame_TreeTools, _win: Ui_MainWindow) -> None:
+    def __init__(self, _config: Config, frame_tree_tools, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
         self.win = _win
         self.build = self.win.build
-        self.layout_tree_tools = FlowLayout(frame_TreeTools, 2)
+        self.layout_tree_tools = FlowLayout(frame_tree_tools, 2)
         self._curr_class = PlayerClasses.SCION
 
         """
@@ -116,13 +79,6 @@ class TreeUI:
         self.btn_show_power_report.setVisible(False)
         self.btn_show_power_report.setText(QCoreApplication.translate("MainWindow", "Show Power Report ...", None))
         self.layout_tree_tools.addWidget(self.btn_show_power_report)
-
-    def __repr__(self) -> str:
-        return (
-            f"Level {self.level} {self.player_class.name}" f" {self.ascendancy.value}\n"
-            if self.ascendancy.value is not None
-            else "\n"
-        )
 
     def load(self):
         """

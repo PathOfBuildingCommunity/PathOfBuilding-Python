@@ -696,12 +696,12 @@ QAction {padding-left: 2px;}</string>
                 </item>
                 <item>
                  <property name="text">
-                  <string extracomment="Weapon 1 Swap">Weapon 1 (Swap)</string>
+                  <string extracomment="Weapon 1 Swap">Weapon 1 Swap</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string extracomment="Weapon 2 Swap">Weapon 2 (Swap)</string>
+                  <string extracomment="Weapon 2 Swap">Weapon 2 Swap</string>
                  </property>
                 </item>
                 <item>

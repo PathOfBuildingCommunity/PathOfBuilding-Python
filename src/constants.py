@@ -10,6 +10,7 @@ without this, items are too far apart and items are far too small on screen.
 All values should only be scaled on point of entry, ie: when they are first processed out of the json
 """
 global_scale_factor = 2
+pob_debug = True
 
 _VERSION = 3.18
 _VERSION_str = "3_18"
@@ -373,29 +374,29 @@ stats_list = [
     {
         "stat": "WarcryCastTime",
         "label": "Cast Time",
-        "fmt": ".2fs",
+        "fmt": "{:.2f}s",
         "flag": "warcry",
     },
     {"stat": "HitSpeed", "label": "Hit Rate", "fmt": "{:.2f}"},
     {
         "stat": "TrapThrowingTime",
         "label": "Trap Throwing Time",
-        "fmt": ".2fs",
+        "fmt": "{:.2f}s",
     },
     {
         "stat": "TrapCooldown",
         "label": "Trap Cooldown",
-        "fmt": ".3fs",
+        "fmt": "{:.2f}s",
     },
     {
         "stat": "MineLayingTime",
         "label": "Mine Throwing Time",
-        "fmt": ".2fs",
+        "fmt": "{:.2f}s",
     },
     {
         "stat": "TotemPlacementTime",
         "label": "Totem Placement Time",
-        "fmt": ".2fs",
+        "fmt": "{:.2f}s",
     },
     {
         "stat": "PreEffectiveCritChance",
@@ -415,7 +416,7 @@ stats_list = [
     {
         "stat": "HitChance",
         "label": "Hit Chance",
-        "fmt": ".0f%",
+        "fmt": "{:.0f}%",
         "flag": "attack",
     },
     {
@@ -539,18 +540,18 @@ stats_list = [
     {
         "stat": "Cooldown",
         "label": "Skill Cooldown",
-        "fmt": ".3fs",
+        "fmt": "{:.2f}s",
     },
     {
         "stat": "SealCooldown",
         "label": "Seal Gain Frequency",
-        "fmt": ".2fs",
+        "fmt": "{:.2f}s",
     },
     {"stat": "SealMax", "label": "Max Number of Seals", "fmt": "{:d}"},
     {
         "stat": "TimeMaxSeals",
         "label": "Time to Gain Max Seals",
-        "fmt": ".2fs",
+        "fmt": "{:.2f}s",
     },
     {
         "stat": "AreaOfEffectRadius",
@@ -632,13 +633,13 @@ stats_list = [
     {
         "stat": "ESPerSecondCost",
         "label": "Energy Shield Cost",
-        "fmt": ".2f/s",
+        "fmt": "{:.2f}/s",
         "colour": ColourCodes.ES,
     },
     {
         "stat": "ESPercentPerSecondCost",
         "label": "Energy Shield Cost",
-        "fmt": ".2f%/s",
+        "fmt": "{:.2f}%/s",
         "colour": ColourCodes.ES,
     },
     {"stat": "blank"},
@@ -947,7 +948,7 @@ stats_list = [
     },
 ]
 
-valid_websites = ["pastebin.com", "pastebinp.com", "pobb.in", "rentry.co", "poe.ninja"]
+valid_websites = ["pastebin.com", "pastebinp.com", "pobb.in", "rentry.co", "poe.ninja/pob"]
 website_list = {
     "pastebin.com": {
         "id": "Pastebin",
@@ -971,13 +972,12 @@ website_list = {
         "id": "Rentry",
         "downloadURL": "https://rentry.co/paste/CODE/raw",
     },
-    "poeninja": {
+    "poe.ninja/pob": {
         "id": "PoeNinja",
         "downloadURL": "https://poe.ninja/pob/raw/CODE",
         "codeOut": "",
         "postUrl": "https://poe.ninja/pob/api/api_post.php",
         "postFields": "api_paste_code=",
     },
-    "Error": {
-    },
+    "Error": {"note": "If you get here, it's broken"},
 }
