@@ -7,6 +7,7 @@ External components are the status bar, toolbar (if exists), menus
 Icons by  Yusuke Kamiyamane (https://p.yusukekamiyamane.com/)
 """
 import re
+import os
 import platform
 import atexit
 import sys
@@ -14,6 +15,7 @@ import datetime
 from typing import Union
 import xml.etree.ElementTree as ET
 from pathlib import Path
+import psutil
 
 import qdarktheme
 from qdarktheme.qtpy.QtCore import Qt, Slot
@@ -21,13 +23,14 @@ from qdarktheme.qtpy.QtGui import QFontDatabase
 from qdarktheme.qtpy.QtWidgets import QSpinBox, QMainWindow, QWidget, QLabel, QComboBox, QApplication, QFileDialog
 
 from constants import (
-    program_title,
+    ColourCodes,
     PlayerClasses,
+    bandits,
+    empty_build,
     pantheon_major_gods,
     pantheon_minor_gods,
-    bandits,
-    ColourCodes,
-    empty_build,
+    pob_debug,
+    program_title,
 )
 from pob_config import Config, _debug
 from ui_utils import FlowLayout, set_combo_index_by_data
@@ -174,13 +177,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Add content to Colour ComboBox
         self.combo_Notes_Colour.addItems([colour.name.title() for colour in ColourCodes])
 
-        # get the initial colour of the edit box for later use as 'NORMAL'
-        # self.config.default_notes_text_colour = self.textedit_Notes.textColor()
-
         self.menu_Builds.addSeparator()
         self.set_recent_builds_menu_items(self.config)
 
-        # Connect our Actions
+        # Connect our Actions / triggers
         self.combo_Notes_Font.currentFontChanged.connect(self.set_notes_font)
         self.spin_Notes_FontSize.valueChanged.connect(self.set_notes_font_size)
         self.combo_Notes_Colour.currentTextChanged.connect(self.set_notes_font_colour)
@@ -193,6 +193,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Settings.triggered.connect(self.config.open_settings_dialog)
         self.action_Import.triggered.connect(self.open_import_dialog)
         self.action_Export.triggered.connect(self.open_export_dialog)
+        self.statusbar_MainWindow.messageChanged.connect(self.update_status_bar)
 
         self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
         self.combo_classes.currentTextChanged.connect(self.change_class)
@@ -201,6 +202,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
         self.tree_ui.textEdit_Search.textChanged.connect(self.search_text_changed)
         self.tree_ui.textEdit_Search.returnPressed.connect(self.search_return_pressed)
+
+        # Start the statusbar self updating
+        self.update_status_bar()
 
         # setup Scion by default, and this will trigger it's correct ascendancy to appear in combo_ascendancy
         # and other ui's to display properly
@@ -324,6 +328,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
+            self.statusbar_MainWindow.showMessage(f"Loaded: {self.build.name}", 10000)
 
     @Slot()
     def build_save_as(self):
@@ -572,6 +577,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def search_return_pressed(self):
         self.gview_Tree.add_tree_images()
+
+    @Slot()
+    def update_status_bar(self, message=None):
+        """
+        Update the status bar. Use default text if no message is supplied.
+        This triggers when the message is set and when it is cleared afterwards.
+        :param message: string: the message
+        :return: N/A
+        """
+        # we only care for when the message clears
+        if pob_debug and message is None or message == "":
+            process = psutil.Process(os.getpid())
+            message = f"RAM memory {'{:.2f}'.format(process.memory_info().rss / 1024 ** 2)}MB used:"
+            self.statusbar_MainWindow.showMessage(message, 2000)
 
 
 # Start here

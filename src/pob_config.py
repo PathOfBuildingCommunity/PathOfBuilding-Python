@@ -14,6 +14,7 @@ import base64
 import itertools
 import operator
 import zlib
+import datetime
 
 from qdarktheme.qtpy.QtCore import QSize, Slot
 from qdarktheme.qtpy.QtWidgets import QFileDialog, QDialogButtonBox
@@ -27,10 +28,19 @@ def str_to_bool(in_str):
     """
     Return a boolean from a string. As the settings could be manipulated by a human, we can't trust eval()
       EG: eval('os.system(`rm -rf /`)')
-    :param: str: The setting to be evaluated
+    :param: in_str: String: The setting to be evaluated
     :returns: True if it looks like it could be true, otherwise False
     """
     return in_str.lower() in ("yes", "true", "t", "1", "on")
+
+
+def bool_to_str(in_bool):
+    """
+    Return a string from a boolean.
+    :param: in_bool: Boolean: The setting to be evaluated
+    :returns: String: true or false
+    """
+    return in_bool and "true" or "false"
 
 
 def index_exists(_list_or_dict, index):
@@ -71,7 +81,7 @@ def _debug(*text):
     """
     if pob_debug:
         lines = traceback.format_stack()
-        print(text, ":", lines[-2].strip().partition("\n")[0])
+        print(f"{datetime.datetime.now()}: {text}", ":", lines[-2].strip().partition("\n")[0])
 
 
 def print_a_xml_element(the_element):

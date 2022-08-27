@@ -59,7 +59,7 @@ def write_xml(filename, _tree):
     try:
         with _fn.open("wb") as xml_file:
             ET.indent(_tree, "\t")
-            _tree.write(xml_file, encoding="utf-8")
+            _tree.write(xml_file, encoding="utf-8", xml_declaration=True)
     except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
         print(f"Unable to write to {_fn}")
 

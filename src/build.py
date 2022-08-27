@@ -247,6 +247,7 @@ class Build:
         # pob["PathOfBuilding"]["Skills"] = self.skills
         self.notes.text, self.notes_html.text = win.notes_ui.save()
         win.stats.save(self.build)
+        win.skills_ui.save()
         # pob["PathOfBuilding"]["Notes"] = self.notes
         # pob["PathOfBuilding"]["NotesHTML"] = self.notes_html
         # pob["PathOfBuilding"]["TreeView"] = self.tree_view
