@@ -175,6 +175,8 @@
     <file>TreeData/VioletOil.png</file>
   </qresource>
   <qresource prefix="Font">
+    <file>Font/NotoSansMono-Regular.ttf</file>
+    <file>Font/NotoSans-Regular.ttf</file>
     <file>Font/LuxiMono.ttf</file>
   </qresource>
 </RCC>

@@ -19,8 +19,20 @@ import psutil
 
 import qdarktheme
 from qdarktheme.qtpy.QtCore import Qt, Slot
-from qdarktheme.qtpy.QtGui import QFontDatabase
-from qdarktheme.qtpy.QtWidgets import QSpinBox, QMainWindow, QWidget, QLabel, QComboBox, QApplication, QFileDialog
+from qdarktheme.qtpy.QtGui import QFontDatabase, QFont
+from qdarktheme.qtpy.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QFileDialog,
+    QFrame,
+    QLabel,
+    QMainWindow,
+    QScrollArea,
+    QSizePolicy,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
 
 from constants import (
     ColourCodes,
@@ -160,6 +172,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # set the ComboBox dropdown width.
         self.combo_Bandits.view().setMinimumWidth(self.combo_Bandits.minimumSizeHint().width())
 
+        layout = QVBoxLayout()
+        scrollArea = QScrollArea(self.frame_SkillsRightBottom)
+        scrollArea.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        scrollArea.setViewportMargins(0, 0, 0, 0)
+        scrollArea.setWidgetResizable(True)
+        self.scrollAreaSkillsContents = QLabel(alignment=Qt.AlignCenter)
+        scrollArea.setWidget(self.scrollAreaSkillsContents)
+        layout.addWidget(scrollArea)
+        self.frame_SkillsRightBottom.setLayout(layout)
+        layout = QVBoxLayout()
+        self.scrollAreaSkillsContents.setLayout(layout)
+
+        # self.frame_SkillsTab.setLayout(QVBoxLayout())
+
         """
             End: Do what the QT Designer cannot yet do 
         """
@@ -212,7 +238,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.build_loader("Default")
 
         """
-        From time to time, comboBoxes don't show the correct colours. It could be becuase of changing the
+        From time to time, comboBoxes don't show the correct colours. It could be because of changing the
             width of the dropdowns. Soreapply the current theme in an attempt to force the correct colours.
         """
         # don't use self.switch_theme
@@ -596,8 +622,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # Start here
 # sys.stdout = open("PathOfBuilding.log", 'a')
 app = QApplication(sys.argv)
+
 # font for stats box. To line things up, we need a Mono font. Font acquired from Linux.
-font = QFontDatabase.addApplicationFont(":/Font/Font/LuxiMono.ttf")
+QFontDatabase.addApplicationFont(":/Font/Font/NotoSansMono-Regular.ttf")
+# system wide font
+QApplication.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 9))
 
 window = MainWindow(app)
 window.show()

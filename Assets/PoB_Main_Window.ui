@@ -26,7 +26,7 @@ QMenu::item:selected {background-color: rgb(0, 85, 127);color: rgb(255, 255, 255
 QAction {padding-left: 2px;}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="hlayout_MainWindow">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -205,7 +205,7 @@ QAction {padding-left: 2px;}</string>
              <widget class="QTextEdit" name="textedit_Statistics">
               <property name="font">
                <font>
-                <family>Luxi Mono</family>
+                <family>Noto Mono</family>
                </font>
               </property>
               <property name="focusPolicy">
@@ -324,6 +324,9 @@ QAction {padding-left: 2px;}</string>
              <string notr="true">SKILLS</string>
             </attribute>
             <layout class="QHBoxLayout" name="hLayout_Skills">
+             <property name="spacing">
+              <number>0</number>
+             </property>
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -337,16 +340,16 @@ QAction {padding-left: 2px;}</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frame_SkillsTab">
+              <widget class="QFrame" name="frame_SkillsLeft">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                 <horstretch>4</horstretch>
+                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>1000</width>
+                 <width>400</width>
                  <height>655</height>
                 </size>
                </property>
@@ -356,122 +359,6 @@ QAction {padding-left: 2px;}</string>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <property name="lineWidth">
-                <number>0</number>
-               </property>
-               <widget class="QLabel" name="label_SocketGroups">
-                <property name="geometry">
-                 <rect>
-                  <x>10</x>
-                  <y>40</y>
-                  <width>90</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Socket Groups:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-               <widget class="QLabel" name="label_SkillSet">
-                <property name="geometry">
-                 <rect>
-                  <x>10</x>
-                  <y>10</y>
-                  <width>90</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Skill Set:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-               <widget class="QComboBox" name="combo_SkillSet">
-                <property name="geometry">
-                 <rect>
-                  <x>110</x>
-                  <y>10</y>
-                  <width>180</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="placeholderText">
-                 <string>&lt;empty&gt;</string>
-                </property>
-                <property name="duplicatesEnabled">
-                 <bool>true</bool>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="btn_SkillsManage">
-                <property name="geometry">
-                 <rect>
-                  <x>310</x>
-                  <y>10</y>
-                  <width>75</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Manage ...</string>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="btn_SkillsDelete">
-                <property name="geometry">
-                 <rect>
-                  <x>210</x>
-                  <y>40</y>
-                  <width>75</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Delete</string>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="btn_SkillsDeleteAll">
-                <property name="geometry">
-                 <rect>
-                  <x>310</x>
-                  <y>40</y>
-                  <width>75</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Delete All</string>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="btn_NewSocketGrp">
-                <property name="geometry">
-                 <rect>
-                  <x>110</x>
-                  <y>40</y>
-                  <width>75</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>New</string>
-                </property>
-               </widget>
-               <widget class="QListWidget" name="list_SocketGroups">
-                <property name="geometry">
-                 <rect>
-                  <x>10</x>
-                  <y>70</y>
-                  <width>375</width>
-                  <height>311</height>
-                 </rect>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
-                </property>
-               </widget>
                <widget class="QLabel" name="label_Usage_Hints">
                 <property name="geometry">
                  <rect>
@@ -486,6 +373,19 @@ QAction {padding-left: 2px;}</string>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
+                </property>
+               </widget>
+               <widget class="QListWidget" name="list_SocketGroups">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>70</y>
+                  <width>385</width>
+                  <height>311</height>
+                 </rect>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
                 </property>
                </widget>
                <widget class="QGroupBox" name="group_SkillTabLeft">
@@ -664,12 +564,12 @@ QAction {padding-left: 2px;}</string>
                  </property>
                 </widget>
                </widget>
-               <widget class="QComboBox" name="combo_SocketedIn">
+               <widget class="QComboBox" name="combo_SkillSet">
                 <property name="geometry">
                  <rect>
-                  <x>480</x>
-                  <y>40</y>
-                  <width>171</width>
+                  <x>110</x>
+                  <y>10</y>
+                  <width>190</width>
                   <height>22</height>
                  </rect>
                 </property>
@@ -677,226 +577,388 @@ QAction {padding-left: 2px;}</string>
                  <string>&lt;empty&gt;</string>
                 </property>
                 <property name="duplicatesEnabled">
-                 <bool>false</bool>
-                </property>
-                <item>
-                 <property name="text">
-                  <string extracomment="None">None</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Weapon 1">Weapon 1</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Weapon 2">Weapon 2</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Weapon 1 Swap">Weapon 1 Swap</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Weapon 2 Swap">Weapon 2 Swap</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Helmet">Helmet</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Body Armour">Body Armour</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Gloves">Gloves</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Boots">Boots</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Amulet">Amulet</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Ring 1">Ring 1</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Ring 2">Ring 2</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string extracomment="Belt">Belt</string>
-                 </property>
-                </item>
-               </widget>
-               <widget class="QCheckBox" name="check_SocketGroupEnabled">
-                <property name="geometry">
-                 <rect>
-                  <x>660</x>
-                  <y>40</y>
-                  <width>75</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Enabled</string>
-                </property>
-                <property name="checked">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                </widget>
-               <widget class="QLabel" name="label_SocketedIn">
+               <widget class="QPushButton" name="btn_NewSocketGrp">
                 <property name="geometry">
                  <rect>
-                  <x>400</x>
+                  <x>110</x>
                   <y>40</y>
-                  <width>75</width>
+                  <width>80</width>
                   <height>22</height>
                  </rect>
                 </property>
                 <property name="text">
-                 <string>Socketed In:</string>
+                 <string>New</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_SocketGroups">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>40</y>
+                  <width>90</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Socket Groups:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
-               <widget class="QLineEdit" name="lineedit_SkillLabel">
+               <widget class="QPushButton" name="btn_SkillsDeleteAll">
                 <property name="geometry">
                  <rect>
-                  <x>480</x>
-                  <y>10</y>
-                  <width>400</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-               </widget>
-               <widget class="QLabel" name="label_SkillLabel">
-                <property name="geometry">
-                 <rect>
-                  <x>410</x>
-                  <y>10</y>
-                  <width>65</width>
+                  <x>315</x>
+                  <y>40</y>
+                  <width>80</width>
                   <height>22</height>
                  </rect>
                 </property>
                 <property name="text">
-                 <string>Skill Label:</string>
+                 <string>Delete All</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_SkillSet">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>10</y>
+                  <width>90</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Skill Set:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
-               <widget class="QCheckBox" name="check_SocketGroup_FullDPS">
+               <widget class="QPushButton" name="btn_SkillsManage">
                 <property name="geometry">
                  <rect>
-                  <x>750</x>
+                  <x>315</x>
+                  <y>10</y>
+                  <width>80</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>Manage ...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="btn_SkillsDelete">
+                <property name="geometry">
+                 <rect>
+                  <x>220</x>
                   <y>40</y>
-                  <width>130</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Include in Full DPS</string>
-                </property>
-                <property name="checked">
-                 <bool>false</bool>
-                </property>
-               </widget>
-               <widget class="QLabel" name="label_Variant">
-                <property name="geometry">
-                 <rect>
-                  <x>820</x>
-                  <y>70</y>
-                  <width>40</width>
+                  <width>80</width>
                   <height>22</height>
                  </rect>
                 </property>
                 <property name="text">
-                 <string>Variant</string>
+                 <string>Delete</string>
                 </property>
                </widget>
-               <widget class="QLabel" name="label_Quality">
-                <property name="geometry">
-                 <rect>
-                  <x>760</x>
-                  <y>70</y>
-                  <width>45</width>
-                  <height>22</height>
-                 </rect>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frame_SkillsRight">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <property name="midLineWidth">
+                <number>1</number>
+               </property>
+               <layout class="QVBoxLayout" name="vlayout_SkillsRight">
+                <property name="spacing">
+                 <number>0</number>
                 </property>
-                <property name="text">
-                 <string>Quality</string>
+                <property name="leftMargin">
+                 <number>0</number>
                 </property>
-               </widget>
-               <widget class="QLabel" name="label_Count">
-                <property name="geometry">
-                 <rect>
-                  <x>970</x>
-                  <y>70</y>
-                  <width>40</width>
-                  <height>22</height>
-                 </rect>
+                <property name="topMargin">
+                 <number>0</number>
                 </property>
-                <property name="text">
-                 <string>Count</string>
+                <property name="rightMargin">
+                 <number>0</number>
                 </property>
-               </widget>
-               <widget class="QLabel" name="label_GemName">
-                <property name="geometry">
-                 <rect>
-                  <x>427</x>
-                  <y>70</y>
-                  <width>70</width>
-                  <height>22</height>
-                 </rect>
+                <property name="bottomMargin">
+                 <number>0</number>
                 </property>
-                <property name="text">
-                 <string>Gem Name:</string>
-                </property>
-               </widget>
-               <widget class="QLabel" name="label_Enabled">
-                <property name="geometry">
-                 <rect>
-                  <x>910</x>
-                  <y>70</y>
-                  <width>50</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Enabled</string>
-                </property>
-               </widget>
-               <widget class="QLabel" name="label_Level">
-                <property name="geometry">
-                 <rect>
-                  <x>700</x>
-                  <y>70</y>
-                  <width>40</width>
-                  <height>22</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Level:</string>
-                </property>
-               </widget>
+                <item>
+                 <widget class="QFrame" name="frame_SkillsRightTop">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>610</width>
+                    <height>100</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <widget class="QLabel" name="label_GemName">
+                   <property name="geometry">
+                    <rect>
+                     <x>27</x>
+                     <y>70</y>
+                     <width>70</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Gem Name:</string>
+                   </property>
+                  </widget>
+                  <widget class="QComboBox" name="combo_SocketedIn">
+                   <property name="geometry">
+                    <rect>
+                     <x>80</x>
+                     <y>40</y>
+                     <width>171</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="placeholderText">
+                    <string>&lt;empty&gt;</string>
+                   </property>
+                   <property name="duplicatesEnabled">
+                    <bool>false</bool>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string extracomment="None">None</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Weapon 1">Weapon 1</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Weapon 2">Weapon 2</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Weapon 1 Swap">Weapon 1 Swap</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Weapon 2 Swap">Weapon 2 Swap</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Helmet">Helmet</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Body Armour">Body Armour</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Gloves">Gloves</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Boots">Boots</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Amulet">Amulet</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Ring 1">Ring 1</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Ring 2">Ring 2</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string extracomment="Belt">Belt</string>
+                    </property>
+                   </item>
+                  </widget>
+                  <widget class="QLabel" name="label_Variant">
+                   <property name="geometry">
+                    <rect>
+                     <x>420</x>
+                     <y>70</y>
+                     <width>40</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Variant</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="label_SkillLabel">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>10</y>
+                     <width>65</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Skill Label:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="label_Enabled">
+                   <property name="geometry">
+                    <rect>
+                     <x>510</x>
+                     <y>70</y>
+                     <width>50</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Enabled</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="label_Quality">
+                   <property name="geometry">
+                    <rect>
+                     <x>360</x>
+                     <y>70</y>
+                     <width>45</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Quality</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="lineedit_SkillLabel">
+                   <property name="geometry">
+                    <rect>
+                     <x>80</x>
+                     <y>10</y>
+                     <width>400</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="label_Count">
+                   <property name="geometry">
+                    <rect>
+                     <x>570</x>
+                     <y>70</y>
+                     <width>40</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Count</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="label_SocketedIn">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>40</y>
+                     <width>75</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Socketed In:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="label_Level">
+                   <property name="geometry">
+                    <rect>
+                     <x>300</x>
+                     <y>70</y>
+                     <width>40</width>
+                     <height>22</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Level:</string>
+                   </property>
+                  </widget>
+                  <widget class="QCheckBox" name="check_SocketGroupEnabled">
+                   <property name="geometry">
+                    <rect>
+                     <x>260</x>
+                     <y>40</y>
+                     <width>75</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Enabled</string>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                  <widget class="QCheckBox" name="check_SocketGroup_FullDPS">
+                   <property name="geometry">
+                    <rect>
+                     <x>350</x>
+                     <y>40</y>
+                     <width>130</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Include in Full DPS</string>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame_SkillsRightBottom">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
@@ -1490,7 +1552,7 @@ QAction {padding-left: 2px;}</string>
             <attribute name="whatsThis">
              <string notr="true">NOTES</string>
             </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout">
+            <layout class="QVBoxLayout" name="vlayout_Notes">
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -1625,7 +1687,7 @@ hr { height: 1px; border-width: 0; }
             <attribute name="whatsThis">
              <string notr="true">CONFIG</string>
             </attribute>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <layout class="QHBoxLayout" name="hlayout_Config">
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -2301,23 +2363,6 @@ hr { height: 1px; border-width: 0; }
   <tabstop>scrollArea</tabstop>
   <tabstop>combo_MainSkill</tabstop>
   <tabstop>combo_MainSkillActive</tabstop>
-  <tabstop>combo_SkillSet</tabstop>
-  <tabstop>btn_SkillsManage</tabstop>
-  <tabstop>btn_NewSocketGrp</tabstop>
-  <tabstop>btn_SkillsDelete</tabstop>
-  <tabstop>btn_SkillsDeleteAll</tabstop>
-  <tabstop>list_SocketGroups</tabstop>
-  <tabstop>check_SortByDPS</tabstop>
-  <tabstop>combo_SortByDPS</tabstop>
-  <tabstop>check_MatchToLevel</tabstop>
-  <tabstop>spin_DefaultGemLevel</tabstop>
-  <tabstop>spin_DefaultGemQuality</tabstop>
-  <tabstop>combo_ShowSupportGems</tabstop>
-  <tabstop>check_ShowGemQualityVariants</tabstop>
-  <tabstop>lineedit_SkillLabel</tabstop>
-  <tabstop>combo_SocketedIn</tabstop>
-  <tabstop>check_SocketGroupEnabled</tabstop>
-  <tabstop>check_SocketGroup_FullDPS</tabstop>
   <tabstop>combo_ItemSet</tabstop>
   <tabstop>btn_ItemManage</tabstop>
   <tabstop>combo_Weapon1</tabstop>
