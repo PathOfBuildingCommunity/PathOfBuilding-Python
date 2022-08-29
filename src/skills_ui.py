@@ -17,8 +17,9 @@ from ui_utils import set_combo_index_by_data, set_combo_index_by_text
 
 
 class SkillsUI:
-    def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
+    def __init__(self, _config: Config, _build, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
+        self.build = _build
         self.win = _win
         # this is the whole <Skills>...</Skills> tag set
         self.xml_skills = None
@@ -65,7 +66,7 @@ class SkillsUI:
     def load(self, _skills):
         """
         Load internal structures from the build object
-        :param _skills: Reference to the xml tree
+        :param _skills: Reference to the xml <Skills> tag set
         :return: N/A
         """
         self.xml_skills = _skills
@@ -141,7 +142,7 @@ class SkillsUI:
         if 0 <= new_index < len(self.skill_sets_list):
             self.show_skill_set(self.skill_sets_list[new_index])
 
-    def define_socket_group_label(self, item, group=None):
+    def define_socket_group_label(self, index, item=None, group=None):
         """
         Setup the passed in QListWidgetItem depending on whether it's active or not, etc
         :param: item: QListWidgetItem:
@@ -170,7 +171,12 @@ class SkillsUI:
 
         full_dps = str_to_bool(group.get("includeInFullDPS"))
         enabled = str_to_bool(group.get("enabled")) and _label != ""
-        item.setText(f"{_label}{not enabled and ' (Disabled)' or ''}{full_dps and ' (FullDPS)' or ''}")
+        active = self.build.mainSocketGroup == index
+        item.setText(
+            f"{_label}{not enabled and ' (Disabled)' or ''}{full_dps and ' (FullDPS)' or ''}{active and ' (Active)' or ''}"
+        )
+        # get a copy of the label with out all the extra information
+        item.setWhatsThis(_label)
 
         # change colour (dim) if it's disabled or no active skills
         if not enabled:
@@ -203,8 +209,12 @@ class SkillsUI:
         # Find all Socket Groups (<Skill> in the xml) and add them to the Socket Group list
         socket_groups = _set.findall("Skill")
         # _debug("len, socket_groups", len(socket_groups), socket_groups)
-        for group in socket_groups:
-            self.win.list_SocketGroups.addItem(self.define_socket_group_label(QListWidgetItem(""), group))
+        for idx, group in enumerate(socket_groups):
+            self.win.list_SocketGroups.addItem(self.define_socket_group_label(idx, None, group))
+
+        self.win.load_socket_group(
+            [self.win.list_SocketGroups.item(i).whatsThis() for i in range(self.win.list_SocketGroups.count())]
+        )
 
         # re-connect triggers
         self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
@@ -361,20 +371,6 @@ class SkillsUI:
         if _key in self.gem_ui_list.keys():
             self.remove_gem_ui(_key)
 
-    # @Slot()
-    # def enable_disable_full_dps(self, _key):
-    #     """
-    #     Actions required for selecting the checkbox to the left of the GemUI()
-    #     This is called by the enabled and gemlist elements in this class
-    #     :param _key: the index passed through to lambda, this is actually the key into gem_ui_list
-    #     :return:
-    #     """
-    #     if _key in self.gem_ui_list.keys():
-    #         self.gem_ui_list[_key].save()
-    #         item = self.win.list_SocketGroups.currentItem()
-    #         # _debug(_key, type(item), item.text())
-    #         self.define_socket_group_label(item)
-
     @Slot()
     def enable_disable_socket_group_full_dps(self, checked):
         """
@@ -384,9 +380,14 @@ class SkillsUI:
         :return:
         """
         self.xml_current_socket_group.set("enabled", bool_to_str(self.win.check_SocketGroupEnabled.isChecked()))
-        self.xml_current_socket_group.set("includeInFullDPS", bool_to_str(self.win.check_SocketGroup_FullDPS.isChecked()))
+        self.xml_current_socket_group.set(
+            "includeInFullDPS", bool_to_str(self.win.check_SocketGroup_FullDPS.isChecked())
+        )
         item = self.win.list_SocketGroups.currentItem()
-        self.define_socket_group_label(item)
+        self.define_socket_group_label(self.win.list_SocketGroups.currentIndex(), item)
+        self.win.load_socket_group(
+            [self.win.list_SocketGroups.item(i).whatsThis() for i in range(self.win.list_SocketGroups.count())]
+        )
 
     @Slot()
     def update_from_gemlist(self, _key):
@@ -588,6 +589,7 @@ class GemUI:
         :param show_support_gems: if True, only add non-awakened gems
         :return:
         """
+
         def add_colour(index):
             """
             Add colour to a gem name

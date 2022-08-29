@@ -12,9 +12,10 @@ associated with a Player.
 
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from typing import Union
 
 from constants import _VERSION, empty_build, program_title, default_spec, PlayerClasses
-from pob_config import _debug, Config
+from pob_config import _debug, Config, str_to_bool, bool_to_str
 import pob_file
 import ui_utils
 from tree import Tree
@@ -111,36 +112,49 @@ class Build:
         self.build.set("level", f"{new_level}")
 
     @property
+    def mainSocketGroup(self):
+        print(type(self.build.get("mainSocketGroup", 0)), self.build.get("mainSocketGroup", 0))
+        return int(self.build.get("mainSocketGroup", 0))
+
+    @mainSocketGroup.setter
+    def mainSocketGroup(self, new_group):
+        self.build.set("mainSocketGroup", f"{new_group}")
+
+    @property
+    def resistancePenalty(self):
+        return self.get_config_tag_item("Input", "resistancePenalty", "number", 0)
+
+    @resistancePenalty.setter
+    def resistancePenalty(self, new_name):
+        self.build.set("resistancePenalty", new_name)
+        self.set_config_tag_item("Input", "resistancePenalty", "number", new_name)
+
+    @property
     def bandit(self):
-        return self.build.get("bandit", "None")
+        return self.get_config_tag_item("Input", "bandit", "string", "None")
 
     @bandit.setter
     def bandit(self, new_name):
         self.build.set("bandit", new_name)
-
-    @property
-    def mainSocketGroup(self):
-        return self.build.get("mainSocketGroup")
-
-    @mainSocketGroup.setter
-    def mainSocketGroup(self, new_name):
-        self.build.set("mainSocketGroup", new_name)
+        self.set_config_tag_item("Input", "bandit", "string", new_name)
 
     @property
     def pantheonMajorGod(self):
-        return self.build.get("pantheonMajorGod")
+        return self.get_config_tag_item("Input", "pantheonMajorGod", "string", "None")
 
     @pantheonMajorGod.setter
     def pantheonMajorGod(self, new_name):
         self.build.set("pantheonMajorGod", new_name)
+        self.set_config_tag_item("Input", "pantheonMajorGod", "string", new_name)
 
     @property
     def pantheonMinorGod(self):
-        return self.build.get("pantheonMinorGod")
+        return self.get_config_tag_item("Input", "pantheonMinorGod", "string", "None")
 
     @pantheonMinorGod.setter
     def pantheonMinorGod(self, new_name):
         self.build.set("pantheonMinorGod", new_name)
+        self.set_config_tag_item("Input", "pantheonMinorGod", "string", new_name)
 
     @property
     def targetVersion(self):
@@ -177,6 +191,47 @@ class Build:
     # @.setter
     # def (self, new_name):
     #     self.build[""] = new_name
+
+    def get_config_tag_item(self, key, name, value_type, default=Union[str, int, bool]):
+        """
+        Get an item from the <Config> ... </Config> tag set
+        :param key: string: the key: Input or Placeholder for example
+        :param name: string: the value of the 'name' property
+        :param value_type: string: just to be confusing, the name of the 'value' property (string, boolean, number)
+        :param default: Union[str, int, bool]): a default value in case the item is not in the xml
+        :return: The appropriate value from xml or the default
+        """
+        for _input in self.config.findall(key):
+            if _input.get("name") == name:
+                _value = _input.get(value_type, default)
+                match value_type:
+                    case "string":
+                        return _value
+                    case "boolean":
+                        return str_to_bool(_value)
+                    case "number":
+                        return int(_value)
+        return None
+
+    def set_config_tag_item(self, key, name, value_type, new_value=Union[str, int, bool]):
+        """
+        Get an item from the <Config> ... </Config> tag set
+        :param key: string: the key: Input or Placeholder for example
+        :param name: string: the value of the 'name' property
+        :param value_type: string: just to be confusing, the name of the 'value' property (string, boolean, number)
+        :param new_value: Union[str, int, bool]): the value to be recorded
+        :return: The appropriate value from xml or "default"
+        """
+        for _input in self.config.findall(key):
+            if _input.get("name") == name:
+                match value_type:
+                    case "boolean":
+                        new_value = bool_to_str(new_value)
+                    case "number":
+                        new_value = f"{new_value}"
+                return _input.set(value_type, new_value)
+        # if we get here, the key/ name combo was not found, lets make one and add it
+        self.config.append(ET.fromstring(f'<{key} name="{name}" {value_type}="{new_value}" />'))
 
     def new(self, _build_tree):
         """
@@ -232,7 +287,6 @@ class Build:
             # How do we want to deal with corrupt builds
             self.filename = filename
             self.new(_build_pob)
-            # print(self.build["PlayerStat"][:])
             self.name = Path(Path(filename).name).stem
 
     def save(self, win: Ui_MainWindow):
@@ -248,11 +302,9 @@ class Build:
         self.notes.text, self.notes_html.text = win.notes_ui.save()
         win.stats.save(self.build)
         win.skills_ui.save()
-        # pob["PathOfBuilding"]["Notes"] = self.notes
-        # pob["PathOfBuilding"]["NotesHTML"] = self.notes_html
+        win.config_ui.save()
         # pob["PathOfBuilding"]["TreeView"] = self.tree_view
         # pob["PathOfBuilding"]["Items"] = self.items
-        # pob["PathOfBuilding"]["Config"] = self.config
         # pob["PathOfBuilding"]["Tree"] = self.tree
         # pob_file.write_xml_from_dict("builds/test.xml", pob)
         # # pob_file.write_xml_from_dict(self.filename, pob)

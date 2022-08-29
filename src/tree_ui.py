@@ -157,17 +157,6 @@ class TreeUI:
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)
 
-    def set_current_tab(self):
-        """
-        Actions required when setting the current tab from the configuration xml file
-        :return: N/A
-        """
-        for i in range(self.win.tab_main.count()):
-            if self.win.tab_main.tabWhatsThis(i) == self.build.viewMode:
-                self.win.tab_main.setCurrentIndex(i)
-                return
-        self.win.tab_main.setCurrentIndex(0)
-
 
 def test() -> None:
     tree_ui = TreeUI()

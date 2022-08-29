@@ -43,6 +43,7 @@ from constants import (
     pantheon_minor_gods,
     pob_debug,
     program_title,
+    resistance_penalty,
 )
 from pob_config import Config, _debug
 from ui_utils import FlowLayout, set_combo_index_by_data
@@ -97,10 +98,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Setup UI Classes()
         self.stats = PlayerStats(self.config, self)
         self.calcs_ui = CalcsUI(self.config, self)
-        self.config_ui = ConfigUI(self.config, self)
+        self.config_ui = ConfigUI(self.config, self.build, self)
         self.items_ui = ItemsUI(self.config, self)
         self.notes_ui = NotesUI(self.config, self)
-        self.skills_ui = SkillsUI(self.config, self)
+        self.skills_ui = SkillsUI(self.config, self.build, self)
         self.tree_ui = TreeUI(self.config, self.frame_TreeTools, self)
 
         """
@@ -190,6 +191,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             End: Do what the QT Designer cannot yet do 
         """
 
+        self.combo_ResPenalty.clear()
+        for penalty in resistance_penalty.keys():
+            self.combo_ResPenalty.addItem(resistance_penalty[penalty], penalty)
         self.combo_Bandits.clear()
         for bandit in bandits.keys():
             self.combo_Bandits.addItem(bandits[bandit], bandit)
@@ -224,6 +228,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
         self.combo_classes.currentTextChanged.connect(self.change_class)
         self.combo_ascendancy.currentTextChanged.connect(self.change_ascendancy)
+        self.combo_MainSkill.currentTextChanged.connect(self.change_socket_group)
+        self.combo_MainSkillActive.currentTextChanged.connect(self.change_active_skill)
         # ToDO: this could be currentIndexChanged
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
         self.tree_ui.textEdit_Search.textChanged.connect(self.search_text_changed)
@@ -342,11 +348,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             _debug("build_loader")
             if not new:
                 self.config.add_recent_build(xml)
-            # these need to be set before the tree, as the change_tree function sets it also.
-            set_combo_index_by_data(self.combo_Bandits, self.build.bandit)
-            set_combo_index_by_data(self.combo_MajorGods, self.build.pantheonMajorGod)
-            set_combo_index_by_data(self.combo_MinorGods, self.build.pantheonMinorGod)
-            self.tree_ui.set_current_tab()
+            # Config need to be set before the tree, as the change_tree function uses/sets it also.
+            self.config_ui.load(self.build.config)
+            self.set_current_tab()
             self.tree_ui.fill_current_tree_combo()
             self.skills_ui.load(self.build.skills)
             self.notes_ui.load(self.build.notes_html.text, self.build.notes.text)
@@ -594,12 +598,67 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
 
+    def set_current_tab(self):
+        """
+        Actions required when setting the current tab from the configuration xml file
+        :return: N/A
+        """
+        for i in range(self.tab_main.count()):
+            if self.tab_main.tabWhatsThis(i) == self.build.viewMode:
+                self.tab_main.setCurrentIndex(i)
+                return
+        self.tab_main.setCurrentIndex(0)
+
     def search_text_changed(self):
         """
         Store the text of Search edit as it is typed.
         Should we use this or just use the return_pressed function
         """
         self.build.search_text = self.tree_ui.textEdit_Search.text()
+
+    @Slot()
+    def change_active_skill(self, _skill_text):
+        """
+        Actions when changing the socket group combo
+        :return: N/A
+        """
+        pass
+
+    @Slot()
+    def change_socket_group(self, _group_text):
+        """
+        Actions when changing the socket group combo
+        :return: N/A
+        """
+        self.combo_MainSkillActive.clear()
+        self.combo_MainSkillActive.addItems(_group_text.split(","))
+        self.combo_MainSkillActive.setCurrentIndex(0)
+        self.build.mainSocketGroup = self.combo_MainSkill.currentIndex()
+
+    def load_socket_group(self, _list):
+        """
+        Load the left hand socket group (under "Main Skill") controls
+        :param _list: list: a list of socket group names as they appear in the skills_ui() socket group listview
+        :return: N/A
+        """
+        if len(_list) == 0:
+            return
+        curr_index = self.combo_MainSkill.currentIndex()
+        self.combo_MainSkill.clear()
+        self.combo_MainSkill.addItems(_list)
+        # print("load_socket_group1", self.build.mainSocketGroup)
+        if curr_index == -1:
+            if 0 <= self.build.mainSocketGroup < self.combo_MainSkill.count():
+                # print("load_socket_group2", self.build.mainSocketGroup)
+                self.combo_MainSkill.setCurrentIndex(self.build.mainSocketGroup)
+        else:
+            self.combo_MainSkill.setCurrentIndex(curr_index)
+            self.build.mainSocketGroup = curr_index
+        # looping on itself ?
+        #   File "C:\git\PathOfBuilding-Python\src\skills_ui.py", line 193, in show_skill_set
+        #   self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
+        #   RuntimeError: Failed to disconnect signal currentRowChanged(int).
+        # self.skills_ui.show_skill_set(self.skills_ui.xml_current_skill_set, self.list_SocketGroups.currentIndex())
 
     def search_return_pressed(self):
         self.gview_Tree.add_tree_images()

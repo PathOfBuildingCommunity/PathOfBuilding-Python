@@ -38,7 +38,7 @@ default_spec = f'\
 default_view_mode = "SKILLS"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
-     mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">\
+     mainSocketGroup="0" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">\
     </Build>\
     <Import/>\
     <Calcs/>\
@@ -55,7 +55,13 @@ empty_build = f'<PathOfBuilding>\
     <NotesHTML/>\
     <TreeView searchStr="" zoomY="0" showHeatMap="nil" zoomLevel="3" showStatDifferences="true" zoomX="0"/>\
     <Items/>\
-    <Config/>\
+    <Config>\
+        <Input name="resistancePenalty" number="0"/>\
+        <Input name="pantheonMinorGod" string="None"/>\
+        <Input name="enemyIsBoss" string="None"/>\
+        <Input name="pantheonMajorGod" string="None"/>\
+        <Input name="bandit" string="None"/>\
+    </Config>\
 </PathOfBuilding>'
 
 empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot=""\
@@ -69,6 +75,12 @@ bandits = {
     "Oak": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)",
     "Kraityn": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)",
     "Alira": "Alira (Mana Regen, Crit Multiplier, Resists)",
+}
+
+resistance_penalty = {
+    0: "None",
+    -30: "Act 5 (-30%)",
+    -60: "Act 10 (-60%)",
 }
 
 pantheon_major_gods = {
