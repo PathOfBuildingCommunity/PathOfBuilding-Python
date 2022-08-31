@@ -30,6 +30,7 @@ class SkillsUI:
         # xml element for the currently chosen socket group (the <Skill>...<Skill> tags inside a skill set)
         self.xml_current_socket_group = None
         # list of gems from gems.json
+        self.gems_by_name = {}
         self.json_gems = self.load_gems_json()
 
         # dictionary for holding the GemUI representions of the gems in each socket group
@@ -144,7 +145,7 @@ class SkillsUI:
 
     def define_socket_group_label(self, index, item=None, group=None):
         """
-        Setup the passed in QListWidgetItem depending on whether it's active or not, etc
+        Setup the passed in QListWidgetItem text depending on whether it's active or not, etc
         :param: item: QListWidgetItem:
         :param: group: ElementTree.Element:
         :return: string
@@ -183,6 +184,18 @@ class SkillsUI:
             item.setForeground(QColor(ColourCodes.LIGHTGRAY.value))
 
         return item
+
+    def change_active_socket_group_label(self, old_index, new_index):
+        """
+        This changes the text on the socket group list as the
+        :param old_index:
+        :param new_index:
+        :return: N/A
+        """
+        _debug(old_index, new_index)
+        # turn off old one by sending -1
+        self.define_socket_group_label(-1, self.win.list_SocketGroups.item(old_index), self.xml_current_skill_set[old_index])
+        self.define_socket_group_label(new_index, self.win.list_SocketGroups.item(new_index), self.xml_current_skill_set[new_index])
 
     def show_skill_set(self, _set, current_index=0):
         """
@@ -359,7 +372,22 @@ class SkillsUI:
                     # remove 'Support' from the name
                     _name = base_item["display_name"]
                     base_item["display_name"] = _name.replace(" Support", "")
+                    base_item["full_name"] = _name
+
+        # make a list by name as well, list supports using the fullname (Faster Attacks Support)
+        #  and the display name (Faster Attacks)
+        for g in gems.keys():
+            display_name = gems[g]["base_item"]["display_name"]
+            self.gems_by_name[display_name] = gems[g]
+            self.gems_by_name[display_name]["skillId"] = g
+            # add supports using the full name
+            full_name = gems[g]["base_item"].get("full_name", None)
+            if full_name is not None:
+                self.gems_by_name[full_name] = gems[g]
+                self.gems_by_name[full_name]["skillId"] = g
+
         return gems
+    # load_gems_json
 
     @Slot()
     def gem_remove_checkbox_selected(self, _key):

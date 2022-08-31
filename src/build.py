@@ -11,11 +11,12 @@ associated with a Player.
 """
 
 import xml.etree.ElementTree as ET
+from pprint import pprint
 from pathlib import Path
 from typing import Union
 
-from constants import _VERSION, empty_build, program_title, default_spec, PlayerClasses
-from pob_config import _debug, Config, str_to_bool, bool_to_str
+from constants import _VERSION, empty_build, program_title, default_spec, PlayerClasses, empty_gem, empty_socket_group
+from pob_config import _debug, Config, str_to_bool, bool_to_str, print_a_xml_element
 import pob_file
 import ui_utils
 from tree import Tree
@@ -23,8 +24,9 @@ from PoB_Main_Window import Ui_MainWindow
 
 
 class Build:
-    def __init__(self, _config: Config) -> None:
+    def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
+        self.win = _win
         self._name = "Default"
         # self.player = player.Player()
         self.filename = ""
@@ -51,6 +53,7 @@ class Build:
         self.tree_view = None
         self.items = None
         self.config = None
+        self.gems_by_name = None
 
         """Now fill out everything above out with a new build
            This stops the creation of other classes() erroring out because variables are setup
@@ -86,6 +89,7 @@ class Build:
         :return:
         """
         self.current_spec.classId = new_class
+        self.className = PlayerClasses(new_class).name.title()
 
     @property
     def className(self):
@@ -113,7 +117,6 @@ class Build:
 
     @property
     def mainSocketGroup(self):
-        print(type(self.build.get("mainSocketGroup", 0)), self.build.get("mainSocketGroup", 0))
         return int(self.build.get("mainSocketGroup", 0))
 
     @mainSocketGroup.setter
@@ -170,7 +173,7 @@ class Build:
 
     @viewMode.setter
     def viewMode(self, curr_tab):
-        self.build.set("viewMode", curr_tab.upper)
+        self.build.set("viewMode", curr_tab.upper())
 
     @property
     def current_spec(self):
@@ -355,6 +358,83 @@ class Build:
         self.activeSpec = tree_id
         self.current_spec = self.specs[tree_id]
 
+    def import_passive_tree_jewels_json(self, json_tree, json_character):
+        """
+        Import the tree (and later the jewels)
+        :param json_tree: json import of tree and jewel data
+        :param json_character: json import of the character information
+        :return: N/A
+            character={ ascendancyClass=1, class="Inquisitor", classId=5, experience=1028062232,
+                league="Standard", level=82, name="Mirabel__Sentinel" },
+        """
+        # print(json_character)
+        # print(json_tree)
+        new_spec = Spec()
+        self.specs.append(new_spec)
+        new_spec.title = f"Imported {json_character.get('name', '')}"
+        self.name = new_spec.title
+        new_spec.classId = json_character.get('classId', 0)
+        self.current_class = new_spec.classId
+        new_spec.ascendancyClass = json_character.get('ascendancyClass', 0)
+        self.ascendClassName = json_character.get('class', "")
+        self.level = json_character.get('level', 1)
+
+        # show tree
+        self.win.tree_ui.combo_manage_tree.setCurrentIndex(int(self.tree.get("activeSpec", 1)) - 1)
+
+    def import_items_json(self, json_items):
+        """
+        Import items and their sockets skills
+        :param json_items: json import of the item data
+        :return: N/A
+        """
+        def get_property(_json_gem, _name, _default):
+            for _prop in _json_gem.get("properties"):
+                if _prop.get("name") == _name:
+                    value = _prop.get("values")[0][0].replace(" (Max)", "").replace("+", "").replace("%", "")
+                    print("value", _name, value)
+                    return value
+            return _default
+
+        # pprint(json_items)
+        if len(json_items["items"]) <= 0:
+            return
+        json_character = json_items.get("character")
+        # Make a new skill set
+        skill_set = ET.fromstring(f'<SkillSet id="{len(self.skills)}" title="Imported {json_character.get("name", "")}" />')
+        self.skills.append(skill_set)
+
+        # loop through all items and look for gems in socketedItems
+        for item in json_items["items"]:
+            if item.get('socketedItems', None) is not None:
+                # create a new socket group for each one found
+                socket_group = ET.fromstring(empty_socket_group)
+                skill_set.append(socket_group)
+                # print(item["baseType"], item["inventoryId"])
+                for json_gem in item.get("socketedItems"):
+                    # print(json_gem)
+                    xml_gem = ET.fromstring(empty_gem)
+                    socket_group.append(xml_gem)
+                    xml_gem.set("level", get_property(json_gem, "Level", "1"))
+                    # print("1a")
+                    # print_a_xml_element(xml_gem)
+                    xml_gem.set("quality", get_property(json_gem, "quality", "0"))
+                    name = json_gem["baseType"].replace(" Support", "")
+                    xml_gem.set("nameSpec", name)
+                    print("1")
+                    print_a_xml_element(xml_gem)
+                    base_item = self.gems_by_name[name]["base_item"]
+                    xml_gem.set("skillId", self.gems_by_name[name]["skillId"])
+                    print("2")
+                    print_a_xml_element(xml_gem)
+                    xml_gem.set("gemId", base_item.get("id"))
+                    print("3")
+                    print_a_xml_element(xml_gem)
+                print_a_xml_element(socket_group)
+
+
+# <Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="" gemId=""\
+#     enabled="true" quality="0" count="1" nameSpec=""/>'
 
 class Spec:
     def __init__(self, _spec=None) -> None:

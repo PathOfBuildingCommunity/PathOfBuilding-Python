@@ -93,7 +93,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle(program_title)  # Do not translate
 
         # Start with an empty build
-        self.build = Build(self.config)
+        self.build = Build(self.config, self)
 
         # Setup UI Classes()
         self.stats = PlayerStats(self.config, self)
@@ -103,6 +103,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.notes_ui = NotesUI(self.config, self)
         self.skills_ui = SkillsUI(self.config, self.build, self)
         self.tree_ui = TreeUI(self.config, self.frame_TreeTools, self)
+
+        # share the goodness
+        self.build.gems_by_name = self.skills_ui.gems_by_name
 
         """
             Start: Do what the QT Designer cannot yet do 
@@ -225,11 +228,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Export.triggered.connect(self.open_export_dialog)
         self.statusbar_MainWindow.messageChanged.connect(self.update_status_bar)
 
-        self.combo_Bandits.currentTextChanged.connect(self.change_bandits)
-        self.combo_classes.currentTextChanged.connect(self.change_class)
-        self.combo_ascendancy.currentTextChanged.connect(self.change_ascendancy)
-        self.combo_MainSkill.currentTextChanged.connect(self.change_socket_group)
-        self.combo_MainSkillActive.currentTextChanged.connect(self.change_active_skill)
+        self.combo_Bandits.currentTextChanged.connect(self.bandits_changed)
+        self.combo_classes.currentTextChanged.connect(self.class_changed)
+        self.combo_ascendancy.currentTextChanged.connect(self.ascendancy_changed)
+        self.combo_MainSkill.currentTextChanged.connect(self.socket_group_text_changed)
+        self.combo_MainSkill.currentIndexChanged.connect(self.socket_group_index_changed)
+        self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
         # ToDO: this could be currentIndexChanged
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
         self.tree_ui.textEdit_Search.textChanged.connect(self.search_text_changed)
@@ -395,7 +399,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.build.change_tree(self.tree_ui.combo_manage_tree.currentData())
 
         # update label_points
-        self.change_bandits(self.combo_Bandits.currentText())
+        self.bandits_changed(self.combo_Bandits.currentText())
 
         _current_class = self.combo_classes.currentData()
         if self.build.current_spec.classId == _current_class:
@@ -418,7 +422,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.gview_Tree.add_tree_images()
 
     @Slot()
-    def change_class(self, selected_class):
+    def class_changed(self, selected_class):
         """
         Slot for the Classes combobox. Triggers the curr_class property actions
         :param selected_class: String of the selected text
@@ -449,7 +453,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.gview_Tree.add_tree_images()
 
     @Slot()
-    def change_ascendancy(self, selected_ascendancy):
+    def ascendancy_changed(self, selected_ascendancy):
         """
         Actions required for changing ascendancies
         :param  selected_ascendancy: String of the selected text
@@ -466,9 +470,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.gview_Tree.add_tree_images()
 
     @Slot()
-    def change_bandits(self, bandit_id):
+    def bandits_changed(self, bandit_id):
         """
-        Actions required when the change_bandits widget changes
+        Actions required when the combo_bandits widget changes
         :param bandit_id: Current text string. We don't use it.
         :return: N/A
         """
@@ -565,8 +569,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dlg.exec()
         if dlg.xml is not None:
             self.build_loader(dlg.xml)
-        # if dlg.character_data is not None:
-        #     self.build_loader_json(dlg.xml)
+        if dlg.character_data is not None:
+            self.set_current_tab("CONFIG")
+            self.combo_Bandits.showPopup()
+            self.skills_ui.load(self.build.skills)
 
     @Slot()
     def open_export_dialog(self):
@@ -598,15 +604,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
 
-    def set_current_tab(self):
+    def set_current_tab(self, tab_name=""):
         """
         Actions required when setting the current tab from the configuration xml file
+        :param tab_name: String;  name of a tab to switch to programatically. Doesn't set the build xml if used
         :return: N/A
         """
+        if tab_name == "":
+            tab_name = self.build.viewMode
         for i in range(self.tab_main.count()):
-            if self.tab_main.tabWhatsThis(i) == self.build.viewMode:
+            if self.tab_main.tabWhatsThis(i) == tab_name:
                 self.tab_main.setCurrentIndex(i)
                 return
+        # If not found, set the first
         self.tab_main.setCurrentIndex(0)
 
     def search_text_changed(self):
@@ -617,7 +627,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.build.search_text = self.tree_ui.textEdit_Search.text()
 
     @Slot()
-    def change_active_skill(self, _skill_text):
+    def active_skill_changed(self, _skill_text):
         """
         Actions when changing the socket group combo
         :return: N/A
@@ -625,15 +635,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     @Slot()
-    def change_socket_group(self, _group_text):
+    def socket_group_text_changed(self, new_text):
         """
-        Actions when changing the socket group combo
+        Fill out combo_MainSkillActive with the current text
+        :param new_text: string: the combo's text
         :return: N/A
         """
         self.combo_MainSkillActive.clear()
-        self.combo_MainSkillActive.addItems(_group_text.split(","))
+        self.combo_MainSkillActive.addItems(new_text.split(","))
         self.combo_MainSkillActive.setCurrentIndex(0)
-        self.build.mainSocketGroup = self.combo_MainSkill.currentIndex()
+
+    @Slot()
+    def socket_group_index_changed(self, new_index):
+        """
+        Actions when changing the socket group combo
+        :param new_index: string: the combo's index
+        :return: N/A
+        """
+        if new_index == -1:
+            if 0 <= self.build.mainSocketGroup < self.combo_MainSkill.count():
+                new_index = self.build.mainSocketGroup
+            else:
+                new_index = 0
+        # Keep index in bounds for when socket groups are deleted
+        new_index = min(new_index, self.combo_MainSkill.count()-1)
+        old_index = self.build.mainSocketGroup
+        # must happen before call to change_active_socket_group_label
+        self.build.mainSocketGroup = new_index
+        self.skills_ui.change_active_socket_group_label(old_index, new_index)
+        # this is ok as this function is only called *IF* the index changes
+        self.combo_MainSkill.setCurrentIndex(new_index)
 
     def load_socket_group(self, _list):
         """
@@ -643,22 +674,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         if len(_list) == 0:
             return
-        curr_index = self.combo_MainSkill.currentIndex()
+        current_index = self.combo_MainSkill.currentIndex()
         self.combo_MainSkill.clear()
         self.combo_MainSkill.addItems(_list)
-        # print("load_socket_group1", self.build.mainSocketGroup)
-        if curr_index == -1:
-            if 0 <= self.build.mainSocketGroup < self.combo_MainSkill.count():
-                # print("load_socket_group2", self.build.mainSocketGroup)
-                self.combo_MainSkill.setCurrentIndex(self.build.mainSocketGroup)
-        else:
-            self.combo_MainSkill.setCurrentIndex(curr_index)
-            self.build.mainSocketGroup = curr_index
-        # looping on itself ?
-        #   File "C:\git\PathOfBuilding-Python\src\skills_ui.py", line 193, in show_skill_set
-        #   self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
-        #   RuntimeError: Failed to disconnect signal currentRowChanged(int).
-        # self.skills_ui.show_skill_set(self.skills_ui.xml_current_skill_set, self.list_SocketGroups.currentIndex())
+        self.socket_group_index_changed(current_index)
 
     def search_return_pressed(self):
         self.gview_Tree.add_tree_images()

@@ -66,7 +66,9 @@ class ImportDlg(Ui_Dialog, QDialog):
 
         self.btn_Close.clicked.connect(self.close_dialog)
         self.btn_StartImport.clicked.connect(self.download_character_information)
-        self.btn_ImportAll.clicked.connect(self.import_all)
+        self.btn_ImportAll.clicked.connect(self.import_all_selected)
+        self.btn_TreeJewels.clicked.connect(self.import_passive_tree_jewels_selected)
+        self.btn_ItemsSkills.clicked.connect(self.import_items_skills_selected)
         self.btn_ImportBuildSharing.clicked.connect(self.import_from_code)
         self.lineedit_Account.returnPressed.connect(self.download_character_information)
         self.lineedit_BuildShare.textChanged.connect(self.validate_build_sharing_text)
@@ -79,11 +81,15 @@ class ImportDlg(Ui_Dialog, QDialog):
 
     @Slot()
     def validate_build_sharing_text(self):
+        """
+        Attempt to break up the text in lineedit control into a meaningful url to see if it's a url
+        that we support *OR* if it's a validate import code. Turn on the import button if needed.
+        :return: N/A
+        """
         self.btn_ImportBuildSharing.setEnabled(False)
         text = self.lineedit_BuildShare.text().strip()
         if text == "":
             return
-        # Attempt to break up the text in lineedit control into a meaningful url.
         # get the website and the code as separate 'group' variables
         #   (1) is the website and (2) is the code (not used here)
         m = re.search(r"http[s]?://(.*)/(.*)", text)
@@ -92,8 +98,13 @@ class ImportDlg(Ui_Dialog, QDialog):
 
     @Slot()
     def import_from_code(self, text):
-        """Import the whole character's data"""
-        print("import_from_code")
+        """
+        Import the whole character's data
+        Attempt to break up the text in lineedit control into a meaningful url to see if it's a url
+        that we support *OR* if it's a validate import code.
+        Close dialog if successful
+        :return: N/A
+        """
         text = self.lineedit_BuildShare.text().strip()
         if text == "":
             return
@@ -107,28 +118,46 @@ class ImportDlg(Ui_Dialog, QDialog):
                 url = website_list[m.group(1)]["downloadURL"].replace("CODE", m.group(2))
                 response = requests.get(url, headers=http_headers, timeout=6.0)
                 code = decode_base64_and_inflate(response.content)
-                print("import_from_code", code)
             except requests.RequestException as e:
+                # ToDo: proper notification
                 print(f"Error retrieving data: {e}.")
                 return
         else:
             # check the code is valid
             code = decode_base64_and_inflate(text)
 
-        if code is not None:
-            # code is an xml string
-            # tree = ET.ElementTree(ET.fromstring(code))
-            # print_a_xml_element(tree.getroot())
+        if code is None:
+            # ToDo: proper notification
+            print(f"Code failed to decode.")
+            return
+        else:
             self.xml = ET.ElementTree(ET.fromstring(code))
             self.done(0)
 
     @Slot()
-    def import_all(self, text):
+    def import_all_selected(self):
         """Import the whole character's data from PoE web site"""
-        print("import_all")
+        print("import_all_selected")
+        self.import_passive_tree_jewels_selected()
+        self.import_items_skills_selected()
+
+    @Slot()
+    def import_passive_tree_jewels_selected(self):
+        """Import the whole character's data from PoE web site"""
+        print("import_passive_tree_jewels_selected")
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
+        self.build.import_passive_tree_jewels_json(self.character_data.get("tree"), self.character_data.get("character"))
+
+    @Slot()
+    def import_items_skills_selected(self):
+        """Import the whole character's data from PoE web site"""
+        print("import_items_skills_selected")
+        # download the data if one of the other buttons hasn't done it yet.
+        if self.character_data is None:
+            self.download_character_data()
+        self.build.import_items_json(self.character_data.get("items"))
 
     @Slot()
     def change_account_name(self, text):
@@ -157,7 +186,7 @@ class ImportDlg(Ui_Dialog, QDialog):
     @Slot()
     def download_character_information(self):
         """
-        React to the 'Start' button by getting a list of characters and setting.
+        React to the 'Start' button by getting a list of characters and settings.
         :return: N/A
         """
         account_name = self.lineedit_Account.text()
@@ -201,7 +230,6 @@ class ImportDlg(Ui_Dialog, QDialog):
             url = f"{realm_code['hostName']}character-window/get-passive-skills"
             response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             passive_tree = response.json()
-            print(type(passive_tree))
         except requests.RequestException as e:
             print(f"Error retrieving account: {e}.")
             if response:
@@ -213,15 +241,13 @@ class ImportDlg(Ui_Dialog, QDialog):
             url = f"{realm_code['hostName']}character-window/get-items"
             response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             items = response.json()
-            print(type(items))
         except requests.RequestException as e:
             print(f"Error retrieving account: {e}.")
             print(vars(response))
         # items =
 
-        # pprint.pprint(passive_tree)
-        # pprint.pprint(items)
-        self.character_data = {"tree": passive_tree, "items": items}
+        char_info = items.get("character", None)
+        self.character_data = {"tree": passive_tree, "items": items, "character": char_info}
 
     def fill_character_history(self):
         self.comboChar_History.clear()
