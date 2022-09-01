@@ -38,8 +38,7 @@ default_spec = f'\
 default_view_mode = "SKILLS"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
-     mainSocketGroup="0" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">\
-    </Build>\
+     mainSocketGroup="0" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
     <Import/>\
     <Calcs/>\
     <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="0"\
@@ -992,4 +991,19 @@ website_list = {
         "postFields": "api_paste_code=",
     },
     "Error": {"note": "If you get here, it's broken"},
+}
+
+slot_map = {
+    "Weapon": "Weapon 1",
+    "Offhand": "Weapon 2",
+    "Weapon2": "Weapon 1 Swap",
+    "Offhand2": "Weapon 2 Swap",
+    "Helm": "Helmet",
+    "BodyArmour": "Body Armour",
+    "Gloves": "Gloves",
+    "Boots": "Boots",
+    "Amulet": "Amulet",
+    "Ring": "Ring 1",
+    "Ring2": "Ring 2",
+    "Belt": "Belt",
 }

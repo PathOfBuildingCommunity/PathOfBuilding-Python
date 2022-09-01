@@ -148,7 +148,9 @@ class ImportDlg(Ui_Dialog, QDialog):
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
-        self.build.import_passive_tree_jewels_json(self.character_data.get("tree"), self.character_data.get("character"))
+        self.build.import_passive_tree_jewels_json(
+            self.character_data.get("tree"), self.character_data.get("character")
+        )
 
     @Slot()
     def import_items_skills_selected(self):
@@ -243,7 +245,8 @@ class ImportDlg(Ui_Dialog, QDialog):
             items = response.json()
         except requests.RequestException as e:
             print(f"Error retrieving account: {e}.")
-            print(vars(response))
+            if response:
+                print(vars(response))
         # items =
 
         char_info = items.get("character", None)

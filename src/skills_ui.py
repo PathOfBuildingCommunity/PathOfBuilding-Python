@@ -194,8 +194,12 @@ class SkillsUI:
         """
         _debug(old_index, new_index)
         # turn off old one by sending -1
-        self.define_socket_group_label(-1, self.win.list_SocketGroups.item(old_index), self.xml_current_skill_set[old_index])
-        self.define_socket_group_label(new_index, self.win.list_SocketGroups.item(new_index), self.xml_current_skill_set[new_index])
+        self.define_socket_group_label(
+            -1, self.win.list_SocketGroups.item(old_index), self.xml_current_skill_set[old_index]
+        )
+        self.define_socket_group_label(
+            new_index, self.win.list_SocketGroups.item(new_index), self.xml_current_skill_set[new_index]
+        )
 
     def show_skill_set(self, _set, current_index=0):
         """
@@ -387,6 +391,7 @@ class SkillsUI:
                 self.gems_by_name[full_name]["skillId"] = g
 
         return gems
+
     # load_gems_json
 
     @Slot()

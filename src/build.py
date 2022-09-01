@@ -15,7 +15,16 @@ from pprint import pprint
 from pathlib import Path
 from typing import Union
 
-from constants import _VERSION, empty_build, program_title, default_spec, PlayerClasses, empty_gem, empty_socket_group
+from constants import (
+    PlayerClasses,
+    _VERSION,
+    default_spec,
+    empty_build,
+    empty_gem,
+    empty_socket_group,
+    program_title,
+    slot_map,
+)
 from pob_config import _debug, Config, str_to_bool, bool_to_str, print_a_xml_element
 import pob_file
 import ui_utils
@@ -129,7 +138,6 @@ class Build:
 
     @resistancePenalty.setter
     def resistancePenalty(self, new_name):
-        self.build.set("resistancePenalty", new_name)
         self.set_config_tag_item("Input", "resistancePenalty", "number", new_name)
 
     @property
@@ -313,16 +321,25 @@ class Build:
         # # pob_file.write_xml_from_dict(self.filename, pob)
 
         """Debug Please leave until build is mostly complete"""
-        # print(ET.tostring(self.root, encoding='utf8').decode('utf8'))
-        # print(ET.tostring(self.build, encoding='utf8').decode('utf8'))
+        # print("build")
+        # print(ET.tostring(self.build, encoding='utf8'))  # .decode('utf8'))
+        # print("import_field")
         # print(ET.tostring(self.import_field, encoding='utf8').decode('utf8'))
+        # print("calcs")
         # print(ET.tostring(self.calcs, encoding='utf8').decode('utf8'))
+        # print("skills")
         # print(ET.tostring(self.skills, encoding='utf8').decode('utf8'))
+        # print("tree")
         # print(ET.tostring(self.tree, encoding='utf8').decode('utf8'))
+        # print("notes")
         # print(ET.tostring(self.notes, encoding='utf8').decode('utf8'))
+        # print("notes_html")
         # print(ET.tostring(self.notes_html, encoding='utf8').decode('utf8'))
+        # print("tree_view")
         # print(ET.tostring(self.tree_view, encoding='utf8').decode('utf8'))
+        # print("items")
         # print(ET.tostring(self.items, encoding='utf8').decode('utf8'))
+        # print("config")
         # print(ET.tostring(self.config, encoding='utf8').decode('utf8'))
         """Debug Please leave until build is mostly complete"""
 
@@ -373,11 +390,11 @@ class Build:
         self.specs.append(new_spec)
         new_spec.title = f"Imported {json_character.get('name', '')}"
         self.name = new_spec.title
-        new_spec.classId = json_character.get('classId', 0)
+        new_spec.classId = json_character.get("classId", 0)
         self.current_class = new_spec.classId
-        new_spec.ascendancyClass = json_character.get('ascendancyClass', 0)
-        self.ascendClassName = json_character.get('class', "")
-        self.level = json_character.get('level', 1)
+        new_spec.ascendancyClass = json_character.get("ascendancyClass", 0)
+        self.ascendClassName = json_character.get("class", "")
+        self.level = json_character.get("level", 1)
 
         # show tree
         self.win.tree_ui.combo_manage_tree.setCurrentIndex(int(self.tree.get("activeSpec", 1)) - 1)
@@ -388,6 +405,7 @@ class Build:
         :param json_items: json import of the item data
         :return: N/A
         """
+
         def get_property(_json_gem, _name, _default):
             for _prop in _json_gem.get("properties"):
                 if _prop.get("name") == _name:
@@ -396,45 +414,36 @@ class Build:
                     return value
             return _default
 
-        # pprint(json_items)
         if len(json_items["items"]) <= 0:
             return
         json_character = json_items.get("character")
         # Make a new skill set
-        skill_set = ET.fromstring(f'<SkillSet id="{len(self.skills)}" title="Imported {json_character.get("name", "")}" />')
+        skill_set = ET.fromstring(
+            f'<SkillSet id="{len(self.skills)}" title="Imported {json_character.get("name", "")}" />'
+        )
         self.skills.append(skill_set)
 
         # loop through all items and look for gems in socketedItems
         for item in json_items["items"]:
-            if item.get('socketedItems', None) is not None:
+            if item.get("socketedItems", None) is not None:
                 # create a new socket group for each one found
                 socket_group = ET.fromstring(empty_socket_group)
                 skill_set.append(socket_group)
-                # print(item["baseType"], item["inventoryId"])
+                socket_group.set("slot", slot_map[item["inventoryId"]])
+                # ToDo: Checkout the 'sockets': attribute for how the sockets are grouped (group attr)
                 for json_gem in item.get("socketedItems"):
-                    # print(json_gem)
                     xml_gem = ET.fromstring(empty_gem)
                     socket_group.append(xml_gem)
                     xml_gem.set("level", get_property(json_gem, "Level", "1"))
-                    # print("1a")
-                    # print_a_xml_element(xml_gem)
                     xml_gem.set("quality", get_property(json_gem, "quality", "0"))
+
                     name = json_gem["baseType"].replace(" Support", "")
                     xml_gem.set("nameSpec", name)
-                    print("1")
-                    print_a_xml_element(xml_gem)
-                    base_item = self.gems_by_name[name]["base_item"]
                     xml_gem.set("skillId", self.gems_by_name[name]["skillId"])
-                    print("2")
-                    print_a_xml_element(xml_gem)
+
+                    base_item = self.gems_by_name[name]["base_item"]
                     xml_gem.set("gemId", base_item.get("id"))
-                    print("3")
-                    print_a_xml_element(xml_gem)
-                print_a_xml_element(socket_group)
 
-
-# <Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="" gemId=""\
-#     enabled="true" quality="0" count="1" nameSpec=""/>'
 
 class Spec:
     def __init__(self, _spec=None) -> None:

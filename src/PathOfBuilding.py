@@ -658,7 +658,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 new_index = 0
         # Keep index in bounds for when socket groups are deleted
-        new_index = min(new_index, self.combo_MainSkill.count()-1)
+        new_index = min(new_index, self.combo_MainSkill.count() - 1)
         old_index = self.build.mainSocketGroup
         # must happen before call to change_active_socket_group_label
         self.build.mainSocketGroup = new_index
