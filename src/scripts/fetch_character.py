@@ -1,6 +1,5 @@
 import argparse
 import re
-from typing import Optional
 
 import requests
 
@@ -41,7 +40,7 @@ realm_code = "pc"
 headers = {"User-Agent": "Path of Building Community", "Accept": ""}
 
 
-def import_characters(account_name: str) -> Optional[tuple[str, dict]]:
+def import_characters(account_name: str) -> tuple[str, dict] | None:
     url = f"{HOST_NAME}{CHARACTER_PATH}"
     params = {"accountName": account_name, "realm": realm_code}
     try:
@@ -60,7 +59,7 @@ def import_characters(account_name: str) -> Optional[tuple[str, dict]]:
         return m.group(1), characters
 
 
-def import_passive_tree(account_name: str, char_name: str) -> Optional[dict]:
+def import_passive_tree(account_name: str, char_name: str) -> dict | None:
     url = f"{HOST_NAME}{PASSIVE_TREE_PATH}"
     params = {"accountName": account_name, "character": char_name, "realm": realm_code}
     try:
@@ -71,7 +70,7 @@ def import_passive_tree(account_name: str, char_name: str) -> Optional[dict]:
     return response.json()
 
 
-def import_items(account_name: str, char_name: str) -> Optional[dict]:
+def import_items(account_name: str, char_name: str) -> dict | None:
     url = f"{HOST_NAME}{ITEM_PATH}"
     params = {"accountName": account_name, "character": char_name, "realm": realm_code}
     try:
