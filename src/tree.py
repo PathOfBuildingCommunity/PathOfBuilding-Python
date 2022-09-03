@@ -21,7 +21,7 @@ from qdarktheme.qtpy.QtCore import QRect, Qt
 from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter
 
 import ui_utils
-from pob_config import Config
+from pob_config import Config, _debug
 from constants import _VERSION, global_scale_factor, Layers, ascendancy_positions, nodeOverlay, PlayerClasses
 import pob_file
 
@@ -73,6 +73,7 @@ class Tree:
         self.max_x = 0
         self.max_y = 0
         self.size = QRect(self.min_x, self.min_y, self.max_x, self.max_y)
+        # list of graphic ites in no specific order
         self.graphics_items = []
         self.total_points = 0
         self.ascendancy_points = 8
@@ -129,11 +130,11 @@ class Tree:
         :param node: Node: which node is this item:
         :return: ptr to the created TreeGraphicsItem
         """
-        # if pixmap and not pixmap.isNull():
         image = TreeGraphicsItem(self.config, name, z, True)
         image.setPos(x, y)
         image.setOffset(ox, oy)
-        self.graphics_items.append(image)
+        if z != Layers.active:
+            self.graphics_items.append(image)
         return image
 
     def load(self, vers=_VERSION):
@@ -186,7 +187,7 @@ class Tree:
         for orbit, skillsInOrbit in enumerate(self.skillsPerOrbit):
             self.orbit_anglesByOrbit[orbit] = calc_orbit_angles(skillsInOrbit)
 
-        """Build maps of class name -> class table"""
+        """ Build maps of class name -> class table """
         ascend_name_map = {}
         class_notables = {}
         # loop through each class
@@ -264,7 +265,7 @@ class Tree:
         for g in self.groups:
             group = self.groups[g]
             if not group.get("isProxy", False):
-                self.render_group(group, g)
+                self.render_group_background(group, g)
 
             # ToDo: Temporary code for data checking purposes
             # ToDo: Leave in place until all coding, including calcs are complete
@@ -313,7 +314,7 @@ class Tree:
             sprite.node_name = node.name
             return sprite
 
-        inactive_sprite = None
+        node.inactive_sprite = None
         # Assign node artwork assets
         if node.type == "Mastery":
             # This is the icon that appears in the center of many groups
@@ -323,20 +324,24 @@ class Tree:
                     "inactiveIcon": self.spriteMap[node.inactiveIcon]["masteryInactive"],
                     "activeEffectImage": self.spriteMap[node.activeEffectImage]["masteryActiveEffect"],
                 }
-                inactive_sprite = self.spriteMap[node.inactiveIcon]["masteryInactive"]
+                node.inactive_sprite = self.spriteMap[node.inactiveIcon]["masteryInactive"]
+                node.active_sprite = self.spriteMap[node.activeIcon]["masteryActiveSelected"]
             else:
+                # No active image
                 node.sprites = self.spriteMap[node.icon]["mastery"]
-                inactive_sprite = node.sprites
+                node.inactive_sprite = node.sprites
         else:
             node.sprites = self.spriteMap[node.icon]
             if node.type not in ("Socket", "ClassStart"):
-                inactive_sprite = node.sprites[f"{node.type.lower()}Inactive"]
+                node.inactive_sprite = node.sprites[f"{node.type.lower()}Inactive"]
+                node.active_sprite = node.sprites[f"{node.type.lower()}Active"]
         # setting this to "if node.sprites is not None:" makes the sprites disappear
         #       if x is not None # which works only on None
         if not node.sprites and not node.masterySprites:
+            # No active image
             node.sprites = self.spriteMap["Art/2DArt/SkillIcons/passives/MasteryBlank.png"]["normalInactive"]
-            inactive_sprite = node.sprites
-            print(node.type, inactive_sprite)
+            node.inactive_sprite = node.sprites
+            _debug(node.type, node.inactive_sprite)
 
         # Derive the true position of the node
         if node.group:
@@ -356,18 +361,18 @@ class Tree:
                 node.x = ascendancy_positions[_a_name]["x"] + math.sin(node.angle) * orbit_radius
                 node.y = ascendancy_positions[_a_name]["y"] - math.cos(node.angle) * orbit_radius
 
-            # if node.type == "Mastery":
-            #     print(node.type, inactive_sprite)
-            if inactive_sprite and inactive_sprite.get("handle", None) is not None:
-                # if node.type == "Mastery":
-                #     print(node.type, inactive_sprite)
-                add_sprite(inactive_sprite)
+            if node.inactive_sprite and node.inactive_sprite.get("handle", None) is not None:
+                add_sprite(node.inactive_sprite)
+            if node.active_sprite and node.active_sprite.get("handle", None) is not None:
+                node.active_image = add_sprite(node.active_sprite, Layers.active)
 
             # "ClassStart" might belong in treeView still depending on the size of the active asset
             if node.type == "ClassStart":
+                # No active image
                 node.inactiveOverlay = self.spriteMap["PSStartNodeBackgroundInactive"]["startNode"]
                 add_sprite(node.inactiveOverlay)
             elif node.type == "AscendClassStart":
+                # No active image
                 node.inactiveOverlay = self.spriteMap["AscendancyMiddle"]["ascendancy"]
                 add_sprite(node.inactiveOverlay)
             else:
@@ -377,14 +382,24 @@ class Tree:
                     node.rsq = node.overlay["rsq"]
                     node.size = node.overlay["size"]
                     _layer = node.type == "Notable" and Layers.key_overlays or Layers.small_overlays
-                    overlay_name = node.overlay.get(
+
+                    # inactive overlay image
+                    inactive_overlay_name = node.overlay.get(
                         f"unalloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
                         "",
                     )
-                    overlay_type = f"{'Ascendancy' in overlay_name and 'ascendancy' or 'frame'}"
-                    node.inactiveOverlay = self.spriteMap[overlay_name][overlay_type]
+                    overlay_type = f"{'Ascendancy' in inactive_overlay_name and 'ascendancy' or 'frame'}"
+                    node.inactiveOverlay = self.spriteMap[inactive_overlay_name][overlay_type]
                     overlay = add_sprite(node.inactiveOverlay, _layer)
                     overlay.node_isoverlay = True
+                    # active overlay image
+                    active_overlay_name = node.overlay.get(
+                        f"alloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
+                        "",
+                    )
+                    node.activeOverlay = self.spriteMap[active_overlay_name][overlay_type]
+                    node.active_overlay_image = add_sprite(node.inactiveOverlay, Layers.active)
+                    node.active_overlay_image.node_isoverlay = True
 
     # process_node
 
@@ -563,7 +578,7 @@ class Tree:
 
     # process_assets
 
-    def render_group(self, _group, g, is_expansion=False):
+    def render_group_background(self, _group, g, is_expansion=False):
         __image = None
         scale = 1
         if _group.get("ascendancyName") != "":
@@ -645,7 +660,7 @@ class Tree:
             __image.filename = f"{g} GroupBackgroundSmallAlt"
             __image.setScale(2.5 / global_scale_factor)
 
-    # render_group
+    # render_group_background
 
 
 def test(config: Config) -> None:

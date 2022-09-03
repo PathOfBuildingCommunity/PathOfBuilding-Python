@@ -220,6 +220,9 @@
     </property>
    </widget>
    <widget class="QCheckBox" name="check_DeleteJewels">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -236,6 +239,9 @@
     </property>
    </widget>
    <widget class="QCheckBox" name="check_Items">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>385</x>
@@ -252,6 +258,9 @@
     </property>
    </widget>
    <widget class="QCheckBox" name="check_DeleteSkills">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>385</x>

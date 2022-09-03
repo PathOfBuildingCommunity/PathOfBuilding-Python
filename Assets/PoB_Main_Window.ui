@@ -254,7 +254,7 @@ QAction {padding-left: 2px;}</string>
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -580,7 +580,7 @@ QAction {padding-left: 2px;}</string>
                  <bool>true</bool>
                 </property>
                </widget>
-               <widget class="QPushButton" name="btn_NewSocketGrp">
+               <widget class="QPushButton" name="btn_NewSocketGroup">
                 <property name="geometry">
                  <rect>
                   <x>110</x>
@@ -609,7 +609,7 @@ QAction {padding-left: 2px;}</string>
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
-               <widget class="QPushButton" name="btn_SkillsDeleteAll">
+               <widget class="QPushButton" name="btn_DeleteAllSocketGroups">
                 <property name="geometry">
                  <rect>
                   <x>315</x>
@@ -639,6 +639,9 @@ QAction {padding-left: 2px;}</string>
                 </property>
                </widget>
                <widget class="QPushButton" name="btn_SkillsManage">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="geometry">
                  <rect>
                   <x>315</x>
@@ -651,7 +654,7 @@ QAction {padding-left: 2px;}</string>
                  <string>Manage ...</string>
                 </property>
                </widget>
-               <widget class="QPushButton" name="btn_SkillsDelete">
+               <widget class="QPushButton" name="btn_DeleteSocketGroup">
                 <property name="geometry">
                  <rect>
                   <x>220</x>
@@ -2131,7 +2134,7 @@ hr { height: 1px; border-width: 0; }
    </property>
    <widget class="QMenu" name="menu_Builds">
     <property name="title">
-     <string>Builds</string>
+     <string>&amp;Builds</string>
     </property>
     <addaction name="action_New"/>
     <addaction name="action_Open"/>

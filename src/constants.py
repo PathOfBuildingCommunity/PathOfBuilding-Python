@@ -66,7 +66,7 @@ empty_build = f'<PathOfBuilding>\
 empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot=""\
     mainActiveSkill="1"/>'
 
-empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="" gemId=""\
+empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default" gemId=""\
     enabled="true" quality="0" count="1" nameSpec=""/>'
 
 bandits = {
@@ -108,9 +108,9 @@ class Layers(enum.IntEnum):
     group = -2
     connectors = -1
     inactive = 0
-    active = 1
-    small_overlays = 2
-    key_overlays = 3
+    small_overlays = 1
+    key_overlays = 2
+    active = 3
 
 
 class ColourCodes(enum.Enum):

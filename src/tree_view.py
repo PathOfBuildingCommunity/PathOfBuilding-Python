@@ -177,7 +177,7 @@ class TreeView(QGraphicsView):
         :return: N/A
         """
 
-        def add_circle(_image: TreeGraphicsItem, colour, z_value, line_width=15):
+        def add_circle(_image: TreeGraphicsItem, colour, line_width=10, z_value=10):
             """
             Draw a circle around an overlay image
             :param _image: TreegraphicsItem
@@ -187,10 +187,10 @@ class TreeView(QGraphicsView):
             :return: a reference to the circle
             """
             _circle = QGraphicsEllipseItem(
-                _image.pos().x() + _image.offset().x(),
-                _image.pos().y() + _image.offset().y(),
-                _image.width,
-                _image.height,
+                _image.pos().x() + _image.offset().x() - line_width / 2,
+                _image.pos().y() + _image.offset().y() - line_width / 2,
+                _image.width + line_width,
+                _image.height + line_width,
             )
             _circle.setPen(QPen(QColor(colour), line_width, Qt.SolidLine))
             _circle.setZValue(z_value)
@@ -206,9 +206,20 @@ class TreeView(QGraphicsView):
 
         # ToDo: Only remove items if we change tree versions
         #  else wise just remove the selected nodes/connectors and readd new ones (separate function)
-        # do not use self.clearas it deletes the graphics assets from memory
+        # do not use self.clear as it deletes the graphics assets from memory
         for item in self.items():
             self._scene.removeItem(item)
+
+        # isAlloc = False
+        for node_id in tree.nodes:
+            n = tree.nodes[str(node_id)]
+
+        for node_id in self.build.current_spec.nodes:
+            n = tree.nodes[str(node_id)]
+            if n.active_image is not None:
+                self._scene.addItem(n.active_image)
+                self._scene.addItem(n.active_overlay_image)
+
         for image in tree.graphics_items:
             self._scene.addItem(image)
             # Search indicator
@@ -217,7 +228,7 @@ class TreeView(QGraphicsView):
                 and image.node_isoverlay
                 and (self.build.search_text in image.node_name or self.build.search_text in image.node_sd)
             ):
-                self._scene.addItem(add_circle(image, Qt.darkRed, 10, 8))
+                self._scene.addItem(add_circle(image, Qt.yellow, 12))
 
         # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet
         if self.build.current_class != PlayerClasses.SCION:

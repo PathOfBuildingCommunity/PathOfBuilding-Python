@@ -94,6 +94,7 @@ class Build:
     def current_class(self, new_class):
         """
         Actions required for changing classes
+
         :param new_class: Integer representing the PlayerClasses enumerations
         :return:
         """
@@ -185,10 +186,7 @@ class Build:
 
     @property
     def current_spec(self):
-        """
-        Manage the currently chosen spec in the config class so it can be used by many other classes
-        :return:
-        """
+        """Manage the currently chosen spec in the config class so it can be used by many other classes"""
         return self._current_spec
 
     @current_spec.setter
@@ -206,6 +204,7 @@ class Build:
     def get_config_tag_item(self, key, name, value_type, default=Union[str, int, bool]):
         """
         Get an item from the <Config> ... </Config> tag set
+
         :param key: string: the key: Input or Placeholder for example
         :param name: string: the value of the 'name' property
         :param value_type: string: just to be confusing, the name of the 'value' property (string, boolean, number)
@@ -227,6 +226,7 @@ class Build:
     def set_config_tag_item(self, key, name, value_type, new_value=Union[str, int, bool]):
         """
         Get an item from the <Config> ... </Config> tag set
+
         :param key: string: the key: Input or Placeholder for example
         :param name: string: the value of the 'name' property
         :param value_type: string: just to be confusing, the name of the 'value' property (string, boolean, number)
@@ -247,6 +247,7 @@ class Build:
     def new(self, _build_tree):
         """
         common function to load internal variables from the dictionary
+
         :param _build_tree: xml tree object from loading the source XML or the default one
         :return: N/A
         """
@@ -282,6 +283,7 @@ class Build:
     def load_from_file(self, filename):
         """
         Load a build. Use new() as a common function
+
         :param filename: str() XML file to load
         :return: N/A
         """
@@ -350,6 +352,7 @@ class Build:
     def save_as(self, filename):
         """
         Save the build to a new name
+
         :param filename:
         :return: N/A
         """
@@ -359,6 +362,7 @@ class Build:
     def ask_for_save_if_modified(self):
         """
         Check if the build has been modified and if so, prompt for saving.
+
         :return: True if build saved
         :return: False if build save was refused by the user
         """
@@ -367,6 +371,7 @@ class Build:
     def change_tree(self, tree_id):
         """
         Process changing a tree inside a build
+
         :param tree_id: index into self.specs which comesfrom the data of combo_ManageTree
         :return: N/A
         """
@@ -378,6 +383,7 @@ class Build:
     def import_passive_tree_jewels_json(self, json_tree, json_character):
         """
         Import the tree (and later the jewels)
+
         :param json_tree: json import of tree and jewel data
         :param json_character: json import of the character information
         :return: N/A
@@ -402,17 +408,41 @@ class Build:
     def import_items_json(self, json_items):
         """
         Import items and their sockets skills
+
         :param json_items: json import of the item data
         :return: N/A
         """
 
         def get_property(_json_gem, _name, _default):
+            """
+            Get a property from a list of property tags. Not all properties appear mandatory.
+
+            :param _json_gem: the gem reference from the json download
+            :param _name: the name of the property
+            :param _default: a default value to be used if the property is not listed
+            :return:
+            """
             for _prop in _json_gem.get("properties"):
                 if _prop.get("name") == _name:
                     value = _prop.get("values")[0][0].replace(" (Max)", "").replace("+", "").replace("%", "")
-                    print("value", _name, value)
                     return value
             return _default
+
+        def check_socket_group(_sg):
+            """
+            Check a socket group and if the first gem is not active gem, find an active gem in the group
+            and set it to be first
+
+            :param _sg: ET.element: the socket group to check
+            :return: N/A
+            """
+            if _sg is not None:
+                for _idx, _gem in enumerate(current_socket_group.findall("Gem")):
+                    if "Support" not in _gem.get("skillId"):
+                        if _idx != 0:
+                            current_socket_group.remove(_gem)
+                            current_socket_group.insert(0, _gem)
+                        break
 
         if len(json_items["items"]) <= 0:
             return
@@ -422,27 +452,45 @@ class Build:
             f'<SkillSet id="{len(self.skills)}" title="Imported {json_character.get("name", "")}" />'
         )
         self.skills.append(skill_set)
+        self.skills.set("activeSkillSet", len(self.skills) - 1)
 
         # loop through all items and look for gems in socketedItems
         for item in json_items["items"]:
             if item.get("socketedItems", None) is not None:
-                # create a new socket group for each one found
-                socket_group = ET.fromstring(empty_socket_group)
-                skill_set.append(socket_group)
-                socket_group.set("slot", slot_map[item["inventoryId"]])
+                # setup tracking of socket group changes in one item
+                current_socket_group = None
+                current_socket_group_number = -1
                 # ToDo: Checkout the 'sockets': attribute for how the sockets are grouped (group attr)
-                for json_gem in item.get("socketedItems"):
+                for idx, json_gem in enumerate(item.get("socketedItems")):
+                    # let's get the group # for this socket ...
+                    this_group = item["sockets"][idx]["group"]
+                    # ... so we can make a new one if needed
+                    if this_group != current_socket_group_number:
+                        check_socket_group(current_socket_group)
+                        current_socket_group_number = this_group
+                        current_socket_group = ET.fromstring(empty_socket_group)
+                        current_socket_group.set("slot", slot_map[item["inventoryId"]])
+                        skill_set.append(current_socket_group)
                     xml_gem = ET.fromstring(empty_gem)
-                    socket_group.append(xml_gem)
+                    current_socket_group.append(xml_gem)
                     xml_gem.set("level", get_property(json_gem, "Level", "1"))
-                    xml_gem.set("quality", get_property(json_gem, "quality", "0"))
+                    xml_gem.set("quality", get_property(json_gem, "Quality", "0"))
 
-                    name = json_gem["baseType"].replace(" Support", "")
-                    xml_gem.set("nameSpec", name)
-                    xml_gem.set("skillId", self.gems_by_name[name]["skillId"])
+                    _name = json_gem["baseType"].replace(" Support", "")
+                    xml_gem.set("nameSpec", _name)
+                    xml_gem.set("skillId", self.gems_by_name[_name]["skillId"])
 
-                    base_item = self.gems_by_name[name]["base_item"]
+                    base_item = self.gems_by_name[_name]["base_item"]
                     xml_gem.set("gemId", base_item.get("id"))
+
+                    match json_gem["typeLine"]:
+                        case "Anomalous":
+                            xml_gem.set("qualityId", "Alternate1")
+                        case "Divergent":
+                            xml_gem.set("qualityId", "Alternate2")
+                        case "Phantasmal":
+                            xml_gem.set("qualityId", "Alternate3")
+                check_socket_group(current_socket_group)
 
 
 class Spec:

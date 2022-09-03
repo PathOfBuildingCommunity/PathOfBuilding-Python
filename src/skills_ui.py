@@ -1,5 +1,5 @@
 """
-This Class manages all the elements and owns some elements of the "SKILLS" tab
+This Class manages all the UI controls and takes ownship of the controls on the "SKILLS" tab
 """
 
 import xml.etree.ElementTree as ET
@@ -13,10 +13,12 @@ from PoB_Main_Window import Ui_MainWindow
 from constants import ColourCodes, empty_socket_group, empty_gem
 from pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
 from pob_file import read_json
-from ui_utils import set_combo_index_by_data, set_combo_index_by_text
+from ui_utils import set_combo_index_by_data, set_combo_index_by_text, yes_no_dialog
 
 
 class SkillsUI:
+    """Functions and variables to drive the interactions on the Skills Tab."""
+
     def __init__(self, _config: Config, _build, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
         self.build = _build
@@ -51,7 +53,9 @@ class SkillsUI:
 
         self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
         self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
-        self.win.btn_NewSocketGrp.clicked.connect(self.new_socket_group)
+        self.win.btn_NewSocketGroup.clicked.connect(self.new_socket_group)
+        self.win.btn_DeleteSocketGroup.clicked.connect(self.delete_socket_group)
+        self.win.btn_DeleteAllSocketGroups.clicked.connect(self.delete_all_socket_groups)
 
         # update the socket group label when something changes
         self.win.check_SocketGroupEnabled.stateChanged.connect(self.enable_disable_socket_group_full_dps)
@@ -66,7 +70,8 @@ class SkillsUI:
 
     def load(self, _skills):
         """
-        Load internal structures from the build object
+        Load internal structures from the build object.
+
         :param _skills: Reference to the xml <Skills> tag set
         :return: N/A
         """
@@ -105,6 +110,9 @@ class SkillsUI:
                 _set.append(group)
                 self.xml_skills.remove(group)
 
+        # set the ComboBox dropdown width.
+        self.win.combo_SkillSet.view().setMinimumWidth(self.win.combo_SkillSet.minimumSizeHint().width())
+
         # re-connect triggers
         self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
         self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
@@ -118,9 +126,7 @@ class SkillsUI:
         self.win.combo_SkillSet.setCurrentIndex(active_skill_set)
 
     def save(self):
-        """
-        Save internal structures back to the build's skills object
-        """
+        """Save internal structures back to the build's skills object."""
         self.xml_skills.set("sortGemsByDPS", bool_to_str(self.win.check_SortByDPS.isChecked()))
         self.xml_skills.set("matchGemLevelToCharacterLevel", bool_to_str(self.win.check_MatchToLevel.isChecked()))
         self.xml_skills.set("showAltQualityGems", bool_to_str(self.win.check_ShowGemQualityVariants.isChecked()))
@@ -134,10 +140,11 @@ class SkillsUI:
     def change_skill_set(self, new_index):
         """
         This triggers when the user changes skill sets using the combobox.
-        Will also activate if user changes skill sets in the manage dialog
+        Will also activate if user changes skill sets in the manage dialog.
+
         :param new_index: int: index of the current selection
                -1 will occur during a combobox clear
-        :return:
+        :return: N/A
         """
         # _debug("new_index", new_index)
         if 0 <= new_index < len(self.skill_sets_list):
@@ -145,7 +152,8 @@ class SkillsUI:
 
     def define_socket_group_label(self, index, item=None, group=None):
         """
-        Setup the passed in QListWidgetItem text depending on whether it's active or not, etc
+        Setup the passed in QListWidgetItem's text depending on whether it's active or not, etc.
+
         :param: item: QListWidgetItem:
         :param: group: ElementTree.Element:
         :return: string
@@ -187,12 +195,17 @@ class SkillsUI:
 
     def change_active_socket_group_label(self, old_index, new_index):
         """
-        This changes the text on the socket group list as the
+        This changes the text on the 'active' socket group combos (the ones on the left) as the socket groups are
+        changed in the main socket group list. Called from MainWindow(), so may belong in that class.
+
         :param old_index:
         :param new_index:
         :return: N/A
         """
-        _debug(old_index, new_index)
+        if self.win.list_SocketGroups.count() == 0:
+            return
+        if old_index >= self.win.list_SocketGroups.count():
+            old_index = self.win.list_SocketGroups.count() - 1
         # turn off old one by sending -1
         self.define_socket_group_label(
             -1, self.win.list_SocketGroups.item(old_index), self.xml_current_skill_set[old_index]
@@ -203,7 +216,8 @@ class SkillsUI:
 
     def show_skill_set(self, _set, current_index=0):
         """
-        show a set of skills
+        Show a set of skills.
+
         :param _set: ElementTree.Element. This set of skills
         :param current_index: set the current one active at the end of the function
         :return: N/A
@@ -219,10 +233,16 @@ class SkillsUI:
             # may not need to do this as we are operating straight into the xml
             pass  # unload the previous set, saving it's state
 
+        # clean up. If current_index = -1 this is the only thing emptying these controls
         self.clear_gem_ui_list()
         self.win.list_SocketGroups.clear()
-        self.xml_current_skill_set = _set
+        self.win.combo_MainSkill.clear()
+        self.win.combo_SocketedIn.setCurrentIndex(-1)
+        self.win.lineedit_SkillLabel.setText("")
+        self.win.check_SocketGroupEnabled.setChecked(False)
+        self.win.check_SocketGroup_FullDPS.setChecked(False)
 
+        self.xml_current_skill_set = _set
         # Find all Socket Groups (<Skill> in the xml) and add them to the Socket Group list
         socket_groups = _set.findall("Skill")
         # _debug("len, socket_groups", len(socket_groups), socket_groups)
@@ -244,13 +264,41 @@ class SkillsUI:
 
     @Slot()
     def new_socket_group(self):
-        """
-        Create a new socket group
-        Actions for when the new socket group button is pressed
-        :return:
-        """
+        """Create a new socket group. Actions for when the new socket group button is pressed."""
         self.xml_current_skill_set.append(ET.fromstring(empty_socket_group))
         self.show_skill_set(self.xml_current_skill_set, len(self.xml_current_skill_set) - 1)
+
+    @Slot()
+    def delete_socket_group(self):
+        """Delete a new socket group"""
+        if self.xml_current_socket_group is not None:
+            idx = self.win.list_SocketGroups.currentRow()
+            del self.xml_current_skill_set[idx]
+            if len(list(self.xml_current_skill_set)) == 0:
+                self.xml_current_socket_group = None
+                self.show_skill_set(self.xml_current_skill_set, -1)
+            else:
+                idx = min(idx, self.win.list_SocketGroups.count())
+                if 0 <= idx < self.win.list_SocketGroups.count():
+                    self.xml_current_socket_group = self.xml_current_skill_set[idx]
+                    self.show_skill_set(self.xml_current_skill_set, idx)
+
+    @Slot()
+    def delete_all_socket_groups(self, prompt=True):
+        """
+        Delete all socket groups.
+
+        :param prompt: boolean: If called programatically from importing a build, this should be false,
+                                elsewise prompt the user to be sure.
+        :return: N/A
+        """
+        if len(list(self.xml_current_skill_set)) == 0:
+            return
+        tr = self.pob_config.app.tr
+        if yes_no_dialog(self.win, tr("Delete all Socket Groups"), tr(" This action has no undo. Are you sure ?")):
+            for idx in range(len(list(self.xml_current_skill_set)) - 1, -1, -1):
+                del self.xml_current_skill_set[idx]
+            self.show_skill_set(self.xml_current_skill_set, -1)
 
     def load_socket_group(self, _index):
         """
@@ -258,8 +306,6 @@ class SkillsUI:
         :param _index: index to display
         :return: N/A
         """
-        # _debug("index", _index)
-        # _debug("self.current_skill_set, len", self.current_skill_set, len(self.current_skill_set))
         self.clear_gem_ui_list()
         if index_exists(self.xml_current_skill_set, _index):
             # save changes to current group
@@ -273,8 +319,8 @@ class SkillsUI:
 
             # assign and setup new group
             self.xml_current_socket_group = self.xml_current_skill_set[_index]
-            # _debug("self.current_socket_group", self.current_socket_group)
             if self.xml_current_socket_group is not None:
+                self.build.mainSocketGroup = _index
                 self.win.lineedit_SkillLabel.setText(self.xml_current_socket_group.get("label"))
                 set_combo_index_by_text(self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot"))
                 self.win.check_SocketGroupEnabled.setChecked(

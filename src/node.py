@@ -73,8 +73,12 @@ class Node:
         self.activeEffectImage = _node.get("activeEffectImage", "")
         self.inactiveIcon = _node.get("inactiveIcon", "")
         self.activeIcon = _node.get("activeIcon", "")
+        self.inactive_sprite = None
+        self.active_sprite = None
         self.inactiveOverlay = None
         self.activeOverlay = None
+        self.active_image = None
+        self.active_overlay_image = None
 
     @property
     def id(self):

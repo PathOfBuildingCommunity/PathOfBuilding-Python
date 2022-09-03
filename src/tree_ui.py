@@ -8,7 +8,7 @@ from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, Q
 
 from PoB_Main_Window import Ui_MainWindow
 from constants import _VERSION, PlayerClasses
-from pob_config import Config
+from pob_config import Config, _debug
 from ui_utils import FlowLayout
 
 
@@ -21,8 +21,8 @@ class TreeUI:
         self._curr_class = PlayerClasses.SCION
 
         """
-        Add Widgets to the tool bar at the bottom of the tree, using the fixed version of the PySide6 example Flow Layout
-        You can set size hints, but not setGeometry.
+        Add Widgets to the QFrame at the bottom of the treeview, using the fixed version of the PySide6 example
+         Flow Layout. You can set size hints, but not setGeometry().
         """
         self.win.action_ManageTrees.triggered.connect(self.shortcut_CtrlM)
 
@@ -61,7 +61,7 @@ class TreeUI:
         self.layout_tree_tools.addWidget(self.label_Search)
         self.textEdit_Search = QLineEdit()
         self.textEdit_Search.setMinimumSize(QSize(150, 22))
-        # self.textEdit_Search.setText("Dexterity")
+        self.textEdit_Search.setText("Dexterit")
         self.layout_tree_tools.addWidget(self.textEdit_Search)
 
         self.check_show_node_power = QCheckBox()
@@ -79,17 +79,14 @@ class TreeUI:
         self.btn_show_power_report.setVisible(False)
         self.btn_show_power_report.setText(QCoreApplication.translate("MainWindow", "Show Power Report ...", None))
         self.layout_tree_tools.addWidget(self.btn_show_power_report)
+        """ End Adding Widgets to the QFrame at the bottom of the treeview. """
 
     def load(self):
-        """
-        Load internal structures from the build object
-        """
+        """Load internal structures from the build object."""
         pass
 
     def save(self):
-        """
-        Save internal structures back to the build object
-        """
+        """Save internal structures back to the build object."""
         pass
 
     @property
@@ -143,7 +140,8 @@ class TreeUI:
 
     def fill_current_tree_combo(self):
         """
-        Actions required to fill the combo_manage_tree widget. Usually when loading a build
+        Actions required to fill the combo_manage_tree widget. Usually when loading a build.
+
         :return: N/A
         """
         # let's protect activeSpec as the next part will erase it

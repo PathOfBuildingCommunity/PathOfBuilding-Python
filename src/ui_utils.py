@@ -6,12 +6,16 @@ import warnings
 from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
 from qdarktheme.qtpy.QtWidgets import QComboBox, QLayout, QMessageBox, QSizePolicy
 
+from pob_config import _debug
+
 
 def yes_no_dialog(win, title, text):
+    """Return true if the user selects Yes."""
     return QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No) == QMessageBox.Yes
 
 
 def ok_dialog(win, title, text, btn_text="OK"):
+    """Notify the user of some information."""
     dlg = QMessageBox(win)
     dlg.setWindowTitle(title)
     dlg.setText(text)
@@ -21,6 +25,7 @@ def ok_dialog(win, title, text, btn_text="OK"):
 
 
 def critical_dialog(win, title, text, btn_text="Close"):
+    """Notify the user of some critical? information."""
     dlg = QMessageBox(win)
     dlg.setWindowTitle(title)
     dlg.setText(text)
@@ -29,50 +34,50 @@ def critical_dialog(win, title, text, btn_text="Close"):
     dlg.exec_()
 
 
-def set_combo_index_by_data(combo: QComboBox, _data):
+def set_combo_index_by_data(_combo: QComboBox, _data):
     """
-    Set a combo box current index based on it's data field
-    :param combo: the combo box
-    :param _data: the data. There is no type to this, so the passed in type should match what the combo has
-    :return: int: the index of the combobox or -1 if not found
+    Set a combo box current index based on it's data field.
+
+    :param _combo: the combo box.
+    :param _data: the data. There is no type to this, so the passed in type should match what the combo has.
+    :return: int: the index of the combobox or -1 if not found.
     """
     if _data is None:
         _data = "None"
     # print_call_stack()
-    for i in range(combo.count()):
-        if combo.itemData(i) == _data:
-            combo.setCurrentIndex(i)
+    for i in range(_combo.count()):
+        if _combo.itemData(i) == _data:
+            _combo.setCurrentIndex(i)
             return i
     return -1
 
 
-def set_combo_index_by_text(combo: QComboBox, _text):
+def set_combo_index_by_text(_combo: QComboBox, _text):
     """
-    Set a combo box current index based on it's data field
-    :param combo: the combo box
-    :param _text: the data. There is no type to this, so the passed in type should match what the combo has
-    :return: int: the index of the combobox or -1 if not found
+    Set a combo box current index based on it's text field.
+
+    :param _combo: the combo box.
+    :param _text: string: the text.
+    :return: int: the index of the combobox or -1 if not found.
     """
     if _text is None:
         _text = "None"
     # print_call_stack()
-    for i in range(combo.count()):
-        if combo.itemText(i) == _text:
-            combo.setCurrentIndex(i)
+    for i in range(_combo.count()):
+        if _combo.itemText(i) == _text:
+            _combo.setCurrentIndex(i)
             return i
     return -1
 
 
 class FlowLayout(QLayout):
     """
-    A layout to autoorganise widgets according the the size of the window around them
+    A layout to autoorganise widgets according the the size of the window around them.
     This is a compilation of many examples on the internet and PoB original content.
     """
 
     def __init__(self, parent=None, margin=0, spacing=-1):
-        """
-        Initialize layout
-        """
+        """Initialize layout."""
         super(FlowLayout, self).__init__(parent)
 
         if parent is not None:
@@ -89,10 +94,7 @@ class FlowLayout(QLayout):
         self.itemList = []
 
     def __del__(self):
-        """
-        Internal delete function
-        :return: N/A
-        """
+        """Internal delete function."""
         item = self.takeAt(0)
         while item:
             item = self.takeAt(0)
@@ -100,14 +102,16 @@ class FlowLayout(QLayout):
     # Inherited Function. Don't change name
     def addItem(self, item):
         """
-        Adds a widget to the layout
+        Adds a widget to the layout.
+
+        :param: Widget: The item item to add.
         :return: N/A
         """
         self.itemList.append(item)
 
     def count(self):
         """
-        Count.
+        I love to Count !!!
         :return: Integer: Number of widgets in layout
         """
         return len(self.itemList)
@@ -116,6 +120,7 @@ class FlowLayout(QLayout):
     def itemAt(self, index):
         """
         Return a reference to a widget in the layout.
+
         :return: Return a reference to a widget in the layout, or None
         """
         """
@@ -131,27 +136,29 @@ class FlowLayout(QLayout):
     # Inherited Function. Don't change name
     def takeAt(self, index):
         """
-        Remove a widget
+        Remove a widget.
+
         :return: Return a reference to a widget in the layout, or None
         """
         if 0 <= index < len(self.itemList):
             return self.itemList.pop(index)
-
         return None
 
     # Inherited Function. Don't change name
     def expandingDirections(self):
         """
-        Actually set parents geometry based on our version of do_layout
-        :return: N/A
+        Actually set parents geometry based on our version of do_layout.
+
+        :return: Size information
         """
         return Qt.Orientations(Qt.Orientation(0))
 
     # Inherited Function. Don't change name
     def hasHeightForWidth(self):
         """
-        Ask the layout if there is a valid heightForWidth() function
-        :return: Booean: True
+        Ask the layout if there is a valid heightForWidth() function.
+
+        :return: Boolean: True
         """
         return True
 
@@ -159,6 +166,7 @@ class FlowLayout(QLayout):
     def heightForWidth(self, width):
         """
         Test do_layout and return what the height will be.
+
         :return: Integer: Expected height of the parent
         """
         height = self.do_layout(QRect(0, 0, width, 0), True)
@@ -167,7 +175,8 @@ class FlowLayout(QLayout):
     # Inherited Function. Don't change name
     def setGeometry(self, rect):
         """
-        Actually set parents geometry based on out version of do_layout
+        Actually set parents geometry based on our version of do_layout.
+
         :return: N/A
         """
         super(FlowLayout, self).setGeometry(rect)
@@ -176,7 +185,8 @@ class FlowLayout(QLayout):
     # Inherited Function. Don't change name
     def sizeHint(self):
         """
-        Return the maximum value of all the widget's minimum size
+        Return the maximum value of all the widget's minimum size.
+
         :return: QSize
         """
         return self.minimumSize()
@@ -184,7 +194,8 @@ class FlowLayout(QLayout):
     # Inherited Function. Don't change name
     def minimumSize(self):
         """
-        Return the maximum value of all the widget's minimum size
+        Return the maximum value of all the widget's minimum size.
+
         :return: QSize
         """
         _size = QSize()
@@ -197,12 +208,13 @@ class FlowLayout(QLayout):
 
     def do_layout(self, rect, test_only):
         """
-        Process each visible widget's width, and decide how many rows will be occupied.
-        Also sets the location of the widgets
-          !!! Note the visible word. sizeHint() knows if the item is visble or not
-        :param rect: size of parent.
-        :param test_only: processes everything but will not alter the position of widgets.
-        :return: integer: The height that the parent should be
+        Process each *visible* widget's width, and decide how many rows will be occupied.
+        Also sets the location of the widgets.
+          !!! Note the visible word. sizeHint() knows if the item is visble or not.
+
+        :param rect: QRect: size of parent.
+        :param test_only: boolean: processes everything but will not alter the position of widgets.
+        :return: integer: The height that the parent should be.
         """
         x = rect.x()
         y = rect.y()

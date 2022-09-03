@@ -331,9 +331,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def build_loader(self, xml=Union[str, Path, ET.ElementTree]):
         """
-        Common actions for UI components when we are loading a build
-        :param xml: String|Path: the filename of file to be loaded, or "Default" if called from the New action
-        :param xml: ET.ElementTree: the xml of a file that was loaded or downloaded
+        Common actions for UI components when we are loading a build.
+
+        :param xml: Path: the filename of file to be loaded, or "Default" if called from the New action.
+        :param xml: String: build name, commonly "Default" when called from the New action.
+        :param xml: ET.ElementTree: the xml of a file that was loaded or downloaded.
         :return: N/A
         """
         new = True
@@ -563,6 +565,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         If neither are valid (both = None) then the user did nothing.
         dlg.character_data is a dictionary of tree and items ({"tree": passive_tree, "items":  items})
         dlg.xml is a ET.ElementTree instance of the xml downloaded
+
         :return: N/A
         """
         dlg = ImportDlg(self.build, self.config, self)
@@ -704,6 +707,7 @@ app = QApplication(sys.argv)
 # font for stats box. To line things up, we need a Mono font. Font acquired from Linux.
 QFontDatabase.addApplicationFont(":/Font/Font/NotoSansMono-Regular.ttf")
 # system wide font
+# QApplication.setFont(QFont(":Font/Font/DejaVuSans.ttf", 9))
 QApplication.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 9))
 
 window = MainWindow(app)
