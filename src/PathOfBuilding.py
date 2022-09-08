@@ -188,8 +188,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         layout = QVBoxLayout()
         self.scrollAreaSkillsContents.setLayout(layout)
 
-        # self.frame_SkillsTab.setLayout(QVBoxLayout())
-
         """
             End: Do what the QT Designer cannot yet do 
         """
@@ -214,9 +212,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.set_recent_builds_menu_items(self.config)
 
         # Connect our Actions / triggers
-        self.combo_Notes_Font.currentFontChanged.connect(self.set_notes_font)
-        self.spin_Notes_FontSize.valueChanged.connect(self.set_notes_font_size)
-        self.combo_Notes_Colour.currentTextChanged.connect(self.set_notes_font_colour)
         self.tab_main.currentChanged.connect(self.set_tab_focus)
         self.action_Theme.triggered.connect(self.switch_theme)
         self.action_New.triggered.connect(self.build_new)
@@ -249,7 +244,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         """
         From time to time, comboBoxes don't show the correct colours. It could be because of changing the
-            width of the dropdowns. Soreapply the current theme in an attempt to force the correct colours.
+            width of the dropdowns. So reapply the current theme in an attempt to force the correct colours.
         """
         # don't use self.switch_theme
         QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
@@ -257,8 +252,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def exit_handler(self):
         """
         Ensure the build can be saved before exiting if needed.
-        Save the configuration to settings.xml
-        Any other activities that might be needed
+        Save the configuration to settings.xml. Any other activities that might be needed
         """
         self.config.size = self.size()
         self.config.write()
@@ -273,9 +267,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def close_app(self):
         """
-        Trigger closing of the app. May not get used anymore as action calls MainWindow.close()
+        Trigger closing of the app. May not get used anymore as action calls MainWindow.close().
         Kept here in case it's more sensible to run 'close down' procedures in an App that doesn't think it's closing.
             In which case, change the action back to here.
+
         return: N/A
         """
         self.close()
@@ -283,7 +278,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def build_new(self):
         """
-        React to the New action
+        React to the New action.
+
         :return: N/A
         """
         # Logic for checking we need to save and save if needed, goes here...
@@ -297,7 +293,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def build_open(self):
         """
-        React to the Open action and prompt the user to open a build
+        React to the Open action and prompt the user to open a build.
+
         :return: N/A
         """
         # Logic for checking we need to save and save if needed, goes here...
@@ -316,7 +313,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def _open_previous_build(self, checked, value, index):
         """
-        React to a previous build being selected from the "Build" menu
+        React to a previous build being selected from the "Build" menu.
+
         :param checked: Boolean: a value for if it's checked or not, always False
         :param value: String: Fullpath name of the build to load
         :param index: Integer: index of chosen menu item
@@ -354,7 +352,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             _debug("build_loader")
             if not new:
                 self.config.add_recent_build(xml)
-            # Config need to be set before the tree, as the change_tree function uses/sets it also.
+            # Config needs to be set before the tree, as the change_tree function uses/sets it also.
             self.config_ui.load(self.build.config)
             self.set_current_tab()
             self.tree_ui.fill_current_tree_combo()
@@ -369,7 +367,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def build_save_as(self):
         """
-        Actions required to get a filename to save a build to. Should call build_save() if user doesn't cancel
+        Actions required to get a filename to save a build to. Should call build_save() if user doesn't cancel.
+
         return: N/A
         """
         # filename, selected_filter = QFileDialog.getSaveFileName(
@@ -389,7 +388,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def change_tree(self, tree_id):
         """
-        Actions required when the combo_manage_tree widget changes
+        Actions required when the combo_manage_tree widget changes.
+
         :param tree_id: Current text string. We don't use it.
                 "" will occur during a combobox clear
         :return: N/A
@@ -426,7 +426,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def class_changed(self, selected_class):
         """
-        Slot for the Classes combobox. Triggers the curr_class property actions
+        Slot for the Classes combobox. Triggers the curr_class property actions.
+
         :param selected_class: String of the selected text
         :return:
         """
@@ -457,7 +458,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def ascendancy_changed(self, selected_ascendancy):
         """
-        Actions required for changing ascendancies
+        Actions required for changing ascendancies.
+
         :param  selected_ascendancy: String of the selected text
                 "None" will occur when refilling the combobox or when the user chooses it
                 "" will occur during a combobox clear
@@ -474,7 +476,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def bandits_changed(self, bandit_id):
         """
-        Actions required when the combo_bandits widget changes
+        Actions required when the combo_bandits widget changes.
+
         :param bandit_id: Current text string. We don't use it.
         :return: N/A
         """
@@ -482,44 +485,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.max_points = self.build.bandit == "None" and 123 or 121
         self.label_points.setText(f" {len(self.build.current_spec.nodes)} / {self.max_points}  0 / 8 ")
 
-    # don't use native signals/slot, so focus can be set back to edit box
-    @Slot()
-    def set_notes_font_size(self, _size):
-        """
-        Actions required for changing the TextEdit font size. Ensure that the TextEdit gets the focus back.
-        :return: N/A
-        """
-        self.textedit_Notes.setFontPointSize(_size)
-        self.textedit_Notes.setFocus()
-
-    # don't use native signals/slot, so focus can be set back to edit box
-    @Slot()
-    def set_notes_font_colour(self, colour_name):
-        """
-        Actions required for changing TextEdit font colour. Ensure that the TextEdit gets the focus back
-        :param colour_name: String of the selected text
-        :return: N/A
-        """
-        self.textedit_Notes.setTextColor(ColourCodes[colour_name.upper()].value)
-        self.textedit_Notes.setFocus()
-
-    # don't use native signals/slot, so focus can be set back to edit box
-    @Slot()
-    def set_notes_font(self):
-        """
-        Actions required for changing the TextEdit font. Ensure that the TextEdit gets the focus back.
-        :return: N/A
-        """
-        action = self.sender()
-        self.textedit_Notes.setCurrentFont(action.currentFont())
-        self.textedit_Notes.setFocus()
-
     # Do all actions needed to change between light and dark
     @Slot()
     def switch_theme(self, new_theme):
         """
         Set the new theme based on the state of the action.
         The text of the action has a capital letter but the qdarktheme styles are lowercase
+
         :param new_theme: Boolean: state of the action
         :return: N/A
         """
@@ -537,6 +509,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def set_tab_focus(self, index):
         """
         When switching to a tab, set the focus to a control in the tab
+
         :param index: Which tab got selected (0 based)
         :return: N/A
         """

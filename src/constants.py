@@ -166,6 +166,7 @@ class ColourCodes(enum.Enum):
     SCOURGE = "#FF6E25"
     GRAY = "#D3D3D3"
     LIGHTGRAY = "#808B96"
+    DARKGRAY = "#696969"
     STRENGTH = MARAUDER
     DEXTERITY = RANGER
     INTELLIGENCE = WITCH
@@ -176,6 +177,13 @@ class ColourCodes(enum.Enum):
     EVASION = POSITIVE
     RAGE = WARNING
     PHYS = NORMAL
+    RED = "#FF0000"
+    GREEN = "#00FF00"
+    BLUE = "#0000FF"
+    YELLOW = "#FFFF00"
+    PURPLE = "#FF00FF"
+    AQUA = "#00FFFF"
+    WHITE = "#FFFFFF"
 
 
 @enum.unique
@@ -1006,4 +1014,5 @@ slot_map = {
     "Ring": "Ring 1",
     "Ring2": "Ring 2",
     "Belt": "Belt",
+    "Flask": "Flask",
 }
