@@ -35,7 +35,7 @@ default_spec = f'\
         <Sockets/>\
     </Spec>'
 
-default_view_mode = "SKILLS"
+default_view_mode = "ITEMS"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="0" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\

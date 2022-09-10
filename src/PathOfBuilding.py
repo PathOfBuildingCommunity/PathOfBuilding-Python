@@ -357,6 +357,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.set_current_tab()
             self.tree_ui.fill_current_tree_combo()
             self.skills_ui.load(self.build.skills)
+            self.items_ui.load(self.build.items)
             self.notes_ui.load(self.build.notes_html.text, self.build.notes.text)
             self.stats.load(self.build.build)
             self.spin_level.setValue(self.build.level)

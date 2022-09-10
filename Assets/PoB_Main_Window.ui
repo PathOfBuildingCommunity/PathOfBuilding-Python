@@ -262,7 +262,7 @@ hr { height: 1px; border-width: 0; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>3</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -394,6 +394,9 @@ hr { height: 1px; border-width: 0; }
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
+                </property>
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
                 </property>
                </widget>
                <widget class="QGroupBox" name="group_SkillTabLeft">
@@ -1019,16 +1022,22 @@ hr { height: 1px; border-width: 0; }
                 <property name="geometry">
                  <rect>
                   <x>20</x>
-                  <y>10</y>
+                  <y>12</y>
                   <width>71</width>
                   <height>16</height>
                  </rect>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="text">
                  <string>Item Set:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>combo_ItemSet</cstring>
                 </property>
                </widget>
                <widget class="QComboBox" name="combo_ItemSet">
@@ -1053,7 +1062,7 @@ hr { height: 1px; border-width: 0; }
                   <x>10</x>
                   <y>40</y>
                   <width>345</width>
-                  <height>438</height>
+                  <height>455</height>
                  </rect>
                 </property>
                 <property name="minimumSize">
@@ -1068,9 +1077,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Weapon1">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>20</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>38</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1080,12 +1089,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Weapon1</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Weapon1">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>20</y>
+                   <x>90</x>
+                   <y>38</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1096,12 +1108,17 @@ hr { height: 1px; border-width: 0; }
                  <property name="duplicatesEnabled">
                   <bool>true</bool>
                  </property>
+                 <item>
+                  <property name="text">
+                   <string>P1</string>
+                  </property>
+                 </item>
                 </widget>
                 <widget class="QComboBox" name="combo_Weapon2">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>48</y>
+                   <x>90</x>
+                   <y>66</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1112,13 +1129,18 @@ hr { height: 1px; border-width: 0; }
                  <property name="duplicatesEnabled">
                   <bool>true</bool>
                  </property>
+                 <item>
+                  <property name="text">
+                   <string>P2</string>
+                  </property>
+                 </item>
                 </widget>
                 <widget class="QLabel" name="label_Weapon2">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>48</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>66</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1128,12 +1150,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Weapon2</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Helmet">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>76</y>
+                   <x>90</x>
+                   <y>94</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1148,9 +1173,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Helmet">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>76</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>94</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1160,12 +1185,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Helmet</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_BodyArmour">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>104</y>
+                   <x>90</x>
+                   <y>122</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1180,9 +1208,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_BodyArmour">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>104</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>122</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1192,12 +1220,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_BodyArmour</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Gloves">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>132</y>
+                   <x>90</x>
+                   <y>150</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1212,9 +1243,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Gloves">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>132</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>150</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1224,12 +1255,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Gloves</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Boots">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>160</y>
+                   <x>90</x>
+                   <y>178</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1244,9 +1278,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Boots">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>160</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>178</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1256,12 +1290,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Boots</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Amulet">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>188</y>
+                   <x>90</x>
+                   <y>206</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1276,9 +1313,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Amulet">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>188</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>206</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1288,12 +1325,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Amulet</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Ring1">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>216</y>
+                   <x>90</x>
+                   <y>234</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1308,9 +1348,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Ring1">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>216</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>234</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1320,12 +1360,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Ring1</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Ring2">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>244</y>
+                   <x>90</x>
+                   <y>262</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1340,9 +1383,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Ring2">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>244</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>262</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1352,12 +1395,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Ring2</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Belt">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>272</y>
+                   <x>90</x>
+                   <y>290</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1372,9 +1418,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Belt">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>272</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>290</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1384,12 +1430,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Belt</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Flask1">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>300</y>
+                   <x>90</x>
+                   <y>318</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1404,9 +1453,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Flask1">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>300</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>318</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1416,12 +1465,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Flask1</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Flask2">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>328</y>
+                   <x>90</x>
+                   <y>346</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1436,9 +1488,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Flask2">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>328</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>346</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1448,12 +1500,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Flask2</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Flask3">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>356</y>
+                   <x>90</x>
+                   <y>374</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1468,9 +1523,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Flask3">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>356</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>374</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1480,12 +1535,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Flask3</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Flask4">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>384</y>
+                   <x>90</x>
+                   <y>402</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1500,9 +1558,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Flask4">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>384</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>402</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1512,12 +1570,15 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Flask4</cstring>
+                 </property>
                 </widget>
                 <widget class="QComboBox" name="combo_Flask5">
                  <property name="geometry">
                   <rect>
-                   <x>85</x>
-                   <y>412</y>
+                   <x>90</x>
+                   <y>430</y>
                    <width>250</width>
                    <height>22</height>
                   </rect>
@@ -1532,9 +1593,9 @@ hr { height: 1px; border-width: 0; }
                 <widget class="QLabel" name="label_Flask5">
                  <property name="geometry">
                   <rect>
-                   <x>1</x>
-                   <y>412</y>
-                   <width>80</width>
+                   <x>5</x>
+                   <y>430</y>
+                   <width>84</width>
                    <height>22</height>
                   </rect>
                  </property>
@@ -1544,16 +1605,50 @@ hr { height: 1px; border-width: 0; }
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
+                 <property name="buddy">
+                  <cstring>combo_Flask5</cstring>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="btn_weaponSwap">
+                 <property name="geometry">
+                  <rect>
+                   <x>249</x>
+                   <y>15</y>
+                   <width>91</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Show Alt</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Ctrl+Alt+X</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
                 </widget>
                </widget>
-               <widget class="QListView" name="list_Items">
+               <widget class="QListWidget" name="list_Items">
                 <property name="geometry">
                  <rect>
                   <x>370</x>
                   <y>50</y>
                   <width>301</width>
-                  <height>391</height>
+                  <height>421</height>
                  </rect>
+                </property>
+                <property name="acceptDrops">
+                 <bool>true</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
+                </property>
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
                 </property>
                 <property name="dragEnabled">
                  <bool>true</bool>
@@ -1566,6 +1661,9 @@ hr { height: 1px; border-width: 0; }
                 </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
+                </property>
+                <property name="spacing">
+                 <number>1</number>
                 </property>
                 <property name="uniformItemSizes">
                  <bool>true</bool>

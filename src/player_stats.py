@@ -13,6 +13,7 @@ class PlayerStats:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
         self.config = _config
         self.win = _win
+        self.build = None
 
         # dictionary lists of the stat elements
         self.stats = {}
@@ -24,13 +25,16 @@ class PlayerStats:
     #         else "\n"
     #     )
 
-    def load(self, build):
+    def load(self, _build):
         """
         Load internal structures from the build object
+
+        :param _build: build xml
+        :return: N/A
         """
-        # create a dictionary of stats. Still needed ?
+        self.build = _build
         self.win.textedit_Statistics.clear()
-        for stat in build.findall("PlayerStat"):
+        for stat in self.build.findall("PlayerStat"):
             _stat = stat.get("stat")
             _value = float(stat.get("value"))
             self.stats[_stat] = stat
@@ -64,16 +68,20 @@ class PlayerStats:
                     # There are entries in the build that are not in our stats_list table
                     pass
 
-    def save(self, build):
+    def save(self, _build):
         """
         Save internal structures back to the build object
+
+        :param _build: build xml
+        :return: N/A
         """
         # There is no need to do anything as we update the stat element directly
         pass
 
     def update_stat(self, stat_name, value):
         """
-        Update a stat element witht he supplied value
+        Update a stat element with the supplied value.
+
         :param stat_name: String: Teh string index into the stats dictionary
         :param value: The value
         :return: N/A
@@ -81,6 +89,7 @@ class PlayerStats:
         stat = self.stats[stat_name]
         if stat is not None:
             stat.set(stat_name, f"{value}")
+        self.load(self.build)
 
 
 # def test() -> None:

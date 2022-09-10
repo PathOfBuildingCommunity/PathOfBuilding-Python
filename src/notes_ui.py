@@ -11,16 +11,16 @@ from pob_config import Config
 from constants import ColourCodes
 
 colorEscape = [
-    ColourCodes.BLACK,      # ^0
-    ColourCodes.RED,        # ^1
-    ColourCodes.GREEN,      # ^2
-    ColourCodes.BLUE,       # ^3
-    ColourCodes.YELLOW,     # ^4
-    ColourCodes.PURPLE,     # ^5
-    ColourCodes.AQUA,       # ^6
-    ColourCodes.WHITE,      # ^7
-    ColourCodes.GRAY,       # ^8
-    ColourCodes.DARKGRAY    # ^9
+    ColourCodes.BLACK,  # ^0
+    ColourCodes.RED,  # ^1
+    ColourCodes.GREEN,  # ^2
+    ColourCodes.BLUE,  # ^3
+    ColourCodes.YELLOW,  # ^4
+    ColourCodes.PURPLE,  # ^5
+    ColourCodes.AQUA,  # ^6
+    ColourCodes.WHITE,  # ^7
+    ColourCodes.GRAY,  # ^8
+    ColourCodes.DARKGRAY,  # ^9
 ]
 
 
@@ -29,7 +29,6 @@ class NotesUI:
         self.pob_config = _config
         self.win = _win
         self.modified = False
-        self.text = ""
 
         self.win.btn_ConvertToText.setVisible(False)
         self.win.btn_ConvertToText.clicked.connect(self.convert_to_text)
@@ -46,14 +45,12 @@ class NotesUI:
         :param _notes: String: Plain text version of notes
         :return: N/A
         """
-        print("_notes_html", _notes_html)
         if _notes_html is not None:
             self.win.btn_ConvertToText.setVisible(False)
             self.win.textedit_Notes.setHtml(_notes_html.strip())
         else:
             if _notes is not None:
                 self.win.btn_ConvertToText.setVisible(True)
-                self.text = _notes.strip()
                 self.win.textedit_Notes.setPlainText(_notes.strip())
 
     def save(self):
@@ -70,12 +67,11 @@ class NotesUI:
     def convert_to_text(self):
         """
         Convert the lua colour codes to html and sets the Notes control with the new html text
+
         :return: N/A
         """
-        # print(type(colorEscape), colorEscape, self.modified)
         text = self.win.textedit_Notes.document().toPlainText()
-        # re.sub(r'[\^7]+', '^7', self.text)
-        # remove all obvious duplicate colours
+        # remove all obvious duplicate colours (mainly ^7^7)
         for idx in range(10):
             while f"^{idx}^{idx}" in text:
                 text = text.replace(f"^{idx}^{idx}", f"^{idx}")
@@ -84,24 +80,24 @@ class NotesUI:
             while f"^{idx}" in text:
                 text = text.replace(f"^{idx}", f"^{colorEscape[idx].value.replace('#', 'x')}")
 
+        # search for the lua colour codes and replace them with span tags
         m = re.search(r"(\^x[0-9A-Fa-f]{6})", text)
         while m is not None:
-            # print(m.group(1))
             # get the colour from the match
             c = re.search(r"([0-9A-Fa-f]{6})", m.group(1))
             text = text.replace(m.group(1), f'</span><span style="color:#{c.group(1)};">')
             m = re.search(r"(\^x[0-9A-Fa-f]{6})", text)
 
         # check for a leading closing span tag
-        f = re.match('</span>', text)
+        f = re.match("</span>", text)
         if f is not None:
             text = text[7:]
         # check for no leading span tag
-        f = re.match('<span ', text)
+        f = re.match("<span ", text)
         if f is None:
             text = f'<span style="color:{ColourCodes.NORMAL.value};">{text}'
         # replace newlines
-        text = text.replace('\n', '<br>')
+        text = text.replace("\n", "<br>")
 
         self.win.textedit_Notes.setFontPointSize(self.win.spin_Notes_FontSize.value())
         self.win.textedit_Notes.setCurrentFont(self.win.combo_Notes_Font.currentText())

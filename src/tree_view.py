@@ -215,8 +215,8 @@ class TreeView(QGraphicsView):
             n = tree.nodes[str(node_id)]
 
         for node_id in self.build.current_spec.nodes:
-            n = tree.nodes[str(node_id)]
-            if n.active_image is not None:
+            n = tree.nodes.get(str(node_id), None)
+            if n is not None and n.active_image is not None:
                 self._scene.addItem(n.active_image)
                 self._scene.addItem(n.active_overlay_image)
 

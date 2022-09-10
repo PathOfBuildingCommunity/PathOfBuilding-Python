@@ -105,8 +105,8 @@ class SkillsUI:
             self.win.combo_SkillSet.addItem("Default", 0)
             self.xml_skills.append(_set)
             # Move skills to the new socket group
-            socket_group = self.xml_skills.findall("Skill")
-            for group in socket_group:
+            socket_groups = self.xml_skills.findall("Skill")
+            for group in socket_groups:
                 _set.append(group)
                 self.xml_skills.remove(group)
 
@@ -182,7 +182,8 @@ class SkillsUI:
         enabled = str_to_bool(group.get("enabled")) and _label != ""
         active = self.build.mainSocketGroup == index
         item.setText(
-            f"{_label}{not enabled and ' (Disabled)' or ''}{full_dps and ' (FullDPS)' or ''}{active and ' (Active)' or ''}"
+            f"{_label}{not enabled and ' (Disabled)' or ''}{full_dps and ' (FullDPS)' or ''}\
+              {active and ' (Active)' or ''}"
         )
         # get a copy of the label with out all the extra information
         item.setWhatsThis(_label)
