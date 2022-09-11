@@ -1635,9 +1635,9 @@ hr { height: 1px; border-width: 0; }
                <widget class="QListWidget" name="list_Items">
                 <property name="geometry">
                  <rect>
-                  <x>370</x>
-                  <y>50</y>
-                  <width>301</width>
+                  <x>365</x>
+                  <y>40</y>
+                  <width>345</width>
                   <height>421</height>
                  </rect>
                 </property>
@@ -1648,7 +1648,7 @@ hr { height: 1px; border-width: 0; }
                  <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
                 </property>
                 <property name="editTriggers">
-                 <set>QAbstractItemView::NoEditTriggers</set>
+                 <set>QAbstractItemView::DoubleClicked</set>
                 </property>
                 <property name="dragEnabled">
                  <bool>true</bool>
@@ -1661,6 +1661,9 @@ hr { height: 1px; border-width: 0; }
                 </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
+                </property>
+                <property name="horizontalScrollMode">
+                 <enum>QAbstractItemView::ScrollPerPixel</enum>
                 </property>
                 <property name="spacing">
                  <number>1</number>

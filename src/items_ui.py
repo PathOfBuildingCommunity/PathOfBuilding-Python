@@ -72,6 +72,17 @@ from PoB_Main_Window import Ui_MainWindow
 from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str
 from constants import _VERSION, slot_map, ColourCodes
 
+influence_colours = {
+    "Shaper Item": ColourCodes.SHAPER.value,
+    "Elder Item": ColourCodes.ELDER.value,
+    "Warlord Item": ColourCodes.ADJUDICATOR.value,
+    "Hunter Item": ColourCodes.BASILISK.value,
+    "Crusader Item": ColourCodes.CRUSADER.value,
+    "Redeemer Item": ColourCodes.EYRIE.value,
+    "Searing Exarch": ColourCodes.CLEANSING.value,
+    "Eater of Worlds": ColourCodes.TANGLE.value,
+}
+
 
 class ItemsUI:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
@@ -101,6 +112,9 @@ class ItemsUI:
         self.combo_alt_weapon2 = QComboBox(self.win.groupbox_Items)
         self.combo_alt_weapon2.setVisible(False)
         self.combo_alt_weapon2.setGeometry(self.win.combo_Weapon2.geometry())
+
+        t = Item()
+        t.load_from_xml(test)
 
         self.combo_slot_map = {
             "Weapon 1": self.win.combo_Weapon1,
@@ -208,9 +222,9 @@ class ItemsUI:
         # add the items to the list box
         for _item in self.xml_items.findall("Item"):
             new_item = self.add_item()
+            new_item.curr_variant = _item.get("variant", "")
             new_item.load_from_xml(_item.text)
             self.add_item_to_item_list(new_item)
-            new_item.variant = int(_item.get("variant", -1))
         for _item_set in self.xml_items.findall("ItemSet"):
             self.win.combo_ItemSet.addItem(_item_set.get("title", "Default"), _item_set)
             for _slot in _item_set.findall("Slot"):
@@ -254,13 +268,13 @@ class Item:
         self.base_name = ""
         self.ilevel = 0
         self.quality = 0
-        self.variant = -1
+        self.curr_variant = ""
         self.unique_id = ""
-        self.spec_item = {}
         self.requires = {}
-        self.shaper = False
-        self.elder = False
+        self.influences = {}
+        self.variants = {}
         self.two_hand = False
+        self.corrupted = False
         self.sockets = ""
         self.properties = {}
         self.limits = 0
@@ -271,12 +285,13 @@ class Item:
         """
         Load internal structures from the build object's xml
         """
+        # ToDo: Mod mod class to handle ranges, crafts ?
         # split lines into a list, removing any blank lines, leading & trailing spaces.
         # stolen from https://stackoverflow.com/questions/7630273/convert-multiline-into-list
         lines = [y for y in (x.strip() for x in desc.splitlines()) if y]
         # Entries like 'Shaper Item' are idiotically in the middle of the : separated variables
         # lets get all the : separated variables first and remove them from the lines list
-        implicits, plicits_idx, line_idx = (0, 0, 0)
+        plicits_idx, line_idx = (0, 0)
         # Can't use enumerate as we are changing the list as we move through
         while index_exists(lines, line_idx):
             # _debug("a", len(lines), lines)
@@ -290,6 +305,8 @@ class Item:
                         self.unique_id = m.group(2)
                     case "Item Level":
                         self.ilevel = m.group(2)
+                    case "Selected Variant":
+                        self.curr_variant = m.group(2)
                     case "Quality":
                         self.quality = m.group(2)
                     case "Sockets":
@@ -301,23 +318,38 @@ class Item:
                     case "Implicits":
                         # implicits, if any
                         for idx in range(int(m.group(2))):
-                            self.implicitMods.append(lines.pop(line_idx))
+                            self.implicitMods.append(re.sub("{range.*}", "", lines.pop(line_idx)))
                         plicits_idx = line_idx
-                    case _:
-                        self.properties[m.group(1)] = m.group(2)
+                self.properties[m.group(1)] = m.group(2)
             else:
                 # skip this line
                 line_idx += 1
         # every thing that is left, from plicits_idx, is explicits
         for idx in range(plicits_idx, len(lines)):
-            self.explicitMods.append(lines.pop(plicits_idx))
+            line = re.sub("{range.*}", "", lines.pop(plicits_idx))
+            self.explicitMods.append(line)
+            if "variant" in line:
+                m = re.search(r"{variant:(.*)}(.*)", line)
+                for var in m.group(1).split(","):
+                    if self.variants.get(var, None) is None:
+                        self.variants[var] = []
+                    self.variants[var].append(m.group(2))
+
+        # Reprocess explicits to remove/set up variants
+        if len(self.variants) > 0:
+            new_list = self.variants[self.curr_variant]
+            for line in self.explicitMods:
+                if "variant" not in line:
+                    new_list.append(line)
+            self.variants = new_list
+
         # _debug("b", len(lines), lines)
         # 'normal' and Magic ? objects and flasks only have one line (either no title or no base name)
         if len(lines) == 1:
             self.name = lines.pop(0)
             match self.rarity:
                 case "MAGIC":
-                    self.title = self.name
+                    self.base_name = self.name
                 case "NORMAL":
                     self.base_name = self.name
         else:
@@ -327,10 +359,9 @@ class Item:
         # _debug("c", len(lines), lines)
 
         # Anything left must be something like 'Shaper Item'
-        for idx, line in enumerate(lines):
-            m = re.search(r"(.*) Item", line)
-            if m:
-                self.spec_item[m.group(1)] = True
+        for line in lines:
+            if line in influence_colours.keys():
+                self.influences[line] = True
             else:
                 m = re.search(r"Requires (.*)", line)
                 if m:
@@ -340,6 +371,7 @@ class Item:
                     match line:
                         case _:
                             print(f"Item().load_from_xml: Skipped: {line}")
+        self.corrupted = "Corrupted" in self.explicitMods
 
     def load_from_json(self, json: dict):
         """
@@ -349,12 +381,12 @@ class Item:
 
         def get_property(_json_item, _name, _default):
             """
-            Get a property from a list of property tags. Not all properties appear mandatory.
+            Get a property from a list of property tags. Not all properties appear to be mandatory.
 
             :param _json_item: the gem reference from the json download
             :param _name: the name of the property
-            :param _default: a default value to be used if the property is not listed
-            :return:
+            :param _default: a default value to be used if the property is not listed/found
+            :return: Either the string value if found or the _default value passed in.
             """
             for _prop in _json_item:
                 if _prop.get("name") == _name and _prop.get("suffix") != "(gem)":
@@ -372,10 +404,13 @@ class Item:
         self.implicitMods = json.get("implicitMods", [])
         self.properties = json["properties"]
         self.ilevel = json["ilvl"]
-        self.shaper = str_to_bool(json.get("shaper", "False"))
+        if str_to_bool(json.get("shaper", "False")):
+            self.influences["Shaper Item"] = True
+        if str_to_bool(json.get("elder", "False")):
+            self.influences["Elder Item"] = True
         self.quality = get_property(json["properties"], "Quality", "0")
         self.level_req = get_property(json["requirements"], "Level", "0")
-        # flasks, at least, don't have sockets (yet)
+        # Process sockets and their grouping
         if json.get("sockets", None) is not None:
             current_socket_group_number = -1
             socket_line = ""
@@ -386,7 +421,7 @@ class Item:
                 else:
                     socket_line += f" {socket['sColour']}"
                     current_socket_group_number = this_group
-            # there will always be a leading space
+            # there will always be a leading space from the routine above
             self.sockets = socket_line.strip()
 
     def save(self):
@@ -399,20 +434,24 @@ class Item:
 
     def tooltip(self):
         """
-        Create a tooltip
+        Create a tooltip. Hand crafted html anyone ?
 
         :return: str: the tooltip
         """
         rarity_colour = f"{ColourCodes[self.rarity].value};"
-        crafted_colour = f"{ColourCodes.CRAFTED.value};"
         tip = (
             f"<style>"
             f"table, th, td {{border: 1px solid {rarity_colour}; border-collapse: collapse;}}"
             f"td {{text-align: center;}}"
             f"</style>"
             f'<table width="425">'
-            f'<tr><th><span style="color:{rarity_colour};">{self.name}</span></th></tr>'
+            f'<tr><th>'
         )
+        name = self.title == "" and self.base_name or self.name
+        tip += f'<span style="color:{rarity_colour};">{name}</span>'
+        for influence in self.influences.keys():
+            tip += f'<br/><span style="color:{influence_colours[influence]};">{influence}</span>'
+        tip += '</th></tr>'
         if self.level_req > 0:
             tip += f"<tr><td>Requires Level <b>{self.level_req}</b></td></tr>"
         if self.limits > 0:
@@ -426,9 +465,11 @@ class Item:
             tip = tip[:-4]
             tip += f"</td></tr>"
         if len(self.explicitMods) > 0:
+            lines = len(self.variants) > 0 and self.variants or self.explicitMods
             tip += f"<tr><td>"
-            for idx, line in enumerate(self.explicitMods):
-                tip += f"{line}<br/>"
+            for line in lines:
+                colour = "crafted" in line and ColourCodes.CRAFTED.value or ColourCodes.MAGIC.value
+                tip += f'<span style="color:{colour};">{line.replace("{crafted}","")}</span><br/>'
             # remove the last BR
             tip = tip[:-4]
             tip += f"</td></tr>"
@@ -443,3 +484,35 @@ class Item:
     @slot.setter
     def slot(self, new_slot):
         self._slot = new_slot
+
+    @property
+    def shaper(self):
+        return "Shaper" in self.influences.keys()
+
+    @property
+    def elder(self):
+        return "Elder" in self.influences.keys()
+
+    @property
+    def warlord(self):
+        return "Warlord" in self.influences.keys()
+
+    @property
+    def hunter(self):
+        return "Hunter" in self.influences.keys()
+
+    @property
+    def crusader(self):
+        return "Crusader" in self.influences.keys()
+
+    @property
+    def redeemer(self):
+        return "Redeemer" in self.influences.keys()
+
+    @property
+    def exarch(self):
+        return "Exarch" in self.influences.keys()
+
+    @property
+    def eater(self):
+        return "Eater" in self.influences.keys()
