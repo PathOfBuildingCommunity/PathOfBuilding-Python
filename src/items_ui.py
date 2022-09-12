@@ -83,6 +83,31 @@ influence_colours = {
     "Eater of Worlds": ColourCodes.TANGLE.value,
 }
 
+test = """			Rarity: UNIQUE
+Bottled Faith
+Sulphur Flask
+League: Synthesis
+Variant: Pre 3.15.0
+Variant: Pre 3.16.0
+Variant: Current
+Selected Variant: 3
+Sulphur Flask
+Quality: 20
+LevelReq: 35
+Implicits: 3
+{crafted}{range:1}(60-70)% increased effect
+{crafted}Gains no Charges during Flask Effect
+{variant:1}{range:0.5}(30-50)% increased Duration
+Creates Consecrated Ground on Use
+{variant:1}{range:0.5}(30-50)% increased Duration
+{variant:2}{range:0.5}(20-40)% increased Duration
+{variant:3}{range:0.22}(15-30)% reduced Duration
+Consecrated Ground created by this Flask has Tripled Radius
+{variant:1}{range:0.5}+(1.0-2.0)% to Critical Strike Chance against Enemies on Consecrated Ground during Effect
+{variant:2,3}{range:0.878}(100-150)% increased Critical Strike Chance against Enemies on Consecrated Ground during Effect
+{range:1}Consecrated Ground created during Effect applies (7-10)% increased Damage taken to Enemies
+"""
+
 
 class ItemsUI:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
@@ -113,9 +138,6 @@ class ItemsUI:
         self.combo_alt_weapon2.setVisible(False)
         self.combo_alt_weapon2.setGeometry(self.win.combo_Weapon2.geometry())
 
-        t = Item()
-        t.load_from_xml(test)
-
         self.combo_slot_map = {
             "Weapon 1": self.win.combo_Weapon1,
             "Weapon 2": self.win.combo_Weapon2,
@@ -135,6 +157,9 @@ class ItemsUI:
             "Flask 4": self.win.combo_Flask4,
             "Flask 5": self.win.combo_Flask5,
         }
+
+        # t = Item()
+        # t.load_from_xml(test)
 
     def add_item(self):
         """
@@ -272,7 +297,6 @@ class Item:
         self.unique_id = ""
         self.requires = {}
         self.influences = {}
-        self.variants = {}
         self.two_hand = False
         self.corrupted = False
         self.sockets = ""
@@ -280,6 +304,7 @@ class Item:
         self.limits = 0
         self.implicitMods = []
         self.explicitMods = []
+        self.full_explicitMods_list = []
 
     def load_from_xml(self, desc):
         """
@@ -289,8 +314,8 @@ class Item:
         # split lines into a list, removing any blank lines, leading & trailing spaces.
         # stolen from https://stackoverflow.com/questions/7630273/convert-multiline-into-list
         lines = [y for y in (x.strip() for x in desc.splitlines()) if y]
-        # Entries like 'Shaper Item' are idiotically in the middle of the : separated variables
         # lets get all the : separated variables first and remove them from the lines list
+        # stop when we get to implicits
         plicits_idx, line_idx = (0, 0)
         # Can't use enumerate as we are changing the list as we move through
         while index_exists(lines, line_idx):
@@ -318,30 +343,29 @@ class Item:
                     case "Implicits":
                         # implicits, if any
                         for idx in range(int(m.group(2))):
-                            self.implicitMods.append(re.sub("{range.*}", "", lines.pop(line_idx)))
+                            line = lines.pop(line_idx)
+                            self.implicitMods.append(Mod(line))
                         plicits_idx = line_idx
+                        break
                 self.properties[m.group(1)] = m.group(2)
             else:
                 # skip this line
                 line_idx += 1
         # every thing that is left, from plicits_idx, is explicits
         for idx in range(plicits_idx, len(lines)):
-            line = re.sub("{range.*}", "", lines.pop(plicits_idx))
-            self.explicitMods.append(line)
+            line = lines.pop(plicits_idx)
+            mod = Mod(line)
+            self.full_explicitMods_list.append(mod)
+            if "Corrupted" in line:
+                self.corrupted = True
+            # check for variants and if it's our variant, add it to the smaller explicit mod list
             if "variant" in line:
-                m = re.search(r"{variant:(.*)}(.*)", line)
+                m = re.search(r"{variant:([\d,]+)}(.*)", line)
                 for var in m.group(1).split(","):
-                    if self.variants.get(var, None) is None:
-                        self.variants[var] = []
-                    self.variants[var].append(m.group(2))
-
-        # Reprocess explicits to remove/set up variants
-        if len(self.variants) > 0:
-            new_list = self.variants[self.curr_variant]
-            for line in self.explicitMods:
-                if "variant" not in line:
-                    new_list.append(line)
-            self.variants = new_list
+                    if var == self.curr_variant:
+                        self.explicitMods.append(mod)
+            else:
+                self.explicitMods.append(mod)
 
         # _debug("b", len(lines), lines)
         # 'normal' and Magic ? objects and flasks only have one line (either no title or no base name)
@@ -371,7 +395,6 @@ class Item:
                     match line:
                         case _:
                             print(f"Item().load_from_xml: Skipped: {line}")
-        self.corrupted = "Corrupted" in self.explicitMods
 
     def load_from_json(self, json: dict):
         """
@@ -400,7 +423,7 @@ class Item:
         self.unique_id = json["id"]
         self.slot = slot_map[json["inventoryId"]]
         self.rarity = rarity_map[int(json.get("frameType", 0))]
-        self.explicitMods = json["explicitMods"]
+        self.full_explicitMods_list = json["explicitMods"]
         self.implicitMods = json.get("implicitMods", [])
         self.properties = json["properties"]
         self.ilevel = json["ilvl"]
@@ -458,19 +481,16 @@ class Item:
             tip += f"<tr><td>Limited to: <b>{self.limits}</b></td></tr>"
         if len(self.implicitMods) > 0:
             tip += f"<tr><td>"
-            for idx, line in enumerate(self.implicitMods):
-                colour = "crafted" in line and ColourCodes.CRAFTED.value or ColourCodes.MAGIC.value
-                tip += f'<span style="color:{colour};">{line.replace("{crafted}","")}</span><br/>'
-            # remove the last BR
+            for mod in self.implicitMods:
+                tip += mod.tooltip
+            # mod tooltip's always end in <br/>, remove the last one
             tip = tip[:-4]
             tip += f"</td></tr>"
         if len(self.explicitMods) > 0:
-            lines = len(self.variants) > 0 and self.variants or self.explicitMods
             tip += f"<tr><td>"
-            for line in lines:
-                colour = "crafted" in line and ColourCodes.CRAFTED.value or ColourCodes.MAGIC.value
-                tip += f'<span style="color:{colour};">{line.replace("{crafted}","")}</span><br/>'
-            # remove the last BR
+            for mod in self.explicitMods:
+                tip += mod.tooltip
+            # mod tooltip's always end in <br/>, remove the last one
             tip = tip[:-4]
             tip += f"</td></tr>"
 
@@ -516,3 +536,75 @@ class Item:
     @property
     def eater(self):
         return "Eater" in self.influences.keys()
+
+
+class Mod:
+    """
+    A class to encapsulate one mod
+    """
+    def __init__(self, _line) -> None:
+        """
+        Initialise defaults
+        :param _line: the full line of the mod, including variant stanzas.
+        """
+        # this is the text without {variant}, {crafted}, and {range}. At this point {range} is still present
+        self.line = re.sub(r"{variant:\d+}", "", _line.replace("{crafted}", ""))
+        # this is the text with the (xx-yy), eg '% increased Duration'.
+        # It is to avoid recalculating this value needlessly
+        self.line_without_range = None
+        # print(f"\n_line", _line)
+
+        # value for managing the range of values
+        self._range = None
+        self.min = None
+        self.max = None
+        # the actual value of the mod, where valid
+        self.value = None
+        self.crafted = "{crafted}" in _line
+        self.tooltip_colour = self.crafted and ColourCodes.CRAFTED.value or ColourCodes.MAGIC.value
+        # preformed text for adding to the tooltip. Let's set a default in case there is no 'range'
+        self.tooltip = f'<span style="color:{self.tooltip_colour};">{self.line}</span><br/>'
+
+        # check for and keep variant information
+        m = re.search(r"({variant:\d+})", _line)
+        self.variant_text = m and m.group(1) or None
+
+        # sort out the range, min, max,value and the tooltip, if applicable
+        tooltip = self.line
+        m1 = re.search(r"{range:([0-9.]+)}(.*)", tooltip)
+        if m1:
+            # this is now stripped of the (xx-yy)
+            self.line = m1.group(2)
+            m2 = re.search(r"([0-9.]+)-([0-9.]+)(.*)", self.line)
+            if m2:
+                self.min = float(m2.group(1))
+                self.max = float(m2.group(2))
+                self.line_without_range = m2.group(3)[1:]
+
+            # trigger property to update value and tooltip
+            self.range = float(m1.group(1))
+
+        # print("self.text", self.text)
+
+    @property
+    def text(self):
+        """ Return the text formatted for the xml output """
+        return f'{self.variant_text and self.variant_text or ""}{self.crafted and "{crafted}" or ""}' \
+               f'{self.range and f"{{range:{self.range}}}" or ""}{self.line}'
+
+    @property
+    def range(self):
+        return self._range
+
+    @range.setter
+    def range(self, new_range):
+        """ Set a new range and update value and tooltip """
+        self._range = new_range
+        self.value = self.min + (self.max - self.min) * self.range
+        # get the value without the trailing .0, so we don't end up with 40.0% or such.
+        value = f"{self.value:.1f}".replace(".0", "")
+        # put the crafted colour on the value only
+        tooltip = f'<span style="color:{ColourCodes.CRAFTED.value};">{value}' \
+                  f'</span>{self.line_without_range}'
+        # colour the whole tip
+        self.tooltip = f'<span style="color:{self.tooltip_colour};">{tooltip}</span><br/>'
