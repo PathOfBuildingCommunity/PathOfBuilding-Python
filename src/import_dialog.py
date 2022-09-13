@@ -159,7 +159,7 @@ class ImportDlg(Ui_Dialog, QDialog):
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
-        self.build.import_items_json(self.character_data.get("items"))
+        self.build.import_gems_json(self.character_data.get("items"))
 
     @Slot()
     def change_account_name(self, text):
@@ -201,6 +201,7 @@ class ImportDlg(Ui_Dialog, QDialog):
             # self.account_json = pob_file.read_json("c:/Users/peter/Downloads/get-characters-xyllywyt.json")
         except requests.RequestException as e:
             print(f"Error retrieving account: {e}.")
+            print(vars(response))
             return
         if self.account_json:
             # add this account to account history
@@ -247,10 +248,10 @@ class ImportDlg(Ui_Dialog, QDialog):
             print(f"Error retrieving account: {e}.")
             if response:
                 print(vars(response))
-        # items =
 
         char_info = items.get("character", None)
         self.character_data = {"tree": passive_tree, "items": items, "character": char_info}
+        # print(self.character_data)
 
     def fill_character_history(self):
         self.comboChar_History.clear()

@@ -357,7 +357,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.set_current_tab()
             self.tree_ui.fill_current_tree_combo()
             self.skills_ui.load(self.build.skills)
-            self.items_ui.load(self.build.items)
+            self.items_ui.load_from_xml(self.build.items)
             self.notes_ui.load(self.build.notes_html.text, self.build.notes.text)
             self.stats.load(self.build.build)
             self.spin_level.setValue(self.build.level)
@@ -550,6 +550,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.set_current_tab("CONFIG")
             self.combo_Bandits.showPopup()
             self.skills_ui.load(self.build.skills)
+            self.items_ui.load_from_json(dlg.character_data["items"])
+
 
     @Slot()
     def open_export_dialog(self):
@@ -560,6 +562,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def set_recent_builds_menu_items(self, config: Config):
         """
         Read the config for recent builds and create menu entries for them
+
         return: N/A
         """
 
@@ -568,6 +571,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         def make_connection(_idx, _filename):
             """
             Connect the menu item to _open_previous_build passing in extra information
+
             :param _idx:
             :param _filename:
             :return:
@@ -584,6 +588,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def set_current_tab(self, tab_name=""):
         """
         Actions required when setting the current tab from the configuration xml file
+
         :param tab_name: String;  name of a tab to switch to programatically. Doesn't set the build xml if used
         :return: N/A
         """
@@ -607,6 +612,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def active_skill_changed(self, _skill_text):
         """
         Actions when changing the socket group combo
+
         :return: N/A
         """
         pass
@@ -615,6 +621,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def socket_group_text_changed(self, new_text):
         """
         Fill out combo_MainSkillActive with the current text
+
         :param new_text: string: the combo's text
         :return: N/A
         """
@@ -626,6 +633,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def socket_group_index_changed(self, new_index):
         """
         Actions when changing the socket group combo
+
         :param new_index: string: the combo's index
         :return: N/A
         """
@@ -646,6 +654,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def load_socket_group(self, _list):
         """
         Load the left hand socket group (under "Main Skill") controls
+
         :param _list: list: a list of socket group names as they appear in the skills_ui() socket group listview
         :return: N/A
         """
@@ -664,6 +673,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Update the status bar. Use default text if no message is supplied.
         This triggers when the message is set and when it is cleared afterwards.
+
         :param message: string: the message
         :return: N/A
         """

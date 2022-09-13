@@ -405,9 +405,9 @@ class Build:
         # show tree
         self.win.tree_ui.combo_manage_tree.setCurrentIndex(int(self.tree.get("activeSpec", 1)) - 1)
 
-    def import_items_json(self, json_items):
+    def import_gems_json(self, json_items):
         """
-        Import items and their sockets skills
+        Import skills
 
         :param json_items: json import of the item data
         :return: N/A
@@ -492,6 +492,14 @@ class Build:
                             xml_gem.set("qualityId", "Alternate3")
                 check_socket_group(current_socket_group)
 
+
+    def import_items_json(self, json_items):
+        """
+        Import items
+
+        :param json_items: json import of the item data
+        :return: N/A
+        """
 
 class Spec:
     def __init__(self, _spec=None) -> None:
