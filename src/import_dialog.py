@@ -249,9 +249,11 @@ class ImportDlg(Ui_Dialog, QDialog):
             if response:
                 print(vars(response))
 
+        # lets add the jewels and items together
+        for idx, jewel in enumerate(passive_tree.get("items", [])):
+            items["items"].insert(idx, jewel)
         char_info = items.get("character", None)
         self.character_data = {"tree": passive_tree, "items": items, "character": char_info}
-        # print(self.character_data)
 
     def fill_character_history(self):
         self.comboChar_History.clear()

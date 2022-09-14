@@ -1015,4 +1015,5 @@ slot_map = {
     "Ring2": "Ring 2",
     "Belt": "Belt",
     "Flask": "Flask",
+    "PassiveJewels": "PassiveJewels",
 }
