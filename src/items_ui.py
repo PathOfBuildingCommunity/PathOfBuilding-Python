@@ -8,21 +8,24 @@ from qdarktheme.qtpy.QtCore import (
     QRect,
     QRectF,
     QSize,
+    QStringListModel,
     Qt,
     Signal,
     Slot,
 )
 from qdarktheme.qtpy.QtGui import (
+    QAbstractTextDocumentLayout,
     QAction,
     QActionGroup,
-    QFont,
-    QIcon,
-    QPixmap,
     QBrush,
     QColor,
+    QFont,
+    QIcon,
     QPainter,
-    QStandardItemModel,
+    QPixmap,
     QStandardItem,
+    QStandardItemModel,
+    QTextDocument,
 )
 from qdarktheme.qtpy.QtWidgets import (
     QApplication,
@@ -56,6 +59,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QStackedWidget,
     QStatusBar,
     QStyle,
+    QItemDelegate,
     QTabWidget,
     QTextEdit,
     QToolBar,
@@ -64,15 +68,13 @@ from qdarktheme.qtpy.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from typing import Union
 import xml.etree.ElementTree as ET
 import re
-import ast
-from pprint import pprint
 
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
-from constants import _VERSION, slot_map, ColourCodes
+from constants import slot_map, ColourCodes
+from ui_utils import HTMLDelegate
 
 influence_colours = {
     "Shaper Item": ColourCodes.SHAPER.value,
@@ -146,22 +148,20 @@ class ItemsUI:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
         self.win = _win
-        self.itemlist = []
+        # dictionary of Items() indexed by unique_id. May not be in the same order as items in the GUI
+        self.itemlist = {}
 
         self.xml_items = None
 
-        # self.model = Model(self.win.list_Items)
-        # self.win.list_Items.setModel(self.model)
-        # self.model.itemChanged.connect(self.on_item_changed)
-        # self.win.list_Items.setAlternatingRowColors(True)
+        # Allow us to print in colour
+        delegate = HTMLDelegate()
+        delegate._list = self.win.list_Items
+        self.win.list_Items.setItemDelegate(delegate)
 
-        # self.my_model = Model(self.win.list_Items)
-        # self.win.list_Items.setModel(self.my_model)
-
-        # self.my_model.rowDropped.connect(self.drag_dropped)
         self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
         self.win.list_Items.indexesMoved.connect(self.onIndexesMoved)
         self.win.btn_weaponSwap.clicked.connect(self.weapon_swap)
+        self.win.list_Items.itemDoubleClicked.connect(self.double_clicked)
 
         # setup Alt Weapon combo's
         self.combo_alt_weapon1 = QComboBox(self.win.groupbox_Items)
@@ -191,34 +191,17 @@ class ItemsUI:
             "Flask 5": self.win.combo_Flask5,
         }
 
-    def add_item(self):
+    def add_item(self, _item):
         """
         Create an Item() class and add it to the internal list.
         :return: an Item() class object
         """
-        item = Item()
-        self.itemlist.append(item)
-        return item
-
-    def add_item_to_item_list(self, _item):
-        """
-        Add a new row to the Items list
-        :param _item: Item(): The item to be added
-        :return:
-        """
-        if _item is None:
-            return
-        # print(_item.name, _item.rarity)
-        row = QListWidgetItem()
-        self.win.list_Items.addItem(row)
-        label = QLabel()
-        label.setAcceptDrops(False)
-        label.setFrameShape(QFrame.NoFrame)
-        # label.setFrameShape(QFrame.StyledPanel)
-        label.setFixedHeight(22)
-        label.setText(f'<span style="color:{ColourCodes[_item.rarity].value};">{_item.name}</span>')
-        label.setToolTip(_item.tooltip())
-        self.win.list_Items.setItemWidget(row, label)
+        self.itemlist[_item.unique_id] = _item
+        lwi = QListWidgetItem(f'<span style="color:{ColourCodes[_item.rarity].value};">{_item.name}</span>')
+        lwi.setToolTip(_item.tooltip())
+        lwi.setWhatsThis(_item.unique_id)
+        self.win.list_Items.addItem(lwi)
+        return _item
 
     @Slot()
     def weapon_swap(self, checked):
@@ -233,25 +216,29 @@ class ItemsUI:
 
     @Slot()
     def define_item_labels(self):
-        """"""
-        for idx, _item in enumerate(self.itemlist):
-            label = self.win.list_Items.itemWidget(idx)
-            label.setText(f'<span style="color:{ColourCodes[_item.rarity].value};">{_item.name}</span>')
-            # Do more here based on itemsets, etc
+        """
+        Set item labels based on what sset they are in and what set is active
+        :return:
+        """
+        return
+        # for idx, _item in enumerate(self.itemlist):
+        #     label = self.win.list_Items.itemWidget(idx)
+        #     label.setText(f'<span style="color:{ColourCodes[_item.rarity].value};">{_item.name}</span>')
+        #     # Do more here based on itemsets, etc
 
     @Slot()
     def on_row_changed(self, item):
-        # print(type(item), item.text())
-        label: QLabel = self.win.list_Items.itemWidget(item)
-        print(type(label), label.text())
+        """Are there actions we want to take when the use selects a new item"""
+        print(type(item), item.text())
+        # label: QLabel = self.win.list_Items.itemWidget(item)
+        # print("on_row_changed", type(label), label.text(), label.whatsThis())
 
     @Slot()
-    def drag_dropped(self, current):
-        print("Row %d selected", type(current), current)
-
-    @Slot()
-    def onIndexesMoved(self, indexes):
-        print("indexes were moved", type(indexes), indexes)
+    def double_clicked(self, item: QListWidgetItem):
+        """ Actions for editing an item"""
+        print(type(item), item.text(), item.whatsThis())
+        m = re.search(r"<span.*>(.*)</span>", item.text())
+        print(m.group(1))
 
     def clear_controls(self):
         """
@@ -277,17 +264,18 @@ class ItemsUI:
         # self.clear_controls()
         # add the items to the list box
         for _item in self.xml_items.findall("Item"):
-            new_item = self.add_item()
+            new_item = Item()
             # new_item.curr_variant = _item.get("variant", "")
             new_item.load_from_xml(_item.text)
-            self.add_item_to_item_list(new_item)
+            self.add_item(new_item)
+            # self.add_item_to_item_list(new_item)
         for _item_set in self.xml_items.findall("ItemSet"):
             self.win.combo_ItemSet.addItem(_item_set.get("title", "Default"), _item_set)
             for _slot in _item_set.findall("Slot"):
                 _name = _slot.get("name"), _slot.get("itemId")
-                _id = int(_slot.get("itemId", 0))
-                if _id != 0:
-                    self.itemlist[_id - 1].slot = _name
+                # _id = int(_slot.get("itemId", 0))
+                # if _id != 0:
+                #     self.itemlist[_id - 1].slot = _name
         self.win.combo_ItemSet.setCurrentIndex(0)
 
     def load_from_json(self, _items):
@@ -306,19 +294,20 @@ class ItemsUI:
             new_item = self.add_item()
             new_item.load_from_json(_item)
             # print(vars(new_item))
-            self.add_item_to_item_list(new_item)
+            self.add_item(new_item)
 
+    def save(self):
+        """
+        Save internal structures back to a xml object
 
-class Model(QStandardItemModel):
-    """An idea for a model to export a signel for the drop point, but it doesn't work with QListWidget"""
-
-    rowDropped = Signal(int)
-
-    def dropMimeData(self, *args):
-        success = super(Model, self).dropMimeData(*args)
-        if success:
-            self.rowDropped.emit(args[2])
-        return success
+        :return: ET.ElementTree:
+        """
+        items = []
+        for row in range(self.win.list_Items.count()):
+            items.append(self.win.list_Items.item(row).whatsThis())
+        self.itemlist[items[0]].save()
+        # for id in items:
+        #     xml_item = self.itemlist[id].save()
 
 
 class Item:
@@ -365,7 +354,6 @@ class Item:
         """
         Load internal structures from the build object's xml
         """
-        # ToDo: Mod mod class to handle ranges, crafts ?
         # split lines into a list, removing any blank lines, leading & trailing spaces.
         # stolen from https://stackoverflow.com/questions/7630273/convert-multiline-into-list
         lines = [y for y in (x.strip() for x in desc.splitlines()) if y]
@@ -472,8 +460,6 @@ class Item:
                     return value
             return _default
 
-        if type(_json) == str:
-            _json = ast.literal_eval(_json)
         self.base_name = _json.get("typeLine", "")
         # for magic and normal items, name is blank
         self.title = _json.get("name", "")

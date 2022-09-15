@@ -4,7 +4,17 @@ Utilities for the UI that do not have dependencies on MainWindow
 import warnings
 
 from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
-from qdarktheme.qtpy.QtWidgets import QComboBox, QLayout, QMessageBox, QSizePolicy
+from qdarktheme.qtpy.QtGui import QAbstractTextDocumentLayout, QTextDocument
+from qdarktheme.qtpy.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QLayout,
+    QMessageBox,
+    QSizePolicy,
+    QStyle,
+    QStyleOptionViewItem,
+    QStyledItemDelegate,
+)
 
 from pob_config import _debug
 
@@ -248,3 +258,41 @@ class FlowLayout(QLayout):
             line_height = max(line_height, height)
 
         return y + line_height - rect.y()
+
+
+# https://stackoverflow.com/questions/1956542/how-to-make-item-view-render-rich-html-text-in-qt
+class HTMLDelegate(QStyledItemDelegate):
+    def __init__(self) -> None:
+        super().__init__()
+        # the list of WidgetItems from a QListView
+        self._list = None
+
+    def paint(self, painter, option, index):
+        options = QStyleOptionViewItem(option)
+        self.initStyleOption(options, index)
+        style = QApplication.style() if options.widget is None else options.widget.style()
+
+        doc = QTextDocument()
+        doc.setHtml(options.text)
+
+        options.text = ""
+        style.drawControl(QStyle.CE_ItemViewItem, options, painter)
+
+        ctx = QAbstractTextDocumentLayout.PaintContext()
+
+        text_rect = style.subElementRect(QStyle.SE_ItemViewItemText, options)
+        painter.save()
+        painter.translate(text_rect.topLeft())
+        painter.setClipRect(text_rect.translated(-text_rect.topLeft()))
+        doc.documentLayout().draw(painter, ctx)
+
+        painter.restore()
+
+    def sizeHint(self, option, index):
+        """Inherited function to return the max width of all text items"""
+        doc = QTextDocument()
+        w = 0
+        for row in range(self._list.count()):
+            doc.setHtml(self._list.item(row).text())
+            w = max(w, doc.idealWidth())
+        return QSize(w + 20, doc.size().height())

@@ -315,6 +315,7 @@ class Build:
         self.notes.text, self.notes_html.text = win.notes_ui.save()
         win.stats.save(self.build)
         win.skills_ui.save()
+        win.items_ui.save()
         win.config_ui.save()
         # pob["PathOfBuilding"]["TreeView"] = self.tree_view
         # pob["PathOfBuilding"]["Items"] = self.items
@@ -492,7 +493,6 @@ class Build:
                             xml_gem.set("qualityId", "Alternate3")
                 check_socket_group(current_socket_group)
 
-
     def import_items_json(self, json_items):
         """
         Import items
@@ -500,6 +500,7 @@ class Build:
         :param json_items: json import of the item data
         :return: N/A
         """
+
 
 class Spec:
     def __init__(self, _spec=None) -> None:

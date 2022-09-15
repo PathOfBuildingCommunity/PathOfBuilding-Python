@@ -376,6 +376,11 @@ hr { height: 1px; border-width: 0; }
                   <height>91</height>
                  </rect>
                 </property>
+                <property name="font">
+                 <font>
+                  <strikeout>true</strikeout>
+                 </font>
+                </property>
                 <property name="text">
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Usage Hints:&lt;br&gt;- You can copy/paste socket groups using Ctrl-C and Ctrl-V.&lt;br&gt;- Ctrl-Left click to enable and disable socket groups.&lt;br&gt;- Ctrl-Right click to include/exclude in FullDPS calculations.&lt;br&gt;- Right click to set as the Main skill group.&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
@@ -1637,7 +1642,7 @@ hr { height: 1px; border-width: 0; }
                  <rect>
                   <x>365</x>
                   <y>40</y>
-                  <width>345</width>
+                  <width>350</width>
                   <height>421</height>
                  </rect>
                 </property>
@@ -1646,6 +1651,12 @@ hr { height: 1px; border-width: 0; }
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAsNeeded</enum>
+                </property>
+                <property name="sizeAdjustPolicy">
+                 <enum>QAbstractScrollArea::AdjustToContents</enum>
                 </property>
                 <property name="editTriggers">
                  <set>QAbstractItemView::DoubleClicked</set>
@@ -1665,8 +1676,14 @@ hr { height: 1px; border-width: 0; }
                 <property name="horizontalScrollMode">
                  <enum>QAbstractItemView::ScrollPerPixel</enum>
                 </property>
+                <property name="movement">
+                 <enum>QListView::Free</enum>
+                </property>
+                <property name="resizeMode">
+                 <enum>QListView::Adjust</enum>
+                </property>
                 <property name="spacing">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <property name="uniformItemSizes">
                  <bool>true</bool>

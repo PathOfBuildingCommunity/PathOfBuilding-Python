@@ -13,7 +13,7 @@ from PoB_Main_Window import Ui_MainWindow
 from constants import ColourCodes, empty_socket_group, empty_gem
 from pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
 from pob_file import read_json
-from ui_utils import set_combo_index_by_data, set_combo_index_by_text, yes_no_dialog
+from ui_utils import set_combo_index_by_data, set_combo_index_by_text, yes_no_dialog, HTMLDelegate
 
 
 class SkillsUI:
@@ -37,6 +37,12 @@ class SkillsUI:
 
         # dictionary for holding the GemUI representions of the gems in each socket group
         self.gem_ui_list = {}
+
+        # Allow us to print in colour
+        # ToDo: update list_SocketGroups to use colours
+        delegate = HTMLDelegate()
+        delegate._list = self.win.list_SocketGroups
+        # self.win.list_SocketGroups.setItemDelegate(delegate)
 
         tr = self.pob_config.app.tr
         self.win.combo_SortByDPS.addItem(tr("Full DPS"), "Full DPS")

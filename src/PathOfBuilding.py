@@ -552,7 +552,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.skills_ui.load(self.build.skills)
             self.items_ui.load_from_json(dlg.character_data["items"])
 
-
     @Slot()
     def open_export_dialog(self):
         dlg = ExportDlg(self.build, self.config, self)
