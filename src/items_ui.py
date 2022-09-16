@@ -228,14 +228,14 @@ class ItemsUI:
     @Slot()
     def on_row_changed(self, item):
         """Are there actions we want to take when the use selects a new item"""
-        print(type(item), item.text())
+        print("on_row_changed", item.text())
         # label: QLabel = self.win.list_Items.itemWidget(item)
         # print("on_row_changed", type(label), label.text(), label.whatsThis())
 
     @Slot()
     def double_clicked(self, item: QListWidgetItem):
-        """ Actions for editing an item"""
-        print(type(item), item.text(), item.whatsThis())
+        """Actions for editing an item"""
+        print(item.text(), item.whatsThis())
         m = re.search(r"<span.*>(.*)</span>", item.text())
         print(m.group(1))
 
@@ -260,7 +260,7 @@ class ItemsUI:
         :return: N/A
         """
         self.xml_items = _items
-        # self.clear_controls()
+        self.clear_controls()
         # add the items to the list box
         for _item in self.xml_items.findall("Item"):
             new_item = Item()
@@ -272,9 +272,6 @@ class ItemsUI:
             self.win.combo_ItemSet.addItem(_item_set.get("title", "Default"), _item_set)
             for _slot in _item_set.findall("Slot"):
                 _name = _slot.get("name"), _slot.get("itemId")
-                # _id = int(_slot.get("itemId", 0))
-                # if _id != 0:
-                #     self.itemlist[_id - 1].slot = _name
         self.win.combo_ItemSet.setCurrentIndex(0)
 
     def load_from_json(self, _items):
@@ -304,9 +301,14 @@ class ItemsUI:
         items = []
         for row in range(self.win.list_Items.count()):
             items.append(self.win.list_Items.item(row).whatsThis())
-        self.itemlist[items[0]].save()
-        # for id in items:
-        #     xml_item = self.itemlist[id].save()
+
+        if len(items) > 0:
+            # leave this here for a bit to pick out one item
+            # self.itemlist[items[0]].save(0, true)
+            for child in list(self.xml_items):
+                self.xml_items.remove(child)
+            for idx, u_id in enumerate(items):
+                self.xml_items.append(self.itemlist[u_id].save(idx+1))
 
 
 class Item:
@@ -396,10 +398,11 @@ class Item:
         # every thing that is left, from explicits_idx, is explicits
         for idx in range(explicits_idx, len(lines)):
             line = lines.pop(explicits_idx)
-            mod = Mod(line)
-            self.full_explicitMods_list.append(mod)
             if "Corrupted" in line:
                 self.corrupted = True
+                continue
+            mod = Mod(line)
+            self.full_explicitMods_list.append(mod)
             # check for variants and if it's our variant, add it to the smaller explicit mod list
             if "variant" in line:
                 m = re.search(r"{variant:([\d,]+)}(.*)", line)
@@ -526,13 +529,30 @@ class Item:
                 if key in influence_colours.keys():
                     self.influences.append(key)
 
-    def save(self):
+    def save(self, _id, debug_print=False):
         """
         Save internal structures back to a xml object
 
         :return: ET.ElementTree:
         """
-        pass
+        text = self.title and f"{self.title}\n{self.base_name}\n" or f"{self.base_name}\n"
+        for influence in self.influences:
+            text += f"{influence}\n"
+        for requirement in self.requires.keys():
+            text += f"Requires {requirement}\n"
+        for idx in self.properties.keys():
+            text += f"{idx}: {self.properties[idx]}\n"
+        text += f"Implicits: {len(self.implicitMods)}\n"
+        for mod in self.implicitMods:
+            text += f"{mod.text_for_xml}\n"
+        for mod in self.full_explicitMods_list:
+            text += f"{mod.text_for_xml}\n"
+        if self.corrupted:
+            text += "Corrupted"
+
+        if debug_print:
+            print(f"{text}\n\n")
+        return ET.fromstring(f'<Item id="{_id}">{text}</Item>')
 
     def tooltip(self):
         """
@@ -672,16 +692,13 @@ class Mod:
 
             # trigger property to update value and tooltip
             self.range = float(m1.group(1))
-
         # print("self.text", self.text)
 
     @property
-    def text(self):
+    def text_for_xml(self):
         """Return the text formatted for the xml output"""
-        return (
-            f'{self.variant_text and self.variant_text or ""}{self.crafted and "{crafted}" or ""}'
+        return f'{self.variant_text and self.variant_text or ""}{self.crafted and "{crafted}" or ""}'\
             f'{self.range and f"{{range:{self.range}}}" or ""}{self.line}'
-        )
 
     @property
     def range(self):

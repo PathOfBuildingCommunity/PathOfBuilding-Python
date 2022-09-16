@@ -38,6 +38,7 @@ class TreeView(QGraphicsView):
         self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
         # set a background of black this stops the tree looking ugly when 'light' theme is selected
         self.setBackgroundBrush(QBrush(Qt.black, Qt.SolidPattern))
+        # self.setBackgroundBrush(QBrush("#181818", Qt.SolidPattern))
 
         self._char_class_bkgnd_image = None
         self.add_tree_images()
