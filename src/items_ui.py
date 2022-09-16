@@ -159,7 +159,6 @@ class ItemsUI:
         self.win.list_Items.setItemDelegate(delegate)
 
         self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
-        self.win.list_Items.indexesMoved.connect(self.onIndexesMoved)
         self.win.btn_weaponSwap.clicked.connect(self.weapon_swap)
         self.win.list_Items.itemDoubleClicked.connect(self.double_clicked)
 
