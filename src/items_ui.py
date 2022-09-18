@@ -79,18 +79,7 @@ from pob_file import read_xml, write_xml
 from constants import slot_map, ColourCodes
 from ui_utils import HTMLDelegate, html_colour_text
 from item import Item
-from mod import Mod
 
-influence_colours = {
-    "Shaper Item": ColourCodes.SHAPER.value,
-    "Elder Item": ColourCodes.ELDER.value,
-    "Warlord Item": ColourCodes.ADJUDICATOR.value,
-    "Hunter Item": ColourCodes.BASILISK.value,
-    "Crusader Item": ColourCodes.CRUSADER.value,
-    "Redeemer Item": ColourCodes.EYRIE.value,
-    "Searing Exarch": ColourCodes.CLEANSING.value,
-    "Eater of Worlds": ColourCodes.TANGLE.value,
-}
 
 test = """			Rarity: UNIQUE
 Bottled Faith
@@ -224,10 +213,11 @@ class ItemsUI:
                 print()
         write_xml("c:/git/PathOfBuilding-Python/src/Data/uniques2.xml", u)
 
-    def add_item(self, _item):
+    def add_item_to_itemlist(self, _item):
         """
         Create an Item() class and add it to the internal list.
-        :return: an Item() class object
+        :param _item: Item(). The item to be added to the list
+        :return: the passed in Item() class object
         """
         self.itemlist[_item.unique_id] = _item
         lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
@@ -238,7 +228,12 @@ class ItemsUI:
 
     @Slot()
     def weapon_swap(self, checked):
-        """"""
+        """
+        Switch between active and alternate weapons.
+
+        :param checked: bool: state of the btn_weaponSwap button. Checked = True means Alt is to be shown.
+        :return: N/A
+        """
         self.win.combo_Weapon1.setVisible(not checked)
         self.win.combo_Weapon2.setVisible(not checked)
         self.combo_alt_weapon1.setVisible(checked)
@@ -296,8 +291,7 @@ class ItemsUI:
             new_item = Item()
             # new_item.curr_variant = _item.get("variant", "")
             new_item.load_from_xml(_item.text)
-            self.add_item(new_item)
-            # self.add_item_to_item_list(new_item)
+            self.add_item_to_itemlist(new_item)
         for _item_set in self.xml_items.findall("ItemSet"):
             self.win.combo_ItemSet.addItem(_item_set.get("title", "Default"), _item_set)
             for _slot in _item_set.findall("Slot"):
@@ -321,7 +315,7 @@ class ItemsUI:
             new_item = Item()
             new_item.load_from_json(text_item)
             # print(vars(new_item))
-            self.add_item(new_item)
+            self.add_item_to_itemlist(new_item)
 
     def save(self):
         """

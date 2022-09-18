@@ -1,9 +1,17 @@
-class Mod:
-    """
-    A class to encapsulate one mod.
-    Numeric values default to None so that they can be checked for non use. -1 or 0 could be legitimate values.
-    """
+"""
+A class to encapsulate one mod.
+Numeric values default to None so that they can be checked for non use. -1 or 0 could be legitimate values.
+"""
 
+import xml.etree.ElementTree as ET
+import re
+
+from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
+from pob_file import read_xml, write_xml
+from constants import slot_map, ColourCodes
+from ui_utils import HTMLDelegate, html_colour_text
+
+class Mod:
     def __init__(self, _line) -> None:
         """
         Initialise defaults
@@ -75,4 +83,3 @@ class Mod:
         tooltip = f'{html_colour_text("CRAFTED",value)}{self.line_without_range}'
         # colour the whole tip
         self.tooltip = f'{html_colour_text(self.tooltip_colour,tooltip)}<br/>'
-

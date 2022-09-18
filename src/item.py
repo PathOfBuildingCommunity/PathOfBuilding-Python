@@ -1,6 +1,26 @@
-    """
-    A class to encapsulate one item
-    """
+"""
+A class to encapsulate one item
+"""
+
+import xml.etree.ElementTree as ET
+import re
+
+from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
+from constants import slot_map, ColourCodes
+from ui_utils import html_colour_text
+from mod import Mod
+
+influence_colours = {
+    "Shaper Item": ColourCodes.SHAPER.value,
+    "Elder Item": ColourCodes.ELDER.value,
+    "Warlord Item": ColourCodes.ADJUDICATOR.value,
+    "Hunter Item": ColourCodes.BASILISK.value,
+    "Crusader Item": ColourCodes.CRUSADER.value,
+    "Redeemer Item": ColourCodes.EYRIE.value,
+    "Searing Exarch": ColourCodes.CLEANSING.value,
+    "Eater of Worlds": ColourCodes.TANGLE.value,
+}
+
 
 class Item:
 
