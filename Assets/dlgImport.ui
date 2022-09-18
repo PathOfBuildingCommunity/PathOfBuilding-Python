@@ -363,7 +363,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>https://pobb.in/1LFyvUfab61D</string>
+     <string/>
     </property>
    </widget>
    <widget class="QComboBox" name="combo_Import">

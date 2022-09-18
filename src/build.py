@@ -453,7 +453,7 @@ class Build:
             f'<SkillSet id="{len(self.skills)}" title="Imported {json_character.get("name", "")}" />'
         )
         self.skills.append(skill_set)
-        self.skills.set("activeSkillSet", len(self.skills) - 1)
+        self.skills.set("activeSkillSet", f"{len(self.skills) - 1}")
 
         # loop through all items and look for gems in socketedItems
         for item in json_items["items"]:

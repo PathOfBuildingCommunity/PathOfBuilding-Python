@@ -262,7 +262,7 @@ hr { height: 1px; border-width: 0; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>2</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -400,8 +400,23 @@ hr { height: 1px; border-width: 0; }
                 <property name="styleSheet">
                  <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
                 </property>
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <property name="dragEnabled">
+                 <bool>true</bool>
+                </property>
+                <property name="dragDropMode">
+                 <enum>QAbstractItemView::InternalMove</enum>
+                </property>
+                <property name="defaultDropAction">
+                 <enum>Qt::MoveAction</enum>
+                </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
+                </property>
+                <property name="horizontalScrollMode">
+                 <enum>QAbstractItemView::ScrollPerPixel</enum>
                 </property>
                </widget>
                <widget class="QGroupBox" name="group_SkillTabLeft">

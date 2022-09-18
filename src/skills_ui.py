@@ -13,7 +13,7 @@ from PoB_Main_Window import Ui_MainWindow
 from constants import ColourCodes, empty_socket_group, empty_gem
 from pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
 from pob_file import read_json
-from ui_utils import set_combo_index_by_data, set_combo_index_by_text, yes_no_dialog, HTMLDelegate
+from ui_utils import set_combo_index_by_data, set_combo_index_by_text, yes_no_dialog, HTMLDelegate, html_colour_text
 
 
 class SkillsUI:
@@ -42,7 +42,7 @@ class SkillsUI:
         # ToDo: update list_SocketGroups to use colours
         delegate = HTMLDelegate()
         delegate._list = self.win.list_SocketGroups
-        # self.win.list_SocketGroups.setItemDelegate(delegate)
+        self.win.list_SocketGroups.setItemDelegate(delegate)
 
         tr = self.pob_config.app.tr
         self.win.combo_SortByDPS.addItem(tr("Full DPS"), "Full DPS")
@@ -136,8 +136,8 @@ class SkillsUI:
         self.xml_skills.set("sortGemsByDPS", bool_to_str(self.win.check_SortByDPS.isChecked()))
         self.xml_skills.set("matchGemLevelToCharacterLevel", bool_to_str(self.win.check_MatchToLevel.isChecked()))
         self.xml_skills.set("showAltQualityGems", bool_to_str(self.win.check_ShowGemQualityVariants.isChecked()))
-        self.xml_skills.set("sortGemsByDPSField", self.win.combo_SortByDPS.currentText())
-        self.xml_skills.set("showSupportGemTypes", self.win.combo_ShowSupportGems.currentText())
+        self.xml_skills.set("sortGemsByDPSField", self.win.combo_SortByDPS.currentData())
+        self.xml_skills.set("showSupportGemTypes", self.win.combo_ShowSupportGems.currentData())
         self.xml_skills.set("defaultGemLevel", str(self.win.spin_DefaultGemLevel.value()))
         self.xml_skills.set("defaultGemQuality", str(self.win.spin_DefaultGemQuality.value()))
         return self.xml_skills
@@ -186,7 +186,7 @@ class SkillsUI:
 
         full_dps = str_to_bool(group.get("includeInFullDPS"))
         enabled = str_to_bool(group.get("enabled")) and _label != ""
-        active = self.build.mainSocketGroup == index
+        active = self.build.mainSocketGroup - 1 == index
         item.setText(
             f"{_label}{not enabled and ' (Disabled)' or ''}{full_dps and ' (FullDPS)' or ''}\
               {active and ' (Active)' or ''}"
@@ -310,7 +310,7 @@ class SkillsUI:
     def load_socket_group(self, _index):
         """
         Load a socket group into the UI, unloading the previous one
-        :param _index: index to display
+        :param _index: index to display, 0 based integer
         :return: N/A
         """
         self.clear_gem_ui_list()
@@ -327,7 +327,7 @@ class SkillsUI:
             # assign and setup new group
             self.xml_current_socket_group = self.xml_current_skill_set[_index]
             if self.xml_current_socket_group is not None:
-                self.build.mainSocketGroup = _index
+                self.build.mainSocketGroup = _index + 1
                 self.win.lineedit_SkillLabel.setText(self.xml_current_socket_group.get("label"))
                 set_combo_index_by_text(self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot"))
                 self.win.check_SocketGroupEnabled.setChecked(

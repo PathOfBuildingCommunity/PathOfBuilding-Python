@@ -17,6 +17,7 @@ from qdarktheme.qtpy.QtWidgets import (
 )
 
 from pob_config import _debug
+from constants import ColourCodes
 
 
 def yes_no_dialog(win, title, text):
@@ -42,6 +43,18 @@ def critical_dialog(win, title, text, btn_text="Close"):
     dlg.addButton(btn_text, QMessageBox.YesRole)
     dlg.setIcon(QMessageBox.Critical)
     dlg.exec_()
+
+
+def html_colour_text(colour, text):
+    """
+    Put text into html span tags.
+
+    :param colour: string: the #colour to be used or ColourCodes name
+    :param text: the text to be coloured
+    :return: str:
+    """
+    c = colour[0] == "#" and colour or ColourCodes[colour].value
+    return f'<span style="color:{c};">{text}</span>'
 
 
 def set_combo_index_by_data(_combo: QComboBox, _data):

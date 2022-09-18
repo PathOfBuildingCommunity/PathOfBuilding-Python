@@ -6,6 +6,7 @@ Open a dialog for importing a character.
 import re
 import requests
 import xml.etree.ElementTree as ET
+from pprint import pprint
 
 from qdarktheme.qtpy.QtWidgets import QDialog
 from qdarktheme.qtpy.QtCore import Qt, Slot
@@ -254,6 +255,7 @@ class ImportDlg(Ui_Dialog, QDialog):
             items["items"].insert(idx, jewel)
         char_info = items.get("character", None)
         self.character_data = {"tree": passive_tree, "items": items, "character": char_info}
+        # pprint(items)
 
     def fill_character_history(self):
         self.comboChar_History.clear()
