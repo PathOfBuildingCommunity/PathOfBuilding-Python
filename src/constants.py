@@ -1,6 +1,7 @@
 """Enumeration Data for Path of Exile constants."""
 
 import enum
+import xml.etree.ElementTree as ET
 
 program_title = "Path of Building"
 
@@ -35,7 +36,7 @@ default_spec = f'\
         <Sockets/>\
     </Spec>'
 
-default_view_mode = "ITEMS"
+default_view_mode = "SKILLS"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="0" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
@@ -63,11 +64,15 @@ empty_build = f'<PathOfBuilding>\
     </Config>\
 </PathOfBuilding>'
 
-empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot=""\
-    mainActiveSkill="1"/>'
+empty_socket_group = ET.fromstring(
+    '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
+    enabled="true" slot="" mainActiveSkill="1"/>'
+)
 
-empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default" gemId=""\
-    enabled="true" quality="0" count="1" nameSpec=""/>'
+empty_gem = ET.fromstring(
+    '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default"\
+    gemId="" enabled="true" quality="0" count="1" nameSpec=""/>'
+)
 
 bandits = {
     "None": "2 Passives Points",
@@ -145,9 +150,7 @@ class ColourCodes(enum.Enum):
     TEMPLAR = "#C040FF"
     SHADOW = "#30C0D0"
     MAINHAND = "#50FF50"
-    MAINHANDBG = "#071907"
     OFFHAND = "#B7B7FF"
-    OFFHANDBG = "#070719"
     SHAPER = "#55BBFF"
     ELDER = "#AA77CC"
     FRACTURED = "#A29160"

@@ -23,7 +23,6 @@ influence_colours = {
 
 
 class Item:
-
     def __init__(self, _slot=None) -> None:
         """
         Initialise defaults
@@ -294,7 +293,7 @@ class Item:
         name = self.title == "" and self.base_name or self.name
         tip += html_colour_text(rarity_colour, name)
         for influence in self.influences:
-            tip += f'<br/>{html_colour_text(influence_colours[influence], influence)}'
+            tip += f"<br/>{html_colour_text(influence_colours[influence], influence)}"
         tip += "</th></tr>"
         if self.level_req > 0:
             tip += f"<tr><td>Requires Level <b>{self.level_req}</b></td></tr>"

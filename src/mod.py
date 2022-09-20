@@ -11,6 +11,7 @@ from pob_file import read_xml, write_xml
 from constants import slot_map, ColourCodes
 from ui_utils import HTMLDelegate, html_colour_text
 
+
 class Mod:
     def __init__(self, _line) -> None:
         """
@@ -38,7 +39,7 @@ class Mod:
         self.crafted = "{crafted}" in _line
         self.tooltip_colour = self.crafted and ColourCodes.CRAFTED.value or ColourCodes.MAGIC.value
         # preformed text for adding to the tooltip. Let's set a default in case there is no 'range'
-        self.tooltip = f'{html_colour_text(self.tooltip_colour,self.line)}<br/>'
+        self.tooltip = f"{html_colour_text(self.tooltip_colour,self.line)}<br/>"
 
         # check for and keep variant information
         m = re.search(r"({variant:\d+})", _line)
@@ -82,4 +83,4 @@ class Mod:
         # put the crafted colour on the value only
         tooltip = f'{html_colour_text("CRAFTED",value)}{self.line_without_range}'
         # colour the whole tip
-        self.tooltip = f'{html_colour_text(self.tooltip_colour,tooltip)}<br/>'
+        self.tooltip = f"{html_colour_text(self.tooltip_colour,tooltip)}<br/>"

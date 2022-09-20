@@ -53,7 +53,7 @@ def html_colour_text(colour, text):
     :param text: the text to be coloured
     :return: str:
     """
-    c = colour[0] == "#" and colour or ColourCodes[colour].value
+    c = colour[0] == "#" and colour or ColourCodes[colour.upper()].value
     return f'<span style="color:{c};">{text}</span>'
 
 

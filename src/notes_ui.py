@@ -4,7 +4,8 @@ This Class manages all the elements and owns some elements of the "NOTES" tab
 
 import re
 
-from qdarktheme.qtpy.QtCore import Slot
+from qdarktheme.qtpy.QtCore import Slot, Qt
+from qdarktheme.qtpy.QtGui import QColor, QBrush
 
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import Config
@@ -29,6 +30,12 @@ class NotesUI:
         self.pob_config = _config
         self.win = _win
         self.modified = False
+
+        # Add content to Colour ComboBox
+        self.win.combo_Notes_Colour.addItems([colour.name.title() for colour in ColourCodes])
+        for index in range(self.win.combo_Notes_Colour.count()):
+            colour = ColourCodes[self.win.combo_Notes_Colour.itemText(index).upper()].value
+            self.win.combo_Notes_Colour.setItemData(index, QBrush(colour), Qt.ForegroundRole)
 
         self.win.btn_ConvertToText.setVisible(False)
         self.win.btn_ConvertToText.clicked.connect(self.convert_to_text)

@@ -196,7 +196,7 @@ class ItemsUI:
         #         self.uniques[child.tag].append(new_item)
 
     def rewrite_uniques_xml(self):
-        """ Reformat the xml from the lua. Temporary """
+        """Reformat the xml from the lua. Temporary"""
 
         u = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
         for child in list(u.getroot()):
@@ -245,7 +245,7 @@ class ItemsUI:
     @Slot()
     def define_item_labels(self):
         """
-        Set item labels based on what sset they are in and what set is active
+        Set item labels based on what set they are in and what set is active
         :return:
         """
         return

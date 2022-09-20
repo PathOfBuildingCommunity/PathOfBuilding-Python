@@ -68,9 +68,9 @@ def print_call_stack(full=False):
     if full:
         for line in lines:
             print(line.strip())
-            print()
     else:
         print(lines[-3].strip())
+    print("------\n")
 
 
 def _debug(*text):

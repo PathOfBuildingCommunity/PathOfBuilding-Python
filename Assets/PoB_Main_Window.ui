@@ -983,12 +983,39 @@ hr { height: 1px; border-width: 0; }
                  </widget>
                 </item>
                 <item>
-                 <widget class="QFrame" name="frame_SkillsRightBottom">
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
+                 <widget class="QListWidget" name="list_Skills">
+                  <property name="horizontalScrollBarPolicy">
+                   <enum>Qt::ScrollBarAlwaysOff</enum>
                   </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
+                  <property name="dragEnabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="dragDropMode">
+                   <enum>QAbstractItemView::InternalMove</enum>
+                  </property>
+                  <property name="defaultDropAction">
+                   <enum>Qt::MoveAction</enum>
+                  </property>
+                  <property name="horizontalScrollMode">
+                   <enum>QAbstractItemView::ScrollPerPixel</enum>
+                  </property>
+                  <property name="movement">
+                   <enum>QListView::Free</enum>
+                  </property>
+                  <property name="layoutMode">
+                   <enum>QListView::SinglePass</enum>
+                  </property>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="uniformItemSizes">
+                   <bool>true</bool>
+                  </property>
+                  <property name="batchSize">
+                   <number>3</number>
+                  </property>
+                  <property name="selectionRectVisible">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
