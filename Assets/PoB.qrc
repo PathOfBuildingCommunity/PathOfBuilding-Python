@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="Art">
+    <file>Icons/cross.png</file>
     <file>Icons/paper-plane.png</file>
     <file>Icons/paper-plane-return.png</file>
     <file>Icons/construction.png</file>

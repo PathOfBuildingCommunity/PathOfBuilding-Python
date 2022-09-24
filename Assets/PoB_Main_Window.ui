@@ -397,8 +397,11 @@ hr { height: 1px; border-width: 0; }
                   <height>311</height>
                  </rect>
                 </property>
+                <property name="focusPolicy">
+                 <enum>Qt::StrongFocus</enum>
+                </property>
                 <property name="styleSheet">
-                 <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
+                 <string notr="true"/>
                 </property>
                 <property name="editTriggers">
                  <set>QAbstractItemView::NoEditTriggers</set>
@@ -413,7 +416,10 @@ hr { height: 1px; border-width: 0; }
                  <enum>Qt::MoveAction</enum>
                 </property>
                 <property name="alternatingRowColors">
-                 <bool>true</bool>
+                 <bool>false</bool>
+                </property>
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::SingleSelection</enum>
                 </property>
                 <property name="horizontalScrollMode">
                  <enum>QAbstractItemView::ScrollPerPixel</enum>
@@ -425,7 +431,7 @@ hr { height: 1px; border-width: 0; }
                   <x>0</x>
                   <y>480</y>
                   <width>400</width>
-                  <height>165</height>
+                  <height>175</height>
                  </rect>
                 </property>
                 <property name="minimumSize">
@@ -441,7 +447,7 @@ hr { height: 1px; border-width: 0; }
                  <property name="geometry">
                   <rect>
                    <x>10</x>
-                   <y>65</y>
+                   <y>95</y>
                    <width>170</width>
                    <height>22</height>
                   </rect>
@@ -460,7 +466,7 @@ hr { height: 1px; border-width: 0; }
                  <property name="geometry">
                   <rect>
                    <x>10</x>
-                   <y>90</y>
+                   <y>125</y>
                    <width>170</width>
                    <height>22</height>
                   </rect>
@@ -473,25 +479,6 @@ hr { height: 1px; border-width: 0; }
                  </property>
                  <property name="buddy">
                   <cstring>spin_DefaultGemQuality</cstring>
-                 </property>
-                </widget>
-                <widget class="QLabel" name="label_ShowSupportGems">
-                 <property name="geometry">
-                  <rect>
-                   <x>10</x>
-                   <y>115</y>
-                   <width>170</width>
-                   <height>22</height>
-                  </rect>
-                 </property>
-                 <property name="text">
-                  <string>Sho&amp;w Support Gems</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="buddy">
-                  <cstring>combo_ShowSupportGems</cstring>
                  </property>
                 </widget>
                 <widget class="QComboBox" name="combo_SortByDPS">
@@ -508,9 +495,9 @@ hr { height: 1px; border-width: 0; }
                  <property name="geometry">
                   <rect>
                    <x>190</x>
-                   <y>65</y>
+                   <y>95</y>
                    <width>50</width>
-                   <height>22</height>
+                   <height>24</height>
                   </rect>
                  </property>
                  <property name="minimum">
@@ -524,23 +511,13 @@ hr { height: 1px; border-width: 0; }
                  <property name="geometry">
                   <rect>
                    <x>190</x>
-                   <y>90</y>
+                   <y>125</y>
                    <width>50</width>
-                   <height>22</height>
+                   <height>24</height>
                   </rect>
                  </property>
                  <property name="maximum">
                   <number>40</number>
-                 </property>
-                </widget>
-                <widget class="QComboBox" name="combo_ShowSupportGems">
-                 <property name="geometry">
-                  <rect>
-                   <x>190</x>
-                   <y>115</y>
-                   <width>200</width>
-                   <height>22</height>
-                  </rect>
                  </property>
                 </widget>
                 <widget class="QCheckBox" name="check_SortByDPS">
@@ -563,7 +540,7 @@ hr { height: 1px; border-width: 0; }
                  <property name="geometry">
                   <rect>
                    <x>10</x>
-                   <y>140</y>
+                   <y>150</y>
                    <width>196</width>
                    <height>20</height>
                   </rect>
@@ -579,7 +556,7 @@ hr { height: 1px; border-width: 0; }
                  <property name="geometry">
                   <rect>
                    <x>0</x>
-                   <y>40</y>
+                   <y>70</y>
                    <width>206</width>
                    <height>20</height>
                   </rect>
@@ -592,6 +569,35 @@ hr { height: 1px; border-width: 0; }
                  </property>
                  <property name="text">
                   <string>&amp;Match Gems to Character Level </string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_ShowSupportGems">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>40</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Sho&amp;w Support Gems</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>combo_ShowSupportGems</cstring>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_ShowSupportGems">
+                 <property name="geometry">
+                  <rect>
+                   <x>190</x>
+                   <y>40</y>
+                   <width>200</width>
+                   <height>22</height>
+                  </rect>
                  </property>
                 </widget>
                </widget>
@@ -742,7 +748,7 @@ hr { height: 1px; border-width: 0; }
                    </size>
                   </property>
                   <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
+                   <enum>QFrame::NoFrame</enum>
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
@@ -984,6 +990,9 @@ hr { height: 1px; border-width: 0; }
                 </item>
                 <item>
                  <widget class="QListWidget" name="list_Skills">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
                   </property>

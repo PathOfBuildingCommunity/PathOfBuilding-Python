@@ -46,6 +46,24 @@ empty_build = f'<PathOfBuilding>\
                sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="20" showSupportGemTypes="ALL"\
                showAltQualityGems="false">\
         <SkillSet id="0" title="Default">\
+            <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="SG1" \
+            enabled="true" slot="" mainActiveSkill="1">\
+				<Gem enableGlobal2="nil" skillMinionSkillCalcs="1" level="14" enableGlobal1="true" skillId="SummonSkeletons" skillMinionSkill="1" qualityId="Default" gemId="Metadata/Items/Gems/SkillGemSummonSkeletons" quality="0" enabled="true" count="nil" nameSpec="Summon Skeletons" skillMinion="RaisedSkeleton"/>\
+            </Skill>\
+            <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="SG3" \
+            enabled="true" slot="" mainActiveSkill="1">\
+                <Gem enableGlobal2="nil" level="18" enableGlobal1="true" skillId="WhirlingBlades" qualityId="Default" gemId="Metadata/Items/Gems/SkillGemWhirlingBlades" quality="0" enabled="true" count="nil" nameSpec="Whirling Blades"/>\
+            </Skill>\
+        </SkillSet>\
+        <SkillSet id="1" title="Default2">\
+            <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="SG2" \
+            enabled="true" slot="" mainActiveSkill="1">\
+                <Gem enableGlobal2="nil" level="18" enableGlobal1="true" skillId="ChargedAttack" qualityId="Default" gemId="Metadata/Items/Gems/SkillGemChargedAttack" quality="0" enabled="true" count="nil" nameSpec="Blade Flurry"/>\
+            </Skill>\
+            <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="SG4" \
+            enabled="true" slot="" mainActiveSkill="1">\
+				<Gem enableGlobal2="false" level="2" enableGlobal1="true" skillId="BloodRage" qualityId="Alternate1" gemId="Metadata/Items/Gems/SkillGemBloodRage" quality="20" enabled="true" count="1" nameSpec="Blood Rage" />\
+            </Skill>\
         </SkillSet>\
     </Skills>\
     <Tree activeSpec="1">\

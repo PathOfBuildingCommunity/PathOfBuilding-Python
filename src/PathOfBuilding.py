@@ -176,18 +176,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # set the ComboBox dropdown width.
         self.combo_Bandits.view().setMinimumWidth(self.combo_Bandits.minimumSizeHint().width())
 
-        # layout = QVBoxLayout()
-        # scroll_area = QScrollArea(self.frame_SkillsRightBottom)
-        # scroll_area.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        # scroll_area.setViewportMargins(0, 0, 0, 0)
-        # scroll_area.setWidgetResizable(True)
-        # self.scrollAreaSkillsContents = QLabel(alignment=Qt.AlignCenter)
-        # scroll_area.setWidget(self.scrollAreaSkillsContents)
-        # layout.addWidget(scroll_area)
-        # self.frame_SkillsRightBottom.setLayout(layout)
-        # layout = QVBoxLayout()
-        # self.scrollAreaSkillsContents.setLayout(layout)
-
         """
             End: Do what the QT Designer cannot yet do 
         """
@@ -607,7 +595,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def active_skill_changed(self, _skill_text):
         """
-        Actions when changing the socket group combo
+        Actions when changing combo_MainSkillActive
 
         :return: N/A
         """
@@ -621,10 +609,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param new_text: string: the combo's text
         :return: N/A
         """
+        self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
+
         self.combo_MainSkillActive.clear()
         self.combo_MainSkillActive.addItems(new_text.split(","))
         self.combo_MainSkillActive.view().setMinimumWidth(self.combo_MainSkillActive.minimumSizeHint().width())
         self.combo_MainSkillActive.setCurrentIndex(0)
+
+        self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
 
     def load_main_skill_combo(self, _list):
         """
@@ -635,11 +627,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         if len(_list) == 0:
             return
+        self.combo_MainSkill.currentTextChanged.disconnect(self.socket_group_text_changed)
+        self.combo_MainSkill.currentIndexChanged.disconnect(self.socket_group_index_changed)
+        self.combo_MainSkillActive.currentTextChanged.disconnect(self.active_skill_changed)
+
         current_index = self.combo_MainSkill.currentIndex()
         self.combo_MainSkill.clear()
         self.combo_MainSkill.addItems(_list)
         self.combo_MainSkill.view().setMinimumWidth(self.combo_MainSkill.minimumSizeHint().width())
         self.socket_group_index_changed(current_index)
+
+        self.combo_MainSkill.currentTextChanged.connect(self.socket_group_text_changed)
+        self.combo_MainSkill.currentIndexChanged.connect(self.socket_group_index_changed)
+        self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
 
     @Slot()
     def socket_group_index_changed(self, new_index):
@@ -656,10 +656,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 new_index = 0
         # Keep index in bounds for when socket groups are deleted
         new_index = min(new_index, self.combo_MainSkill.count() - 1)
-        # old_index = self.build.mainSocketGroup
         # must happen before call to change_active_socket_group_label
         self.build.mainSocketGroup = new_index
-        self.skills_ui.change_active_socket_group_label()
+        # ### self.skills_ui.change_active_socket_group_label()
         # this is ok as this function is only called *IF* the index changes
         self.combo_MainSkill.setCurrentIndex(new_index)
 

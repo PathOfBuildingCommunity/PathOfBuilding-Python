@@ -57,7 +57,7 @@ def index_exists(_list_or_dict, index):
         return False
 
 
-def print_call_stack(full=False):
+def print_call_stack(full=False, idx=-3):
     """
     Ahh debug. It's wonderful
     :param: full: Bool: True if you want the full stack trace,
@@ -66,10 +66,10 @@ def print_call_stack(full=False):
     """
     lines = traceback.format_stack()
     if full:
-        for line in lines:
+        for line in lines[:-2]:
             print(line.strip())
     else:
-        print(lines[-3].strip())
+        print(lines[idx].strip())
     print("------\n")
 
 
