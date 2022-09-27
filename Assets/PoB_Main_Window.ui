@@ -262,7 +262,7 @@ hr { height: 1px; border-width: 0; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>5</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -1922,12 +1922,6 @@ hr { height: 1px; border-width: 0; }
              </property>
              <item>
               <widget class="QFrame" name="frame_Config">
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
                <widget class="QGroupBox" name="grpbox_General">
                 <property name="geometry">
                  <rect>

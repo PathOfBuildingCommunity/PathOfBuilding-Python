@@ -469,10 +469,10 @@ class Build:
                     if this_group != current_socket_group_number:
                         check_socket_group(current_socket_group)
                         current_socket_group_number = this_group
-                        current_socket_group = empty_socket_group
+                        current_socket_group = ET.fromstring(empty_socket_group)
                         current_socket_group.set("slot", slot_map[item["inventoryId"]])
                         skill_set.append(current_socket_group)
-                    xml_gem = empty_gem
+                    xml_gem = ET.fromstring(empty_gem)
                     current_socket_group.append(xml_gem)
                     xml_gem.set("level", get_property(json_gem, "Level", "1"))
                     xml_gem.set("quality", get_property(json_gem, "Quality", "0"))

@@ -45,8 +45,8 @@ from constants import (
     program_title,
     resistance_penalty,
 )
-from pob_config import Config, _debug
-from ui_utils import FlowLayout, set_combo_index_by_data
+from pob_config import Config, _debug, index_exists
+from flow_layout import FlowLayout
 from build import Build
 
 from player_stats import PlayerStats
@@ -211,8 +211,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_Bandits.currentTextChanged.connect(self.bandits_changed)
         self.combo_classes.currentTextChanged.connect(self.class_changed)
         self.combo_ascendancy.currentTextChanged.connect(self.ascendancy_changed)
-        self.combo_MainSkill.currentTextChanged.connect(self.socket_group_text_changed)
-        self.combo_MainSkill.currentIndexChanged.connect(self.socket_group_index_changed)
+        self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
+        self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
         # ToDO: this could be currentIndexChanged
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
@@ -601,23 +601,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         pass
 
-    @Slot()
-    def socket_group_text_changed(self, new_text):
-        """
-        Fill out combo_MainSkillActive with the current text
-
-        :param new_text: string: the combo's text
-        :return: N/A
-        """
-        self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
-
-        self.combo_MainSkillActive.clear()
-        self.combo_MainSkillActive.addItems(new_text.split(","))
-        self.combo_MainSkillActive.view().setMinimumWidth(self.combo_MainSkillActive.minimumSizeHint().width())
-        self.combo_MainSkillActive.setCurrentIndex(0)
-
-        self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
-
     def load_main_skill_combo(self, _list):
         """
         Load the left hand socket group (under "Main Skill") controls
@@ -625,40 +608,70 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param _list: list: a list of socket group names as they appear in the skills_ui() socket group listview
         :return: N/A
         """
-        if len(_list) == 0:
-            return
-        self.combo_MainSkill.currentTextChanged.disconnect(self.socket_group_text_changed)
-        self.combo_MainSkill.currentIndexChanged.disconnect(self.socket_group_index_changed)
-        self.combo_MainSkillActive.currentTextChanged.disconnect(self.active_skill_changed)
-
-        current_index = self.combo_MainSkill.currentIndex()
+        # print("PoB.load_main_skill_combo", len(_list))
+        # clear before disconnecting.
+        # This helps for "Delete All" socket groups, resetting to a new build or loading a build.
         self.combo_MainSkill.clear()
-        self.combo_MainSkill.addItems(_list)
-        self.combo_MainSkill.view().setMinimumWidth(self.combo_MainSkill.minimumSizeHint().width())
-        self.socket_group_index_changed(current_index)
 
-        self.combo_MainSkill.currentTextChanged.connect(self.socket_group_text_changed)
-        self.combo_MainSkill.currentIndexChanged.connect(self.socket_group_index_changed)
+        self.combo_MainSkill.currentTextChanged.disconnect(self.main_skill_text_changed)
+        self.combo_MainSkill.currentIndexChanged.disconnect(self.main_skill_index_changed)
+
+        # backup the current index, reload combo with new values and reset to a valid current_index
+        # each line is a colon separated of socket group label and gem list
+        current_index = self.combo_MainSkill.currentIndex()
+        print("current_index ", current_index, self.combo_MainSkill.currentText(), self.build.mainSocketGroup)
+        for line in _list:
+            _label, _gem_list = line.split(":")
+            self.combo_MainSkill.addItem(_label, _gem_list)
+        self.combo_MainSkill.view().setMinimumWidth(self.combo_MainSkill.minimumSizeHint().width())
+        # In case the new list is shorter or empty
+        current_index = min(max(0, current_index), len(_list))
+
+        self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
+        self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
+
+        print("current_index ", current_index)
+        if current_index >= 0:
+            self.combo_MainSkill.setCurrentIndex(current_index)
+
+    @Slot()
+    def main_skill_text_changed(self, new_text):
+        """
+        Fill out combo_MainSkillActive with the current text of combo_MainSkill
+
+        :param new_text: string: the combo's text
+        :return: N/A
+        """
+        if self.combo_MainSkill.currentData() is None:
+            return
+        try:
+            self.combo_MainSkillActive.currentTextChanged.disconnect(self.active_skill_changed)
+        except RuntimeError:
+            pass
+
+        self.combo_MainSkillActive.clear()
+        self.combo_MainSkillActive.addItems(self.combo_MainSkill.currentData().split(", "))
+        self.combo_MainSkillActive.view().setMinimumWidth(self.combo_MainSkillActive.minimumSizeHint().width())
+        self.combo_MainSkillActive.setCurrentIndex(0)
+
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
 
     @Slot()
-    def socket_group_index_changed(self, new_index):
+    def main_skill_index_changed(self, new_index):
         """
-        Actions when changing the main skill combo
+        Actions when changing the main skill combo. Update the Skills tab.
 
         :param new_index: string: the combo's index
         :return: N/A
         """
+        print("current_index ", new_index, self.combo_MainSkill.currentText())
         if new_index == -1:
-            if 0 <= self.build.mainSocketGroup < self.combo_MainSkill.count():
-                new_index = self.build.mainSocketGroup
-            else:
-                new_index = 0
+            return
         # Keep index in bounds for when socket groups are deleted
         new_index = min(new_index, self.combo_MainSkill.count() - 1)
-        # must happen before call to change_active_socket_group_label
+        # must happen before call to update_socket_group_labels
         self.build.mainSocketGroup = new_index
-        # ### self.skills_ui.change_active_socket_group_label()
+        self.skills_ui.update_socket_group_labels()
         # this is ok as this function is only called *IF* the index changes
         self.combo_MainSkill.setCurrentIndex(new_index)
 
@@ -669,7 +682,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def update_status_bar(self, message=None):
         """
         Update the status bar. Use default text if no message is supplied.
-        This triggers when the message is set and when it is cleared afterwards.
+        This triggers when the message is set and when it is cleared after the time out.
 
         :param message: string: the message
         :return: N/A
@@ -677,7 +690,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # we only care for when the message clears
         if pob_debug and message is None or message == "":
             process = psutil.Process(os.getpid())
-            message = f"RAM memory {'{:.2f}'.format(process.memory_info().rss / 1024 ** 2)}MB used:"
+            message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1024 ** 2)}MB used:"
             self.statusbar_MainWindow.showMessage(message, 2000)
 
 

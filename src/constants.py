@@ -1,7 +1,6 @@
 """Enumeration Data for Path of Exile constants."""
 
 import enum
-import xml.etree.ElementTree as ET
 
 program_title = "Path of Building"
 
@@ -82,15 +81,12 @@ empty_build = f'<PathOfBuilding>\
     </Config>\
 </PathOfBuilding>'
 
-empty_socket_group = ET.fromstring(
-    '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
+empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
     enabled="true" slot="" mainActiveSkill="1"/>'
-)
 
-empty_gem = ET.fromstring(
-    '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default"\
+
+empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default"\
     gemId="" enabled="true" quality="0" count="1" nameSpec=""/>'
-)
 
 bandits = {
     "None": "2 Passives Points",

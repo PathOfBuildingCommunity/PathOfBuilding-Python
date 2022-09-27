@@ -9,7 +9,7 @@ from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, Q
 from PoB_Main_Window import Ui_MainWindow
 from constants import _VERSION, PlayerClasses
 from pob_config import Config, _debug
-from ui_utils import FlowLayout
+from flow_layout import FlowLayout
 
 
 class TreeUI:

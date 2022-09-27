@@ -61,8 +61,8 @@ class SkillsUI:
 
         # Button triggers are right to remain connected at all times as they are user initiated.
         self.win.btn_NewSocketGroup.clicked.connect(self.new_socket_group)
-        # self.win.btn_DeleteSocketGroup.clicked.connect(self.delete_socket_group)
-        # self.win.btn_DeleteAllSocketGroups.clicked.connect(self.delete_all_socket_groups)
+        self.win.btn_DeleteSocketGroup.clicked.connect(self.delete_socket_group)
+        self.win.btn_DeleteAllSocketGroups.clicked.connect(self.delete_all_socket_groups)
         # self.win.btn_SkillsManage.clicked.connect(self.manage_skill_sets)
 
         self.socket_group_to_be_moved = None
@@ -90,6 +90,8 @@ class SkillsUI:
         """
         self.xml_skills = _skills
         self.disconnect_skill_triggers()
+        # clean up
+        self.change_skill_set(-1)
 
         self.win.check_SortByDPS.setChecked(str_to_bool(self.xml_skills.get("sortGemsByDPS", "True")))
         self.win.check_MatchToLevel.setChecked(
@@ -103,7 +105,7 @@ class SkillsUI:
         self.win.spin_DefaultGemLevel.setValue(int(self.xml_skills.get("defaultGemLevel", 20)))
         self.win.spin_DefaultGemQuality.setValue(int(self.xml_skills.get("defaultGemQuality", 0)))
 
-        # self.win.combo_SkillSet.clear()
+        self.win.combo_SkillSet.clear()
         self.skill_sets_list.clear()
         _sets = self.xml_skills.findall("SkillSet")
         # if len(_sets) > 0:
@@ -150,488 +152,6 @@ class SkillsUI:
         self.xml_skills.set("defaultGemLevel", str(self.win.spin_DefaultGemLevel.value()))
         self.xml_skills.set("defaultGemQuality", str(self.win.spin_DefaultGemQuality.value()))
         return self.xml_skills
-
-    """
-    ################################################### SKILL SET ###################################################
-    """
-
-    def connect_skill_triggers(self):
-        """re-connect triggers"""
-        print("connect_skill_triggers", self.triggers_connected)
-        print_call_stack(idx=-4)
-        if self.triggers_connected:
-            # Don't re-connect
-            return
-        self.triggers_connected = True
-        # update the socket group label when something changes
-        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
-        self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
-        self.win.check_SocketGroupEnabled.stateChanged.connect(self.save_socket_group_settings)
-        self.win.check_SocketGroup_FullDPS.stateChanged.connect(self.save_socket_group_settings)
-        self.win.lineedit_SkillLabel.textChanged.connect(self.save_socket_group_settings)
-        self.win.combo_SocketedIn.currentIndexChanged.connect(self.save_socket_group_settings)
-
-    def disconnect_skill_triggers(self):
-        """disconnect skill orientated triggers when updating widgets"""
-        print("disconnect_skill_triggers", self.triggers_connected)
-        print_call_stack(idx=-4)
-        if not self.triggers_connected:
-            # Don't disconnect if not connected
-            return
-        self.triggers_connected = False
-        self.win.combo_SkillSet.currentIndexChanged.disconnect(self.change_skill_set)
-        self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
-        self.win.check_SocketGroupEnabled.stateChanged.disconnect(self.save_socket_group_settings)
-        self.win.check_SocketGroup_FullDPS.stateChanged.disconnect(self.save_socket_group_settings)
-        self.win.lineedit_SkillLabel.textChanged.disconnect(self.save_socket_group_settings)
-        self.win.combo_SocketedIn.currentIndexChanged.disconnect(self.save_socket_group_settings)
-
-    @Slot()
-    def change_skill_set(self, new_index):
-        """
-        This triggers when the user changes skill sets using the combobox. (self.load calls it too)
-        Will also activate if user changes skill sets in the manage dialog.
-
-        :param new_index: int: index of the current selection
-               -1 will occur during a combobox clear
-        :return: N/A
-        """
-        print("change_skill_set", new_index)
-        self.disconnect_skill_triggers()
-        self.xml_current_socket_group = None
-        self.clear_socket_group_settings()
-        self.win.list_SocketGroups.clear()
-        if 0 <= new_index < len(self.skill_sets_list):
-            self.show_skill_set(self.skill_sets_list[new_index])
-        self.connect_skill_triggers()
-
-    def show_skill_set(self, xml_set, _index=0):
-        """
-        Show a set of skills.
-
-        :param xml_set: ElementTree.Element. This set of skills
-        :param _index: set the current socket group active at the end of the function
-        :return: N/A
-        """
-        print("show_skill_set", _index, self.win.combo_SkillSet.currentText())
-        self.disconnect_skill_triggers()
-
-        self.xml_current_skill_set = xml_set
-        # Find all Socket Groups (<Skill> in the xml) and add them to the Socket Group list
-        xml_socket_groups = xml_set.findall("Skill")
-
-        # _debug("len, socket_groups", len(socket_groups), socket_groups)
-        for idx, xml_group in enumerate(xml_socket_groups):
-            self.win.list_SocketGroups.addItem(self.define_socket_group_label(None, xml_group))
-
-        # Load the left hand socket group (under "Main Skill") widgets
-        self.load_main_skill_combo()
-
-        self.connect_skill_triggers()
-        # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
-        self.win.list_SocketGroups.setCurrentRow(0)
-        # Use change_socket_group using mainActiveSkill -1
-
-    """
-    ################################################### SOCKET GROUP ###################################################
-    """
-
-    def define_socket_group_label(self, item=None, xml_group=None):
-        """
-        Setup the passed in QListWidgetItem's text depending on whether it's active or not, etc.
-
-        :param: item: QListWidgetItem:
-        :param: group: ElementTree.Element:
-        :return: QListWidgetItem
-        """
-        print("define_socket_group_label", item, xml_group)
-        print_call_stack()
-        if xml_group is None:
-            xml_group = self.xml_current_socket_group
-        if xml_group is None:
-            return
-        if item is None:
-            item = QListWidgetItem("")
-
-        _label = xml_group.get("label")
-        print(f"_label: '{_label}'")
-        # print_a_xml_element(xml_group)
-        # build label from active skills if needed
-        if _label == "":
-            # _debug("Socket group1", _label, group)
-            for xml_gem in xml_group.findall("Gem"):
-                # If this gem is not a support gem and is enabled (the far right widget)
-                if "Support" not in xml_gem.get("skillId") and str_to_bool(xml_gem.get("enabled")):
-                    _label += f'{xml_gem.get("nameSpec")}, '
-
-        if _label == "":
-            _label = "-no active skills-"
-        else:
-            _label = _label.rstrip(", ")
-
-        # set enabled based on the group control and whether there is an active skill in the group
-        enabled = str_to_bool(xml_group.get("enabled")) and (_label != "" or _label != "<no active skills>")
-        full_dps = str_to_bool(xml_group.get("includeInFullDPS", "False"))
-        active = self.win.combo_MainSkill.currentText() == _label and enabled
-
-        # get a copy of the label with out all the extra information or colours
-        item.setWhatsThis(_label)
-
-        _label += (
-            f"{not enabled and ' Disabled' or ''}"
-            f"{full_dps and html_colour_text('TANGLE', ' (FullDPS)') or ''}"
-            f"{active and html_colour_text('RELIC', ' (Active)') or ''}"
-        )
-
-        # change colour (dim) if it's disabled or no active skills
-        if enabled:
-            _label = html_colour_text("NORMAL", _label)
-        else:
-            _label = html_colour_text("LIGHTGRAY", _label)
-        print(_label)
-
-        item.setText(_label)
-        return item
-
-    def change_active_socket_group_labels(self):
-        """
-        This changes the text on the 'active' socket group list as the main skill combo (far left) is
-        changed. Called from MainWindow(), so may belong in that class.
-
-        :return: N/A
-        """
-        print("change_active_socket_group_labels")
-        if self.win.list_SocketGroups.count() == 0:
-            return
-        # print_a_xml_element(self.xml_current_socket_group)
-        for idx in range(self.win.list_SocketGroups.count()):
-            item = self.win.list_SocketGroups.item(idx)
-            # print("change_active_socket_group_labels", idx, item)
-            self.define_socket_group_label(item, self.xml_current_skill_set[idx])
-
-    @Slot()
-    def delete_socket_group(self):
-        """Delete a socket group"""
-        print("delete_socket_group")
-        self.disconnect_skill_triggers()
-        if self.xml_current_skill_set is not None and self.xml_current_socket_group is not None:
-            idx = self.win.list_SocketGroups.currentRow()
-            del self.xml_current_skill_set[idx]
-            if len(self.xml_current_skill_set.findall("Skill")) == 0:
-                # empty widgets
-                self.change_skill_set(-1)
-            else:
-                self.connect_skill_triggers()
-                # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
-                self.win.list_SocketGroups.setCurrentRow(min(idx, self.win.list_SocketGroups.count()))
-        self.connect_skill_triggers()
-
-    # @Slot()
-    # def delete_all_socket_groups(self, prompt=True):
-    #     """
-    #     Delete all socket groups.
-    #
-    #     :param prompt: boolean: If called programatically from importing a build, this should be false,
-    #                             elsewise prompt the user to be sure.
-    #     :return: N/A
-    #     """
-    #     print("delete_all_socket_groups")
-    #     if len(list(self.xml_current_skill_set)) == 0:
-    #         return
-    #     tr = self.pob_config.app.tr
-    #     if yes_no_dialog(self.win, tr("Delete all Socket Groups"), tr(" This action has no undo. Are you sure ?")):
-    #         for idx in range(len(list(self.xml_current_skill_set)) - 1, -1, -1):
-    #             del self.xml_current_skill_set[idx]
-    #         # clear the list widget
-    #         self.clear_socket_group_settings()
-    #         self.win.list_SocketGroups.clear()
-
-    @Slot()
-    def new_socket_group(self):
-        """Create a new socket group. Actions for when the new socket group button is pressed."""
-        print("new_socket_group")
-        # Add new group to xml and Socket Group list, and then show the update
-        self.xml_current_skill_set.append(empty_socket_group)
-        idx = len(self.xml_current_skill_set) - 1
-        self.win.list_SocketGroups.addItem(self.define_socket_group_label(xml_group=self.xml_current_skill_set[idx]))
-        self.change_active_socket_group_labels()
-        # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
-        self.win.list_SocketGroups.setCurrentRow(idx)
-
-    def load_main_skill_combo(self):
-        """
-        Load the left hand socket group (under "Main Skill") controls
-
-        :return: N/A
-        """
-        self.win.load_main_skill_combo(
-            # whatsThis has the un-coloured/un-altered text
-            [self.win.list_SocketGroups.item(i).whatsThis() for i in range(self.win.list_SocketGroups.count())]
-        )
-
-    def clear_socket_group_settings(self):
-        """
-        Clear all the widgets on the top right of the Skills tab.
-
-        :return: N/A
-        """
-        self.disconnect_skill_triggers()
-        self.clear_gem_ui_list()
-        self.win.combo_MainSkill.clear()
-        self.win.combo_SocketedIn.setCurrentIndex(-1)
-        self.win.lineedit_SkillLabel.setText("")
-        self.win.check_SocketGroupEnabled.setChecked(False)
-        self.win.check_SocketGroup_FullDPS.setChecked(False)
-        self.connect_skill_triggers()
-
-    @Slot()
-    def change_socket_group(self, _new_group):
-        """
-        This triggers when the user changes an entry on the list of skills.
-
-        :param _new_group: int: row number.
-               -1 will occur during a combobox clear
-        :return: N/A
-        """
-        print("change_socket_group", _new_group)
-        self.disconnect_skill_triggers()
-
-        # Set mainActiveSkill +1
-
-        # Clean up and save objects. If _index = -1, then this is the only thing emptying these widgets
-        if index_exists(self.xml_current_skill_set, _new_group):
-            self.clear_socket_group_settings()
-            self.load_socket_group(_new_group)
-
-    def load_socket_group(self, _index):
-        """
-        Load a socket group into the UI, unloading the previous one.
-
-        :param _index: index to display, 0 based integer
-        :return: N/A
-        """
-        print("load_socket_group")
-        self.disconnect_skill_triggers()
-
-        if index_exists(self.xml_current_skill_set, _index):
-            # assign and setup new group
-            self.xml_current_socket_group = self.xml_current_skill_set[_index]
-            if self.xml_current_socket_group is not None:
-                self.build.mainSocketGroup = _index + 1
-                self.win.lineedit_SkillLabel.setText(self.xml_current_socket_group.get("label"))
-                set_combo_index_by_text(self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot"))
-                self.win.check_SocketGroupEnabled.setChecked(
-                    str_to_bool(self.xml_current_socket_group.get("enabled", "False"))
-                )
-                self.win.check_SocketGroup_FullDPS.setChecked(
-                    str_to_bool(self.xml_current_socket_group.get("includeInFullDPS", "False"))
-                )
-                for idx, gem in enumerate(self.xml_current_socket_group.findall("Gem")):
-                    self.create_gem_ui(idx, gem)
-                # Create an empty gem at the end
-                self.create_gem_ui(len(self.gem_ui_list), None)
-
-        self.connect_skill_triggers()
-
-    @Slot()
-    def save_socket_group_settings(self, info):
-        """
-        Actions for when the socket group settings are altered. Save to xml. Do *NOT* call internally.
-
-        :param: Any: Some sort of info for a widget. EG: checked state for a checkBox, text for a comboBox.
-        :return: N/A
-        """
-        if self.xml_current_socket_group is not None:
-            print(f"save_socket_group_settings, {type(info)}, '{info}'")
-            # self.disconnect_skill_triggers()
-            self.xml_current_socket_group.set("slot", self.win.combo_SocketedIn.currentText())
-            self.xml_current_socket_group.set("label", self.win.lineedit_SkillLabel.text())
-            self.xml_current_socket_group.set("enabled", bool_to_str(self.win.check_SocketGroupEnabled.isChecked()))
-            self.xml_current_socket_group.set(
-                "includeInFullDPS", bool_to_str(self.win.check_SocketGroup_FullDPS.isChecked())
-            )
-            item = self.win.list_SocketGroups.currentItem()
-            # stop a recursion error as save_socket_group_settings is called from define_socket_group_label as well
-            if info is not None:
-                self.define_socket_group_label(item)
-            self.load_main_skill_combo()
-
-    @Slot()
-    def socket_groups_rows_moved(self, parent, start, end, destination, row):
-        """
-        Respond to a socket group being moved, by moving it's matching xml element. It's called 4 times.
-
-        :param parent: QModelIndex: not Used.
-        :param start: int: where the row was moved from.
-        :param end: int: not Used. It's the same as start as multi-selection is not allowed.
-        :param destination: QModelIndex: not Used.
-        :param row: int: The destination row.
-        :return: N/A
-        """
-        # if not None, do move in current_xml_group and set self.socket_group_to_be_moved = None
-        # this way the last three are ignored.
-        if self.socket_group_to_be_moved is None:
-            return
-        # Do move
-        # reset to none, this one we only respond to the first call of the four.
-        self.socket_group_to_be_moved = None
-
-    @Slot()
-    def socket_groups_rows_about_to_be_moved(
-        self, source_parent, source_start, source_end, destination_parent, destination_row
-    ):
-        """
-        Setup for a socket group move. It's called 4 times.
-
-        :param source_parent: QModelIndex: Used to notify the
-        :param source_start: int: not Used
-        :param source_end: int: not Used
-        :param destination_parent: QModelIndex: not Used
-        :param destination_row: int: not Used
-        :return: N/A
-        """
-        self.socket_group_to_be_moved = source_parent
-
-    """
-    ################################################### SOCKET GROUP ###################################################
-    """
-
-    def gem_ui_notify(self, item):
-        """
-        React to a wigdet change from an instance of GemUI(), where that widget is not the remove button.
-
-        :param item: the triggering WidgetItem from list_Skills
-        :return: N/A
-        """
-        row = self.win.list_Skills.row(item)
-        gem_ui = self.win.list_Skills.itemWidget(item)
-        print("gem_ui_notify", item, row, gem_ui)
-        if (
-            gem_ui.xml_gem is not None
-            and gem_ui.skill_id != ""
-            and gem_ui.xml_gem not in self.xml_current_socket_group.findall("Gem")
-        ):
-            self.xml_current_socket_group.append(gem_ui.xml_gem)
-            print(f"gem_ui_notify: {gem_ui.skill_id} not found, adding.")
-            # Create an empty gem at the end
-            self.create_gem_ui(len(self.gem_ui_list), None)
-
-    def create_gem_ui(self, index, gem=None):
-        """
-        Add a new row to the Items list
-
-        :param index: int: number of this gem in this skill group
-        :param gem: Item(): The item to be added
-        :return:
-        """
-        # print("create_gem_ui", index, gem)
-        self.disconnect_skill_triggers()
-        if index_exists(self.gem_ui_list, index):
-            self.gem_ui_list[index].load(gem)
-        else:
-            item = QListWidgetItem()
-            self.win.list_Skills.addItem(item)
-            gem_ui = GemUI(item, self.gems_by_name_or_id, self.gem_ui_notify, gem)
-            gem_ui.fill_gem_list(self.json_gems, self.win.combo_ShowSupportGems.currentText())
-            item.setSizeHint(gem_ui.sizeHint())
-            self.win.list_Skills.setItemWidget(item, gem_ui)
-
-            # this one is for deleting the gem
-            gem_ui.btn_GemRemove.clicked.connect(lambda checked: self.gem_remove_checkbox_selected(item, gem_ui))
-
-        self.connect_skill_triggers()
-
-    # def create_gem_ui1(self, index, gem=None):
-    #     """
-    #     Create a new GemUI class and fill it. These are the widgets set on the right
-    #
-    #     :param index: int: number of this gem in this skill group
-    #     :param gem: the xml element if known
-    #     :return: N/A
-    #     """
-    #     _debug("create_gem_ui", index, gem)
-    #     # print_call_stack(True)
-    #     # In most cases this will be the first one autocreated
-    #     if index_exists(self.gem_ui_list, index):
-    #         self.gem_ui_list[index].load(gem)
-    #     else:
-    #         ui = GemUI(
-    #             index,
-    #             self.win.scrollAreaSkillsContents,
-    #             self.gems_by_name_or_id,
-    #             self.update_socket_group_from_skills_list,
-    #             gem,
-    #         )
-    #         self.gem_ui_list[index] = ui
-    #         # self.gem_ui_list[index] = GemUI(index, self.win.scrollAreaSkillsContents, self.gems_by_name_or_id, gem)
-    #         # self.current_socket_group.append(gem)
-    #
-    #         # ui: GemUI = self.gem_ui_list[index]
-    #         ui.fill_gem_list(self.json_gems, self.win.combo_ShowSupportGems.currentText())
-    #
-    #         # # this one is for deleting the gem
-    #         # ui.check_GemRemove.stateChanged.connect(lambda checked: self.gem_remove_checkbox_selected(index))
-    #         ui.btn_GemRemove.clicked.connect(lambda checked: self.gem_remove_checkbox_selected(index))
-    #
-    #         # # update the socket label when something changes
-    #         # ui.combo_GemList.currentTextChanged.connect(lambda checked: self.update_socket_group_from_skills_list(index))
-    #         # ui.check_GemEnabled.stateChanged.connect(lambda checked: self.save_socket_group_settings(index))
-    #     return self.gem_ui_list[index]
-
-    def clear_gem_ui_list(self):
-        """
-        Clear the gem_ui_list, destroying the UI elements as we go.
-
-        :return: N/A
-        """
-        print(
-            f"clear_gem_ui_list, len(self.gem_ui_list)={len(self.gem_ui_list)},"
-            f"self.win.list_Skills.count()={self.win.list_Skills.count()}"
-        )
-        for idx in range(self.win.list_Skills.count()):
-            item = self.win.list_Skills.item(idx)
-            gem_ui = self.win.list_Skills.itemWidget(item)
-            print("clear_gem_ui_list", idx)
-            if gem_ui.gem is not None:
-                # Don't notify, cause that cause a loop
-                gem_ui.save(False)
-            # del gem_ui
-        # self.gem_ui_list.clear()
-        self.win.list_Skills.clear()
-
-    # def remove_gem_ui(self, index):
-    #     """
-    #     Remove a GemUI class. TBA on full actions needed.
-    #
-    #     :param index: int: index of frame/GemUI() to remove
-    #     :return:
-    #     """
-    #     print("remove_gem_ui")
-    #     if index_exists(self.gem_ui_list, index):
-    #         # self.current_skill_set[_index].remove(self.gem_ui_list[index].gem)
-    #         del self.gem_ui_list[index]
-    #     # update all gem_ui's index in case the one being deleted was in the middle
-    #     for idx, key in enumerate(self.gem_ui_list.keys()):
-    #         self.gem_ui_list[key].index = idx
-
-    @Slot()
-    def gem_remove_checkbox_selected(self, item, ui):
-        """
-        Actions required for selecting the red cross to the left of the GemUI().
-
-        :param item: the row passed through to lambda
-        :param ui: the GemUI passed through to lambda
-        :return: N/A
-        """
-        print("gem_remove_checkbox_selected", item, ui)
-        row = self.win.list_Skills.row(item)
-        self.win.list_Skills.takeItem(row)
-        # if _key in self.gem_ui_list.keys():
-        #     ui = self.win.list_Skills.itemWidget(item)
-        #     print("gem_ui_notify", row, ui)
-        #     self.remove_gem_ui(_key)
-        if self.win.list_Skills.count() == 0:
-            self.create_gem_ui(0)
 
     def load_gems_json(self):
         """
@@ -709,6 +229,455 @@ class SkillsUI:
         return gems
 
     # load_gems_json
+    """
+    ################################################### SKILL SET ###################################################
+    """
+
+    def connect_skill_triggers(self):
+        """re-connect triggers"""
+        # print("connect_skill_triggers", self.triggers_connected)
+        # print_call_stack(idx=-4)
+        if self.triggers_connected:
+            # Don't re-connect
+            return
+        self.triggers_connected = True
+        # update the socket group label when something changes
+        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
+        self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
+        self.win.check_SocketGroupEnabled.stateChanged.connect(self.save_socket_group_settings)
+        self.win.check_SocketGroup_FullDPS.stateChanged.connect(self.save_socket_group_settings)
+        self.win.lineedit_SkillLabel.textChanged.connect(self.save_socket_group_settings)
+        self.win.combo_SocketedIn.currentIndexChanged.connect(self.save_socket_group_settings)
+
+    def disconnect_skill_triggers(self):
+        """disconnect skill orientated triggers when updating widgets"""
+        # print("disconnect_skill_triggers", self.triggers_connected)
+        # print_call_stack(idx=-4)
+        if not self.triggers_connected:
+            # Don't disconnect if not connected
+            return
+        self.triggers_connected = False
+        self.win.combo_SkillSet.currentIndexChanged.disconnect(self.change_skill_set)
+        self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
+        self.win.check_SocketGroupEnabled.stateChanged.disconnect(self.save_socket_group_settings)
+        self.win.check_SocketGroup_FullDPS.stateChanged.disconnect(self.save_socket_group_settings)
+        self.win.lineedit_SkillLabel.textChanged.disconnect(self.save_socket_group_settings)
+        self.win.combo_SocketedIn.currentIndexChanged.disconnect(self.save_socket_group_settings)
+
+    @Slot()
+    def change_skill_set(self, new_index):
+        """
+        This triggers when the user changes skill sets using the combobox. (self.load calls it too)
+        Will also activate if user changes skill sets in the manage dialog.
+
+        :param new_index: int: index of the current selection
+               -1 will occur during a combobox clear, or some internal calls
+        :return: N/A
+        """
+        # print("change_skill_set", new_index)
+        self.disconnect_skill_triggers()
+        self.xml_current_socket_group = None
+        self.clear_socket_group_settings()
+        self.win.list_SocketGroups.clear()
+        if 0 <= new_index < len(self.skill_sets_list):
+            self.show_skill_set(self.skill_sets_list[new_index])
+        self.connect_skill_triggers()
+
+    def show_skill_set(self, xml_set, _index=0):
+        """
+        Show a set of skills.
+
+        :param xml_set: ElementTree.Element. This set of skills
+        :param _index: set the current socket group active at the end of the function
+        :return: N/A
+        """
+        # print("show_skill_set", _index, self.win.combo_SkillSet.currentText())
+        self.disconnect_skill_triggers()
+
+        self.xml_current_skill_set = xml_set
+        # Find all Socket Groups (<Skill> in the xml) and add them to the Socket Group list
+        xml_socket_groups = xml_set.findall("Skill")
+
+        for idx, xml_group in enumerate(xml_socket_groups):
+            self.win.list_SocketGroups.addItem(self.define_socket_group_label(None, xml_group))
+
+        # Load the left hand socket group (under "Main Skill") widgets
+        self.load_main_skill_combo()
+
+        self.connect_skill_triggers()
+        # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
+        self.win.list_SocketGroups.setCurrentRow(0)
+        # Use change_socket_group using mainActiveSkill -1
+
+    """
+    ################################################### SOCKET GROUP ###################################################
+    """
+
+    def define_socket_group_label(self, item=None, xml_group=None):
+        """
+        Setup the passed in QListWidgetItem's text depending on whether it's active or not, etc.
+
+        :param: item: QListWidgetItem:
+        :param: group: ElementTree.Element:
+        :return: QListWidgetItem
+        """
+        # print("define_socket_group_label", item, xml_group)
+        if xml_group is None:
+            xml_group = self.xml_current_socket_group
+        if xml_group is None:
+            return
+        if item is None:
+            item = QListWidgetItem("")
+
+        _label = xml_group.get("label")
+        # build a gem list from active skills if needed
+        _gem_list = ""
+        for xml_gem in xml_group.findall("Gem"):
+            # If this gem is not a support gem and is enabled (the far right widget)
+            if "Support" not in xml_gem.get("skillId") and str_to_bool(xml_gem.get("enabled")):
+                _gem_list += f'{xml_gem.get("nameSpec")}, '
+
+        if _gem_list == "":
+            _gem_list = "-no active skills-"
+        else:
+            _gem_list = _gem_list.rstrip(", ")
+        if _label == "":
+            _label = _gem_list
+
+        # set enabled based on the group control and whether there is an active skill in the group
+        enabled = str_to_bool(xml_group.get("enabled")) and not (_label == "" or _label == "-no active skills-")
+        full_dps = str_to_bool(xml_group.get("includeInFullDPS", "False"))
+        active = self.win.combo_MainSkill.currentText() == _label and enabled
+
+        # get a copy of the label with out all the extra information or colours
+        item.setWhatsThis(f"{_label}:{_gem_list}")
+
+        _label += (
+            f"{not enabled and ' Disabled' or ''}"
+            f"{full_dps and html_colour_text('TANGLE', ' (FullDPS)') or ''}"
+            f"{active and html_colour_text('RELIC', ' (Active)') or ''}"
+        )
+
+        # change colour (dim) if it's disabled or no active skills
+        if enabled:
+            _label = html_colour_text("NORMAL", _label)
+        else:
+            _label = html_colour_text("LIGHTGRAY", _label)
+        # print(_label)
+
+        item.setText(_label)
+        return item
+
+    def update_socket_group_labels(self):
+        """
+        This changes the text on the 'active' socket group list as the main skill combo (far left) is
+        changed. Called from MainWindow(), so may belong in that class.
+
+        :return: N/A
+        """
+        # print("update_socket_group_labels")
+        if self.win.list_SocketGroups.count() == 0:
+            return
+        # print_a_xml_element(self.xml_current_socket_group)
+        for idx in range(self.win.list_SocketGroups.count()):
+            item = self.win.list_SocketGroups.item(idx)
+            # print("update_socket_group_labels", idx, item)
+            self.define_socket_group_label(item, self.xml_current_skill_set[idx])
+
+    @Slot()
+    def delete_socket_group(self):
+        """Delete a socket group"""
+        # print("delete_socket_group")
+        self.disconnect_skill_triggers()
+        if self.xml_current_skill_set is not None and self.xml_current_socket_group is not None:
+            idx = self.win.list_SocketGroups.currentRow()
+            self.win.list_SocketGroups.takeItem(idx)
+            del self.xml_current_skill_set[idx]
+            if len(self.xml_current_skill_set.findall("Skill")) == 0:
+                # empty all skill/socket widgets
+                self.change_skill_set(-1)
+            else:
+                self.connect_skill_triggers()
+                # Trigger the filling out of the RHS UI elements using change_socket_group -> load_socket_group
+                self.win.list_SocketGroups.setCurrentRow(min(idx, self.win.list_SocketGroups.count()))
+        self.update_socket_group_labels()
+        self.load_main_skill_combo()
+        self.connect_skill_triggers()
+
+    @Slot()
+    def delete_all_socket_groups(self, prompt=True):
+        """
+        Delete all socket groups.
+
+        :param prompt: boolean: If called programatically from importing a build, this should be false,
+                                elsewise prompt the user to be sure.
+        :return: N/A
+        """
+        # print("delete_all_socket_groups")
+        if len(list(self.xml_current_skill_set)) == 0:
+            return
+        tr = self.pob_config.app.tr
+        if yes_no_dialog(self.win, tr("Delete all Socket Groups"), tr(" This action has no undo. Are you sure ?")):
+            self.disconnect_skill_triggers()
+            for idx in range(len(list(self.xml_current_skill_set)) - 1, -1, -1):
+                del self.xml_current_skill_set[idx]
+            # empty all skill/socket widgets
+            self.change_skill_set(-1)
+            self.load_main_skill_combo()
+            self.connect_skill_triggers()
+
+    @Slot()
+    def new_socket_group(self):
+        """Create a new socket group. Actions for when the new socket group button is pressed."""
+        # print("new_socket_group")
+        # Add new group to xml and Socket Group list, and then show the update
+        self.xml_current_skill_set.append(ET.fromstring(empty_socket_group))
+        idx = len(self.xml_current_skill_set) - 1
+        self.win.list_SocketGroups.addItem(self.define_socket_group_label(xml_group=self.xml_current_skill_set[idx]))
+        self.update_socket_group_labels()
+        # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
+        self.win.list_SocketGroups.setCurrentRow(idx)
+
+    def load_main_skill_combo(self):
+        """
+        Load the left hand socket group (under "Main Skill") controls
+
+        :return: N/A
+        """
+        self.win.load_main_skill_combo(
+            # whatsThis has the un-coloured/un-altered text
+            [self.win.list_SocketGroups.item(i).whatsThis() for i in range(self.win.list_SocketGroups.count())]
+        )
+
+    def clear_socket_group_settings(self):
+        """
+        Clear all the widgets on the top right of the Skills tab.
+
+        :return: N/A
+        """
+        self.disconnect_skill_triggers()
+        self.clear_gem_ui_list()
+        self.win.combo_SocketedIn.setCurrentIndex(-1)
+        self.win.lineedit_SkillLabel.setText("")
+        self.win.check_SocketGroupEnabled.setChecked(False)
+        self.win.check_SocketGroup_FullDPS.setChecked(False)
+        self.connect_skill_triggers()
+
+    @Slot()
+    def change_socket_group(self, _new_group):
+        """
+        This triggers when the user changes an entry on the list of skills.
+
+        :param _new_group: int: row number.
+               -1 will occur during a combobox clear
+        :return: N/A
+        """
+        # print("change_socket_group", _new_group)
+        self.disconnect_skill_triggers()
+
+        # Set mainActiveSkill +1
+
+        # Clean up and save objects. If _index = -1, then this is the only thing emptying these widgets
+        if index_exists(self.xml_current_skill_set, _new_group):
+            self.clear_socket_group_settings()
+            self.load_socket_group(_new_group)
+
+    def load_socket_group(self, _index):
+        """
+        Load a socket group into the UI, unloading the previous one.
+
+        :param _index: index to display, 0 based integer
+        :return: N/A
+        """
+        # print("load_socket_group")
+        self.disconnect_skill_triggers()
+
+        if index_exists(self.xml_current_skill_set, _index):
+            # assign and setup new group
+            self.xml_current_socket_group = self.xml_current_skill_set[_index]
+            if self.xml_current_socket_group is not None:
+                self.build.mainSocketGroup = _index + 1
+                self.win.lineedit_SkillLabel.setText(self.xml_current_socket_group.get("label"))
+                set_combo_index_by_text(self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot"))
+                self.win.check_SocketGroupEnabled.setChecked(
+                    str_to_bool(self.xml_current_socket_group.get("enabled", "False"))
+                )
+                self.win.check_SocketGroup_FullDPS.setChecked(
+                    str_to_bool(self.xml_current_socket_group.get("includeInFullDPS", "False"))
+                )
+                for idx, gem in enumerate(self.xml_current_socket_group.findall("Gem")):
+                    self.create_gem_ui(idx, gem)
+                # Create an empty gem at the end
+                self.create_gem_ui(len(self.gem_ui_list), None)
+
+        self.connect_skill_triggers()
+
+    @Slot()
+    def save_socket_group_settings(self, info):
+        """
+        Actions for when the socket group settings are altered. Save to xml. Do *NOT* call internally.
+
+        :param: Any: Some sort of info for a widget. EG: checked state for a checkBox, text for a comboBox.
+        :return: N/A
+        """
+        if self.xml_current_socket_group is not None:
+            # print(f"save_socket_group_settings, {type(info)}, '{info}'")
+            self.xml_current_socket_group.set("slot", self.win.combo_SocketedIn.currentText())
+            self.xml_current_socket_group.set("label", self.win.lineedit_SkillLabel.text())
+            self.xml_current_socket_group.set("enabled", bool_to_str(self.win.check_SocketGroupEnabled.isChecked()))
+            self.xml_current_socket_group.set(
+                "includeInFullDPS", bool_to_str(self.win.check_SocketGroup_FullDPS.isChecked())
+            )
+            item = self.win.list_SocketGroups.currentItem()
+            # stop a recursion error as save_socket_group_settings is called from define_socket_group_label as well
+            if info is not None:
+                self.define_socket_group_label(item)
+            self.load_main_skill_combo()
+
+    @Slot()
+    def socket_groups_rows_moved(self, parent, start, end, destination, row):
+        """
+        Respond to a socket group being moved, by moving it's matching xml element. It's called 4 times.
+
+        :param parent: QModelIndex: not Used.
+        :param start: int: where the row was moved from.
+        :param end: int: not Used. It's the same as start as multi-selection is not allowed.
+        :param destination: QModelIndex: not Used.
+        :param row: int: The destination row.
+        :return: N/A
+        """
+        # if not None, do move in current_xml_group and set self.socket_group_to_be_moved = None
+        # this way the last three are ignored.
+        if self.socket_group_to_be_moved is None:
+            return
+        # Do move
+        # reset to none, this one we only respond to the first call of the four.
+        self.socket_group_to_be_moved = None
+
+    @Slot()
+    def socket_groups_rows_about_to_be_moved(
+        self, source_parent, source_start, source_end, destination_parent, destination_row
+    ):
+        """
+        Setup for a socket group move. It's called 4 times.
+
+        :param source_parent: QModelIndex: Used to notify the
+        :param source_start: int: not Used
+        :param source_end: int: not Used
+        :param destination_parent: QModelIndex: not Used
+        :param destination_row: int: not Used
+        :return: N/A
+        """
+        self.socket_group_to_be_moved = source_parent
+
+    """
+    ################################################### GEM UI ###################################################
+    """
+
+    def gem_ui_notify(self, item):
+        """
+        React to a wigdet change from an instance of GemUI(), where that widget is not the remove button.
+
+        :param item: the triggering WidgetItem from list_Skills
+        :return: N/A
+        """
+        row = self.win.list_Skills.row(item)
+        gem_ui = self.win.list_Skills.itemWidget(item)
+        # print("gem_ui_notify", item, row, gem_ui)
+        if (
+            gem_ui.xml_gem is not None
+            and gem_ui.skill_id != ""
+            and gem_ui.xml_gem not in self.xml_current_socket_group.findall("Gem")
+        ):
+            self.xml_current_socket_group.append(gem_ui.xml_gem)
+            # print(f"gem_ui_notify: {gem_ui.skill_id} not found, adding.")
+            # Create an empty gem at the end
+            self.create_gem_ui(len(self.gem_ui_list), None)
+        self.update_socket_group_labels()
+        self.load_main_skill_combo()
+
+    def create_gem_ui(self, index, gem=None):
+        """
+        Add a new row to the Items list
+
+        :param index: int: number of this gem in this skill group
+        :param gem: Item(): The item to be added
+        :return:
+        """
+        # print("create_gem_ui", index, gem)
+        self.disconnect_skill_triggers()
+        # if index_exists(self.gem_ui_list, index):
+        #     self.gem_ui_list[index].load(gem)
+        # else:
+        item = QListWidgetItem()
+        self.win.list_Skills.addItem(item)
+        gem_ui = GemUI(item, self.gems_by_name_or_id, self.gem_ui_notify, gem)
+        gem_ui.fill_gem_list(self.json_gems, self.win.combo_ShowSupportGems.currentText())
+        item.setSizeHint(gem_ui.sizeHint())
+        self.win.list_Skills.setItemWidget(item, gem_ui)
+
+        # this one is for deleting the gem
+        gem_ui.btn_GemRemove.clicked.connect(lambda checked: self.gem_remove_checkbox_selected(item, gem_ui))
+
+        self.connect_skill_triggers()
+
+    def clear_gem_ui_list(self):
+        """
+        Clear the gem_ui_list, destroying the UI elements as we go.
+
+        :return: N/A
+        """
+        # print(
+        #     f"clear_gem_ui_list, len(self.gem_ui_list)={len(self.gem_ui_list)},"
+        #     f"self.win.list_Skills.count()={self.win.list_Skills.count()}"
+        # )
+        for idx in range(self.win.list_Skills.count()):
+            item = self.win.list_Skills.item(idx)
+            gem_ui = self.win.list_Skills.itemWidget(item)
+            # print("clear_gem_ui_list", idx)
+            if gem_ui.gem is not None:
+                # Don't notify, cause that cause a loop
+                gem_ui.save(False)
+            # del gem_ui
+        # self.gem_ui_list.clear()
+        self.win.list_Skills.clear()
+
+    # def remove_gem_ui(self, index):
+    #     """
+    #     Remove a GemUI class. TBA on full actions needed.
+    #
+    #     :param index: int: index of frame/GemUI() to remove
+    #     :return:
+    #     """
+    #     print("remove_gem_ui")
+    #     if index_exists(self.gem_ui_list, index):
+    #         # self.current_skill_set[_index].remove(self.gem_ui_list[index].gem)
+    #         del self.gem_ui_list[index]
+    #     # update all gem_ui's index in case the one being deleted was in the middle
+    #     for idx, key in enumerate(self.gem_ui_list.keys()):
+    #         self.gem_ui_list[key].index = idx
+
+    @Slot()
+    def gem_remove_checkbox_selected(self, item, gem_ui):
+        """
+        Actions required for selecting the red cross to the left of the GemUI().
+
+        :param item: the row passed through to lambda
+        :param gem_ui: the GemUI passed through to lambda
+        :return: N/A
+        """
+        print("gem_remove_checkbox_selected", item, gem_ui)
+        row = self.win.list_Skills.row(item)
+        self.win.list_Skills.takeItem(row)
+        xml_gem = gem_ui.xml_gem
+        if self.xml_current_socket_group is not None and xml_gem in self.xml_current_socket_group.findall("Gem"):
+            # print("gem_ui_notify", row, ui)
+            # self.remove_gem_ui(_key)
+            self.xml_current_socket_group.remove(xml_gem)
+        if self.win.list_Skills.count() == 0:
+            self.create_gem_ui(0)
+        self.update_socket_group_labels()
+        self.load_main_skill_combo()
 
 
 # def test() -> None:
