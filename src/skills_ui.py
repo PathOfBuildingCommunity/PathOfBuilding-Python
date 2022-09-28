@@ -5,7 +5,7 @@ This Class manages all the UI controls and takes ownship of the controls on the 
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from qdarktheme.qtpy.QtCore import Slot
+from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QListWidgetItem
 
 from PoB_Main_Window import Ui_MainWindow
@@ -66,11 +66,15 @@ class SkillsUI:
         # self.win.btn_SkillsManage.clicked.connect(self.manage_skill_sets)
 
         self.socket_group_to_be_moved = None
-        self.win.list_SocketGroups.model().rowsMoved.connect(self.socket_groups_rows_moved)
-        self.win.list_SocketGroups.model().rowsAboutToBeMoved.connect(self.socket_groups_rows_about_to_be_moved)
-        # self.skill_gem_to_be_moved = None
-        # self.win.list_SocketGroups.model().rowsMoved.connect(self.skill_gem_rows_moved)
-        # self.win.list_SocketGroups.model().rowsAboutToBeMoved.connect(self.skill_gem_rows_about_to_be_moved)
+        self.win.list_SocketGroups.model().rowsMoved.connect(self.socket_groups_rows_moved, Qt.QueuedConnection)
+        self.win.list_SocketGroups.model().rowsAboutToBeMoved.connect(
+            self.socket_groups_rows_about_to_be_moved, Qt.QueuedConnection
+        )
+        self.skill_gem_to_be_moved = None
+        self.win.list_Skills.model().rowsMoved.connect(self.skill_gem_rows_moved, Qt.QueuedConnection)
+        self.win.list_Skills.model().rowsAboutToBeMoved.connect(
+            self.skill_gem_rows_about_to_be_moved, Qt.QueuedConnection
+        )
 
         # Do NOT turn on skill triggers here
 
@@ -80,6 +84,16 @@ class SkillsUI:
     #         if self.ascendancy.value is not None
     #         else "\n"
     #     )
+
+    @property
+    def activeSkillSet(self):
+        # Use a property to ensure the correct +/- 1
+        return max(int(self.xml_skills.get("activeSkillSet", 1)) - 1, 0)
+
+    @activeSkillSet.setter
+    # Use a property to ensure the correct +/- 1
+    def activeSkillSet(self, new_set):
+        self.xml_skills.set("activeSkillSet", f"{new_set + 1}")
 
     def load(self, _skills):
         """
@@ -118,7 +132,6 @@ class SkillsUI:
             # let's create one so we have code compatibility in all circumstances
             _set = ET.Element("SkillSet")
             self.skill_sets_list.append(_set)
-            # self.win.combo_SkillSet.addItem("Default", 0)
             self.xml_skills.append(_set)
             # Move skills to the new socket group
             xml_socket_groups = self.xml_skills.findall("Skill")
@@ -135,7 +148,7 @@ class SkillsUI:
         self.connect_skill_triggers()
 
         # activate trigger to run change_skill_set
-        active_skill_set = max(min(int(self.xml_skills.get("activeSkillSet", 0)), len(self.skill_sets_list) - 1), 0)
+        active_skill_set = min(self.activeSkillSet, len(self.skill_sets_list) - 1)
         self.win.combo_SkillSet.setCurrentIndex(active_skill_set)
 
     def save(self):
@@ -496,7 +509,6 @@ class SkillsUI:
             # assign and setup new group
             self.xml_current_socket_group = self.xml_current_skill_set[_index]
             if self.xml_current_socket_group is not None:
-                self.build.mainSocketGroup = _index + 1
                 self.win.lineedit_SkillLabel.setText(self.xml_current_socket_group.get("label"))
                 set_combo_index_by_text(self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot"))
                 self.win.check_SocketGroupEnabled.setChecked(
@@ -535,22 +547,31 @@ class SkillsUI:
             self.load_main_skill_combo()
 
     @Slot()
-    def socket_groups_rows_moved(self, parent, start, end, destination, row):
+    def socket_groups_rows_moved(self, parent, start, end, destination, destination_row):
         """
-        Respond to a socket group being moved, by moving it's matching xml element. It's called 4 times.
+        Respond to a socket group being moved, by moving it's matching xml element. It's called 4 times (sometimes)
 
         :param parent: QModelIndex: not Used.
         :param start: int: where the row was moved from.
         :param end: int: not Used. It's the same as start as multi-selection is not allowed.
         :param destination: QModelIndex: not Used.
-        :param row: int: The destination row.
+        :param destination_row: int: The destination row.
         :return: N/A
         """
+        print("socket_groups_rows_moved")
         # if not None, do move in current_xml_group and set self.socket_group_to_be_moved = None
         # this way the last three are ignored.
         if self.socket_group_to_be_moved is None:
             return
         # Do move
+        if self.xml_current_skill_set is not None:
+            xml_sg = self.xml_current_skill_set[start]
+            if start < destination_row:
+                # need to decrement dest by one as we are going to remove start first
+                destination_row -= 1
+            self.xml_current_skill_set.remove(xml_sg)
+            self.xml_current_skill_set.insert(destination_row, xml_sg)
+
         # reset to none, this one we only respond to the first call of the four.
         self.socket_group_to_be_moved = None
 
@@ -559,7 +580,7 @@ class SkillsUI:
         self, source_parent, source_start, source_end, destination_parent, destination_row
     ):
         """
-        Setup for a socket group move. It's called 4 times.
+        Setup for a socket group move. It's called 4 times (sometimes)
 
         :param source_parent: QModelIndex: Used to notify the
         :param source_start: int: not Used
@@ -568,6 +589,7 @@ class SkillsUI:
         :param destination_row: int: not Used
         :return: N/A
         """
+        # print("socket_groups_rows_about_to_be_moved")
         self.socket_group_to_be_moved = source_parent
 
     """
@@ -678,6 +700,52 @@ class SkillsUI:
             self.create_gem_ui(0)
         self.update_socket_group_labels()
         self.load_main_skill_combo()
+
+    def skill_gem_rows_moved(self, parent, start, end, destination, destination_row):
+        """
+        Respond to a socket group being moved, by moving it's matching xml element. It's called 4 times (sometimes)
+
+        :param parent: QModelIndex: not Used.
+        :param start: int: where the row was moved from.
+        :param end: int: not Used. It's the same as start as multi-selection is not allowed.
+        :param destination: QModelIndex: not Used.
+        :param destination_row: int: The destination row.
+        :return: N/A
+        """
+        # print("skill_gem_rows_moved")
+        # if not None, do move in current_xml_group and set self.socket_group_to_be_moved = None
+        # this way the last three are ignored.
+        if self.socket_group_to_be_moved is None:
+            return
+        # Do move
+        if self.xml_current_socket_group is not None:
+            # item = self.win.list_SocketGroups.item(start)
+            xml_sg = self.xml_current_socket_group[start]
+            if start < destination_row:
+                # need to decrement dest by one as we are going to remove start first
+                destination_row -= 1
+            self.xml_current_socket_group.remove(xml_sg)
+            self.xml_current_socket_group.insert(destination_row, xml_sg)
+
+        # reset to none, this one we only respond to the first call of the four.
+        self.socket_group_to_be_moved = None
+
+    @Slot()
+    def skill_gem_rows_about_to_be_moved(
+        self, source_parent, source_start, source_end, destination_parent, destination_row
+    ):
+        """
+        Setup for a socket group move. It's called 4 times (sometimes)
+
+        :param source_parent: QModelIndex: Used to notify the
+        :param source_start: int: not Used
+        :param source_end: int: not Used
+        :param destination_parent: QModelIndex: not Used
+        :param destination_row: int: not Used
+        :return: N/A
+        """
+        # print("skill_gem_rows_about_to_be_moved")
+        self.socket_group_to_be_moved = source_parent
 
 
 # def test() -> None:

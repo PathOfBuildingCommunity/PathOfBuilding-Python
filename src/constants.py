@@ -38,10 +38,10 @@ default_spec = f'\
 default_view_mode = "SKILLS"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
-     mainSocketGroup="0" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
+     mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
     <Import/>\
     <Calcs/>\
-    <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="0"\
+    <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="1"\
                sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="20" showSupportGemTypes="ALL"\
                showAltQualityGems="false">\
         <SkillSet id="0" title="Default">\
@@ -61,6 +61,7 @@ empty_build = f'<PathOfBuilding>\
             </Skill>\
             <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="SG4" \
             enabled="true" slot="" mainActiveSkill="1">\
+                <Gem enableGlobal2="false" level="20" enableGlobal1="true" skillId="SupportFasterAttack" qualityId="Default" gemId="Metadata/Items/Gems/SupportGemFasterAttack" quality="20" enabled="true" count="1" nameSpec="Faster Attacks" /> \
 				<Gem enableGlobal2="false" level="2" enableGlobal1="true" skillId="BloodRage" qualityId="Alternate1" gemId="Metadata/Items/Gems/SkillGemBloodRage" quality="20" enabled="true" count="1" nameSpec="Blood Rage" />\
             </Skill>\
         </SkillSet>\

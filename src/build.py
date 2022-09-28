@@ -127,11 +127,13 @@ class Build:
 
     @property
     def mainSocketGroup(self):
-        return int(self.build.get("mainSocketGroup", 0))
+        # Use a property to ensure the correct +/- 1
+        return max(int(self.build.get("mainSocketGroup", 1)) - 1,0)
 
     @mainSocketGroup.setter
     def mainSocketGroup(self, new_group):
-        self.build.set("mainSocketGroup", f"{new_group}")
+        # Use a property to ensure the correct +/- 1
+        self.build.set("mainSocketGroup", f"{new_group + 1}")
 
     @property
     def resistancePenalty(self):
@@ -408,7 +410,7 @@ class Build:
 
     def import_gems_json(self, json_items):
         """
-        Import skills
+        Import skills from the json supplied by GGG
 
         :param json_items: json import of the item data
         :return: N/A
@@ -453,7 +455,6 @@ class Build:
             f'<SkillSet id="{len(self.skills)}" title="Imported {json_character.get("name", "")}" />'
         )
         self.skills.append(skill_set)
-        self.skills.set("activeSkillSet", f"{len(self.skills) - 1}")
 
         # loop through all items and look for gems in socketedItems
         for item in json_items["items"]:

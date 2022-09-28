@@ -619,7 +619,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # backup the current index, reload combo with new values and reset to a valid current_index
         # each line is a colon separated of socket group label and gem list
         current_index = self.combo_MainSkill.currentIndex()
-        print("current_index ", current_index, self.combo_MainSkill.currentText(), self.build.mainSocketGroup)
         for line in _list:
             _label, _gem_list = line.split(":")
             self.combo_MainSkill.addItem(_label, _gem_list)
