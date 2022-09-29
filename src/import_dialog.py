@@ -132,9 +132,6 @@ class ImportDlg(Ui_Dialog, QDialog):
             print(f"Code failed to decode.")
             return
         else:
-            # print(type(code), code)
-            # https://pastebin.com/u6y2ciwj
-            # code = code.decode("utf-8").replace('"nil"', '""')
             self.xml = ET.ElementTree(ET.fromstring(code))
             self.done(0)
 

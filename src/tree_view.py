@@ -41,13 +41,16 @@ class TreeView(QGraphicsView):
         # self.setBackgroundBrush(QBrush("#181818", Qt.SolidPattern))
 
         self._char_class_bkgnd_image = None
-        self.add_tree_images()
-        self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.drag = False
         self.start_pos = None
         self.fitInView(True, 0.1)
 
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
+        # Stop the drag icon being the default, which the above line would do
         self.viewport().setCursor(Qt.ArrowCursor)
+
+        # add_tree_images needs to be before adding a margin
+        self.add_tree_images()
         # add a margin to make panning the view seem more comfortable
         rect = self.sceneRect()
         rect.adjust(-1000.0, -1000.0, 1000.0, 1000.0)
@@ -84,6 +87,7 @@ class TreeView(QGraphicsView):
         :param event: Internal event matrix
         :return: N/A
         """
+        _debug("tree_view: mousePressEvent")
         super(TreeView, self).mousePressEvent(event)
         # ToDo : Do we want to allow the grap cursor or just keep the arrow ?
         # self.viewport().setCursor(Qt.ArrowCursor)
@@ -106,7 +110,7 @@ class TreeView(QGraphicsView):
         :param event: Internal event matrix
         :return: N/A
         """
-        # _debug("tree_view: mouseReleaseEvent")
+        _debug("tree_view: mouseReleaseEvent")
         super(TreeView, self).mouseReleaseEvent(event)
         self.viewport().setCursor(Qt.ArrowCursor)
 

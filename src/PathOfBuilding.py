@@ -60,8 +60,6 @@ from tree_view import TreeView
 from import_dialog import ImportDlg
 from export_dialog import ExportDlg
 
-# from tree_graphics_item import TreeGraphicsItem
-
 # pyside6-uic Assets\PoB_Main_Window.ui -o src\PoB_Main_Window.py
 from PoB_Main_Window import Ui_MainWindow
 
@@ -161,7 +159,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Dump the placeholder Graphics View and add our own
         self.gview_Tree = TreeView(self.config, self.build)
         self.vlayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gview_Tree)
-        # Add our FlowLayout too
+        # Add our FlowLayout to Config tab
         self.layout_config = FlowLayout(None, 0)
         self.frame_Config.setLayout(self.layout_config)
         self.layout_config.addItem(self.grpbox_General)
@@ -609,6 +607,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
         # print("PoB.load_main_skill_combo", len(_list))
+
         # clear before disconnecting.
         # This helps for "Delete All" socket groups, resetting to a new build or loading a build.
         self.combo_MainSkill.clear()
@@ -619,17 +618,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # backup the current index, reload combo with new values and reset to a valid current_index
         # each line is a colon separated of socket group label and gem list
         current_index = self.combo_MainSkill.currentIndex()
+        # print("load_main_skill_combo.current_index 1", current_index)
         for line in _list:
             _label, _gem_list = line.split(":")
             self.combo_MainSkill.addItem(_label, _gem_list)
         self.combo_MainSkill.view().setMinimumWidth(self.combo_MainSkill.minimumSizeHint().width())
         # In case the new list is shorter or empty
         current_index = min(max(0, current_index), len(_list))
+        # print("load_main_skill_combo.current_index 2", current_index)
 
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
 
-        print("current_index ", current_index)
+        # print("load_main_skill_combo.current_index 3", current_index)
         if current_index >= 0:
             self.combo_MainSkill.setCurrentIndex(current_index)
 
@@ -660,19 +661,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Actions when changing the main skill combo. Update the Skills tab.
 
-        :param new_index: string: the combo's index
+        :param new_index: string: the combo's index. -1 during a .clear()
         :return: N/A
         """
-        print("current_index ", new_index, self.combo_MainSkill.currentText())
         if new_index == -1:
             return
-        # Keep index in bounds for when socket groups are deleted
-        new_index = min(new_index, self.combo_MainSkill.count() - 1)
+        # print("main_skill_index_changed.current_index ", new_index, self.combo_MainSkill.currentText())
         # must happen before call to update_socket_group_labels
         self.build.mainSocketGroup = new_index
         self.skills_ui.update_socket_group_labels()
-        # this is ok as this function is only called *IF* the index changes
-        self.combo_MainSkill.setCurrentIndex(new_index)
 
     def search_return_pressed(self):
         self.gview_Tree.add_tree_images()

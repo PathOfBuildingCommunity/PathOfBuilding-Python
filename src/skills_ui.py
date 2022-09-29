@@ -509,6 +509,7 @@ class SkillsUI:
             # assign and setup new group
             self.xml_current_socket_group = self.xml_current_skill_set[_index]
             if self.xml_current_socket_group is not None:
+                self.build.check_socket_group_for_an_active_gem(self.xml_current_socket_group)
                 self.win.lineedit_SkillLabel.setText(self.xml_current_socket_group.get("label"))
                 set_combo_index_by_text(self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot"))
                 self.win.check_SocketGroupEnabled.setChecked(
@@ -600,7 +601,7 @@ class SkillsUI:
         """
         React to a wigdet change from an instance of GemUI(), where that widget is not the remove button.
 
-        :param item: the triggering WidgetItem from list_Skills
+        :param item: the triggering WidgetItem from list_Skills.
         :return: N/A
         """
         row = self.win.list_Skills.row(item)
@@ -620,17 +621,13 @@ class SkillsUI:
 
     def create_gem_ui(self, index, gem=None):
         """
-        Add a new row to the Items list
+        Add a new row to the Items list.
 
         :param index: int: number of this gem in this skill group
         :param gem: Item(): The item to be added
         :return:
         """
         # print("create_gem_ui", index, gem)
-        self.disconnect_skill_triggers()
-        # if index_exists(self.gem_ui_list, index):
-        #     self.gem_ui_list[index].load(gem)
-        # else:
         item = QListWidgetItem()
         self.win.list_Skills.addItem(item)
         gem_ui = GemUI(item, self.gems_by_name_or_id, self.gem_ui_notify, gem)
@@ -640,8 +637,6 @@ class SkillsUI:
 
         # this one is for deleting the gem
         gem_ui.btn_GemRemove.clicked.connect(lambda checked: self.gem_remove_checkbox_selected(item, gem_ui))
-
-        self.connect_skill_triggers()
 
     def clear_gem_ui_list(self):
         """
@@ -657,7 +652,7 @@ class SkillsUI:
             item = self.win.list_Skills.item(idx)
             gem_ui = self.win.list_Skills.itemWidget(item)
             # print("clear_gem_ui_list", idx)
-            if gem_ui.gem is not None:
+            if gem_ui is not None and gem_ui.gem is not None:
                 # Don't notify, cause that cause a loop
                 gem_ui.save(False)
             # del gem_ui

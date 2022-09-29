@@ -128,7 +128,7 @@ class Build:
     @property
     def mainSocketGroup(self):
         # Use a property to ensure the correct +/- 1
-        return max(int(self.build.get("mainSocketGroup", 1)) - 1,0)
+        return max(int(self.build.get("mainSocketGroup", 1)) - 1, 0)
 
     @mainSocketGroup.setter
     def mainSocketGroup(self, new_group):
@@ -408,11 +408,28 @@ class Build:
         # show tree
         self.win.tree_ui.combo_manage_tree.setCurrentIndex(int(self.tree.get("activeSpec", 1)) - 1)
 
+    def check_socket_group_for_an_active_gem(self, _sg):
+        """
+        Check a socket group and if the first gem is not active gem, find an active gem in the group
+        and if found, set it to be first.
+
+        :param _sg: ET.element: the socket group to check
+        :return: N/A
+        """
+        if _sg is not None:
+            for _idx, _gem in enumerate(_sg.findall("Gem")):
+                # find the first active gem and move it if it's index is not 0
+                if "Support" not in _gem.get("skillId"):
+                    if _idx != 0:
+                        _sg.remove(_gem)
+                        _sg.insert(0, _gem)
+                    break
+
     def import_gems_json(self, json_items):
         """
-        Import skills from the json supplied by GGG
+        Import skills from the json supplied by GGG.
 
-        :param json_items: json import of the item data
+        :param json_items: json import of the item data.
         :return: N/A
         """
 
@@ -430,22 +447,6 @@ class Build:
                     value = _prop.get("values")[0][0].replace(" (Max)", "").replace("+", "").replace("%", "")
                     return value
             return _default
-
-        def check_socket_group(_sg):
-            """
-            Check a socket group and if the first gem is not active gem, find an active gem in the group
-            and set it to be first
-
-            :param _sg: ET.element: the socket group to check
-            :return: N/A
-            """
-            if _sg is not None:
-                for _idx, _gem in enumerate(current_socket_group.findall("Gem")):
-                    if "Support" not in _gem.get("skillId"):
-                        if _idx != 0:
-                            current_socket_group.remove(_gem)
-                            current_socket_group.insert(0, _gem)
-                        break
 
         if len(json_items["items"]) <= 0:
             return
@@ -468,7 +469,7 @@ class Build:
                     this_group = item["sockets"][idx]["group"]
                     # ... so we can make a new one if needed
                     if this_group != current_socket_group_number:
-                        check_socket_group(current_socket_group)
+                        self.check_socket_group_for_an_active_gem(current_socket_group)
                         current_socket_group_number = this_group
                         current_socket_group = ET.fromstring(empty_socket_group)
                         current_socket_group.set("slot", slot_map[item["inventoryId"]])
@@ -492,7 +493,7 @@ class Build:
                             xml_gem.set("qualityId", "Alternate2")
                         case "Phantasmal":
                             xml_gem.set("qualityId", "Alternate3")
-                check_socket_group(current_socket_group)
+                self.check_socket_group_for_an_active_gem(current_socket_group)
 
     def import_items_json(self, json_items):
         """
