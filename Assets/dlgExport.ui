@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Export current character</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="PoB.qrc">
+    <normaloff>:/Art/Icons/paper-plane.png</normaloff>:/Art/Icons/paper-plane.png</iconset>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
@@ -126,7 +130,9 @@
    </item>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="PoB.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

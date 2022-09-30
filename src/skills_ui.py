@@ -583,7 +583,7 @@ class SkillsUI:
         """
         Setup for a socket group move. It's called 4 times (sometimes)
 
-        :param source_parent: QModelIndex: Used to notify the
+        :param source_parent: QModelIndex: Used to notify the move
         :param source_start: int: not Used
         :param source_end: int: not Used
         :param destination_parent: QModelIndex: not Used
@@ -732,7 +732,7 @@ class SkillsUI:
         """
         Setup for a socket group move. It's called 4 times (sometimes)
 
-        :param source_parent: QModelIndex: Used to notify the
+        :param source_parent: QModelIndex: Used to notify the move
         :param source_start: int: not Used
         :param source_end: int: not Used
         :param destination_parent: QModelIndex: not Used

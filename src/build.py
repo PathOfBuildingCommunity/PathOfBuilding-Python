@@ -18,7 +18,6 @@ from typing import Union
 from constants import (
     PlayerClasses,
     _VERSION,
-    default_spec,
     empty_build,
     empty_gem,
     empty_socket_group,
@@ -30,6 +29,7 @@ import pob_file
 import ui_utils
 from tree import Tree
 from PoB_Main_Window import Ui_MainWindow
+from spec import Spec
 
 
 class Build:
@@ -63,6 +63,8 @@ class Build:
         self.items = None
         self.config = None
         self.gems_by_name_or_id = None
+
+        self.nodes_assigned, self.ascnodes_assigned, self.sockets_assigned = 0, 0, 0
 
         """Now fill out everything above out with a new build
            This stops the creation of other classes() erroring out because variables are setup
@@ -275,7 +277,7 @@ class Build:
         for spec in self.tree.findall("Spec"):
             if spec.get("title", -1) == -1:
                 spec.set("title", "Default")
-            self.specs.append(Spec(spec))
+            self.specs.append(Spec(self, spec))
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
         self.current_spec = self.specs[self.activeSpec]
@@ -322,6 +324,8 @@ class Build:
         # pob["PathOfBuilding"]["TreeView"] = self.tree_view
         # pob["PathOfBuilding"]["Items"] = self.items
         # pob["PathOfBuilding"]["Tree"] = self.tree
+        for spec in self.specs:
+            spec.save()
         # pob_file.write_xml_from_dict("builds/test.xml", pob)
         # # pob_file.write_xml_from_dict(self.filename, pob)
 
@@ -371,6 +375,25 @@ class Build:
         """
         return True
 
+    def count_allocated_nodes(self):
+        """
+        Loop through the current tree's active nodes and split the normal and ascendancy nodes.
+
+        :return: N/A
+        """
+        self.nodes_assigned, self.ascnodes_assigned, self.sockets_assigned = 0, 0, 0
+        for node_id in self.current_spec.nodes:
+            node = self.current_tree.nodes.get(str(node_id), None)
+            if node is not None:
+                if node.type != "ClassStart" and not node.isAscendancyStart:
+                    if node.ascendancyName == "":
+                        self.nodes_assigned += 1
+                    else:
+                        if not node.isMultipleChoiceOption:
+                            self.ascnodes_assigned += 1
+                    if node.type == "Socket":
+                        self.sockets_assigned += 1
+
     def change_tree(self, tree_id):
         """
         Process changing a tree inside a build
@@ -382,6 +405,40 @@ class Build:
             return
         self.activeSpec = tree_id
         self.current_spec = self.specs[tree_id]
+        self.count_allocated_nodes()
+
+    def move_spec(self, start, destination):
+        """
+        Move a spec entry. This is called by the manage tree dialog.
+
+        :param start: int: the index of the spec to be moved
+        :param destination: the index where to insert the moved spec
+        :return:
+        """
+        spec = self.specs[start]
+        xml_spec = spec.xml_spec
+        print(type(xml_spec), xml_spec)
+        if start < destination:
+            # need to decrement dest by one as we are going to remove start first
+            destination -= 1
+        self.specs.remove(spec)
+        self.specs.insert(destination, spec)
+        self.tree.remove(xml_spec)
+        self.tree.insert(destination, xml_spec)
+
+    def new_spec(self, new_title):
+        """
+        Add a new empty tree/Spec
+
+        :param new_title: str
+        :return: Spec(): the newly created Spec()
+        """
+        # print("build.new_spec")
+        spec = Spec(self.build, None)
+        spec.title = new_title
+        self.specs.append(spec)
+        self.tree.append(spec.xml_spec)
+        return spec
 
     def import_passive_tree_jewels_json(self, json_tree, json_character):
         """
@@ -395,7 +452,7 @@ class Build:
         """
         # print(json_character)
         # print(json_tree)
-        new_spec = Spec()
+        new_spec = Spec(self)
         self.specs.append(new_spec)
         new_spec.title = f"Imported {json_character.get('name', '')}"
         self.name = new_spec.title
@@ -502,32 +559,3 @@ class Build:
         :param json_items: json import of the item data
         :return: N/A
         """
-
-
-class Spec:
-    def __init__(self, _spec=None) -> None:
-        def_spec = ET.fromstring(default_spec)
-        if _spec is None:
-            _spec = def_spec
-
-        self.title = _spec.get("title", def_spec.get("title"))
-        self.classId = PlayerClasses(int(_spec.get("classId", PlayerClasses.SCION)))
-        self.ascendClassId = int(_spec.get("ascendClassId", 0))
-        self.treeVersion = _spec.get("treeVersion", def_spec.get("treeVersion"))
-        self.masteryEffects = _spec.get("masteryEffects", None)
-
-        # ToDo this includes ascendancy nodes (grrr)
-        self.nodes = {}
-        str_nodes = _spec.get("nodes", "0")
-        if str_nodes:
-            self.nodes = str_nodes.split(",")
-
-        self.EditedNodes = _spec.find("EditedNodes")
-        if self.EditedNodes is None:
-            self.EditedNodes = def_spec.find("EditedNodes")
-        self.URL = _spec.find("URL")
-        if self.URL is None:
-            self.URL = def_spec.find("URL")
-        self.Sockets = _spec.find("Sockets")
-        if self.Sockets is None:
-            self.Sockets = def_spec.find("Sockets")

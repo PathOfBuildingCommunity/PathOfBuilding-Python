@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Character Import</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="PoB.qrc">
+    <normaloff>:/Art/Icons/paper-plane-return.png</normaloff>:/Art/Icons/paper-plane-return.png</iconset>
+  </property>
   <widget class="QLabel" name="label_Import">
    <property name="geometry">
     <rect>
@@ -435,6 +439,8 @@
   <tabstop>btn_ImportBuildSharing</tabstop>
   <tabstop>btn_Close</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="PoB.qrc"/>
+ </resources>
  <connections/>
 </ui>

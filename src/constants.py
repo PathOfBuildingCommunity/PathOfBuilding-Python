@@ -12,8 +12,8 @@ All values should only be scaled on point of entry, ie: when they are first proc
 global_scale_factor = 2
 pob_debug = True
 
-_VERSION = 3.18
-_VERSION_str = "3_18"
+_VERSION = 3.19
+_VERSION_str = "3_19"
 
 # http_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'}
 http_headers = {"User-Agent": "Path of Building Community - Python", "Accept": ""}
@@ -30,7 +30,6 @@ default_config = '<PathOfBuilding>\
 
 default_spec = f'\
     <Spec title="Default" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}" classId="0">\
-        <EditedNodes/>\
         <URL>https://www.pathofexile\.com/passive-skill-tree/AAAABgAAAAAA</URL>\
         <Sockets/>\
     </Spec>'
@@ -190,7 +189,6 @@ class ColourCodes(enum.Enum):
 
 @enum.unique
 class PlayerClasses(enum.IntEnum):
-    # class PlayerClasses(Enum):
     SCION = 0
     MARAUDER = 1
     RANGER = 2
@@ -305,60 +303,6 @@ ascendancy_positions = {
     "Saboteur": {"x": 10200 / global_scale_factor, "y": -2200 / global_scale_factor},
     "Trickster": {"x": 10200 / global_scale_factor, "y": -3700 / global_scale_factor},
 }
-
-
-nodeOverlay = {
-    "Normal": {
-        "artWidth": "40",
-        "alloc": "PSSkillFrameActive",
-        "path": "PSSkillFrameHighlighted",
-        "unalloc": "PSSkillFrame",
-        "allocAscend": "AscendancyFrameSmallAllocated",
-        "pathAscend": "AscendancyFrameSmallCanAllocate",
-        "unallocAscend": "AscendancyFrameSmallNormal",
-    },
-    "Notable": {
-        "artWidth": "58",
-        "alloc": "NotableFrameAllocated",
-        "path": "NotableFrameCanAllocate",
-        "unalloc": "NotableFrameUnallocated",
-        "allocAscend": "AscendancyFrameLargeAllocated",
-        "pathAscend": "AscendancyFrameLargeCanAllocate",
-        "unallocAscend": "AscendancyFrameLargeNormal",
-        "allocBlighted": "BlightedNotableFrameAllocated",
-        "pathBlighted": "BlightedNotableFrameCanAllocate",
-        "unallocBlighted": "BlightedNotableFrameUnallocated",
-    },
-    "Keystone": {
-        "artWidth": "84",
-        "alloc": "KeystoneFrameAllocated",
-        "path": "KeystoneFrameCanAllocate",
-        "unalloc": "KeystoneFrameUnallocated",
-    },
-    "Socket": {
-        "artWidth": "58",
-        "alloc": "JewelFrameAllocated",
-        "path": "JewelFrameCanAllocate",
-        "unalloc": "JewelFrameUnallocated",
-        "allocAlt": "JewelSocketAltActive",
-        "pathAlt": "JewelSocketAltCanAllocate",
-        "unallocAlt": "JewelSocketAltNormal",
-    },
-    "Mastery": {
-        "artWidth": "65",
-        "alloc": "AscendancyFrameLargeAllocated",
-        "path": "AscendancyFrameLargeCanAllocate",
-        "unalloc": "AscendancyFrameLargeNormal",
-    },
-}
-for _type in nodeOverlay:
-    """
-    From PassiveTree.lua file. Setting as the same scope as the 'constant'
-    """
-    data = nodeOverlay[_type]
-    size = int(data["artWidth"]) * 1.33
-    data["size"] = size
-    data["rsq"] = size * size
 
 
 @enum.unique

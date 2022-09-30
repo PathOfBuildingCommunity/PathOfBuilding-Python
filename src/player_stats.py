@@ -7,6 +7,7 @@ from operator import itemgetter
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import Config
 from constants import stats_list, ColourCodes
+from ui_utils import html_colour_text
 
 
 class PlayerStats:
@@ -56,11 +57,10 @@ class PlayerStats:
                         if "d" in _fmt:
                             _value = int(_value)
                         if _value < 0:
-                            _str_value = (
-                                f'<span style="color:{ColourCodes.NEGATIVE.value};">{_fmt.format(_value)}</span>'
-                            )
+                            _str_value = html_colour_text("NEGATIVE", _fmt.format(_value))
                         else:
                             _str_value = _fmt.format(_value)
+                        # Cannot use html_colour_text() on this
                         self.win.textedit_Statistics.append(
                             f'<span style="white-space: pre; color:{_colour.value};">{_label}:</span> {_str_value}'
                         )

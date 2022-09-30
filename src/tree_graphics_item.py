@@ -9,33 +9,6 @@ from qdarktheme.qtpy.QtWidgets import QGraphicsPixmapItem
 
 from pob_config import Config
 
-"""
-Example data
-    "skill": 57560,
-    "name": "Rite of Ruin",
-    "icon": "Art/2DArt/SkillIcons/passives/Berserker/RiteOfRuin.png",
-    "isNotable": true,
-    "ascendancyName": "Berserker",
-    "stats": [
-        "Lose 0.1% of Life per second per Rage while you are not losing Rage",
-        "Inherent effects from having Rage are Tripled",
-        "Cannot be Stunned while you have at least 25 Rage"
-    ],
-    "reminderText": [
-        "(Inherent effects from having Rage are:",
-        "1% increased Attack Damage per 1 Rage",
-        "1% increased Attack Speed per 2 Rage",
-        "1% increased Movement Speed per 5 Rage)"
-    ],
-    "group": 1,
-    "orbit": 4,
-    "orbitIndex": 10,
-    "out": [
-        "42861"
-    ],
-    "in": []
-"""
-
 
 class TreeGraphicsItem(QGraphicsPixmapItem):
     def __init__(

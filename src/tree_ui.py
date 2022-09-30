@@ -7,24 +7,27 @@ from qdarktheme.qtpy.QtCore import QCoreApplication, Qt, Slot, QSize
 from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton
 
 from PoB_Main_Window import Ui_MainWindow
-from constants import _VERSION, PlayerClasses
+from constants import _VERSION, PlayerClasses, _VERSION_str
 from pob_config import Config, _debug
 from flow_layout import FlowLayout
+from manage_tree_dialog import ManageTreeDlg
 
 
 class TreeUI:
     def __init__(self, _config: Config, frame_tree_tools, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
+        tr = self.pob_config.app.tr
         self.win = _win
         self.build = self.win.build
-        self.layout_tree_tools = FlowLayout(frame_tree_tools, 2)
         self._curr_class = PlayerClasses.SCION
+
+        self.win.action_ManageTrees.triggered.connect(self.open_manage_trees)
 
         """
         Add Widgets to the QFrame at the bottom of the treeview, using the fixed version of the PySide6 example
-         Flow Layout. You can set size hints, but not setGeometry().
+         Flow Layout. You can set size hints for these widgets, but not setGeometry().
         """
-        self.win.action_ManageTrees.triggered.connect(self.shortcut_CtrlM)
+        self.layout_tree_tools = FlowLayout(frame_tree_tools, 2)
 
         self.combo_manage_tree = QComboBox()
         self.combo_manage_tree.setMinimumSize(QSize(180, 22))
@@ -47,9 +50,9 @@ class TreeUI:
         self.btn_Reset = QPushButton()
         self.btn_Import = QPushButton()
         self.btn_Export = QPushButton()
-        self.btn_Reset.setText(QCoreApplication.translate("MainWindow", "Reset Tree...", None))
-        self.btn_Import.setText(QCoreApplication.translate("MainWindow", "Import Tree ...", None))
-        self.btn_Export.setText(QCoreApplication.translate("MainWindow", "Export Tree...", None))
+        self.btn_Reset.setText(tr(f'{tr("Reset Tree")} ...'))
+        self.btn_Import.setText(tr(f'{tr("Import Tree")} ...'))
+        self.btn_Export.setText(tr(f'{tr("Export Tree")} ...'))
         self.layout_tree_tools.addWidget(self.btn_Reset)
         self.layout_tree_tools.addWidget(self.btn_Import)
         self.layout_tree_tools.addWidget(self.btn_Export)
@@ -66,7 +69,7 @@ class TreeUI:
 
         self.check_show_node_power = QCheckBox()
         self.check_show_node_power.setMinimumSize(QSize(50, 22))
-        self.check_show_node_power.setText(QCoreApplication.translate("MainWindow", "Show Node Power:", None))
+        self.check_show_node_power.setText(tr("Show Node Power:"))
         self.check_show_node_power.setLayoutDirection(Qt.RightToLeft)
         self.check_show_node_power.stateChanged.connect(self.set_show_node_power_visibility)
         self.layout_tree_tools.addWidget(self.check_show_node_power)
@@ -77,7 +80,7 @@ class TreeUI:
         self.layout_tree_tools.addWidget(self.combo_show_node_power)
         self.btn_show_power_report = QPushButton()
         self.btn_show_power_report.setVisible(False)
-        self.btn_show_power_report.setText(QCoreApplication.translate("MainWindow", "Show Power Report ...", None))
+        self.btn_show_power_report.setText(f'{tr("Show Power Report")} ...')
         self.layout_tree_tools.addWidget(self.btn_show_power_report)
         """ End Adding Widgets to the QFrame at the bottom of the treeview. """
 
@@ -137,6 +140,9 @@ class TreeUI:
         :return:
         """
         print("open_manage_trees")
+        dlg = ManageTreeDlg(self.build, self.win)
+        dlg.exec()
+        self.fill_current_tree_combo()
 
     def fill_current_tree_combo(self):
         """
@@ -150,8 +156,12 @@ class TreeUI:
         self.combo_compare.clear()
         for idx, spec in enumerate(self.build.specs):
             if spec is not None:
-                self.combo_manage_tree.addItem(spec.title, idx)
-                self.combo_compare.addItem(spec.title, idx)
+                if spec.treeVersion != _VERSION_str:
+                    title = f"[{spec.treeVersion}] {spec.title}"
+                else:
+                    title = spec.title
+                self.combo_manage_tree.addItem(title, idx)
+                self.combo_compare.addItem(title, idx)
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)
 

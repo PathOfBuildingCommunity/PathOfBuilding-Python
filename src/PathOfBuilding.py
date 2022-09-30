@@ -45,6 +45,7 @@ from constants import (
     program_title,
     resistance_penalty,
 )
+from ui_utils import html_colour_text
 from pob_config import Config, _debug, index_exists
 from flow_layout import FlowLayout
 from build import Build
@@ -155,9 +156,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_ascendancy.addItem("None", 0)
         self.combo_ascendancy.addItem("Ascendant", 1)
         self.toolbar_MainWindow.addWidget(self.combo_ascendancy)
+        # end add widgets to the Toolbar
 
         # Dump the placeholder Graphics View and add our own
-        self.gview_Tree = TreeView(self.config, self.build)
+        self.gview_Tree = TreeView(self, self.config, self.build)
         self.vlayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gview_Tree)
         # Add our FlowLayout to Config tab
         self.layout_config = FlowLayout(None, 0)
@@ -200,7 +202,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_New.triggered.connect(self.build_new)
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save_as)
-        self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
+        # self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
         self.action_Settings.triggered.connect(self.config.open_settings_dialog)
         self.action_Import.triggered.connect(self.open_import_dialog)
         self.action_Export.triggered.connect(self.open_export_dialog)
@@ -419,8 +421,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.build.current_spec.classId == new_class and self.refresh_tree:
             return
         # ToDo: Who should do the check against clearing your tree and how do we stop it during loading a build or tree swap ?
-        # if not self.gview_Tree.switch_class(new_class):
-        #     return
 
         # GUI Changes
         # Changing the ascendancy combobox, will trigger it's signal/slot.
@@ -467,7 +467,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         self.build.bandit = self.combo_Bandits.currentData()
         self.max_points = self.build.bandit == "None" and 123 or 121
-        self.label_points.setText(f" {len(self.build.current_spec.nodes)} / {self.max_points}  0 / 8 ")
+        nodes_assigned = (
+            self.build.nodes_assigned > self.max_points
+            and html_colour_text("RED", f"{self.build.nodes_assigned}")
+            or f"{self.build.nodes_assigned}"
+        )
+        ascnodes_assigned = (
+            self.build.ascnodes_assigned > 8
+            and html_colour_text("RED", f"{self.build.ascnodes_assigned}")
+            or f"{self.build.ascnodes_assigned}"
+        )
+        self.label_points.setText(f" {nodes_assigned} / {self.max_points}    {ascnodes_assigned} / 8 ")
 
     # Do all actions needed to change between light and dark
     @Slot()
@@ -686,7 +696,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # we only care for when the message clears
         if pob_debug and message is None or message == "":
             process = psutil.Process(os.getpid())
-            message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1024 ** 2)}MB used:"
+            message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
             self.statusbar_MainWindow.showMessage(message, 2000)
 
 
@@ -694,10 +704,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # sys.stdout = open("PathOfBuilding.log", 'a')
 app = QApplication(sys.argv)
 
-# font for stats box. To line things up, we need a Mono font. Font acquired from Linux.
+# font for stats box. To line things up, we need a Mono font.
 QFontDatabase.addApplicationFont(":/Font/Font/NotoSansMono-Regular.ttf")
 # system wide font
-# QApplication.setFont(QFont(":Font/Font/DejaVuSans.ttf", 9))
 QApplication.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 9))
 
 window = MainWindow(app)

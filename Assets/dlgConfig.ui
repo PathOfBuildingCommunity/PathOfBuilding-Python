@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="PoB.qrc">
+    <normaloff>:/Art/Icons/construction.png</normaloff>:/Art/Icons/construction.png</iconset>
+  </property>
   <property name="modal">
    <bool>true</bool>
   </property>
@@ -547,7 +551,9 @@
   <tabstop>check_BuildWarnings</tabstop>
   <tabstop>check_Tooltips</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="PoB.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>btnBox</sender>

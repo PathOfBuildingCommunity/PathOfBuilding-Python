@@ -2,10 +2,39 @@
 Node Class
 
 This class represents one node of the Passive Tree.
+As well as the information from the json file, it will have image data added.
 
 It is referenced by the Tree class
 """
 from constants import _VERSION
+from pob_config import str_to_bool
+
+"""
+Example node data
+    "skill": 57560,
+    "name": "Rite of Ruin",
+    "icon": "Art/2DArt/SkillIcons/passives/Berserker/RiteOfRuin.png",
+    "isNotable": true,
+    "ascendancyName": "Berserker",
+    "stats": [
+        "Lose 0.1% of Life per second per Rage while you are not losing Rage",
+        "Inherent effects from having Rage are Tripled",
+        "Cannot be Stunned while you have at least 25 Rage"
+    ],
+    "reminderText": [
+        "(Inherent effects from having Rage are:",
+        "1% increased Attack Damage per 1 Rage",
+        "1% increased Attack Speed per 2 Rage",
+        "1% increased Movement Speed per 5 Rage)"
+    ],
+    "group": 1,
+    "orbit": 4,
+    "orbitIndex": 10,
+    "out": [
+        "42861"
+    ],
+    "in": []
+"""
 
 
 class Node:
@@ -65,6 +94,7 @@ class Node:
         self.expansionJewel = _node.get("expansionJewel", {})
         self.isProxy = _node.get("isProxy", False)
         self.isKeystone = _node.get("isKeystone", False)
+        self.isMultipleChoiceOption = _node.get("isMultipleChoiceOption", False)
         self.flavourText = _node.get("flavourText", "")
 
         """ These values are text items indicating the name of a file. 

@@ -22,11 +22,65 @@ from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter
 
 import ui_utils
 from pob_config import Config, _debug
-from constants import _VERSION, global_scale_factor, Layers, ascendancy_positions, nodeOverlay, PlayerClasses
+from constants import _VERSION, global_scale_factor, Layers, ascendancy_positions, PlayerClasses
 import pob_file
 
 from tree_graphics_item import TreeGraphicsItem
 from node import Node
+
+
+nodeOverlay = {
+    "Normal": {
+        "artWidth": "40",
+        "alloc": "PSSkillFrameActive",
+        "path": "PSSkillFrameHighlighted",
+        "unalloc": "PSSkillFrame",
+        "allocAscend": "AscendancyFrameSmallAllocated",
+        "pathAscend": "AscendancyFrameSmallCanAllocate",
+        "unallocAscend": "AscendancyFrameSmallNormal",
+    },
+    "Notable": {
+        "artWidth": "58",
+        "alloc": "NotableFrameAllocated",
+        "path": "NotableFrameCanAllocate",
+        "unalloc": "NotableFrameUnallocated",
+        "allocAscend": "AscendancyFrameLargeAllocated",
+        "pathAscend": "AscendancyFrameLargeCanAllocate",
+        "unallocAscend": "AscendancyFrameLargeNormal",
+        "allocBlighted": "BlightedNotableFrameAllocated",
+        "pathBlighted": "BlightedNotableFrameCanAllocate",
+        "unallocBlighted": "BlightedNotableFrameUnallocated",
+    },
+    "Keystone": {
+        "artWidth": "84",
+        "alloc": "KeystoneFrameAllocated",
+        "path": "KeystoneFrameCanAllocate",
+        "unalloc": "KeystoneFrameUnallocated",
+    },
+    "Socket": {
+        "artWidth": "58",
+        "alloc": "JewelFrameAllocated",
+        "path": "JewelFrameCanAllocate",
+        "unalloc": "JewelFrameUnallocated",
+        "allocAlt": "JewelSocketAltActive",
+        "pathAlt": "JewelSocketAltCanAllocate",
+        "unallocAlt": "JewelSocketAltNormal",
+    },
+    "Mastery": {
+        "artWidth": "65",
+        "alloc": "AscendancyFrameLargeAllocated",
+        "path": "AscendancyFrameLargeCanAllocate",
+        "unalloc": "AscendancyFrameLargeNormal",
+    },
+}
+for _type in nodeOverlay:
+    """
+    From PassiveTree.lua file. Setting as the same scope as the 'constant'
+    """
+    data = nodeOverlay[_type]
+    size = int(data["artWidth"]) * 1.33
+    data["size"] = size
+    data["rsq"] = size * size
 
 
 # fmt: off
@@ -63,8 +117,7 @@ class Tree:
 
         self.name = "Default"
         self.ui = None
-        self.allocated_nodes = set()
-        self.assets = {}
+        # self.assets = {}
         self.classes = {}
         self.groups = {}
         self.nodes = {}

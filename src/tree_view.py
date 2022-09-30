@@ -21,8 +21,16 @@ from build import Build
 
 
 class TreeView(QGraphicsView):
-    def __init__(self, _config: Config, _build: Build) -> None:
+    def __init__(self, _win, _config: Config, _build: Build) -> None:
+        """
+        Initialize Treeview
+
+        :param _win: pointer to MainWindow()
+        :param _config: pointer to Config()
+        :param _build: pointer to build()
+        """
         super(TreeView, self).__init__()
+        self.win = _win
         self.config = _config
         self.build = _build
 
@@ -87,21 +95,10 @@ class TreeView(QGraphicsView):
         :param event: Internal event matrix
         :return: N/A
         """
-        _debug("tree_view: mousePressEvent")
+        # _debug("tree_view: mousePressEvent")
         super(TreeView, self).mousePressEvent(event)
-        # ToDo : Do we want to allow the grap cursor or just keep the arrow ?
-        # self.viewport().setCursor(Qt.ArrowCursor)
-        _item: TreeGraphicsItem = self.itemAt(event.pos())
-        # if _item:
-        #     _debug("tree_view: mousePressEvent1", _item.node_id, _item.filename)
-        if _item and _item.node_id != 0:
-            # _debug("tree_view: mousePressEvent2", self.build.current_spec.nodes)
-            if _item.node_id in self.build.current_spec.nodes:
-                self.build.current_spec.nodes.remove(_item.node_id)
-            else:
-                self.build.current_spec.nodes.append(_item.node_id)
-            # _debug("tree_view: mousePressEvent3", self.build.current_spec.nodes)
-            self.add_tree_images()
+        # Stop hand cursor
+        self.viewport().setCursor(Qt.ArrowCursor)
 
     # Inherited, don't change definition
     def mouseReleaseEvent(self, event) -> None:
@@ -110,9 +107,20 @@ class TreeView(QGraphicsView):
         :param event: Internal event matrix
         :return: N/A
         """
-        _debug("tree_view: mouseReleaseEvent")
+        # _debug("tree_view: mouseReleaseEvent")
         super(TreeView, self).mouseReleaseEvent(event)
+        # Ensure hand cursor is gone (it's sneaky)
         self.viewport().setCursor(Qt.ArrowCursor)
+        _item: TreeGraphicsItem = self.itemAt(event.pos())
+        if _item and _item.node_id != 0:
+            if _item.node_id in self.build.current_spec.nodes:
+                self.build.current_spec.nodes.remove(_item.node_id)
+            else:
+                self.build.current_spec.nodes.append(_item.node_id)
+            self.add_tree_images()
+            # count the new nodes and display them
+            self.build.count_allocated_nodes()
+            self.win.bandits_changed(self.win.combo_Bandits.currentText())
 
     # Function Overridden
     def fitInView(self, scale=True, factor=None):
@@ -203,7 +211,7 @@ class TreeView(QGraphicsView):
 
         # leave the print in till we have everything working.
         # It is what tells us how often the assets are being redrawn.
-        _debug("add_tree_images")
+        # _debug("add_tree_images")
         if self.build.current_tree is None:
             return
 
@@ -219,11 +227,14 @@ class TreeView(QGraphicsView):
         for node_id in tree.nodes:
             n = tree.nodes[str(node_id)]
 
+        # loop though active nodes and add them
         for node_id in self.build.current_spec.nodes:
             n = tree.nodes.get(str(node_id), None)
-            if n is not None and n.active_image is not None:
-                self._scene.addItem(n.active_image)
-                self._scene.addItem(n.active_overlay_image)
+            if n is not None:
+                if n.active_image is not None:
+                    self._scene.addItem(n.active_image)
+                    self._scene.addItem(n.active_overlay_image)
+                # take advantage of the loop andcount assigned nodes and Ascendancy nodes.
 
         for image in tree.graphics_items:
             self._scene.addItem(image)
@@ -231,8 +242,10 @@ class TreeView(QGraphicsView):
             if (
                 self.build.search_text
                 and image.node_isoverlay
-                and (self.build.search_text in image.node_name or self.build.search_text in image.node_sd)
+                and (self.build.search_text in (image.node_name, image.node_sd, f"{image.node_id}"))
+                # and (self.build.search_text in image.node_name or self.build.search_text in image.node_sd)
             ):
+                print(self.build.search_text)
                 self._scene.addItem(add_circle(image, Qt.yellow, 12))
 
         # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet
