@@ -39,6 +39,9 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         # ToDo: Temporary
         self.setAcceptHoverEvents(True)
         # self.setAcceptHoverEvents(selectable)
+        self.tool_tip = self.node_name and f"{self.node_name}, {self.node_id}" or f"{self.node_id}"
+        self.tool_tip += self.filename and f"{self.filename}, " or ""
+        self.tool_tip += self.data and f"{self.data}, " or ""
 
         # turn all those data's into properties ?
 
@@ -51,8 +54,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
     # Inherited, don't change definition
     def hoverEnterEvent(self, event):
         # this will be text associated with the node
-        if self.filename != "":
-            self.setToolTip(f"{self.filename}, {self.node_id}\n{self.data}")
+        self.setToolTip(self.tool_tip)
 
     # not sure if this is needed
     # def hoverLeaveEvent(self, event):

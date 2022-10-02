@@ -46,7 +46,7 @@ class Node:
         """
         # declare variables that are set in functions
         self.version = _version
-        self._active = False
+        # self._active = False
 
         # calculated values
         self.conquered = False
@@ -82,8 +82,8 @@ class Node:
         self.sd = _node.get("stats", [])
         self.reminderText = _node.get("reminderText", "")
         self.ascendancyName = _node.get("ascendancyName", "")
-        self.nodes_in = _node.get("in", [])
-        self.nodes_out = _node.get("out", [])
+        self.nodes_in = [int(node) for node in _node.get("in", [])]
+        self.nodes_out = [int(node) for node in _node.get("out", [])]
         self.recipe = _node.get("recipe", [])
         self.classStartIndex = _node.get("classStartIndex", -1)
         self.masteryEffects = _node.get("masteryEffects", {})
@@ -118,24 +118,24 @@ class Node:
     # def id(self, new_id):
     #     self._id = new_id
 
-    @property
-    def active(self):
-        """
-        Used for determining the right icon to display ?? The build should have a separate list managing that
-        :return:
-        """
-        if self._active:
-            return "Active"
-        else:
-            return "Inactive"
-
-    @active.setter
-    def active(self, new_state: bool):
-        self._active = new_state
-
-    @active.setter
-    def active(self, new_state: str):
-        self._active = new_state == "Active"
+    # @property
+    # def active(self):
+    #     """
+    #     Used for determining the right icon to display ?? The build should have a separate list managing that
+    #     :return:
+    #     """
+    #     if self._active:
+    #         return "Active"
+    #     else:
+    #         return "Inactive"
+    #
+    # @active.setter
+    # def active(self, new_state: bool):
+    #     self._active = new_state
+    #
+    # @active.setter
+    # def active(self, new_state: str):
+    #     self._active = new_state == "Active"
 
     @property
     def reminderText(self):

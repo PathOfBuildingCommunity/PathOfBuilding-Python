@@ -134,7 +134,8 @@ class Spec:
         :return: N/A
         """
         if new_nodes:
-            self.nodes = new_nodes.split(",")
+            self.nodes = [int(node) for node in new_nodes.split(",")]
+            # self.nodes = new_nodes.split(",")
 
     def set_extended_hashes_from_string(self, new_nodes):
         """

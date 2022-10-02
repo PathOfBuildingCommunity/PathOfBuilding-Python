@@ -9,11 +9,11 @@ A Tree instance is tied to a Version of the Tree as released by GGG and thus old
 need to be supported for backwards compatibility reason.
 
 """
-from qdarktheme.qtpy.QtCore import QRectF, Qt
+from qdarktheme.qtpy.QtCore import QLineF, QRectF, Qt
 from qdarktheme.qtpy.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
 from qdarktheme.qtpy.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView
 
-from constants import PlayerClasses, class_backgrounds, Layers
+from constants import ColourCodes, class_backgrounds, Layers, PlayerClasses
 from pob_config import Config, _debug
 
 from tree_graphics_item import TreeGraphicsItem
@@ -209,6 +209,13 @@ class TreeView(QGraphicsView):
             _circle.setZValue(z_value)
             return _circle
 
+        def add_line():
+            """
+            Draw a line from one node to another
+
+            :return: a reference to the line
+            """
+
         # leave the print in till we have everything working.
         # It is what tells us how often the assets are being redrawn.
         # _debug("add_tree_images")
@@ -224,17 +231,38 @@ class TreeView(QGraphicsView):
             self._scene.removeItem(item)
 
         # isAlloc = False
-        for node_id in tree.nodes:
-            n = tree.nodes[str(node_id)]
+        # for node_id in tree.nodes:
+        #     n = tree.nodes[str(node_id)]
 
         # loop though active nodes and add them
-        for node_id in self.build.current_spec.nodes:
-            n = tree.nodes.get(str(node_id), None)
-            if n is not None:
-                if n.active_image is not None:
-                    self._scene.addItem(n.active_image)
-                    self._scene.addItem(n.active_overlay_image)
-                # take advantage of the loop andcount assigned nodes and Ascendancy nodes.
+        active_nodes = self.build.current_spec.nodes
+        for node_id in active_nodes:
+            node = tree.nodes.get(node_id, None)
+            if node is not None:
+                if node.active_image is not None:
+                    self._scene.addItem(node.active_image)
+                    self._scene.addItem(node.active_overlay_image)
+
+                # Draw lines
+                if node.type not in ("ClassStart", "Mastery"):
+                    in_out_nodes = []
+                    for other_node_id in set(node.nodes_out + node.nodes_in) & set(active_nodes):
+                        other_node = tree.nodes.get(other_node_id, None)
+                        if (
+                            other_node is not None
+                            and other_node.type not in ("ClassStart", "Mastery")
+                            # This stops lines crossing out of the Ascendency circles
+                            and node.ascendancyName == other_node.ascendancyName
+                        ):
+                            in_out_nodes.append(other_node)
+
+                    for other_node in in_out_nodes:
+                        line = self.scene().addLine(
+                            QLineF(node.x, node.y, other_node.x, other_node.y),
+                            QPen(QColor(ColourCodes.CURRENCY.value), 4, Qt.SolidLine),
+                        )
+                        line.setAcceptTouchEvents(False)
+                        line.setZValue(Layers.connectors)
 
         for image in tree.graphics_items:
             self._scene.addItem(image)

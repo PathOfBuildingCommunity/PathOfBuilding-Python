@@ -18,11 +18,12 @@ from collections import OrderedDict
 from pathlib import Path
 
 from qdarktheme.qtpy.QtCore import QRect, Qt
-from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter
+from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter, QPen, QColor
+from qdarktheme.qtpy.QtWidgets import QGraphicsLineItem
 
 import ui_utils
 from pob_config import Config, _debug
-from constants import _VERSION, global_scale_factor, Layers, ascendancy_positions, PlayerClasses
+from constants import _VERSION, global_scale_factor, Layers, ascendancy_positions, ColourCodes, PlayerClasses
 import pob_file
 
 from tree_graphics_item import TreeGraphicsItem
@@ -145,6 +146,7 @@ class Tree:
         self.sockets = {}
         # Should this be a dict of GraphicItems
         self.spriteMap = {}
+        self.assets = {}
 
         self.load()
 
@@ -180,7 +182,6 @@ class Tree:
         :param ox: it's position in the scene
         :param oy: it's position in the scene
         :param z: Layers: which layer to use:
-        :param node: Node: which node is this item:
         :return: ptr to the created TreeGraphicsItem
         """
         image = TreeGraphicsItem(self.config, name, z, True)
@@ -189,6 +190,25 @@ class Tree:
         if z != Layers.active:
             self.graphics_items.append(image)
         return image
+
+    def add_line(self, x1, y1, x2, y2, z=Layers.connectors):
+        """
+        Add a line
+        :param x1: it's position in the scene
+        :param y1: it's position in the scene
+        :param x2: it's position in the scene
+        :param y2: it's position in the scene
+        :param z: Layers: which layer to use:
+        :return: ptr to the created TreeGraphicsItem
+        """
+        line = QGraphicsLineItem(x1, y1, x2, y2)
+        line.setAcceptTouchEvents(False)
+        line.setAcceptHoverEvents(False)
+        line.setZValue(z)
+        line.setPen(QPen(QColor(ColourCodes.CURRENCY.value), 1, Qt.SolidLine))
+        if z != Layers.active:
+            self.graphics_items.append(line)
+        return line
 
     def load(self, vers=_VERSION):
         """
@@ -225,11 +245,19 @@ class Tree:
             self.assets = self.spriteMap
         self.classes = json_dict["classes"]
         self.constants = json_dict["constants"]
-        self.groups = json_dict["groups"]
-        self.nodes = json_dict["nodes"]
 
-        # -1 one as the dictionaries are 0 based indexes
-        # num_zoom_levels = len(json_dict["imageZoomLevels"]) - 1
+        # add group indexes as int's not string
+        groups = json_dict["groups"]
+        for group_id in groups:
+            self.groups[int(group_id)] = groups[group_id]
+
+        # add node indexes as int's not string
+        nodes = json_dict["nodes"]
+        del nodes["root"]  # make the root node go away
+        for node_id in nodes:
+            self.nodes[int(node_id)] = nodes[node_id]
+
+        # Get last entry (highest zoom factor)
         zoom_text = f'{json_dict["imageZoomLevels"][-1]}'
 
         self.skillsPerOrbit = self.constants["skillsPerOrbit"]
@@ -278,7 +306,7 @@ class Tree:
         # if self._version < 3.18:
         #   self.process_assets(self.assets)
         #
-        """ Migrate groups to old format. To be evaluated if this is needed
+        """ Migrate groups to old format. ToDo: To be evaluated if this is needed
             also scale x,y"""
         for g in self.groups:
             group = self.groups[g]
@@ -291,18 +319,17 @@ class Tree:
 
         # """ Create a dictionary list of nodes of class Node()
         #     self.nodes = dictionary from the json"""
-        # make the root node go away
-        del self.nodes["root"]
-        for n in self.nodes:
-            node = Node(self.nodes[n])
-            self.nodes[n] = node
+        for node_id in self.nodes:
+            # Overwrite the json node definition with our class definition
+            node = Node(self.nodes[node_id])
+            self.nodes[node_id] = node
 
             # Find the node's type
             self.set_node_type(node, ascend_name_map, class_notables)
 
             # Find the node's group
             if node.group_id >= 0:
-                group = self.groups.get(str(node.group_id), None)
+                group = self.groups.get(node.group_id, None)
                 if group is not None:
                     group["ascendancyName"] = node.ascendancyName
                     group["isAscendancyStart"] = node.isAscendancyStart
@@ -313,6 +340,25 @@ class Tree:
 
             # Finally the node will get an x,y value. Now we can show it.
             self.process_node(node)
+
+        # Add background lines
+        for node_id in self.nodes:
+            node = self.nodes[node_id]
+            if node.type not in ("ClassStart", "Mastery"):
+                in_out_nodes = []
+                # for other_node_id in set(node.nodes_out + node.nodes_in) & set(self.nodes):
+                for other_node_id in node.nodes_out + node.nodes_in:
+                    other_node = self.nodes.get(other_node_id, None)
+                    if (
+                        other_node is not None
+                        and other_node.type not in ("ClassStart", "Mastery")
+                        # This stops lines crossing out of the Ascendency circles
+                        and node.ascendancyName == other_node.ascendancyName
+                    ):
+                        in_out_nodes.append(other_node)
+
+                for other_node in in_out_nodes:
+                    self.add_line(node.x, node.y, other_node.x, other_node.y)
 
         # Add the group backgrounds
         for g in self.groups:
@@ -336,6 +382,12 @@ class Tree:
             #         ),
             #         fout,
             #     )
+
+        # Update the nodes in and out to real nodes
+        # for n in self.nodes:
+        #     node: Node = self.nodes[n]
+        #     nodes_in = node.nodes_in
+        #     nodes_out = node.nodes_out
 
     # load
 

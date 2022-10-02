@@ -381,7 +381,7 @@ class Build:
         """
         self.nodes_assigned, self.ascnodes_assigned, self.sockets_assigned = 0, 0, 0
         for node_id in self.current_spec.nodes:
-            node = self.current_tree.nodes.get(str(node_id), None)
+            node = self.current_tree.nodes.get(node_id, None)
             if node is not None:
                 if node.type != "ClassStart" and not node.isAscendancyStart:
                     if node.ascendancyName == "":
