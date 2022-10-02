@@ -18,6 +18,7 @@ from typing import Union
 from constants import (
     PlayerClasses,
     _VERSION,
+    _VERSION_str,
     empty_build,
     empty_gem,
     empty_socket_group,
@@ -274,7 +275,7 @@ class Build:
 
         self.specs.clear()
         for spec in self.tree.findall("Spec"):
-            self.new_spec("", spec)
+            self.new_spec(xml_spec=spec)
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
         self.current_spec = self.specs[self.activeSpec]
@@ -451,11 +452,30 @@ class Build:
         :param destination: int: The destination index into self.specs and self.tree
         :return: Spec(): the newly created Spec()
         """
-        print("build.copy_spec")
+        # print("build.copy_spec")
         # converting to a string ensures it is copied and not one element that is shared.
         # internet rumour indicate .clone() and .copy() may not be good enough
         new_xml_spec = ET.fromstring(ET.tostring(self.specs[source].xml_spec))
         return self.new_spec("", new_xml_spec, destination)
+
+    def convert_spec(self, source, destination):
+        """
+        Convert an existing Spec() and xml_spec to the latest tree version.
+
+        :param source: int: The source index into self.specs and self.tree
+        :param destination: int: The destination index into self.specs and self.tree
+        :return: Spec(): the newly created Spec(), None if conversion didn't happen
+        """
+        print("build.convert_spec")
+        # Looking at the lua version, convert is just copy, with the tree version set to current.
+        # ToDo: should we at least check the nodes are still valid ?
+        spec = self.specs[source]
+        if spec.treeVersion != _VERSION_str:
+            spec = self.copy_spec(source, destination)
+            spec.treeVersion = _VERSION_str
+            return spec
+        else:
+            return None
 
     def delete_spec(self, index):
         """

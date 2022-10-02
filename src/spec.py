@@ -4,7 +4,7 @@ Represents and manages one Spec in the XML.
 import xml.etree.ElementTree as ET
 import re
 
-from constants import default_spec, PlayerClasses
+from constants import default_spec, PlayerClasses, _VERSION_str
 
 
 class Spec:
@@ -55,7 +55,7 @@ class Spec:
     @classId.setter
     def classId(self, new_class_id):
         """
-        :param new_class_id: PlayerClasses or int: importing fromjson sets using an int
+        :param new_class_id: PlayerClasses or int: importing from json sets using an int
         :return: N/A
         """
         if type(new_class_id) == int:
@@ -67,6 +67,14 @@ class Spec:
     def ascendClassId(self):
         return int(self.xml_spec.get("ascendClassId", 0))
 
+    @ascendClassId.setter
+    def ascendClassId(self, new_ascend_class_id):
+        """
+        :param new_ascend_class_id: int
+        :return: N/A
+        """
+        self.xml_spec.set("ascendClassId", f"{new_ascend_class_id}")
+
     def ascendClassId_str(self):
         """Return a string of the current Ascendancy"""
         # get a list of ascendancies from the current tree's json
@@ -77,17 +85,9 @@ class Spec:
         # Return the current ascendancy's name
         return ascendancies[self.ascendClassId]
 
-    @ascendClassId.setter
-    def ascendClassId(self, new_ascend_class_id):
-        """
-        :param new_ascend_class_id: int
-        :return: N/A
-        """
-        self.xml_spec.set("ascendClassId", f"{new_ascend_class_id}")
-
     @property
     def treeVersion(self):
-        return self.xml_spec.get("treeVersion", self.def_spec.get("treeVersion"))
+        return self.xml_spec.get("treeVersion", _VERSION_str)
 
     @treeVersion.setter
     def treeVersion(self, new_version):

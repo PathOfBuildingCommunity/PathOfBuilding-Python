@@ -42,8 +42,10 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
 
         self.btnConvert.setToolTip(self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}"))
         self.btnNew.setToolTip(self.btnNew.toolTip().replace("_VERSION", f"{_VERSION}"))
+
         self.btnNew.clicked.connect(self.new_spec)
         self.btnCopy.clicked.connect(self.duplicate_specs)
+        self.btnConvert.clicked.connect(self.convert_specs)
         self.btnDelete.clicked.connect(self.delete_specs)
         self.btnClose.clicked.connect(self.close)
         self.list_Trees.model().rowsMoved.connect(self.specs_rows_moved, Qt.QueuedConnection)
@@ -109,22 +111,30 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
 
     def duplicate_specs(self):
         """Duplicate selected rows, adding a new one after the selected row"""
-        # print("Ctrl-C")
-        # print(self.list_Trees.selectedItems())
-        # print(self.list_Trees.selectedIndexes())
-        copied_items = sorted(self.list_Trees.selectedItems())
-        if len(copied_items) <= 0:
+        selected_items = sorted(self.list_Trees.selectedItems())
+        if len(selected_items) <= 0:
             return
-        for item in copied_items:
+        for item in selected_items:
             row = self.list_Trees.row(item)
-            # self.list_Trees.takeItem(row)
             spec = self.build.copy_spec(row, row + 1)
             self.list_Trees.insertItem(row + 1, spec.title)
-        # sleep(0.4)
+        self.add_detail_to_spec_names()
+
+    def convert_specs(self):
+        """Convert selected rows, adding the new one after the selected row"""
+        # print("manage.convert_specs")
+        selected_items = sorted(self.list_Trees.selectedItems())
+        if len(selected_items) <= 0:
+            return
+        for item in selected_items:
+            row = self.list_Trees.row(item)
+            spec = self.build.specs[row]
+            if spec.treeVersion != _VERSION_str:
+                spec = self.build.convert_spec(row, row + 1)
+                self.list_Trees.insertItem(row + 1, spec.title)
         self.add_detail_to_spec_names()
 
     def delete_specs(self):
-        # print("Delete")
         copied_items = sorted(self.list_Trees.selectedItems())
         if len(copied_items) <= 0:
             return
@@ -162,7 +172,6 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         :param item: QListWidgetItem:
         :return: N/A
         """
-        # print("list_item_double_clicked", item.text())
         self.disconnect_triggers()
         self.item_being_edited = item
         row = self.list_Trees.currentRow()
@@ -177,8 +186,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         :param previous: QListWidgetItem:
         :return: N/A
         """
-        # print("list_current_item_changed", current, previous, self.item_being_edited)
-        # print("list_current_item_changed", current.text(), previous.text())
+        print("list_current_item_changed")
         if self.item_being_edited == previous:
             self.list_item_changed(previous)
             # Abandon previous edit
