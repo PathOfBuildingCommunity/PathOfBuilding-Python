@@ -115,13 +115,14 @@ class ImportDlg(Ui_Dialog, QDialog):
         m = re.search(r"http[s]?://(.*)/(.*)$", text)
         if m is not None and m.group(1) in valid_websites:
             # if the text was a meaninful url and it was a supported url, let's get the code
+            response = None
             try:
                 url = website_list[m.group(1)]["downloadURL"].replace("CODE", m.group(2))
                 response = requests.get(url, headers=http_headers, timeout=6.0)
                 code = decode_base64_and_inflate(response.content)
             except requests.RequestException as e:
-                # ToDo: proper notification
-                print(f"Error retrieving data: {e}.")
+                self.status = f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+                print(f"Error retrieving 'Data': {e}.")
                 return
         else:
             # check the code is valid
@@ -193,15 +194,16 @@ class ImportDlg(Ui_Dialog, QDialog):
         :return: N/A
         """
         account_name = self.lineedit_Account.text()
+        response = None
         try:
             realm_code = realm_list.get(self.combo_Realm.currentText(), "pc")
             url = f"{realm_code['hostName']}character-window/get-characters"
             params = {"accountName": account_name, "realm": realm_code}
             response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             self.account_json = response.json()
-            # self.account_json = pob_file.read_json("c:/Users/peter/Downloads/get-characters-xyllywyt.json")
         except requests.RequestException as e:
-            print(f"Error retrieving account: {e}.")
+            self.status = f"Error retrieving 'Account': {response.reason} ({response.status_code})."
+            print(f"Error retrieving 'Account': {e}.")
             print(vars(response))
             return
         if self.account_json:
@@ -214,6 +216,16 @@ class ImportDlg(Ui_Dialog, QDialog):
             self.combo_League.clear()
             self.combo_League.addItem("All")
             self.combo_League.addItems(unique_sorted([char["league"] for char in self.account_json]))
+
+    @property
+    def status(self):
+        """status label text. Needed so we can have a setter"""
+        return self.label_Status.text()
+
+    @status.setter
+    def status(self, text):
+        """Add to the status label"""
+        self.label_Status.setText(text)
 
     def download_character_data(self):
         """
@@ -235,27 +247,28 @@ class ImportDlg(Ui_Dialog, QDialog):
             response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             passive_tree = response.json()
         except requests.RequestException as e:
-            print(f"Error retrieving account: {e}.")
-            if response:
-                print(vars(response))
+            print(f"Error retrieving 'Passive Tree': {e}.")
+            self.status = f"Error retrieving 'Passive Tree': {response.reason} ({response.status_code})."
+            print(vars(response))
 
         # get items
         items = None
+        response = None
         try:
             url = f"{realm_code['hostName']}character-window/get-items"
             response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             items = response.json()
         except requests.RequestException as e:
-            print(f"Error retrieving account: {e}.")
-            if response:
-                print(vars(response))
+            print(f"Error retrieving 'Items': {e}.")
+            self.status = f"Error retrieving 'Items': {response.reason} ({response.status_code})."
+            print(vars(response))
 
         # lets add the jewels and items together
         for idx, jewel in enumerate(passive_tree.get("items", [])):
             items["items"].insert(idx, jewel)
         char_info = items.get("character", None)
         self.character_data = {"tree": passive_tree, "items": items, "character": char_info}
-        # pprint(items)
+        # pprint(passive_tree)
 
     def fill_character_history(self):
         self.comboChar_History.clear()

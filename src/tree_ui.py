@@ -139,7 +139,6 @@ class TreeUI:
         and we need a dialog ...
         :return:
         """
-        print("open_manage_trees")
         dlg = ManageTreeDlg(self.build, self.win)
         dlg.exec()
         self.fill_current_tree_combo()

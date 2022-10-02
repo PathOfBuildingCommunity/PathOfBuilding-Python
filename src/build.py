@@ -74,8 +74,7 @@ class Build:
         self.new(ET.ElementTree(ET.fromstring(empty_build)))
 
     def __repr__(self) -> str:
-        ret_str = f"[BUILD]: '{self.name}'\n"
-        ret_str += f"{self.current_tree.version}"
+        ret_str = f"[BUILD]: '{self.name}', {self.current_tree.version}"
         # ret_str += f"{self.player}"
         return ret_str
 
@@ -275,9 +274,7 @@ class Build:
 
         self.specs.clear()
         for spec in self.tree.findall("Spec"):
-            if spec.get("title", -1) == -1:
-                spec.set("title", "Default")
-            self.specs.append(Spec(self, spec))
+            self.new_spec("", spec)
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
         self.current_spec = self.specs[self.activeSpec]
@@ -417,7 +414,6 @@ class Build:
         """
         spec = self.specs[start]
         xml_spec = spec.xml_spec
-        print(type(xml_spec), xml_spec)
         if start < destination:
             # need to decrement dest by one as we are going to remove start first
             destination -= 1
@@ -426,19 +422,52 @@ class Build:
         self.tree.remove(xml_spec)
         self.tree.insert(destination, xml_spec)
 
-    def new_spec(self, new_title):
+    def new_spec(self, new_title="", xml_spec=None, destination=-1):
         """
         Add a new empty tree/Spec
 
         :param new_title: str
+        :param xml_spec: ET.elementtree: If specified, the new x,l representation
+        :param destination: int: If specified, insert the new spec at destination elsewise append to the end
         :return: Spec(): the newly created Spec()
         """
         # print("build.new_spec")
-        spec = Spec(self.build, None)
-        spec.title = new_title
-        self.specs.append(spec)
-        self.tree.append(spec.xml_spec)
+        spec = Spec(self, xml_spec)
+        if new_title != "":
+            spec.title = new_title
+        if destination == -1:
+            self.specs.append(spec)
+            self.tree.append(spec.xml_spec)
+        else:
+            self.specs.insert(destination, spec)
+            self.tree.insert(destination, spec.xml_spec)
         return spec
+
+    def copy_spec(self, source, destination):
+        """
+        Copy an existing Spec() and xml_spec
+
+        :param source: int: The source index into self.specs and self.tree
+        :param destination: int: The destination index into self.specs and self.tree
+        :return: Spec(): the newly created Spec()
+        """
+        print("build.copy_spec")
+        # converting to a string ensures it is copied and not one element that is shared.
+        # internet rumour indicate .clone() and .copy() may not be good enough
+        new_xml_spec = ET.fromstring(ET.tostring(self.specs[source].xml_spec))
+        return self.new_spec("", new_xml_spec, destination)
+
+    def delete_spec(self, index):
+        """
+        Add a new empty tree/Spec
+
+        :param index: int: The index into self.specs and self.tree
+        :return:  N/A
+        """
+        # print("build.delete_spec")
+        xml_spec = self.specs[index].xml_spec
+        self.tree.remove(xml_spec)
+        del self.specs[index]
 
     def import_passive_tree_jewels_json(self, json_tree, json_character):
         """
@@ -450,20 +479,21 @@ class Build:
             character={ ascendancyClass=1, class="Inquisitor", classId=5, experience=1028062232,
                 league="Standard", level=82, name="Mirabel__Sentinel" },
         """
-        # print(json_character)
-        # print(json_tree)
-        new_spec = Spec(self)
-        self.specs.append(new_spec)
-        new_spec.title = f"Imported {json_character.get('name', '')}"
-        self.name = new_spec.title
-        new_spec.classId = json_character.get("classId", 0)
+        # print("import_passive_tree_jewels_json", json_character)
+        # print("import_passive_tree_jewels_json", json_tree)
+        new_spec = self.new_spec()
+        self.name = f"Imported {json_character.get('name', '')}"
+        print(self.name)
+        new_spec.load_from_json(self.name, json_tree, json_character)
+        print(ET.tostring(new_spec.xml_spec))
         self.current_class = new_spec.classId
-        new_spec.ascendancyClass = json_character.get("ascendancyClass", 0)
         self.ascendClassName = json_character.get("class", "")
         self.level = json_character.get("level", 1)
 
+        # add to combo
+        self.win.tree_ui.fill_current_tree_combo()
         # show tree
-        self.win.tree_ui.combo_manage_tree.setCurrentIndex(int(self.tree.get("activeSpec", 1)) - 1)
+        self.win.tree_ui.combo_manage_tree.setCurrentIndex(self.win.tree_ui.combo_manage_tree.count() - 1)
 
     def check_socket_group_for_an_active_gem(self, _sg):
         """

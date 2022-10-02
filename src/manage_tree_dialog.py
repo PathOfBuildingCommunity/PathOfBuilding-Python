@@ -5,7 +5,7 @@ Open a dialog for importing a character.
 """
 
 import urllib3
-
+import re
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QDialog
 
@@ -14,6 +14,7 @@ from qdarktheme.qtpy.QtWidgets import QDialog
 from dlg_ManageTree import Ui_Dialog
 from build import Build
 from constants import _VERSION, _VERSION_str
+from ui_utils import yes_no_dialog
 
 
 class ManageTreeDlg(Ui_Dialog, QDialog):
@@ -31,22 +32,19 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
 
         for spec in self.build.specs:
             self.list_Trees.addItem(spec.title)
-            # if spec.treeVersion != _VERSION_str:
-            #     title = f"[{spec.treeVersion}] {spec.title}"
-            # else:
-            #     title = spec.title
-            # self.list_Trees.addItem(title)
 
         self.list_Trees.setFocus()
         self.list_Trees.setCurrentRow(0)
         for index in range(self.list_Trees.count()):
             item = self.list_Trees.item(index)
             item.setFlags(item.flags() | Qt.ItemIsEditable)
-        self.add_detail_to_spec_name()
+        self.add_detail_to_spec_names()
 
         self.btnConvert.setToolTip(self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}"))
         self.btnNew.setToolTip(self.btnNew.toolTip().replace("_VERSION", f"{_VERSION}"))
         self.btnNew.clicked.connect(self.new_spec)
+        self.btnCopy.clicked.connect(self.duplicate_specs)
+        self.btnDelete.clicked.connect(self.delete_specs)
         self.btnClose.clicked.connect(self.close)
         self.list_Trees.model().rowsMoved.connect(self.specs_rows_moved, Qt.QueuedConnection)
         self.list_Trees.model().rowsAboutToBeMoved.connect(self.specs_rows_about_to_be_moved, Qt.QueuedConnection)
@@ -67,7 +65,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         self.list_Trees.currentItemChanged.disconnect(self.list_current_item_changed)
         self.triggers_connected = False
 
-    def add_detail_to_spec_name(self):
+    def add_detail_to_spec_names(self):
         """
         Add the tree version and other information to the spec title
 
@@ -96,6 +94,12 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         if self.list_Trees.hasFocus():
             if ctrl_pressed and event.key() == Qt.Key_A:
                 self.list_Trees.selectAll()
+            elif ctrl_pressed and event.key() == Qt.Key_E:
+                # start editing on the current item
+                item = self.list_Trees.currentItem()
+                if item is not None:
+                    self.list_item_double_clicked(item)
+                    self.list_Trees.editItem(item)
             else:
                 event.ignore()
         else:
@@ -103,13 +107,36 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
 
         super(ManageTreeDlg, self).keyPressEvent(event)
 
-    def duplicate_rows(self):
+    def duplicate_specs(self):
         """Duplicate selected rows, adding a new one after the selected row"""
-        print("Ctrl-C")
-        print(self.list_Trees.selectedItems())
+        # print("Ctrl-C")
+        # print(self.list_Trees.selectedItems())
+        # print(self.list_Trees.selectedIndexes())
+        copied_items = sorted(self.list_Trees.selectedItems())
+        if len(copied_items) <= 0:
+            return
+        for item in copied_items:
+            row = self.list_Trees.row(item)
+            # self.list_Trees.takeItem(row)
+            spec = self.build.copy_spec(row, row + 1)
+            self.list_Trees.insertItem(row + 1, spec.title)
+        # sleep(0.4)
+        self.add_detail_to_spec_names()
 
-    def delete_rows(self):
-        print("Delete")
+    def delete_specs(self):
+        # print("Delete")
+        copied_items = sorted(self.list_Trees.selectedItems())
+        if len(copied_items) <= 0:
+            return
+        text = "You are about to delete the following Passives Trees\n"
+        for item in copied_items:
+            text += f"{item.text()}\n"
+        text += "\nReally DO this ?\n"
+        if yes_no_dialog(self, "Deleting Passives Trees", text):
+            for item in copied_items:
+                index = self.list_Trees.row(item)
+                self.list_Trees.takeItem(index)
+                self.build.delete_spec(index)
 
     @Slot()
     def new_spec(self):
@@ -120,11 +147,12 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
 
     @Slot()
     def list_item_changed(self, item):
-        print("list_current_text_changed", item.text())
+        """Update line text after the user hits enter or clicks away"""
+        # print("list_current_text_changed", item.text())
         self.item_being_edited = None
         row = self.list_Trees.currentRow()
         self.build.specs[row].title = item.text()
-        self.add_detail_to_spec_name()
+        self.add_detail_to_spec_names()
 
     @Slot()
     def list_item_double_clicked(self, item):
@@ -152,9 +180,10 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         # print("list_current_item_changed", current, previous, self.item_being_edited)
         # print("list_current_item_changed", current.text(), previous.text())
         if self.item_being_edited == previous:
+            self.list_item_changed(previous)
             # Abandon previous edit
-            self.item_being_edited = None
-            self.add_detail_to_spec_name()
+            # self.item_being_edited = None
+            self.add_detail_to_spec_names()
 
     @Slot()
     def specs_rows_moved(self, parent, start, end, destination, destination_row):
@@ -193,5 +222,5 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         :param destination_row: int: not Used
         :return: N/A
         """
-        print("specs_rows_about_to_be_moved")
+        # print("specs_rows_about_to_be_moved")
         self.spec_to_be_moved = source_parent
