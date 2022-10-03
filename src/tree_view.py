@@ -34,9 +34,11 @@ class TreeView(QGraphicsView):
         self.config = _config
         self.build = _build
 
-        self.ui = None
-        self._scene = QGraphicsScene()
+        self.search_rings = []
+        self.active_nodes = []
+        self.active_lines = []
 
+        self._scene = QGraphicsScene()
         self.setScene(self._scene)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
         self.setResizeAnchor(QGraphicsView.AnchorUnderMouse)
@@ -49,8 +51,6 @@ class TreeView(QGraphicsView):
         # self.setBackgroundBrush(QBrush("#181818", Qt.SolidPattern))
 
         self._char_class_bkgnd_image = None
-        self.drag = False
-        self.start_pos = None
         self.fitInView(True, 0.1)
 
         self.setDragMode(QGraphicsView.ScrollHandDrag)
@@ -58,7 +58,7 @@ class TreeView(QGraphicsView):
         self.viewport().setCursor(Qt.ArrowCursor)
 
         # add_tree_images needs to be before adding a margin
-        self.add_tree_images()
+        self.add_tree_images(True)
         # add a margin to make panning the view seem more comfortable
         rect = self.sceneRect()
         rect.adjust(-1000.0, -1000.0, 1000.0, 1000.0)
@@ -103,8 +103,9 @@ class TreeView(QGraphicsView):
     # Inherited, don't change definition
     def mouseReleaseEvent(self, event) -> None:
         """
-        Override the GraphicsView drag cursor
-        :param event: Internal event matrix
+        Turn on or off a node if one is clicked on. Update node count appropriately.
+
+        :param event: Internal event matrix.
         :return: N/A
         """
         # _debug("tree_view: mouseReleaseEvent")
@@ -112,15 +113,16 @@ class TreeView(QGraphicsView):
         # Ensure hand cursor is gone (it's sneaky)
         self.viewport().setCursor(Qt.ArrowCursor)
         _item: TreeGraphicsItem = self.itemAt(event.pos())
-        if _item and _item.node_id != 0:
+        if _item and type(_item) == TreeGraphicsItem and _item.node_id != 0:
             if _item.node_id in self.build.current_spec.nodes:
                 self.build.current_spec.nodes.remove(_item.node_id)
             else:
                 self.build.current_spec.nodes.append(_item.node_id)
             self.add_tree_images()
-            # count the new nodes and display them
+            # count the new nodes ...
             self.build.count_allocated_nodes()
-            self.win.bandits_changed(self.win.combo_Bandits.currentText())
+            # ... and display them
+            self.win.display_number_node_points(-1)
 
     # Function Overridden
     def fitInView(self, scale=True, factor=None):
@@ -176,28 +178,29 @@ class TreeView(QGraphicsView):
 
     def switch_tree(self):
         """
-        Changes for this Class() to deal with a PoB tree change
+        Changes for this Class() to deal with a PoB tree change.
+
         :param:  N/A
         :return: N/A
         """
         self.add_tree_images()
+        self.refresh_search_rings()
 
-    def add_tree_images(self):
+    def refresh_search_rings(self):
         """
-        Used when swapping tree's in a build.
-        It will remove all assets, including selected nodes and connecting lines and present an empty tree
-        It is expected another function will be called to created selected nodes and connecting lines
+        clear and redraw search rings around nodes.
+
         :return: N/A
         """
 
         def add_circle(_image: TreeGraphicsItem, colour, line_width=10, z_value=10):
             """
             Draw a circle around an overlay image
-            :param _image: TreegraphicsItem
-            :param colour: yep
-            :param z_value: which layer shall we draw it
-            :param line_width: yep
-            :return: a reference to the circle
+            :param _image: TreegraphicsItem: The image to have a circle drawn around it.
+            :param colour: ColourCodes.value: yep.
+            :param z_value: Layers: which layer shall we draw it.
+            :param line_width: int: yep.
+            :return: a reference to the circle.
             """
             _circle = QGraphicsEllipseItem(
                 _image.pos().x() + _image.offset().x() - line_width / 2,
@@ -207,43 +210,87 @@ class TreeView(QGraphicsView):
             )
             _circle.setPen(QPen(QColor(colour), line_width, Qt.SolidLine))
             _circle.setZValue(z_value)
+            _circle.setStartAngle(90 * 16)
+            _circle.setSpanAngle(90 * 16)
+
             return _circle
+            # add_circle
 
-        def add_line():
-            """
-            Draw a line from one node to another
+        # print(f"refresh_search_rings: '{self.build.search_text}', {len(self.search_rings)}, {len(self._scene.items())}")
+        for item in self.search_rings:
+            self._scene.removeItem(item)
+            del item
+        self.search_rings.clear()
+        if self.build.search_text == "":
+            return
+        # We only put search rings around a node's overlay, not the node itself.
+        # The stops the ring appearing under or over the node's overlay.
+        for image in self.build.current_tree.graphics_items:
+            if image.node_isoverlay and self.build.search_text in image.build_tooltip():
+                _circle = add_circle(image, Qt.yellow, 12)
+                self.search_rings.append(_circle)
+                self._scene.addItem(_circle)
 
-            :return: a reference to the line
-            """
+    def add_tree_images(self, full_clear=False):
+        """
+        Used when swapping tree's in a build.
+        It will remove all assets, including selected nodes and connecting lines and present an empty tree.
+        It is expected another function will be called to created selected nodes and connecting lines.
+        :param: full_clear: bool: If set, delete the tree images also. If not set, only delete the active images
+        :return: N/A
+        """
 
         # leave the print in till we have everything working.
         # It is what tells us how often the assets are being redrawn.
-        # _debug("add_tree_images")
+        _debug("add_tree_images", full_clear)
         if self.build.current_tree is None:
             return
 
         tree = self.build.current_tree
-
-        # ToDo: Only remove items if we change tree versions
-        #  else wise just remove the selected nodes/connectors and readd new ones (separate function)
         # do not use self.clear as it deletes the graphics assets from memory
-        for item in self.items():
-            self._scene.removeItem(item)
+        if full_clear:
+            for item in self.items():
+                self._scene.removeItem(item)
+            # inactive tree assets
+            for image in tree.graphics_items:
+                self._scene.addItem(image)
 
-        # isAlloc = False
-        # for node_id in tree.nodes:
-        #     n = tree.nodes[str(node_id)]
+            # inactive tree lines
+            for line in tree.lines:
+                self._scene.addItem(line)
 
-        # loop though active nodes and add them
+            # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet.
+            if self.build.current_class != PlayerClasses.SCION:
+                bkgnd = class_backgrounds[self.build.current_class]
+                self._char_class_bkgnd_image = self.add_picture(
+                    QPixmap(f":/Art/TreeData/{bkgnd['n']}"),
+                    bkgnd["x"],
+                    bkgnd["y"],
+                    Layers.backgrounds,
+                )
+                self._char_class_bkgnd_image.filename = bkgnd["n"]
+        else:
+            # don't delete the images for the nodes as they are owned by the relevant Tree() class.
+            for item in self.active_nodes:
+                self._scene.removeItem(item)
+            for item in self.active_lines:
+                self._scene.removeItem(item)
+                del item
+        self.active_nodes.clear()
+        self.active_lines.clear()
+
+        # loop though active nodes and add them and their connecting lines
         active_nodes = self.build.current_spec.nodes
         for node_id in active_nodes:
             node = tree.nodes.get(node_id, None)
             if node is not None:
                 if node.active_image is not None:
+                    self.active_nodes.append(node.active_image)
+                    self.active_nodes.append(node.active_overlay_image)
                     self._scene.addItem(node.active_image)
                     self._scene.addItem(node.active_overlay_image)
 
-                # Draw lines
+                # Draw active lines
                 if node.type not in ("ClassStart", "Mastery"):
                     in_out_nodes = []
                     for other_node_id in set(node.nodes_out + node.nodes_in) & set(active_nodes):
@@ -258,33 +305,15 @@ class TreeView(QGraphicsView):
 
                     for other_node in in_out_nodes:
                         line = self.scene().addLine(
-                            QLineF(node.x, node.y, other_node.x, other_node.y),
-                            QPen(QColor(ColourCodes.CURRENCY.value), 4, Qt.SolidLine),
+                            node.x,
+                            node.y,
+                            other_node.x,
+                            other_node.y,
+                            QPen(QColor(ColourCodes.CURRENCY.value), 4),
                         )
                         line.setAcceptTouchEvents(False)
+                        line.setAcceptHoverEvents(False)
                         line.setZValue(Layers.connectors)
-
-        for image in tree.graphics_items:
-            self._scene.addItem(image)
-            # Search indicator
-            if (
-                self.build.search_text
-                and image.node_isoverlay
-                and (self.build.search_text in (image.node_name, image.node_sd, f"{image.node_id}"))
-                # and (self.build.search_text in image.node_name or self.build.search_text in image.node_sd)
-            ):
-                print(self.build.search_text)
-                self._scene.addItem(add_circle(image, Qt.yellow, 12))
-
-        # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet
-        if self.build.current_class != PlayerClasses.SCION:
-            bkgnd = class_backgrounds[self.build.current_class]
-            self._char_class_bkgnd_image = self.add_picture(
-                QPixmap(f":/Art/TreeData/{bkgnd['n']}"),
-                bkgnd["x"],
-                bkgnd["y"],
-                Layers.backgrounds,
-            )
-            self._char_class_bkgnd_image.filename = bkgnd["n"]
+                        self.active_lines.append(line)
 
     # add_tree_images

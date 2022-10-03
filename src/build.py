@@ -25,7 +25,7 @@ from constants import (
     program_title,
     slot_map,
 )
-from pob_config import _debug, Config, str_to_bool, bool_to_str, print_a_xml_element
+from pob_config import _debug, Config, str_to_bool, bool_to_str, print_a_xml_element, print_call_stack
 import pob_file
 import ui_utils
 from tree import Tree
@@ -394,16 +394,19 @@ class Build:
 
     def change_tree(self, tree_id):
         """
-        Process changing a tree inside a build
+        Process changing a tree inside a build.
 
-        :param tree_id: index into self.specs which comesfrom the data of combo_ManageTree
-        :return: N/A
+        :param tree_id: int/None: index into self.specs which comes from combo_ManageTree.currentData().
+        :return: bool: True if the previous and new trees have different versions.
         """
         if tree_id is None:
-            return
+            return True
+        new_spec = self.specs[tree_id]
+        full_clear = self.current_spec.treeVersion != new_spec.treeVersion
         self.activeSpec = tree_id
-        self.current_spec = self.specs[tree_id]
+        self.current_spec = new_spec
         self.count_allocated_nodes()
+        return full_clear
 
     def move_spec(self, start, destination):
         """

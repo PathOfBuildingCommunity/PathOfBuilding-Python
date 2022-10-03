@@ -208,7 +208,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Export.triggered.connect(self.open_export_dialog)
         self.statusbar_MainWindow.messageChanged.connect(self.update_status_bar)
 
-        self.combo_Bandits.currentTextChanged.connect(self.bandits_changed)
+        self.combo_Bandits.currentTextChanged.connect(self.display_number_node_points)
         self.combo_classes.currentTextChanged.connect(self.class_changed)
         self.combo_ascendancy.currentTextChanged.connect(self.ascendancy_changed)
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
@@ -216,8 +216,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
         # ToDO: this could be currentIndexChanged
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
-        self.tree_ui.textEdit_Search.textChanged.connect(self.search_text_changed)
-        self.tree_ui.textEdit_Search.returnPressed.connect(self.search_return_pressed)
 
         # Start the statusbar self updating
         self.update_status_bar()
@@ -334,7 +332,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # if everything worked, lets update the UI
         if self.build.build is not None:
-            _debug("build_loader")
+            # _debug("build_loader")
             if not new:
                 self.config.add_recent_build(xml)
             # Config needs to be set before the tree, as the change_tree function uses/sets it also.
@@ -384,10 +382,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not tree_id:
             return
 
-        self.build.change_tree(self.tree_ui.combo_manage_tree.currentData())
+        full_clear = self.build.change_tree(self.tree_ui.combo_manage_tree.currentData())
 
         # update label_points
-        self.bandits_changed(self.combo_Bandits.currentText())
+        self.display_number_node_points(-1)
 
         _current_class = self.combo_classes.currentData()
         if self.build.current_spec.classId == _current_class:
@@ -407,7 +405,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_ascendancy.setCurrentIndex(_ascendClassId)
 
         self.refresh_tree = True
-        self.gview_Tree.add_tree_images()
+        self.gview_Tree.add_tree_images(full_clear)
 
     @Slot()
     def class_changed(self, selected_class):
@@ -458,7 +456,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.gview_Tree.add_tree_images()
 
     @Slot()
-    def bandits_changed(self, bandit_id):
+    def display_number_node_points(self, bandit_id):
         """
         Actions required when the combo_bandits widget changes.
 
@@ -593,13 +591,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # If not found, set the first
         self.tab_main.setCurrentIndex(0)
 
-    def search_text_changed(self):
-        """
-        Store the text of Search edit as it is typed.
-        Should we use this or just use the return_pressed function
-        """
-        self.build.search_text = self.tree_ui.textEdit_Search.text()
-
     @Slot()
     def active_skill_changed(self, _skill_text):
         """
@@ -680,9 +671,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # must happen before call to update_socket_group_labels
         self.build.mainSocketGroup = new_index
         self.skills_ui.update_socket_group_labels()
-
-    def search_return_pressed(self):
-        self.gview_Tree.add_tree_images()
 
     @Slot()
     def update_status_bar(self, message=None):

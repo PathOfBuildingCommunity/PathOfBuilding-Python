@@ -127,8 +127,10 @@ class Tree:
         self.max_x = 0
         self.max_y = 0
         self.size = QRect(self.min_x, self.min_y, self.max_x, self.max_y)
-        # list of graphic ites in no specific order
+        # list of graphic items in no specific order
         self.graphics_items = []
+        # lines are separate as they do not have the same properties as TreeGraphicsItem's
+        self.lines = []
         self.total_points = 0
         self.ascendancy_points = 8
         self.skillsPerOrbit = {}
@@ -194,10 +196,10 @@ class Tree:
     def add_line(self, x1, y1, x2, y2, z=Layers.connectors):
         """
         Add a line
-        :param x1: it's position in the scene
-        :param y1: it's position in the scene
-        :param x2: it's position in the scene
-        :param y2: it's position in the scene
+        :param x1: it's start position in the scene
+        :param y1: it's start position in the scene
+        :param x2: it's end position in the scene
+        :param y2: it's end position in the scene
         :param z: Layers: which layer to use:
         :return: ptr to the created TreeGraphicsItem
         """
@@ -207,7 +209,7 @@ class Tree:
         line.setZValue(z)
         line.setPen(QPen(QColor(ColourCodes.CURRENCY.value), 1, Qt.SolidLine))
         if z != Layers.active:
-            self.graphics_items.append(line)
+            self.lines.append(line)
         return line
 
     def load(self, vers=_VERSION):

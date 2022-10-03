@@ -62,10 +62,10 @@ class TreeUI:
         self.label_Search.setMinimumSize(QSize(50, 22))
         self.label_Search.setText("Search:")
         self.layout_tree_tools.addWidget(self.label_Search)
-        self.textEdit_Search = QLineEdit()
-        self.textEdit_Search.setMinimumSize(QSize(150, 22))
-        self.textEdit_Search.setText("Dexterit")
-        self.layout_tree_tools.addWidget(self.textEdit_Search)
+        self.lineEdit_Search = QLineEdit()
+        self.lineEdit_Search.setMinimumSize(QSize(150, 22))
+        self.lineEdit_Search.setText("Dexterit")
+        self.layout_tree_tools.addWidget(self.lineEdit_Search)
 
         self.check_show_node_power = QCheckBox()
         self.check_show_node_power.setMinimumSize(QSize(50, 22))
@@ -83,6 +83,9 @@ class TreeUI:
         self.btn_show_power_report.setText(f'{tr("Show Power Report")} ...')
         self.layout_tree_tools.addWidget(self.btn_show_power_report)
         """ End Adding Widgets to the QFrame at the bottom of the treeview. """
+
+        self.lineEdit_Search.textChanged.connect(self.search_text_changed)
+        self.lineEdit_Search.returnPressed.connect(self.search_text_return_pressed)
 
     def load(self):
         """Load internal structures from the build object."""
@@ -163,6 +166,25 @@ class TreeUI:
                 self.combo_compare.addItem(title, idx)
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)
+
+    @Slot()
+    def search_text_changed(self):
+        """
+        Store the text of Search edit as it is typed.
+        Should we use this or just use the return_pressed function
+        """
+        self.build.search_text = self.lineEdit_Search.text()
+        self.win.gview_Tree.refresh_search_rings()
+
+    @Slot()
+    def search_text_return_pressed(self):
+        """
+        refresh the whole scene and Update the search rings
+
+        :return: N/A
+        """
+        self.win.gview_Tree.add_tree_images(True)
+        self.search_text_changed()
 
 
 def test() -> None:
