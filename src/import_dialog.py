@@ -132,6 +132,8 @@ class ImportDlg(Ui_Dialog, QDialog):
         text = self.lineedit_BuildShare.text().strip()
         if text == "":
             return
+        if self.combo_Import.currentData() == "NEW":
+            self.win.build_new()
         # Attempt to break up the text in lineedit control into a meaningful url.
         # get the website and the code as separate 'group' variables
         #   (1) is the website and (2) is the code

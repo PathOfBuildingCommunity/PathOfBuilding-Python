@@ -8,7 +8,7 @@ from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, Q
 
 from PoB_Main_Window import Ui_MainWindow
 from constants import _VERSION, PlayerClasses, _VERSION_str
-from pob_config import Config, _debug
+from pob_config import Config, _debug, print_call_stack
 from flow_layout import FlowLayout
 from manage_tree_dialog import ManageTreeDlg
 

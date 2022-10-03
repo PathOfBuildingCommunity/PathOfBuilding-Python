@@ -38,7 +38,7 @@ class Spec:
 
     @property
     def title(self):
-        return self.xml_spec.get("title")
+        return self.xml_spec.get("title", "Default")
 
     @title.setter
     def title(self, new_title):
