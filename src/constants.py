@@ -107,13 +107,14 @@ pantheon_minor_gods = {
 
 
 class Layers(enum.IntEnum):
-    backgrounds = -3
-    group = -2
-    connectors = -1
+    backgrounds = -4
+    group = -3
+    connectors = -2
+    active_effect = -1
     inactive = 0
     small_overlays = 1
     key_overlays = 2
-    active = 3
+    active = 4
 
 
 class ColourCodes(enum.Enum):

@@ -190,7 +190,7 @@ class Tree:
         image = TreeGraphicsItem(self.config, name, z, True)
         image.setPos(x, y)
         image.setOffset(ox, oy)
-        if z != Layers.active:
+        if z not in [Layers.active, Layers.active_effect]:
             self.graphics_items.append(image)
         return image
 
@@ -434,6 +434,7 @@ class Tree:
                 }
                 node.inactive_sprite = self.spriteMap[node.inactiveIcon]["masteryInactive"]
                 node.active_sprite = self.spriteMap[node.activeIcon]["masteryActiveSelected"]
+                node.activeEffectImage = self.spriteMap[node.activeEffectImage]["masteryActiveEffect"]
             else:
                 # No active image
                 node.sprites = self.spriteMap[node.icon]["mastery"]
@@ -473,6 +474,8 @@ class Tree:
                 add_sprite(node.inactive_sprite)
             if node.active_sprite and node.active_sprite.get("handle", None) is not None:
                 node.active_image = add_sprite(node.active_sprite, Layers.active)
+            if node.activeEffectImage and node.activeEffectImage.get("handle", None) is not None:
+                node.activeEffectImage = add_sprite(node.activeEffectImage, Layers.active_effect)
 
             # "ClassStart" might belong in treeView still depending on the size of the active asset
             if node.type == "ClassStart":
@@ -508,8 +511,7 @@ class Tree:
                     node.activeOverlay = self.spriteMap[active_overlay_name][overlay_type]
                     node.active_overlay_image = add_sprite(node.inactiveOverlay, Layers.active)
                     node.active_overlay_image.node_isoverlay = True
-
-    # process_node
+        # process_node
 
     def set_node_type(self, node: Node, ascend_name_map, class_notables):
         """
@@ -573,8 +575,7 @@ class Tree:
                 if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
                     class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
                 class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
-
-    # set_node_type
+        # set_node_type
 
     def process_sprite_map(self, sprite_list, sprite_map, sprite_path, index):
         """
@@ -647,8 +648,7 @@ class Tree:
 
         # with open("temp/spriteMap.txt", "a") as f_out:
         #     pprint(self.spriteMap, f_out)
-
-    # process_sprite_map
+        # process_sprite_map
 
     def process_assets(self, sprite_list):
         """
@@ -680,11 +680,10 @@ class Tree:
                 "width": _result.width,
                 "height": _result.height,
             }
-
         # with open("temp/spriteMap.txt", "a") as f_out:
         #     pprint(self.spriteMap, f_out)
 
-    # process_assets
+        # process_assets
 
     def render_group_background(self, _group, g, is_expansion=False):
         __image = None
@@ -767,8 +766,7 @@ class Tree:
             )
             __image.filename = f"{g} GroupBackgroundSmallAlt"
             __image.setScale(2.5 / global_scale_factor)
-
-    # render_group_background
+        # render_group_background
 
 
 def test(config: Config) -> None:

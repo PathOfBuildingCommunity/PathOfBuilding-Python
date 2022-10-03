@@ -289,6 +289,12 @@ class TreeView(QGraphicsView):
                     self.active_nodes.append(node.active_overlay_image)
                     self._scene.addItem(node.active_image)
                     self._scene.addItem(node.active_overlay_image)
+                if node.masteryEffects:
+                    print(node.id, node.activeEffectImage)
+                    print(node.id, node.active_image)
+                    # image = node.masterySprites["activeEffectImage"]
+                    self.active_nodes.append(node.activeEffectImage)
+                    self._scene.addItem(node.activeEffectImage)
 
                 # Draw active lines
                 if node.type not in ("ClassStart", "Mastery"):
