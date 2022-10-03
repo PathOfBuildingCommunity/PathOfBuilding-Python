@@ -316,4 +316,13 @@ class TreeView(QGraphicsView):
                         line.setZValue(Layers.connectors)
                         self.active_lines.append(line)
 
-    # add_tree_images
+        # Darken Ascendancy backgrouds.
+        current_ascendancy = f"Classes{self.build.ascendClassName}"
+        for item in tree.ascendancy_group_list:
+            # Chieftain is brighter than the rest
+            dim = item.filename == "ClassesChieftain" and 0.3 or 0.5
+            if current_ascendancy == item.filename:
+                item.setOpacity(1.0)
+            else:
+                item.setOpacity(dim)
+        # add_tree_images

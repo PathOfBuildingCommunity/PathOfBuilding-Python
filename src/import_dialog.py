@@ -209,7 +209,7 @@ class ImportDlg(Ui_Dialog, QDialog):
             pass
         skillset = self.build.import_gems_json(self.character_data.get("items"))
         self.win.skills_ui.load(self.build.skills)
-        self.win.skills_ui.change_skill_set(skillset-1)
+        self.win.skills_ui.change_skill_set(skillset - 1)
 
     @Slot()
     def change_account_name(self, text):

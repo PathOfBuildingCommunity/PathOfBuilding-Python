@@ -9,7 +9,7 @@ this is used to divide all x and y data coming in from the tree.json, but not He
 without this, items are too far apart and items are far too small on screen.
 All values should only be scaled on point of entry, ie: when they are first processed out of the json
 """
-global_scale_factor = 3
+global_scale_factor = 2.5
 pob_debug = True
 
 _VERSION = 3.19

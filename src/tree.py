@@ -149,6 +149,7 @@ class Tree:
         # Should this be a dict of GraphicItems
         self.spriteMap = {}
         self.assets = {}
+        self.ascendancy_group_list = []
 
         self.load()
 
@@ -716,8 +717,8 @@ class Tree:
                 )
                 __image.setScale(2.5 / global_scale_factor)
                 __image.filename = f"Classes{_name}"
-                # Darken if Ascendancy. Chieftain is brighter than the rest
-                __image.setOpacity(_name == "Chieftain" and 0.2 or 0.4)
+                # Store these images for tree_view to darken as it needs
+                self.ascendancy_group_list.append(__image)
 
         # Large background
         elif _group["oo"].get(3, False):
