@@ -48,33 +48,56 @@ realm_list = {
 class ImportDlg(Ui_Dialog, QDialog):
     """Import dialog"""
 
-    def __init__(self, _build: Build, _config: Config, parent=None):
+    def __init__(self, _build: Build, _config: Config, parent):
+        """
+
+        :param _build: A pointer of the build
+        :param _config: A pointer to the settings
+        :param _skills_ui: pointer to the ItemsUI() class for item saving
+        :param parent: A pointer to MainWindowUI
+        """
         super().__init__(parent)
         self.build = _build
         self.config = _config
+        self.win = parent
+
         # A temporary variable to hold the account list of characters.
         # Needs to be sharable so trigger functions can access it
         self.account_json = None
 
-        """ when a character has been chosen to download, this will hold the itmes and passive tree data"""
+        """ when a character has been chosen to download, this will hold the items and passive tree data"""
         self.character_data = None
-        """ when buid sharing is used, then the result will be an xml string"""
+        """ when build sharing is used, then the result will be an xml string"""
         self.xml = None
 
         self.setupUi(self)
         self.fill_character_history()
-        self.grpbox_CharImport.setVisible(False)
+
+        self.combo_Import.setItemData(0, "THIS")
+        self.combo_Import.setItemData(1, "NEW")
 
         self.btn_Close.clicked.connect(self.close_dialog)
         self.btn_StartImport.clicked.connect(self.download_character_information)
         self.btn_ImportAll.clicked.connect(self.import_all_selected)
         self.btn_TreeJewels.clicked.connect(self.import_passive_tree_jewels_selected)
-        self.btn_ItemsSkills.clicked.connect(self.import_items_skills_selected)
+        self.btn_Items.clicked.connect(self.import_items_selected)
+        self.btn_Skills.clicked.connect(self.import_skills_selected)
         self.btn_ImportBuildSharing.clicked.connect(self.import_from_code)
         self.lineedit_Account.returnPressed.connect(self.download_character_information)
         self.lineedit_BuildShare.textChanged.connect(self.validate_build_sharing_text)
-        self.comboChar_History.currentTextChanged.connect(self.change_account_name)
+        self.comboAccount_History.currentTextChanged.connect(self.change_account_name)
         self.combo_League.currentTextChanged.connect(self.change_league_name)
+        self.combo_Import.currentTextChanged.connect(self.change_import_selection_data)
+
+    @property
+    def status(self):
+        """status label text. Needed so we can have a setter"""
+        return self.label_Status.text()
+
+    @status.setter
+    def status(self, text):
+        """Add to the status label"""
+        self.label_Status.setText(text)
 
     @Slot()
     def close_dialog(self):
@@ -129,7 +152,7 @@ class ImportDlg(Ui_Dialog, QDialog):
             code = decode_base64_and_inflate(text)
 
         if code is None:
-            # ToDo: proper notification
+            self.status = f"Code failed to decode."
             print(f"Code failed to decode.")
             return
         else:
@@ -141,32 +164,56 @@ class ImportDlg(Ui_Dialog, QDialog):
         """Import the whole character's data from PoE web site"""
         print("import_all_selected")
         self.import_passive_tree_jewels_selected()
-        self.import_items_skills_selected()
+        self.import_items_selected()
+        self.import_skills_selected()
 
     @Slot()
     def import_passive_tree_jewels_selected(self):
-        """Import the whole character's data from PoE web site"""
+        """Import the character's data from PoE web site"""
         print("import_passive_tree_jewels_selected")
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
+        if self.check_DeleteJewels.isChecked():
+            # ToDo: Do something clever to remove jewels
+            pass
         self.build.import_passive_tree_jewels_json(
             self.character_data.get("tree"), self.character_data.get("character")
         )
 
     @Slot()
-    def import_items_skills_selected(self):
-        """Import the whole character's data from PoE web site"""
+    def import_items_selected(self):
+        """Import the character's items from PoE web site"""
+        # print("import_items_skills_selected")
+        # download the data if one of the other buttons hasn't done it yet.
+        if self.character_data is None:
+            self.download_character_data()
+        if self.check_DeleteItems.isChecked():
+            # ToDo: Do something clever to remove items. Later when you have Manage Item Sets dialog working
+            pass
+        # A lot of technology is built into the ItemsUI() class, lets reuse that
+        self.win.items_ui.load_from_json(self.character_data["items"])
+        self.win.items_ui.save()
+
+    @Slot()
+    def import_skills_selected(self):
+        """Import the character's skills from PoE web site"""
         print("import_items_skills_selected")
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
-        self.build.import_gems_json(self.character_data.get("items"))
+        if self.check_DeleteSkills.isChecked():
+            # ToDo: Do something clever to remove skills. Later when you have Manage Skill Sets dialog working
+            pass
+        skillset = self.build.import_gems_json(self.character_data.get("items"))
+        self.win.skills_ui.load(self.build.skills)
+        self.win.skills_ui.change_skill_set(skillset-1)
 
     @Slot()
     def change_account_name(self, text):
-        """Set Account lineedit based on comboChar_History"""
+        """Set Account lineedit based on comboAccount_History"""
         self.lineedit_Account.setText(text)
+        self.character_data = None
 
     @Slot()
     def change_league_name(self, text):
@@ -188,12 +235,32 @@ class ImportDlg(Ui_Dialog, QDialog):
                     self.combo_CharList.addItem(char["name"])
 
     @Slot()
+    def change_import_selection_data(self, text):
+        """
+        React to the user changing the combo_Import.
+
+        :param text: str: Not used
+        :return:
+        """
+        match self.combo_Import.currentData():
+            case "NEW":
+                self.check_DeleteJewels.setEnabled(False)
+                self.check_DeleteItems.setEnabled(False)
+                self.check_DeleteSkills.setEnabled(False)
+            case "THIS":
+                self.check_DeleteJewels.setEnabled(True)
+                self.check_DeleteItems.setEnabled(True)
+                self.check_DeleteSkills.setEnabled(True)
+
+    @Slot()
     def download_character_information(self):
         """
-        React to the 'Start' button by getting a list of characters and settings.
+        React to the 'Start' button by getting a list of characters and settings (not data).
+
         :return: N/A
         """
         account_name = self.lineedit_Account.text()
+        self.grpbox_CharImport.setEnabled(True)
         response = None
         try:
             realm_code = realm_list.get(self.combo_Realm.currentText(), "pc")
@@ -217,22 +284,14 @@ class ImportDlg(Ui_Dialog, QDialog):
             self.combo_League.addItem("All")
             self.combo_League.addItems(unique_sorted([char["league"] for char in self.account_json]))
 
-    @property
-    def status(self):
-        """status label text. Needed so we can have a setter"""
-        return self.label_Status.text()
-
-    @status.setter
-    def status(self, text):
-        """Add to the status label"""
-        self.label_Status.setText(text)
-
     def download_character_data(self):
         """
         Given the account and character is chosen, download the data and decode
         Do not load into build. Let the button procedures do their thing.
         Called by the button procedures
         """
+        if self.combo_Import.currentData() == "NEW":
+            self.win.build_new()
         self.character_data = None
         account_name = self.lineedit_Account.text()
         char_name = self.combo_CharList.currentText()
@@ -271,7 +330,7 @@ class ImportDlg(Ui_Dialog, QDialog):
         # pprint(passive_tree)
 
     def fill_character_history(self):
-        self.comboChar_History.clear()
-        self.comboChar_History.addItems(self.config.accounts())
-        self.comboChar_History.setCurrentText(self.config.last_account_name)
+        self.comboAccount_History.clear()
+        self.comboAccount_History.addItems(self.config.accounts())
+        self.comboAccount_History.setCurrentText(self.config.last_account_name)
         self.lineedit_Account.setText(self.config.last_account_name)

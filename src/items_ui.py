@@ -284,6 +284,7 @@ class ItemsUI:
         :param _items: Reference to the xml <Items> tag set
         :return: N/A
         """
+        # print("load_from_xml")
         self.xml_items = _items
         self.clear_controls()
         # add the items to the list box
@@ -305,10 +306,11 @@ class ItemsUI:
         :param _items: Reference to the downloaded json <Items> tag set
         :return: N/A
         """
+        # print("load_from_json")
         self.clear_controls()
-        # print(_items)
-        # character = _items["character"]
-        # print("load_from_json.character", character)
+        print(_items)
+        character = _items["character"]
+        print("load_from_json.character", character)
         # add the items to the list box
         for text_item in _items["items"]:
             # print(text_item)

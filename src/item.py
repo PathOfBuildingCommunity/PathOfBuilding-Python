@@ -259,7 +259,7 @@ class Item:
             text += f"{influence}\n"
         for requirement in self.requires.keys():
             text += f"Requires {requirement}\n"
-        print(self.properties)
+        # print(self.properties)
         if type(self.properties) == dict:
             for idx in self.properties.keys():
                 text += f"{idx}: {self.properties[idx]}\n"
@@ -271,8 +271,8 @@ class Item:
         if self.corrupted:
             text += "Corrupted"
 
-        if debug_print:
-            print(f"{text}\n\n")
+        # if debug_print:
+        #     print(f"{text}\n\n")
         return ET.fromstring(f'<Item id="{_id}">{text}</Item>')
 
     def tooltip(self):

@@ -214,7 +214,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
-        # ToDO: this could be currentIndexChanged
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
 
         # Start the statusbar self updating
@@ -537,11 +536,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dlg.exec()
         if dlg.xml is not None:
             self.build_loader(dlg.xml)
-        if dlg.character_data is not None:
+        elif dlg.character_data is not None:
             self.set_current_tab("CONFIG")
             self.combo_Bandits.showPopup()
-            self.skills_ui.load(self.build.skills)
-            self.items_ui.load_from_json(dlg.character_data["items"])
+        # If neither of those two were valid, then the user closed with no actions taken
 
     @Slot()
     def open_export_dialog(self):

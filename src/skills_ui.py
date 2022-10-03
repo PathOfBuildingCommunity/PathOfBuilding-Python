@@ -240,8 +240,8 @@ class SkillsUI:
                 self.gems_by_name_or_id[full_name]["skillId"] = g
 
         return gems
+        # load_gems_json
 
-    # load_gems_json
     """
     ################################################### SKILL SET ###################################################
     """
@@ -624,7 +624,7 @@ class SkillsUI:
         Add a new row to the Items list.
 
         :param index: int: number of this gem in this skill group
-        :param gem: Item(): The item to be added
+        :param gem: ET.elementtree: The item to be added
         :return:
         """
         # print("create_gem_ui", index, gem)

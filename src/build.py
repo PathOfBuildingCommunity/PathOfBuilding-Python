@@ -279,30 +279,7 @@ class Build:
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
         self.current_spec = self.specs[self.activeSpec]
-
-    # new
-
-    def load_from_file(self, filename):
-        """
-        Load a build. Use new() as a common function
-
-        :param filename: str() XML file to load
-        :return: N/A
-        """
-        _build_pob = pob_file.read_xml(filename)
-        if _build_pob is None:
-            tr = self.pob_config.app.tr
-            ui_utils.critical_dialog(
-                self.pob_config.win,
-                tr("Load Build"),
-                f"{tr('An error occurred to trying load')}:\n{filename}",
-                tr("Close"),
-            )
-        else:
-            # How do we want to deal with corrupt builds
-            self.filename = filename
-            self.new(_build_pob)
-            self.name = Path(Path(filename).name).stem
+        # new
 
     def save(self, win: Ui_MainWindow):
         """
@@ -408,6 +385,27 @@ class Build:
         self.count_allocated_nodes()
         return full_clear
 
+    def check_socket_group_for_an_active_gem(self, _sg):
+        """
+        Check a socket group and if the first gem is not active gem, find an active gem in the group
+        and if found, set it to be first.
+
+        :param _sg: ET.element: the socket group to check
+        :return: N/A
+        """
+        if _sg is not None:
+            for _idx, _gem in enumerate(_sg.findall("Gem")):
+                # find the first active gem and move it if it's index is not 0
+                if "Support" not in _gem.get("skillId"):
+                    if _idx != 0:
+                        _sg.remove(_gem)
+                        _sg.insert(0, _gem)
+                    break
+
+    """
+    ################################################### SPECS ###################################################
+    """
+
     def move_spec(self, start, destination):
         """
         Move a spec entry. This is called by the manage tree dialog.
@@ -492,6 +490,32 @@ class Build:
         self.tree.remove(xml_spec)
         del self.specs[index]
 
+    """
+    ################################################### IMPORT ###################################################
+    """
+
+    def load_from_file(self, filename):
+        """
+        Load a build. Use new() as a common function
+
+        :param filename: str() XML file to load
+        :return: N/A
+        """
+        _build_pob = pob_file.read_xml(filename)
+        if _build_pob is None:
+            tr = self.pob_config.app.tr
+            ui_utils.critical_dialog(
+                self.pob_config.win,
+                tr("Load Build"),
+                f"{tr('An error occurred to trying load')}:\n{filename}",
+                tr("Close"),
+            )
+        else:
+            # How do we want to deal with corrupt builds
+            self.filename = filename
+            self.new(_build_pob)
+            self.name = Path(Path(filename).name).stem
+
     def import_passive_tree_jewels_json(self, json_tree, json_character):
         """
         Import the tree (and later the jewels)
@@ -506,9 +530,7 @@ class Build:
         # print("import_passive_tree_jewels_json", json_tree)
         new_spec = self.new_spec()
         self.name = f"Imported {json_character.get('name', '')}"
-        print(self.name)
         new_spec.load_from_json(self.name, json_tree, json_character)
-        print(ET.tostring(new_spec.xml_spec))
         self.current_class = new_spec.classId
         self.ascendClassName = json_character.get("class", "")
         self.level = json_character.get("level", 1)
@@ -518,29 +540,12 @@ class Build:
         # show tree
         self.win.tree_ui.combo_manage_tree.setCurrentIndex(self.win.tree_ui.combo_manage_tree.count() - 1)
 
-    def check_socket_group_for_an_active_gem(self, _sg):
-        """
-        Check a socket group and if the first gem is not active gem, find an active gem in the group
-        and if found, set it to be first.
-
-        :param _sg: ET.element: the socket group to check
-        :return: N/A
-        """
-        if _sg is not None:
-            for _idx, _gem in enumerate(_sg.findall("Gem")):
-                # find the first active gem and move it if it's index is not 0
-                if "Support" not in _gem.get("skillId"):
-                    if _idx != 0:
-                        _sg.remove(_gem)
-                        _sg.insert(0, _gem)
-                    break
-
     def import_gems_json(self, json_items):
         """
         Import skills from the json supplied by GGG.
 
         :param json_items: json import of the item data.
-        :return: N/A
+        :return: int: number of skillsets
         """
 
         def get_property(_json_gem, _name, _default):
@@ -573,7 +578,6 @@ class Build:
                 # setup tracking of socket group changes in one item
                 current_socket_group = None
                 current_socket_group_number = -1
-                # ToDo: Checkout the 'sockets': attribute for how the sockets are grouped (group attr)
                 for idx, json_gem in enumerate(item.get("socketedItems")):
                     # let's get the group # for this socket ...
                     this_group = item["sockets"][idx]["group"]
@@ -604,11 +608,4 @@ class Build:
                         case "Phantasmal":
                             xml_gem.set("qualityId", "Alternate3")
                 self.check_socket_group_for_an_active_gem(current_socket_group)
-
-    def import_items_json(self, json_items):
-        """
-        Import items
-
-        :param json_items: json import of the item data
-        :return: N/A
-        """
+        return len(self.skills)
