@@ -82,6 +82,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._theme = "dark"
         self._border_radius = "rounded"
         self.start_pos = None
+        # Flag to stop some actions happening in triggers during loading
+        self.loading = False
 
         self.max_points = 123
         self.config = Config(self, _app)
@@ -143,14 +145,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toolbar_MainWindow.addWidget(widget_spacer)
 
         self.combo_classes = QComboBox()
-        self.combo_classes.setObjectName("combo_classes")
         self.combo_classes.setMinimumSize(100, 0)
         self.combo_classes.setDuplicatesEnabled(False)
         for idx in PlayerClasses:
             self.combo_classes.addItem(idx.name.title(), idx)
         self.toolbar_MainWindow.addWidget(self.combo_classes)
         self.combo_ascendancy = QComboBox()
-        self.combo_ascendancy.setObjectName("combo_ascendancy")
         self.combo_ascendancy.setMinimumSize(100, 0)
         self.combo_ascendancy.setDuplicatesEnabled(False)
         self.combo_ascendancy.addItem("None", 0)
@@ -318,6 +318,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param xml: ET.ElementTree: the xml of a file that was loaded or downloaded.
         :return: N/A
         """
+        self.loading = True
         new = True
         if type(xml) is ET.ElementTree:
             self.build.new(xml)
@@ -347,6 +348,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
             self.statusbar_MainWindow.showMessage(f"Loaded: {self.build.name}", 10000)
 
+        self.loading = False
     @Slot()
     def build_save_as(self):
         """
@@ -417,11 +419,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         new_class = self.combo_classes.currentData()
         if self.build.current_spec.classId == new_class and self.refresh_tree:
             return
-        # ToDo: Who should do the check against clearing your tree and how do we stop it during loading a build or tree swap ?
+        if not self.loading and len(self.build.current_spec.nodes) > 1:
+            self.tree_ui.tree_reset_pressed()
 
         # GUI Changes
         # Changing the ascendancy combobox, will trigger it's signal/slot.
-        # This is good as it will set the ascendancy back to None
+        # This is good as it will set the ascendancy back to 'None'
         self.combo_ascendancy.clear()
         self.combo_ascendancy.addItem("None", 0)
         _class = self.build.current_tree.classes[new_class.value]

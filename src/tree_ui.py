@@ -4,19 +4,20 @@ This Class manages all the elements and owns some elements of the "TREE" tab
 """
 
 from qdarktheme.qtpy.QtCore import QCoreApplication, Qt, Slot, QSize
-from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton
+from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
 
 from PoB_Main_Window import Ui_MainWindow
 from constants import _VERSION, PlayerClasses, _VERSION_str
 from pob_config import Config, _debug, print_call_stack
 from flow_layout import FlowLayout
 from manage_tree_dialog import ManageTreeDlg
+from ui_utils import yes_no_dialog
 
 
 class TreeUI:
     def __init__(self, _config: Config, frame_tree_tools, _win: Ui_MainWindow) -> None:
         self.pob_config = _config
-        tr = self.pob_config.app.tr
+        self.tr = self.pob_config.app.tr
         self.win = _win
         self.build = self.win.build
         self._curr_class = PlayerClasses.SCION
@@ -50,12 +51,15 @@ class TreeUI:
         self.btn_Reset = QPushButton()
         self.btn_Import = QPushButton()
         self.btn_Export = QPushButton()
-        self.btn_Reset.setText(tr(f'{tr("Reset Tree")} ...'))
-        self.btn_Import.setText(tr(f'{tr("Import Tree")} ...'))
-        self.btn_Export.setText(tr(f'{tr("Export Tree")} ...'))
+        self.btn_Reset.setText(f'{self.tr("Reset Tree")} ...')
+        self.btn_Import.setText(f'{self.tr("Import Tree")} ...')
+        self.btn_Export.setText(f'{self.tr("Export Tree")} ...')
         self.layout_tree_tools.addWidget(self.btn_Reset)
         self.layout_tree_tools.addWidget(self.btn_Import)
         self.layout_tree_tools.addWidget(self.btn_Export)
+        self.btn_Reset.clicked.connect(self.tree_reset_pressed)
+        self.btn_Import.clicked.connect(self.tree_import_pressed)
+        self.btn_Export.clicked.connect(self.tree_export_pressed)
 
         self.label_Search = QLabel()
         self.label_Search.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
@@ -64,23 +68,25 @@ class TreeUI:
         self.layout_tree_tools.addWidget(self.label_Search)
         self.lineEdit_Search = QLineEdit()
         self.lineEdit_Search.setMinimumSize(QSize(150, 22))
-        self.lineEdit_Search.setText("Dexterit")
         self.layout_tree_tools.addWidget(self.lineEdit_Search)
 
         self.check_show_node_power = QCheckBox()
         self.check_show_node_power.setMinimumSize(QSize(50, 22))
-        self.check_show_node_power.setText(tr("Show Node Power:"))
+        self.check_show_node_power.setText(self.tr("Show Node Power:"))
         self.check_show_node_power.setLayoutDirection(Qt.RightToLeft)
         self.check_show_node_power.stateChanged.connect(self.set_show_node_power_visibility)
+        self.check_show_node_power.setEnabled(False)
         self.layout_tree_tools.addWidget(self.check_show_node_power)
         self.combo_show_node_power = QComboBox()
         self.combo_show_node_power.setMinimumSize(QSize(180, 22))
         self.combo_show_node_power.setMaximumSize(QSize(180, 16777215))
         self.combo_show_node_power.setVisible(False)
+        self.combo_show_node_power.setEnabled(False)
         self.layout_tree_tools.addWidget(self.combo_show_node_power)
         self.btn_show_power_report = QPushButton()
         self.btn_show_power_report.setVisible(False)
-        self.btn_show_power_report.setText(f'{tr("Show Power Report")} ...')
+        self.btn_show_power_report.setText(f'{self.tr("Show Power Report")} ...')
+        self.btn_show_power_report.setEnabled(False)
         self.layout_tree_tools.addWidget(self.btn_show_power_report)
         """ End Adding Widgets to the QFrame at the bottom of the treeview. """
 
@@ -185,6 +191,19 @@ class TreeUI:
         """
         self.win.gview_Tree.add_tree_images(True)
         self.search_text_changed()
+
+    def tree_reset_pressed(self):
+        print("tree_reset_pressed")
+        if yes_no_dialog(self.win, self.tr("Resetting your Tree"), self.tr("Are you sure? It could be dangerous.")):
+            start_node = self.build.current_tree.classes[self.build.current_class]["startNodeId"]
+            self.build.current_spec.nodes = [start_node]
+            self.win.gview_Tree.add_tree_images(False)
+
+    def tree_import_pressed(self):
+        pass
+
+    def tree_export_pressed(self):
+        pass
 
 
 def test() -> None:

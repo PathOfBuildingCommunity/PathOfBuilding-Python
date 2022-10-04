@@ -386,13 +386,7 @@ class Tree:
             #         fout,
             #     )
 
-        # Update the nodes in and out to real nodes
-        # for n in self.nodes:
-        #     node: Node = self.nodes[n]
-        #     nodes_in = node.nodes_in
-        #     nodes_out = node.nodes_out
-
-    # load
+        # load
 
     def process_node(self, node: Node):
         """

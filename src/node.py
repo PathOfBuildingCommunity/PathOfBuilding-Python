@@ -69,7 +69,7 @@ class Node:
         """values from the passed in dictionary"""
         self.name = _node.get("name", "")
         self.dn = _node.get("name", "")
-        self._id = _node.get("skill", 0)
+        self._id = int(_node.get("skill", 0))
         self.skill = _node.get("skill", 0)
         self.group_id = _node.get("group", -1)
         self.g = _node.get("group", -1)
