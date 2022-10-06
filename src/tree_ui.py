@@ -2,9 +2,12 @@
 This Class manages all the elements and owns some elements of the "TREE" tab
 
 """
+import re
 
 from qdarktheme.qtpy.QtCore import QCoreApplication, Qt, Slot, QSize
 from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
+
+import base64
 
 from PoB_Main_Window import Ui_MainWindow
 from constants import _VERSION, PlayerClasses, _VERSION_str
@@ -57,9 +60,9 @@ class TreeUI:
         self.layout_tree_tools.addWidget(self.btn_Reset)
         self.layout_tree_tools.addWidget(self.btn_Import)
         self.layout_tree_tools.addWidget(self.btn_Export)
-        self.btn_Reset.clicked.connect(self.tree_reset_pressed)
-        self.btn_Import.clicked.connect(self.tree_import_pressed)
-        self.btn_Export.clicked.connect(self.tree_export_pressed)
+        self.btn_Reset.clicked.connect(self.reset_tree)
+        self.btn_Import.clicked.connect(self.import_tree)
+        self.btn_Export.clicked.connect(self.export_tree)
 
         self.label_Search = QLabel()
         self.label_Search.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
@@ -173,6 +176,38 @@ class TreeUI:
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)
 
+    def reset_tree(self):
+        print("reset_tree")
+        if yes_no_dialog(self.win, self.tr("Resetting your Tree"), self.tr("Are you sure? It could be dangerous.")):
+            start_node = self.build.current_tree.classes[self.build.current_class]["startNodeId"]
+            self.build.current_spec.nodes = [start_node]
+            self.win.gview_Tree.add_tree_images(False)
+
+    def import_tree(self):
+        # b64string = "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA?fred"
+        # b64string = "https://www.pathofexile.com/fullscreen-passive-skill-tree/AAAABgMAJwDwBAcQWBEPFLAdgx8CH8creCycLX0vXTBbMjQ2iTbFOlhEq0wtVa5VxlZIakN2EX6vghCD24-mrJesmLWFvOrBtNgk37Dk7OXA71D06QAD-vEA8LoaL13HMeXA?accountName=xyllywyt&characterName=XyllyWitchy"
+        # Mira_sentinal
+        b64string = "https://www.pathofexile.com/passive-skill-tree/3.19.0/AAAABgUBaeS82WGbIR0UFm_sOFnzdl73MqIAhnfEpNeWpwiFe6EjFy_vIVFgwGaApNgkPfxxeZx7v7iEgzD4ggfwH7v2jM9fP3GFOpHvDj0PBLMClvnd9kgGOYx2eWhoZY9Gdqxo8icvcqmAMPuqM2xXDYN5WGO3MeNq34ZmnizxGjiCm57NFCCbbny7rv862GTnCwxoWAirZlStCup_ocexHVXW-tKLjBccvrYSacEEkFXPftJ8PAX7lqyJ2rmsqn3x8kFlcq2N0iEpi_ObidjvfO1h6hjmfQcAqgCgAKIEhASABJMEkAdL3oN5GEgs8S0BCwy9Aa0Kuhqhx-og-5aWNn3x"
+
+        m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", b64string)
+        # check the validity of what was pasted in
+        # group(1) is None or a version
+        # group(2) is always the encoded string, with any variables
+        if m is not None:
+            # if not new_spec selected, alert like reset_tree above
+
+            # output[0] will be the encoded string and the rest will variable=value
+            output = m.group(2).split("?")
+            self.build.current_spec.URL = output[0]
+            del output[0]
+            variables = output  # a list of variable=value or an empty list
+            # use variables as the title for the spec
+            self.build.current_spec.set_nodes_from_url()
+            self.win.gview_Tree.add_tree_images(True)
+
+    def export_tree(self):
+        pass
+
     @Slot()
     def search_text_changed(self):
         """
@@ -191,19 +226,6 @@ class TreeUI:
         """
         self.win.gview_Tree.add_tree_images(True)
         self.search_text_changed()
-
-    def tree_reset_pressed(self):
-        print("tree_reset_pressed")
-        if yes_no_dialog(self.win, self.tr("Resetting your Tree"), self.tr("Are you sure? It could be dangerous.")):
-            start_node = self.build.current_tree.classes[self.build.current_class]["startNodeId"]
-            self.build.current_spec.nodes = [start_node]
-            self.win.gview_Tree.add_tree_images(False)
-
-    def tree_import_pressed(self):
-        pass
-
-    def tree_export_pressed(self):
-        pass
 
 
 def test() -> None:

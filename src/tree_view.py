@@ -210,13 +210,12 @@ class TreeView(QGraphicsView):
             )
             _circle.setPen(QPen(QColor(colour), line_width, Qt.SolidLine))
             _circle.setZValue(z_value)
-            _circle.setStartAngle(90 * 16)
-            _circle.setSpanAngle(90 * 16)
+            # _circle.setStartAngle(90 * 16)
+            # _circle.setSpanAngle(90 * 16)
 
             return _circle
             # add_circle
 
-        # print(f"refresh_search_rings: '{self.build.search_text}', {len(self.search_rings)}, {len(self._scene.items())}")
         for item in self.search_rings:
             self._scene.removeItem(item)
             del item

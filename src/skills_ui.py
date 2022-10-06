@@ -116,8 +116,14 @@ class SkillsUI:
         )
         set_combo_index_by_data(self.win.combo_SortByDPS, self.xml_skills.get("sortGemsByDPSField", "FullDPS"))
         set_combo_index_by_data(self.win.combo_ShowSupportGems, self.xml_skills.get("showSupportGemTypes", "ALL"))
-        self.win.spin_DefaultGemLevel.setValue(int(self.xml_skills.get("defaultGemLevel", 20)))
-        self.win.spin_DefaultGemQuality.setValue(int(self.xml_skills.get("defaultGemQuality", 0)))
+        level = self.xml_skills.get("defaultGemLevel", 20)
+        if level == "nil":
+            level = 0
+        self.win.spin_DefaultGemLevel.setValue(int(level))
+        quality = self.xml_skills.get("defaultGemQuality", 0)
+        if quality == "nil":
+            quality = 0
+        self.win.spin_DefaultGemQuality.setValue(int(quality))
 
         self.win.combo_SkillSet.clear()
         self.skill_sets_list.clear()

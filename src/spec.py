@@ -2,9 +2,11 @@
 Represents and manages one Spec in the XML.
 """
 import xml.etree.ElementTree as ET
+import base64
 import re
 
 from constants import default_spec, PlayerClasses, _VERSION_str
+from pob_config import print_call_stack
 
 
 class Spec:
@@ -32,9 +34,21 @@ class Spec:
         self.extended_hashes = []
         self.set_nodes_from_string(self.xml_spec.get("nodes", "0"))
 
-        self.Sockets = _spec.find("Sockets")
-        if self.Sockets is None:
-            self.Sockets = self.def_spec.find("Sockets")
+        # Table of jewels equipped in this tree
+        # Keys are node IDs, values are items
+        self.jewels = {}
+
+        # if there are no sockets there, we don't mind. We'll create an empty one when saving
+        sockets = _spec.find("Sockets")
+        if sockets is not None:
+            for socket in sockets.findall("Socket"):
+                node_id = int(socket.get("nodeId", 0))
+                item_id = int(socket.get("itemId", 0))
+                # There are files which have been saved poorly and have empty jewel sockets saved as sockets ...
+                # with itemId zero. This check filters them out to prevent dozens of invalid jewels
+                if item_id > 0:
+                    self.jewels[node_id] = item_id
+
 
     @property
     def title(self):
@@ -101,8 +115,7 @@ class Spec:
     def URL(self):
         xml_url = self.xml_spec.find("URL")
         if xml_url is None:
-            xml_url = self.def_spec.find("URL")
-            self.xml_spec.append(xml_url)
+            return None
         return xml_url.text.strip()
 
     @URL.setter
@@ -111,8 +124,90 @@ class Spec:
         :param new_url: str
         :return:
         """
+        if new_url == "":
+            return
         xml_url = self.xml_spec.find("URL")
+        if xml_url is None:
+            xml_url = ET.Element("URL")
+            self.xml_spec.append(xml_url)
         xml_url.text = new_url
+
+    def set_nodes_from_url(self):
+        """
+        :return:
+        This function sets the nodes from the self.URL property. This allows us to set the URL for legacy purposes
+        without actually disturbing the node information we have.
+        """
+        if self.URL is None:
+            return
+        m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", self.URL)
+
+        # check the validity of what was passed in
+        # group(1) is None or a version
+        # group(2) is always the encoded string, with any variables
+        if m is not None:
+            # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
+            output = m.group(2).split("?")
+            self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
+            decoded_str = base64.b64decode(output[0], "-_")
+            print(type(decoded_str), decoded_str)
+            print(f"decoded_str: {len(decoded_str)},", "".join('{:02x} '.format(x) for x in decoded_str))
+
+            # the decoded_str is 0 based, so every index will be one smaller than the equivalent in lua
+            if decoded_str and len(decoded_str) > 7:
+                version = int.from_bytes(decoded_str[0:4], "big")
+                print(f"Valid tree found, {version}")
+
+                self.classId = decoded_str[4]
+                self.ascendClassId = version >= 4 and decoded_str[5] or 0
+
+                nodes_start = version >= 4 and 7 or 6
+                nodes_end = version >= 5 and 6 + (decoded_str[6] * 2) or -1
+                print("nodes_start, end", nodes_start, nodes_end)
+                nodes = decoded_str[nodes_start: nodes_end + 1]
+                # print(f"nodes: {len(nodes)},", "".join('{:02x} '.format(x) for x in nodes))
+                # print("")
+
+                # now decode the nodes structure to numbers
+                self.nodes = []
+                for i in range(0, len(nodes), 2):
+                    # print(i, int.from_bytes(nodes[i:i+2], "big"))
+                    self.nodes.append(int.from_bytes(nodes[i:i+2], "big"))
+
+                if version < 5:
+                    return
+
+                cluster_count = decoded_str[nodes_end + 1]
+                cluster_start = cluster_count == 0 and nodes_end + 1 or nodes_end + 2
+                cluster_end = cluster_count == 0 and cluster_start or cluster_start + (cluster_count * 2)
+                print("cluster_start, end", cluster_start, cluster_end, cluster_count)
+                if cluster_count > 0:
+                    # cluster_start += 1
+                    cluster_nodes = decoded_str[cluster_start:cluster_end]
+                    # cluster_nodes = decoded_str[cluster_start:cluster_start+(cluster_count * 2)]
+                    # print(f"cluster_nodes: {len(cluster_nodes)},", ''.join('{:02x} '.format(x) for x in cluster_nodes))
+                    # now decode the cluster nodes structure to numbers
+                    for idx in range(0, len(cluster_nodes), 2):
+                        # print(''.join('{:02x} '.format(x) for x in cluster_nodes[idx:idx + 2]))
+                        print(idx, int.from_bytes(cluster_nodes[idx:idx + 2], "big") + 65536)
+                        self.nodes.append(int.from_bytes(cluster_nodes[idx:idx + 2], "big") + 65536)
+
+                mastery_count = decoded_str[cluster_end + 1]
+                mastery_start = mastery_count == 0 and cluster_end + 1 or cluster_end + 2
+                mastery_end = mastery_count == 0 and mastery_start or mastery_start + (mastery_count * 4)
+                print("mastery_start, end", mastery_start, mastery_end, mastery_count)
+                if mastery_count > 0:
+                    # mastery_start += 1
+                    mastery_nodes = decoded_str[mastery_start:mastery_end]
+                    # print(f"mastery_nodes: {len(mastery_nodes)},", ''.join('{:02x} '.format(x) for x in mastery_nodes))
+                    # now decode the mastery nodes structure to numbers
+                    for idx in range(0, len(mastery_nodes), 4):
+                        # print(''.join('{:02x} '.format(x) for x in mastery_nodes[idx:idx + 4]))
+                        # print(idx, int.from_bytes(mastery_nodes[idx:idx+2], "big"))
+                        m_id = int.from_bytes(mastery_nodes[idx + 2:idx + 4], "big")
+                        m_effect = int.from_bytes(mastery_nodes[idx:idx + 2], "big")
+                        print(m_id, m_effect)
+                        self.masteryEffects[m_id] = m_effect
 
     def set_masteryEffects_from_string(self, new_effects):
         """
@@ -160,6 +255,15 @@ class Spec:
         for effect in self.masteryEffects.keys():
             str_mastery_effects += f"{{{effect},{self.masteryEffects[effect]}}},"
         self.xml_spec.set("masteryEffects", str_mastery_effects.rstrip(","))
+
+        sockets = self.xml_spec.find("Sockets")
+        if sockets is not None:
+            self.xml_spec.remove(sockets)
+        sockets = ET.Element("Sockets")
+        self.xml_spec.append(sockets)
+        if len(self.jewels) > 0:
+            for node_id in self.jewels.keys():
+                sockets.append(ET.fromstring(f'<Socket nodeId="{node_id}" itemId="{self.jewels[node_id]}"/>'))
 
     def load_from_json(self, title, json_tree, json_character):
         """

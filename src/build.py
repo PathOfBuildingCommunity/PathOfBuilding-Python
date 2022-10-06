@@ -49,9 +49,10 @@ class Build:
         # list of specs in this build
         self.specs = []
         self.activeSpec = 0
+        self._current_spec = None
 
         # variables from the xml
-        self.build_xml_tree = None
+        self.build_xml = None
         self.root = None
         self.build = None
         self.import_field = None
@@ -256,7 +257,7 @@ class Build:
         :return: N/A
         """
         self.name = "Default"
-        self.build_xml_tree = _build_tree
+        self.build_xml = _build_tree
         self.root = _build_tree.getroot()
         self.build = self.root.find("Build")
         self.import_field = self.root.find("Import")
@@ -274,8 +275,11 @@ class Build:
         self.config = self.root.find("Config")
 
         self.specs.clear()
-        for spec in self.tree.findall("Spec"):
-            self.new_spec(xml_spec=spec)
+        # Do not use self.new_spec() as this will duplicate the xml information
+        for xml_spec in self.tree.findall("Spec"):
+            self.specs.append(Spec(self, xml_spec))
+        self.current_spec = self.specs[0]
+
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
         self.current_spec = self.specs[self.activeSpec]
@@ -328,8 +332,8 @@ class Build:
         """Debug Please leave until build is mostly complete"""
 
         # Temporarily write to a test file to not corrupt the original and make for easy compare
-        pob_file.write_xml("builds/test.xml", self.build_xml_tree)
-        # pob_file.write_xml(self.filename, self.build_xml_tree)
+        pob_file.write_xml("builds/test.xml", self.build_xml)
+        # pob_file.write_xml(self.filename, self.build_xml)
 
     def save_as(self, filename):
         """

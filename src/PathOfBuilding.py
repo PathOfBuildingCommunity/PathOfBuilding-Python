@@ -46,7 +46,7 @@ from constants import (
     resistance_penalty,
 )
 from ui_utils import html_colour_text
-from pob_config import Config, _debug, index_exists
+from pob_config import Config, _debug, index_exists, print_a_xml_element
 from flow_layout import FlowLayout
 from build import Build
 
@@ -329,6 +329,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build.load_from_file(xml)
             else:
                 self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
+                pass
 
         # if everything worked, lets update the UI
         if self.build.build is not None:
@@ -420,7 +421,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.build.current_spec.classId == new_class and self.refresh_tree:
             return
         if not self.loading and len(self.build.current_spec.nodes) > 1:
-            self.tree_ui.tree_reset_pressed()
+            self.tree_ui.reset_tree()
 
         # GUI Changes
         # Changing the ascendancy combobox, will trigger it's signal/slot.
