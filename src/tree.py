@@ -345,6 +345,7 @@ class Tree:
             self.process_node(node)
 
         # Add background lines
+        lines_db = {}
         for node_id in self.nodes:
             node = self.nodes[node_id]
             if node.type not in ("ClassStart", "Mastery"):
@@ -361,7 +362,12 @@ class Tree:
                         in_out_nodes.append(other_node)
 
                 for other_node in in_out_nodes:
-                    self.add_line(node.x, node.y, other_node.x, other_node.y)
+                    # check if we have this line already
+                    ids = sorted([node.id, other_node.id])
+                    index = f"{ids[0]}_{ids[1]}"
+                    if not lines_db.get(index, False):
+                        lines_db[index] = True
+                        self.add_line(node.x, node.y, other_node.x, other_node.y)
 
         # Add the group backgrounds
         for g in self.groups:

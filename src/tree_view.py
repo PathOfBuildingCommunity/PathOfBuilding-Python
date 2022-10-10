@@ -279,6 +279,7 @@ class TreeView(QGraphicsView):
         self.active_lines.clear()
 
         # loop though active nodes and add them and their connecting lines
+        lines_db = {}
         active_nodes = self.build.current_spec.nodes
         for node_id in active_nodes:
             node = tree.nodes.get(node_id, None)
@@ -306,17 +307,22 @@ class TreeView(QGraphicsView):
                             in_out_nodes.append(other_node)
 
                     for other_node in in_out_nodes:
-                        line = self.scene().addLine(
-                            node.x,
-                            node.y,
-                            other_node.x,
-                            other_node.y,
-                            QPen(QColor(ColourCodes.CURRENCY.value), 4),
-                        )
-                        line.setAcceptTouchEvents(False)
-                        line.setAcceptHoverEvents(False)
-                        line.setZValue(Layers.connectors)
-                        self.active_lines.append(line)
+                        # check if we have this line already
+                        ids = sorted([node.id, other_node.id])
+                        index = f"{ids[0]}_{ids[1]}"
+                        if not lines_db.get(index, False):
+                            lines_db[index] = True
+                            line = self.scene().addLine(
+                                node.x,
+                                node.y,
+                                other_node.x,
+                                other_node.y,
+                                QPen(QColor(ColourCodes.CURRENCY.value), 4),
+                            )
+                            line.setAcceptTouchEvents(False)
+                            line.setAcceptHoverEvents(False)
+                            line.setZValue(Layers.connectors)
+                            self.active_lines.append(line)
 
         # Darken Ascendancy backgrouds.
         current_ascendancy = f"Classes{self.build.ascendClassName}"
