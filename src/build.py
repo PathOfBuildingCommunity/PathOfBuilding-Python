@@ -50,6 +50,7 @@ class Build:
         self.specs = []
         self.activeSpec = 0
         self._current_spec = None
+        self.compare_spec = None
 
         # variables from the xml
         self.build_xml = None

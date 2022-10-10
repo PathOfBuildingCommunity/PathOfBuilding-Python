@@ -107,7 +107,9 @@ class Node:
         self.active_sprite = None
         self.inactiveOverlay = None
         self.activeOverlay = None
+        self.inactive_image = None
         self.active_image = None
+        self.inactive_overlay_image = None
         self.active_overlay_image = None
 
     @property

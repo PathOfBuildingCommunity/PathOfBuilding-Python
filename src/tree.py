@@ -471,7 +471,7 @@ class Tree:
                 node.y = ascendancy_positions[_a_name]["y"] - math.cos(node.angle) * orbit_radius
 
             if node.inactive_sprite and node.inactive_sprite.get("handle", None) is not None:
-                add_sprite(node.inactive_sprite)
+                node.inactive_image = add_sprite(node.inactive_sprite)
             if node.active_sprite and node.active_sprite.get("handle", None) is not None:
                 node.active_image = add_sprite(node.active_sprite, Layers.active)
             if node.activeEffectImage and node.activeEffectImage.get("handle", None) is not None:
@@ -501,15 +501,15 @@ class Tree:
                     )
                     overlay_type = f"{'Ascendancy' in inactive_overlay_name and 'ascendancy' or 'frame'}"
                     node.inactiveOverlay = self.spriteMap[inactive_overlay_name][overlay_type]
-                    overlay = add_sprite(node.inactiveOverlay, _layer)
-                    overlay.node_isoverlay = True
+                    node.inactive_overlay_image = add_sprite(node.inactiveOverlay, _layer)
+                    node.inactive_overlay_image.node_isoverlay = True
                     # active overlay image
                     active_overlay_name = node.overlay.get(
                         f"alloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
                         "",
                     )
                     node.activeOverlay = self.spriteMap[active_overlay_name][overlay_type]
-                    node.active_overlay_image = add_sprite(node.inactiveOverlay, Layers.active)
+                    node.active_overlay_image = add_sprite(node.activeOverlay, Layers.active)
                     node.active_overlay_image.node_isoverlay = True
         # process_node
 
@@ -581,6 +581,7 @@ class Tree:
         """
         Process a sprite map list for loading the image (downloading it too later)
           and updating self.spriteMap (should these be a list of graphic items (using setOffset) ?
+
         :param sprite_list: Incoming Dictionary from a json file
         :param sprite_map: Dictionary to stop duplicate loading of a GraphicItem, to be shared between instantiations
         :param sprite_path: The path where the images are stored
@@ -590,7 +591,8 @@ class Tree:
 
         def mirror_image(_image):
             """
-            Mirror an image. Specifically GroupBackgroundLargeHalfAlt
+            Mirror an image. Specifically GroupBackgroundLargeHalfAlt.
+
             :param: _source: the image to be mirrored
             :return: the mirrored image
             """
@@ -652,7 +654,8 @@ class Tree:
 
     def process_assets(self, sprite_list):
         """
-        remap assets' contents into internal resource ids
+        remap assets' contents into internal resource ids.
+
         :param sprite_list: Incoming Dictionary from a json file
         :return: N/A
         """
@@ -663,7 +666,6 @@ class Tree:
                 # This needs to mirrored.
                 _source = QImage(f":/Art/TreeData/{name}.png")
                 _result = QPixmap(_source.width(), _source.height() * 2)
-                _result.height()
                 _result.fill(Qt.transparent)
                 painter = QPainter()
                 painter.begin(_result)

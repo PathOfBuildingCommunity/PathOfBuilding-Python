@@ -389,15 +389,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # update label_points
         self.display_number_node_points(-1)
 
+        # stop the tree from being updated mulitple times during the class / ascendancy combo changes
+        # Also stops updating build.current_spec
+        self.refresh_tree = False
+
         _current_class = self.combo_classes.currentData()
         if self.build.current_spec.classId == _current_class:
             # update the ascendancy combo in case it's different
             self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-            return
-
-        # stop the tree from being updated mulitple times during the class / ascendancy combo changes
-        # Also stops updating build.current_spec
-        self.refresh_tree = False
+            # return
 
         # Protect the ascendancy value as it will get clobbered ...
         _ascendClassId = self.build.current_spec.ascendClassId

@@ -50,6 +50,7 @@ class TreeUI:
         self.combo_compare.setMaximumSize(QSize(300, 16777215))
         self.combo_compare.setVisible(False)
         self.layout_tree_tools.addWidget(self.combo_compare)
+        self.combo_compare.currentIndexChanged.connect(self.change_compare_combo)
 
         self.btn_Reset = QPushButton()
         self.btn_Import = QPushButton()
@@ -126,6 +127,8 @@ class TreeUI:
         :return: N/A
         """
         self.combo_compare.setVisible(checked_state > 0)
+        self.build.compare_spec = checked_state > 0 and self.build.specs[self.combo_compare.currentIndex()] or None
+        self.win.gview_Tree.add_tree_images(False)
 
     @Slot()
     def set_show_node_power_visibility(self, checked_state):
@@ -175,6 +178,16 @@ class TreeUI:
                 self.combo_compare.addItem(title, idx)
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)
+
+    def change_compare_combo(self, index):
+        """
+        Processes for changing the compare combo
+
+        :param index:
+        :return: N/A
+        """
+        self.build.compare_spec = self.build.specs[index]
+        self.win.gview_Tree.add_tree_images(False)
 
     def reset_tree(self):
         print("reset_tree")

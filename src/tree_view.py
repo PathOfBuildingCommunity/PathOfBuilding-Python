@@ -37,6 +37,7 @@ class TreeView(QGraphicsView):
         self.search_rings = []
         self.active_nodes = []
         self.active_lines = []
+        self.compare_nodes_items = []
 
         self._scene = QGraphicsScene()
         self.setScene(self._scene)
@@ -166,7 +167,7 @@ class TreeView(QGraphicsView):
 
     def switch_class(self, _class):
         """
-        Changes for this Class() to deal with a PoB class change
+        Changes for this Class() to deal with a PoB class change. ToDo: Is this needed.
         :param _class:
         :return: N/A
         """
@@ -195,11 +196,12 @@ class TreeView(QGraphicsView):
 
         def add_circle(_image: TreeGraphicsItem, colour, line_width=10, z_value=10):
             """
-            Draw a circle around an overlay image
+            Draw a circle around an overlay image.
+
             :param _image: TreegraphicsItem: The image to have a circle drawn around it.
             :param colour: ColourCodes.value: yep.
-            :param z_value: Layers: which layer shall we draw it.
             :param line_width: int: yep.
+            :param z_value: Layers: which layer shall we draw it.
             :return: a reference to the circle.
             """
             _circle = QGraphicsEllipseItem(
@@ -226,9 +228,9 @@ class TreeView(QGraphicsView):
         # The stops the ring appearing under or over the node's overlay.
         for image in self.build.current_tree.graphics_items:
             if image.node_isoverlay and self.build.search_text in image.build_tooltip():
-                _circle = add_circle(image, Qt.yellow, 12)
-                self.search_rings.append(_circle)
-                self._scene.addItem(_circle)
+                circle = add_circle(image, Qt.yellow, 12)
+                self.search_rings.append(circle)
+                self._scene.addItem(circle)
 
     def add_tree_images(self, full_clear=False):
         """
@@ -238,6 +240,31 @@ class TreeView(QGraphicsView):
         :param: full_clear: bool: If set, delete the tree images also. If not set, only delete the active images
         :return: N/A
         """
+
+        def add_compare_spot(_node, colour, z_value=10):
+            """
+            Draw a filled circle an image.
+
+            :param _node: Node: The node whose image is to have a circle drawn on it.
+            :param colour: ColourCodes.value: yep.
+            :param z_value: Layers: which layer shall we draw it.
+            :return: a reference to the circle.
+            """
+            _image = _node.inactive_overlay_image is None and _node.inactive_image or _node.inactive_overlay_image
+            _spot = QGraphicsEllipseItem(
+                _image.pos().x() + _image.offset().x(),
+                _image.pos().y() + _image.offset().y(),
+                _image.width,
+                _image.height,
+            )
+            _spot.setBrush(QBrush(colour, Qt.SolidPattern))
+            _spot.setOpacity(0.3)
+            _spot.setZValue(z_value)
+            self.compare_nodes_items.append(_spot)
+            self._scene.addItem(_spot)
+
+            return _spot
+            # add_compare_spot
 
         # leave the print in till we have everything working.
         # It is what tells us how often the assets are being redrawn.
@@ -275,8 +302,12 @@ class TreeView(QGraphicsView):
             for item in self.active_lines:
                 self._scene.removeItem(item)
                 del item
+            for item in self.compare_nodes_items:
+                self._scene.removeItem(item)
+                del item
         self.active_nodes.clear()
         self.active_lines.clear()
+        self.compare_nodes_items.clear()
 
         # loop though active nodes and add them and their connecting lines
         lines_db = {}
@@ -321,7 +352,7 @@ class TreeView(QGraphicsView):
                             )
                             line.setAcceptTouchEvents(False)
                             line.setAcceptHoverEvents(False)
-                            line.setZValue(Layers.connectors)
+                            line.setZValue(Layers.active_connectors)
                             self.active_lines.append(line)
 
         # Darken Ascendancy backgrouds.
@@ -333,4 +364,19 @@ class TreeView(QGraphicsView):
                 item.setOpacity(1.0)
             else:
                 item.setOpacity(dim)
+
+        # Draw spots for comparing trees
+        if self.win.tree_ui.check_Compare.isChecked() and self.build.compare_spec is not None:
+            current = set(self.build.current_spec.nodes)
+            nodes_not_in_compare_spec = [x for x in self.build.compare_spec.nodes if x not in current]
+            for node in nodes_not_in_compare_spec:
+                add_compare_spot(tree.nodes[node], Qt.green, 6)
+
+            compare = set(self.build.compare_spec.nodes)
+            nodes_not_in_current_spec = [x for x in self.build.current_spec.nodes if x not in compare]
+            for node in nodes_not_in_current_spec:
+                add_compare_spot(tree.nodes[node], Qt.red, 6)
+            # Can add lines too. How to find the node that connects back to an active node ?
+            # Possibly add all active and difference nodes ?
+            # Add them to Layers.connectors-1 ? To have the active lines overwrite them
         # add_tree_images
