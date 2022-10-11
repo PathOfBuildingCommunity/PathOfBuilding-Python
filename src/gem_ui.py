@@ -10,7 +10,8 @@ from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QPushButton, QListWi
 
 from pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
 from constants import ColourCodes, empty_gem
-from ui_utils import set_combo_index_by_data, set_combo_index_by_text, yes_no_dialog, HTMLDelegate, html_colour_text
+from ui_utils import set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
+from popup_dialogs import yes_no_dialog
 
 
 class GemUI(QWidget):

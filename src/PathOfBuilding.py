@@ -350,6 +350,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.statusbar_MainWindow.showMessage(f"Loaded: {self.build.name}", 10000)
 
         self.loading = False
+
     @Slot()
     def build_save_as(self):
         """

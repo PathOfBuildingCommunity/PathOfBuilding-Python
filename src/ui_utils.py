@@ -19,31 +19,6 @@ from pob_config import _debug
 from constants import ColourCodes
 
 
-def yes_no_dialog(win, title, text):
-    """Return true if the user selects Yes."""
-    return QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No) == QMessageBox.Yes
-
-
-def ok_dialog(win, title, text, btn_text="OK"):
-    """Notify the user of some information."""
-    dlg = QMessageBox(win)
-    dlg.setWindowTitle(title)
-    dlg.setText(text)
-    dlg.addButton(btn_text, QMessageBox.YesRole)
-    dlg.setIcon(QMessageBox.Information)
-    dlg.exec_()
-
-
-def critical_dialog(win, title, text, btn_text="Close"):
-    """Notify the user of some critical? information."""
-    dlg = QMessageBox(win)
-    dlg.setWindowTitle(title)
-    dlg.setText(text)
-    dlg.addButton(btn_text, QMessageBox.YesRole)
-    dlg.setIcon(QMessageBox.Critical)
-    dlg.exec_()
-
-
 def html_colour_text(colour, text):
     """
     Put text into html span tags.

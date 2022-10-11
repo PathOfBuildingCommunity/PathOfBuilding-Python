@@ -149,7 +149,10 @@ class Tree:
         # Should this be a dict of GraphicItems
         self.spriteMap = {}
         self.assets = {}
+        # list of images for the ascendency circles
         self.ascendancy_group_list = []
+        # dictionary, by name, of node start ids for each ascendancy
+        self.ascendancy_start_nodes = {}
 
         self.load()
 
@@ -420,6 +423,7 @@ class Tree:
             sprite.filename = node.icon
             sprite.node_sd = node.sd
             sprite.node_name = node.name
+            sprite.node_type = node.type
             return sprite
 
         node.inactive_sprite = None
@@ -530,6 +534,7 @@ class Tree:
             # node.type = "AscendClassStart"
             node.type = "Normal"
             ascend_name_map[node.ascendancyName]["ascendClass"]["startNodeId"] = node.id
+            self.ascendancy_start_nodes[node.ascendancyName] = node.id
         elif node.isMastery:
             node.type = "Mastery"
             if node.masteryEffects:

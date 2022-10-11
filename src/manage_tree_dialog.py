@@ -14,7 +14,7 @@ from qdarktheme.qtpy.QtWidgets import QDialog
 from dlg_ManageTree import Ui_Dialog
 from build import Build
 from constants import _VERSION, _VERSION_str
-from ui_utils import yes_no_dialog
+from popup_dialogs import yes_no_dialog
 
 
 class ManageTreeDlg(Ui_Dialog, QDialog):

@@ -421,6 +421,9 @@ hr { height: 1px; border-width: 0; }
                 <property name="horizontalScrollMode">
                  <enum>QAbstractItemView::ScrollPerPixel</enum>
                 </property>
+                <property name="currentRow">
+                 <number>-1</number>
+                </property>
                </widget>
                <widget class="QGroupBox" name="group_SkillTabLeft">
                 <property name="geometry">

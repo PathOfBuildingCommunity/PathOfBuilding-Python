@@ -22,10 +22,6 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         self.config = _config
         self.filename = ""
         self.data = ""
-        self.node_id = 0
-        self.node_sd = ""
-        self.node_name = ""
-        self.node_isoverlay = False
         self.setPixmap(_image)
         if not type(_image) == QPixmap:
             self.filename = str(_image)
@@ -39,6 +35,14 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         # ToDo: Temporary
         self.setAcceptHoverEvents(True)
         # self.setAcceptHoverEvents(selectable)
+
+        # these are to have a fast way for a graphic item to identify its owner node's params. Used by mouse events
+        # Maybe have just the node reference ?
+        self.node_id = 0
+        self.node_sd = ""
+        self.node_name = ""
+        self.node_type = ""
+        self.node_isoverlay = False
 
         # turn all those data's into properties ?
 

@@ -11,13 +11,14 @@ need to be supported for backwards compatibility reason.
 """
 from qdarktheme.qtpy.QtCore import QLineF, QRectF, Qt
 from qdarktheme.qtpy.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
-from qdarktheme.qtpy.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView
+from qdarktheme.qtpy.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
 
 from constants import ColourCodes, class_backgrounds, Layers, PlayerClasses
 from pob_config import Config, _debug
 
 from tree_graphics_item import TreeGraphicsItem
 from build import Build
+from popup_dialogs import MasteryPopup
 
 
 class TreeView(QGraphicsView):
@@ -115,10 +116,27 @@ class TreeView(QGraphicsView):
         self.viewport().setCursor(Qt.ArrowCursor)
         _item: TreeGraphicsItem = self.itemAt(event.pos())
         if _item and type(_item) == TreeGraphicsItem and _item.node_id != 0:
-            if _item.node_id in self.build.current_spec.nodes:
-                self.build.current_spec.nodes.remove(_item.node_id)
-            else:
-                self.build.current_spec.nodes.append(_item.node_id)
+            if event.button() == Qt.LeftButton:
+                if _item.node_id in self.build.current_spec.nodes:
+                    if _item.node_type == "Mastery":
+                        self.build.current_spec.remove_mastery_effect(_item.node_id)
+                    self.build.current_spec.nodes.remove(_item.node_id)
+                else:
+                    current_tree_nodes = self.build.current_tree.nodes
+                    node = current_tree_nodes[_item.node_id]
+                    for node_id in set(node.nodes_out + node.nodes_in):
+                        if node_id in self.build.current_spec.nodes:
+                            if _item.node_type == "Mastery":
+                                if self.mastery_popup(self.build.current_tree.nodes[_item.node_id]):
+                                    self.build.current_spec.nodes.append(_item.node_id)
+                            else:
+                                self.build.current_spec.nodes.append(_item.node_id)
+                            break
+            elif event.button() == Qt.RightButton:
+                # look for Mastery and popup a dialog
+                # print("RightButton", _item.node_type)
+                if _item.node_type == "Mastery" and _item.node_id in self.build.current_spec.nodes:
+                    self.mastery_popup(self.build.current_tree.nodes[_item.node_id])
             self.add_tree_images()
             # count the new nodes ...
             self.build.count_allocated_nodes()
@@ -144,6 +162,21 @@ class TreeView(QGraphicsView):
             self.scale(1 / unity.width(), 1 / unity.height())
         else:
             self.scale(factor, factor)
+
+    def mastery_popup(self, node):
+        """
+        Popup a list of mastery effects for this node and set the currect spec with the choice, if needed.
+
+        :param node: node(): this mastery
+        :return: bool: True if an effect was chosen
+        """
+        dlg = MasteryPopup(node)
+        # 0 is discard, 1 is save
+        _return = dlg.exec()
+        if _return:
+            # print(dlg.selected_effect, dlg.selected_row)
+            self.build.current_spec.set_mastery_effect(node.id, dlg.selected_effect)
+        return _return == 1
 
     def add_picture(self, pixmap, x, y, z=0, selectable=False):
         """

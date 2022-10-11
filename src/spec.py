@@ -28,7 +28,7 @@ class Spec:
             self.xml_spec.remove(ed)
 
         self.masteryEffects = {}
-        self.set_masteryEffects_from_string(self.xml_spec.get("masteryEffects", ""))
+        self.set_mastery_effects_from_string(self.xml_spec.get("masteryEffects", ""))
 
         self.nodes = []
         self.extended_hashes = []
@@ -48,7 +48,6 @@ class Spec:
                 # with itemId zero. This check filters them out to prevent dozens of invalid jewels
                 if item_id > 0:
                     self.jewels[node_id] = item_id
-
 
     @property
     def title(self):
@@ -151,7 +150,7 @@ class Spec:
             self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             decoded_str = base64.b64decode(output[0], "-_")
             print(type(decoded_str), decoded_str)
-            print(f"decoded_str: {len(decoded_str)},", "".join('{:02x} '.format(x) for x in decoded_str))
+            print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
 
             # the decoded_str is 0 based, so every index will be one smaller than the equivalent in lua
             if decoded_str and len(decoded_str) > 7:
@@ -164,7 +163,7 @@ class Spec:
                 nodes_start = version >= 4 and 7 or 6
                 nodes_end = version >= 5 and 6 + (decoded_str[6] * 2) or -1
                 print("nodes_start, end", nodes_start, nodes_end)
-                nodes = decoded_str[nodes_start: nodes_end + 1]
+                nodes = decoded_str[nodes_start : nodes_end + 1]
                 # print(f"nodes: {len(nodes)},", "".join('{:02x} '.format(x) for x in nodes))
                 # print("")
 
@@ -172,7 +171,7 @@ class Spec:
                 self.nodes = []
                 for i in range(0, len(nodes), 2):
                     # print(i, int.from_bytes(nodes[i:i+2], "big"))
-                    self.nodes.append(int.from_bytes(nodes[i:i+2], "big"))
+                    self.nodes.append(int.from_bytes(nodes[i : i + 2], "big"))
 
                 if version < 5:
                     return
@@ -189,8 +188,8 @@ class Spec:
                     # now decode the cluster nodes structure to numbers
                     for idx in range(0, len(cluster_nodes), 2):
                         # print(''.join('{:02x} '.format(x) for x in cluster_nodes[idx:idx + 2]))
-                        print(idx, int.from_bytes(cluster_nodes[idx:idx + 2], "big") + 65536)
-                        self.nodes.append(int.from_bytes(cluster_nodes[idx:idx + 2], "big") + 65536)
+                        print(idx, int.from_bytes(cluster_nodes[idx : idx + 2], "big") + 65536)
+                        self.nodes.append(int.from_bytes(cluster_nodes[idx : idx + 2], "big") + 65536)
 
                 mastery_count = decoded_str[cluster_end + 1]
                 mastery_start = mastery_count == 0 and cluster_end + 1 or cluster_end + 2
@@ -204,14 +203,14 @@ class Spec:
                     for idx in range(0, len(mastery_nodes), 4):
                         # print(''.join('{:02x} '.format(x) for x in mastery_nodes[idx:idx + 4]))
                         # print(idx, int.from_bytes(mastery_nodes[idx:idx+2], "big"))
-                        m_id = int.from_bytes(mastery_nodes[idx + 2:idx + 4], "big")
-                        m_effect = int.from_bytes(mastery_nodes[idx:idx + 2], "big")
+                        m_id = int.from_bytes(mastery_nodes[idx + 2 : idx + 4], "big")
+                        m_effect = int.from_bytes(mastery_nodes[idx : idx + 2], "big")
                         print(m_id, m_effect)
                         self.masteryEffects[m_id] = m_effect
 
-    def set_masteryEffects_from_string(self, new_effects):
+    def set_mastery_effects_from_string(self, new_effects):
         """
-        masteryEffects is string of {paired numbers}. Turn it into a dictionary [int1] = int2
+        masteryEffects is a string of {paired numbers}. Turn it into a dictionary [int1] = int2
 
         :param new_effects: str
         :return:
@@ -221,6 +220,26 @@ class Spec:
             effects = re.findall(r"{(\d+),(\d+)}", new_effects)
             for effect in effects:
                 self.masteryEffects[int(effect[0])] = int(effect[1])
+
+    def set_mastery_effect(self, node_id, effect_id):
+        """add one node id from mastery effects"""
+        self.masteryEffects[node_id] = int(effect_id)
+
+    def remove_mastery_effect(self, node_id):
+        """remove one node id from mastery effects"""
+        try:
+            del self.masteryEffects[node_id]
+        except KeyError:
+            pass
+
+    def list_assigned_effects_for_mastery_type(self, node_list):
+        """
+        Get a list of effects assigned for a given mastery type (eg: "Life Mastery").
+
+        :param node_list: list: A list of node id's
+        :return: list of effects already assigned.
+        """
+        pass
 
     def set_nodes_from_string(self, new_nodes):
         """
