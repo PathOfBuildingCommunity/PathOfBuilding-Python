@@ -221,6 +221,10 @@ class Spec:
             for effect in effects:
                 self.masteryEffects[int(effect[0])] = int(effect[1])
 
+    def get_mastery_effect(self, node_id):
+        """return one node id from mastery effects"""
+        return self.masteryEffects.get(node_id, -1)
+
     def set_mastery_effect(self, node_id, effect_id):
         """add one node id from mastery effects"""
         self.masteryEffects[node_id] = int(effect_id)

@@ -153,6 +153,8 @@ class Tree:
         self.ascendancy_group_list = []
         # dictionary, by name, of node start ids for each ascendancy
         self.ascendancy_start_nodes = {}
+        # dictionary of a list of nodes in a given mastery group, eg: "Life Mastery"
+        self.mastery_effects_nodes = {}
 
         self.load()
 
@@ -430,6 +432,9 @@ class Tree:
         # Assign node artwork assets
         if node.type == "Mastery":
             # This is the icon that appears in the center of many groups
+            this_nodes_effect_list = self.mastery_effects_nodes.setdefault(node.name, [])
+            if node.id not in this_nodes_effect_list:
+                this_nodes_effect_list.append(node.id)
             if node.masteryEffects:
                 node.masterySprites = {
                     "activeIcon": self.spriteMap[node.activeIcon]["masteryActiveSelected"],

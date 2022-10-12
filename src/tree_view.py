@@ -106,6 +106,7 @@ class TreeView(QGraphicsView):
     def mouseReleaseEvent(self, event) -> None:
         """
         Turn on or off a node if one is clicked on. Update node count appropriately.
+        Trigger a mastery effect popup when appropriate
 
         :param event: Internal event matrix.
         :return: N/A
@@ -170,11 +171,10 @@ class TreeView(QGraphicsView):
         :param node: node(): this mastery
         :return: bool: True if an effect was chosen
         """
-        dlg = MasteryPopup(node)
+        dlg = MasteryPopup(node, self.build.current_spec, self.build.current_tree.mastery_effects_nodes[node.name])
         # 0 is discard, 1 is save
         _return = dlg.exec()
         if _return:
-            # print(dlg.selected_effect, dlg.selected_row)
             self.build.current_spec.set_mastery_effect(node.id, dlg.selected_effect)
         return _return == 1
 
