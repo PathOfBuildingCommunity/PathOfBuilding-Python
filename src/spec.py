@@ -6,7 +6,7 @@ import base64
 import re
 
 from constants import default_spec, PlayerClasses, _VERSION_str
-from pob_config import print_call_stack
+from pob_config import print_call_stack, print_a_xml_element
 
 
 class Spec:
@@ -121,7 +121,7 @@ class Spec:
     def URL(self, new_url):
         """
         :param new_url: str
-        :return:
+        :return: N/A
         """
         if new_url == "":
             return
@@ -133,9 +133,10 @@ class Spec:
 
     def set_nodes_from_url(self):
         """
-        :return:
         This function sets the nodes from the self.URL property. This allows us to set the URL for legacy purposes
         without actually disturbing the node information we have.
+
+        :return: N/A
         """
         if self.URL is None:
             return
@@ -145,12 +146,12 @@ class Spec:
         # group(1) is None or a version
         # group(2) is always the encoded string, with any variables
         if m is not None:
+            self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
             output = m.group(2).split("?")
-            self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             decoded_str = base64.b64decode(output[0], "-_")
-            print(type(decoded_str), decoded_str)
-            print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
+            # print(type(decoded_str), decoded_str)
+            # print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
 
             # the decoded_str is 0 based, so every index will be one smaller than the equivalent in lua
             if decoded_str and len(decoded_str) > 7:
@@ -161,51 +162,54 @@ class Spec:
                 self.ascendClassId = version >= 4 and decoded_str[5] or 0
 
                 nodes_start = version >= 4 and 7 or 6
-                nodes_end = version >= 5 and 6 + (decoded_str[6] * 2) or -1
-                print("nodes_start, end", nodes_start, nodes_end)
-                nodes = decoded_str[nodes_start : nodes_end + 1]
+                nodes_end = version >= 5 and 7 + (decoded_str[6] * 2) or -1
+                # print("nodes_start, end", nodes_start, nodes_end)
+                decoded_nodes = decoded_str[nodes_start:nodes_end]
                 # print(f"nodes: {len(nodes)},", "".join('{:02x} '.format(x) for x in nodes))
                 # print("")
 
                 # now decode the nodes structure to numbers
                 self.nodes = []
-                for i in range(0, len(nodes), 2):
-                    # print(i, int.from_bytes(nodes[i:i+2], "big"))
-                    self.nodes.append(int.from_bytes(nodes[i : i + 2], "big"))
+                for i in range(0, len(decoded_nodes), 2):
+                    # print(
+                    #     i,
+                    #     " ".join("{:02x}".format(x) for x in decoded_nodes[i : i + 2]),
+                    #     int.from_bytes(decoded_nodes[i : i + 2], "big"),
+                    # )
+                    self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], "big"))
 
                 if version < 5:
+                    self.masteryEffects = {}
                     return
 
-                cluster_count = decoded_str[nodes_end + 1]
-                cluster_start = cluster_count == 0 and nodes_end + 1 or nodes_end + 2
+                cluster_count = decoded_str[nodes_end]
+                cluster_start = nodes_end + 1
                 cluster_end = cluster_count == 0 and cluster_start or cluster_start + (cluster_count * 2)
-                print("cluster_start, end", cluster_start, cluster_end, cluster_count)
+                # print("cluster_start, end", cluster_start, cluster_end, cluster_count)
                 if cluster_count > 0:
-                    # cluster_start += 1
-                    cluster_nodes = decoded_str[cluster_start:cluster_end]
+                    decoded_cluster_nodes = decoded_str[cluster_start:cluster_end]
                     # cluster_nodes = decoded_str[cluster_start:cluster_start+(cluster_count * 2)]
-                    # print(f"cluster_nodes: {len(cluster_nodes)},", ''.join('{:02x} '.format(x) for x in cluster_nodes))
+                    # print(f"decoded_cluster_nodes: {len(decoded_cluster_nodes)},", ''.join('{:02x} '.format(x) for x in decoded_cluster_nodes))
                     # now decode the cluster nodes structure to numbers
-                    for idx in range(0, len(cluster_nodes), 2):
+                    for idx in range(0, len(decoded_cluster_nodes), 2):
                         # print(''.join('{:02x} '.format(x) for x in cluster_nodes[idx:idx + 2]))
-                        print(idx, int.from_bytes(cluster_nodes[idx : idx + 2], "big") + 65536)
-                        self.nodes.append(int.from_bytes(cluster_nodes[idx : idx + 2], "big") + 65536)
+                        # print(idx, int.from_bytes(decoded_cluster_nodes[idx : idx + 2], "big") + 65536)
+                        self.nodes.append(int.from_bytes(decoded_cluster_nodes[idx : idx + 2], "big") + 65536)
 
-                mastery_count = decoded_str[cluster_end + 1]
-                mastery_start = mastery_count == 0 and cluster_end + 1 or cluster_end + 2
-                mastery_end = mastery_count == 0 and mastery_start or mastery_start + (mastery_count * 4)
-                print("mastery_start, end", mastery_start, mastery_end, mastery_count)
+                mastery_count = decoded_str[cluster_end]
                 if mastery_count > 0:
-                    # mastery_start += 1
-                    mastery_nodes = decoded_str[mastery_start:mastery_end]
-                    # print(f"mastery_nodes: {len(mastery_nodes)},", ''.join('{:02x} '.format(x) for x in mastery_nodes))
+                    mastery_start = cluster_end + 1
+                    mastery_end = mastery_count == 0 and mastery_start or mastery_start + (mastery_count * 4)
+                    # print("mastery_start, end", mastery_start, mastery_end, mastery_count)
+                    decoded_mastery_nodes = decoded_str[mastery_start:mastery_end]
+                    # print(f"decoded_mastery_nodes: {len(decoded_mastery_nodes)},", ''.join('{:02x} '.format(x) for x in decoded_mastery_nodes))
                     # now decode the mastery nodes structure to numbers
-                    for idx in range(0, len(mastery_nodes), 4):
-                        # print(''.join('{:02x} '.format(x) for x in mastery_nodes[idx:idx + 4]))
-                        # print(idx, int.from_bytes(mastery_nodes[idx:idx+2], "big"))
-                        m_id = int.from_bytes(mastery_nodes[idx + 2 : idx + 4], "big")
-                        m_effect = int.from_bytes(mastery_nodes[idx : idx + 2], "big")
-                        print(m_id, m_effect)
+                    for idx in range(0, len(decoded_mastery_nodes), 4):
+                        # print(''.join('{:02x} '.format(x) for x in decoded_mastery_nodes[idx:idx + 4]))
+                        # print(idx, int.from_bytes(decoded_mastery_nodes[idx:idx+2], "big"))
+                        m_id = int.from_bytes(decoded_mastery_nodes[idx + 2 : idx + 4], "big")
+                        m_effect = int.from_bytes(decoded_mastery_nodes[idx : idx + 2], "big")
+                        # print(m_id, m_effect)
                         self.masteryEffects[m_id] = m_effect
 
     def set_mastery_effects_from_string(self, new_effects):

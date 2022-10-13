@@ -12,7 +12,7 @@ from constants import _VERSION, PlayerClasses, _VERSION_str
 from pob_config import Config, _debug, print_call_stack
 from flow_layout import FlowLayout
 from manage_tree_dialog import ManageTreeDlg
-from popup_dialogs import yes_no_dialog
+from popup_dialogs import yes_no_dialog, ImportTreePopup
 
 
 class TreeUI:
@@ -195,26 +195,37 @@ class TreeUI:
             self.win.gview_Tree.add_tree_images(False)
 
     def import_tree(self):
-        # b64string = "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA?fred"
-        # b64string = "https://www.pathofexile.com/fullscreen-passive-skill-tree/AAAABgMAJwDwBAcQWBEPFLAdgx8CH8creCycLX0vXTBbMjQ2iTbFOlhEq0wtVa5VxlZIakN2EX6vghCD24-mrJesmLWFvOrBtNgk37Dk7OXA71D06QAD-vEA8LoaL13HMeXA?accountName=xyllywyt&characterName=XyllyWitchy"
-        # Mira_sentinal
-        b64string = "https://www.pathofexile.com/passive-skill-tree/3.19.0/AAAABgUBaeS82WGbIR0UFm_sOFnzdl73MqIAhnfEpNeWpwiFe6EjFy_vIVFgwGaApNgkPfxxeZx7v7iEgzD4ggfwH7v2jM9fP3GFOpHvDj0PBLMClvnd9kgGOYx2eWhoZY9Gdqxo8icvcqmAMPuqM2xXDYN5WGO3MeNq34ZmnizxGjiCm57NFCCbbny7rv862GTnCwxoWAirZlStCup_ocexHVXW-tKLjBccvrYSacEEkFXPftJ8PAX7lqyJ2rmsqn3x8kFlcq2N0iEpi_ObidjvfO1h6hjmfQcAqgCgAKIEhASABJMEkAdL3oN5GEgs8S0BCwy9Aa0Kuhqhx-og-5aWNn3x"
+        """
+        Import a passive tree URL.
 
-        m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", b64string)
-        # check the validity of what was pasted in
-        # group(1) is None or a version
-        # group(2) is always the encoded string, with any variables
-        if m is not None:
-            # if not new_spec selected, alert like reset_tree above
+        :return: N/A
+        """
+        dlg = ImportTreePopup(self.pob_config.app.tr)
+        _return = dlg.exec()
+        if _return:
+            url = dlg.lineedit.text()
+            # url = "https://www.pathofexile.com/passive-skill-tree/AAAABgAAAAAA?fred"
+            # url = "https://www.pathofexile.com/fullscreen-passive-skill-tree/AAAABgMAJwDwBAcQWBEPFLAdgx8CH8creCycLX0vXTBbMjQ2iTbFOlhEq0wtVa5VxlZIakN2EX6vghCD24-mrJesmLWFvOrBtNgk37Dk7OXA71D06QAD-vEA8LoaL13HMeXA?accountName=xyllywyt&characterName=XyllyWitchy"
+            # Mira_sentinal
+            # url = "https://www.pathofexile.com/passive-skill-tree/3.19.0/AAAABgUBaeS82WGbIR0UFm_sOFnzdl73MqIAhnfEpNeWpwiFe6EjFy_vIVFgwGaApNgkPfxxeZx7v7iEgzD4ggfwH7v2jM9fP3GFOpHvDj0PBLMClvnd9kgGOYx2eWhoZY9Gdqxo8icvcqmAMPuqM2xXDYN5WGO3MeNq34ZmnizxGjiCm57NFCCbbny7rv862GTnCwxoWAirZlStCup_ocexHVXW-tKLjBccvrYSacEEkFXPftJ8PAX7lqyJ2rmsqn3x8kFlcq2N0iEpi_ObidjvfO1h6hjmfQcAqgCgAKIEhASABJMEkAdL3oN5GEgs8S0BCwy9Aa0Kuhqhx-og-5aWNn3x"
+            # mastery test tree
+            # url = "https://www.pathofexile.com/passive-skill-tree/AAAABgAAEz8nM4cdvoLHvSf56HUpCGcD7l-YWlJKyBg8qJqbXc8yWW2TOvKXAAFU4nUp"
 
-            # output[0] will be the encoded string and the rest will variable=value
-            output = m.group(2).split("?")
-            self.build.current_spec.URL = output[0]
-            del output[0]
-            variables = output  # a list of variable=value or an empty list
-            # use variables as the title for the spec
-            self.build.current_spec.set_nodes_from_url()
-            self.win.gview_Tree.add_tree_images(True)
+            # check the validity of what was passed in
+            m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", url)
+            # group(1) is None or a version
+            # group(2) is always the encoded string, with any variables
+            if m is not None:
+                # output[0] will be the encoded string and the rest will variable=value
+                output = m.group(2).split("?")
+                self.build.current_spec.URL = url
+                # del output[0]
+                # output is a now a list of variable=value or an empty list
+                # variables = output
+                # print(variables)
+                # use variables as the title for the spec
+                self.build.current_spec.set_nodes_from_url()
+                self.win.gview_Tree.add_tree_images(True)
 
     def export_tree(self):
         pass

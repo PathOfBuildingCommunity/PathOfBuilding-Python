@@ -11,7 +11,7 @@ from pprint import pprint
 from qdarktheme.qtpy.QtWidgets import QDialog
 from qdarktheme.qtpy.QtCore import Qt, Slot
 
-from dlg_Import import Ui_Dialog
+from dlg_BuildImport import Ui_Dialog
 from constants import valid_websites, website_list, http_headers
 from pob_config import Config, decode_base64_and_inflate, deflate_and_base64_encode, unique_sorted
 from build import Build

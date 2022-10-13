@@ -8,7 +8,7 @@ import urllib3
 
 from qdarktheme.qtpy.QtWidgets import QDialog
 
-from dlg_Export import Ui_Dialog
+from dlg_BuildExport import Ui_Dialog
 from pob_config import Config
 from build import Build
 

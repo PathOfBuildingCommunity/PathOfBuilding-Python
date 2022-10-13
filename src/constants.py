@@ -29,7 +29,7 @@ default_config = '<PathOfBuilding>\
     </PathOfBuilding>'
 
 default_spec = f'\
-    <Spec title="Default" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}" classId="0">\
+    <Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}">\
     </Spec>'
 
 default_view_mode = "TREE"

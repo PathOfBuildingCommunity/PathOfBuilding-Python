@@ -2,19 +2,24 @@
 simple popups that don't need complex activities to load or execute them
 """
 
+import re
+import base64
+
 from qdarktheme.qtpy.QtCore import Slot, Qt, QSize
-from qdarktheme.qtpy.QtGui import QTextDocument
+from qdarktheme.qtpy.QtGui import QTextDocument, QIcon
 from qdarktheme.qtpy.QtWidgets import (
     QDialog,
     QDialogButtonBox,
     QLabel,
+    QLineEdit,
     QListWidget,
     QListWidgetItem,
     QMessageBox,
+    QPushButton,
     QVBoxLayout,
 )
 
-from constants import ColourCodes
+from constants import ColourCodes, _VERSION_str
 from ui_utils import HTMLDelegate, html_colour_text
 
 
@@ -47,10 +52,11 @@ def critical_dialog(win, title, text, btn_text="Close"):
 
 
 class MasteryPopup(QDialog):
-    def __init__(self, node, current_spec, mastery_effects_nodes):
+    def __init__(self, tr, node, current_spec, mastery_effects_nodes):
         """
         Choose a mastery from the passed in Node.
 
+        :param tr: App translate function
         :param node: node(): this mastery node
         :param current_spec: Spec(): the current Spec class for looking up assigned effects
         :param mastery_effects_nodes: list: list of node ids in this mastery group
@@ -85,14 +91,14 @@ class MasteryPopup(QDialog):
                 case node.id:
                     # assigned to this node
                     item.setText(html_colour_text("GREEN", stats))
-                    tooltip = "(Currently Assigned)"
+                    tooltip = tr("(Currently Assigned)")
                     self.selected_row = idx
                     self.selected_effect = effect["effect"]
                 case _:
                     # assigned to another node
                     item.setFlags(Qt.NoItemFlags)
                     item.setText(html_colour_text("RED", stats))
-                    tooltip = "(Already Assigned)"
+                    tooltip = tr("(Already Assigned)")
             if tooltip is not None:
                 item.setToolTip(" ".join(tooltip))
             self.listbox.addItem(item)
@@ -108,13 +114,13 @@ class MasteryPopup(QDialog):
         self.setWindowTitle(node.name)
         self.setWindowIcon(node.active_image.pixmap())
 
-        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Close)
-        self.buttonBox.rejected.connect(self.reject)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Close)
+        self.button_box.rejected.connect(self.reject)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(QLabel("Double Click to select an effect."))
         self.layout.addWidget(self.listbox)
-        self.layout.addWidget(self.buttonBox)
+        self.layout.addWidget(self.button_box)
         self.setLayout(self.layout)
 
         self.listbox.setCurrentRow(self.selected_row)
@@ -149,3 +155,61 @@ class MasteryPopup(QDialog):
         if self.starting:
             self.starting = False
             self.listbox.setCurrentRow(-1)
+
+
+"""######## ImportTreePopup. Import a passive Tree URL ########"""
+
+
+class ImportTreePopup(QDialog):
+    def __init__(self, tr):
+        """
+        Initialize
+        :param tr: App translate function
+        """
+        super().__init__()
+        self.label_intro_text = tr("Enter passive tree URL.")
+        self.label_legit_text = tr(html_colour_text("GREEN", "Seems valid. Lets go."))
+        self.label_not_valid_text = tr(html_colour_text("RED", "Not valid. Try again."))
+        self.setWindowTitle(tr("Import tree from URL"))
+        self.setWindowIcon(QIcon(":/Art/Icons/paper-plane-return.png"))
+
+        self.label = QLabel(self.label_intro_text)
+        self.lineedit = QLineEdit()
+        self.lineedit.setMinimumWidth(600)
+        self.lineedit.textChanged.connect(self.validate_url)
+
+        self.btn_import = QPushButton("Import")
+        self.btn_import.setEnabled(False)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Cancel)
+        self.button_box.rejected.connect(self.reject)
+        self.button_box.accepted.connect(self.accept)
+        self.button_box.addButton(self.btn_import, QDialogButtonBox.AcceptRole)
+        self.button_box.setCenterButtons(True)
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.lineedit)
+        self.layout.addWidget(self.button_box)
+        self.setLayout(self.layout)
+
+    def validate_url(self, text):
+        """
+        Validate the lineedit input (url hopefuilly). Turn on/off the import button and change label text as needed.
+
+        :param text: str: the current text of the line edit
+        :return: N/A
+        """
+        if text == "":
+            self.label.setText(self.label_intro_text)
+        else:
+            # check the validity of what was passed in
+            m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", text)
+            if m is not None:
+                # output[0] will be the encoded string and the rest will variable=value, which we don't care about
+                output = m.group(2).split("?")
+                decoded_str = base64.b64decode(output[0], "-_")
+                self.btn_import.setEnabled(decoded_str and len(decoded_str) > 7)
+                self.label.setText(self.label_legit_text)
+            else:
+                self.btn_import.setEnabled(False)
+                self.label.setText(self.label_not_valid_text)
