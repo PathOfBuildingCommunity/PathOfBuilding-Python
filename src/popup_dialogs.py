@@ -216,6 +216,9 @@ class ImportTreePopup(QDialog):
                 self.label.setText(self.label_not_valid_text)
 
 
+"""######## ExportTreePopup. Export a passive Tree URL ########"""
+
+
 class ExportTreePopup(QDialog):
     def __init__(self, tr, url, win):
         """
