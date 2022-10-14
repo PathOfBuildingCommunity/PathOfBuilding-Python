@@ -4,9 +4,10 @@ simple popups that don't need complex activities to load or execute them
 
 import re
 import base64
+import requests
 
 from qdarktheme.qtpy.QtCore import Slot, Qt, QSize
-from qdarktheme.qtpy.QtGui import QTextDocument, QIcon
+from qdarktheme.qtpy.QtGui import QGuiApplication, QIcon
 from qdarktheme.qtpy.QtWidgets import (
     QDialog,
     QDialogButtonBox,
@@ -19,7 +20,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QVBoxLayout,
 )
 
-from constants import ColourCodes, _VERSION_str
+from constants import ColourCodes, _VERSION_str, http_headers
 from ui_utils import HTMLDelegate, html_colour_text
 
 
@@ -213,3 +214,76 @@ class ImportTreePopup(QDialog):
             else:
                 self.btn_import.setEnabled(False)
                 self.label.setText(self.label_not_valid_text)
+
+
+class ExportTreePopup(QDialog):
+    def __init__(self, tr, url, win):
+        """
+        Initialize
+        :param tr: App translate function
+        :param url: str: the encoded url
+        :param tr: MainWindow(): reference for accessing the statusbar
+        """
+        super().__init__()
+        self.tr = tr
+        self.win = win
+        self.label_intro_text = tr("Passive tree URL.")
+        self.shrink_text = f'{tr("Shrink with")} PoEURL'
+        # self.label_legit_text = tr(html_colour_text("GREEN", "Seems valid. Lets go."))
+        # self.label_not_valid_text = tr(html_colour_text("RED", "Not valid. Try again."))
+        self.setWindowTitle(tr("Export tree to URL"))
+        self.setWindowIcon(QIcon(":/Art/Icons/paper-plane.png"))
+
+        self.label = QLabel(self.label_intro_text)
+        self.lineedit = QLineEdit()
+        self.lineedit.setMinimumWidth(600)
+        self.lineedit.setText(url)
+
+        self.btn_copy = QPushButton(tr("Copy"))
+        self.btn_copy.setAutoDefault(False)
+        self.btn_copy.clicked.connect(self.copy_url)
+        self.btn_shrink = QPushButton(self.shrink_text)
+        self.btn_shrink.clicked.connect(self.shrink_url)
+        self.btn_shrink.setAutoDefault(False)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Close)
+        self.button_box.rejected.connect(self.reject)
+        self.button_box.accepted.connect(self.accept)
+        self.button_box.addButton(self.btn_shrink, QDialogButtonBox.ActionRole)
+        self.button_box.addButton(self.btn_copy, QDialogButtonBox.ActionRole)
+        self.button_box.setCenterButtons(True)
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.lineedit)
+        self.layout.addWidget(self.button_box)
+        self.setLayout(self.layout)
+        self.set_lineedit_selection()
+
+    def set_lineedit_selection(self):
+        self.lineedit.setFocus(Qt.OtherFocusReason)
+        self.lineedit.setSelection(0, len(self.lineedit.text()))
+
+    def copy_url(self):
+        """Copy the text in the lineedit to the clipboard"""
+        clipboard = QGuiApplication.clipboard()
+        clipboard.setText(self.lineedit.text())
+        self.set_lineedit_selection()
+
+    def shrink_url(self):
+        """"""
+        self.btn_shrink.setText(f'{self.tr("Shrinking")} ...')
+        self.btn_shrink.setEnabled(False)
+        url = f"http://poeurl.com/shrink.php?url={self.lineedit.text()}"
+        response = None
+        try:
+            response = requests.get(url, headers=http_headers, timeout=6.0)
+            url = f'http://poeurl.com/{response.content.decode("utf-8")}'
+            self.lineedit.setText(url)
+            self.lineedit.setSelection(0, len(url))
+            self.btn_shrink.setText(self.tr("Done"))
+        except requests.RequestException as e:
+            self.win.update_status_bar(f"Error retrieving 'Data': {response.reason} ({response.status_code}).")
+            self.btn_shrink.setEnabled(True)
+            self.btn_shrink.setText(self.shrink_text)
+            print(f"Error accessing 'http://poeurl.com': {e}.")
+        self.set_lineedit_selection()

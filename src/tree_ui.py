@@ -12,7 +12,7 @@ from constants import _VERSION, PlayerClasses, _VERSION_str
 from pob_config import Config, _debug, print_call_stack
 from flow_layout import FlowLayout
 from manage_tree_dialog import ManageTreeDlg
-from popup_dialogs import yes_no_dialog, ImportTreePopup
+from popup_dialogs import yes_no_dialog, ImportTreePopup, ExportTreePopup
 
 
 class TreeUI:
@@ -228,7 +228,12 @@ class TreeUI:
                 self.win.gview_Tree.add_tree_images(True)
 
     def export_tree(self):
-        pass
+        """Export the current nodes as a URL"""
+        url = self.build.current_spec.export_nodes_to_url()
+        self.build.current_spec.URL = url
+        dlg = ExportTreePopup(self.pob_config.app.tr, url, self.win)
+        # we don't care about how the user exits
+        dlg.exec()
 
     @Slot()
     def search_text_changed(self):

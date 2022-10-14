@@ -16,6 +16,7 @@ class Spec:
 
         :param _spec: the spec from the XML, or None for a new Spec (probably should never happen)
         """
+        self.internal_version = 6
         self.build = build
         self.def_spec = ET.fromstring(default_spec)
         if _spec is None:
@@ -189,7 +190,10 @@ class Spec:
                 if cluster_count > 0:
                     decoded_cluster_nodes = decoded_str[cluster_start:cluster_end]
                     # cluster_nodes = decoded_str[cluster_start:cluster_start+(cluster_count * 2)]
-                    # print(f"decoded_cluster_nodes: {len(decoded_cluster_nodes)},", ''.join('{:02x} '.format(x) for x in decoded_cluster_nodes))
+                    # print(
+                    #     f"decoded_cluster_nodes: {len(decoded_cluster_nodes)},",
+                    #     "".join("{:02x} ".format(x) for x in decoded_cluster_nodes),
+                    # )
                     # now decode the cluster nodes structure to numbers
                     for idx in range(0, len(decoded_cluster_nodes), 2):
                         # print(''.join('{:02x} '.format(x) for x in cluster_nodes[idx:idx + 2]))
@@ -202,7 +206,10 @@ class Spec:
                     mastery_end = mastery_count == 0 and mastery_start or mastery_start + (mastery_count * 4)
                     # print("mastery_start, end", mastery_start, mastery_end, mastery_count)
                     decoded_mastery_nodes = decoded_str[mastery_start:mastery_end]
-                    # print(f"decoded_mastery_nodes: {len(decoded_mastery_nodes)},", ''.join('{:02x} '.format(x) for x in decoded_mastery_nodes))
+                    # print(
+                    #     f"decoded_mastery_nodes: {len(decoded_mastery_nodes)},",
+                    #     "".join("{:02x} ".format(x) for x in decoded_mastery_nodes),
+                    # )
                     # now decode the mastery nodes structure to numbers
                     for idx in range(0, len(decoded_mastery_nodes), 4):
                         # print(''.join('{:02x} '.format(x) for x in decoded_mastery_nodes[idx:idx + 4]))
@@ -211,6 +218,45 @@ class Spec:
                         m_effect = int.from_bytes(decoded_mastery_nodes[idx : idx + 2], "big")
                         # print(m_id, m_effect)
                         self.masteryEffects[m_id] = m_effect
+
+    def export_nodes_to_url(self):
+        byte_stream = bytearray()
+        byte_stream.extend(self.internal_version.to_bytes(4, "big"))
+        byte_stream.append(self.classId)
+        byte_stream.append(self.ascendClassId)
+
+        # print(''.join('{:02x} '.format(x) for x in byte_stream))
+
+        # separate the cluster nodes from the real nodes
+        nodes = []
+        cluster_nodes = []
+        for node in sorted(self.nodes):
+            if node >= 65536:
+                cluster_nodes.append(node)
+            else:
+                nodes.append(node)
+
+        byte_stream.append(len(nodes))
+        for node in self.nodes:
+            byte_stream.extend(node.to_bytes(2, "big"))
+        # print(''.join('{:02x} '.format(x) for x in byte_stream))
+
+        byte_stream.append(len(cluster_nodes))
+        for cluster_node in cluster_nodes:
+            cluster_node -= 65536
+            byte_stream.extend(cluster_node.to_bytes(2, "big"))
+        # print(''.join('{:02x} '.format(x) for x in byte_stream))
+
+        byte_stream.append(len(self.masteryEffects))
+        for mastery_node in self.masteryEffects:
+            byte_stream.extend(self.masteryEffects[mastery_node].to_bytes(2, "big"))
+            byte_stream.extend(mastery_node.to_bytes(2, "big"))
+
+        # string = " ".join('{:02x}'.format(x) for x in byte_stream)
+        # print(string)
+
+        encoded_string = base64.b64encode(byte_stream, b"-_").decode("utf-8")
+        return f"https://www.pathofexile.com/passive-skill-tree/{encoded_string}"
 
     def set_mastery_effects_from_string(self, new_effects):
         """
