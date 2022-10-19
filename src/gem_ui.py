@@ -20,6 +20,14 @@ class GemUI(QWidget):
     """
 
     def __init__(self, my_list_item, json_gems, parent_notify, gem=None) -> None:
+        """
+        init
+
+        :param my_list_item:QListWidgetItem: the item inthe list box that this instance is attached to
+        :param json_gems: dict: a dictionary of skills by id and name
+        :param parent_notify: function: function to call when a change has happened
+        :param gem: ET.elementree: prefill with this gem
+        """
         super(GemUI, self).__init__()
 
         self.widget_height = 30

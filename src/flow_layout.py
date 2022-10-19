@@ -43,6 +43,15 @@ class FlowLayout(QLayout):
         """
         self.itemList.append(item)
 
+    def insertItem(self, index, item):
+        """
+        Adds a widget to the layout.
+
+        :param: Widget: The item item to add.
+        :return: N/A
+        """
+        self.itemList.insert(index, item)
+
     def count(self):
         """
         I love to Count !!!

@@ -32,7 +32,7 @@ default_spec = f'\
     <Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}">\
     </Spec>'
 
-default_view_mode = "TREE"
+default_view_mode = "ITEMS"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
@@ -947,10 +947,11 @@ website_list = {
     "Error": {"note": "If you get here, it's broken"},
 }
 
+# names for importing from json converting to xml entry names
 slot_map = {
     "Weapon": "Weapon 1",
-    "Offhand": "Weapon 2",
-    "Weapon2": "Weapon 1 Swap",
+    "Weapon2": "Weapon 2",
+    "Offhand": "Weapon 1 Swap",
     "Offhand2": "Weapon 2 Swap",
     "Helm": "Helmet",
     "BodyArmour": "Body Armour",
@@ -962,4 +963,42 @@ slot_map = {
     "Belt": "Belt",
     "Flask": "Flask",
     "PassiveJewels": "PassiveJewels",
+    "Weapon1": "Weapon 1",
+    "Offhand1": "Weapon 1 Swap",
+    "Ring1": "Ring 1",
+    "Flask1": "Flask 1",
+    "Flask2": "Flask 2",
+    "Flask3": "Flask 3",
+    "Flask4": "Flask 4",
+    "Flask5": "Flask 5",
+    "Abyssal1": "Abyssal #1",
+    "Abyssal2": "Abyssal #2",
+    "Abyssal3": "Abyssal #3",
+    "Abyssal4": "Abyssal #4",
+}
+
+slot_names = {
+    "Weapon1": "Weapon 1",
+    "Weapon2": "Weapon 2",
+    "Offhand1": "Alt Weapon 1",
+    "Offhand2": "Alt Weapon 2",
+    "Helm": "Helmet",
+    "BodyArmour": "Body Armour",
+    "Gloves": "Gloves",
+    "Boots": "Boots",
+    "Amulet": "Amulet",
+    "Ring1": "Ring 1",
+    "Ring2": "Ring 2",
+    "Belt": "Belt",
+    "Flask": "Flask",
+    "PassiveJewels": "PassiveJewels",
+    "Flask1": "Flask 1",
+    "Flask2": "Flask 2",
+    "Flask3": "Flask 3",
+    "Flask4": "Flask 4",
+    "Flask5": "Flask 5",
+    "Abyssal1": "Abyssal #1",
+    "Abyssal2": "Abyssal #2",
+    "Abyssal3": "Abyssal #3",
+    "Abyssal4": "Abyssal #4",
 }

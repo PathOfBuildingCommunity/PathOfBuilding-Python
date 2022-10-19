@@ -225,15 +225,13 @@ class ExportTreePopup(QDialog):
         Initialize
         :param tr: App translate function
         :param url: str: the encoded url
-        :param tr: MainWindow(): reference for accessing the statusbar
+        :param win: MainWindow(): reference for accessing the statusbar
         """
         super().__init__()
         self.tr = tr
         self.win = win
         self.label_intro_text = tr("Passive tree URL.")
         self.shrink_text = f'{tr("Shrink with")} PoEURL'
-        # self.label_legit_text = tr(html_colour_text("GREEN", "Seems valid. Lets go."))
-        # self.label_not_valid_text = tr(html_colour_text("RED", "Not valid. Try again."))
         self.setWindowTitle(tr("Export tree to URL"))
         self.setWindowIcon(QIcon(":/Art/Icons/paper-plane.png"))
 
@@ -263,6 +261,7 @@ class ExportTreePopup(QDialog):
         self.set_lineedit_selection()
 
     def set_lineedit_selection(self):
+        """Ensure linedit has focus and the text selected"""
         self.lineedit.setFocus(Qt.OtherFocusReason)
         self.lineedit.setSelection(0, len(self.lineedit.text()))
 
@@ -273,7 +272,7 @@ class ExportTreePopup(QDialog):
         self.set_lineedit_selection()
 
     def shrink_url(self):
-        """"""
+        """Call poeurl and get the url 'shrinked'"""
         self.btn_shrink.setText(f'{self.tr("Shrinking")} ...')
         self.btn_shrink.setEnabled(False)
         url = f"http://poeurl.com/shrink.php?url={self.lineedit.text()}"

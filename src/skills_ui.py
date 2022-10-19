@@ -628,7 +628,7 @@ class SkillsUI:
 
     def create_gem_ui(self, index, gem=None):
         """
-        Add a new row to the Items list.
+        Add a new row to the Skills list.
 
         :param index: int: number of this gem in this skill group
         :param gem: ET.elementtree: The item to be added
