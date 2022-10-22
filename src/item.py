@@ -23,21 +23,28 @@ influence_colours = {
 
 
 class Item:
-    def __init__(self, _slot=None) -> None:
+    def __init__(self, _base_items, _slot=None) -> None:
         """
         Initialise defaults
+        :param _base_items: dict: the loaded base_items.json
         :param _slot: where this item is worn/carried.
         """
         self._slot = _slot
+        # the dict from json of the all items
+        self.base_items = _base_items
+        # Just this item's entry from base_items
+        self.base_item = None
 
         # this is not always available from the json character download
         self.level_req = 0
 
+        self.id = 0
         self.rarity = "NORMAL"
         self.title = ""
         self.name = ""
         self.base_name = ""
         self.ilevel = 0
+        self.type = ""  # or item_class
         self.quality = 0
         self.curr_variant = ""
         self.unique_id = ""
@@ -155,6 +162,11 @@ class Item:
                     match line:
                         case _:
                             print(f"Item().load_from_xml: Skipped: {line}")
+        self.base_item = self.base_items.get(self.base_name, None)
+        if self.base_item is not None:
+            self.type = self.base_item["type"]
+        elif "Flask" in self.name:
+            self.type = "Flask"
 
     def load_from_json(self, _json):
         """
@@ -239,6 +251,12 @@ class Item:
                 key = f'{influence.split("=")[0].title()} Item'
                 if key in influence_colours.keys():
                     self.influences.append(key)
+
+        self.base_item = self.base_items.get(self.base_name, None)
+        if self.base_item is not None:
+            self.type = self.base_item["type"]
+        elif "Flask" in self.name:
+            self.type = "Flask"
 
     def save(self, _id, debug_print=False):
         """

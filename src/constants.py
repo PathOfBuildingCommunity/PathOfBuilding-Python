@@ -980,8 +980,8 @@ slot_map = {
 slot_names = {
     "Weapon1": "Weapon 1",
     "Weapon2": "Weapon 2",
-    "Offhand1": "Alt Weapon 1",
-    "Offhand2": "Alt Weapon 2",
+    "Offhand1": "Alt Weapon 1 Swap",
+    "Offhand2": "Alt Weapon 2 Swap",
     "Helm": "Helmet",
     "BodyArmour": "Body Armour",
     "Gloves": "Gloves",
