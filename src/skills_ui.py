@@ -249,10 +249,6 @@ class SkillsUI:
         return gems
         # load_gems_json
 
-    """
-    ################################################### SKILL SET ###################################################
-    """
-
     def connect_skill_triggers(self):
         """re-connect triggers"""
         # print("connect_skill_triggers", self.triggers_connected)
@@ -283,6 +279,10 @@ class SkillsUI:
         self.win.check_SocketGroup_FullDPS.stateChanged.disconnect(self.save_socket_group_settings)
         self.win.lineedit_SkillLabel.textChanged.disconnect(self.save_socket_group_settings)
         self.win.combo_SocketedIn.currentIndexChanged.disconnect(self.save_socket_group_settings)
+
+    """
+    ################################################### SKILL SET ###################################################
+    """
 
     @Slot()
     def change_skill_set(self, new_index):

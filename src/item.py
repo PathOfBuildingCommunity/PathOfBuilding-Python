@@ -167,6 +167,7 @@ class Item:
             self.type = self.base_item["type"]
         elif "Flask" in self.name:
             self.type = "Flask"
+        # load_from_xml
 
     def load_from_json(self, _json):
         """
@@ -257,6 +258,7 @@ class Item:
             self.type = self.base_item["type"]
         elif "Flask" in self.name:
             self.type = "Flask"
+        # load_from_json
 
     def save(self, _id, debug_print=False):
         """
@@ -291,7 +293,7 @@ class Item:
 
         # if debug_print:
         #     print(f"{text}\n\n")
-        return ET.fromstring(f'<Item id="{_id}">{text}</Item>')
+        return ET.fromstring(f'<Item id="{self.id}">{text}</Item>')
 
     def tooltip(self):
         """

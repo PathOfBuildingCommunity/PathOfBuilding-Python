@@ -4,7 +4,7 @@ A class to show and manage the item slots ui on the left hand side of the Items 
 
 import xml.etree.ElementTree as ET
 
-from qdarktheme.qtpy.QtCore import QRect, Slot, QSize, Qt
+from qdarktheme.qtpy.QtCore import Slot, QSize, Qt
 from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
 from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QListWidgetItem, QSpinBox, QWidget
 
@@ -24,9 +24,9 @@ class ItemSlotUI(QWidget):
         """
         init
 
-        :param title: string: the text for the label
-        :param indent: bool: If the widgets is indented or not
-        :param parent_notify: function: function to call when a change has happened
+        :param title: string: the text for the label.
+        :param indent: bool: If the widgets is indented or not.
+        :param parent_notify: function: function to call when a change has happened.
         """
         super(ItemSlotUI, self).__init__()
 
@@ -54,29 +54,55 @@ class ItemSlotUI(QWidget):
 
         self.label = QLabel(self)
         self.label.setText(f"{title}:")
-        self.label.setGeometry(1, 5, indent and 95 or 85, 22)
+        self.label.setGeometry(1, 5, indent and 105 or 95, 22)
         self.label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.combo_item_list = QComboBox(self)
-        self.combo_item_list.setGeometry(indent and 100 or 90, 3, indent and 360 or 380, 22)
+        self.combo_item_list.setGeometry(indent and 110 or 100, 3, indent and 370 or 380, 22)
         self.combo_item_list.setDuplicatesEnabled(True)
         self.combo_item_list.addItem("None", 0)
         if self.type == "Flask":
-            self.active = QCheckBox(self)
-            # Flasks are never indented
-            self.active.setGeometry(65, 5, 20, 20)
-            self.label.setGeometry(1, 5, 63, 22)
+            self.cb_active = QCheckBox(self)
+            # Flasks are never indented, so no need to mention it.
+            self.cb_active.setGeometry(75, 5, 20, 20)
+            self.label.setGeometry(1, 5, 73, 22)
+        else:
+            self.cb_active = None
 
     @property
     def title(self):
+        """The label's text"""
         return self.label.text()
+
+    @property
+    def current_item_id(self):
+        """Get the i number of the combo's current entry"""
+        item = self.combo_item_list.currentData()
+        if item == 0:  # "None"
+            return 0
+        else:
+            return item.id
+
+    @property
+    def active(self) -> bool:
+        """Return is a flask is active or not. Ignores non-flasks"""
+        if self.cb_active is not None:
+            return self.cb_active.isChecked()
+        else:
+            return False
+
+    @active.setter
+    def active(self, new_state):
+        """Set flasks to active or not. Ignores non-flasks"""
+        if self.cb_active is not None:
+            self.cb_active.setChecked(new_state)
 
     def sizeHint(self) -> QSize:
         """Return a known size. Without this the default row height is about 22"""
         return QSize(self.label.width() + self.combo_item_list.width() + 5, self.widget_height)
 
-    def add_item(self, item: Item):
+    def add_item(self, _item: Item):
         """add an item to the drop down"""
-        self.combo_item_list.addItem(item.name, item)
+        self.combo_item_list.addItem(_item.name, _item)
 
     def del_item(self, _item: Item):
         """delete an item from the drop down"""
@@ -90,6 +116,8 @@ class ItemSlotUI(QWidget):
         # print("self.combo_item_list.clear")
         self.combo_item_list.clear()
         self.combo_item_list.addItem("None", 0)
+        self.active = False
 
-    def set_active_item(self, _text):
+    def set_active_item_text(self, _text):
+        """Set the combo's active item by text"""
         set_combo_index_by_text(self.combo_item_list, _text)

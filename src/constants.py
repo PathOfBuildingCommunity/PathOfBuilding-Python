@@ -47,6 +47,9 @@ empty_build = f'<PathOfBuilding>\
             </Skill>\
         </SkillSet>\
     </Skills>\
+    <Items activeItemSet="1">\
+        <ItemSet useSecondWeaponSet="false" id="1"/>\
+    </Items>\
     <Tree activeSpec="1">\
         {default_spec}\
     </Tree>\
@@ -65,7 +68,6 @@ empty_build = f'<PathOfBuilding>\
 
 empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
     enabled="true" slot="" mainActiveSkill="1"/>'
-
 
 empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default"\
     gemId="" enabled="true" quality="0" count="1" nameSpec=""/>'
@@ -980,8 +982,8 @@ slot_map = {
 slot_names = {
     "Weapon1": "Weapon 1",
     "Weapon2": "Weapon 2",
-    "Offhand1": "Alt Weapon 1 Swap",
-    "Offhand2": "Alt Weapon 2 Swap",
+    "Offhand1": "Weapon 1 Swap",
+    "Offhand2": "Weapon 2 Swap",
     "Helm": "Helmet",
     "BodyArmour": "Body Armour",
     "Gloves": "Gloves",
@@ -990,15 +992,9 @@ slot_names = {
     "Ring1": "Ring 1",
     "Ring2": "Ring 2",
     "Belt": "Belt",
-    "Flask": "Flask",
-    "PassiveJewels": "PassiveJewels",
     "Flask1": "Flask 1",
     "Flask2": "Flask 2",
     "Flask3": "Flask 3",
     "Flask4": "Flask 4",
     "Flask5": "Flask 5",
-    "Abyssal1": "Abyssal #1",
-    "Abyssal2": "Abyssal #2",
-    "Abyssal3": "Abyssal #3",
-    "Abyssal4": "Abyssal #4",
 }

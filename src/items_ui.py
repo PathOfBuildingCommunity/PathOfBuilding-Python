@@ -77,7 +77,7 @@ import re
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack, print_a_xml_element
 from pob_file import read_xml, write_xml, read_json
-from constants import slot_map, ColourCodes
+from constants import slot_map, ColourCodes, slot_names
 from ui_utils import HTMLDelegate, html_colour_text
 from item import Item
 from item_slot_ui import ItemSlotUI
@@ -149,6 +149,9 @@ class ItemsUI:
         # dictionary of Items() indexed by unique_id. May not be in the same order as items in the GUI
         self.itemlist_by_uid = {}
         self.xml_items = None
+        self.current_itemset = None
+        self.xml_itemsets = []
+        self.triggers_connected = False
 
         self.base_items = read_json(Path(self.pob_config.exe_dir, "Data/base_items.json"))
 
@@ -157,31 +160,21 @@ class ItemsUI:
         delegate._list = self.win.list_Items
         self.win.list_Items.setItemDelegate(delegate)
 
-        self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
-        self.win.btn_WeaponSwap.clicked.connect(self.weapon_swap)
-        self.win.list_Items.itemDoubleClicked.connect(self.double_clicked)
-
-        self.item_ui_list = {}
-        self.create_equipped_items_slot_ui("Weapon 1")
-        self.create_equipped_items_slot_ui("Weapon 2")
-        self.create_equipped_items_slot_ui("Weapon 1 Swap", hidden=True)
-        self.create_equipped_items_slot_ui("Weapon 2 Swap", hidden=True)
-        self.create_equipped_items_slot_ui("Helmet")
-        self.create_equipped_items_slot_ui("Body Armour")
-        self.create_equipped_items_slot_ui("Gloves")
-        self.create_equipped_items_slot_ui("Boots")
-        self.create_equipped_items_slot_ui("Amulet")
-        self.create_equipped_items_slot_ui("Ring 1")
-        self.create_equipped_items_slot_ui("Ring 2")
-        self.create_equipped_items_slot_ui("Belt")
-        self.create_equipped_items_slot_ui("Flask 1")
-        self.create_equipped_items_slot_ui("Flask 2")
-        self.create_equipped_items_slot_ui("Flask 3")
-        self.create_equipped_items_slot_ui("Flask 4")
-        self.create_equipped_items_slot_ui("Flask 5")
+        """Create the ui elements for displaying on the left side of the tab"""
+        # list of abyssal ui's for ease of hiding them during itemset changes
+        self.abyssal_item_slot_ui_list = []
+        # dict of all slots
+        self.item_slot_ui_list = {}
+        for item_label in slot_names.values():
+            self.create_equipped_item_slot_ui(item_label)
+        for name in ("Weapon 1", "Weapon 2", "Weapon 1 Swap", "Weapon 2 Swap", "Body Armour"):
+            self.create_equipped_abyssal_socket_slots(name, 6)
+        for name in ("Helmet", "Gloves", "Boots"):
+            self.create_equipped_abyssal_socket_slots(name, 4)
+        self.create_equipped_abyssal_socket_slots("Belt", 2)
+        self.hide_equipped_items_slot_ui("Weapon 1 Swap", hidden=True)
+        self.hide_equipped_items_slot_ui("Weapon 2 Swap", hidden=True)
         self.win.groupbox_SocketedJewels.setVisible(False)
-        # for idx in range(10):
-        #     self.create_equipped_items_slot_ui(f"Socket #{idx+1}")
 
         # self.rewrite_uniques_xml()
         # self.uniques = {}
@@ -194,21 +187,67 @@ class ItemsUI:
         #         new_item.load_from_xml(f"Rarity: UNIQUE\n{_item.text}")
         #         self.uniques[child.tag].append(new_item)
 
-    def create_equipped_items_slot_ui(self, slot_name, hidden=False, insert_after=""):
-        slot_ui = ItemSlotUI(slot_name, insert_after != "")
+    def connect_item_triggers(self):
+        """re-connect triggers"""
+        # print("connect_item_triggers", self.triggers_connected)
+        # print_call_stack(idx=-4)
+        if self.triggers_connected:
+            # Don't re-connect
+            return
+        self.triggers_connected = True
+        self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
+        self.win.btn_WeaponSwap.clicked.connect(self.weapon_swap)
+        self.win.list_Items.itemDoubleClicked.connect(self.double_clicked)
+        self.win.combo_ItemSet.currentIndexChanged.connect(self.change_item_set)
+
+    def disconnect_item_triggers(self):
+        """disconnect item orientated triggers when updating widgets"""
+        # print("disconnect_item_triggers", self.triggers_connected)
+        # print_call_stack(idx=-4)
+        if not self.triggers_connected:
+            # Don't disconnect if not connected
+            return
+        self.triggers_connected = False
+        self.win.list_Items.currentItemChanged.disconnect(self.on_row_changed)
+        self.win.btn_WeaponSwap.clicked.disconnect(self.weapon_swap)
+        self.win.list_Items.itemDoubleClicked.disconnect(self.double_clicked)
+        self.win.combo_ItemSet.currentIndexChanged.disconnect(self.change_item_set)
+
+    def create_equipped_abyssal_socket_slots(self, item_name, number_of_sockets):
+        for idx in range(number_of_sockets, 0, -1):
+            ui = self.create_equipped_item_slot_ui(f"{item_name} Abyssal Socket {idx}", True, item_name)
+            self.abyssal_item_slot_ui_list.append(ui)
+        # for idx in range(number_of_sockets):
+        #     # work out what the preceeding
+        #     after = idx == 0 and item_name or f"{item_name} Abyssal Socket {idx}"
+        #     ui = self.create_equipped_item_slot_ui(f"{item_name} Abyssal Socket {idx+1}", True, after)
+        #     self.abyssal_item_slot_ui_list.append(ui)
+
+    def create_equipped_item_slot_ui(self, slot_name, hidden=False, insert_after=""):
+        """
+        Create an item_slot_ui with the label being slot_name
+
+        :param slot_name: str: The labels contents
+        :param hidden: bool: Alt weapons are hidden by default
+        :param insert_after: str: The slot_name of the item_slot_ui to insert this item_slot_ui after
+        :return: item_slot_ui:
+        """
+        # Abyssal sockets have the item name in front, so split it out. EG: 'Belt Abyssal Socket 1'
+        if "Abyssal" in slot_name:
+            socket_number = slot_name.split("Socket ")
+            slot_ui = ItemSlotUI(f"Abyssal #{socket_number[1]}", True)
+        else:
+            slot_ui = ItemSlotUI(slot_name, insert_after != "")
+        # Find which list we are adding these to, Items or Sockets
         vlayout = "Socket #" in slot_name and self.win.vlayout_SocketedJewels or self.win.vlayout_EquippedItems
         if insert_after != "":
-            index = vlayout.indexOf(self.item_ui_list[insert_after]) + 1
+            index = vlayout.indexOf(self.item_slot_ui_list[insert_after]) + 1
             vlayout.insertWidget(index, slot_ui)
         else:
             vlayout.addWidget(slot_ui)
-        self.item_ui_list[slot_name] = slot_ui
+        self.item_slot_ui_list[slot_name] = slot_ui
         slot_ui.setHidden(hidden)
         self.win.groupbox_SocketedJewels.setVisible(self.win.vlayout_SocketedJewels.count() > 1)
-        # # -2 for the two hidden alt weapon item_slot_ui's
-        # item_count = self.win.groupbox_Items.layout().count() + self.win.groupbox_SocketedJewels.layout().count() - 2
-        # # 30 = item_slot_ui.height() + layout Spacing
-        # self.win.scrollAreaWidgetContents_Items.setFixedHeight(item_count * 30)
         height = (
             self.win.vlayout_EquippedItems.totalSizeHint().height()
             + self.win.vlayout_SocketedJewels.totalSizeHint().height()
@@ -218,12 +257,12 @@ class ItemsUI:
         return slot_ui
 
     def remove_equipped_items_slot_ui(self, slot_name):
-        slot_ui = self.item_ui_list.get(slot_name, None)
+        slot_ui = self.item_slot_ui_list.get(slot_name, None)
         if slot_ui is not None:
             vlayout = "Socket #" in slot_name and self.win.vlayout_SocketedJewels or self.win.vlayout_EquippedItems
             # vlayout.removeWidget(slot_ui)
             vlayout.takeAt(vlayout.indexOf(slot_ui))
-            del self.item_ui_list[slot_name]
+            del self.item_slot_ui_list[slot_name]
         self.win.groupbox_SocketedJewels.setVisible(self.win.vlayout_SocketedJewels.count() > 1)
         # # -2 for the two hidden alt weapon item_slot_ui's
         # item_count = self.win.groupbox_Items.layout().count() + self.win.groupbox_SocketedJewels.layout().count() - 2
@@ -244,11 +283,20 @@ class ItemsUI:
         :param hidden: bool: Whether to hide or not
         :return:
         """
-        # widget_item = self.item_ui_list[slot_name].my_list_item
+        # widget_item = self.item_slot_ui_list[slot_name].my_list_item
         # self.win.list_Slots.setRowHidden(self.win.list_Slots.row(widget_item), hidden)
-        slot_ui = self.item_ui_list.get(slot_name, None)
+        slot_ui = self.item_slot_ui_list.get(slot_name, None)
         if slot_ui is not None:
             slot_ui.setHidden(hidden)
+
+    def fill_item_slot_uis(self):
+        """fill the left hand item combos with items"""
+        for id in self.itemlist_by_id:
+            item = self.itemlist_by_id[id]
+            for name in self.item_slot_ui_list:
+                slot = self.item_slot_ui_list[name]
+                if slot.type == item.type or (item.type == "Shield" and "Weapon 2" in slot.title):
+                    slot.add_item(item)
 
     def rewrite_uniques_xml(self):
         """Reformat the xml from the lua. Temporary"""
@@ -282,14 +330,6 @@ class ItemsUI:
         lwi.setWhatsThis(_item.unique_id)
         self.win.list_Items.addItem(lwi)
         return _item
-
-    def fill_item_slot_uis(self):
-        for id in self.itemlist_by_id:
-            item = self.itemlist_by_id[id]
-            for name in self.item_ui_list:
-                slot = self.item_ui_list[name]
-                if slot.type == item.type or (item.type == "Shield" and "Weapon 2" in slot.title):
-                    slot.add_item(item)
 
     @Slot()
     def weapon_swap(self, checked):
@@ -327,19 +367,23 @@ class ItemsUI:
         """Actions for editing an item"""
         print(item.text(), item.whatsThis())
 
-    def clear_controls(self):
+    def clear_controls(self, loading=False):
         """
         Clear certain controls on the Skills tab in preparation for reloading.
 
         :return: N/A
         """
         _debug("clear_controls")
-        self.win.list_Items.clear()
-        for item_ui in self.item_ui_list:
-            self.item_ui_list[item_ui].combo_item_list.clear()
-        for name in self.item_ui_list:
-            slot = self.item_ui_list[name]
+        if loading:
+            self.win.list_Items.clear()
+        # for item_ui in self.item_slot_ui_list:
+        #     self.item_slot_ui_list[item_ui].combo_item_list.clear()
+        for name in self.item_slot_ui_list:
+            slot: ItemSlotUI = self.item_slot_ui_list[name]
             slot.clear()
+        for slot in self.abyssal_item_slot_ui_list:
+            slot.setHidden(True)
+        self.win.groupbox_SocketedJewels.setHidden(True)
 
     def load_from_xml(self, _items):
         """
@@ -349,8 +393,13 @@ class ItemsUI:
         :return: N/A
         """
         # print("load_from_xml")
+        self.disconnect_item_triggers()
         self.xml_items = _items
-        self.clear_controls()
+        self.clear_controls(True)
+        self.win.combo_ItemSet.clear()
+        # Remove <Slot /> entries under <Items /> only
+        for _item in self.xml_items.findall("Slot"):
+            self.xml_items.remove(_item)
         # add the items to the list box
         for _item in self.xml_items.findall("Item"):
             new_item = Item(self.base_items)
@@ -358,22 +407,13 @@ class ItemsUI:
             new_item.load_from_xml(_item.text)
             new_item.id = _item.get("id", 0)
             self.add_item_to_itemlist_widget(new_item)
-        for _item_set in self.xml_items.findall("ItemSet"):
+        self.xml_itemsets = self.xml_items.findall("ItemSet")
+        for _item_set in self.xml_itemsets:
             self.win.combo_ItemSet.addItem(_item_set.get("title", "Default"), _item_set)
-            for _slot in _item_set.findall("Slot"):
-                _name = _slot.get("name"), _slot.get("itemId")
-        self.win.combo_ItemSet.setCurrentIndex(0)
         self.fill_item_slot_uis()
-        # Process the Slot entries and set default items
-        for slot_xml in self.xml_items.findall("Slot"):
-            name = slot_xml.get("name", None)
-            item_id = slot_xml.get("itemId", None)
-            if name is not None and item_id is not None:
-                item = self.itemlist_by_id[item_id]
-                item_ui = self.item_ui_list[name]
-                item_ui.set_active_item(item.name)
-                if item.type == "Flask":
-                    item_ui.active.setChecked(str_to_bool(slot_xml.get("active", "False")))
+        self.win.combo_ItemSet.setCurrentIndex(0)
+        self.show_itemset(0, True)
+        self.connect_item_triggers()
 
     def load_from_json(self, _items):
         """
@@ -382,8 +422,10 @@ class ItemsUI:
         :param _items: Reference to the downloaded json <Items> tag set
         :return: N/A
         """
+        # ToDo: Revisit this now that slots and skillsets exist
         # print("load_from_json")
-        self.clear_controls()
+        self.disconnect_item_triggers()
+        self.clear_controls(True)
         print(_items)
         character = _items["character"]
         print("load_from_json.character", character)
@@ -394,6 +436,10 @@ class ItemsUI:
             new_item.load_from_json(text_item)
             # print(vars(new_item))
             self.add_item_to_itemlist_widget(new_item)
+        self.fill_item_slot_uis()
+        self.win.combo_ItemSet.setCurrentIndex(0)
+        self.show_itemset(0, True)
+        self.connect_item_triggers()
 
     def save(self):
         """
@@ -402,6 +448,7 @@ class ItemsUI:
         :return: ET.ElementTree:
         """
         items = []
+        # build a list of items from the list control
         for row in range(self.win.list_Items.count()):
             items.append(self.win.list_Items.item(row).whatsThis())
 
@@ -409,7 +456,55 @@ class ItemsUI:
             # leave this here for a bit to pick out one item
             # self.itemlist[items[0]].save(0, true)
             # delete any items present and readd them with the current data
-            for child in list(self.xml_items):
+            for child in list(self.xml_items.findall('Item')):
                 self.xml_items.remove(child)
             for idx, u_id in enumerate(items):
                 self.xml_items.append(self.itemlist_by_uid[u_id].save(idx + 1, True))
+
+            # Add slot information
+            for child in list(self.current_itemset.findall('Slot')):
+                self.current_itemset.remove(child)
+            for slot_ui_name in self.item_slot_ui_list:
+                slot_ui = self.item_slot_ui_list[slot_ui_name]
+                item_id = slot_ui.current_item_id
+                if item_id != 0:
+                    item_xml = ET.fromstring(f'<Slot name="{slot_ui_name}" itemId="{item_id}"/>')
+                    if "Flask" in slot_ui_name:
+                        item_xml.set("active", bool_to_str(slot_ui.active))
+                    self.current_itemset.append(item_xml)
+
+    def show_itemset(self, _itemset, initial=False):
+        """
+        Show the nominated Item Set
+
+        :param _itemset: int:
+        :param initial: bool: Only set during loading
+        :return:
+        """
+        _debug("show_itemset", _itemset)
+        if 0 <= _itemset < len(self.xml_itemsets):
+            if not initial:
+                self.save()
+                # self.clear_controls()
+            self.current_itemset = self.xml_itemsets[_itemset]
+
+            # Process the Slot entries and set default items
+            for slot_xml in self.current_itemset.findall("Slot"):
+                # The regex is for a data error: 1Swap -> 1 Swap
+                name = re.sub(r'([12])Swap', '\\1 Swap', slot_xml.get("name", ""))
+                # name = slot_xml.get("name", "")
+                item_id = slot_xml.get("itemId", 0)
+                if name != "" and item_id != "0":
+                    item = self.itemlist_by_id[item_id]
+                    item_ui: ItemSlotUI = self.item_slot_ui_list[name]
+                    item_ui.set_active_item_text(item.name)
+                    if item.type == "Flask":
+                        item_ui.active = str_to_bool(slot_xml.get("active", "False"))
+                    if "Abyssal" in name:
+                        item_ui.setVisible(True)
+
+    def change_item_set(self, _index):
+        """React to the the itemset combo being changed"""
+        _debug("change_item_set", _index)
+        if 0 <= _index < len(self.xml_itemsets):
+            self.show_itemset(_index)
