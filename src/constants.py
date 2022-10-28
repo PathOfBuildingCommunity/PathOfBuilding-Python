@@ -56,7 +56,6 @@ empty_build = f'<PathOfBuilding>\
     <Notes/>\
     <NotesHTML/>\
     <TreeView searchStr="" zoomY="0" showHeatMap="nil" zoomLevel="3" showStatDifferences="true" zoomX="0"/>\
-    <Items/>\
     <Config>\
         <Input name="resistancePenalty" number="0"/>\
         <Input name="pantheonMinorGod" string="None"/>\

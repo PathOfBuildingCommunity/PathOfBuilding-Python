@@ -392,7 +392,7 @@ class Build:
 
     def check_socket_group_for_an_active_gem(self, _sg):
         """
-        Check a socket group and if the first gem is not active gem, find an active gem in the group
+        Check a socket group and if the first gem is not an active gem, find an active gem in the group
         and if found, set it to be first.
 
         :param _sg: ET.element: the socket group to check
@@ -547,7 +547,7 @@ class Build:
 
     def import_gems_json(self, json_items):
         """
-        Import skills from the json supplied by GGG.
+        Import skills from the json supplied by GGG and convert it to xml.
 
         :param json_items: json import of the item data.
         :return: int: number of skillsets

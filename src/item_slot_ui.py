@@ -29,7 +29,6 @@ class ItemSlotUI(QWidget):
         :param parent_notify: function: function to call when a change has happened.
         """
         super(ItemSlotUI, self).__init__()
-
         self.widget_height = 26
         # self.setGeometry(0, 0, 320, self.widget_height)
         self.setMinimumHeight(self.widget_height)
@@ -51,6 +50,7 @@ class ItemSlotUI(QWidget):
             self.type = "AbyssJewel"
         else:
             self.type = title
+        self.title = title
 
         self.label = QLabel(self)
         self.label.setText(f"{title}:")
@@ -60,6 +60,7 @@ class ItemSlotUI(QWidget):
         self.combo_item_list.setGeometry(indent and 110 or 100, 3, indent and 370 or 380, 22)
         self.combo_item_list.setDuplicatesEnabled(True)
         self.combo_item_list.addItem("None", 0)
+        self.combo_item_list.setCurrentIndex(0)
         if self.type == "Flask":
             self.cb_active = QCheckBox(self)
             # Flasks are never indented, so no need to mention it.
@@ -68,14 +69,14 @@ class ItemSlotUI(QWidget):
         else:
             self.cb_active = None
 
-    @property
-    def title(self):
-        """The label's text"""
-        return self.label.text()
+    # @property
+    # def title(self):
+    #     """The label's text"""
+    #     return self.label.text()
 
     @property
     def current_item_id(self):
-        """Get the i number of the combo's current entry"""
+        """Get the id number of the combo's current entry"""
         item = self.combo_item_list.currentData()
         if item == 0:  # "None"
             return 0
@@ -121,3 +122,35 @@ class ItemSlotUI(QWidget):
     def set_active_item_text(self, _text):
         """Set the combo's active item by text"""
         set_combo_index_by_text(self.combo_item_list, _text)
+
+    def set_default_item(self):
+        """
+        Set a default item if there is no slot information to set it (for example json download)
+        For slots with more than one entry (eg: Flasks), try to fill out slots with different items.
+
+        :return: N/A
+        """
+        # print("set_default_item", self.title, self.combo_item_list.currentIndex(), self.combo_item_list.count())
+
+        if self.combo_item_list.currentIndex() == 0 and self.combo_item_list.count() > 0:
+            # Split out the number for those titles that have numbers
+            title_parts = self.title.split(" ")
+            match self.type:
+                case "Flask" | "Weapon" | "Ring":
+                    idx = int(title_parts[-1])
+                    if self.combo_item_list.count() > idx:
+                        self.combo_item_list.setCurrentIndex(idx)
+                    else:
+                        self.combo_item_list.setCurrentIndex(0)
+                case "AbyssJewel":
+                    title_parts = self.title[-1].split("#")
+                    idx = int(title_parts[-1])
+                    if self.combo_item_list.count() > idx:
+                        self.combo_item_list.setCurrentIndex(idx)
+                    else:
+                        self.combo_item_list.setCurrentIndex(0)
+                case _:
+                    if self.combo_item_list.count() > 1:
+                        self.combo_item_list.setCurrentIndex(1)
+                    else:
+                        self.combo_item_list.setCurrentIndex(0)

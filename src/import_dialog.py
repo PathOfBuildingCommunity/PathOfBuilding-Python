@@ -192,9 +192,12 @@ class ImportDlg(Ui_Dialog, QDialog):
             self.download_character_data()
         if self.check_DeleteItems.isChecked():
             # ToDo: Do something clever to remove items. Later when you have Manage Item Sets dialog working
-            pass
+            self.win.items_ui.delete_all_itemsets()
+            self.win.items_ui.delete_all_items()
+        json_character = self.character_data.get("character")
         # A lot of technology is built into the ItemsUI() class, lets reuse that
-        self.win.items_ui.load_from_json(self.character_data["items"])
+        self.win.items_ui.load_from_json(self.character_data["items"], f'Imported {json_character.get("name", "")}')
+        # force everything back to xml format
         self.win.items_ui.save()
 
     @Slot()
