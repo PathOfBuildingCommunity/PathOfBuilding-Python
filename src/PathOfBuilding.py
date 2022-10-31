@@ -184,14 +184,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for penalty in resistance_penalty.keys():
             self.combo_ResPenalty.addItem(resistance_penalty[penalty], penalty)
         self.combo_Bandits.clear()
-        for bandit in bandits.keys():
-            self.combo_Bandits.addItem(bandits[bandit], bandit)
+        for idx, bandit_name in enumerate(bandits.keys()):
+            bandit_info = bandits[bandit_name]
+            self.combo_Bandits.addItem(bandit_info.get("name"), bandit_name)
+            self.combo_Bandits.setItemData(idx, html_colour_text("TANGLE", bandit_info.get("tooltip")), Qt.ToolTipRole)
         self.combo_MajorGods.clear()
-        for name in pantheon_major_gods.keys():
-            self.combo_MajorGods.addItem(pantheon_major_gods[name], name)
+        for idx, god_name in enumerate(pantheon_major_gods.keys()):
+            god_info = pantheon_major_gods[god_name]
+            self.combo_MajorGods.addItem(god_info.get("name"), god_name)
+            self.combo_MajorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
         self.combo_MinorGods.clear()
-        for name in pantheon_minor_gods.keys():
-            self.combo_MinorGods.addItem(pantheon_minor_gods[name], name)
+        for idx, god_name in enumerate(pantheon_minor_gods.keys()):
+            god_info = pantheon_minor_gods[god_name]
+            self.combo_MinorGods.addItem(god_info.get("name"), god_name)
+            self.combo_MinorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
 
         self.menu_Builds.addSeparator()
         self.set_recent_builds_menu_items(self.config)

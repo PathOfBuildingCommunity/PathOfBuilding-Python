@@ -28,7 +28,8 @@ def html_colour_text(colour, text):
     :return: str:
     """
     c = colour[0] == "#" and colour or ColourCodes[colour.upper()].value
-    return f'<span style="color:{c};">{text}</span>'
+    newline="\n"
+    return f'<span style="color:{c};">{text.replace(newline,"<BR>")}</span>'
 
 
 def set_combo_index_by_data(_combo: QComboBox, _data):
