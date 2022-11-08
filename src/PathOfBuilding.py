@@ -24,13 +24,9 @@ from qdarktheme.qtpy.QtWidgets import (
     QApplication,
     QComboBox,
     QFileDialog,
-    QFrame,
     QLabel,
     QMainWindow,
-    QScrollArea,
-    QSizePolicy,
     QSpinBox,
-    QVBoxLayout,
     QWidget,
 )
 

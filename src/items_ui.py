@@ -412,7 +412,7 @@ class ItemsUI:
             # print(idx, text_item)
             new_item = Item(self.base_items)
             new_item.load_from_json(text_item)
-            new_item.id = id_base+idx
+            new_item.id = id_base + idx
             # print(vars(new_item))
             self.add_item_to_itemlist_widget(new_item)
         self.fill_item_slot_uis()
@@ -435,13 +435,13 @@ class ItemsUI:
             # leave this here for a bit to pick out one item
             # self.itemlist[items[0]].save(0, true)
             # delete any items present in the xml and readd them with the current data
-            for child in list(self.xml_items.findall('Item')):
+            for child in list(self.xml_items.findall("Item")):
                 self.xml_items.remove(child)
             for idx, u_id in enumerate(items):
                 self.xml_items.append(self.itemlist_by_uid[u_id].save(idx + 1, True))
 
             # Remove legacy <Slot /> entries
-            for child in list(self.current_itemset.findall('Slot')):
+            for child in list(self.current_itemset.findall("Slot")):
                 self.current_itemset.remove(child)
             # Add slot information
             for slot_ui_name in self.item_slot_ui_list:
@@ -474,7 +474,7 @@ class ItemsUI:
     def delete_all_items(self):
         """Delete all items"""
         print("delete_all_items")
-        for child in list(self.xml_items.findall('Item')):
+        for child in list(self.xml_items.findall("Item")):
             self.xml_items.remove(child)
         self.clear_controls(True)
 
@@ -499,7 +499,7 @@ class ItemsUI:
             if len(slots) > 0:
                 for slot_xml in slots:
                     # The regex is for a data error: 1Swap -> 1 Swap
-                    name = re.sub(r'([12])Swap', '\\1 Swap', slot_xml.get("name", ""))
+                    name = re.sub(r"([12])Swap", "\\1 Swap", slot_xml.get("name", ""))
                     item_id = int(slot_xml.get("itemId", 0))
                     if name != "" and item_id != 0:
                         item = self.itemlist_by_id[item_id]
@@ -523,7 +523,7 @@ class ItemsUI:
         new_itemset = ET.fromstring(f'<ItemSet useSecondWeaponSet="false" id="{len(self.xml_itemsets)+1}"/>')
         new_itemset.set("title", itemset_name)
         self.xml_itemsets.append(new_itemset)
-        self.change_itemset(len(self.xml_itemsets)-1)
+        self.change_itemset(len(self.xml_itemsets) - 1)
 
     def change_itemset(self, _index):
         """React to the the itemset combo being changed"""

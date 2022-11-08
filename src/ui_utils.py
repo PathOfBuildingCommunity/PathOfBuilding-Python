@@ -28,7 +28,7 @@ def html_colour_text(colour, text):
     :return: str:
     """
     c = colour[0] == "#" and colour or ColourCodes[colour.upper()].value
-    newline="\n"
+    newline = "\n"
     return f'<span style="color:{c};">{text.replace(newline,"<BR>")}</span>'
 
 

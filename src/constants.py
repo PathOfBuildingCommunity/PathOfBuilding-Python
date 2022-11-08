@@ -73,9 +73,24 @@ empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="
 
 bandits = {
     "None": {"name": "Kill All", "tooltip": "2 Passives Points"},
-    "Oak": {"name": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)", "tooltip": "Regenerate 1% of Life per second\n2% additional Physical Damage Reduction\n20% increased Physical Damage"},
-    "Kraityn": {"name": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)", "tooltip": "6% increased Attack and Cast Speed\n10% chance to avoid Elemental Ailments\n6% increased Movement Speed"},
-    "Alira": {"name": "Alira (Mana Regen, Crit Multiplier, Resists)", "tooltip": "Regenerate 5 Mana per second\n+20% to Critical Strike Multiplier\n+15% to all Elemental Resistances"},
+    "Oak": {
+        "name": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)",
+        "tooltip": "Regenerate 1% of Life per second\n"
+                   "2% additional Physical Damage Reduction\n"
+                   "20% increased Physical Damage",
+    },
+    "Kraityn": {
+        "name": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)",
+        "tooltip": "6% increased Attack and Cast Speed\n"
+                   "10% chance to avoid Elemental Ailments\n"
+                   "6% increased Movement Speed",
+    },
+    "Alira": {
+        "name": "Alira (Mana Regen, Crit Multiplier, Resists)",
+        "tooltip": "Regenerate 5 Mana per second\n"
+                   "+20% to Critical Strike Multiplier\n"
+                   "+15% to all Elemental Resistances",
+    },
 }
 
 resistance_penalty = {
@@ -86,22 +101,53 @@ resistance_penalty = {
 
 pantheon_major_gods = {
     "None": {"name": "Godless", "tooltip": "You get nothing, heathen"},
-    "TheBrineKing": {"name": "Soul of the Brine King", "tooltip": "You cannot be Stunned if you've been Stunned or Blocked a Stunning Hit in the past 2 seconds"},
-    "Lunaris": {"name": "Soul of Lunaris", "tooltip": "1% additional Physical Damage Reduction for each nearby Enemy, up to 8%\n1% increased Movement Speed for each nearby Enemy, up to 8%"},
-    "Solaris": {"name": "Soul of Solaris", "tooltip": "6% additional Physical Damage Reduction while there is only one nearby Enemy\n20% chance to take 50% less Area Damage from Hits"},
+    "TheBrineKing": {
+        "name": "Soul of the Brine King",
+        "tooltip": "You cannot be Stunned if you've been Stunned or Blocked a Stunning Hit in the past 2 seconds",
+    },
+    "Lunaris": {
+        "name": "Soul of Lunaris",
+        "tooltip": "1% additional Physical Damage Reduction for each nearby Enemy, up to 8%\n"
+                   "1% increased Movement Speed for each nearby Enemy, up to 8%",
+    },
+    "Solaris": {
+        "name": "Soul of Solaris",
+        "tooltip": "6% additional Physical Damage Reduction while there is only one nearby Enemy\n"
+                   "20% chance to take 50% less Area Damage from Hits",
+    },
     "Arakaali": {"name": "Soul of Arakaali", "tooltip": "10% reduced Damage taken from Damage Over Time"},
 }
 
 pantheon_minor_gods = {
     "None": {"name": "Godless", "tooltip": "You get nothing, heathen"},
-    "Gruthkul": {"name": "Soul of Gruthkul", "tooltip": "1% additional Physical Damage Reduction for each Hit you've taken Recently up to a maximum of 5%"},
-    "Yugul": {"name": "Soul of Yugul", "tooltip": "You and your Minions take 50% reduced Reflected Damage\n50% chance to Reflect Hexes"},
+    "Gruthkul": {
+        "name": "Soul of Gruthkul",
+        "tooltip": "1% additional Physical Damage Reduction for each Hit you've taken Recently up to a maximum of 5%",
+    },
+    "Yugul": {
+        "name": "Soul of Yugul",
+        "tooltip": "You and your Minions take 50% reduced Reflected Damage\n50% chance to Reflect Hexes",
+    },
     "Abberath": {"name": "Soul of Abberath", "tooltip": "60% less Duration of Ignite on You"},
-    "Tukohama": {"name": "Soul of Tukohama", "tooltip": "While stationary, gain 3% additional Physical Damage Reduction every second, up to a maximum of 9%"},
+    "Tukohama": {
+        "name": "Soul of Tukohama",
+        "tooltip": "While stationary, gain 3% additional Physical Damage Reduction every second, up to a maximum of 9%",
+    },
     "Garukhan": {"name": "Soul of Garukhan", "tooltip": "60% reduced Effect of Shock on you"},
-    "Ralakesh": {"name": "Soul of Ralakesh", "tooltip": "25% reduced Physical Damage over Time taken while moving\nMoving while Bleeding doesn't cause you to take extra Damage"},
-    "Ryslatha": {"name": "Soul of Ryslatha", "tooltip": "Life Flasks gain 3 Charges every 3 seconds if you haven't used a Life Flask Recently"},
-    "Shakari": {"name": "Soul of Shakari", "tooltip": "50% less Duration of Poisons on You\nYou cannot be Poisoned while there are at least 3 Poisons on you"},
+    "Ralakesh": {
+        "name": "Soul of Ralakesh",
+        "tooltip": "25% reduced Physical Damage over Time taken while moving\n"
+                   "Moving while Bleeding doesn't cause you to take extra Damage",
+    },
+    "Ryslatha": {
+        "name": "Soul of Ryslatha",
+        "tooltip": "Life Flasks gain 3 Charges every 3 seconds if you haven't used a Life Flask Recently",
+    },
+    "Shakari": {
+        "name": "Soul of Shakari",
+        "tooltip": "50% less Duration of Poisons on you\n"
+                   "You cannot be Poisoned while there are at least 3 Poisons on you",
+    },
 }
 
 
