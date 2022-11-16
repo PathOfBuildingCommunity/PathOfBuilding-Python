@@ -1413,7 +1413,7 @@ hr { height: 1px; border-width: 0; }
                      <rect>
                       <x>85</x>
                       <y>2</y>
-                      <width>165</width>
+                      <width>310</width>
                       <height>22</height>
                      </rect>
                     </property>
@@ -1430,7 +1430,7 @@ hr { height: 1px; border-width: 0; }
                    <widget class="QPushButton" name="btn_ItemManage">
                     <property name="geometry">
                      <rect>
-                      <x>260</x>
+                      <x>405</x>
                       <y>2</y>
                       <width>75</width>
                       <height>24</height>

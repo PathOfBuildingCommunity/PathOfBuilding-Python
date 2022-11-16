@@ -76,20 +76,20 @@ bandits = {
     "Oak": {
         "name": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)",
         "tooltip": "Regenerate 1% of Life per second\n"
-                   "2% additional Physical Damage Reduction\n"
-                   "20% increased Physical Damage",
+        "2% additional Physical Damage Reduction\n"
+        "20% increased Physical Damage",
     },
     "Kraityn": {
         "name": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)",
         "tooltip": "6% increased Attack and Cast Speed\n"
-                   "10% chance to avoid Elemental Ailments\n"
-                   "6% increased Movement Speed",
+        "10% chance to avoid Elemental Ailments\n"
+        "6% increased Movement Speed",
     },
     "Alira": {
         "name": "Alira (Mana Regen, Crit Multiplier, Resists)",
         "tooltip": "Regenerate 5 Mana per second\n"
-                   "+20% to Critical Strike Multiplier\n"
-                   "+15% to all Elemental Resistances",
+        "+20% to Critical Strike Multiplier\n"
+        "+15% to all Elemental Resistances",
     },
 }
 
@@ -108,12 +108,12 @@ pantheon_major_gods = {
     "Lunaris": {
         "name": "Soul of Lunaris",
         "tooltip": "1% additional Physical Damage Reduction for each nearby Enemy, up to 8%\n"
-                   "1% increased Movement Speed for each nearby Enemy, up to 8%",
+        "1% increased Movement Speed for each nearby Enemy, up to 8%",
     },
     "Solaris": {
         "name": "Soul of Solaris",
         "tooltip": "6% additional Physical Damage Reduction while there is only one nearby Enemy\n"
-                   "20% chance to take 50% less Area Damage from Hits",
+        "20% chance to take 50% less Area Damage from Hits",
     },
     "Arakaali": {"name": "Soul of Arakaali", "tooltip": "10% reduced Damage taken from Damage Over Time"},
 }
@@ -137,7 +137,7 @@ pantheon_minor_gods = {
     "Ralakesh": {
         "name": "Soul of Ralakesh",
         "tooltip": "25% reduced Physical Damage over Time taken while moving\n"
-                   "Moving while Bleeding doesn't cause you to take extra Damage",
+        "Moving while Bleeding doesn't cause you to take extra Damage",
     },
     "Ryslatha": {
         "name": "Soul of Ryslatha",
@@ -146,7 +146,7 @@ pantheon_minor_gods = {
     "Shakari": {
         "name": "Soul of Shakari",
         "tooltip": "50% less Duration of Poisons on you\n"
-                   "You cannot be Poisoned while there are at least 3 Poisons on you",
+        "You cannot be Poisoned while there are at least 3 Poisons on you",
     },
 }
 

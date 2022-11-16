@@ -164,7 +164,7 @@ class ImportDlg(Ui_Dialog, QDialog):
     @Slot()
     def import_all_selected(self):
         """Import the whole character's data from PoE web site"""
-        print("import_all_selected")
+        # print("import_all_selected")
         self.import_passive_tree_jewels_selected()
         self.import_items_selected()
         self.import_skills_selected()
@@ -172,7 +172,7 @@ class ImportDlg(Ui_Dialog, QDialog):
     @Slot()
     def import_passive_tree_jewels_selected(self):
         """Import the character's data from PoE web site"""
-        print("import_passive_tree_jewels_selected")
+        # print("import_passive_tree_jewels_selected")
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
@@ -182,28 +182,30 @@ class ImportDlg(Ui_Dialog, QDialog):
         self.build.import_passive_tree_jewels_json(
             self.character_data.get("tree"), self.character_data.get("character")
         )
+        self.btn_Close.setFocus()
 
     @Slot()
     def import_items_selected(self):
         """Import the character's items from PoE web site"""
-        # print("import_items_skills_selected")
+        # print("import_items_selected")
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
-        if self.check_DeleteItems.isChecked():
-            # ToDo: Do something clever to remove items. Later when you have Manage Item Sets dialog working
-            self.win.items_ui.delete_all_itemsets()
-            self.win.items_ui.delete_all_items()
         json_character = self.character_data.get("character")
         # A lot of technology is built into the ItemsUI() class, lets reuse that
-        self.win.items_ui.load_from_json(self.character_data["items"], f'Imported {json_character.get("name", "")}')
+        self.win.items_ui.load_from_json(
+            self.character_data["items"],
+            f'Imported {json_character.get("name", "")}',
+            self.check_DeleteItems.isChecked(),
+        )
         # force everything back to xml format
         self.win.items_ui.save()
+        self.btn_Close.setFocus()
 
     @Slot()
     def import_skills_selected(self):
         """Import the character's skills from PoE web site"""
-        print("import_items_skills_selected")
+        # print("import_skills_selected")
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
@@ -212,7 +214,8 @@ class ImportDlg(Ui_Dialog, QDialog):
             pass
         skillset = self.build.import_gems_json(self.character_data.get("items"))
         self.win.skills_ui.load(self.build.skills)
-        self.win.skills_ui.change_skill_set(skillset - 1)
+        self.win.combo_SkillSet.setCurrentIndex(skillset - 1)
+        self.btn_Close.setFocus()
 
     @Slot()
     def change_account_name(self, text):
@@ -288,6 +291,7 @@ class ImportDlg(Ui_Dialog, QDialog):
             self.combo_League.clear()
             self.combo_League.addItem("All")
             self.combo_League.addItems(unique_sorted([char["league"] for char in self.account_json]))
+            self.combo_League.setFocus()
 
     def download_character_data(self):
         """

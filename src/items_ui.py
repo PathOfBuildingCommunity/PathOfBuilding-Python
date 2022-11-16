@@ -252,7 +252,7 @@ class ItemsUI:
             self.win.vlayout_EquippedItems.totalSizeHint().height()
             + self.win.vlayout_SocketedJewels.totalSizeHint().height()
         )
-        # +40 = to make for other widgets on the tab
+        # +40 = to make up for other widgets on the tab
         self.win.scrollAreaWidgetContents_Items.setFixedHeight(height + 40)
         return slot_ui
 
@@ -393,27 +393,27 @@ class ItemsUI:
         self.show_itemset(0, True)
         self.connect_item_triggers()
 
-    def load_from_json(self, _items, itemset_name):
+    def load_from_json(self, _items, itemset_name, delete_it_all):
         """
         Load internal structures from the build object.
 
         :param _items: Reference to the downloaded json <Items> tag set
         :param itemset_name: str: A potential new name for this itemset
+        :param delete_it_all: bool: delete all current items and itemsets
         :return: N/A
         """
-        # ToDo: Revisit this now that slots and skillsets exist, Need to create Item ID's (adding to existing if needed)
-        print("load_from_json")
+        # print("items_ui.load_from_json")
         self.disconnect_item_triggers()
-        # self.clear_controls(True)
+        if delete_it_all:
+            self.delete_all_items()
+            self.delete_all_itemsets()
         self.new_itemset(itemset_name)
         id_base = len(self.itemlist_by_id) == 0 and 1 or max(self.itemlist_by_id.keys())
         # add the items to the list box
         for idx, text_item in enumerate(_items["items"]):
-            # print(idx, text_item)
             new_item = Item(self.base_items)
             new_item.load_from_json(text_item)
             new_item.id = id_base + idx
-            # print(vars(new_item))
             self.add_item_to_itemlist_widget(new_item)
         self.fill_item_slot_uis()
         self.win.combo_ItemSet.setCurrentIndex(0)
@@ -473,7 +473,7 @@ class ItemsUI:
 
     def delete_all_items(self):
         """Delete all items"""
-        print("delete_all_items")
+        # print("delete_all_items")
         for child in list(self.xml_items.findall("Item")):
             self.xml_items.remove(child)
         self.clear_controls(True)
@@ -493,9 +493,10 @@ class ItemsUI:
                 # self.clear_controls()
             self.current_itemset = self.xml_itemsets[_itemset]
 
+            for slot_ui in self.abyssal_item_slot_ui_list:
+                slot_ui.setHidden(True)
             # Process the Slot entries and set default items
             slots = self.current_itemset.findall("Slot")
-            print(type(slots), slots)
             if len(slots) > 0:
                 for slot_xml in slots:
                     # The regex is for a data error: 1Swap -> 1 Swap
@@ -508,7 +509,7 @@ class ItemsUI:
                         if item.type == "Flask":
                             item_ui.active = str_to_bool(slot_xml.get("active", "False"))
                         if "Abyssal" in name:
-                            item_ui.setVisible(True)
+                            item_ui.setHidden(False)
             else:
                 for slot_name in self.item_slot_ui_list:
                     self.item_slot_ui_list[slot_name].set_default_item()
@@ -519,10 +520,11 @@ class ItemsUI:
         :param itemset_name: str: A potential new name for this itemset
         :return: N/A
         """
-        print("new_itemset", itemset_name)
+        # print("new_itemset", itemset_name, len(self.xml_itemsets))
         new_itemset = ET.fromstring(f'<ItemSet useSecondWeaponSet="false" id="{len(self.xml_itemsets)+1}"/>')
         new_itemset.set("title", itemset_name)
         self.xml_itemsets.append(new_itemset)
+        self.win.combo_ItemSet.addItem(itemset_name, new_itemset)
         self.change_itemset(len(self.xml_itemsets) - 1)
 
     def change_itemset(self, _index):
@@ -533,8 +535,9 @@ class ItemsUI:
 
     def delete_all_itemsets(self):
         """Delete ALL itemsets"""
-        print("delete_all_itemsets")
+        # print("delete_all_itemsets")
         for itemset in self.xml_itemsets:
             self.xml_items.remove(itemset)
         self.current_itemset = None
         self.xml_itemsets.clear()
+        self.win.combo_ItemSet.clear()
