@@ -326,10 +326,8 @@ class_centres = {
 ascendancy_positions = {
     "Ascendant": {"x": -7800.0 / global_scale_factor, "y": 7200 / global_scale_factor},
     "Berserker": {"x": -10400 / global_scale_factor, "y": 3700 / global_scale_factor},
-    "Chieftain": {
-        "x": -10400 / global_scale_factor,
-        "y": 2200 / global_scale_factor,
-    },  # data Error
+    "Chieftain": {"x": -10400 / global_scale_factor, "y": 2200 / global_scale_factor},
+    "Chieftain_g3": {"x": -10580 / global_scale_factor, "y": 2507 / global_scale_factor},
     "Juggernaut": {"x": -10400 / global_scale_factor, "y": 5200 / global_scale_factor},
     "Deadeye": {"x": 10200 / global_scale_factor, "y": 2200 / global_scale_factor},
     "Pathfinder": {"x": 10200 / global_scale_factor, "y": 3700 / global_scale_factor},

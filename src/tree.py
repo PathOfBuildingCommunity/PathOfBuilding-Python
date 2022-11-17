@@ -468,7 +468,7 @@ class Tree:
             orbit_radius = self.orbitRadii[node.o]
 
             """ Move all nodes to the correct location"""
-            # _a_name == "" is a non ascendancy node
+            # _a_name == "" means this a non ascendancy node
             _a_name = node.ascendancyName
             # Ascendant position in the json is good ...
             if _a_name == "" or _a_name == "Ascendant":
@@ -476,6 +476,9 @@ class Tree:
                 node.y = node.group["y"] - math.cos(node.angle) * orbit_radius
             else:
                 # ... all other ascendancies else needs hard coding
+                # Chieftain has two groups (3 and 7) with different start positions
+                if _a_name == "Chieftain" and node.g == 3:
+                    _a_name = "Chieftain_g3"
                 node.x = ascendancy_positions[_a_name]["x"] + math.sin(node.angle) * orbit_radius
                 node.y = ascendancy_positions[_a_name]["y"] - math.cos(node.angle) * orbit_radius
 
@@ -699,25 +702,25 @@ class Tree:
 
     def render_group_background(self, _group, g, is_expansion=False):
         __image = None
-        scale = 1
-        if _group.get("ascendancyName") != "":
-            _name = _group["ascendancyName"]
+        # scale = 1
+        if _group.get("ascendancyName", "") != "":
+            a_name = _group["ascendancyName"]
             # ToDo: Accommodate a bug that makes Chieftain disappear
-            if _name == "Chieftain":
+            if a_name == "Chieftain":
                 _group["isAscendancyStart"] = True
             if _group.get("isAscendancyStart", False):
                 # This is the ascendancy circles around the outside of the tree
                 # Ascendant position in the json is good, everyone else needs hard coding
-                if _name == "Ascendant":
+                if a_name == "Ascendant":
                     _x, _y = _group["x"], _group["y"]
                 else:
                     _x, _y = (
-                        ascendancy_positions[_name]["x"],
-                        ascendancy_positions[_name]["y"],
+                        ascendancy_positions[a_name]["x"],
+                        ascendancy_positions[a_name]["y"],
                     )
 
                 # add the picture and shift it by half itself to line up with the nodes
-                sprite = self.spriteMap[f"Classes{_name}"]["ascendancyBackground"]
+                sprite = self.spriteMap[f"Classes{a_name}"]["ascendancyBackground"]
                 __image = self.add_picture(
                     sprite["handle"],
                     _x,
@@ -727,7 +730,7 @@ class Tree:
                     Layers.backgrounds,
                 )
                 __image.setScale(2.5 / global_scale_factor)
-                __image.filename = f"Classes{_name}"
+                __image.filename = f"Classes{a_name}"
                 # Store these images for tree_view to darken as it needs
                 self.ascendancy_group_list.append(__image)
 
