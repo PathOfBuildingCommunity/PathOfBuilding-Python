@@ -27,7 +27,7 @@ from constants import (
 )
 from pob_config import _debug, Config, str_to_bool, bool_to_str, print_a_xml_element, print_call_stack
 import pob_file
-import ui_utils
+import popup_dialogs
 from tree import Tree
 from PoB_Main_Window import Ui_MainWindow
 from spec import Spec
@@ -509,7 +509,7 @@ class Build:
         _build_pob = pob_file.read_xml(filename)
         if _build_pob is None:
             tr = self.pob_config.app.tr
-            ui_utils.critical_dialog(
+            popup_dialogs.critical_dialog(
                 self.pob_config.win,
                 tr("Load Build"),
                 f"{tr('An error occurred to trying load')}:\n{filename}",

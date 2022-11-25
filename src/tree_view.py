@@ -115,8 +115,14 @@ class TreeView(QGraphicsView):
         super(TreeView, self).mouseReleaseEvent(event)
         # Ensure hand cursor is gone (it's sneaky)
         self.viewport().setCursor(Qt.ArrowCursor)
-        _item: TreeGraphicsItem = self.itemAt(event.pos())
+        # If compare is on, then the compare circles will be the first item detected (highest in the Z order)
+        # Get all items at that pos and find the first TreeGraphicsItem
+        items = self.items(event.pos())
+        if len(items) < 1:
+            return
+        _item = next((i for i in items if isinstance(i, TreeGraphicsItem)), None)
         if _item and type(_item) == TreeGraphicsItem and _item.node_id != 0:
+            print(_item.node_id)
             if event.button() == Qt.LeftButton:
                 if _item.node_id in self.build.current_spec.nodes:
                     if _item.node_type == "Mastery":
@@ -295,6 +301,7 @@ class TreeView(QGraphicsView):
             _spot.setBrush(QBrush(colour, Qt.SolidPattern))
             _spot.setOpacity(0.3)
             _spot.setZValue(z_value)
+            _spot.setAcceptedMouseButtons(Qt.NoButton)
             self.compare_nodes_items.append(_spot)
             self._scene.addItem(_spot)
 

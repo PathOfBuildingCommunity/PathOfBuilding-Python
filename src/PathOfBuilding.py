@@ -155,8 +155,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # end add widgets to the Toolbar
 
         # Dump the placeholder Graphics View and add our own
+        # Cannot be set in TreeUI() init due to recursion error.
         self.gview_Tree = TreeView(self, self.config, self.build)
         self.vlayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gview_Tree)
+        # destroy the old object
+        self.graphicsView_PlaceHolder.setParent(None)
+
         # Add our FlowLayout to Config tab
         self.layout_config = FlowLayout(None, 0)
         self.frame_Config.setLayout(self.layout_config)
@@ -166,8 +170,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.layout_config.addItem(self.grpbox_EffectiveDPS)
         self.layout_config.addItem(self.grpbox_5)
         self.layout_config.addItem(self.grpbox_6)
-        # destroy the old object
-        self.graphicsView_PlaceHolder.setParent(None)
 
         # set the ComboBox dropdown width.
         self.combo_Bandits.view().setMinimumWidth(self.combo_Bandits.minimumSizeHint().width())

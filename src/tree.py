@@ -7,7 +7,7 @@ at different Jewel/Cluster itemisations, etc.), so there could be multiple insta
 
 A Tree instance is tied to a Version of the Tree as released by GGG (eg: 3.18).
 
-This holds in memory a copy of the tree data and doesn't know about any actively selected nodes.
+This holds, in memory, a copy of the tree data and doesn't know about any actively selected nodes.
   That's the Build class' job.
 
 It is referenced by the TreeView class to display the tree
@@ -781,7 +781,8 @@ class Tree:
             )
             __image.filename = f"{g} GroupBackgroundSmallAlt"
             __image.setScale(2.5 / global_scale_factor)
-        # render_group_background
+
+    # render_group_background
 
 
 def test(config: Config) -> None:

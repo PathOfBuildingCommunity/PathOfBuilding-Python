@@ -13,12 +13,13 @@ from pob_config import Config, _debug, print_call_stack
 from flow_layout import FlowLayout
 from manage_tree_dialog import ManageTreeDlg
 from popup_dialogs import yes_no_dialog, ImportTreePopup, ExportTreePopup
+from tree_view import TreeView
 
 
 class TreeUI:
     def __init__(self, _config: Config, frame_tree_tools, _win: Ui_MainWindow) -> None:
-        self.pob_config = _config
-        self.tr = self.pob_config.app.tr
+        self.config = _config
+        self.tr = self.config.app.tr
         self.win = _win
         self.build = self.win.build
         self._curr_class = PlayerClasses.SCION

@@ -382,7 +382,7 @@ class ItemsUI:
         for _item in self.xml_items.findall("Item"):
             new_item = Item(self.base_items)
             # new_item.curr_variant = _item.get("variant", "")
-            new_item.load_from_xml(_item.text)
+            new_item.load_from_xml(_item)
             new_item.id = int(_item.get("id", 0))
             self.add_item_to_itemlist_widget(new_item)
         self.xml_itemsets = self.xml_items.findall("ItemSet")
@@ -437,8 +437,10 @@ class ItemsUI:
             # delete any items present in the xml and readd them with the current data
             for child in list(self.xml_items.findall("Item")):
                 self.xml_items.remove(child)
+            # for idx, u_id in enumerate(items):
+            #     self.xml_items.append(self.itemlist_by_uid[u_id].save(idx + 1, True))
             for idx, u_id in enumerate(items):
-                self.xml_items.append(self.itemlist_by_uid[u_id].save(idx + 1, True))
+                self.xml_items.append(self.itemlist_by_uid[u_id].save_v2(idx + 1, True))
 
             # Remove legacy <Slot /> entries
             for child in list(self.current_itemset.findall("Slot")):

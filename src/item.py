@@ -44,6 +44,7 @@ class Item:
         self.name = ""
         self.base_name = ""
         self.ilevel = 0
+        self.limited_to = 0
         self.type = ""  # or item_class
         self.quality = 0
         self.curr_variant = ""
@@ -58,21 +59,33 @@ class Item:
         self.synthesised = None
         self.sockets = ""
         self.properties = {}
-        self.limits = 0
         self.implicitMods = []
         self.explicitMods = []
         self.full_explicitMods_list = []
         self.craftedMods = []
         self.enchantMods = []
 
-    def load_from_xml(self, desc, debug_lines=False):
+        self.evasion = 0
+        self.evasion_base_percentile = 0.0
+        self.energy_shield = 0
+        self.energy_shield_base_percentile = 0.0
+        self.armour = 0
+        self.armour_base_percentile = 0.0
+        self.league = ""
+        self.source = ""
+
+    def load_from_xml(self, xml, debug_lines=False):
         """
         Load internal structures from the build object's xml
 
-        :param desc: The lines of the item
+        :param xml: ET.element: xml of the item
         :param debug_lines: Temporary to debug the process
         :return: N/A
         """
+        if xml.get("ver", "1") == "2":
+            self.load_from_xml_v2(xml)
+            return
+        desc = xml.text
         # split lines into a list, removing any blank lines, leading & trailing spaces.
         #   stolen from https://stackoverflow.com/questions/7630273/convert-multiline-into-list
         lines = [y for y in (x.strip() for x in desc.splitlines()) if y]
@@ -99,10 +112,22 @@ class Item:
                         self.quality = m.group(2)
                     case "Sockets":
                         self.sockets = m.group(2)
+                    case "Armour":
+                        self.armour = m.group(2)
+                    case "ArmourBasePercentile":
+                        self.armour_base_percentile = m.group(2)
+                    case "Energy Shield":
+                        self.energy_shield = m.group(2)
+                    case "EnergyShieldBasePercentile":
+                        self.energy_shield_base_percentile = m.group(2)
+                    case "Evasion":
+                        self.evasion = m.group(2)
+                    case "EvasionBasePercentile":
+                        self.evasion_base_percentile = m.group(2)
                     case "LevelReq":
                         self.level_req = int(m.group(2))
                     case "Limited to":
-                        self.limits = int(m.group(2))
+                        self.limited_to = int(m.group(2))
                     case "Implicits":
                         # implicits, if any
                         for idx in range(int(m.group(2))):
@@ -135,6 +160,7 @@ class Item:
         if debug_lines:
             _debug("b", len(lines), lines)
         # 'normal' and Magic ? objects and flasks only have one line (either no title or no base name)
+        # should only have the title and basename entries
         if len(lines) == 1:
             self.name = lines.pop(0)
             match self.rarity:
@@ -279,7 +305,6 @@ class Item:
             text += f"{influence}\n"
         for requirement in self.requires.keys():
             text += f"Requires {requirement}\n"
-        # print(self.properties)
         if type(self.properties) == dict:
             for idx in self.properties.keys():
                 text += f"{idx}: {self.properties[idx]}\n"
@@ -294,6 +319,101 @@ class Item:
         # if debug_print:
         #     print(f"{text}\n\n")
         return ET.fromstring(f'<Item id="{self.id}">{text}</Item>')
+
+    def save_v2(self, _id, debug_print=False):
+        """
+
+        :param _id:
+        :param debug_print:
+        :return: ET.element
+        """
+        def set_attrib(_xml, tag, value):
+            """
+
+            :param _xml: ET.element: the xml element to add to
+            :param tag: the tag name to add
+            :param value:
+            :return: N/A
+            """
+            if type(value) == str:
+                if value:
+                    _xml.set(tag, value)
+            else:
+                if value != 0:
+                    _xml.set(tag, f'{value}')
+
+        xml = ET.fromstring(f'<Item ver="2" id="{self.id}"></Item>')
+        xml.set("title", self.title)
+        xml.set("base_name", self.base_name)
+        xml.set("rarity", self.rarity)
+        xml.set("unique_id", self.unique_id)
+        xml.set("sockets", f"{self.sockets}")
+        if self.rarity == "UNIQUE":
+            xml.set("league", self.league)
+            xml.set("source", self.source)
+        if self.corrupted:
+            xml.set("corrupted", "true")
+        attribs = ET.fromstring(f'<Attribs />')
+        set_attrib(attribs, "evasion", self.evasion)
+        set_attrib(attribs, "evasion_base_percentile", self.evasion_base_percentile)
+        set_attrib(attribs, "energy_shield", self.energy_shield)
+        set_attrib(attribs, "energy_shield_base_percentile", self.energy_shield_base_percentile)
+        set_attrib(attribs, "armour", self.armour)
+        set_attrib(attribs, "armour_base_percentile", self.armour_base_percentile)
+        set_attrib(attribs, "limited_to", self.limited_to)
+        set_attrib(attribs, "ilevel", self.ilevel)
+        set_attrib(attribs, "level_req", self.level_req)
+        xml.append(attribs)
+        imp = ET.fromstring(f'<Implicits num="{len(self.implicitMods)}" />')
+        for mod in self.implicitMods:
+            imp.append(ET.fromstring(f'<Mod>{mod.text_for_xml}</Mod>'))
+        xml.append(imp)
+        exp = ET.fromstring(f'<Explicits num="{len(self.full_explicitMods_list)}" />')
+        for mod in self.full_explicitMods_list:
+            exp.append(ET.fromstring(f'<Mod>{mod.text_for_xml}</Mod>'))
+        xml.append(exp)
+        for requirement in self.requires.keys():
+            xml.append(ET.fromstring(f'<Requires>{requirement}</Requires>'))
+        # print(ET.tostring(xml))
+        return xml
+
+    def load_from_xml_v2(self, xml):
+        """
+        Fill variables from the version 2 xml
+
+        :param the loaded xml:
+        :return:
+        """
+        self.title = xml.get("title", "")
+        # print(self.title)
+        self.base_name = xml.get("base_name", "oh noes")
+        # print(self.base_name)
+        self.name = f'{self.title and f"{self.title}, " or ""}{self.base_name}'
+        self.rarity = xml.get("rarity", "")
+        self.unique_id = xml.get("unique_id", "")
+        self.sockets = xml.get("sockets", "")
+        self.league = xml.get("league", "")
+        self.source = xml.get("source", "")
+        self.corrupted = str_to_bool(xml.get("corrupted", "False"))
+        attribs = xml.find("Attribs")
+        if attribs is not None:
+            self.evasion = int(attribs.get("evasion", "0"))
+            self.evasion_base_percentile = float(attribs.get("evasion_base_percentile", "0.0"))
+            self.energy_shield = int(attribs.get("energy_shield", "0"))
+            self.energy_shield_base_percentile = float(attribs.get("energy_shield_base_percentile", "0.0"))
+            self.armour = int(attribs.get("armour", "0"))
+            self.armour_base_percentile = float(attribs.get("armour_base_percentile", "0.0"))
+            self.limited_to = int(attribs.get("limited_to", "0"))
+            self.ilevel = int(attribs.get("ilevel", "0"))
+            self.level_req = int(attribs.get("level_req", "0"))
+        imp = xml.find("Implicits")
+        for mod in imp.findall("Mod"):
+            self.implicitMods.append(Mod(mod.text))
+        exp = xml.find("Explicits")
+        for mod in exp.findall("Mod"):
+            self.full_explicitMods_list.append(Mod(mod.text))
+        for requirement in xml.findall("Requires"):
+            self.requires[requirement.text] = True
 
     def tooltip(self):
         """
@@ -317,8 +437,8 @@ class Item:
         tip += "</th></tr>"
         if self.level_req > 0:
             tip += f"<tr><td>Requires Level <b>{self.level_req}</b></td></tr>"
-        if self.limits > 0:
-            tip += f"<tr><td>Limited to: <b>{self.limits}</b></td></tr>"
+        if self.limited_to > 0:
+            tip += f"<tr><td>Limited to: <b>{self.limited_to}</b></td></tr>"
         if self.requires:
             for requirement in self.requires:
                 tip += f"<tr><td>Requires <b>{requirement}</b></td></tr>"
