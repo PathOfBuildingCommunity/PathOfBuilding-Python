@@ -17,8 +17,8 @@ influence_colours = {
     "Hunter Item": ColourCodes.BASILISK.value,
     "Crusader Item": ColourCodes.CRUSADER.value,
     "Redeemer Item": ColourCodes.EYRIE.value,
-    "Searing Exarch": ColourCodes.CLEANSING.value,
-    "Eater of Worlds": ColourCodes.TANGLE.value,
+    "Searing Exarch Item": ColourCodes.CLEANSING.value,
+    "Eater of Worlds Item": ColourCodes.TANGLE.value,
 }
 
 
@@ -39,14 +39,16 @@ class Item:
         self.level_req = 0
 
         self.id = 0
-        self.rarity = "NORMAL"
+        self.rarity = "UNIQUE"
         self.title = ""
         self.name = ""
         self.base_name = ""
         self.ilevel = 0
-        self.limited_to = 0
+        # needs to be a string as there are entries like "Limited to: 1 Survival"
+        self.limited_to = ""
         self.type = ""  # or item_class
         self.quality = 0
+        # this is a string even though the value is a number, as it's easier for comparisons from the original string.
         self.curr_variant = ""
         self.unique_id = ""
         self.requires = {}
@@ -60,10 +62,16 @@ class Item:
         self.sockets = ""
         self.properties = {}
         self.implicitMods = []
+        # explicit mods affecting this item
         self.explicitMods = []
+        # all explicit mods including all variants
         self.full_explicitMods_list = []
         self.craftedMods = []
         self.enchantMods = []
+        # titles of the variants
+        self.variants = []
+        # I think i need to store the variants separately, for crafting. Dict of string lists, var number is index
+        self.variantMods = {}
 
         self.evasion = 0
         self.evasion_base_percentile = 0.0
@@ -76,7 +84,7 @@ class Item:
 
     def load_from_xml(self, xml, debug_lines=False):
         """
-        Load internal structures from the build object's xml
+        Load internal structures from the free text version of item's xml
 
         :param xml: ET.element: xml of the item
         :param debug_lines: Temporary to debug the process
@@ -97,7 +105,10 @@ class Item:
             if debug_lines:
                 _debug("a", len(lines), lines)
             m = re.search(r"(.*): (.*)", lines[line_idx])
-            if m is not None:
+            if m is None:
+                # skip this line
+                line_idx += 1
+            else:
                 lines.pop(line_idx)
                 match m.group(1):
                     case "Rarity":
@@ -127,7 +138,9 @@ class Item:
                     case "LevelReq":
                         self.level_req = int(m.group(2))
                     case "Limited to":
-                        self.limited_to = int(m.group(2))
+                        self.limited_to = m.group(2)
+                    case "Variant":
+                        self.variants.append(m.group(2))
                     case "Implicits":
                         # implicits, if any
                         for idx in range(int(m.group(2))):
@@ -136,9 +149,6 @@ class Item:
                         explicits_idx = line_idx
                         break
                 self.properties[m.group(1)] = m.group(2)
-            else:
-                # skip this line
-                line_idx += 1
         # every thing that is left, from explicits_idx, is explicits
         for idx in range(explicits_idx, len(lines)):
             line = lines.pop(explicits_idx)
@@ -151,9 +161,11 @@ class Item:
             # check for variants and if it's our variant, add it to the smaller explicit mod list
             if "variant" in line:
                 m = re.search(r"{variant:([\d,]+)}(.*)", line)
-                for var in m.group(1).split(","):
-                    if var == self.curr_variant:
-                        self.explicitMods.append(mod)
+                if self.curr_variant in m.group(1).split(","):
+                    self.explicitMods.append(mod)
+                # for var in m.group(1).split(","):
+                #     if var == self.curr_variant:
+                #         self.explicitMods.append(mod)
             else:
                 self.explicitMods.append(mod)
 
@@ -320,15 +332,16 @@ class Item:
         #     print(f"{text}\n\n")
         return ET.fromstring(f'<Item id="{self.id}">{text}</Item>')
 
-    def save_v2(self, _id, debug_print=False):
+    def save_v2(self, debug_print=False):
         """
 
-        :param _id:
         :param debug_print:
         :return: ET.element
         """
-        def set_attrib(_xml, tag, value):
+
+        def add_attrib_if_not_null(_xml, tag, value):
             """
+            add an attribute if not 0, none, false or empty str
 
             :param _xml: ET.element: the xml element to add to
             :param tag: the tag name to add
@@ -338,44 +351,58 @@ class Item:
             if type(value) == str:
                 if value:
                     _xml.set(tag, value)
+            elif type(value) == bool:
+                if value:
+                    _xml.set(tag, bool_to_str(value))
             else:
+                # some kind of number (int or float)
                 if value != 0:
-                    _xml.set(tag, f'{value}')
+                    _xml.set(tag, f"{value}")
 
         xml = ET.fromstring(f'<Item ver="2" id="{self.id}"></Item>')
         xml.set("title", self.title)
         xml.set("base_name", self.base_name)
         xml.set("rarity", self.rarity)
-        xml.set("unique_id", self.unique_id)
         xml.set("sockets", f"{self.sockets}")
         if self.rarity == "UNIQUE":
             xml.set("league", self.league)
             xml.set("source", self.source)
-        if self.corrupted:
-            xml.set("corrupted", "true")
-        attribs = ET.fromstring(f'<Attribs />')
-        set_attrib(attribs, "evasion", self.evasion)
-        set_attrib(attribs, "evasion_base_percentile", self.evasion_base_percentile)
-        set_attrib(attribs, "energy_shield", self.energy_shield)
-        set_attrib(attribs, "energy_shield_base_percentile", self.energy_shield_base_percentile)
-        set_attrib(attribs, "armour", self.armour)
-        set_attrib(attribs, "armour_base_percentile", self.armour_base_percentile)
-        set_attrib(attribs, "limited_to", self.limited_to)
-        set_attrib(attribs, "ilevel", self.ilevel)
-        set_attrib(attribs, "level_req", self.level_req)
+        add_attrib_if_not_null(xml, "unique_id", self.unique_id)
+        add_attrib_if_not_null(xml, "corrupted", self.corrupted)
+        add_attrib_if_not_null(xml, "variant", self.curr_variant)
+        # there is always an Attribs element, even if it is empty, which almost never happens
+        attribs = ET.fromstring(f"<Attribs />")
+        add_attrib_if_not_null(attribs, "evasion", self.evasion)
+        add_attrib_if_not_null(attribs, "evasion_base_percentile", self.evasion_base_percentile)
+        add_attrib_if_not_null(attribs, "energy_shield", self.energy_shield)
+        add_attrib_if_not_null(attribs, "energy_shield_base_percentile", self.energy_shield_base_percentile)
+        add_attrib_if_not_null(attribs, "armour", self.armour)
+        add_attrib_if_not_null(attribs, "armour_base_percentile", self.armour_base_percentile)
+        add_attrib_if_not_null(attribs, "limited_to", self.limited_to)
+        add_attrib_if_not_null(attribs, "ilevel", self.ilevel)
+        add_attrib_if_not_null(attribs, "level_req", self.level_req)
         xml.append(attribs)
-        imp = ET.fromstring(f'<Implicits num="{len(self.implicitMods)}" />')
+        # there is always Implicits and Explicits elements, even if they are empty
+        imp = ET.fromstring("<Implicits></Implicits>")
         for mod in self.implicitMods:
-            imp.append(ET.fromstring(f'<Mod>{mod.text_for_xml}</Mod>'))
+            imp.append(ET.fromstring(f"<Mod>{mod.text_for_xml}</Mod>"))
         xml.append(imp)
-        exp = ET.fromstring(f'<Explicits num="{len(self.full_explicitMods_list)}" />')
+        exp = ET.fromstring("<Explicits></Explicits>")
         for mod in self.full_explicitMods_list:
-            exp.append(ET.fromstring(f'<Mod>{mod.text_for_xml}</Mod>'))
+            exp.append(ET.fromstring(f"<Mod>{mod.text_for_xml}</Mod>"))
         xml.append(exp)
+        # Requires are only present if there are some
         for requirement in self.requires.keys():
-            xml.append(ET.fromstring(f'<Requires>{requirement}</Requires>'))
-        # print(ET.tostring(xml))
+            xml.append(ET.fromstring(f"<Requires>{requirement}</Requires>"))
+        if len(self.variants) > 0:
+            var_xml = ET.fromstring("<Variants></Variants>")
+            for num, variant in enumerate(self.variants, 1):
+                # at this point (Nov2022) 'num' isn't used but it makes reading/editing the xml a little easier
+                var_xml.append(ET.fromstring(f'<Variant num="{num}">{variant}</Variant>'))
+            xml.append(var_xml)
         return xml
+
+    # save_v2
 
     def load_from_xml_v2(self, xml):
         """
@@ -389,12 +416,13 @@ class Item:
         self.base_name = xml.get("base_name", "oh noes")
         # print(self.base_name)
         self.name = f'{self.title and f"{self.title}, " or ""}{self.base_name}'
-        self.rarity = xml.get("rarity", "")
+        self.rarity = xml.get("rarity", "oh noes")
         self.unique_id = xml.get("unique_id", "")
         self.sockets = xml.get("sockets", "")
         self.league = xml.get("league", "")
         self.source = xml.get("source", "")
         self.corrupted = str_to_bool(xml.get("corrupted", "False"))
+        self.curr_variant = xml.get("variant", "0")
         attribs = xml.find("Attribs")
         if attribs is not None:
             self.evasion = int(attribs.get("evasion", "0"))
@@ -403,19 +431,37 @@ class Item:
             self.energy_shield_base_percentile = float(attribs.get("energy_shield_base_percentile", "0.0"))
             self.armour = int(attribs.get("armour", "0"))
             self.armour_base_percentile = float(attribs.get("armour_base_percentile", "0.0"))
-            self.limited_to = int(attribs.get("limited_to", "0"))
+            self.limited_to = attribs.get("limited_to", "")
             self.ilevel = int(attribs.get("ilevel", "0"))
             self.level_req = int(attribs.get("level_req", "0"))
         imp = xml.find("Implicits")
-        for mod in imp.findall("Mod"):
-            self.implicitMods.append(Mod(mod.text))
+        for mod_xml in imp.findall("Mod"):
+            self.implicitMods.append(Mod(mod_xml.text))
         exp = xml.find("Explicits")
-        for mod in exp.findall("Mod"):
-            self.full_explicitMods_list.append(Mod(mod.text))
+        for mod_xml in exp.findall("Mod"):
+            line = mod_xml.text
+            mod = Mod(mod_xml.text)
+            self.full_explicitMods_list.append(mod)
+            # check for variants and if it's our variant, add it to the smaller explicit mod list
+            if "variant" in line:
+                m = re.search(r"{variant:([\d,]+)}(.*)", line)
+                if self.curr_variant in m.group(1).split(","):
+                    self.explicitMods.append(mod)
+                # for var in m.group(1).split(","):
+                #     if var == self.curr_variant:
+                #         self.explicitMods.append(mod)
+            else:
+                self.explicitMods.append(mod)
         for requirement in xml.findall("Requires"):
             self.requires[requirement.text] = True
+        var_xml = xml.find("Variants")
+        if var_xml is not None:
+            for variant in var_xml.findall("Variant"):
+                self.variants.append(variant.text)
 
-    def tooltip(self):
+        # load_from_xml_v2
+
+        # def tooltip(self):
         """
         Create a tooltip. Hand crafted html anyone ?
 
@@ -437,7 +483,7 @@ class Item:
         tip += "</th></tr>"
         if self.level_req > 0:
             tip += f"<tr><td>Requires Level <b>{self.level_req}</b></td></tr>"
-        if self.limited_to > 0:
+        if self.limited_to != "":
             tip += f"<tr><td>Limited to: <b>{self.limited_to}</b></td></tr>"
         if self.requires:
             for requirement in self.requires:

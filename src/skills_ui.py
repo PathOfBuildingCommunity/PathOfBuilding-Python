@@ -146,9 +146,9 @@ class SkillsUI:
                 _set.append(group)
                 self.xml_skills.remove(group)
 
-        for idx, _set in enumerate(self.xml_skills.findall("SkillSet")):
+        for idx, _set in enumerate(self.xml_skills.findall("SkillSet"), 1):
             self.skill_sets_list.append(_set)
-            self.win.combo_SkillSet.addItem(_set.get("title", f"Default{idx + 1}"), idx)
+            self.win.combo_SkillSet.addItem(_set.get("title", f"Default{idx}"), idx)
         # set the SkillSet ComboBox dropdown width.
         self.win.combo_SkillSet.view().setMinimumWidth(self.win.combo_SkillSet.minimumSizeHint().width())
 

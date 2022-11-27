@@ -434,8 +434,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_ascendancy.clear()
         self.combo_ascendancy.addItem("None", 0)
         _class = self.build.current_tree.classes[new_class.value]
-        for idx, _ascendancy in enumerate(_class["ascendancies"]):
-            self.combo_ascendancy.addItem(_ascendancy["name"], idx + 1)
+        for idx, _ascendancy in enumerate(_class["ascendancies"], 1):
+            self.combo_ascendancy.addItem(_ascendancy["name"], idx)
 
         if self.refresh_tree:
             # build changes

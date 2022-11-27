@@ -176,16 +176,8 @@ class ItemsUI:
         self.hide_equipped_items_slot_ui("Weapon 2 Swap", hidden=True)
         self.win.groupbox_SocketedJewels.setVisible(False)
 
+        """Reformat the xml from the lua. Temporary"""
         # self.rewrite_uniques_xml()
-        # self.uniques = {}
-        # u = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
-        # for child in list(u.getroot()):
-        #     self.uniques[child.tag] = []
-        #     for _item in child.findall("Item"):
-        #         new_item = Item()
-        #         # print(_item.text)
-        #         new_item.load_from_xml(f"Rarity: UNIQUE\n{_item.text}")
-        #         self.uniques[child.tag].append(new_item)
 
     def connect_item_triggers(self):
         """re-connect triggers"""
@@ -297,20 +289,44 @@ class ItemsUI:
     def rewrite_uniques_xml(self):
         """Reformat the xml from the lua. Temporary"""
 
-        u = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
-        for child in list(u.getroot()):
+        uniques = {}
+        u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques_flat.xml"))
+        for child in list(u_xml.getroot()):
+            # print(child.tag)
+            uniques[child.tag] = []
             for _item in child.findall("Item"):
-                # if "Implicits:" not in _item.text:
-                #     lines = [y for y in (x.strip() for x in _item.text.splitlines()) if y]
-                #     print(lines[0])
-                lines = [y for y in (x.strip() for x in _item.text.splitlines()) if y]
-                count = 0
-                for line in lines:
-                    if "Implicits:" in line:
-                        count += 1
-                        print(count, lines[0])
-                print()
-        write_xml("c:/git/PathOfBuilding-Python/src/Data/uniques2.xml", u)
+                new_item = Item(self.base_items)
+                # print(_item.text)
+                new_item.load_from_xml(_item)
+                uniques[child.tag].append(new_item)
+        new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
+        new_root = new_xml.getroot()
+        new_root.insert(1, ET.Comment(' === At this point in time (Nov2022), variants on item types is not supported. '
+                                      'Items are duplicated instead === '))
+        for child_tag in uniques:
+            # print(child_tag)
+            child_xml = ET.fromstring(f"<{child_tag} />")
+            item_type = uniques[child_tag]
+            for item in item_type:
+                child_xml.append(item.save_v2())
+            new_root.append(child_xml)
+
+        write_xml("Data/uniques.xml", new_xml)
+
+        # u = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
+        # for child in list(u.getroot()):
+        #     for _item in child.findall("Item"):
+        #         # if "Implicits:" not in _item.text:
+        #         #     lines = [y for y in (x.strip() for x in _item.text.splitlines()) if y]
+        #         #     print(lines[0])
+        #         lines = [y for y in (x.strip() for x in _item.text.splitlines()) if y]
+        #         count = 0
+        #         for line in lines:
+        #             if "Implicits:" in line:
+        #                 count += 1
+        #                 print(count, lines[0])
+        #         print()
+        # write_xml("c:/git/PathOfBuilding-Python/src/Data/uniques2.xml", u)
 
     def add_item_to_itemlist_widget(self, _item):
         """
@@ -370,7 +386,7 @@ class ItemsUI:
         :param _items: Reference to the xml <Items> tag set
         :return: N/A
         """
-        # print("load_from_xml")
+        # print("items_ui.load_from_xml")
         self.disconnect_item_triggers()
         self.xml_items = _items
         self.clear_controls(True)
@@ -437,10 +453,8 @@ class ItemsUI:
             # delete any items present in the xml and readd them with the current data
             for child in list(self.xml_items.findall("Item")):
                 self.xml_items.remove(child)
-            # for idx, u_id in enumerate(items):
-            #     self.xml_items.append(self.itemlist_by_uid[u_id].save(idx + 1, True))
-            for idx, u_id in enumerate(items):
-                self.xml_items.append(self.itemlist_by_uid[u_id].save_v2(idx + 1, True))
+            for idx, u_id in enumerate(items, 1):
+                self.xml_items.append(self.itemlist_by_uid[u_id].save_v2(idx, True))
 
             # Remove legacy <Slot /> entries
             for child in list(self.current_itemset.findall("Slot")):

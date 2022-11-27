@@ -66,7 +66,7 @@ class Mod:
         """Return the text formatted for the xml output"""
         return (
             f'{self.variant_text and self.variant_text or ""}{self.crafted and "{crafted}" or ""}'
-            f'{self.range and f"{{range:{self.range}}}" or ""}{self.line}'
+            f'{self.range and f"{{range:{self.range}}}" or ""}{self.line.replace("&", "&amp;")}'
         )
 
     @property
