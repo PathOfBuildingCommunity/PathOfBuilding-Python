@@ -301,8 +301,13 @@ class ItemsUI:
                 uniques[child.tag].append(new_item)
         new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
         new_root = new_xml.getroot()
-        new_root.insert(1, ET.Comment(' === At this point in time (Nov2022), variants on item types is not supported. '
-                                      'Items are duplicated instead === '))
+        new_root.insert(
+            1,
+            ET.Comment(
+                " === At this point in time (Nov2022), variants on item types is not supported. "
+                "Items are duplicated instead === "
+            ),
+        )
         for child_tag in uniques:
             # print(child_tag)
             child_xml = ET.fromstring(f"<{child_tag} />")

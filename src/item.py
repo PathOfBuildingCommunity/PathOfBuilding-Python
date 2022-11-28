@@ -5,7 +5,7 @@ A class to encapsulate one item
 import xml.etree.ElementTree as ET
 import re
 
-from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
+from pob_config import _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
 from constants import slot_map, ColourCodes
 from ui_utils import html_colour_text
 from mod import Mod
@@ -298,11 +298,10 @@ class Item:
             self.type = "Flask"
         # load_from_json
 
-    def save(self, _id, debug_print=False):
+    def save(self):
         """
         Save internal structures back to a xml object
 
-        :param:   debug_print: bool, temporary whilst items are being developed
         :return: ET.ElementTree:
         """
         text = f"Rarity: {self.rarity}\n"
@@ -332,10 +331,10 @@ class Item:
         #     print(f"{text}\n\n")
         return ET.fromstring(f'<Item id="{self.id}">{text}</Item>')
 
-    def save_v2(self, debug_print=False):
+    def save_v2(self):
         """
+        Save to xml in version 2
 
-        :param debug_print:
         :return: ET.element
         """
 
