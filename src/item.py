@@ -137,6 +137,10 @@ class Item:
                         self.evasion_base_percentile = m.group(2)
                     case "LevelReq":
                         self.level_req = int(m.group(2))
+                    case "League":
+                        self.league = m.group(2)
+                    case "Source":
+                        self.source = m.group(2)
                     case "Limited to":
                         self.limited_to = m.group(2)
                     case "Variant":
@@ -362,10 +366,10 @@ class Item:
         xml.set("title", self.title)
         xml.set("base_name", self.base_name)
         xml.set("rarity", self.rarity)
-        xml.set("sockets", f"{self.sockets}")
+        add_attrib_if_not_null(xml, "sockets", self.sockets)
         if self.rarity == "UNIQUE":
-            xml.set("league", self.league)
-            xml.set("source", self.source)
+            add_attrib_if_not_null(xml, "league", self.league)
+            add_attrib_if_not_null(xml, "source", self.source)
         add_attrib_if_not_null(xml, "unique_id", self.unique_id)
         add_attrib_if_not_null(xml, "corrupted", self.corrupted)
         add_attrib_if_not_null(xml, "variant", self.curr_variant)
@@ -400,7 +404,6 @@ class Item:
                 var_xml.append(ET.fromstring(f'<Variant num="{num}">{variant}</Variant>'))
             xml.append(var_xml)
         return xml
-
     # save_v2
 
     def load_from_xml_v2(self, xml):
