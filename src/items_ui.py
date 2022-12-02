@@ -296,8 +296,8 @@ class ItemsUI:
             uniques[child.tag] = []
             for _item in child.findall("Item"):
                 new_item = Item(self.base_items)
-                # print(_item.text)
                 new_item.load_from_xml(_item)
+                new_item.rarity = "UNIQUE"
                 uniques[child.tag].append(new_item)
         new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
         new_root = new_xml.getroot()
@@ -313,6 +313,8 @@ class ItemsUI:
             child_xml = ET.fromstring(f"<{child_tag} />")
             item_type = uniques[child_tag]
             for item in item_type:
+                # we don't want to add extra work for when we are manually updating uniques.xml
+                item.curr_variant = ""
                 child_xml.append(item.save_v2())
             new_root.append(child_xml)
 
@@ -459,7 +461,7 @@ class ItemsUI:
             for child in list(self.xml_items.findall("Item")):
                 self.xml_items.remove(child)
             for idx, u_id in enumerate(items, 1):
-                self.xml_items.append(self.itemlist_by_uid[u_id].save_v2(idx, True))
+                self.xml_items.append(self.itemlist_by_uid[u_id].save_v2())
 
             # Remove legacy <Slot /> entries
             for child in list(self.current_itemset.findall("Slot")):

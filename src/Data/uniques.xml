@@ -2810,7 +2810,7 @@
 			<Implicits>
 				<Mod>{variant:1}20% increased Stun Duration on Enemies</Mod>
 				<Mod>{variant:2,3}30% increased Stun Duration on Enemies</Mod>
-				<Mod>{variant:4,5}45% increased Stun Duration on Enemies</Mod>
+				<Mod>{variant:4,5,6}45% increased Stun Duration on Enemies</Mod>
 			</Implicits>
 			<Explicits>
 				<Mod>{variant:1,2,3,4}Socketed Gems are Supported by Level 15 Pulverise</Mod>
@@ -2818,14 +2818,15 @@
 				<Mod>{variant:3}(230-260)% increased Physical Damage</Mod>
 				<Mod>{variant:4}(200-230)% increased Physical Damage</Mod>
 				<Mod>{variant:5}(400-500)% increased Physical Damage</Mod>
+				<Mod>{variant:6}(500-600)% increased Physical Damage</Mod>
 				<Mod>{variant:1,2}Adds 10 to 20 Physical Damage</Mod>
 				<Mod>{variant:3,4}Adds 30 to 40 Physical Damage</Mod>
 				<Mod>{variant:1,2,3,4}10% reduced Attack Speed</Mod>
-				<Mod>{variant:5}25% reduced Attack Speed</Mod>
+				<Mod>{variant:5,6}25% reduced Attack Speed</Mod>
 				<Mod>{variant:1,2,3,4}10% reduced Movement Speed</Mod>
 				<Mod>(40-50)% increased Stun Duration on Enemies</Mod>
 				<Mod>{variant:1,2,3,4}-100 to Accuracy Rating</Mod>
-				<Mod>{variant:5}-500 to Accuracy Rating</Mod>
+				<Mod>{variant:5,6}-500 to Accuracy Rating</Mod>
 			</Explicits>
 			<Requires>Level 57, 182 Str</Requires>
 			<Variants>
@@ -2833,7 +2834,8 @@
 				<Variant num="2">Pre 3.7.0</Variant>
 				<Variant num="3">Pre 3.11.0</Variant>
 				<Variant num="4">Pre 3.19.0</Variant>
-				<Variant num="5">Current</Variant>
+				<Variant num="5">Pre 3.20.0</Variant>
+				<Variant num="6">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Quecholli" base_name="Jagged Maul" rarity="UNIQUE">
@@ -4945,11 +4947,12 @@
 				<Mod>30% increased Global Critical Strike Chance</Mod>
 			</Implicits>
 			<Explicits>
-				<Mod>30% increased Damage over Time</Mod>
-				<Mod>Adds (50-60) to (120-140) Physical Damage</Mod>
+				<Mod>{variant:1,2}30% increased Damage over Time</Mod>
+				<Mod>{variant:1,2}Adds (50-60) to (120-140) Physical Damage</Mod>
+				<Mod>{variant:3}Adds (140-155) to (210-235) Physical Damage</Mod>
 				<Mod>(40-50)% increased Critical Strike Chance</Mod>
 				<Mod>{variant:1}+(10-15)% to Global Critical Strike Multiplier</Mod>
-				<Mod>{variant:2}+(15-25)% to Global Critical Strike Multiplier</Mod>
+				<Mod>{variant:2,3}+(15-25)% to Global Critical Strike Multiplier</Mod>
 				<Mod>+(8-12)% to Chaos Resistance</Mod>
 				<Mod>On Killing a Poisoned Enemy, nearby Enemies are Poisoned</Mod>
 				<Mod>and nearby Allies Regenerate 200 Life per second</Mod>
@@ -4957,7 +4960,8 @@
 			<Requires>Level 65, 81 Dex, 117 Int</Requires>
 			<Variants>
 				<Variant num="1">Pre 2.2.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Bloodplay" base_name="Stiletto" rarity="UNIQUE">
@@ -5044,19 +5048,25 @@
 				<Mod>30% increased Global Critical Strike Chance</Mod>
 			</Implicits>
 			<Explicits>
-				<Mod>(50-70)% increased Spell Damage</Mod>
+				<Mod>{variant:1,2}(50-70)% increased Spell Damage</Mod>
+				<Mod>{variant:3}(100-150)% increased Spell Damage</Mod>
 				<Mod>{variant:1}+10 Life gained on Kill</Mod>
 				<Mod>{variant:2}+30 Life gained on Kill</Mod>
+				<Mod>{variant:3}+(100-200) Life gained on Kill</Mod>
 				<Mod>{variant:1}+5 Mana gained on Kill</Mod>
 				<Mod>{variant:2}+10 Mana gained on Kill</Mod>
+				<Mod>{variant:3}+(50-100) Mana gained on Kill</Mod>
 				<Mod>10% increased Area of Effect of Area Skills</Mod>
 				<Mod>{variant:2}(125-175)% increased Critical Strike Chance for Spells if you've Killed Recently</Mod>
+				<Mod>{variant:3}(200-250)% increased Critical Strike Chance for Spells if you've Killed Recently</Mod>
 				<Mod>{variant:2}+(40-60)% to Critical Strike Multiplier for Spells if you haven't Killed Recently</Mod>
+				<Mod>{variant:3}+(60-100)% to Critical Strike Multiplier for Spells if you haven't Killed Recently</Mod>
 			</Explicits>
 			<Requires>Level 66, 95 Dex, 131 Int</Requires>
 			<Variants>
 				<Variant num="1">Pre 3.7.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Goredrill" base_name="Skinning Knife" rarity="UNIQUE">
@@ -5696,11 +5706,13 @@
 			<Explicits>
 				<Mod>{variant:1,2,3,4}(150-175)% increased Physical Damage</Mod>
 				<Mod>{variant:5}(90-105)% increased Physical Damage</Mod>
-				<Mod>Adds (6-12) to (20-32) Physical Damage</Mod>
+				<Mod>{variant:6}(180-200)% increased Physical Damage</Mod>
+				<Mod>{variant:1,2,3,4,5}Adds (6-12) to (20-32) Physical Damage</Mod>
+				<Mod>{variant:6}Adds (7-14) to (24-34) Physical Damage</Mod>
 				<Mod>(10-20)% increased Attack Speed</Mod>
 				<Mod>+(80-100) to maximum Mana</Mod>
 				<Mod>Hits can't be Evaded</Mod>
-				<Mod>{variant:4,5}Far Shot</Mod>
+				<Mod>{variant:4,5,6}Far Shot</Mod>
 			</Explicits>
 			<Requires>Level 66, 212 Dex</Requires>
 			<Variants>
@@ -5708,7 +5720,8 @@
 				<Variant num="2">Pre 2.6.0</Variant>
 				<Variant num="3">Pre 3.0.0</Variant>
 				<Variant num="4">Pre 3.17.0</Variant>
-				<Variant num="5">Current</Variant>
+				<Variant num="5">Pre 3.17.0</Variant>
+				<Variant num="6">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Null's Inclination" base_name="Ranger Bow" rarity="UNIQUE">
@@ -5919,18 +5932,21 @@
 			<Attribs />
 			<Implicits />
 			<Explicits>
-				<Mod>Adds 1 to (275-325) Lightning Damage</Mod>
+				<Mod>{variant:1,2}Adds 1 to (275-325) Lightning Damage</Mod>
+				<Mod>{variant:3}Adds 1 to (600-750) Lightning Damage</Mod>
 				<Mod>(10-15)% increased Attack Speed</Mod>
-				<Mod>60% of Lightning Damage Converted to Chaos Damage</Mod>
-				<Mod>10% Chance to Shock</Mod>
+				<Mod>{variant:1,2}60% of Lightning Damage Converted to Chaos Damage</Mod>
+				<Mod>{variant:3}100% of Lightning Damage Converted to Chaos Damage</Mod>
+				<Mod>{variant:1,2}10% Chance to Shock</Mod>
 				<Mod>Your Chaos Damage can Shock</Mod>
-				<Mod>{variant:2}Hits with this Weapon Shock Enemies as though dealing 300% more Damage</Mod>
-				<Mod>{variant:2}+40% to maximum Effect of Shock</Mod>
+				<Mod>{variant:2,3}Hits with this Weapon Shock Enemies as though dealing 300% more Damage</Mod>
+				<Mod>{variant:2,3}+40% to maximum Effect of Shock</Mod>
 			</Explicits>
 			<Requires>Level 64, 212 Dex</Requires>
 			<Variants>
 				<Variant num="1">Pre 3.9.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Windripper" base_name="Imperial Bow" rarity="UNIQUE">
@@ -15276,7 +15292,9 @@
 			<Explicits>
 				<Mod>{variant:1}(160-200)% increased Physical Damage</Mod>
 				<Mod>{variant:2}(100-140)% increased Physical Damage</Mod>
-				<Mod>Adds 10 to 20 Physical Damage</Mod>
+				<Mod>{variant:3}(140-180)% increased Physical Damage</Mod>
+				<Mod>{variant:1,2}Adds 10 to 20 Physical Damage</Mod>
+				<Mod>{variant:3}Adds 30 to 40 Physical Damage</Mod>
 				<Mod>(20-25)% increased Attack Speed</Mod>
 				<Mod>+(20-25)% to Cold Resistance</Mod>
 				<Mod>Insufficient Mana doesn't prevent your Melee Attacks</Mod>
@@ -15284,7 +15302,8 @@
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 1.0.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Replica Soul Taker" base_name="Siege Axe" rarity="UNIQUE" league="Heist">
@@ -15302,19 +15321,23 @@
 		<Item ver="2" id="0" title="Atziri's Disfavour" base_name="Vaal Axe" rarity="UNIQUE" source="Drops from unique{Atziri, Queen of the Vaal} in normal{The Apex of Sacrifice}">
 			<Attribs level_req="75" />
 			<Implicits>
-				<Mod>{variant:2}25% chance to Maim on Hit</Mod>
+				<Mod>{variant:2,3}25% chance to Maim on Hit</Mod>
 			</Implicits>
 			<Explicits>
-				<Mod>+2 to Level of Socketed Support Gems</Mod>
+				<Mod>{variant:1,2}+2 to Level of Socketed Support Gems</Mod>
 				<Mod>{variant:1}Adds (220-235) to (270-290) Physical Damage</Mod>
 				<Mod>{variant:2}Adds (205-220) to (250-270) Physical Damage</Mod>
+				<Mod>{variant:3}Adds (310-330) to (370-390) Physical Damage</Mod>
 				<Mod>(12-16)% increased Attack Speed</Mod>
 				<Mod>25% chance to cause Bleeding on Hit</Mod>
-				<Mod>+2 to Weapon Range</Mod>
+				<Mod>{variant:1,2}+2 to Weapon Range</Mod>
+				<Mod>{variant:3}+10 to Weapon Range</Mod>
+				<Mod>{variant:3}+30% to Quality of Socketed Support Gems</Mod>
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 3.11.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="The Blood Reaper" base_name="Headsman Axe" rarity="UNIQUE">
@@ -15413,32 +15436,35 @@
 				<Mod>{variant:3}(250-285)% increased Physical Damage</Mod>
 				<Mod>{variant:4}(170-200)% increased Physical Damage</Mod>
 				<Mod>{variant:5}(190-240)% increased Physical Damage</Mod>
+				<Mod>{variant:6}(300-360)% increased Physical Damage</Mod>
 				<Mod>(7-12)% increased Attack Speed</Mod>
-				<Mod>{variant:2,3,4,5}(30-40)% increased Critical Strike Chance</Mod>
+				<Mod>{variant:2,3,4,5,6}(30-40)% increased Critical Strike Chance</Mod>
 				<Mod>{variant:1}+(100-150) to maximum Mana</Mod>
 				<Mod>Nearby Allies have 30% increased Item Rarity</Mod>
 				<Mod>Nearby Allies have Culling Strike</Mod>
-				<Mod>{variant:2,3,4,5}Insufficient Mana doesn't prevent your Melee Attacks</Mod>
-				<Mod>{variant:3,4,5}Nearby Allies have +50% to Critical Strike Multiplier</Mod>
+				<Mod>{variant:2,3,4,5,6}Insufficient Mana doesn't prevent your Melee Attacks</Mod>
+				<Mod>{variant:3,4,5,6}Nearby Allies have +50% to Critical Strike Multiplier</Mod>
 				<Mod>{variant:3,4}Nearby Allies have +1 Fortification</Mod>
-				<Mod>{variant:5}Nearby Allies have +10 Fortification</Mod>
+				<Mod>{variant:5,6}Nearby Allies have +10 Fortification</Mod>
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 2.6.0</Variant>
 				<Variant num="2">Pre 3.6.0</Variant>
 				<Variant num="3">Pre 3.11.0</Variant>
 				<Variant num="4">Pre 3.16.0</Variant>
-				<Variant num="5">Current</Variant>
+				<Variant num="5">Pre 3.20.0</Variant>
+				<Variant num="6">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Kitava's Feast" base_name="Void Axe" rarity="UNIQUE">
 			<Attribs />
 			<Implicits />
 			<Explicits>
-				<Mod>Socketed Gems are supported by Level 25 Melee Splash</Mod>
+				<Mod>{variant:1,2,3}Socketed Gems are supported by Level 25 Melee Splash</Mod>
+				<Mod>{variant:4}Socketed Gems are supported by Level 25 Melee Splash</Mod>
 				<Mod>{variant:1}(250-300)% increased Physical Damage</Mod>
 				<Mod>{variant:2}(265-330)% increased Physical Damage</Mod>
-				<Mod>{variant:3}(200-240)% increased Physical Damage</Mod>
+				<Mod>{variant:3,4}(200-240)% increased Physical Damage</Mod>
 				<Mod>1% of Physical Attack Damage Leeched as Life</Mod>
 				<Mod>1% of Physical Attack Damage Leeched as Mana</Mod>
 				<Mod>Recover 5% of Life on Kill</Mod>
@@ -15447,7 +15473,8 @@
 			<Variants>
 				<Variant num="1">Pre 3.5.0</Variant>
 				<Variant num="2">Pre 3.11.0</Variant>
-				<Variant num="3">Current</Variant>
+				<Variant num="3">Pre 3.20.0</Variant>
+				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Limbsplit" base_name="Woodsplitter" rarity="UNIQUE">
@@ -16688,7 +16715,9 @@
 			<Explicits>
 				<Mod>{variant:1}(100-120)% increased Physical Damage</Mod>
 				<Mod>{variant:2}(150-170)% increased Physical Damage</Mod>
-				<Mod>Adds 10 to 12 Physical Damage</Mod>
+				<Mod>{variant:3}(200-220)% increased Physical Damage</Mod>
+				<Mod>{variant:1,2}Adds 10 to 12 Physical Damage</Mod>
+				<Mod>{variant:3}Adds 25 to 30 Physical Damage</Mod>
 				<Mod>5% increased Attack Speed</Mod>
 				<Mod>1.2% of Physical Attack Damage Leeched as Life</Mod>
 				<Mod>5% increased Movement Speed</Mod>
@@ -16697,7 +16726,8 @@
 			<Requires>Level 62, 131 Dex, 95 Int</Requires>
 			<Variants>
 				<Variant num="1">Pre 3.0.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Cybil's Paw" base_name="Thresher Claw" rarity="UNIQUE">
@@ -16748,7 +16778,7 @@
 				<Variant num="1">Pre 1.3.0</Variant>
 				<Variant num="2">Pre 2.0.0</Variant>
 				<Variant num="3">Pre 2.6.0</Variant>
-				<Variant num="4">Current</Variant>
+				<Variant num="4">Pre 3.10.0</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Essentia Sanguis" base_name="Vaal Claw" rarity="UNIQUE">
@@ -16758,19 +16788,21 @@
 			</Implicits>
 			<Explicits>
 				<Mod>+8% Chance to Block Attack Damage while Dual Wielding Claws</Mod>
-				<Mod>(140-180)% increased Physical Damage</Mod>
-				<Mod>Adds 1 to 200 Lightning Damage</Mod>
+				<Mod>{variant:1,2}(140-180)% increased Physical Damage</Mod>
+				<Mod>{variant:1,2}Adds 1 to 200 Lightning Damage</Mod>
+				<Mod>{variant:3}Adds 1 to (500-600) Lightning Damage</Mod>
 				<Mod>(20-30)% increased Attack Speed</Mod>
 				<Mod>+(30-40) to maximum Energy Shield</Mod>
 				<Mod>{variant:1}Leech Energy Shield instead of Life</Mod>
-				<Mod>{variant:2}50% reduced Maximum Recovery per Energy Shield Leech</Mod>
-				<Mod>{variant:2}Energy Shield Leech Effects from Attacks are not removed at Full Energy Shield</Mod>
-				<Mod>{variant:2}Ghost Reaver</Mod>
+				<Mod>{variant:2,3}50% reduced Maximum Recovery per Energy Shield Leech</Mod>
+				<Mod>{variant:2,3}Energy Shield Leech Effects from Attacks are not removed at Full Energy Shield</Mod>
+				<Mod>{variant:2,3}Ghost Reaver</Mod>
 			</Explicits>
 			<Requires>Level 66, 95 Dex, 131 Int</Requires>
 			<Variants>
 				<Variant num="1">Pre 3.11.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Hand of Thought and Motion" base_name="Blinder" rarity="UNIQUE" league="Breach" source="Drops in Esh Breach or from unique{Esh, Forked Thought}">
@@ -19726,10 +19758,15 @@
 			</Implicits>
 			<Explicits>
 				<Mod>Triggers Level 20 Reflection when Equipped</Mod>
-				<Mod>(40-50)% increased Physical Damage</Mod>
+				<Mod>{variant:1}(40-50)% increased Physical Damage</Mod>
+				<Mod>{variant:2}(130-150)% increased Physical Damage</Mod>
 				<Mod>Adds (16-22) to (40-45) Physical Damage</Mod>
 				<Mod>(8-12)% increased Attack Speed</Mod>
 				<Mod>(8-12)% increased Critical Strike Chance</Mod>
+			<Variants>
+				<Variant num="1">Pre 3.20.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 			</Explicits>
 		</Item>
 		<Item ver="2" id="0" title="Scaeva" base_name="Gladius" rarity="UNIQUE">
@@ -19882,17 +19919,19 @@
 			<Attribs />
 			<Implicits>
 				<Mod>{variant:1}18% increased Global Accuracy Rating</Mod>
-				<Mod>{variant:2}+460 to Accuracy Rating</Mod>
+				<Mod>{variant:2,3}+460 to Accuracy Rating</Mod>
 			</Implicits>
 			<Explicits>
-				<Mod>(40-60)% increased Physical Damage</Mod>
+				<Mod>{variant:1,2}(40-60)% increased Physical Damage</Mod>
+				<Mod>{variant:3}(80-100)% increased Physical Damage</Mod>
 				<Mod>Adds (30-45) to (80-100) Physical Damage</Mod>
 				<Mod>+(2-3) Mana gained for each Enemy hit by Attacks</Mod>
 				<Mod>Counts as all One Handed Melee Weapon Types</Mod>
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 2.6.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Aurumvorax" base_name="Basket Rapier" rarity="UNIQUE">
@@ -20309,11 +20348,12 @@
 			<Attribs />
 			<Implicits>
 				<Mod>{variant:1}30% increased Global Accuracy Rating</Mod>
-				<Mod>{variant:2}30% increased Global Physical Damage</Mod>
+				<Mod>{variant:2,3}30% increased Global Physical Damage</Mod>
 			</Implicits>
 			<Explicits>
 				<Mod>{variant:1}(400-500)% increased Physical Damage</Mod>
 				<Mod>{variant:2}(200-300)% increased Physical Damage</Mod>
+				<Mod>{variant:3}(400-450)% increased Physical Damage</Mod>
 				<Mod>(5-8)% increased Attack Speed</Mod>
 				<Mod>+(90-100) to maximum Life</Mod>
 				<Mod>Your Physical Damage can Shock</Mod>
@@ -20323,7 +20363,8 @@
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 3.11.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" id="0" title="Terminus Est" base_name="Tiger Sword" rarity="UNIQUE">
@@ -20352,7 +20393,7 @@
 			<Attribs />
 			<Implicits>
 				<Mod>{variant:1}30% increased Global Accuracy Rating</Mod>
-				<Mod>{variant:2}30% increased Elemental Damage with Attack Skills</Mod>
+				<Mod>{variant:2,3}30% increased Elemental Damage with Attack Skills</Mod>
 			</Implicits>
 			<Explicits>
 				<Mod>{variant:1}(50-100)% increased Physical Damage</Mod>
@@ -20360,14 +20401,16 @@
 				<Mod>(5-8)% increased Attack Speed</Mod>
 				<Mod>+(90-100) to maximum Life</Mod>
 				<Mod>Your Elemental Damage can Shock</Mod>
-				<Mod>Gain 300% of Weapon Physical Damage as Extra Damage of a random Element</Mod>
+				<Mod>{variant:1,2}Gain 300% of Weapon Physical Damage as Extra Damage of a random Element</Mod>
+				<Mod>{variant:3}Gain 700% of Weapon Physical Damage as Extra Damage of a random Element</Mod>
 				<Mod>20% increased Area of Effect for Attacks</Mod>
 				<Mod>Deal no Non-Elemental Damage</Mod>
 				<Mod>Elder Item</Mod>
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 3.11.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.20.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 	</sword>

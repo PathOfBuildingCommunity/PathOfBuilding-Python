@@ -39,7 +39,7 @@ class Item:
         self.level_req = 0
 
         self.id = 0
-        self.rarity = "UNIQUE"
+        self.rarity = "NORMAL"
         self.title = ""
         self.name = ""
         self.base_name = ""
@@ -62,7 +62,7 @@ class Item:
         self.sockets = ""
         self.properties = {}
         self.implicitMods = []
-        # explicit mods affecting this item
+        # explicit mods affecting this item with current variants
         self.explicitMods = []
         # all explicit mods including all variants
         self.full_explicitMods_list = []
@@ -372,7 +372,7 @@ class Item:
             add_attrib_if_not_null(xml, "source", self.source)
         add_attrib_if_not_null(xml, "unique_id", self.unique_id)
         add_attrib_if_not_null(xml, "corrupted", self.corrupted)
-        add_attrib_if_not_null(xml, "variant", self.curr_variant)
+        # add_attrib_if_not_null(xml, "variant", self.curr_variant)
         # there is always an Attribs element, even if it is empty, which almost never happens
         attribs = ET.fromstring(f"<Attribs />")
         add_attrib_if_not_null(attribs, "evasion", self.evasion)
@@ -398,7 +398,7 @@ class Item:
         for requirement in self.requires.keys():
             xml.append(ET.fromstring(f"<Requires>{requirement}</Requires>"))
         if len(self.variants) > 0:
-            var_xml = ET.fromstring("<Variants></Variants>")
+            var_xml = ET.fromstring(f'<Variants current="{self.curr_variant}"></Variants>')
             for num, variant in enumerate(self.variants, 1):
                 # at this point (Nov2022) 'num' isn't used but it makes reading/editing the xml a little easier
                 var_xml.append(ET.fromstring(f'<Variant num="{num}">{variant}</Variant>'))
@@ -424,7 +424,7 @@ class Item:
         self.league = xml.get("league", "")
         self.source = xml.get("source", "")
         self.corrupted = str_to_bool(xml.get("corrupted", "False"))
-        self.curr_variant = xml.get("variant", "0")
+        # self.curr_variant = xml.get("variant", "0")
         attribs = xml.find("Attribs")
         if attribs is not None:
             self.evasion = int(attribs.get("evasion", "0"))
@@ -436,6 +436,14 @@ class Item:
             self.limited_to = attribs.get("limited_to", "")
             self.ilevel = int(attribs.get("ilevel", "0"))
             self.level_req = int(attribs.get("level_req", "0"))
+        var_xml = xml.find("Variants")
+        if var_xml is not None:
+            self.curr_variant = var_xml.get("current", "1")
+            for variant in var_xml.findall("Variant"):
+                self.variants.append(variant.text)
+            # ensure the uniques load with the latest value
+            if self.curr_variant == "0" and self.rarity == "UNIQUE":
+                self.curr_variant = f"{len(self.variants)}"
         imp = xml.find("Implicits")
         for mod_xml in imp.findall("Mod"):
             self.implicitMods.append(Mod(mod_xml.text))
@@ -456,14 +464,9 @@ class Item:
                 self.explicitMods.append(mod)
         for requirement in xml.findall("Requires"):
             self.requires[requirement.text] = True
-        var_xml = xml.find("Variants")
-        if var_xml is not None:
-            for variant in var_xml.findall("Variant"):
-                self.variants.append(variant.text)
-
         # load_from_xml_v2
 
-        # def tooltip(self):
+    def tooltip(self):
         """
         Create a tooltip. Hand crafted html anyone ?
 
