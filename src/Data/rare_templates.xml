@@ -1,0 +1,2273 @@
+<?xml version='1.0' encoding='utf-8'?>
+<RareTemplates>
+	<Item ver="2" title="Armour/Evasion Helmet" base_name="Penitent Mask" sockets="G-G-G-G">
+		<Attribs evasion="254" armour="254" level_req="75" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEvasionRating3</Prefix>
+			<Prefix>LocalIncreasedArmourAndEvasion5</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion/Energy Shield Helmet" base_name="Blizzard Crown" sockets="G-G-G-G">
+		<Attribs evasion="254" energy_shield="52" level_req="75" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseEvasionRatingAndEnergyShield3</Prefix>
+			<Prefix>LocalIncreasedEvasionAndEnergyShield5_</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Helmet" base_name="Archdemon Crown" sockets="B-B-B-B">
+		<Attribs energy_shield="52" armour="254" level_req="75" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEnergyShield3</Prefix>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Helmet" base_name="Eternal Burgonet" sockets="R-R-R-R">
+		<Attribs armour="515" level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating3</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Helmet" base_name="Lion Pelt" sockets="G-G-G-G">
+		<Attribs evasion="524" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRating3</Prefix>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Helmet" base_name="Hubris Circlet" sockets="B-B-B-B">
+		<Attribs energy_shield="110" level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>IncreasedLife7</Prefix>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>LocalIncreasedEnergyShield7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Evasion Helmet" base_name="Nightmare Bascinet" sockets="G-G-G-G">
+		<Attribs evasion="322" armour="224" level_req="67" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEvasionRating3</Prefix>
+			<Prefix>LocalIncreasedArmourAndEvasion5</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Helmet" base_name="Praetor Crown" sockets="B-B-B-B">
+		<Attribs energy_shield="70" armour="222" level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEnergyShield3</Prefix>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Helmet" base_name="Bone Helmet" sockets="B-B-B-B">
+		<Attribs energy_shield="55" armour="272" level_req="73" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEnergyShield3</Prefix>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion/Energy Shield Helmet" base_name="Deicide Mask" sockets="B-B-B-B">
+		<Attribs evasion="263" energy_shield="65" level_req="67" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseEvasionRatingAndEnergyShield3</Prefix>
+			<Prefix>LocalIncreasedEvasionAndEnergyShield5_</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Ward Helmet" base_name="Runic Crown" sockets="G-G-G-G">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedWardPercent3</Prefix>
+			<Prefix>LocalIncreasedWard5___</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Gloves" base_name="Sinistral Gloves" sockets="G-G-G-G">
+		<Attribs evasion="325" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating2</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Gloves" base_name="Nexus Gloves" sockets="B-B-B-B">
+		<Attribs energy_shield="65" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>LocalIncreasedEnergyShield6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Gloves" base_name="Debilitation Gauntlets" sockets="R-R-R-R">
+		<Attribs armour="325" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating2</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Gloves" base_name="Apothecary's Gloves" sockets="B-B-B-B">
+		<Attribs energy_shield="40" armour="149" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEnergyShield2_</Prefix>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Gloves" base_name="Titan Gauntlets" sockets="R-R-R-R">
+		<Attribs armour="334" level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating2</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Gloves" base_name="Spiked Gloves" sockets="R-R-R-R">
+		<Attribs armour="304" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating2</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Gloves" base_name="Slink Gloves" sockets="G-G-G-G">
+		<Attribs evasion="334" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRating2</Prefix>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Gloves" base_name="Gripped Gloves" sockets="G-G-G-G">
+		<Attribs evasion="304" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRating2</Prefix>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Gloves" base_name="Sorcerer Gloves" sockets="B-B-B-B">
+		<Attribs energy_shield="68" level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>LocalIncreasedEnergyShield6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Gloves" base_name="Fingerless Silk Gloves" sockets="B-B-B-B">
+		<Attribs energy_shield="62" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>LocalIncreasedEnergyShield6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Evasion Gloves" base_name="Dragonscale Gauntlets" sockets="G-G-G-G">
+		<Attribs evasion="167" armour="167" level_req="67" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEvasionRating2</Prefix>
+			<Prefix>LocalIncreasedArmourAndEvasion5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Gloves" base_name="Crusader Gloves" sockets="B-B-B-B">
+		<Attribs energy_shield="34" armour="167" level_req="66" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEnergyShield2_</Prefix>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion/Energy Shield Gloves" base_name="Murder Mitts" sockets="G-G-G-G">
+		<Attribs evasion="167" energy_shield="34" level_req="67" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseEvasionRatingAndEnergyShield2</Prefix>
+			<Prefix>LocalIncreasedEvasionAndEnergyShield5_</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Ward Gloves" base_name="Runic Gauntlets" sockets="G-G-G-G">
+		<Attribs level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedWardPercent3</Prefix>
+			<Prefix>LocalIncreasedWard5___</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Chest" base_name="Glorious Plate" sockets="R-R-R-R-R-R">
+		<Attribs armour="1070" level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Chest" base_name="Astral Plate" sockets="R-R-R-R-R-R">
+		<Attribs armour="938" level_req="62" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Chest" base_name="Assassin's Garb" sockets="G-G-G-G-G-G">
+		<Attribs evasion="973" level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRating5</Prefix>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Chest" base_name="Zodiac Leather" sockets="G-G-G-G-G-G">
+		<Attribs evasion="1178" level_req="65" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRating5</Prefix>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Chest" base_name="Vaal Regalia" sockets="B-B-B-B-B-B">
+		<Attribs energy_shield="236" level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>IncreasedLife9</Prefix>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>LocalIncreasedEnergyShield10</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Evasion Chest" base_name="Triumphant Lamellar" sockets="G-G-G-G-G-G">
+		<Attribs evasion="659" armour="524" level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEvasionRating5</Prefix>
+			<Prefix>LocalIncreasedArmourAndEvasion5</Prefix>
+			<Prefix>IncreasedLife9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Chest" base_name="Saintly Chainmail" sockets="B-B-B-B-B-B">
+		<Attribs energy_shield="132" armour="553" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEnergyShield5</Prefix>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion/Energy Shield Chest" base_name="Carnal Armour" sockets="B-B-B-B-B-B">
+		<Attribs evasion="466" energy_shield="136" level_req="71" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseEvasionRatingAndEnergyShield5_</Prefix>
+			<Prefix>LocalIncreasedEvasionAndEnergyShield5_</Prefix>
+			<Prefix>IncreasedLife9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion/Energy Shield Boots" base_name="Fugitive Boots" sockets="B-B-B-B">
+		<Attribs evasion="155" energy_shield="44" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionAndEnergyShield5_</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>ChaosResist4</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Boots" base_name="Stormrider Boots" sockets="G-G-G-G">
+		<Attribs evasion="325" level_req="80" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Boots" base_name="Dreamquest Slippers" sockets="B-B-B-B">
+		<Attribs energy_shield="68" level_req="80" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Boots" base_name="Brimstone Treads" sockets="R-R-R-R">
+		<Attribs armour="325" level_req="80" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Boots" base_name="Titan Greaves" sockets="R-R-R-R">
+		<Attribs armour="334" level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Boots" base_name="Slink Boots" sockets="G-G-G-G">
+		<Attribs evasion="340" level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Boots" base_name="Sorcerer Boots" sockets="B-B-B-B">
+		<Attribs energy_shield="71" level_req="67" quality="20" />
+		<Crafted>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Evasion Boots" base_name="Dragonscale Boots" sockets="G-G-G-G">
+		<Attribs evasion="167" armour="167" level_req="65" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedArmourAndEvasion5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Evasion Boots" base_name="Two-Toned Boots (Armour/Evasion)" sockets="G-G-G-G">
+		<Attribs evasion="174" armour="174" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedArmourAndEvasion5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Boots" base_name="Crusader Boots" sockets="B-B-B-B">
+		<Attribs energy_shield="34" armour="167" level_req="64" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Boots" base_name="Two-Toned Boots (Armour/Energy Shield)" sockets="B-B-B-B">
+		<Attribs energy_shield="36" armour="174" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion/Energy Shield Boots" base_name="Murder Boots" sockets="G-G-G-G">
+		<Attribs evasion="256" energy_shield="25" level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionAndEnergyShield5_</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion/Energy Shield Boots" base_name="Two-Toned Boots (Evasion/Energy Shield)" sockets="G-G-G-G">
+		<Attribs evasion="174" energy_shield="36" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionAndEnergyShield5_</Prefix>
+			<Prefix>IncreasedLife6</Prefix>
+			<Prefix>MovementVelocity5</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Ward Boots" base_name="Runic Sabatons" sockets="G-G-G-G">
+		<Attribs level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedWardPercent3</Prefix>
+			<Prefix>LocalIncreasedWard5___</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Shield" base_name="Transfer-attuned Spirit Shield" sockets="B-B-B">
+		<Attribs energy_shield="77" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>IncreasedLife8</Prefix>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>LocalIncreasedEnergyShield9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Shield" base_name="Cold-attuned Buckler" sockets="G-G-G">
+		<Attribs evasion="418" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRating5</Prefix>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife8</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Shield" base_name="Heat-attuned Tower Shield" sockets="R-R-R">
+		<Attribs armour="455" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife8</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour Shield" base_name="Pinnacle Tower Shield" sockets="R-R-R">
+		<Attribs armour="644" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRating5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamageReductionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife8</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion Shield" base_name="Imperial Buckler" sockets="G-G-G">
+		<Attribs evasion="607" level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedEvasionRating5</Prefix>
+			<Prefix>LocalIncreasedEvasionRatingPercent5</Prefix>
+			<Prefix>IncreasedLife8</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Shield" base_name="Titanium Spirit Shield" sockets="B-B-B">
+		<Attribs energy_shield="92" level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>IncreasedLife8</Prefix>
+			<Prefix>LocalIncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>LocalIncreasedEnergyShield9</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Evasion Shield" base_name="Elegant Round Shield" sockets="G-G-G">
+		<Attribs evasion="204" armour="204" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEvasionRating5</Prefix>
+			<Prefix>LocalIncreasedArmourAndEvasion5</Prefix>
+			<Prefix>IncreasedLife8</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Armour/Energy Shield Shield" base_name="Archon Kite Shield" sockets="B-B-B">
+		<Attribs energy_shield="44" armour="215" level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseArmourAndEnergyShield5</Prefix>
+			<Prefix>LocalIncreasedArmourAndEnergyShield5</Prefix>
+			<Prefix>IncreasedLife8</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Evasion/Energy Shield Shield" base_name="Supreme Spiked Shield" sockets="G-G-G">
+		<Attribs evasion="334" energy_shield="68" level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalBaseEvasionRatingAndEnergyShield5_</Prefix>
+			<Prefix>LocalIncreasedEvasionAndEnergyShield5_</Prefix>
+			<Prefix>IncreasedLife8</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Amulet" base_name="Seaglass Amulet">
+		<Attribs level_req="74" />
+		<Crafted>
+			<Prefix>IncreasedEnergyShield7</Prefix>
+			<Prefix>IncreasedEnergyShieldPercent5</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Amber Amulet">
+		<Attribs level_req="5" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Strength5</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Jade Amulet">
+		<Attribs level_req="5" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Dexterity5</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Lapis Amulet">
+		<Attribs level_req="5" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Onyx Amulet">
+		<Attribs level_req="20" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>AllAttributes5</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Agate Amulet">
+		<Attribs level_req="16" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Strength5</Suffix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Turquoise Amulet">
+		<Attribs level_req="16" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Dexterity5</Suffix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Citrine Amulet">
+		<Attribs level_req="16" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Dexterity5</Suffix>
+			<Suffix>Strength5</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Mana Amulet" base_name="Paua Amulet">
+		<Attribs />
+		<Crafted>
+			<Prefix>IncreasedMana7</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>ManaRegeneration4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Marble Amulet">
+		<Attribs level_req="74" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Mana Amulet" base_name="Blue Pearl Amulet">
+		<Attribs level_req="77" />
+		<Crafted>
+			<Prefix>IncreasedMana7</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>ManaRegeneration4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Influence Amulet" base_name="Astrolabe Amulet">
+		<Attribs level_req="69" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Amulet" base_name="Simplex Amulet">
+		<Attribs level_req="24" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Ring" base_name="Geodesic Ring">
+		<Attribs level_req="24" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Resistance Ring" base_name="Cogwork Ring">
+		<Attribs level_req="24" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>FireResist4</Suffix>
+			<Suffix>ColdResist4</Suffix>
+			<Suffix>LightningResist4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Mana Ring" base_name="Paua Ring">
+		<Attribs />
+		<Crafted>
+			<Prefix>IncreasedMana7</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>ManaRegeneration4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Ring" base_name="Moonstone Ring">
+		<Attribs level_req="20" />
+		<Crafted>
+			<Prefix>IncreasedEnergyShield6</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Ring" base_name="Diamond Ring">
+		<Attribs level_req="20" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Resistance Ring" base_name="Ruby Ring">
+		<Attribs level_req="16" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>FireResist4</Suffix>
+			<Suffix>ColdResist4</Suffix>
+			<Suffix>LightningResist4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Resistance Ring" base_name="Sapphire Ring">
+		<Attribs level_req="8" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>FireResist4</Suffix>
+			<Suffix>ColdResist4</Suffix>
+			<Suffix>LightningResist4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Resistance Ring" base_name="Topaz Ring">
+		<Attribs level_req="12" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>FireResist4</Suffix>
+			<Suffix>ColdResist4</Suffix>
+			<Suffix>LightningResist4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Chaos Resistance Ring" base_name="Amethyst Ring">
+		<Attribs level_req="30" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>ChaosResist4</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Resistance Ring" base_name="Ruby Ring">
+		<Attribs level_req="16" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>FireResist4</Suffix>
+			<Suffix>ColdResist4</Suffix>
+			<Suffix>LightningResist4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Life Ring" base_name="Coral Ring">
+		<Attribs />
+		<Crafted>
+			<Prefix>IncreasedLife4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Strength6</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Resistance Ring" base_name="Prismatic Ring">
+		<Attribs level_req="30" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>FireResist4</Suffix>
+			<Suffix>ColdResist4</Suffix>
+			<Suffix>LightningResist4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Resistance Ring" base_name="Two-Stone Ring">
+		<Attribs level_req="20" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>FireResist4</Suffix>
+			<Suffix>ColdResist4</Suffix>
+			<Suffix>LightningResist4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+		<Variants current="3">
+			<Variant num="1">Fire and Cold</Variant>
+			<Variant num="2">Cold and Lightning</Variant>
+			<Variant num="3">Fire and Lightning</Variant>
+		</Variants>
+	</Item>
+	<Item ver="2" title="Ring" base_name="Unset Ring">
+		<Attribs level_req="5" />
+		<Crafted>
+			<Prefix>LocalIncreaseSocketedGemUnsetRing2</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Ring" base_name="Steel Ring">
+		<Attribs level_req="80" />
+		<Crafted>
+			<Prefix>AddedPhysicalDamage4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>IncreasedAccuracyNew3</Suffix>
+			<Suffix>IncreasedAttackSpeed1</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Ring" base_name="Iolite Ring">
+		<Attribs level_req="80" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Ring" base_name="Opal Ring">
+		<Attribs level_req="80" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Mana Ring" base_name="Cerulean Ring">
+		<Attribs level_req="80" />
+		<Crafted>
+			<Prefix>IncreasedMana7</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Intelligence5</Suffix>
+			<Suffix>ManaRegeneration4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Life Ring" base_name="Vermillion Ring">
+		<Attribs level_req="80" />
+		<Crafted>
+			<Prefix>IncreasedLife4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Strength6</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Belt" base_name="Rustic Sash">
+		<Attribs />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Belt" base_name="Chain Belt">
+		<Attribs />
+		<Crafted>
+			<Prefix>IncreasedEnergyShield6</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Belt" base_name="Leather Belt">
+		<Attribs level_req="8" />
+		<Crafted>
+			<Prefix>IncreasedLife4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Strength6</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Belt" base_name="Heavy Belt">
+		<Attribs level_req="8" />
+		<Crafted>
+			<Prefix>IncreasedLife4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>Strength6</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Energy Shield Belt" base_name="Crystal Belt">
+		<Attribs level_req="79" />
+		<Crafted>
+			<Prefix>IncreasedEnergyShield6</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Belt" base_name="Vanguard Belt">
+		<Attribs level_req="78" />
+		<Crafted>
+			<Prefix>IncreasedPhysicalDamageReductionRating5</Prefix>
+			<Prefix>IncreasedLife5</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Flask Belt" base_name="Micro-Distillery Belt">
+		<Attribs level_req="24" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>BeltReducedFlaskChargesUsed1</Suffix>
+			<Suffix>BeltIncreasedFlaskDuration1</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Belt" base_name="Mechalarm Belt">
+		<Attribs level_req="56" />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Quiver" base_name="Spike-Point Arrow Quiver">
+		<Attribs level_req="40" />
+		<Crafted>
+			<Prefix>AddedPhysicalDamage3</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Prefix>WeaponElementalDamage3</Prefix>
+			<Suffix>IncreasedAttackSpeed1</Suffix>
+			<Suffix>CriticalStrikeChanceWithBows4</Suffix>
+			<Suffix>CriticalMultiplierWithBows3</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Quiver" base_name="Artillery Quiver">
+		<Attribs level_req="74" />
+		<Crafted>
+			<Prefix>AddedPhysicalDamage3</Prefix>
+			<Prefix>IncreasedLife7</Prefix>
+			<Prefix>WeaponElementalDamage3</Prefix>
+			<Suffix>IncreasedAttackSpeed1</Suffix>
+			<Suffix>CriticalStrikeChanceWithBows4</Suffix>
+			<Suffix>CriticalMultiplierWithBows3</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 1H Axe" base_name="Runic Hatchet" sockets="R-R-R">
+		<Attribs level_req="71" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 1H Axe" base_name="Vaal Hatchet" sockets="R-R-R">
+		<Attribs level_req="65" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 1H Axe" base_name="Psychotic Axe" sockets="R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 1H Axe" base_name="Psychotic Axe" sockets="R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 2H Axe" base_name="Fleshripper" sockets="R-R-R-R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamageTwoHand6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 2H Axe" base_name="Despot Axe" sockets="R-R-R-R-R-R">
+		<Attribs level_req="66" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 2H Axe" base_name="Apex Cleaver" sockets="G-G-G-G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamageTwoHand6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 2H Axe" base_name="Apex Cleaver" sockets="G-G-G-G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Bow" base_name="Harbinger Bow" sockets="G-G-G-G-G-G">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamageTwoHand6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed2</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Bow" base_name="Thicket Bow" sockets="G-G-G-G-G-G">
+		<Attribs level_req="56" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed2</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Fire Bow" base_name="Solarine Bow" sockets="G-G-G-G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalAddedFireDamageRanged6</Prefix>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed2</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+3 Bow" base_name="Thicket Bow" sockets="G-G-G-G-G-G">
+		<Attribs level_req="56" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreaseSocketedGemLevel1</Prefix>
+			<Prefix>LocalIncreaseSocketedBowGemLevel2</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed2</Suffix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Claw" base_name="Gemini Claw" sockets="G-G-G">
+		<Attribs level_req="72" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Claw" base_name="Imperial Claw" sockets="G-G-G">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Chaos Claw" base_name="Void Fangs" sockets="G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalAddedChaosDamage1</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Dagger" base_name="Ambusher" sockets="G-G-G">
+		<Attribs level_req="60" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Dagger" base_name="Ambusher" sockets="G-G-G">
+		<Attribs level_req="60" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Dagger" base_name="Platinum Kris" sockets="B-B-B">
+		<Attribs level_req="64" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Dagger" base_name="Pneumatic Dagger" sockets="G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Dagger" base_name="Pneumatic Dagger" sockets="G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Dagger" base_name="Infernal Blade" sockets="G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Vagan Dagger" base_name="Royal Skean" sockets="B-B-B">
+		<Attribs level_req="50" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits>
+			<Mod>{custom}Hits can't be Evaded</Mod>
+		</Explicits>
+	</Item>
+	<Item ver="2" title="Spell Sceptre" base_name="Void Sceptre" sockets="B-B-B">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Sceptre" base_name="Void Sceptre" sockets="B-B-B">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Sceptre" base_name="Void Sceptre" sockets="B-B-B">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Sceptre" base_name="Oscillating Sceptre" sockets="B-B-B">
+		<Attribs level_req="30" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Sceptre" base_name="Oscillating Sceptre" sockets="B-B-B">
+		<Attribs level_req="30" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Sceptre" base_name="Stabilising Sceptre" sockets="B-B-B">
+		<Attribs level_req="50" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Sceptre" base_name="Stabilising Sceptre" sockets="B-B-B">
+		<Attribs level_req="50" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Sceptre" base_name="Alternating Sceptre" sockets="B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Sceptre" base_name="Alternating Sceptre" sockets="B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Sceptre" base_name="Alternating Sceptre" sockets="B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 1H Mace" base_name="Behemoth Mace" sockets="R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 1H Mace" base_name="Behemoth Mace" sockets="R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 1H Mace" base_name="Boom Mace" sockets="R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 1H Mace" base_name="Boom Mace" sockets="R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 2H Mace" base_name="Coronal Maul" sockets="R-R-R-R-R-R">
+		<Attribs level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamageTwoHand6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 2H Mace" base_name="Coronal Maul" sockets="R-R-R-R-R-R">
+		<Attribs level_req="69" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 2H Mace" base_name="Impact Force Propagator" sockets="R-R-R-R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamageTwoHand6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 2H Mace" base_name="Impact Force Propagator" sockets="R-R-R-R-R-R">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Staff" base_name="Maelstrom Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="64" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamageTwoHand6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Staff" base_name="Maelstrom Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="64" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon6</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Staff" base_name="Eventuality Rod" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamageTwoHand6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Staff" base_name="Eventuality Rod" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon6</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnTwoHandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Physical Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalPhysicalSpellGemsLevelTwoHand2_</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Fire Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalFireSpellGemsLevelTwoHand2</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Cold Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalColdSpellGemsLevelTwoHand2</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Lightning Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalLightningSpellGemsLevelTwoHand2</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Chaos Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalChaosSpellGemsLevelTwoHand2</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnTwoHandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Physical Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalPhysicalSpellGemsLevelTwoHand2_</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Fire Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalFireSpellGemsLevelTwoHand2</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Cold Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalColdSpellGemsLevelTwoHand2</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Lightning Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalLightningSpellGemsLevelTwoHand2</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="+5 Chaos Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>GlobalSpellGemsLevelTwoHand1</Prefix>
+			<Prefix>GlobalChaosSpellGemsLevelTwoHand2</Prefix>
+			<Prefix>SpellDamageOnTwoHandWeapon5</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 1H Sword" base_name="Tiger Hook" sockets="G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 1H Sword" base_name="Jewelled Foil" sockets="G-G-G">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 1H Sword" base_name="Eternal Sword" sockets="G-G-G">
+		<Attribs level_req="66" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 1H Sword" base_name="Anarchic Spiritblade" sockets="G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 1H Sword" base_name="Anarchic Spiritblade" sockets="G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 1H Sword" base_name="Jewelled Foil" sockets="G-G-G">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical 2H Sword" base_name="Exquisite Blade" sockets="G-G-G-G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamageTwoHand6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 2H Sword" base_name="Reaver Sword" sockets="G-G-G-G-G-G">
+		<Attribs level_req="59" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental 2H Sword" base_name="Banishing Blade" sockets="G-G-G-G-G-G">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnTwohandWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed3</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Wand" base_name="Imbued Wand" sockets="B-B-B">
+		<Attribs level_req="59" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed2</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Wand" base_name="Imbued Wand" sockets="B-B-B">
+		<Attribs level_req="59" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed2</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Wand" base_name="Prophecy Wand" sockets="B-B-B">
+		<Attribs level_req="68" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Physical Wand" base_name="Accumulator Wand" sockets="B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>LocalIncreasedPhysicalDamagePercent5</Prefix>
+			<Prefix>LocalIncreasedPhysicalDamagePercentAndAccuracyRating5</Prefix>
+			<Prefix>LocalAddedPhysicalDamage6</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed2</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Elemental Wand" base_name="Accumulator Wand" sockets="B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>WeaponElementalDamageOnWeapons4</Prefix>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>LocalIncreasedAttackSpeed2</Suffix>
+			<Suffix>LocalCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Spell Wand" base_name="Accumulator Wand" sockets="B-B-B">
+		<Attribs level_req="70" quality="20" />
+		<Crafted>
+			<Prefix>SpellDamageOnWeapon5</Prefix>
+			<Prefix>SpellDamageAndManaOnWeapon4</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>SpellCriticalStrikeChance3</Suffix>
+			<Suffix>LocalCriticalMultiplier4</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Jewel" base_name="Crimson Jewel">
+		<Attribs />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Jewel" base_name="Viridian Jewel">
+		<Attribs />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Jewel" base_name="Cobalt Jewel">
+		<Attribs />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Cluster Jewel" base_name="Large Cluster Jewel">
+		<Attribs />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Cluster Jewel" base_name="Medium Cluster Jewel">
+		<Attribs />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+	<Item ver="2" title="Cluster Jewel" base_name="Small Cluster Jewel">
+		<Attribs />
+		<Crafted>
+			<Prefix>None</Prefix>
+			<Prefix>None</Prefix>
+			<Suffix>None</Suffix>
+			<Suffix>None</Suffix>
+		</Crafted>
+		<Implicits />
+		<Explicits />
+	</Item>
+</RareTemplates>

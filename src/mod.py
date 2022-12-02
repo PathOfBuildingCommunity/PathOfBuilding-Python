@@ -18,7 +18,7 @@ class Mod:
         Initialise defaults
         :param _line: the full line of the mod, including variant stanzas.
         """
-        # this is the text without {variant}, {crafted}, and {range}. At this point {range} is still present
+        # this is the text without {variant}, {crafted}. At this point {range} is still present
         self.line = re.sub(r"{variant:\d+}", "", _line.replace("{crafted}", ""))
         # this is the text with the (xx-yy), eg '% increased Duration'.
         # It is to avoid recalculating this value needlessly

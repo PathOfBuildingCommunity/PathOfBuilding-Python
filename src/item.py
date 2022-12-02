@@ -61,10 +61,11 @@ class Item:
         self.synthesised = None
         self.sockets = ""
         self.properties = {}
+        # implicit/explicit mods affecting this item with current variants
         self.implicitMods = []
-        # explicit mods affecting this item with current variants
         self.explicitMods = []
-        # all explicit mods including all variants
+        # all implicit/explicit mods including all variants
+        self.full_implicitMods_list = []
         self.full_explicitMods_list = []
         self.craftedMods = []
         self.enchantMods = []
@@ -81,6 +82,9 @@ class Item:
         self.armour_base_percentile = 0.0
         self.league = ""
         self.source = ""
+
+        # special dictionary/list for the rare template items that get imported into a build
+        self.crafted_item = {}
 
     def load_from_xml(self, xml, debug_lines=False):
         """
@@ -145,6 +149,10 @@ class Item:
                         self.limited_to = m.group(2)
                     case "Variant":
                         self.variants.append(m.group(2))
+                    case "Prefix":
+                        self.crafted_item.setdefault("Prefix", []).append(m.group(2))
+                    case "Suffix":
+                        self.crafted_item.setdefault("Suffix", []).append(m.group(2))
                     case "Implicits":
                         # implicits, if any
                         for idx in range(int(m.group(2))):
@@ -362,7 +370,8 @@ class Item:
                 if value != 0:
                     _xml.set(tag, f"{value}")
 
-        xml = ET.fromstring(f'<Item ver="2" id="{self.id}"></Item>')
+        xml = ET.fromstring(f'<Item ver="2"></Item>')
+        add_attrib_if_not_null(xml, "id", self.id)
         xml.set("title", self.title)
         xml.set("base_name", self.base_name)
         xml.set("rarity", self.rarity)
@@ -372,7 +381,7 @@ class Item:
             add_attrib_if_not_null(xml, "source", self.source)
         add_attrib_if_not_null(xml, "unique_id", self.unique_id)
         add_attrib_if_not_null(xml, "corrupted", self.corrupted)
-        # add_attrib_if_not_null(xml, "variant", self.curr_variant)
+
         # there is always an Attribs element, even if it is empty, which almost never happens
         attribs = ET.fromstring(f"<Attribs />")
         add_attrib_if_not_null(attribs, "evasion", self.evasion)
@@ -384,21 +393,35 @@ class Item:
         add_attrib_if_not_null(attribs, "limited_to", self.limited_to)
         add_attrib_if_not_null(attribs, "ilevel", self.ilevel)
         add_attrib_if_not_null(attribs, "level_req", self.level_req)
+        add_attrib_if_not_null(attribs, "quality", self.quality)
         xml.append(attribs)
-        # there is always Implicits and Explicits elements, even if they are empty
+
+        # this is for crafted items
+        if self.crafted_item:
+            crafted = ET.fromstring(f"<Crafted></Crafted>")
+            for line in self.crafted_item["Prefix"]:
+                crafted.append(ET.fromstring(f'<Prefix>{line}</Prefix>'))
+            for line in self.crafted_item["Suffix"]:
+                crafted.append(ET.fromstring(f'<Suffix>{line}</Suffix>'))
+            xml.append(crafted)
+
+        # there are always Implicits and Explicits elements, even if they are empty
         imp = ET.fromstring("<Implicits></Implicits>")
-        for mod in self.implicitMods:
+        for mod in self.full_implicitMods_list:
             imp.append(ET.fromstring(f"<Mod>{mod.text_for_xml}</Mod>"))
         xml.append(imp)
         exp = ET.fromstring("<Explicits></Explicits>")
         for mod in self.full_explicitMods_list:
             exp.append(ET.fromstring(f"<Mod>{mod.text_for_xml}</Mod>"))
         xml.append(exp)
+
         # Requires are only present if there are some
         for requirement in self.requires.keys():
             xml.append(ET.fromstring(f"<Requires>{requirement}</Requires>"))
+
         if len(self.variants) > 0:
-            var_xml = ET.fromstring(f'<Variants current="{self.curr_variant}"></Variants>')
+            var_xml = ET.fromstring(f'<Variants></Variants>')
+            add_attrib_if_not_null(var_xml, "current", self.curr_variant)
             for num, variant in enumerate(self.variants, 1):
                 # at this point (Nov2022) 'num' isn't used but it makes reading/editing the xml a little easier
                 var_xml.append(ET.fromstring(f'<Variant num="{num}">{variant}</Variant>'))
@@ -424,7 +447,6 @@ class Item:
         self.league = xml.get("league", "")
         self.source = xml.get("source", "")
         self.corrupted = str_to_bool(xml.get("corrupted", "False"))
-        # self.curr_variant = xml.get("variant", "0")
         attribs = xml.find("Attribs")
         if attribs is not None:
             self.evasion = int(attribs.get("evasion", "0"))
@@ -436,6 +458,17 @@ class Item:
             self.limited_to = attribs.get("limited_to", "")
             self.ilevel = int(attribs.get("ilevel", "0"))
             self.level_req = int(attribs.get("level_req", "0"))
+            self.quality = int(attribs.get("quality", "0"))
+        # this is for crafted items
+        crafted_xml = xml.find("Crafted")
+        if crafted_xml is not None:
+            self.crafted_item["Prefix"] = []
+            for prefix in crafted_xml.findall("Prefix"):
+                self.crafted_item["Prefix"].append(prefix.text)
+            self.crafted_item["Suffix"] = []
+            for suffix in crafted_xml.findall("Suffix"):
+                self.crafted_item["Suffix"].append(suffix.text)
+
         var_xml = xml.find("Variants")
         if var_xml is not None:
             self.curr_variant = var_xml.get("current", "1")
@@ -444,9 +477,19 @@ class Item:
             # ensure the uniques load with the latest value
             if self.curr_variant == "0" and self.rarity == "UNIQUE":
                 self.curr_variant = f"{len(self.variants)}"
+
         imp = xml.find("Implicits")
         for mod_xml in imp.findall("Mod"):
-            self.implicitMods.append(Mod(mod_xml.text))
+            line = mod_xml.text
+            mod = Mod(mod_xml.text)
+            self.full_implicitMods_list.append(mod)
+            # check for variants and if it's our variant, add it to the smaller implicit mod list
+            if "variant" in line:
+                m = re.search(r"{variant:([\d,]+)}(.*)", line)
+                if self.curr_variant in m.group(1).split(","):
+                    self.implicitMods.append(mod)
+            else:
+                self.implicitMods.append(mod)
         exp = xml.find("Explicits")
         for mod_xml in exp.findall("Mod"):
             line = mod_xml.text
@@ -457,11 +500,9 @@ class Item:
                 m = re.search(r"{variant:([\d,]+)}(.*)", line)
                 if self.curr_variant in m.group(1).split(","):
                     self.explicitMods.append(mod)
-                # for var in m.group(1).split(","):
-                #     if var == self.curr_variant:
-                #         self.explicitMods.append(mod)
             else:
                 self.explicitMods.append(mod)
+
         for requirement in xml.findall("Requires"):
             self.requires[requirement.text] = True
         # load_from_xml_v2

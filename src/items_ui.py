@@ -176,8 +176,13 @@ class ItemsUI:
         self.hide_equipped_items_slot_ui("Weapon 2 Swap", hidden=True)
         self.win.groupbox_SocketedJewels.setVisible(False)
 
-        """Reformat the xml from the lua. Temporary"""
-        # self.rewrite_uniques_xml()
+        """Reformat the xml that came from the lua. Temporary"""
+        # self.rewrite_flat_files_to_xml()
+
+        self.uniques_items = {}
+        self.load_unique_items()
+        self.rare_template_items = []
+        self.load_rare_template_items()
 
     def connect_item_triggers(self):
         """re-connect triggers"""
@@ -286,19 +291,37 @@ class ItemsUI:
                 if slot.type == item.type or (item.type == "Shield" and "Weapon 2" in slot.title):
                     slot.add_item(item)
 
-    def rewrite_uniques_xml(self):
+    def load_unique_items(self):
+        u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
+        for xml_item_type in list(u_xml.getroot()):
+            self.uniques_items[xml_item_type.tag] = []
+            for xml_item in xml_item_type.findall("Item"):
+                new_item = Item(self.base_items)
+                new_item.load_from_xml_v2(xml_item)
+                new_item.rarity = "UNIQUE"
+                self.uniques_items[xml_item_type.tag].append(new_item)
+
+    def load_rare_template_items(self):
+        t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates.xml"))
+        for xml_item in t_xml.getroot().findall("Item"):
+            new_item = Item(self.base_items)
+            new_item.load_from_xml_v2(xml_item)
+            new_item.rarity = "RARE"
+            self.rare_template_items.append(new_item)
+
+    def rewrite_flat_files_to_xml(self):
         """Reformat the xml from the lua. Temporary"""
 
         uniques = {}
         u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques_flat.xml"))
-        for child in list(u_xml.getroot()):
-            # print(child.tag)
-            uniques[child.tag] = []
-            for _item in child.findall("Item"):
+        for item_type in list(u_xml.getroot()):
+            # print(item_type.tag)
+            uniques[item_type.tag] = []
+            for _item in item_type.findall("Item"):
                 new_item = Item(self.base_items)
                 new_item.load_from_xml(_item)
                 new_item.rarity = "UNIQUE"
-                uniques[child.tag].append(new_item)
+                uniques[item_type.tag].append(new_item)
         new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
         new_root = new_xml.getroot()
         new_root.insert(
@@ -315,25 +338,28 @@ class ItemsUI:
             for item in item_type:
                 # we don't want to add extra work for when we are manually updating uniques.xml
                 item.curr_variant = ""
-                child_xml.append(item.save_v2())
+                item_xml = item.save_v2()
+                item_xml.attrib.pop("rarity", None)
+                child_xml.append(item_xml)
             new_root.append(child_xml)
-
         write_xml("Data/uniques.xml", new_xml)
 
-        # u = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
-        # for child in list(u.getroot()):
-        #     for _item in child.findall("Item"):
-        #         # if "Implicits:" not in _item.text:
-        #         #     lines = [y for y in (x.strip() for x in _item.text.splitlines()) if y]
-        #         #     print(lines[0])
-        #         lines = [y for y in (x.strip() for x in _item.text.splitlines()) if y]
-        #         count = 0
-        #         for line in lines:
-        #             if "Implicits:" in line:
-        #                 count += 1
-        #                 print(count, lines[0])
-        #         print()
-        # write_xml("c:/git/PathOfBuilding-Python/src/Data/uniques2.xml", u)
+        templates = []
+        t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates_flat.xml"))
+        _xml_root = t_xml.getroot()
+        for xml_item in t_xml.getroot().findall("Item"):
+            new_item = Item(self.base_items)
+            new_item.load_from_xml(xml_item)
+            new_item.rarity = "RARE"
+            templates.append(new_item)
+        new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><RareTemplates></RareTemplates>"))
+        new_root = new_xml.getroot()
+        for item in templates:
+            # we don't want to add extra work for when we are manually updating uniques.xml
+            item_xml = item.save_v2()
+            item_xml.attrib.pop("rarity", None)
+            new_root.append(item_xml)
+        write_xml("Data/rare_templates.xml", new_xml)
 
     def add_item_to_itemlist_widget(self, _item):
         """
