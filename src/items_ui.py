@@ -312,37 +312,37 @@ class ItemsUI:
     def rewrite_flat_files_to_xml(self):
         """Reformat the xml from the lua. Temporary"""
 
-        uniques = {}
-        u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques_flat.xml"))
-        for item_type in list(u_xml.getroot()):
-            # print(item_type.tag)
-            uniques[item_type.tag] = []
-            for _item in item_type.findall("Item"):
-                new_item = Item(self.base_items)
-                new_item.load_from_xml(_item)
-                new_item.rarity = "UNIQUE"
-                uniques[item_type.tag].append(new_item)
-        new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
-        new_root = new_xml.getroot()
-        new_root.insert(
-            1,
-            ET.Comment(
-                " === At this point in time (Nov2022), variants on item types is not supported. "
-                "Items are duplicated instead === "
-            ),
-        )
-        for child_tag in uniques:
-            # print(child_tag)
-            child_xml = ET.fromstring(f"<{child_tag} />")
-            item_type = uniques[child_tag]
-            for item in item_type:
-                # we don't want to add extra work for when we are manually updating uniques.xml
-                item.curr_variant = ""
-                item_xml = item.save_v2()
-                item_xml.attrib.pop("rarity", None)
-                child_xml.append(item_xml)
-            new_root.append(child_xml)
-        write_xml("Data/uniques.xml", new_xml)
+        # uniques = {}
+        # u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques_flat.xml"))
+        # for item_type in list(u_xml.getroot()):
+        #     # print(item_type.tag)
+        #     uniques[item_type.tag] = []
+        #     for _item in item_type.findall("Item"):
+        #         new_item = Item(self.base_items)
+        #         new_item.load_from_xml(_item)
+        #         new_item.rarity = "UNIQUE"
+        #         uniques[item_type.tag].append(new_item)
+        # new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
+        # new_root = new_xml.getroot()
+        # new_root.insert(
+        #     1,
+        #     ET.Comment(
+        #         " === At this point in time (Nov2022), variants on item types is not supported. "
+        #         "Items are duplicated instead === "
+        #     ),
+        # )
+        # for child_tag in uniques:
+        #     # print(child_tag)
+        #     child_xml = ET.fromstring(f"<{child_tag} />")
+        #     item_type = uniques[child_tag]
+        #     for item in item_type:
+        #         # we don't want to add extra work for when we are manually updating uniques.xml
+        #         item.curr_variant = ""
+        #         item_xml = item.save_v2()
+        #         item_xml.attrib.pop("rarity", None)
+        #         child_xml.append(item_xml)
+        #     new_root.append(child_xml)
+        # write_xml("Data/uniques.xml", new_xml)
 
         templates = []
         t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates_flat.xml"))
