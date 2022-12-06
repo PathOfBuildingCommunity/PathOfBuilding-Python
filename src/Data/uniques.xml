@@ -14889,7 +14889,7 @@
 				<Variant num="2">Pre 3.17.0</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Sudden Ignition" base_name="Viridian Jewel" source="No longer obtainable" source="No longer obtainable">
+		<Item ver="2" title="Sudden Ignition" base_name="Viridian Jewel" source="No longer obtainable">
 			<Attribs limited_to="1" radius="Medium" />
 			<Implicits />
 			<Explicits>
@@ -15405,7 +15405,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Survival Secrets" base_name="Cobalt Jewel" source="No longer obtainable" source="No longer obtainable">
+		<Item ver="2" title="Survival Secrets" base_name="Cobalt Jewel" source="No longer obtainable">
 			<Attribs limited_to="1 Survival" />
 			<Implicits />
 			<Explicits>

@@ -82,6 +82,7 @@ class Item:
         self.armour_base_percentile = 0.0
         self.league = ""
         self.source = ""
+        self.radius = ""
 
         # special dictionary/list for the rare template items that get imported into a build
         self.crafted_item = {}
@@ -394,6 +395,7 @@ class Item:
         add_attrib_if_not_null(attribs, "ilevel", self.ilevel)
         add_attrib_if_not_null(attribs, "level_req", self.level_req)
         add_attrib_if_not_null(attribs, "quality", self.quality)
+        add_attrib_if_not_null(attribs, "radius", self.radius)
         xml.append(attribs)
 
         # this is for crafted items
@@ -459,6 +461,7 @@ class Item:
             self.ilevel = int(attribs.get("ilevel", "0"))
             self.level_req = int(attribs.get("level_req", "0"))
             self.quality = int(attribs.get("quality", "0"))
+            self.radius = attribs.get("quality", "")
         # this is for crafted items
         crafted_xml = xml.find("Crafted")
         if crafted_xml is not None:
