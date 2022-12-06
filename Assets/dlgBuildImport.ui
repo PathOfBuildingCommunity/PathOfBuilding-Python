@@ -434,22 +434,23 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>lineedit_BuildShare</tabstop>
+  <tabstop>btn_ImportBuildSharing</tabstop>
+  <tabstop>btn_Close</tabstop>
   <tabstop>combo_Realm</tabstop>
   <tabstop>lineedit_Account</tabstop>
   <tabstop>btn_StartImport</tabstop>
   <tabstop>comboAccount_History</tabstop>
   <tabstop>combo_League</tabstop>
+  <tabstop>combo_Import</tabstop>
   <tabstop>combo_CharList</tabstop>
+  <tabstop>check_DeleteJewels</tabstop>
+  <tabstop>check_DeleteItems</tabstop>
+  <tabstop>check_DeleteSkills</tabstop>
   <tabstop>btn_ImportAll</tabstop>
   <tabstop>btn_TreeJewels</tabstop>
   <tabstop>btn_Items</tabstop>
-  <tabstop>check_DeleteJewels</tabstop>
-  <tabstop>check_DeleteSkills</tabstop>
-  <tabstop>check_DeleteItems</tabstop>
-  <tabstop>lineedit_BuildShare</tabstop>
-  <tabstop>combo_Import</tabstop>
-  <tabstop>btn_ImportBuildSharing</tabstop>
-  <tabstop>btn_Close</tabstop>
+  <tabstop>btn_Skills</tabstop>
  </tabstops>
  <resources>
   <include location="PoB.qrc"/>

@@ -88,6 +88,7 @@ class ImportDlg(Ui_Dialog, QDialog):
         self.comboAccount_History.currentTextChanged.connect(self.change_account_name)
         self.combo_League.currentTextChanged.connect(self.change_league_name)
         self.combo_Import.currentTextChanged.connect(self.change_import_selection_data)
+        self.lineedit_BuildShare.setFocus()
 
     @property
     def status(self):
