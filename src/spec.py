@@ -5,12 +5,12 @@ import xml.etree.ElementTree as ET
 import base64
 import re
 
-from constants import default_spec, PlayerClasses, _VERSION_str
+from constants import default_spec, PlayerClasses, _VERSION, _VERSION_str
 from pob_config import print_call_stack, print_a_xml_element
 
 
 class Spec:
-    def __init__(self, build, _spec=None) -> None:
+    def __init__(self, build, _spec=None, version=_VERSION_str) -> None:
         """
         Represents one Spec in the XML. Most simple settings are properties.
 
@@ -21,6 +21,7 @@ class Spec:
         self.def_spec = ET.fromstring(default_spec)
         if _spec is None:
             _spec = self.def_spec
+            _spec.set("treeVersion", version)
         self.xml_spec = _spec
 
         # remove editedNodes if found

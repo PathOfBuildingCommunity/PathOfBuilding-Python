@@ -402,9 +402,9 @@ class Item:
         if self.crafted_item:
             crafted = ET.fromstring(f"<Crafted></Crafted>")
             for line in self.crafted_item["Prefix"]:
-                crafted.append(ET.fromstring(f'<Prefix>{line}</Prefix>'))
+                crafted.append(ET.fromstring(f"<Prefix>{line}</Prefix>"))
             for line in self.crafted_item["Suffix"]:
-                crafted.append(ET.fromstring(f'<Suffix>{line}</Suffix>'))
+                crafted.append(ET.fromstring(f"<Suffix>{line}</Suffix>"))
             xml.append(crafted)
 
         # there are always Implicits and Explicits elements, even if they are empty
@@ -422,13 +422,14 @@ class Item:
             xml.append(ET.fromstring(f"<Requires>{requirement}</Requires>"))
 
         if len(self.variants) > 0:
-            var_xml = ET.fromstring(f'<Variants></Variants>')
+            var_xml = ET.fromstring(f"<Variants></Variants>")
             add_attrib_if_not_null(var_xml, "current", self.curr_variant)
             for num, variant in enumerate(self.variants, 1):
                 # at this point (Nov2022) 'num' isn't used but it makes reading/editing the xml a little easier
                 var_xml.append(ET.fromstring(f'<Variant num="{num}">{variant}</Variant>'))
             xml.append(var_xml)
         return xml
+
     # save_v2
 
     def load_from_xml_v2(self, xml):

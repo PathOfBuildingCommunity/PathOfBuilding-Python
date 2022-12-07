@@ -429,17 +429,18 @@ class Build:
         self.tree.remove(xml_spec)
         self.tree.insert(destination, xml_spec)
 
-    def new_spec(self, new_title="", xml_spec=None, destination=-1):
+    def new_spec(self, new_title="", version=_VERSION_str, xml_spec=None, destination=-1):
         """
         Add a new empty tree/Spec
 
         :param new_title: str
+        :param version: float: the version number of this spec. Default to the default Tree version
         :param xml_spec: ET.elementtree: If specified, the new x,l representation
         :param destination: int: If specified, insert the new spec at destination elsewise append to the end
         :return: Spec(): the newly created Spec()
         """
         # print("build.new_spec")
-        spec = Spec(self, xml_spec)
+        spec = Spec(self, xml_spec, version)
         if new_title != "":
             spec.title = new_title
         if destination == -1:
@@ -460,9 +461,9 @@ class Build:
         """
         # print("build.copy_spec")
         # converting to a string ensures it is copied and not one element that is shared.
-        # internet rumour indicate .clone() and .copy() may not be good enough
+        # internet rumour indicates .clone() and .copy() may not be good enough
         new_xml_spec = ET.fromstring(ET.tostring(self.specs[source].xml_spec))
-        return self.new_spec("", new_xml_spec, destination)
+        return self.new_spec(new_title="", xml_spec=new_xml_spec, destination=destination)
 
     def convert_spec(self, source, destination):
         """

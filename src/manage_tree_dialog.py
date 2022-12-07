@@ -14,7 +14,7 @@ from qdarktheme.qtpy.QtWidgets import QDialog
 from dlg_ManageTree import Ui_Dialog
 from build import Build
 from constants import _VERSION, _VERSION_str
-from popup_dialogs import yes_no_dialog
+from popup_dialogs import yes_no_dialog, NewTreePopup
 
 
 class ManageTreeDlg(Ui_Dialog, QDialog):
@@ -41,7 +41,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         self.add_detail_to_spec_names()
 
         self.btnConvert.setToolTip(self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}"))
-        self.btnNew.setToolTip(self.btnNew.toolTip().replace("_VERSION", f"{_VERSION}"))
+        # self.btnNew.setToolTip(self.btnNew.toolTip().replace("_VERSION", f"{_VERSION}"))
 
         self.btnNew.clicked.connect(self.new_spec)
         self.btnCopy.clicked.connect(self.duplicate_specs)
@@ -152,8 +152,13 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
     def new_spec(self):
         """Add a new empty tree to the list"""
         # print("new_spec")
-        spec = self.build.new_spec("New tree, Rename Me")
-        self.list_Trees.addItem(spec.title)
+        dlg = NewTreePopup(self.build.pob_config.app.tr)
+        _return = dlg.exec()
+        new_name = dlg.lineedit.text()
+        version = dlg.combo_tree_version.currentData()
+        if _return and new_name != "":
+            spec = self.build.new_spec(new_name, version)
+            self.list_Trees.addItem(spec.title)
 
     @Slot()
     def list_item_changed(self, item):

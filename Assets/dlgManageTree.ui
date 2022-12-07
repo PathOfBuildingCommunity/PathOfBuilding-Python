@@ -67,7 +67,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="toolTip">
-    <string>New _VERSION tree.  (Ctrl-N)</string>
+    <string>New tree.  (Ctrl-N)</string>
    </property>
    <property name="text">
     <string>&amp;New</string>

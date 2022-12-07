@@ -5,7 +5,7 @@ This class represents an instance of the Passive Tree for **ONE** tree version.
 Multiple versions of Trees can exist in a single Build (at various progress levels;
 at different Jewel/Cluster itemisations, etc.), so there could be multiple instantiations of this class.
 
-A Tree instance is tied to a Version of the Tree as released by GGG (eg: 3.18).
+A Tree() instance is tied to a Version of the Tree as released by GGG (eg: 3.18).
 
 This holds, in memory, a copy of the tree data and doesn't know about any actively selected nodes.
   That's the Build class' job.
@@ -426,6 +426,9 @@ class Tree:
             sprite.node_sd = node.sd
             sprite.node_name = node.name
             sprite.node_type = node.type
+            sprite.node_reminder = node.reminderText
+            # sprite.node_tooltip = node.tooltip
+
             return sprite
 
         node.inactive_sprite = None

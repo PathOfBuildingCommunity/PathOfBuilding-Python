@@ -201,7 +201,7 @@ class TreeUI:
 
         :return: N/A
         """
-        dlg = ImportTreePopup(self.pob_config.app.tr)
+        dlg = ImportTreePopup(self.config.app.tr)
         _return = dlg.exec()
         if _return:
             url = dlg.lineedit.text()
@@ -226,7 +226,7 @@ class TreeUI:
         """Export the current nodes as a URL"""
         url = self.build.current_spec.export_nodes_to_url()
         self.build.current_spec.URL = url
-        dlg = ExportTreePopup(self.pob_config.app.tr, url, self.win)
+        dlg = ExportTreePopup(self.config.app.tr, url, self.win)
         # we don't care about how the user exits
         dlg.exec()
 

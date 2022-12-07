@@ -9,6 +9,7 @@ import requests
 from qdarktheme.qtpy.QtCore import Slot, Qt, QSize
 from qdarktheme.qtpy.QtGui import QGuiApplication, QIcon
 from qdarktheme.qtpy.QtWidgets import (
+    QComboBox,
     QDialog,
     QDialogButtonBox,
     QLabel,
@@ -17,10 +18,11 @@ from qdarktheme.qtpy.QtWidgets import (
     QListWidgetItem,
     QMessageBox,
     QPushButton,
+    QHBoxLayout,
     QVBoxLayout,
 )
 
-from constants import ColourCodes, _VERSION_str, http_headers
+from constants import ColourCodes, _VERSION_str, http_headers, tree_versions
 from ui_utils import HTMLDelegate, html_colour_text
 
 
@@ -289,3 +291,47 @@ class ExportTreePopup(QDialog):
             self.btn_shrink.setText(self.shrink_text)
             print(f"Error accessing 'http://poeurl.com': {e}.")
         self.set_lineedit_selection()
+
+
+"""######## NewTreePopup. Export a passive Tree URL ########"""
+
+
+class NewTreePopup(QDialog):
+    def __init__(self, tr):
+        """
+        Initialize
+        :param tr: App translate function
+        """
+        super().__init__()
+        # self.label_intro_text = tr("New passive tree.")
+        self.setWindowTitle(tr("New passive tree"))
+        self.setWindowIcon(QIcon(":/Art/Icons/tree--pencil.png"))
+
+        # self.label = QLabel(self.label_intro_text)
+        self.lineedit = QLineEdit()
+        self.lineedit.setMinimumWidth(400)
+        self.lineedit.setPlaceholderText("New tree, Rename Me")
+        # self.lineedit.textChanged.connect(self.validate_url)
+        self.combo_tree_version = QComboBox()
+        for ver in tree_versions.keys():
+            # self.combo_tree_version.addItem(ver)
+            self.combo_tree_version.addItem(f"{ver:.2f}", tree_versions[ver])
+        self.combo_tree_version.setCurrentIndex(len(tree_versions) - 1)
+
+        self.btn_exit = QPushButton("Don't Save")
+        # self.btn_exit.setEnabled(False)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Save)
+        self.button_box.rejected.connect(self.reject)
+        self.button_box.accepted.connect(self.accept)
+        self.button_box.addButton(self.btn_exit, QDialogButtonBox.RejectRole)
+        self.button_box.setCenterButtons(True)
+
+        self.hlayout = QHBoxLayout()
+        # self.hlayout.addWidget(self.label)
+        self.hlayout.addWidget(self.lineedit)
+        self.hlayout.addWidget(self.combo_tree_version)
+
+        self.vlayout = QVBoxLayout()
+        self.vlayout.addLayout(self.hlayout)
+        self.vlayout.addWidget(self.button_box)
+        self.setLayout(self.vlayout)

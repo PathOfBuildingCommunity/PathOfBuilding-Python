@@ -39,9 +39,11 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         # these are to have a fast way for a graphic item to identify its owner node's params. Used by mouse events
         # Maybe have just the node reference ?
         self.node_id = 0
+        self.node_tooltip = ""
         self.node_sd = ""
         self.node_name = ""
         self.node_type = ""
+        self.node_reminder = ""
         self.node_isoverlay = False
 
         # turn all those data's into properties ?
@@ -63,8 +65,12 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         :return: str: the tooltip
         """
         tool_tip = self.node_name and f"{self.node_name}, {self.node_id}" or f"{self.node_id}"
-        tool_tip += self.filename and f", {self.filename}" or ""
         tool_tip += self.data and f", {self.data}" or ""
+        if self.node_sd != "":
+            for line in self.node_sd:
+                tool_tip += f"\n{line}"
+        tool_tip += self.node_reminder and f"\n{self.node_reminder}" or ""
+        tool_tip += self.filename and f"\n{self.filename}" or ""
         return tool_tip
 
     # not sure if this is needed

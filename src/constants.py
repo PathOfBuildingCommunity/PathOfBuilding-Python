@@ -13,7 +13,12 @@ global_scale_factor = 2.5
 pob_debug = True
 
 _VERSION = 3.19
-_VERSION_str = "3_19"
+tree_versions = {
+    3.18: "3_18",
+    3.19: "3_19",
+    3.20: "3_20",
+}
+_VERSION_str = tree_versions[_VERSION]
 
 # http_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'}
 http_headers = {"User-Agent": "Path of Building Community - Python", "Accept": ""}
@@ -32,7 +37,7 @@ default_spec = f'\
     <Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}">\
     </Spec>'
 
-default_view_mode = "ITEMS"
+default_view_mode = "TREE"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
