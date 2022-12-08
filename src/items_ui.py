@@ -508,7 +508,7 @@ class ItemsUI:
 
         :return: N/A
         """
-        _debug("clear_controls")
+        # _debug("clear_controls")
         if loading:
             self.win.list_Items.clear()
             self.itemlist_by_id.clear()
@@ -535,7 +535,7 @@ class ItemsUI:
         :param initial: bool: Only set during loading
         :return:
         """
-        _debug("show_itemset", _itemset)
+        # _debug("show_itemset", _itemset)
         if 0 <= _itemset < len(self.xml_itemsets):
             if not initial:
                 self.save()

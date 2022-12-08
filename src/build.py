@@ -44,8 +44,8 @@ class Build:
         self.need_saving = True
         self.current_tab = "TREE"
         # Load the default tree into the array
-        self.trees = {_VERSION: Tree(self.pob_config)}
-        self.current_tree = self.trees.get(_VERSION)
+        self.trees = {_VERSION_str: Tree(self.pob_config, _VERSION_str)}
+        self.current_tree = self.trees.get(_VERSION_str)
         # list of specs in this build
         self.specs = []
         self.activeSpec = 0
@@ -384,11 +384,17 @@ class Build:
         if tree_id is None:
             return True
         new_spec = self.specs[tree_id]
-        full_clear = self.current_spec.treeVersion != new_spec.treeVersion
+        different_version = self.current_spec.treeVersion != new_spec.treeVersion
+        if different_version:
+            # Check if this version is loaded
+            if self.trees.get(new_spec.treeVersion, None) is None:
+                self.trees[new_spec.treeVersion] = Tree(self.pob_config, new_spec.treeVersion)
+        self.current_tree = self.trees[new_spec.treeVersion]
+
         self.activeSpec = tree_id
         self.current_spec = new_spec
         self.count_allocated_nodes()
-        return full_clear
+        return different_version
 
     def check_socket_group_for_an_active_gem(self, _sg):
         """

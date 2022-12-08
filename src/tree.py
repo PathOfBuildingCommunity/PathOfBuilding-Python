@@ -23,7 +23,15 @@ from qdarktheme.qtpy.QtWidgets import QGraphicsLineItem
 
 import ui_utils
 from pob_config import Config, _debug
-from constants import _VERSION, global_scale_factor, Layers, ascendancy_positions, ColourCodes, PlayerClasses
+from constants import (
+    ColourCodes,
+    Layers,
+    PlayerClasses,
+    _VERSION_str,
+    ascendancy_positions,
+    global_scale_factor,
+    tree_versions,
+)
 import pob_file
 
 from tree_graphics_item import TreeGraphicsItem
@@ -111,7 +119,7 @@ def calc_orbit_angles(nodes_in_orbit):
 
 
 class Tree:
-    def __init__(self, _config: Config, _version: str = _VERSION) -> None:
+    def __init__(self, _config: Config, _version: str = _VERSION_str) -> None:
         # declare variables that are set in functions
         self.config = _config
         self.version = _version
@@ -218,13 +226,13 @@ class Tree:
             self.lines.append(line)
         return line
 
-    def load(self, vers=_VERSION):
+    def load(self):
         """
-        Load the tree json of a given version and process it
-        :param vers: The version of the tree to load
+        Load the tree json of this Tree()'s version and process it
+
         :return:
         """
-        print(f"Loading Tree: {vers}")
+        print(f"Loading Tree: {tree_versions[self.version]}")
         json_dict = OrderedDict(pob_file.read_json(self.json_file_path))
         if json_dict is None:
             tr = self.config.app.tr
@@ -236,7 +244,6 @@ class Tree:
             )
             return
 
-        self._version = vers
         self.min_x = json_dict["min_x"] / global_scale_factor
         self.min_y = json_dict["min_y"] / global_scale_factor
         self.max_x = json_dict["max_x"] / global_scale_factor
@@ -244,7 +251,7 @@ class Tree:
         self.total_points = json_dict["points"]["totalPoints"]
         self.ascendancy_points = json_dict["points"]["ascendancyPoints"]
         # and now split the file into dicts
-        if self._version < 3.18:
+        if float(tree_versions[self.version]) < 3.18:
             self.assets = json_dict["assets"]
             # this information is moved into self.spriteMap
             skill_sprites = json_dict["skillSprites"]

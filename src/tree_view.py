@@ -317,6 +317,7 @@ class TreeView(QGraphicsView):
         tree = self.build.current_tree
         # do not use self.clear as it deletes the graphics assets from memory
         if full_clear:
+            # don't delete the images for the nodes as they are owned by the relevant Tree() class.
             for item in self.items():
                 self._scene.removeItem(item)
             # inactive tree assets

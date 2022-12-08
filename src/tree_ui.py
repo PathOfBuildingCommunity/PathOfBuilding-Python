@@ -8,7 +8,7 @@ from qdarktheme.qtpy.QtCore import QCoreApplication, Qt, Slot, QSize
 from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
 
 from PoB_Main_Window import Ui_MainWindow
-from constants import _VERSION, PlayerClasses, _VERSION_str
+from constants import tree_versions, PlayerClasses, _VERSION_str
 from pob_config import Config, _debug, print_call_stack
 from flow_layout import FlowLayout
 from manage_tree_dialog import ManageTreeDlg
@@ -170,7 +170,7 @@ class TreeUI:
         for idx, spec in enumerate(self.build.specs):
             if spec is not None:
                 if spec.treeVersion != _VERSION_str:
-                    title = f"[{spec.treeVersion}] {spec.title}"
+                    title = f"[{tree_versions[spec.treeVersion]}] {spec.title}"
                 else:
                     title = spec.title
                 self.combo_manage_tree.addItem(title, idx)

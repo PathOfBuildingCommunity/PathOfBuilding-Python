@@ -314,8 +314,7 @@ class NewTreePopup(QDialog):
         # self.lineedit.textChanged.connect(self.validate_url)
         self.combo_tree_version = QComboBox()
         for ver in tree_versions.keys():
-            # self.combo_tree_version.addItem(ver)
-            self.combo_tree_version.addItem(f"{ver:.2f}", tree_versions[ver])
+            self.combo_tree_version.addItem(tree_versions[ver], ver)
         self.combo_tree_version.setCurrentIndex(len(tree_versions) - 1)
 
         self.btn_exit = QPushButton("Don't Save")

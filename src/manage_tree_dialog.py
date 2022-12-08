@@ -5,15 +5,12 @@ Open a dialog for importing a character.
 """
 
 import urllib3
-import re
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QDialog
 
-# from qdarktheme.qtpy.QtGui import
-
 from dlg_ManageTree import Ui_Dialog
 from build import Build
-from constants import _VERSION, _VERSION_str
+from constants import _VERSION, _VERSION_str, tree_versions
 from popup_dialogs import yes_no_dialog, NewTreePopup
 
 
@@ -41,7 +38,6 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         self.add_detail_to_spec_names()
 
         self.btnConvert.setToolTip(self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}"))
-        # self.btnNew.setToolTip(self.btnNew.toolTip().replace("_VERSION", f"{_VERSION}"))
 
         self.btnNew.clicked.connect(self.new_spec)
         self.btnCopy.clicked.connect(self.duplicate_specs)
@@ -75,7 +71,9 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         """
         self.disconnect_triggers()
         for idx, spec in enumerate(self.build.specs):
-            text = spec.treeVersion != _VERSION_str and f"[{spec.treeVersion}] {spec.title}" or spec.title
+            text = (
+                spec.treeVersion != _VERSION_str and f"[{tree_versions[spec.treeVersion]}] {spec.title}" or spec.title
+            )
             text += f" ({spec.ascendClassId_str()}, {len(spec.nodes)} points)"
             self.list_Trees.item(idx).setText(text)
         self.connect_triggers()
@@ -191,7 +189,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         :param previous: QListWidgetItem:
         :return: N/A
         """
-        print("list_current_item_changed")
+        # print("list_current_item_changed")
         if self.item_being_edited == previous:
             self.list_item_changed(previous)
             # Abandon previous edit
