@@ -297,16 +297,14 @@ class ItemsUI:
             self.uniques_items[xml_item_type.tag] = []
             for xml_item in xml_item_type.findall("Item"):
                 new_item = Item(self.base_items)
-                new_item.load_from_xml_v2(xml_item)
-                new_item.rarity = "UNIQUE"
+                new_item.load_from_xml_v2(xml_item, "UNIQUE")
                 self.uniques_items[xml_item_type.tag].append(new_item)
 
     def load_rare_template_items(self):
         t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates.xml"))
         for xml_item in t_xml.getroot().findall("Item"):
             new_item = Item(self.base_items)
-            new_item.load_from_xml_v2(xml_item)
-            new_item.rarity = "RARE"
+            new_item.load_from_xml_v2(xml_item, "RARE")
             self.rare_template_items.append(new_item)
 
     def rewrite_flat_files_to_xml(self):
@@ -324,13 +322,6 @@ class ItemsUI:
         #         uniques[item_type.tag].append(new_item)
         # new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
         # new_root = new_xml.getroot()
-        # new_root.insert(
-        #     1,
-        #     ET.Comment(
-        #         " === At this point in time (Nov2022), variants on item types is not supported. "
-        #         "Items are duplicated instead === "
-        #     ),
-        # )
         # for child_tag in uniques:
         #     # print(child_tag)
         #     child_xml = ET.fromstring(f"<{child_tag} />")
@@ -344,22 +335,22 @@ class ItemsUI:
         #     new_root.append(child_xml)
         # write_xml("Data/uniques.xml", new_xml)
 
-        templates = []
-        t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates_flat.xml"))
-        _xml_root = t_xml.getroot()
-        for xml_item in t_xml.getroot().findall("Item"):
-            new_item = Item(self.base_items)
-            new_item.load_from_xml(xml_item)
-            new_item.rarity = "RARE"
-            templates.append(new_item)
-        new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><RareTemplates></RareTemplates>"))
-        new_root = new_xml.getroot()
-        for item in templates:
-            # we don't want to add extra work for when we are manually updating uniques.xml
-            item_xml = item.save_v2()
-            item_xml.attrib.pop("rarity", None)
-            new_root.append(item_xml)
-        write_xml("Data/rare_templates.xml", new_xml)
+        # templates = []
+        # t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates_flat.xml"))
+        # _xml_root = t_xml.getroot()
+        # for xml_item in t_xml.getroot().findall("Item"):
+        #     new_item = Item(self.base_items)
+        #     new_item.load_from_xml(xml_item)
+        #     new_item.rarity = "RARE"
+        #     templates.append(new_item)
+        # new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><RareTemplates></RareTemplates>"))
+        # new_root = new_xml.getroot()
+        # for item in templates:
+        #     # we don't want to add extra work for when we are manually updating uniques.xml
+        #     item_xml = item.save_v2()
+        #     item_xml.attrib.pop("rarity", None)
+        #     new_root.append(item_xml)
+        # write_xml("Data/rare_templates.xml", new_xml)
 
     def add_item_to_itemlist_widget(self, _item):
         """

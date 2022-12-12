@@ -30,16 +30,16 @@ class Mod:
             return
 
         # value for managing the range of values. EG: 20-40% of ... _range will be between 0 and 1
-        self._range = None
-        self.min = None
-        self.max = None
+        self._range = -1
+        self.min = 0
+        self.max = 0
         # the actual value of the mod, where valid. EG: if _range is 0.5, then this will be 30%
-        self.value = None
+        self.value = 0
 
         self.crafted = "{crafted}" in _line
         self.tooltip_colour = self.crafted and ColourCodes.CRAFTED.value or ColourCodes.MAGIC.value
         # preformed text for adding to the tooltip. Let's set a default in case there is no 'range'
-        self.tooltip = f"{html_colour_text(self.tooltip_colour,self.line)}<br/>"
+        self.tooltip = f"{html_colour_text(self.tooltip_colour, self.line)}<br/>"
 
         # check for and keep variant information
         m = re.search(r"({variant:\d+})", _line)
@@ -49,9 +49,9 @@ class Mod:
         tooltip = self.line
         m1 = re.search(r"{range:([0-9.]+)}(.*)", tooltip)
         if m1:
-            # this is now stripped of the (xx-yy)
+            # this is now stripped of the {range:n}
             self.line = m1.group(2)
-            m2 = re.search(r"([0-9.]+)-([0-9.]+)(.*)", self.line)
+            m2 = re.search(r"\(([0-9.]+)-([0-9.]+)\)(.*)", self.line)
             if m2:
                 self.min = float(m2.group(1))
                 self.max = float(m2.group(2))
@@ -64,10 +64,12 @@ class Mod:
     @property
     def text_for_xml(self):
         """Return the text formatted for the xml output"""
-        return (
-            f'{self.variant_text and self.variant_text or ""}{self.crafted and "{crafted}" or ""}'
-            f'{self.range and f"{{range:{self.range}}}" or ""}{self.line.replace("&", "&amp;")}'
-        )
+        text = f'{self.variant_text and self.variant_text or ""}{self.crafted and "{crafted}" or ""}'
+        if self.range >= 0:
+            r = f"range:{self.range}".rstrip("0").rstrip(".")
+            text += f"{{{r}}}"
+        text += f'{self.line.replace("&", "&amp;")}'
+        return text
 
     @property
     def range(self):
