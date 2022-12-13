@@ -250,16 +250,16 @@ class Build:
         # if we get here, the key/ name combo was not found, lets make one and add it
         self.config.append(ET.fromstring(f'<{key} name="{name}" {value_type}="{new_value}" />'))
 
-    def new(self, _build_tree):
+    def new(self, _build_xml):
         """
         common function to load internal variables from the dictionary
 
-        :param _build_tree: xml tree object from loading the source XML or the default one
+        :param _build_xml: xml tree object from loading the source XML or the default one
         :return: N/A
         """
         self.name = "Default"
-        self.build_xml = _build_tree
-        self.root = _build_tree.getroot()
+        self.build_xml = _build_xml
+        self.root = _build_xml.getroot()
         self.build = self.root.find("Build")
         self.import_field = self.root.find("Import")
         self.calcs = self.root.find("Calcs")
@@ -385,10 +385,9 @@ class Build:
             return True
         new_spec = self.specs[tree_id]
         different_version = self.current_spec.treeVersion != new_spec.treeVersion
-        if different_version:
-            # Check if this version is loaded
-            if self.trees.get(new_spec.treeVersion, None) is None:
-                self.trees[new_spec.treeVersion] = Tree(self.pob_config, new_spec.treeVersion)
+        # Check if this version is loaded
+        if self.trees.get(new_spec.treeVersion, None) is None:
+            self.trees[new_spec.treeVersion] = Tree(self.pob_config, new_spec.treeVersion)
         self.current_tree = self.trees[new_spec.treeVersion]
 
         self.activeSpec = tree_id
