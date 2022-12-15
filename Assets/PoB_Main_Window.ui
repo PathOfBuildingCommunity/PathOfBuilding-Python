@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1220</width>
-    <height>804</height>
+    <width>1442</width>
+    <height>801</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -58,8 +58,8 @@ QAction {padding-left: 2px;}</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1280</width>
-         <height>708</height>
+         <width>1440</width>
+         <height>722</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -262,7 +262,7 @@ hr { height: 1px; border-width: 0; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>2</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -431,42 +431,23 @@ hr { height: 1px; border-width: 0; }
                   <x>0</x>
                   <y>480</y>
                   <width>400</width>
-                  <height>175</height>
+                  <height>160</height>
                  </rect>
                 </property>
                 <property name="minimumSize">
                  <size>
                   <width>375</width>
-                  <height>165</height>
+                  <height>160</height>
                  </size>
                 </property>
                 <property name="title">
                  <string>Gem Options</string>
                 </property>
-                <widget class="QLabel" name="label_DefaultGemLevel">
-                 <property name="geometry">
-                  <rect>
-                   <x>10</x>
-                   <y>95</y>
-                   <width>170</width>
-                   <height>22</height>
-                  </rect>
-                 </property>
-                 <property name="text">
-                  <string>Default Gem &amp;Level</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="buddy">
-                  <cstring>spin_DefaultGemLevel</cstring>
-                 </property>
-                </widget>
                 <widget class="QLabel" name="label_DefaultGemQuality">
                  <property name="geometry">
                   <rect>
                    <x>10</x>
-                   <y>125</y>
+                   <y>105</y>
                    <width>170</width>
                    <height>22</height>
                   </rect>
@@ -491,27 +472,11 @@ hr { height: 1px; border-width: 0; }
                   </rect>
                  </property>
                 </widget>
-                <widget class="QSpinBox" name="spin_DefaultGemLevel">
-                 <property name="geometry">
-                  <rect>
-                   <x>190</x>
-                   <y>95</y>
-                   <width>50</width>
-                   <height>24</height>
-                  </rect>
-                 </property>
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>25</number>
-                 </property>
-                </widget>
                 <widget class="QSpinBox" name="spin_DefaultGemQuality">
                  <property name="geometry">
                   <rect>
                    <x>190</x>
-                   <y>125</y>
+                   <y>105</y>
                    <width>50</width>
                    <height>24</height>
                   </rect>
@@ -540,7 +505,7 @@ hr { height: 1px; border-width: 0; }
                  <property name="geometry">
                   <rect>
                    <x>10</x>
-                   <y>150</y>
+                   <y>135</y>
                    <width>196</width>
                    <height>20</height>
                   </rect>
@@ -552,30 +517,11 @@ hr { height: 1px; border-width: 0; }
                   <string>Show Gem Quality &amp;Variants</string>
                  </property>
                 </widget>
-                <widget class="QCheckBox" name="check_MatchToLevel">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>70</y>
-                   <width>206</width>
-                   <height>20</height>
-                  </rect>
-                 </property>
-                 <property name="layoutDirection">
-                  <enum>Qt::RightToLeft</enum>
-                 </property>
-                 <property name="autoFillBackground">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>&amp;Match Gems to Character Level </string>
-                 </property>
-                </widget>
                 <widget class="QLabel" name="label_ShowSupportGems">
                  <property name="geometry">
                   <rect>
                    <x>10</x>
-                   <y>40</y>
+                   <y>75</y>
                    <width>170</width>
                    <height>22</height>
                   </rect>
@@ -594,10 +540,39 @@ hr { height: 1px; border-width: 0; }
                  <property name="geometry">
                   <rect>
                    <x>190</x>
-                   <y>40</y>
+                   <y>75</y>
                    <width>200</width>
                    <height>22</height>
                   </rect>
+                 </property>
+                </widget>
+                <widget class="QComboBox" name="combo_DefaultGemLevel">
+                 <property name="geometry">
+                  <rect>
+                   <x>190</x>
+                   <y>45</y>
+                   <width>200</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_DefaultGemLevel">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>45</y>
+                   <width>170</width>
+                   <height>22</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Default Gem &amp;Level</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>combo_ShowSupportGems</cstring>
                  </property>
                 </widget>
                </widget>
@@ -1087,7 +1062,7 @@ hr { height: 1px; border-width: 0; }
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>1009</width>
+                     <width>1169</width>
                      <height>800</height>
                     </rect>
                    </property>
@@ -1122,10 +1097,10 @@ hr { height: 1px; border-width: 0; }
                    <widget class="QListWidget" name="list_Items">
                     <property name="geometry">
                      <rect>
-                      <x>510</x>
-                      <y>40</y>
-                      <width>350</width>
-                      <height>421</height>
+                      <x>450</x>
+                      <y>35</y>
+                      <width>370</width>
+                      <height>450</height>
                      </rect>
                     </property>
                     <property name="acceptDrops">
@@ -1179,13 +1154,13 @@ hr { height: 1px; border-width: 0; }
                      <rect>
                       <x>0</x>
                       <y>30</y>
-                      <width>480</width>
+                      <width>440</width>
                       <height>600</height>
                      </rect>
                     </property>
                     <property name="minimumSize">
                      <size>
-                      <width>480</width>
+                      <width>400</width>
                       <height>0</height>
                      </size>
                     </property>
@@ -1316,10 +1291,10 @@ hr { height: 1px; border-width: 0; }
                          <number>4</number>
                         </property>
                         <item>
-                         <widget class="QWidget" name="widget_ItemsManageTree" native="true">
+                         <widget class="QWidget" name="widget_SocketedJewels" native="true">
                           <property name="minimumSize">
                            <size>
-                            <width>478</width>
+                            <width>0</width>
                             <height>30</height>
                            </size>
                           </property>
@@ -1359,7 +1334,7 @@ hr { height: 1px; border-width: 0; }
                             <rect>
                              <x>94</x>
                              <y>4</y>
-                             <width>300</width>
+                             <width>270</width>
                              <height>22</height>
                             </rect>
                            </property>
@@ -1379,7 +1354,7 @@ hr { height: 1px; border-width: 0; }
                           <widget class="QPushButton" name="btn_ItemsManageTree">
                            <property name="geometry">
                             <rect>
-                             <x>400</x>
+                             <x>370</x>
                              <y>3</y>
                              <width>75</width>
                              <height>24</height>
@@ -1413,7 +1388,7 @@ hr { height: 1px; border-width: 0; }
                      <rect>
                       <x>85</x>
                       <y>2</y>
-                      <width>310</width>
+                      <width>270</width>
                       <height>22</height>
                      </rect>
                     </property>
@@ -1430,14 +1405,329 @@ hr { height: 1px; border-width: 0; }
                    <widget class="QPushButton" name="btn_ItemManage">
                     <property name="geometry">
                      <rect>
-                      <x>405</x>
-                      <y>2</y>
+                      <x>365</x>
+                      <y>1</y>
                       <width>75</width>
                       <height>24</height>
                      </rect>
                     </property>
                     <property name="text">
                      <string>Manage ...</string>
+                    </property>
+                   </widget>
+                   <widget class="QLabel" name="label">
+                    <property name="geometry">
+                     <rect>
+                      <x>850</x>
+                      <y>10</y>
+                      <width>300</width>
+                      <height>191</height>
+                     </rect>
+                    </property>
+                    <property name="text">
+                     <string>Double-click an item from one of the lists, or copy and paste an item from in game (hover over the item and Ctrl+C) to view or edit the item and add it to your build. You can also clone an item within Path of Building by copying and pasting it with Ctrl+C and Ctrl+V.
+
+You can Control + Click an item to equip it, or drag it onto the slot.  This will also add it to your build if it's from the unique/template list.
+
+If there's 2 slots an item can go in, holding Shift will put it in the second.</string>
+                    </property>
+                    <property name="wordWrap">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                   <widget class="QLabel" name="label_2">
+                    <property name="geometry">
+                     <rect>
+                      <x>840</x>
+                      <y>222</y>
+                      <width>71</width>
+                      <height>16</height>
+                     </rect>
+                    </property>
+                    <property name="text">
+                     <string>Import from:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>combo_ItemsImportFrom</cstring>
+                    </property>
+                   </widget>
+                   <widget class="QComboBox" name="combo_ItemsImportFrom">
+                    <property name="geometry">
+                     <rect>
+                      <x>920</x>
+                      <y>220</y>
+                      <width>150</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Uniques</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Rare Templates</string>
+                     </property>
+                    </item>
+                   </widget>
+                   <widget class="QComboBox" name="combo_ItemsImportSlot">
+                    <property name="geometry">
+                     <rect>
+                      <x>840</x>
+                      <y>250</y>
+                      <width>150</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Any Slot</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Weapon 1</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Weapon 2</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Belt</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Body Armour</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Boots</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Gloves</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Helmet</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Amulet</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Ring</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Jewel</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Flask</string>
+                     </property>
+                    </item>
+                   </widget>
+                   <widget class="QComboBox" name="combo_ItemsImportType">
+                    <property name="geometry">
+                     <rect>
+                      <x>995</x>
+                      <y>250</y>
+                      <width>150</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Any Type</string>
+                     </property>
+                    </item>
+                   </widget>
+                   <widget class="QComboBox" name="combo_ItemsImportLeague">
+                    <property name="geometry">
+                     <rect>
+                      <x>995</x>
+                      <y>275</y>
+                      <width>150</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Any League</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>No League</string>
+                     </property>
+                    </item>
+                   </widget>
+                   <widget class="QComboBox" name="combo_ItemsImportSort">
+                    <property name="geometry">
+                     <rect>
+                      <x>840</x>
+                      <y>275</y>
+                      <width>150</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Sort by Name</string>
+                     </property>
+                    </item>
+                   </widget>
+                   <widget class="QComboBox" name="combo_ItemsImportSource">
+                    <property name="geometry">
+                     <rect>
+                      <x>995</x>
+                      <y>300</y>
+                      <width>150</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Any Source</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Obtainable</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Unobtainable</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Vendor Recipe</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Upgraded</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Boss Item</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Corruption</string>
+                     </property>
+                    </item>
+                   </widget>
+                   <widget class="QComboBox" name="combo_ItemsImportRequirements">
+                    <property name="geometry">
+                     <rect>
+                      <x>840</x>
+                      <y>300</y>
+                      <width>150</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Any requirements</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Current level</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Current attributes</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Current useable</string>
+                     </property>
+                    </item>
+                   </widget>
+                   <widget class="QLabel" name="label_3">
+                    <property name="geometry">
+                     <rect>
+                      <x>840</x>
+                      <y>332</y>
+                      <width>49</width>
+                      <height>16</height>
+                     </rect>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="text">
+                     <string>Search:</string>
+                    </property>
+                   </widget>
+                   <widget class="QLineEdit" name="lineedit_ItemsImportSearch">
+                    <property name="geometry">
+                     <rect>
+                      <x>885</x>
+                      <y>330</y>
+                      <width>165</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                   </widget>
+                   <widget class="QComboBox" name="combo_ItemsImportSearchSource">
+                    <property name="geometry">
+                     <rect>
+                      <x>1055</x>
+                      <y>330</y>
+                      <width>90</width>
+                      <height>22</height>
+                     </rect>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Anywhere</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Names</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Modifiers</string>
+                     </property>
+                    </item>
+                   </widget>
+                   <widget class="QListWidget" name="list_ImportItems">
+                    <property name="geometry">
+                     <rect>
+                      <x>840</x>
+                      <y>360</y>
+                      <width>305</width>
+                      <height>265</height>
+                     </rect>
+                    </property>
+                    <property name="sortingEnabled">
+                     <bool>false</bool>
                     </property>
                    </widget>
                   </widget>
@@ -2040,7 +2330,7 @@ hr { height: 1px; border-width: 0; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1220</width>
+     <width>1442</width>
      <height>22</height>
     </rect>
    </property>

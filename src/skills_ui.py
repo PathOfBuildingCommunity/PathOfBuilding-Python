@@ -4,6 +4,7 @@ This Class manages all the UI controls and takes ownship of the controls on the 
 
 import xml.etree.ElementTree as ET
 from pathlib import Path
+import re
 
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QListWidgetItem
@@ -48,7 +49,7 @@ class SkillsUI:
         self.win.list_SocketGroups.setItemDelegate(delegate)
 
         tr = self.pob_config.app.tr
-        self.win.combo_SortByDPS.addItem(tr("Full DPS"), "Full DPS")
+        self.win.combo_SortByDPS.addItem(tr("Full DPS"), "FullDPS")
         self.win.combo_SortByDPS.addItem(tr("Combined DPS"), "CombinedDPS")
         self.win.combo_SortByDPS.addItem(tr("Total DPS"), "TotalDPS")
         self.win.combo_SortByDPS.addItem(tr("Average Hit"), "AverageDamage")
@@ -59,6 +60,10 @@ class SkillsUI:
         self.win.combo_ShowSupportGems.addItem(tr("All"), "ALL")
         self.win.combo_ShowSupportGems.addItem(tr("Normal"), "NORMAL")
         self.win.combo_ShowSupportGems.addItem(tr("Awakened"), "AWAKENED")
+        self.win.combo_DefaultGemLevel.addItem(tr("Normal Maximum"), "normalMaximum")
+        self.win.combo_DefaultGemLevel.addItem(tr("Corrupted Maximum"), "corruptedMaximum")
+        self.win.combo_DefaultGemLevel.addItem(tr("Awakened Maximum"), "awakenedMaximum")
+        self.win.combo_DefaultGemLevel.addItem(tr("Match Character Level"), "characterLevel")
 
         # Button triggers are right to remain connected at all times as they are user initiated.
         self.win.btn_NewSocketGroup.clicked.connect(self.new_socket_group)
@@ -109,22 +114,37 @@ class SkillsUI:
         self.change_skill_set(-1)
 
         self.win.check_SortByDPS.setChecked(str_to_bool(self.xml_skills.get("sortGemsByDPS", "True")))
-        self.win.check_MatchToLevel.setChecked(
-            str_to_bool(self.xml_skills.get("matchGemLevelToCharacterLevel", "False"))
-        )
+        set_combo_index_by_data(self.win.combo_SortByDPS, self.xml_skills.get("sortGemsByDPSField", "FullDPS"))
         self.win.check_ShowGemQualityVariants.setChecked(
             str_to_bool(self.xml_skills.get("showAltQualityGems", "False"))
         )
-        set_combo_index_by_data(self.win.combo_SortByDPS, self.xml_skills.get("sortGemsByDPSField", "FullDPS"))
         set_combo_index_by_data(self.win.combo_ShowSupportGems, self.xml_skills.get("showSupportGemTypes", "ALL"))
-        level = self.xml_skills.get("defaultGemLevel", 20)
-        if level == "nil":
-            level = 0
-        self.win.spin_DefaultGemLevel.setValue(int(level))
         quality = self.xml_skills.get("defaultGemQuality", 0)
         if quality == "nil":
             quality = 0
         self.win.spin_DefaultGemQuality.setValue(int(quality))
+
+        # matchGemLevelToCharacterLevel deprecated/defaultGemLevel changed. Check for it and use it if it exists
+        level = self.xml_skills.get("defaultGemLevel", "normalMaximum")
+        m = re.search(r"(\d+)$", level)
+        if level == "nil" or m is None:
+            level = "normalMaximum"
+        else:
+            if int(m.group(1)) == 20:
+                level = "normalMaximum"
+            else:
+                level = "characterLevel"
+        set_combo_index_by_data(self.win.combo_DefaultGemLevel, level)
+
+        value = self.xml_skills.get("matchGemLevelToCharacterLevel", "NotFound")
+        if value != "NotFound":
+            if str_to_bool(value):
+                set_combo_index_by_data(self.win.combo_DefaultGemLevel, "characterLevel")
+
+        # self.win.spin_DefaultGemLevel.setValue(int(level))
+        # self.win.check_MatchToLevel.setChecked(
+        #     str_to_bool(self.xml_skills.get("matchGemLevelToCharacterLevel", "False"))
+        # )
 
         self.win.combo_SkillSet.clear()
         self.skill_sets_list.clear()
@@ -165,11 +185,12 @@ class SkillsUI:
           so we only need to get the other UI widget's values
         """
         self.xml_skills.set("sortGemsByDPS", bool_to_str(self.win.check_SortByDPS.isChecked()))
-        self.xml_skills.set("matchGemLevelToCharacterLevel", bool_to_str(self.win.check_MatchToLevel.isChecked()))
+        # self.xml_skills.set("matchGemLevelToCharacterLevel", bool_to_str(self.win.check_MatchToLevel.isChecked()))
         self.xml_skills.set("showAltQualityGems", bool_to_str(self.win.check_ShowGemQualityVariants.isChecked()))
         self.xml_skills.set("sortGemsByDPSField", self.win.combo_SortByDPS.currentData())
         self.xml_skills.set("showSupportGemTypes", self.win.combo_ShowSupportGems.currentData())
-        self.xml_skills.set("defaultGemLevel", str(self.win.spin_DefaultGemLevel.value()))
+        self.xml_skills.set("showSupportGemTypes", self.win.combo_DefaultGemLevel.currentData())
+        # self.xml_skills.set("defaultGemLevel", str(self.win.spin_DefaultGemLevel.value()))
         self.xml_skills.set("defaultGemQuality", str(self.win.spin_DefaultGemQuality.value()))
         return self.xml_skills
 

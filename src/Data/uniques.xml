@@ -190,6 +190,18 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Eternal Damnation" base_name="Agate Amulet" league="Sanctum">
+			<Attribs level_req="52" />
+			<Implicits>
+				<Mod>{tags:jewellery_attribute}+(16-24) to Strength and Intelligence</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:mana}+(40-70) to maximum Mana</Mod>
+				<Mod>{tags:jewellery_resistance}+(-13-13)% to Chaos Resistance</Mod>
+				<Mod>{tags:jewellery_resistance}-5% to all maximum Resistances</Mod>
+				<Mod>Gain additional Elemental Damage Reduction equal to half your Chaos Resistance</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Badge of the Brotherhood" base_name="Turquoise Amulet">
 			<Attribs />
 			<Implicits>
@@ -340,6 +352,17 @@
 				<Mod>{tags:critical}+(30-40)% to Critical Strike Multiplier if you've gained a Power Charge Recently</Mod>
 				<Mod>{tags:jewellery_elemental}(1-2) to (36-40) Lightning Damage per Power Charge</Mod>
 				<Mod>90% less Power Charge Duration</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Doedre's Tongue" base_name="Lapis Amulet">
+			<Attribs level_req="24" />
+			<Implicits>
+				<Mod>{tags:jewellery_attribute}+(20-30) to Intelligence</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:jewellery_resistance}+(20-25)% to all Elemental Resistances</Mod>
+				<Mod>(20-25)% chance to Freeze, Shock and Ignite</Mod>
+				<Mod>Cursed Enemies cannot inflict Elemental Ailments on You</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="Extractor Mentis" base_name="Agate Amulet">
@@ -4571,6 +4594,17 @@
 				<Mod>60% increased Area of Effect of Hex Skills</Mod>
 			</Explicits>
 		</Item>
+		<Item ver="2" title="Dawnstrider" base_name="Vaal Greaves" source="Drops from unique{The Searing Exarch}">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>+(80-100) to maximum Life</Mod>
+				<Mod>30% increased Movement Speed</Mod>
+				<Mod>100% increased Effect of Buffs your Ancestor Totems grant while Active</Mod>
+				<Mod>Buffs from Active Ancestor Totems Linger for 4 seconds</Mod>
+				<Mod>Maximum 1 Buff from an Active Ancestor Totem at a time</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Abberath's Hooves" base_name="Goathide Boots">
 			<Attribs level_req="12" />
 			<Implicits />
@@ -5148,6 +5182,20 @@
 				<Variant num="1">Pre 3.17.0</Variant>
 				<Variant num="2">Current</Variant>
 			</Variants>
+		</Item>
+		<Item ver="2" title="Annihilation's Approach" base_name="Dragonscale Boots" source="Drops from unique{The Searing Exarch} (Uber)">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>Grants Level 20 Approaching Flames Skill</Mod>
+				<Mod>(60-100)% increased Armour and Evasion</Mod>
+				<Mod>30% increased Movement Speed</Mod>
+				<Mod>Cannot be Chilled</Mod>
+				<Mod>Cannot be Frozen</Mod>
+				<Mod>Take 10000 Fire Damage per Second while Flame-Touched</Mod>
+				<Mod>Gain Adrenaline when you become Flame-Touched</Mod>
+				<Mod>Lose Adrenaline when you cease to be Flame-Touched</Mod>
+			</Explicits>
 		</Item>
 		<Item ver="2" title="Lioneye's Paws" base_name="Bronzescale Boots" league="Legion">
 			<Attribs level_req="30" />
@@ -7357,6 +7405,15 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Progenesis" base_name="Amethyst Flask" source="Drops from unique{The Maven} (Uber)">
+			<Attribs level_req="60" />
+			<Implicits />
+			<Explicits>
+				<Mod>(10-20)% reduced Charges per use</Mod>
+				<Mod>(-35-35)% increased Duration</Mod>
+				<Mod>When Hit during effect, 25% of Life loss from Damage taken occurs over 4 seconds instead</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Bottled Faith" base_name="Sulphur Flask" league="Synthesis" source="Drops from unique{Synthete Nightmare} in normal{The Cortex}">
 			<Attribs />
 			<Implicits>
@@ -7748,6 +7805,14 @@
 				<Variant num="2">Pre 3.15.0</Variant>
 				<Variant num="3">Current</Variant>
 			</Variants>
+		</Item>
+		<Item ver="2" title="Oriath's End" base_name="Bismuth Flask" source="Drops from unique{Sirus, Awakener of Worlds} (Uber)">
+			<Attribs level_req="56" />
+			<Implicits />
+			<Explicits>
+				<Mod>(20-40)% increased Charge Recovery</Mod>
+				<Mod>Enemies you Kill during Effect have a (20-30)% chance to Explode, dealing a tenth of their maximum Life as Damage of a Random Element</Mod>
+			</Explicits>
 		</Item>
 		<Item ver="2" title="Witchfire Brew" base_name="Stibnite Flask">
 			<Attribs level_req="48" />
@@ -10117,6 +10182,31 @@
 				<base_name>{variant:7}Prismatic Ring</base_name>
 			</VariantEntries>
 		</Item>
+		<Item ver="2" title="The Balance of Terror" base_name="Cobalt Jewel" league="Sanctum">
+			<Attribs limited_to="1" level_req="56" />
+			<Implicits />
+			<Explicits>
+				<Mod>+(10-15)% to all Elemental Resistances</Mod>
+				<Mod>{variant:1}Take no Extra Damage from Critical Strikes if you've cast Enfeeble in the past 10 seconds</Mod>
+				<Mod>{variant:2}You are Unaffected by Freeze if you've cast Frostbite in the past 10 seconds</Mod>
+				<Mod>{variant:3}Inflict Lightning Exposure on Hit if you've cast Conductivity in the past 10 seconds</Mod>
+				<Mod>{variant:4}Gain (30-40)% of Physical Damage as a Random Element if you've cast Elemental Weakness in the past 10 seconds</Mod>
+				<Mod>{variant:5}(6-10)% chance to deal Double Damage if you've cast Vulnerability in the past 10 seconds</Mod>
+				<Mod>{variant:6}You are Unaffected by Shock if you've cast Conductivity in the past 10 seconds</Mod>
+				<Mod>{variant:7}You are Unaffected by Ignite if you've cast Flammability in the past 10 seconds</Mod>
+				<Mod>{variant:8}Immune to Reflected Damage if you've cast Punishment in the past 10 seconds</Mod>
+				<Mod>{variant:9}+(30-40)% to Critical Strike Multiplier if you've cast Enfeeble in the past 10 seconds</Mod>
+				<Mod>{variant:10}(20-25)% increased Cooldown Recovery Rate if you've cast Temporal Chains in the past 10 seconds</Mod>
+				<Mod>{variant:11}Immune to Exposure if you've cast Elemental Weakness in the past 10 seconds</Mod>
+				<Mod>{variant:12}Cold Exposure on Hit if you've cast Frostbite in the past 10 seconds</Mod>
+				<Mod>{variant:13}Action Speed cannot be Slowed below Base Value if you've cast Temporal Chains in the past 10 seconds</Mod>
+				<Mod>{variant:14}Inflict Fire Exposure on Hit if you've cast Flammability in the past 10 seconds</Mod>
+				<Mod>{variant:15}Inflict Withered for 2 seconds on Hit if you've cast Despair in the past 10 seconds</Mod>
+				<Mod>{variant:16}Immune to Curses if you've cast Despair in the past 10 seconds</Mod>
+				<Mod>{variant:17}You are Unaffected by Bleeding if you've cast Vulnerability in the past 10 seconds</Mod>
+				<Mod>{variant:18}Intimidate Enemies on Hit if you've cast Punishment in the past 10 seconds</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Skin of the Lords" base_name="Simple Robe" corrupted="true" league="Breach" source="Upgraded from unique{Skin of the Loyal} using currency{Blessing of Chayula}">
 			<Attribs />
 			<Implicits />
@@ -11819,6 +11909,16 @@
 				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Entropic Devastation" base_name="Assassin's Mitts" source="Drops from unique{The Shaper} (Uber)">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>Grants Call of Steel</Mod>
+				<Mod>(100-150)% increased Evasion and Energy Shield</Mod>
+				<Mod>(30-50)% increased Effect of Impales inflicted with Spells</Mod>
+				<Mod>Critical Strikes with Spells inflict Impale</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Medved's Challenge" base_name="Runic Gauntlets" league="Expedition">
 			<Attribs level_req="69" />
 			<Implicits />
@@ -12396,6 +12496,17 @@
 				<Variant num="24">Focus Ailment Duration</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Wilma's Requital" base_name="Solaris Circlet">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>+(300-500) to Accuracy Rating</Mod>
+				<Mod>(200-250)% increased Energy Shield</Mod>
+				<Mod>Increases and Reductions to Cast Speed apply to Attack Speed</Mod>
+				<Mod>(20-30)% increased Elemental Damage with Attack Skills</Mod>
+				<Mod>Ancestral Bond</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Doedre's Scorn" base_name="Lunaris Circlet">
 			<Attribs level_req="39" />
 			<Implicits />
@@ -12440,6 +12551,17 @@
 				<Mod>Aspect of the Spider inflicts Spider's Webs and Hinder every 0.5 Seconds instead</Mod>
 			</Explicits>
 			<Requires>112 Int</Requires>
+		</Item>
+		<Item ver="2" title="Sandstorm Visage" base_name="Necromancer Circlet" league="Sanctum">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>(8-10)% increased Cast Speed</Mod>
+				<Mod>(200-250)% increased Energy Shield</Mod>
+				<Mod>Avoid interruption from Stuns while Casting</Mod>
+				<Mod>Base Critical Strike Chance of Spells is the Critical Strike Chance of your Main Hand Weapon</Mod>
+				<Mod>Cannot deal Critical Strikes with Attacks</Mod>
+			</Explicits>
 		</Item>
 		<Item ver="2" title="Flamesight" base_name="Solaris Circlet">
 			<Attribs level_req="59" />
@@ -14090,6 +14212,50 @@
 			<Explicits>
 				<Mod>50% increased Effect of non-Keystone Passive Skills in Radius</Mod>
 				<Mod>Notable Passive Skills in Radius grant nothing</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Immutable Force" base_name="Crimson Jewel">
+			<Attribs limited_to="1" />
+			<Implicits />
+			<Explicits>
+				<Mod>(500-1000)% increased Stun and Block Recovery</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Firesong" base_name="Crimson Jewel">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>+(10-15)% to Fire Resistance</Mod>
+				<Mod>Modifiers to Ignite Duration on you apply to all Elemental Ailments</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Stormshroud" base_name="Viridian Jewel">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>+(10-15)% to Lightning Resistance</Mod>
+				<Mod>Modifiers to Chance to Avoid being Shocked apply to all Elemental Ailments</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Witchbane" base_name="Cobalt Jewel">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>+(5-15) to Intelligence</Mod>
+				<Mod>When you Kill an Enemy Cursed with a Non-Aura Hex, become Immune to</Mod>
+				<Mod>Curses for remaining Hex Duration</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Rational Doctrine" base_name="Cobalt Jewel" source="Drops from unique{Synthete Nightmare} in normal{The Cortex} (Uber)">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>You have Consecrated Ground around you while</Mod>
+				<Mod>stationary if Strength is your highest Attribute</Mod>
+				<Mod>25% chance to create Profane Ground on Critical</Mod>
+				<Mod>Strike if Intelligence is your highest Attribute</Mod>
+				<Mod>Effects of Consecrated Ground you create Linger for 4 seconds</Mod>
+				<Mod>Effects of Profane Ground you create Linger for 4 seconds</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="Nadir Mode" base_name="Cobalt Jewel" league="Heist">
@@ -16293,7 +16459,7 @@
 				<Mod>{variant:1,2,3,4}(20-30)% increased Spell Damage</Mod>
 				<Mod>{variant:2,3,4,5}(150-200)% increased Physical Damage</Mod>
 				<Mod>{variant:5}Adds (76-98) to (161-176) Fire Damage</Mod>
-				<Mod>{variant:1,2,3,4}Gain (6-10) Life per Enemy Hit by Attacks</Mod>
+				<Mod>{variant:1,2,3,4}Grants (6-10) Life per Enemy Hit</Mod>
 				<Mod>{variant:1,2,3,4}25% increased Light Radius</Mod>
 				<Mod>{variant:5}50% increased Light Radius</Mod>
 				<Mod>{variant:5}Battlemage</Mod>
@@ -16742,116 +16908,7 @@
 			</Variants>
 		</Item>
 	</mace>
-	<new>
-		<Item ver="2" title="Anathema" base_name="Moonstone Ring">
-			<Attribs level_req="49" />
-			<Implicits>
-				<Mod>{tags:jewellery_defense}+(15-25) to maximum Energy Shield</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>{tags:jewellery_attribute}+37 to Intelligence</Mod>
-				<Mod>{tags:caster}13% increased Cast Speed</Mod>
-				<Mod>16% chance to gain a Power Charge when you Cast a Curse Spell</Mod>
-				<Mod>Your Curse Limit is equal to your maximum Power Charges</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Eternal Damnation" base_name="Agate Amulet" league="Sanctum">
-			<Attribs level_req="52" />
-			<Implicits>
-				<Mod>{tags:jewellery_attribute}+(16-24) to Strength and Intelligence</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>{tags:mana}+45 to maximum Mana</Mod>
-				<Mod>{tags:jewellery_resistance}+9% to Chaos Resistance</Mod>
-				<Mod>{tags:jewellery_resistance}-5% to all maximum Resistances</Mod>
-				<Mod>Gain additional Elemental Damage Reduction equal to half your Chaos Resistance</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Progenesis" base_name="Amethyst Flask" source="Drops from unique{The Maven} (Uber)">
-			<Attribs level_req="60" />
-			<Implicits />
-			<Explicits>
-				<Mod>17% reduced Charges per use</Mod>
-				<Mod>14% increased Duration</Mod>
-				<Mod>When Hit during effect, 25% of Life loss from Damage taken occurs over 4 seconds instead</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Rational Doctrine" base_name="Cobalt Jewel" source="Drops from unique{Synthete Nightmare} in normal{The Cortex} (Uber)">
-			<Attribs />
-			<Implicits />
-			<Explicits>
-				<Mod>You have Consecrated Ground around you while stationary if Strength is your highest Attribute</Mod>
-				<Mod>25% chance to create Profane Ground on Critical Strike if Intelligence is your highest Attribute</Mod>
-				<Mod>Effects of Consecrated Ground you create Linger for 4 seconds</Mod>
-				<Mod>Effects of Profane Ground you create Linger for 4 seconds</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Entropic Devastation" base_name="Assassin's Mitts" source="Drops from unique{The Shaper} (Uber)">
-			<Attribs />
-			<Implicits />
-			<Explicits>
-				<Mod>Grants Call of Steel</Mod>
-				<Mod>124% increased Evasion and Energy Shield</Mod>
-				<Mod>50% increased effects of impale inflicted by Spells</Mod>
-				<Mod>Critical Strikes with Spells inflict Impale</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Firesong" base_name="Crimson Jewel">
-			<Attribs />
-			<Implicits />
-			<Explicits>
-				<Mod>+13% to Fire Resistance</Mod>
-				<Mod>Modifiers to Ignite Duration on you apply to all Elemental Ailments</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Nimis" base_name="Topaz Ring" source="Drops from unique{The Eater of Worlds} (Uber)">
-			<Attribs level_req="48" />
-			<Implicits />
-			<Explicits>
-				<Mod>{tags:jewellery_resistance}+(20-30)% to Lightning Resistance</Mod>
-				<Mod>{tags:jewellery_attribute}+49 to Dexterity</Mod>
-				<Mod>28% increased Projectile Damage</Mod>
-				<Mod>Projectiles Return to you at end of flight</Mod>
-				<Mod>Projectiles are fired in random directions</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Witchbane" base_name="Cobalt Jewel">
-			<Attribs />
-			<Implicits />
-			<Explicits>
-				<Mod>+10 to Intelligence</Mod>
-				<Mod>When you Kill an Enemy affected by a Non-Aura Hex, become Immune to Curses for remaining Hex Duration</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Stormshroud" base_name="Viridian Jewel">
-			<Attribs />
-			<Implicits />
-			<Explicits>
-				<Mod>+10% to Lightning Resistance</Mod>
-				<Mod>Chance to Avoid being Shocked applies to all Elemental Ailments</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Oriath's End" base_name="Bismuth Flask" source="Drops from unique{Sirus, Awakener of Worlds} (Uber)">
-			<Attribs level_req="56" />
-			<Implicits />
-			<Explicits>
-				<Mod>35% increased Charge Recovery</Mod>
-				<Mod>Enemies you Kill during Effect have a 28% chance to Explode, dealing a tenth of their</Mod>
-				<Mod>maximum Life as damage of a Random Element</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Dawnstrider" base_name="Vaal Greaves" source="Drops from unique{The Searing Exarch}">
-			<Attribs />
-			<Implicits />
-			<Explicits>
-				<Mod>+94 to maximum Life</Mod>
-				<Mod>30% increased Movement Speed</Mod>
-				<Mod>100% increased Effect of Buffs your Ancestor Totems grant while Active</Mod>
-				<Mod>Buffs from Active Ancestor Totems Linger for 4 seconds</Mod>
-				<Mod>Maximum 1 Buff from an Active Ancestor Totem at a time</Mod>
-			</Explicits>
-		</Item>
-	</new>
+	<new />
 	<quiver>
 		<Item ver="2" title="Asphyxia's Wrath" base_name="variant">
 			<Attribs />
@@ -17940,9 +17997,8 @@
 			<Explicits>
 				<Mod>{tags:jewellery_attribute}+(20-40) to Intelligence</Mod>
 				<Mod>{tags:caster,speed}Curse Skills have (8-12)% increased Cast Speed</Mod>
-				<Mod>Hexes you inflict have their Effect increased by twice their Doom instead</Mod>
-				<Mod>Hexes have (-20-20)% reduced Doom gain rate</Mod>
-				<Mod>Hexes expire 0.5 seconds after reaching maximum Doom</Mod>
+				<Mod>Non-Aura Hexes expire upon reaching (180-220)% of base Effect</Mod>
+				<Mod>Non-Aura Hexes gain 20% increased Effect per second</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="Gifts from Above" base_name="Diamond Ring" league="Anarchy">
@@ -17975,6 +18031,18 @@
 				<Mod>Minions have 15% increased maximum Life</Mod>
 				<Mod>Minions have 10% increased Area of Effect</Mod>
 				<Mod>350 Physical Damage taken on Minion Death</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Anathema" base_name="Moonstone Ring">
+			<Attribs level_req="49" />
+			<Implicits>
+				<Mod>{tags:jewellery_defense}+(15-25) to maximum Energy Shield</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:jewellery_attribute}+(30-40) to Intelligence</Mod>
+				<Mod>{tags:caster}(10-15)% increased Cast Speed</Mod>
+				<Mod>(10-20)% chance to gain a Power Charge when you Cast a Curse Spell</Mod>
+				<Mod>Your Curse Limit is equal to your maximum Power Charges</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="The Highwayman" base_name="Gold Ring" league="Heist">
@@ -18080,6 +18148,18 @@
 				<Variant num="3">Pre 3.19.0</Variant>
 				<Variant num="4">Current</Variant>
 			</Variants>
+		</Item>
+		<Item ver="2" title="Nimis" base_name="Topaz Ring" source="Drops from unique{The Eater of Worlds} (Uber)">
+			<Attribs level_req="48" />
+			<Implicits>
+				<Mod>{tags:jewellery_resistance}+(20-30)% to Lightning Resistance</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:jewellery_attribute}+(30-50) to Dexterity</Mod>
+				<Mod>(25-35)% increased Projectile Damage</Mod>
+				<Mod>Projectiles Return to you at end of flight</Mod>
+				<Mod>Projectiles are fired in random directions</Mod>
+			</Explicits>
 		</Item>
 		<Item ver="2" title="Le Heup of All" base_name="Iron Ring">
 			<Attribs level_req="24" />
@@ -20460,6 +20540,20 @@
 			<Requires>113 Str</Requires>
 			<Requires>113 Int</Requires>
 		</Item>
+		<Item ver="2" title="The Winds of Fate" base_name="Foul Staff" league="Sanctum">
+			<Attribs />
+			<Implicits>
+				<Mod>+18% Chance to Block Attack Damage while wielding a Staff</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>(700-800)% increased Physical Damage</Mod>
+				<Mod>+100% to Global Critical Strike Multiplier</Mod>
+				<Mod>75% of Physical Damage converted to a random Element</Mod>
+				<Mod>25% of Physical Damage Converted to Chaos Damage</Mod>
+				<Mod>Maximum Critical Strike Chance is 50%</Mod>
+				<Mod>Non-Critical Strikes deal no Damage</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="The Blood Thorn" base_name="Gnarled Branch">
 			<Attribs />
 			<Implicits>
@@ -22077,6 +22171,20 @@
 				<Mod>10% increased Physical Damage taken</Mod>
 				<Mod>10% increased Cold Damage taken</Mod>
 				<Mod>Gain an Endurance Charge if an Attack Freezes an Enemy</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Echoforge" base_name="Infernal Sword" source="Drops from unique{The Maven} (Uber)">
+			<Attribs />
+			<Implicits>
+				<Mod>30% increased Chaos Damage</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>Adds (600-650) to (750-800) Chaos Damage</Mod>
+				<Mod>(-16-16)% increased Attack Speed</Mod>
+				<Mod>+(-200-200) to maximum Life</Mod>
+				<Mod>Your Chaos Damage can Shock</Mod>
+				<Mod>(-40-40)% increased Area of Effect for Attacks</Mod>
+				<Mod>Deal no Physical or Elemental Damage</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="Queen's Decree" base_name="Ornate Sword">

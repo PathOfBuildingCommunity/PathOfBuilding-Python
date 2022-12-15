@@ -1063,7 +1063,11 @@
 			<Suffix>ColdResist4</Suffix>
 			<Suffix>LightningResist4</Suffix>
 		</Crafted>
-		<Implicits />
+		<Implicits>
+			<Mod>{variant:1}{range:0.5}+(12-16)% to Fire and Cold Resistances</Mod>
+			<Mod>{variant:2}{range:0.5}+(12-16)% to Cold and Lightning Resistances</Mod>
+			<Mod>{variant:3}{range:0.5}+(12-16)% to Fire and Lightning Resistances</Mod>
+		</Implicits>
 		<Explicits />
 		<Variants current="3">
 			<Variant num="1">Fire and Cold</Variant>
