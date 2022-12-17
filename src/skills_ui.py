@@ -17,6 +17,28 @@ from ui_utils import set_combo_index_by_data, set_combo_index_by_text, HTMLDeleg
 from popup_dialogs import yes_no_dialog
 from gem_ui import GemUI
 
+DefaultGemLevel_info = {
+    "normalMaximum": {
+        "name": "Normal Maximum",
+        "tooltip": "All gems default to their highest valid non-corrupted gem level.\n",
+    },
+    "corruptedMaximum": {
+        "name": "Corrupted Maximum",
+        "tooltip": "Normal gems default to their highest valid corrupted gem level.\n"
+        "Awakened gems default to their highest valid non-corrupted gem level.",
+    },
+    "awakenedMaximum": {
+        "name": "Awakened Maximum",
+        "tooltip": "All gems default to their highest valid corrupted gem level.",
+    },
+    "characterLevel": {
+        "name": "Match Character Level",
+        "tooltip": "All gems default to their highest valid non-corrupted gem level, that your character meets the"
+        " level requirement for.\nThis hides gems with a minimum level requirement above your character level,"
+        " preventing them from showing up in the dropdown list.",
+    },
+}
+
 
 class SkillsUI:
     """Functions and variables to drive the interactions on the Skills Tab."""
@@ -60,10 +82,17 @@ class SkillsUI:
         self.win.combo_ShowSupportGems.addItem(tr("All"), "ALL")
         self.win.combo_ShowSupportGems.addItem(tr("Normal"), "NORMAL")
         self.win.combo_ShowSupportGems.addItem(tr("Awakened"), "AWAKENED")
-        self.win.combo_DefaultGemLevel.addItem(tr("Normal Maximum"), "normalMaximum")
-        self.win.combo_DefaultGemLevel.addItem(tr("Corrupted Maximum"), "corruptedMaximum")
-        self.win.combo_DefaultGemLevel.addItem(tr("Awakened Maximum"), "awakenedMaximum")
-        self.win.combo_DefaultGemLevel.addItem(tr("Match Character Level"), "characterLevel")
+        for idx, entry in enumerate(DefaultGemLevel_info.keys()):
+            info = DefaultGemLevel_info[entry]
+            self.win.combo_DefaultGemLevel.addItem(tr(info.get("name")), entry)
+            self.win.combo_DefaultGemLevel.setItemData(
+                idx, html_colour_text("TANGLE", tr(info.get("tooltip"))), Qt.ToolTipRole
+            )
+
+        # self.win.combo_DefaultGemLevel.addItem(tr("Normal Maximum"), "normalMaximum")
+        # self.win.combo_DefaultGemLevel.addItem(tr("Corrupted Maximum"), "corruptedMaximum")
+        # self.win.combo_DefaultGemLevel.addItem(tr("Awakened Maximum"), "awakenedMaximum")
+        # self.win.combo_DefaultGemLevel.addItem(tr("Match Character Level"), "characterLevel")
 
         # Button triggers are right to remain connected at all times as they are user initiated.
         self.win.btn_NewSocketGroup.clicked.connect(self.new_socket_group)

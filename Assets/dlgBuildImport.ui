@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>BuildImport</class>
+ <widget class="QDialog" name="BuildImport">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -53,7 +53,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>To start importing a character, enter the character's account name. Note: if the account name contains non-ASCII characters then it must be URL encoded first : &lt;a href=&quot;https://www.urlencoder.org/&quot;&gt;www.urlencoder.org&lt;/a&gt;</string>
+    <string>To start importing a character, enter the character's account name. Note: if the account name contains non-ASCII characters then it will be URL encoded on the fly.</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>

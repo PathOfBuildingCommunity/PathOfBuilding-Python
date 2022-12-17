@@ -51,13 +51,14 @@ class ItemSlotUI(QWidget):
         else:
             self.type = title
         self.title = title
+        self.itemPbURL = ""
 
         self.label = QLabel(self)
         self.label.setText(f"{title}:")
         self.label.setGeometry(1, 5, indent and 105 or 95, 22)
         self.label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.combo_item_list = QComboBox(self)
-        self.combo_item_list.setGeometry(indent and 110 or 100, 3, indent and 370 or 380, 22)
+        self.combo_item_list.setGeometry(indent and 110 or 100, 3, indent and 320 or 330, 22)
         self.combo_item_list.setDuplicatesEnabled(True)
         self.combo_item_list.addItem("None", 0)
         self.combo_item_list.setCurrentIndex(0)
@@ -104,6 +105,7 @@ class ItemSlotUI(QWidget):
     def add_item(self, _item: Item):
         """add an item to the drop down"""
         self.combo_item_list.addItem(_item.name, _item)
+        self.combo_item_list.view().setMinimumWidth(self.combo_item_list.minimumSizeHint().width() + 50)
 
     def del_item(self, _item: Item):
         """delete an item from the drop down"""

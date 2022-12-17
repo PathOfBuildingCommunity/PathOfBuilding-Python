@@ -3,76 +3,16 @@ This Class manages all the elements and owns some elements of the "ITEMS" tab
 """
 
 from pathlib import Path
-
-from qdarktheme.qtpy.QtCore import (
-    QCoreApplication,
-    QDir,
-    QRect,
-    QRectF,
-    QSize,
-    QStringListModel,
-    Qt,
-    Signal,
-    Slot,
-)
-from qdarktheme.qtpy.QtGui import (
-    QAbstractTextDocumentLayout,
-    QAction,
-    QActionGroup,
-    QBrush,
-    QColor,
-    QFont,
-    QIcon,
-    QPainter,
-    QPixmap,
-    QStandardItem,
-    QStandardItemModel,
-    QTextDocument,
-)
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QCheckBox,
-    QColorDialog,
-    QComboBox,
-    QDockWidget,
-    QFileDialog,
-    QFontComboBox,
-    QFontDialog,
-    QFormLayout,
-    QFrame,
-    QGraphicsLineItem,
-    QGraphicsPixmapItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QLayout,
-    QListWidget,
-    QListWidgetItem,
-    QMainWindow,
-    QMenuBar,
-    QMessageBox,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QSpinBox,
-    QSplitter,
-    QStackedWidget,
-    QStatusBar,
-    QStyle,
-    QItemDelegate,
-    QTabWidget,
-    QTextEdit,
-    QToolBar,
-    QToolBox,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
+import enum
 import xml.etree.ElementTree as ET
 import re
+
+from qdarktheme.qtpy.QtCore import (
+    Slot,
+)
+from qdarktheme.qtpy.QtWidgets import (
+    QListWidgetItem,
+)
 
 from PoB_Main_Window import Ui_MainWindow
 from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack, print_a_xml_element
@@ -81,7 +21,7 @@ from constants import slot_map, ColourCodes, slot_names
 from ui_utils import HTMLDelegate, html_colour_text
 from item import Item
 from item_slot_ui import ItemSlotUI
-
+from craft_items_dialog import CraftItemsDlg
 
 test = """			Rarity: UNIQUE
 Bottled Faith
@@ -159,6 +99,7 @@ class ItemsUI:
         delegate = HTMLDelegate()
         delegate._list = self.win.list_Items
         self.win.list_Items.setItemDelegate(delegate)
+        self.win.list_ImportItems.setItemDelegate(delegate)
 
         """Create the ui elements for displaying on the left side of the tab"""
         # list of abyssal ui's for ease of hiding them during itemset changes
@@ -179,10 +120,21 @@ class ItemsUI:
         """Reformat the xml that came from the lua. Temporary"""
         # self.rewrite_flat_files_to_xml()
 
-        self.uniques_items = {}
+        self.uniques_items = []
+        # self.uniques_items = {}
         self.load_unique_items()
+
         self.rare_template_items = []
         self.load_rare_template_items()
+        # dictionary list of current items in the imported items list widget
+        self.import_items_list = {}
+        self.fill_import_items_list("")
+
+        # self.win.combo_ItemsImportFrom.currentTextChanged.connect(self.change_import_from_combo)
+        self.win.combo_ItemsImportFrom.currentTextChanged.connect(self.fill_import_items_list)
+        self.win.combo_ItemsImportSlot.currentIndexChanged.connect(self.change_import_slot_combo)
+        self.win.combo_ItemsImportType.currentIndexChanged.connect(self.change_import_type_combo)
+        self.win.combo_ItemsImportLeague.currentTextChanged.connect(self.fill_import_items_list)
 
     def connect_item_triggers(self):
         """re-connect triggers"""
@@ -194,7 +146,8 @@ class ItemsUI:
         self.triggers_connected = True
         self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
         self.win.btn_WeaponSwap.clicked.connect(self.weapon_swap)
-        self.win.list_Items.itemDoubleClicked.connect(self.double_clicked)
+        self.win.list_Items.itemDoubleClicked.connect(self.item_list_double_clicked)
+        self.win.list_ImportItems.itemDoubleClicked.connect(self.import_items_list_double_clicked)
         self.win.combo_ItemSet.currentIndexChanged.connect(self.change_itemset)
 
     def disconnect_item_triggers(self):
@@ -207,7 +160,8 @@ class ItemsUI:
         self.triggers_connected = False
         self.win.list_Items.currentItemChanged.disconnect(self.on_row_changed)
         self.win.btn_WeaponSwap.clicked.disconnect(self.weapon_swap)
-        self.win.list_Items.itemDoubleClicked.disconnect(self.double_clicked)
+        self.win.list_Items.itemDoubleClicked.disconnect(self.item_list_double_clicked)
+        self.win.list_ImportItems.itemDoubleClicked.disconnect(self.import_items_list_double_clicked)
         self.win.combo_ItemSet.currentIndexChanged.disconnect(self.change_itemset)
 
     def create_equipped_abyssal_socket_slots(self, item_name, number_of_sockets):
@@ -245,12 +199,15 @@ class ItemsUI:
         self.item_slot_ui_list[slot_name] = slot_ui
         slot_ui.setHidden(hidden)
         self.win.groupbox_SocketedJewels.setVisible(self.win.vlayout_SocketedJewels.count() > 1)
+        # +40 = to make up for other widgets on the tab
         height = (
             self.win.vlayout_EquippedItems.totalSizeHint().height()
             + self.win.vlayout_SocketedJewels.totalSizeHint().height()
+        ) + 40
+        self.win.scrollAreaWidgetContents_Items.setFixedHeight(
+            max(height, self.win.list_ImportItems.geometry().y() + self.win.list_ImportItems.geometry().height())
         )
-        # +40 = to make up for other widgets on the tab
-        self.win.scrollAreaWidgetContents_Items.setFixedHeight(height + 40)
+        # self.win.scrollAreaWidgetContents_Items.setFixedHeight(height)
         return slot_ui
 
     def remove_equipped_items_slot_ui(self, slot_name):
@@ -292,13 +249,41 @@ class ItemsUI:
                     slot.add_item(item)
 
     def load_unique_items(self):
+        item_types = [""]
+        item_leagues = [""]
         u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
         for xml_item_type in list(u_xml.getroot()):
-            self.uniques_items[xml_item_type.tag] = []
             for xml_item in xml_item_type.findall("Item"):
                 new_item = Item(self.base_items)
                 new_item.load_from_xml_v2(xml_item, "UNIQUE")
-                self.uniques_items[xml_item_type.tag].append(new_item)
+                self.uniques_items.append(new_item)
+                if new_item.type:
+                    item_types.append(new_item.type)
+                    item_types.append(new_item.sub_type)
+                if new_item.league:
+                    item_leagues.extend(new_item.league.split(", "))
+
+        # Update the Import items type combo
+        self.win.combo_ItemsImportType.clear()
+        self.win.combo_ItemsImportType.addItems(sorted(set(item_types)))
+        self.win.combo_ItemsImportType.setItemText(0, "Any Type")
+        self.win.combo_ItemsImportType.view().setMinimumWidth(self.win.combo_ItemsImportType.minimumSizeHint().width())
+        self.win.combo_ItemsImportLeague.clear()
+        self.win.combo_ItemsImportLeague.addItems(sorted(set(item_leagues)))
+        self.win.combo_ItemsImportLeague.setItemText(0, "Any League")
+        self.win.combo_ItemsImportLeague.view().setMinimumWidth(
+            self.win.combo_ItemsImportLeague.minimumSizeHint().width()
+        )
+
+    # dictionary of lists. Do we want that ? or is a list easier ?
+    # def load_unique_items(self):
+    #     u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
+    #     for xml_item_type in list(u_xml.getroot()):
+    #         self.uniques_items[xml_item_type.tag] = []
+    #         for xml_item in xml_item_type.findall("Item"):
+    #             new_item = Item(self.base_items)
+    #             new_item.load_from_xml_v2(xml_item, "UNIQUE")
+    #             self.uniques_items[xml_item_type.tag].append(new_item)
 
     def load_rare_template_items(self):
         t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates.xml"))
@@ -334,7 +319,7 @@ class ItemsUI:
         #         child_xml.append(item_xml)
         #     new_root.append(child_xml)
         # write_xml("Data/uniques.xml", new_xml)
-
+        #
         # templates = []
         # t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates_flat.xml"))
         # _xml_root = t_xml.getroot()
@@ -354,7 +339,7 @@ class ItemsUI:
 
     def add_item_to_itemlist_widget(self, _item):
         """
-        Add an Item() class to the internal list.
+        Add an Item() class to the list widget and internal lists.
 
         :param _item: Item(). The item to be added to the list
         :return: the passed in Item() class object
@@ -363,8 +348,22 @@ class ItemsUI:
         self.itemlist_by_id[_item.id] = _item
         lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
         lwi.setToolTip(_item.tooltip())
-        lwi.setWhatsThis(_item.unique_id)
+        lwi.setWhatsThis(_item.name)
         self.win.list_Items.addItem(lwi)
+        return _item
+
+    def add_item_to_import_item_list_widget(self, _item, idx):
+        """
+        Add an Item() class to the list widget.
+
+        :param _item: Item(). The item to be added to the list
+        :param idx: int. Index of this item in self.rare_template_items or self.uniques_items
+        :return: the passed in Item() class object
+        """
+        lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
+        lwi.setToolTip(_item.tooltip())
+        lwi.setWhatsThis(_item.name)
+        self.win.list_ImportItems.addItem(lwi)
         return _item
 
     @Slot()
@@ -395,13 +394,26 @@ class ItemsUI:
 
     @Slot()
     def on_row_changed(self, item):
-        """Are there actions we want to take when the use selects a new item"""
+        """Are there actions we want to take when the user selects a new item"""
         print("on_row_changed", item.text())
 
     @Slot()
-    def double_clicked(self, item: QListWidgetItem):
+    def item_list_double_clicked(self, item: QListWidgetItem):
         """Actions for editing an item"""
-        print(item.text(), item.whatsThis())
+        dlg = CraftItemsDlg(self.pob_config, self.base_items, self.win)
+        dlg.item = item.whatsThis()
+        _return = dlg.exec()
+
+    @Slot()
+    def import_items_list_double_clicked(self, item: QListWidgetItem):
+        """Actions for editing an item"""
+        dlg = CraftItemsDlg(self.pob_config, self.base_items, self.win)
+        dlg.item = self.import_items_list[item.whatsThis()]
+        _return = dlg.exec()
+        if _return:
+            print("Imported")
+        else:
+            print("Discarded")
 
     def load_from_xml(self, _items):
         """
@@ -487,11 +499,11 @@ class ItemsUI:
             for slot_ui_name in self.item_slot_ui_list:
                 slot_ui = self.item_slot_ui_list[slot_ui_name]
                 item_id = slot_ui.current_item_id
-                if item_id != 0:
-                    item_xml = ET.fromstring(f'<Slot name="{slot_ui_name}" itemId="{item_id}"/>')
-                    if "Flask" in slot_ui_name:
-                        item_xml.set("active", bool_to_str(slot_ui.active))
-                    self.current_itemset.append(item_xml)
+                item_xml = ET.fromstring(f'<Slot name="{slot_ui_name}" itemId="{item_id}"/>')
+                if "Flask" in slot_ui_name:
+                    item_xml.set("active", bool_to_str(slot_ui.active))
+                item_xml.set("itemPbURL", slot_ui.itemPbURL)
+                self.current_itemset.append(item_xml)
 
     def clear_controls(self, loading=False):
         """
@@ -546,6 +558,7 @@ class ItemsUI:
                         item = self.itemlist_by_id[item_id]
                         item_ui: ItemSlotUI = self.item_slot_ui_list[name]
                         item_ui.set_active_item_text(item.name)
+                        item_ui.itemPbURL = slot_xml.get("itemPbURL", "")
                         if item.type == "Flask":
                             item_ui.active = str_to_bool(slot_xml.get("active", "False"))
                         if "Abyssal" in name:
@@ -581,3 +594,98 @@ class ItemsUI:
         self.current_itemset = None
         self.xml_itemsets.clear()
         self.win.combo_ItemSet.clear()
+
+    @Slot()
+    def fill_import_items_list(self, text):
+        """
+        Fill the import items list widget bsaed on the variuous accompaning comboBoxes
+
+        :param: text: str: Not used
+        :return: N/A
+        """
+
+        class ImportFromType(enum.IntEnum):
+            uniques = 0
+            rares = 1
+
+        items = []
+        self.win.list_ImportItems.clear()
+        import_from = ImportFromType(self.win.combo_ItemsImportFrom.currentIndex())
+        import_slot = self.win.combo_ItemsImportSlot.currentText()
+        import_type = self.win.combo_ItemsImportType.currentText()
+        import_league = self.win.combo_ItemsImportLeague.currentText()
+        match import_from:
+            case ImportFromType.uniques:
+                items = self.uniques_items
+                self.win.combo_ItemsImportSort.setEnabled(True)
+                self.win.combo_ItemsImportLeague.setEnabled(True)
+                self.win.combo_ItemsImportRequirements.setEnabled(True)
+                self.win.combo_ItemsImportSource.setEnabled(True)
+            case ImportFromType.rares:
+                items = self.rare_template_items
+                self.win.combo_ItemsImportSort.setEnabled(False)
+                self.win.combo_ItemsImportLeague.setEnabled(False)
+                self.win.combo_ItemsImportRequirements.setEnabled(False)
+                self.win.combo_ItemsImportSource.setEnabled(False)
+
+        for idx, item in enumerate(items):
+            if ("Any" in import_type or import_type == item.sub_type) and (
+                "Any" in import_league or import_league in item.league
+            ):
+                self.add_item_to_import_item_list_widget(item, idx)
+                # self.win.list_ImportItems.addItem(item.name)
+                self.import_items_list[item.name] = item
+
+        if import_from == ImportFromType.uniques:
+            match self.win.combo_ItemsImportSort.currentText():
+                case "Sort by Name":
+                    self.win.list_ImportItems.sortItems()
+        else:
+            self.win.list_ImportItems.sortItems()
+
+    @Slot()
+    def change_import_from_combo(self, text):
+        """
+
+        :return:
+        """
+        match self.win.combo_ItemsImportFrom.currentText():
+            case "Uniques":
+                self.win.combo_ItemsImportSort.setHidden(False)
+                self.win.combo_ItemsImportLeague.setHidden(False)
+                self.win.combo_ItemsImportRequirements.setHidden(False)
+                self.win.combo_ItemsImportSource.setHidden(False)
+            case "Rare Templates":
+                self.win.combo_ItemsImportSort.setHidden(True)
+                self.win.combo_ItemsImportLeague.setHidden(True)
+                self.win.combo_ItemsImportRequirements.setHidden(True)
+                self.win.combo_ItemsImportSource.setHidden(True)
+        self.fill_import_items_list(text)
+
+    @Slot()
+    def change_import_slot_combo(self, index):
+        """
+        Set type combo back to "Any Type" to prevent stupidity
+
+        :param index: int: Index of the combo
+        :return:
+        """
+        if index < 0:
+            return
+        if index > 0:
+            self.win.combo_ItemsImportType.setCurrentIndex(0)
+        self.fill_import_items_list("")
+
+    @Slot()
+    def change_import_type_combo(self, index):
+        """
+        Set slot combo back to "Any Slot" to prevent stupidity
+
+        :param index: int: Index of the combo
+        :return:
+        """
+        if index < 0:
+            return
+        if index > 0:
+            self.win.combo_ItemsImportSlot.setCurrentIndex(0)
+        self.fill_import_items_list("")

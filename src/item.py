@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 import re
 
 from pob_config import _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
-from constants import slot_map, ColourCodes
+from constants import slot_map, slot_names, ColourCodes
 from ui_utils import html_colour_text
 from mod import Mod
 
@@ -32,8 +32,11 @@ class Item:
         self._slot = _slot
         # the dict from json of the all items
         self.base_items = _base_items
-        # Just this item's entry from base_items
+        # This item's entry from base_items
         self.base_item = None
+        self._base_name = ""
+        self._type = ""  # or item_class - eg weapon
+        self.sub_type = ""  # or item_class - eg claw
 
         # this is not always available from the json character download
         self.level_req = 0
@@ -46,7 +49,6 @@ class Item:
         self.ilevel = 0
         # needs to be a string as there are entries like "Limited to: 1 Survival"
         self.limited_to = ""
-        self.type = ""  # or item_class
         self.quality = 0
         # this is a string even though the value is a number, as it's easier for comparisons from the original string.
         self.curr_variant = ""
@@ -86,6 +88,8 @@ class Item:
         self.source = ""
         self.radius = ""
         self.talisman_tier = 0
+        # tooltip text for the item stats, not DPS. Prevent recalculating mostly static values every time the TT is read
+        self.base_tooltip_text = ""
 
         # special dictionary/list for the rare template items that get imported into a build
         self.crafted_item = {}
@@ -175,12 +179,7 @@ class Item:
                 key = f'{influence.split("=")[0].title()} Item'
                 if key in influence_colours.keys():
                     self.influences.append(key)
-
-        self.base_item = self.base_items.get(self.base_name, None)
-        if self.base_item is not None:
-            self.type = self.base_item["type"]
-        elif "Flask" in self.name:
-            self.type = "Flask"
+        self.tooltip()
         # load_from_json
 
     def load_from_xml(self, xml, debug_lines=False):
@@ -215,7 +214,7 @@ class Item:
         desc = xml.text
         # split lines into a list, removing any blank lines, leading & trailing spaces.
         #   stolen from https://stackoverflow.com/questions/7630273/convert-multiline-into-list
-        lines = [y for y in (x.strip() for x in desc.splitlines()) if y]
+        lines = [y for y in (x.strip(" \t\r\n") for x in desc.splitlines()) if y]
         # The first line has to be rarity !!!!
         line = lines.pop(0)
         if "rarity" not in line.lower():
@@ -237,6 +236,10 @@ class Item:
                 self.base_name = line
                 lines.pop(0)
             self.name = f"{self.title}, {self.base_name}"
+        # remove any (information)
+        m = re.search(r"(.*)( \(.*\))$", self.name)
+        if m:
+            self.name = m.group(1)
 
         # print(f"t: {self.title}, r: {self.rarity}")
         if debug_lines:
@@ -379,16 +382,140 @@ class Item:
             match line:
                 case _:
                     print(f"Item().load_from_xml: Skipped: {line} (from {self.name})")
-        self.base_item = self.base_items.get(self.base_name, None)
-        if self.base_item is not None:
-            self.type = self.base_item["type"]
-        elif "Flask" in self.name:
-            self.type = "Flask"
+
         if debug_lines:
             _debug("end", len(lines), lines)
             print()
+        self.tooltip()
         return True
         # load_from_xml
+
+    def load_from_xml_v2(self, xml, default_rarity="oh noes"):
+        """
+        Fill variables from the version 2 xml
+
+        :param xml: the loaded xml
+        :param default_rarity: str: a default rarity. Useful for the uniue and rare templates
+        :return: boolean
+        """
+
+        def get_variant_value(_xml, entry_name, default_value):
+            """
+
+            :param _xml: ElementTree: Part of xml to load entry from
+            :param entry_name: str: entry name for variant_entries
+            :param default_value: str: a suitable default value for the entry being tested
+            :return: str of the entries value or the default value, or the variant value as applicable
+            """
+            _entry = _xml.get(entry_name, default_value)
+            if _entry == "variant":
+                # check which value is our variant
+                for _line in self.variant_entries[entry_name]:
+                    _m = re.search(r"{variant:([\d,]+)}(.*)", _line)
+                    if self.curr_variant in _m.group(1).split(","):
+                        return _m.group(2)
+                # _m = re.search(r"({variant:.*})(.*)", self.variant_entries[entry_name][int(self.curr_variant)])
+                # if _m:
+                #     print("variant", entry_name, _m.group(2))
+                #     return _m.group(2)
+            return _entry
+
+        self.title = xml.get("title", "")
+        self.rarity = xml.get("rarity", default_rarity)
+        # print(self.title, self.rarity)
+
+        # get all the variant information
+        self.variant_entries_xml = xml.find("VariantEntries")
+        if self.variant_entries_xml is not None:
+            for entry in list(self.variant_entries_xml):
+                self.variant_entries.setdefault(entry.tag, []).append(entry.text)
+        variant_xml = xml.find("Variants")
+        if variant_xml is not None:
+            for variant in variant_xml.findall("Variant"):
+                self.variant_names.append(variant.text)
+            self.curr_variant = variant_xml.get("current", f"{len(self.variant_names)}")
+            # ensure the uniques load with the latest value
+            if self.curr_variant == "0" and self.rarity == "UNIQUE":
+                self.curr_variant = f"{len(self.variant_names)}"
+            for alt in range(1, 9):
+                value = variant_xml.get(f"alt{alt}", "")
+                if value != "":
+                    self.alt_variants[alt] = int(value)
+
+        """!!!! use get_variant_value() for values that need variants !!!!"""
+        self.base_name = get_variant_value(xml, "base_name", "oh noes")
+        # print(self.base_name)
+        self.name = f'{self.title and f"{self.title}, " or ""}{self.base_name}'
+        # remove any (information)
+        m = re.search(r"(.*)(\(.*\))$", self.name)
+        if m:
+            self.name = m.group(1)
+
+        self.unique_id = xml.get("unique_id", "")
+        self.sockets = xml.get("sockets", "")
+        self.league = xml.get("league", "")
+        self.source = xml.get("source", "")
+        self.corrupted = str_to_bool(xml.get("corrupted", "False"))
+        attribs = xml.find("Attribs")
+        if attribs is not None:
+            self.evasion = int(attribs.get("evasion", "0"))
+            self.evasion_base_percentile = float(attribs.get("evasion_base_percentile", "0.0"))
+            self.energy_shield = int(attribs.get("energy_shield", "0"))
+            self.energy_shield_base_percentile = float(attribs.get("energy_shield_base_percentile", "0.0"))
+            self.armour = int(attribs.get("armour", "0"))
+            self.armour_base_percentile = float(attribs.get("armour_base_percentile", "0.0"))
+            self.limited_to = attribs.get("limited_to", "")
+            self.ilevel = int(attribs.get("ilevel", "0"))
+            # self.level_req = int(get_variant_value(attribs, "level_req", "0"))
+            self.level_req = int(attribs.get("level_req", "0"))
+            self.quality = int(attribs.get("quality", "0"))
+            self.radius = attribs.get("radius", "")
+            self.talisman_tier = int(attribs.get("talisman_tier", "0"))
+        # this is for crafted items
+        crafted_xml = xml.find("Crafted")
+        if crafted_xml is not None:
+            self.crafted_item["Prefix"] = []
+            for prefix in crafted_xml.findall("Prefix"):
+                self.crafted_item["Prefix"].append(prefix.text)
+            self.crafted_item["Suffix"] = []
+            for suffix in crafted_xml.findall("Suffix"):
+                self.crafted_item["Suffix"].append(suffix.text)
+
+        influence_xml = xml.find("Influences")
+        if influence_xml is not None:
+            for influence in influence_xml.findall("Variant"):
+                self.influences.append(influence.text)
+
+        imp = xml.find("Implicits")
+        for mod_xml in imp.findall("Mod"):
+            line = mod_xml.text
+            mod = Mod(mod_xml.text)
+            self.full_implicitMods_list.append(mod)
+            # check for variants and if it's our variant, add it to the smaller implicit mod list
+            if "variant" in line:
+                m = re.search(r"{variant:([\d,]+)}(.*)", line)
+                if self.curr_variant in m.group(1).split(","):
+                    self.implicitMods.append(mod)
+            else:
+                self.implicitMods.append(mod)
+        exp = xml.find("Explicits")
+        for mod_xml in exp.findall("Mod"):
+            line = mod_xml.text
+            mod = Mod(mod_xml.text)
+            self.full_explicitMods_list.append(mod)
+            # check for variants and if it's our variant, add it to the smaller explicit mod list
+            if "variant" in line:
+                m = re.search(r"{variant:([\d,]+)}(.*)", line)
+                if self.curr_variant in m.group(1).split(","):
+                    self.explicitMods.append(mod)
+            else:
+                self.explicitMods.append(mod)
+
+        for requirement in xml.findall("Requires"):
+            self.requires[requirement.text] = True
+        self.tooltip()
+        return True
+        # load_from_xml_v2
 
     def save(self):
         """
@@ -422,6 +549,8 @@ class Item:
         # if debug_print:
         #     print(f"{text}\n\n")
         return ET.fromstring(f'<Item id="{self.id}">{text}</Item>')
+
+    # save_v2
 
     def save_v2(self):
         """
@@ -545,135 +674,15 @@ class Item:
 
         return xml
 
-    # save_v2
-
-    def load_from_xml_v2(self, xml, default_rarity="oh noes"):
-        """
-        Fill variables from the version 2 xml
-
-        :param xml: the loaded xml
-        :param default_rarity: str: a default rarity. Useful for the uniue and rare templates
-        :return: boolean
-        """
-
-        def get_variant_value(_xml, entry_name, default_value):
-            """
-
-            :param _xml: ElementTree: Part of xml to load entry from
-            :param entry_name: str: entry name for variant_entries
-            :param default_value: str: a suitable default value for the entry being tested
-            :return: str of the entries value or the default value, or the variant value as applicable
-            """
-            _entry = _xml.get(entry_name, default_value)
-            if _entry == "variant":
-                # check which value is our variant
-                for _line in self.variant_entries[entry_name]:
-                    _m = re.search(r"{variant:([\d,]+)}(.*)", _line)
-                    if self.curr_variant in _m.group(1).split(","):
-                        return _m.group(2)
-                # _m = re.search(r"({variant:.*})(.*)", self.variant_entries[entry_name][int(self.curr_variant)])
-                # if _m:
-                #     print("variant", entry_name, _m.group(2))
-                #     return _m.group(2)
-            return _entry
-
-        self.title = xml.get("title", "")
-        self.rarity = xml.get("rarity", default_rarity)
-        # print(self.title, self.rarity)
-
-        # get all the variant information
-        self.variant_entries_xml = xml.find("VariantEntries")
-        if self.variant_entries_xml is not None:
-            for entry in list(self.variant_entries_xml):
-                self.variant_entries.setdefault(entry.tag, []).append(entry.text)
-        variant_xml = xml.find("Variants")
-        if variant_xml is not None:
-            for variant in variant_xml.findall("Variant"):
-                self.variant_names.append(variant.text)
-            self.curr_variant = variant_xml.get("current", f"{len(self.variant_names)}")
-            # ensure the uniques load with the latest value
-            if self.curr_variant == "0" and self.rarity == "UNIQUE":
-                self.curr_variant = f"{len(self.variant_names)}"
-            for alt in range(1, 9):
-                value = variant_xml.get(f"alt{alt}", "")
-                if value != "":
-                    self.alt_variants[alt] = int(value)
-
-        """!!!! use get_variant_value() for values that need variants !!!!"""
-        self.base_name = get_variant_value(xml, "base_name", "oh noes")
-        # print(self.base_name)
-        self.name = f'{self.title and f"{self.title}, " or ""}{self.base_name}'
-        self.unique_id = xml.get("unique_id", "")
-        self.sockets = xml.get("sockets", "")
-        self.league = xml.get("league", "")
-        self.source = xml.get("source", "")
-        self.corrupted = str_to_bool(xml.get("corrupted", "False"))
-        attribs = xml.find("Attribs")
-        if attribs is not None:
-            self.evasion = int(attribs.get("evasion", "0"))
-            self.evasion_base_percentile = float(attribs.get("evasion_base_percentile", "0.0"))
-            self.energy_shield = int(attribs.get("energy_shield", "0"))
-            self.energy_shield_base_percentile = float(attribs.get("energy_shield_base_percentile", "0.0"))
-            self.armour = int(attribs.get("armour", "0"))
-            self.armour_base_percentile = float(attribs.get("armour_base_percentile", "0.0"))
-            self.limited_to = attribs.get("limited_to", "")
-            self.ilevel = int(attribs.get("ilevel", "0"))
-            # self.level_req = int(get_variant_value(attribs, "level_req", "0"))
-            self.level_req = int(attribs.get("level_req", "0"))
-            self.quality = int(attribs.get("quality", "0"))
-            self.radius = attribs.get("radius", "")
-            self.talisman_tier = int(attribs.get("talisman_tier", "0"))
-        # this is for crafted items
-        crafted_xml = xml.find("Crafted")
-        if crafted_xml is not None:
-            self.crafted_item["Prefix"] = []
-            for prefix in crafted_xml.findall("Prefix"):
-                self.crafted_item["Prefix"].append(prefix.text)
-            self.crafted_item["Suffix"] = []
-            for suffix in crafted_xml.findall("Suffix"):
-                self.crafted_item["Suffix"].append(suffix.text)
-
-        influence_xml = xml.find("Influences")
-        if influence_xml is not None:
-            for influence in influence_xml.findall("Variant"):
-                self.influences.append(influence.text)
-
-        imp = xml.find("Implicits")
-        for mod_xml in imp.findall("Mod"):
-            line = mod_xml.text
-            mod = Mod(mod_xml.text)
-            self.full_implicitMods_list.append(mod)
-            # check for variants and if it's our variant, add it to the smaller implicit mod list
-            if "variant" in line:
-                m = re.search(r"{variant:([\d,]+)}(.*)", line)
-                if self.curr_variant in m.group(1).split(","):
-                    self.implicitMods.append(mod)
-            else:
-                self.implicitMods.append(mod)
-        exp = xml.find("Explicits")
-        for mod_xml in exp.findall("Mod"):
-            line = mod_xml.text
-            mod = Mod(mod_xml.text)
-            self.full_explicitMods_list.append(mod)
-            # check for variants and if it's our variant, add it to the smaller explicit mod list
-            if "variant" in line:
-                m = re.search(r"{variant:([\d,]+)}(.*)", line)
-                if self.curr_variant in m.group(1).split(","):
-                    self.explicitMods.append(mod)
-            else:
-                self.explicitMods.append(mod)
-
-        for requirement in xml.findall("Requires"):
-            self.requires[requirement.text] = True
-        return True
-        # load_from_xml_v2
-
-    def tooltip(self):
+    def tooltip(self, force=False):
         """
         Create a tooltip. Hand crafted html anyone ?
 
+        :param force: Bool. Set to true to force recalculation of TT. EG: Use for when changing variants.
         :return: str: the tooltip
         """
+        if not force and self.base_tooltip_text != "":
+            return
         rarity_colour = f"{ColourCodes[self.rarity].value};"
         tip = (
             f"<style>"
@@ -683,8 +692,9 @@ class Item:
             f'<table width="425">'
             f"<tr><th>"
         )
-        name = self.title == "" and self.base_name or self.name
-        tip += html_colour_text(rarity_colour, name)
+        # name = self.title == "" and self.base_name or self.name
+        # tip += html_colour_text(rarity_colour, name)
+        tip += html_colour_text(rarity_colour, self.name)
         for influence in self.influences:
             tip += f"<br/>{html_colour_text(influence_colours[influence], influence)}"
         tip += "</th></tr>"
@@ -715,6 +725,61 @@ class Item:
             tip += f'<tr><td>{html_colour_text("STRENGTH", "Corrupted")}</td></tr>'
         tip += f"</table>"
         return tip
+
+    @property
+    def base_name(self):
+        return self._base_name
+
+    @base_name.setter
+    def base_name(self, new_name):
+        self._base_name = new_name
+        # remove any (information)
+        m = re.search(r"(.*)( \(.*\))$", new_name)
+        if m:
+            new_name = m.group(1)
+        # Look up base_items to get the item type
+        self.base_item = self.base_items.get(new_name, None)
+        if self.base_item is not None:
+            self.type = self.base_item["type"]
+            self.sub_type = self.base_item["sub-type"]
+        elif "Flask" in new_name:
+            self.type = "Flask"
+            self.sub_type = "Flask"
+
+        # if self.base_item:
+        #     print(new_name, self.type, self.sub_type, self.base_item["tags"])
+        # else:
+        #     print(new_name, self.type, self.sub_type)
+
+        match self.type:
+            case "Shield":
+                self.slots = ["Weapon 2", "Weapon 2 Swap"]
+            case "Weapon":
+                if "twohand" in self.base_item["tags"]:
+                    self.slots = ["Weapon 1", "Weapon 1 Swap"]
+                else:
+                    self.slots = ["Weapon 1", "Weapon 1 Swap", "Weapon 2", "Weapon 2 Swap"]
+            case "Ring":
+                self.slots = ["Ring 1", "Ring 2"]
+            case "Flask":
+                self.slots = ["Flask 1", "Flask 2", "Flask 3", "Flask 4", "Flask 5"]
+            case _:
+                self.slots = [self.type]
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, new_type):
+        """
+        Fill slot list based on type
+
+        :param new_type:
+        :return:
+        """
+        self._type = new_type
+        # Fill slot list
 
     @property
     def slot(self):

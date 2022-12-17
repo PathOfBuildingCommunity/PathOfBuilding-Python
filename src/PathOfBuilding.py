@@ -33,7 +33,6 @@ from qdarktheme.qtpy.QtWidgets import (
 from constants import (
     ColourCodes,
     PlayerClasses,
-    bandits,
     empty_build,
     pantheon_major_gods,
     pantheon_minor_gods,
@@ -59,6 +58,28 @@ from export_dialog import ExportDlg
 
 # pyside6-uic Assets\PoB_Main_Window.ui -o src\PoB_Main_Window.py
 from PoB_Main_Window import Ui_MainWindow
+
+bandits = {
+    "None": {"name": "Kill All", "tooltip": "2 Passives Points"},
+    "Oak": {
+        "name": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)",
+        "tooltip": "Regenerate 1% of Life per second\n"
+        "2% additional Physical Damage Reduction\n"
+        "20% increased Physical Damage",
+    },
+    "Kraityn": {
+        "name": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)",
+        "tooltip": "6% increased Attack and Cast Speed\n"
+        "10% chance to avoid Elemental Ailments\n"
+        "6% increased Movement Speed",
+    },
+    "Alira": {
+        "name": "Alira (Mana Regen, Crit Multiplier, Resists)",
+        "tooltip": "Regenerate 5 Mana per second\n"
+        "+20% to Critical Strike Multiplier\n"
+        "+15% to all Elemental Resistances",
+    },
+}
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):

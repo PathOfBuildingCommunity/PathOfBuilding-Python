@@ -76,28 +76,6 @@ empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" l
 empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default"\
     gemId="" enabled="true" quality="0" count="1" nameSpec=""/>'
 
-bandits = {
-    "None": {"name": "Kill All", "tooltip": "2 Passives Points"},
-    "Oak": {
-        "name": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)",
-        "tooltip": "Regenerate 1% of Life per second\n"
-        "2% additional Physical Damage Reduction\n"
-        "20% increased Physical Damage",
-    },
-    "Kraityn": {
-        "name": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)",
-        "tooltip": "6% increased Attack and Cast Speed\n"
-        "10% chance to avoid Elemental Ailments\n"
-        "6% increased Movement Speed",
-    },
-    "Alira": {
-        "name": "Alira (Mana Regen, Crit Multiplier, Resists)",
-        "tooltip": "Regenerate 5 Mana per second\n"
-        "+20% to Critical Strike Multiplier\n"
-        "+15% to all Elemental Resistances",
-    },
-}
-
 resistance_penalty = {
     0: "None",
     -30: "Act 5 (-30%)",

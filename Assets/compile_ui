@@ -8,3 +8,4 @@ ${env}/bin/pyside6-uic dlgBuildExport.ui -o ../src/dlg_BuildExport.py
 ${env}/bin/pyside6-uic dlgManageTree.ui -o ../src/dlg_ManageTree.py
 ${env}/bin/pyside6-uic dlgManageSkills.ui -o ../src/dlg_ManageSkills.py
 ${env}/bin/pyside6-uic dlgManageItems.ui -o ../src/dlg_ManageItems.py
+${env}/bin/pyside6-uic dlgCraftItems.ui -o ../src/dlg_CraftItems.py
