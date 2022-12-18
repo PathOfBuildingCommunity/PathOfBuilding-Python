@@ -1,5 +1,7 @@
 """
 This Class manages all the elements and owns some elements of the "ITEMS" tab
+
+Abyssal sockets are precreated and are made visble or hidden based on what is in them.
 """
 
 from pathlib import Path
@@ -130,11 +132,13 @@ class ItemsUI:
         self.import_items_list = {}
         self.fill_import_items_list("")
 
-        # self.win.combo_ItemsImportFrom.currentTextChanged.connect(self.change_import_from_combo)
         self.win.combo_ItemsImportFrom.currentTextChanged.connect(self.fill_import_items_list)
         self.win.combo_ItemsImportSlot.currentIndexChanged.connect(self.change_import_slot_combo)
         self.win.combo_ItemsImportType.currentIndexChanged.connect(self.change_import_type_combo)
         self.win.combo_ItemsImportLeague.currentTextChanged.connect(self.fill_import_items_list)
+        self.win.combo_ItemsImportSource.currentTextChanged.connect(self.fill_import_items_list)
+        self.win.combo_ItemsImportSearchSource.currentTextChanged.connect(self.change_import_search_widgets)
+        self.win.lineedit_ItemsImportSearch.textChanged.connect(self.change_import_search_widgets)
 
     def connect_item_triggers(self):
         """re-connect triggers"""
@@ -205,7 +209,7 @@ class ItemsUI:
             + self.win.vlayout_SocketedJewels.totalSizeHint().height()
         ) + 40
         self.win.scrollAreaWidgetContents_Items.setFixedHeight(
-            max(height, self.win.list_ImportItems.geometry().y() + self.win.list_ImportItems.geometry().height())
+            max(height, self.win.widget_ImportItems.geometry().y() + self.win.widget_ImportItems.geometry().height())
         )
         # self.win.scrollAreaWidgetContents_Items.setFixedHeight(height)
         return slot_ui
@@ -598,7 +602,8 @@ class ItemsUI:
     @Slot()
     def fill_import_items_list(self, text):
         """
-        Fill the import items list widget bsaed on the variuous accompaning comboBoxes
+        Fill the import items list widget based on the various accompaning comboBoxes.
+        Start with a list of items and trim the list, rather than adding and causing duplicates.
 
         :param: text: str: Not used
         :return: N/A
@@ -612,29 +617,85 @@ class ItemsUI:
         self.win.list_ImportItems.clear()
         import_from = ImportFromType(self.win.combo_ItemsImportFrom.currentIndex())
         import_slot = self.win.combo_ItemsImportSlot.currentText()
-        import_type = self.win.combo_ItemsImportType.currentText()
-        import_league = self.win.combo_ItemsImportLeague.currentText()
         match import_from:
             case ImportFromType.uniques:
                 items = self.uniques_items
-                self.win.combo_ItemsImportSort.setEnabled(True)
-                self.win.combo_ItemsImportLeague.setEnabled(True)
-                self.win.combo_ItemsImportRequirements.setEnabled(True)
-                self.win.combo_ItemsImportSource.setEnabled(True)
+                self.win.combo_ItemsImportSort.setHidden(False)
+                self.win.combo_ItemsImportLeague.setHidden(False)
+                self.win.combo_ItemsImportRequirements.setHidden(False)
+                self.win.combo_ItemsImportSource.setHidden(False)
             case ImportFromType.rares:
                 items = self.rare_template_items
-                self.win.combo_ItemsImportSort.setEnabled(False)
-                self.win.combo_ItemsImportLeague.setEnabled(False)
-                self.win.combo_ItemsImportRequirements.setEnabled(False)
-                self.win.combo_ItemsImportSource.setEnabled(False)
+                self.win.combo_ItemsImportSort.setHidden(True)
+                self.win.combo_ItemsImportLeague.setHidden(True)
+                self.win.combo_ItemsImportRequirements.setHidden(True)
+                self.win.combo_ItemsImportSource.setHidden(True)
 
-        for idx, item in enumerate(items):
+        # start trimming the list by league and (sub)type
+        import_league = self.win.combo_ItemsImportLeague.currentText()
+        import_type = self.win.combo_ItemsImportType.currentText()
+        temp_list = []
+        for item in items:
             if ("Any" in import_type or import_type == item.sub_type) and (
                 "Any" in import_league or import_league in item.league
             ):
-                self.add_item_to_import_item_list_widget(item, idx)
-                # self.win.list_ImportItems.addItem(item.name)
-                self.import_items_list[item.name] = item
+                temp_list.append(item)
+        items = temp_list
+
+        # search item's name and mods. Only iterate through items once so as to avoid duplicates
+        search_text = self.win.lineedit_ItemsImportSearch.text().lower()
+        if search_text != "":
+            temp_list = []
+            # mod_list = []
+            for item in items:
+                # mod_list is just long string to search in (includes variants)
+                mod_list = ' '.join(mod.line.lower() for mod in item.full_implicitMods_list)
+                mod_list += ''.join(mod.line.lower() for mod in item.full_explicitMods_list)
+                match self.win.combo_ItemsImportSearchSource.currentText():
+                    case "Anywhere":
+                        if search_text in item.name.lower() or search_text in mod_list:
+                            temp_list.append(item)
+                    case "Names":
+                        if search_text in item.name.lower():
+                            temp_list.append(item)
+                    case "Modifiers":
+                        if search_text in mod_list:
+                            temp_list.append(item)
+            items = temp_list
+
+        if self.win.combo_ItemsImportSource.currentIndex() != 0:
+            temp_list = []
+            for item in items:
+                source = item.source.lower()
+                match self.win.combo_ItemsImportSource.currentText():
+                    case "Obtainable":
+                        if source != "no longer obtainable":
+                            temp_list.append(item)
+                    case "Unobtainable":
+                        if source == "no longer obtainable":
+                            temp_list.append(item)
+                    case "Vendor Recipe":
+                        temp_list.append(item)
+                    case "Upgraded":
+                        if "upgraded from" in source:
+                            temp_list.append(item)
+                    case "Boss Item":
+                        if "drops from unique" in source:
+                            temp_list.append(item)
+                    case "Corruption":
+                        if "vaal orb" in source:
+                            temp_list.append(item)
+            items = temp_list
+
+        # ToDo: Need to know where to get level and str and stuff from the build. how to represent it in the character
+        # if self.win.combo_ItemsImportRequirements.currentIndex() != 0:
+        #     temp_list = []
+        #     items = temp_list
+
+        # add the culled list to the list widget and internal list
+        for idx, item in enumerate(items):
+            self.add_item_to_import_item_list_widget(item, idx)
+            self.import_items_list[item.name] = item
 
         if import_from == ImportFromType.uniques:
             match self.win.combo_ItemsImportSort.currentText():
@@ -642,25 +703,6 @@ class ItemsUI:
                     self.win.list_ImportItems.sortItems()
         else:
             self.win.list_ImportItems.sortItems()
-
-    @Slot()
-    def change_import_from_combo(self, text):
-        """
-
-        :return:
-        """
-        match self.win.combo_ItemsImportFrom.currentText():
-            case "Uniques":
-                self.win.combo_ItemsImportSort.setHidden(False)
-                self.win.combo_ItemsImportLeague.setHidden(False)
-                self.win.combo_ItemsImportRequirements.setHidden(False)
-                self.win.combo_ItemsImportSource.setHidden(False)
-            case "Rare Templates":
-                self.win.combo_ItemsImportSort.setHidden(True)
-                self.win.combo_ItemsImportLeague.setHidden(True)
-                self.win.combo_ItemsImportRequirements.setHidden(True)
-                self.win.combo_ItemsImportSource.setHidden(True)
-        self.fill_import_items_list(text)
 
     @Slot()
     def change_import_slot_combo(self, index):
@@ -688,4 +730,9 @@ class ItemsUI:
             return
         if index > 0:
             self.win.combo_ItemsImportSlot.setCurrentIndex(0)
+        self.fill_import_items_list("")
+
+    @Slot()
+    def change_import_search_widgets(self, text):
+        # print("change_import_search_widgets", text)
         self.fill_import_items_list("")
