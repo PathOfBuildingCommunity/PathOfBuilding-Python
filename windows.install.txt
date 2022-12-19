@@ -18,6 +18,7 @@ EG:
 Open a command prompt and change directory to where you cloned PathofBuilding
 
 upgrade pip
+-----------
 python.exe -m pip install --upgrade pip
 
 Install poetry and install dependencies.
