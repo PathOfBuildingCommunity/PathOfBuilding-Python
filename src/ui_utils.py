@@ -7,7 +7,7 @@ from qdarktheme.qtpy.QtGui import QAbstractTextDocumentLayout, QTextDocument
 from qdarktheme.qtpy.QtWidgets import (
     QApplication,
     QComboBox,
-    QLayout,
+    QLabel,
     QMessageBox,
     QSizePolicy,
     QStyle,
@@ -74,6 +74,7 @@ class HTMLDelegate(QStyledItemDelegate):
         super().__init__()
         # the list of WidgetItems from a QListView
         self._list = None
+        self.doc = QTextDocument()
 
     def paint(self, painter, option, index):
         options = QStyleOptionViewItem(option)
@@ -98,9 +99,6 @@ class HTMLDelegate(QStyledItemDelegate):
 
     def sizeHint(self, option, index):
         """Inherited function to return the max width of all text items"""
-        doc = QTextDocument()
-        w = 0
-        for row in range(self._list.count()):
-            doc.setHtml(self._list.item(row).text())
-            w = max(w, doc.idealWidth())
-        return QSize(w + 20, doc.size().height())
+        # print("HTMLDelegate.sizeHint", self._list.objectName(), index.row())
+        self.doc.setHtml(self._list.item(index.row()).text())
+        return QSize(self.doc.idealWidth() + 20, self.doc.size().height())
