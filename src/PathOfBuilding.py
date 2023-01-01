@@ -256,6 +256,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # don't use self.switch_theme
         QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
 
+    def setup_ui(self):
+        """Called after show(). Call setup_ui for all UI classes that need it"""
+        self.items_ui.setup_ui()
+
     def exit_handler(self):
         """
         Ensure the build can be saved before exiting if needed.
@@ -727,4 +731,5 @@ QApplication.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 9))
 
 window = MainWindow(app)
 window.show()
+window.setup_ui()
 app.exec()

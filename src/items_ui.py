@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 import re
 
 from qdarktheme.qtpy.QtCore import (
+    Qt,
     Slot,
 )
 from qdarktheme.qtpy.QtWidgets import (
@@ -25,62 +26,6 @@ from item import Item
 from item_slot_ui import ItemSlotUI
 from craft_items_dialog import CraftItemsDlg
 
-test = """			Rarity: UNIQUE
-Bottled Faith
-Sulphur Flask
-League: Synthesis
-Variant: Pre 3.15.0
-Variant: Pre 3.16.0
-Variant: Current
-Selected Variant: 3
-Sulphur Flask
-Quality: 20
-LevelReq: 35
-Implicits: 3
-{crafted}{range:1}(60-70)% increased effect
-{crafted}Gains no Charges during Flask Effect
-{variant:1}{range:0.5}(30-50)% increased Duration
-Creates Consecrated Ground on Use
-{variant:1}{range:0.5}(30-50)% increased Duration
-{variant:2}{range:0.5}(20-40)% increased Duration
-{variant:3}{range:0.22}(15-30)% reduced Duration
-Consecrated Ground created by this Flask has Tripled Radius
-{variant:1}{range:0.5}+(1.0-2.0)% to Critical Strike Chance against Enemies on Consecrated Ground during Effect
-{variant:2,3}{range:0.878}(100-150)% increased Critical Strike Chance against Enemies on Consecrated Ground during Effect
-{range:1}Consecrated Ground created during Effect applies (7-10)% increased Damage taken to Enemies
-"""
-
-fract = """           {"baseType": "Two-Stone Ring",
-            "craftedMods": ["Non-Channelling Skills have -7 to Total Mana Cost",
-             "+1 to Level of Socketed AoE Gems","9% increased Area of Effect"],
-            "explicitMods": ["+32% to Fire Resistance",
-                             "+32% to Cold Resistance",
-                             "+28% to Chaos Resistance"],
-            "fractured": "True",
-            "fracturedMods": ["+53 to maximum Life"],
-            "frameType": 2,
-            "h": 1,
-            "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvUmluZ3MvVG9wYXpSdWJ5IiwidyI6MSwiaCI6MSwic2NhbGUiOjEsImZyYWN0dXJlZCI6dHJ1ZX1d/132743fd5f/TopazRuby.png",
-            "id": "a56586f68e0ca5ea5126023ae0f87349e63a1d8d60b3ebb703d60bb0dc767916",
-            "identified": "True",
-            "ilvl": 69,
-            "implicitMods": ["+16% to Fire and Lightning Resistances"],
-            "influences": [
-                "elder=true"
-            ],
-            "inventoryId": "Ring2",
-            "league": "Standard",
-            "name": "Glyph Finger",
-            "requirements": [{"displayMode": 0,
-                              "name": "Level",
-                              "type": 62,
-                              "values": [["64", 0]]}],
-            "typeLine": "Two-Stone Ring",
-            "verified": "False",
-            "w": 1,
-            "x": 0,
-            "y": 0}"""
-
 
 class ItemsUI:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
@@ -88,8 +33,6 @@ class ItemsUI:
         self.win = _win
         # dictionary of Items() indexed by id. This is the same order in the xml
         self.itemlist_by_id = {}
-        # dictionary of Items() indexed by unique_id. May not be in the same order as items in the GUI
-        self.itemlist_by_uid = {}
         self.xml_items = None
         self.current_itemset = None
         self.xml_itemsets = None
@@ -97,11 +40,9 @@ class ItemsUI:
 
         self.base_items = read_json(Path(self.pob_config.exe_dir, "Data/base_items.json"))
 
-        # Allow us to print in colour
-        delegate = HTMLDelegate()
-        delegate._list = self.win.list_Items
-        self.win.list_Items.setItemDelegate(delegate)
-        self.win.list_ImportItems.setItemDelegate(delegate)
+        # set the key_event - handler - self.item_list_keypressed
+        self.win.list_Items.key_press_handler = self.item_list_keypressed
+        self.win.list_Items.set_delegate()
 
         """Create the ui elements for displaying on the left side of the tab"""
         # list of abyssal ui's for ease of hiding them during itemset changes
@@ -123,7 +64,6 @@ class ItemsUI:
         # self.rewrite_flat_files_to_xml()
 
         self.uniques_items = []
-        # self.uniques_items = {}
         self.load_unique_items()
 
         self.rare_template_items = []
@@ -140,8 +80,13 @@ class ItemsUI:
         self.win.combo_ItemsImportSearchSource.currentTextChanged.connect(self.change_import_search_widgets)
         self.win.lineedit_ItemsImportSearch.textChanged.connect(self.change_import_search_widgets)
 
+    def setup_ui(self):
+        """Call setupUI on all UI classes that need it"""
+        # Delay setting the delegate so not all 1167 rows (Jan2023) are processed multiple times during startup
+        self.win.list_ImportItems.set_delegate()
+
     def connect_item_triggers(self):
-        """re-connect triggers"""
+        """re-connect widget triggers that need to be disconnected during loading and other processing"""
         # print("connect_item_triggers", self.triggers_connected)
         # print_call_stack(idx=-4)
         if self.triggers_connected:
@@ -155,7 +100,7 @@ class ItemsUI:
         self.win.combo_ItemSet.currentIndexChanged.connect(self.change_itemset)
 
     def disconnect_item_triggers(self):
-        """disconnect item orientated triggers when updating widgets"""
+        """disconnect widget triggers that need to be disconnected during loading and other processing"""
         # print("disconnect_item_triggers", self.triggers_connected)
         # print_call_stack(idx=-4)
         if not self.triggers_connected:
@@ -248,9 +193,30 @@ class ItemsUI:
         for _id in self.itemlist_by_id:
             item = self.itemlist_by_id[_id]
             for name in self.item_slot_ui_list:
-                slot = self.item_slot_ui_list[name]
+                slot: ItemSlotUI = self.item_slot_ui_list[name]
                 if slot.type == item.type or (item.type == "Shield" and "Weapon 2" in slot.title):
                     slot.add_item(item)
+
+    def add_item_to_item_slot_ui(self, item):
+        """
+        Add just one item to the relevant item slot(s). Each Item() knows what slots it is allowed to be in.
+
+        :param item: Item(): the item to be added.
+        :return: N/A
+        """
+        for slot_name in item.slots:
+            self.item_slot_ui_list[slot_name].add_item(item)
+            self.item_slot_ui_list[slot_name].set_default_item()
+
+    def delete_item_from_item_slot_ui(self, item):
+        """
+        Remove just one item to the relevant item slot(s). Each Item() knows what slots it is allowed to be in.
+
+        :param item: Item(): the item to be added.
+        :return: N/A
+        """
+        for slot_name in item.slots:
+            self.item_slot_ui_list[slot_name].delete_item(item)
 
     def load_unique_items(self):
         item_types = [""]
@@ -278,16 +244,6 @@ class ItemsUI:
         self.win.combo_ItemsImportLeague.view().setMinimumWidth(
             self.win.combo_ItemsImportLeague.minimumSizeHint().width()
         )
-
-    # dictionary of lists. Do we want that ? or is a list easier ?
-    # def load_unique_items(self):
-    #     u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
-    #     for xml_item_type in list(u_xml.getroot()):
-    #         self.uniques_items[xml_item_type.tag] = []
-    #         for xml_item in xml_item_type.findall("Item"):
-    #             new_item = Item(self.base_items)
-    #             new_item.load_from_xml_v2(xml_item, "UNIQUE")
-    #             self.uniques_items[xml_item_type.tag].append(new_item)
 
     def load_rare_template_items(self):
         t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates.xml"))
@@ -348,7 +304,6 @@ class ItemsUI:
         :param _item: Item(). The item to be added to the list
         :return: the passed in Item() class object
         """
-        self.itemlist_by_uid[_item.unique_id] = _item
         self.itemlist_by_id[_item.id] = _item
         lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
         lwi.setToolTip(_item.tooltip())
@@ -402,11 +357,41 @@ class ItemsUI:
         print("on_row_changed", item.text())
 
     @Slot()
+    def item_list_keypressed(self, key, ctrl_pressed, alt_pressed, shift_pressed, event):
+        """
+        respond to keypresses in the item_list
+
+        :param key: the event.key()
+        :param ctrl_pressed: Bool: True if Control key pressed
+        :param alt_pressed: Bool: True if Alt key pressed
+        :param shift_pressed: Bool: True if Shift key pressed
+        :param event: The actual QT event incase more preocessing is required
+        :return: N/A
+        """
+        print("item_list_keypressed", key, event)
+        match key:
+            case Qt.Key_C:
+                if ctrl_pressed:
+                    print("item_list_keypressed: Ctrl-C pressed")
+            case Qt.Key_V:
+                if ctrl_pressed:
+                    print("item_list_keypressed: Ctrl-V pressed")
+            case Qt.Key_E:
+                if ctrl_pressed:
+                    print("item_list_keypressed: Ctrl-E pressed")
+            case Qt.Key_Delete:
+                print("item_list_keypressed: Delete pressed")
+
+    @Slot()
     def item_list_double_clicked(self, item: QListWidgetItem):
         """Actions for editing an item"""
         dlg = CraftItemsDlg(self.pob_config, self.base_items, self.win)
         dlg.item = item.whatsThis()
         _return = dlg.exec()
+        if _return:
+            print(f"Saved: {dlg.item.name}")
+        else:
+            print(f"Discarded: {dlg.item.name}")
 
     @Slot()
     def import_items_list_double_clicked(self, item: QListWidgetItem):
@@ -415,9 +400,12 @@ class ItemsUI:
         dlg.item = self.import_items_list[item.whatsThis()]
         _return = dlg.exec()
         if _return:
-            print("Imported")
+            dlg.item.id = len(self.itemlist_by_id) + 1
+            self.add_item_to_itemlist_widget(dlg.item)
+            self.add_item_to_item_slot_ui(dlg.item)
+            # self.fill_item_slot_uis()
         else:
-            print("Discarded")
+            print(f"Discarded: {dlg.item.name}")
 
     def load_from_xml(self, _items):
         """
@@ -493,8 +481,8 @@ class ItemsUI:
             # delete any items present in the xml and readd them with the current data
             for child in list(self.xml_items.findall("Item")):
                 self.xml_items.remove(child)
-            for idx, u_id in enumerate(items, 1):
-                self.xml_items.append(self.itemlist_by_uid[u_id].save_v2())
+            for _id in self.itemlist_by_id:
+                self.xml_items.append(self.itemlist_by_id[_id].save_v2())
 
             # Remove legacy <Slot /> entries
             for child in list(self.current_itemset.findall("Slot")):
@@ -519,7 +507,6 @@ class ItemsUI:
         if loading:
             self.win.list_Items.clear()
             self.itemlist_by_id.clear()
-            self.itemlist_by_uid.clear()
         for name in self.item_slot_ui_list:
             slot: ItemSlotUI = self.item_slot_ui_list[name]
             slot.clear()
@@ -649,8 +636,8 @@ class ItemsUI:
             # mod_list = []
             for item in items:
                 # mod_list is just long string to search in (includes variants)
-                mod_list = ' '.join(mod.line.lower() for mod in item.full_implicitMods_list)
-                mod_list += ''.join(mod.line.lower() for mod in item.full_explicitMods_list)
+                mod_list = " ".join(mod.line.lower() for mod in item.full_implicitMods_list)
+                mod_list += "".join(mod.line.lower() for mod in item.full_explicitMods_list)
                 match self.win.combo_ItemsImportSearchSource.currentText():
                     case "Anywhere":
                         if search_text in item.name.lower() or search_text in mod_list:
@@ -734,5 +721,4 @@ class ItemsUI:
 
     @Slot()
     def change_import_search_widgets(self, text):
-        # print("change_import_search_widgets", text)
         self.fill_import_items_list("")

@@ -64,11 +64,7 @@ class SkillsUI:
         # dictionary for holding the GemUI representions of the gems in each socket group
         self.gem_ui_list = {}
 
-        # Allow us to print in colour
-        # ToDo: update list_SocketGroups to use colours
-        delegate = HTMLDelegate()
-        delegate._list = self.win.list_SocketGroups
-        self.win.list_SocketGroups.setItemDelegate(delegate)
+        self.win.list_SocketGroups.set_delegate()
 
         tr = self.pob_config.app.tr
         self.win.combo_SortByDPS.addItem(tr("Full DPS"), "FullDPS")

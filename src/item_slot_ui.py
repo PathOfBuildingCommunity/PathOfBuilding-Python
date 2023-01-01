@@ -107,7 +107,7 @@ class ItemSlotUI(QWidget):
         self.combo_item_list.addItem(_item.name, _item)
         self.combo_item_list.view().setMinimumWidth(self.combo_item_list.minimumSizeHint().width() + 50)
 
-    def del_item(self, _item: Item):
+    def delete_item(self, _item: Item):
         """delete an item from the drop down"""
         for i in range(self.combo_item_list.count()):
             if self.combo_item_list.itemData(i) == _item:

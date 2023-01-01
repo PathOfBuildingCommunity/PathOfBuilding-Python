@@ -333,7 +333,7 @@ class Build:
         """Debug Please leave until build is mostly complete"""
 
         # Temporarily write to a test file to not corrupt the original and make for easy compare
-        pob_file.write_xml("builds/test.xml", self.build_xml)
+        pob_file.write_xml("builds/_test.xml", self.build_xml)
         # pob_file.write_xml(self.filename, self.build_xml)
 
     def save_as(self, filename):
