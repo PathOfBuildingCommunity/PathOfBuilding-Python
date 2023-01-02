@@ -965,7 +965,7 @@ website_list = {
         "id": "Rentry",
         "downloadURL": "https://rentry.co/paste/CODE/raw",
     },
-    "poe.ninja/pob": {
+    "poe.ninja": {
         "id": "PoeNinja",
         "downloadURL": "https://poe.ninja/pob/raw/CODE",
         "codeOut": "",

@@ -108,7 +108,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
     def validate_build_sharing_text(self):
         """
         Attempt to break up the text in lineedit control into a meaningful url to see if it's a url
-        that we support *OR* if it's a validate import code. Turn on the import button if needed.
+        that we support *OR* if it's a valid import code. Turn on the import button if needed.
         :return: N/A
         """
         self.btn_ImportBuildSharing.setEnabled(False)
@@ -117,7 +117,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             return
         # get the website and the code as separate 'group' variables
         #   (1) is the website and (2) is the code (not used here)
-        m = re.search(r"http[s]?://(.*)/(.*)", text)
+        m = re.search(r"http[s]?://([a-z0-9.\-]+)/(.*)", text)
         if (m is not None and m.group(1) in valid_websites) or decode_base64_and_inflate(text) is not None:
             self.btn_ImportBuildSharing.setEnabled(True)
 
@@ -138,7 +138,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         # Attempt to break up the text in lineedit control into a meaningful url.
         # get the website and the code as separate 'group' variables
         #   (1) is the website and (2) is the code
-        m = re.search(r"http[s]?://(.*)/(.*)$", text)
+        m = re.search(r"http[s]?://([a-z0-9.\-]+)/(.*)", text)
         if m is not None and m.group(1) in valid_websites:
             # if the text was a meaninful url and it was a supported url, let's get the code
             response = None
