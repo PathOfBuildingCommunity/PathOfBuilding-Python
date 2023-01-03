@@ -379,7 +379,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Eye of Chayula" base_name="Onyx Amulet">
+		<Item ver="2" title="Eye of Chayula" base_name="Onyx Amulet" upgrade="Upgrades to unique{Presence of Chayula} using currency{Blessing of Chayula}">
 			<Attribs level_req="20" />
 			<Implicits>
 				<Mod>{tags:jewellery_attribute}+(10-16) to all Attributes</Mod>
@@ -540,7 +540,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="The Halcyon" base_name="Jade Amulet" league="Breach" source="Drops in Tul Breach or from unique{Tul, Creeping Avalanche}">
+		<Item ver="2" title="The Halcyon" base_name="Jade Amulet" league="Breach" source="Drops in Tul Breach or from unique{Tul, Creeping Avalanche}" upgrade="Upgrades to unique{The Pandemonius} using currency{Blessing of Tul}">
 			<Attribs level_req="35" />
 			<Implicits>
 				<Mod>{tags:jewellery_attribute}+(20-30) to Dexterity</Mod>
@@ -939,7 +939,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Sacrificial Heart" base_name="Paua Amulet" league="Incursion" source="Drops from unique{The Vaal Omnitect}">
+		<Item ver="2" title="Sacrificial Heart" base_name="Paua Amulet" league="Incursion" source="Drops from unique{The Vaal Omnitect}" upgrade="Upgrades to unique{Zerphi's Heart} via currency{Vial of Sacrifice}">
 			<Attribs level_req="32" />
 			<Implicits>
 				<Mod>{tags:mana}(20-30)% increased Mana Regeneration Rate</Mod>
@@ -1177,7 +1177,7 @@
 				<Mod>5% increased Projectile Damage per Power Charge</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Voice of the Storm" base_name="Lapis Amulet" league="Breach" source="Drops in Esh Breach or from unique{Esh, Forked Thought}">
+		<Item ver="2" title="Voice of the Storm" base_name="Lapis Amulet" league="Breach" source="Drops in Esh Breach or from unique{Esh, Forked Thought}" upgrade="Upgrades to unique{Choir of the Storm} using currency{Blessing of Esh}">
 			<Attribs level_req="40" />
 			<Implicits>
 				<Mod>{tags:jewellery_attribute}+(20-30) to Intelligence</Mod>
@@ -1302,7 +1302,7 @@
 				<Mod>Unaffected by Shock</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Xoph's Heart" base_name="Amber Amulet" league="Breach" source="Drops in Xoph Breach or from unique{Xoph, Dark Embers}">
+		<Item ver="2" title="Xoph's Heart" base_name="Amber Amulet" league="Breach" source="Drops in Xoph Breach or from unique{Xoph, Dark Embers}" upgrade="Upgrades to unique{Xoph's Blood} using currency{Blessing of Xoph}">
 			<Attribs level_req="35" />
 			<Implicits>
 				<Mod>{tags:jewellery_attribute}+(20-30) to Strength</Mod>
@@ -1791,7 +1791,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Uul-Netol's Kiss" base_name="Labrys" league="Breach" source="Drops in Uul-Netol Breach or from unique{Uul-Netol, Unburdened Flesh}">
+		<Item ver="2" title="Uul-Netol's Kiss" base_name="Labrys" league="Breach" source="Drops in Uul-Netol Breach or from unique{Uul-Netol, Unburdened Flesh}" upgrade="Upgrades to unique{Uul-Netol's Embrace} using currency{Blessing of Uul-Netol}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -2047,7 +2047,7 @@
 				<Mod>Immune to Curses while you have at least 25 Rage</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Coward's Chains" base_name="Chain Belt" league="Incursion" source="Opening normal{Experimental Chest} in normal{Hybridisation Chamber}">
+		<Item ver="2" title="Coward's Chains" base_name="Chain Belt" league="Incursion" source="Opening normal{Experimental Chest} in normal{Hybridisation Chamber}" upgrade="Upgrades to unique{Coward's Legacy} via currency{Vial of Consequence}">
 			<Attribs level_req="22" />
 			<Implicits>
 				<Mod>{tags:jewellery_defense}+(9-20) to maximum Energy Shield</Mod>
@@ -2212,7 +2212,7 @@
 				<Mod>{tags:mana}50% increased Mana Regeneration Rate during any Flask Effect</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="The Flow Untethered" base_name="Cloth Belt" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead">
+		<Item ver="2" title="The Flow Untethered" base_name="Cloth Belt" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead" upgrade="Upgrades to unique{The Torrent's Reclamation} via currency{Time-light Scroll}">
 			<Attribs level_req="60" />
 			<Implicits>
 				<Mod>(15-25)% increased Stun and Block Recovery</Mod>
@@ -3275,7 +3275,7 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="The Snowblind Grace" base_name="Coronal Leather" league="Breach" source="Drops in Tul Breach or from unique{Tul, Creeping Avalanche}">
+		<Item ver="2" title="The Snowblind Grace" base_name="Coronal Leather" league="Breach" source="Drops in Tul Breach or from unique{Tul, Creeping Avalanche}" upgrade="Upgrades to unique{The Perfect Form} using currency{Blessing of Tul}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -3576,7 +3576,7 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Skin of the Loyal" base_name="Simple Robe" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}">
+		<Item ver="2" title="Skin of the Loyal" base_name="Simple Robe" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}" upgrade="Upgrades to unique{Skin of the Lords} using currency{Blessing of Chayula}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -4441,7 +4441,7 @@
 			</Explicits>
 			<Requires>120 Str</Requires>
 		</Item>
-		<Item ver="2" title="The Infinite Pursuit" base_name="Goliath Greaves" league="Breach" source="Drops in Uul-Netol Breach or from unique{Uul-Netol, Unburdened Flesh}">
+		<Item ver="2" title="The Infinite Pursuit" base_name="Goliath Greaves" league="Breach" source="Drops in Uul-Netol Breach or from unique{Uul-Netol, Unburdened Flesh}" upgrade="Upgrades to unique{The Red Trail} using currency{Blessing of Uul-Netol}">
 			<Attribs level_req="54" />
 			<Implicits />
 			<Explicits>
@@ -5448,7 +5448,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Dance of the Offered" base_name="variant" league="Incursion" source="Opening normal{Thunder Coffer} in normal{Conduit of Lightning}">
+		<Item ver="2" title="Dance of the Offered" base_name="variant" league="Incursion" source="Opening normal{Thunder Coffer} in normal{Conduit of Lightning}" upgrade="Upgrades to unique{Omeyocan} via currency{Vial of the Ritual}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -6325,7 +6325,7 @@
 			</Explicits>
 			<Requires>212 Dex</Requires>
 		</Item>
-		<Item ver="2" title="Xoph's Inception" base_name="Bone Bow" league="Breach" source="Drops in Xoph Breach or from unique{Xoph, Dark Embers}">
+		<Item ver="2" title="Xoph's Inception" base_name="Bone Bow" league="Breach" source="Drops in Xoph Breach or from unique{Xoph, Dark Embers}" upgrade="Upgrades to unique{Xoph's Nurture} using currency{Blessing of Xoph}">
 			<Attribs level_req="23" />
 			<Implicits />
 			<Explicits>
@@ -6549,7 +6549,7 @@
 				<base_name>{variant:4,5,6}Vaal Claw</base_name>
 			</VariantEntries>
 		</Item>
-		<Item ver="2" title="Hand of Thought and Motion" base_name="Blinder" league="Breach" source="Drops in Esh Breach or from unique{Esh, Forked Thought}">
+		<Item ver="2" title="Hand of Thought and Motion" base_name="Blinder" league="Breach" source="Drops in Esh Breach or from unique{Esh, Forked Thought}" upgrade="Upgrades to unique{Hand of Wisdom and Action} using currency{Blessing of Esh}">
 			<Attribs level_req="22" />
 			<Implicits>
 				<Mod>{variant:1}Grants 10 Life per Enemy Hit</Mod>
@@ -7662,7 +7662,7 @@
 				<Mod>Eldritch Battery during Effect</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Soul Catcher" base_name="Quartz Flask" league="Incursion" source="Drops from unique{The Vaal Omnitect}">
+		<Item ver="2" title="Soul Catcher" base_name="Quartz Flask" league="Incursion" source="Drops from unique{The Vaal Omnitect}" upgrade="Upgrades to unique{Soul Ripper} via currency{Vial of the Ghost}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -11660,7 +11660,7 @@
 			</Explicits>
 			<Requires>25 Dex 25 Int</Requires>
 		</Item>
-		<Item ver="2" title="Architect's Hand" base_name="variant" league="Incursion" source="Opening normal{Fortified Casket} in normal{Defense Research Lab}">
+		<Item ver="2" title="Architect's Hand" base_name="variant" league="Incursion" source="Opening normal{Fortified Casket} in normal{Defense Research Lab}" upgrade="Upgrades to unique{Slavedriver's Hand} via currency{Vial of Dominance}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -12028,7 +12028,7 @@
 				<Mod>Cannot be Stunned</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="The Formless Flame" base_name="Siege Helmet" league="Breach" source="Drops in Xoph Breach or from unique{Xoph, Dark Embers}">
+		<Item ver="2" title="The Formless Flame" base_name="Siege Helmet" league="Breach" source="Drops in Xoph Breach or from unique{Xoph, Dark Embers}" upgrade="Upgrades to unique{The Formless Inferno} using currency{Blessing of Xoph}">
 			<Attribs level_req="48" />
 			<Implicits />
 			<Explicits>
@@ -13209,7 +13209,7 @@
 				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Mask of the Spirit Drinker" base_name="variant" league="Incursion" source="Opening normal{Pools Coffer} in normal{Sanctum of Immortality}">
+		<Item ver="2" title="Mask of the Spirit Drinker" base_name="variant" league="Incursion" source="Opening normal{Pools Coffer} in normal{Sanctum of Immortality}" upgrade="Upgrades to unique{Mask of the Stitched Demon} via currency{Vial of Summoning}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -13647,7 +13647,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="The Tempest's Binding" base_name="Callous Mask" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead">
+		<Item ver="2" title="The Tempest's Binding" base_name="Callous Mask" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead" upgrade="Upgrades to unique{The Tempest's Liberation} via currency{Deregulation Scroll}">
 			<Attribs level_req="45" />
 			<Implicits />
 			<Explicits>
@@ -13793,7 +13793,7 @@
 				<Mod>Minions have +(2-5)% chance to Suppress Spell Damage</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="The Blue Dream" base_name="Cobalt Jewel" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}">
+		<Item ver="2" title="The Blue Dream" base_name="Cobalt Jewel" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}" upgrade="Upgrades to unique{The Blue Nightmare} using currency{Blessing of Chayula}">
 			<Attribs radius="Large" />
 			<Implicits />
 			<Explicits>
@@ -14025,7 +14025,7 @@
 				<Variant num="6">Current - Min Frenzy Charge</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="The Green Dream" base_name="Viridian Jewel" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}">
+		<Item ver="2" title="The Green Dream" base_name="Viridian Jewel" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}" upgrade="Upgrades to unique{The Green Nightmare} using currency{Blessing of Chayula}">
 			<Attribs radius="Large" />
 			<Implicits />
 			<Explicits>
@@ -14360,7 +14360,7 @@
 				<Mod>+10% chance to be Frozen, Shocked and Ignited</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="The Red Dream" base_name="Crimson Jewel" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}">
+		<Item ver="2" title="The Red Dream" base_name="Crimson Jewel" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}" upgrade="Upgrades to unique{The Red Nightmare} using currency{Blessing of Chayula}">
 			<Attribs radius="Large" />
 			<Implicits />
 			<Explicits>
@@ -14403,7 +14403,7 @@
 				<Mod>Adds 1 to 2 Lightning Damage to Attacks</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Tempered Flesh" base_name="Crimson Jewel" league="Incursion" source="Drops from unique{The Vaal Omnitect}">
+		<Item ver="2" title="Tempered Flesh" base_name="Crimson Jewel" league="Incursion" source="Drops from unique{The Vaal Omnitect}" upgrade="Upgrades to unique{Transcendent Flesh} via currency{Vial of Transcendence}">
 			<Attribs radius="Medium" />
 			<Implicits />
 			<Explicits>
@@ -14435,7 +14435,7 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Tempered Mind" base_name="Cobalt Jewel" league="Incursion" source="Drops from unique{The Vaal Omnitect}">
+		<Item ver="2" title="Tempered Mind" base_name="Cobalt Jewel" league="Incursion" source="Drops from unique{The Vaal Omnitect}" upgrade="Upgrades to unique{Transcendent Mind} via currency{Vial of Transcendence}">
 			<Attribs radius="Medium" />
 			<Implicits />
 			<Explicits>
@@ -14469,7 +14469,7 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Tempered Spirit" base_name="Viridian Jewel" league="Incursion" source="Drops from unique{The Vaal Omnitect}">
+		<Item ver="2" title="Tempered Spirit" base_name="Viridian Jewel" league="Incursion" source="Drops from unique{The Vaal Omnitect}" upgrade="Upgrades to unique{Transcendent Spirit} via currency{Vial of Transcendence}">
 			<Attribs radius="Medium" />
 			<Implicits />
 			<Explicits>
@@ -17030,7 +17030,7 @@
 				<Mod>Arrows deal 50% increased Damage with Hits and Ailments to Targets they Pierce</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="The Fracturing Spinner" base_name="Blunt Arrow Quiver" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead">
+		<Item ver="2" title="The Fracturing Spinner" base_name="Blunt Arrow Quiver" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead" upgrade="Upgrades to unique{The Shattered Divinity} via currency{Fragmentation Scroll}">
 			<Attribs level_req="60" />
 			<Implicits>
 				<Mod>(7-9) to (13-16) Added Physical Damage with Bow Attacks</Mod>
@@ -19088,7 +19088,7 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="The Anticipation" base_name="Ezomyte Tower Shield" league="Breach" source="Drops in Uul-Netol Breach or from unique{Uul-Netol, Unburdened Flesh}">
+		<Item ver="2" title="The Anticipation" base_name="Ezomyte Tower Shield" league="Breach" source="Drops in Uul-Netol Breach or from unique{Uul-Netol, Unburdened Flesh}" upgrade="Upgrades to unique{The Surrender} using currency{Blessing of Uul-Netol}">
 			<Attribs />
 			<Implicits>
 				<Mod>{variant:2}+(30-40) to maximum Life</Mod>
@@ -19311,7 +19311,7 @@
 				<Mod>Blood Magic</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Atziri's Mirror" base_name="Golden Buckler">
+		<Item ver="2" title="Atziri's Mirror" base_name="Golden Buckler" source="No longer obtainable">
 			<Attribs />
 			<Implicits>
 				<Mod>{variant:3}6% increased Movement Speed</Mod>
@@ -19544,7 +19544,7 @@
 				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Apep's Slumber" base_name="variant" league="Incursion" source="Opening normal{Grove Vessel} in normal{Toxic Grove}">
+		<Item ver="2" title="Apep's Slumber" base_name="variant" league="Incursion" source="Opening normal{Grove Vessel} in normal{Toxic Grove}" upgrade="Upgrades to unique{Apep's Supremacy} via currency{Vial of Awakening}">
 			<Attribs />
 			<Implicits>
 				<Mod>(5-10)% increased Spell Damage</Mod>
@@ -19637,7 +19637,7 @@
 				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Esh's Mirror" base_name="Thorium Spirit Shield" league="Breach" source="Drops in Esh Breach or from unique{Esh, Forked Thought}">
+		<Item ver="2" title="Esh's Mirror" base_name="Thorium Spirit Shield" league="Breach" source="Drops in Esh Breach or from unique{Esh, Forked Thought}" upgrade="Upgrades to unique{Esh's Visage} using currency{Blessing of Esh}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -20213,7 +20213,7 @@
 				<Variant num="2">Pre 3.17.0</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="The Unshattered Will" base_name="Archon Kite Shield" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead">
+		<Item ver="2" title="The Unshattered Will" base_name="Archon Kite Shield" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead" upgrade="Upgrades to unique{The Immortal Will} via currency{Specularity Scroll}">
 			<Attribs />
 			<Implicits>
 				<Mod>+12% to all Elemental Resistances</Mod>
@@ -20544,7 +20544,7 @@
 			<Requires>113 Str</Requires>
 			<Requires>113 Int</Requires>
 		</Item>
-		<Item ver="2" title="The Winds of Fate" base_name="Foul Staff" league="Sanctum" source="Source: Drops from unique{Lycia, Herald of the Scourge} in normal{The Beyond}">
+		<Item ver="2" title="The Winds of Fate" base_name="Foul Staff" league="Sanctum" source="Drops from unique{Lycia, Herald of the Scourge} in normal{The Beyond}">
 			<Attribs />
 			<Implicits>
 				<Mod>+18% Chance to Block Attack Damage while wielding a Staff</Mod>
@@ -20708,7 +20708,7 @@
 				<base_name>{variant:2}Iron Staff</base_name>
 			</VariantEntries>
 		</Item>
-		<Item ver="2" title="The Enmity Divine" base_name="Imperial Staff" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead">
+		<Item ver="2" title="The Enmity Divine" base_name="Imperial Staff" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead" upgrade="Upgrades to unique{The Yielding Mortality} via currency{Haemocombustion Scroll}">
 			<Attribs level_req="66" />
 			<Implicits>
 				<Mod>18% Chance to Block Attack Damage while wielding a Staff</Mod>
@@ -21646,7 +21646,7 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="The Rippling Thoughts" base_name="Legion Sword" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead">
+		<Item ver="2" title="The Rippling Thoughts" base_name="Legion Sword" league="Harbinger" source="Created from item parts obtained from Boss in The Beachhead" upgrade="Upgrades to unique{The Surging Thoughts} via currency{Electroshock Scroll}">
 			<Attribs />
 			<Implicits>
 				<Mod>40% increased Global Accuracy Rating</Mod>
@@ -21715,7 +21715,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Severed in Sleep" base_name="Cutlass" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}">
+		<Item ver="2" title="Severed in Sleep" base_name="Cutlass" league="Breach" source="Drops in Chayula Breach or from unique{Chayula, Who Dreamt}" upgrade="Upgrades to unique{United in Dream} using currency{Blessing of Chayula}">
 			<Attribs />
 			<Implicits>
 				<Mod>{variant:1}18% increased Global Accuracy Rating</Mod>
@@ -21758,7 +21758,7 @@
 				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Story of the Vaal" base_name="variant" league="Incursion" source="Opening normal{Fireproof Chest} in normal{Crucible of Flame}">
+		<Item ver="2" title="Story of the Vaal" base_name="variant" league="Incursion" source="Opening normal{Fireproof Chest} in normal{Crucible of Flame}" upgrade="Upgrades to unique{Fate of the Vaal} via currency{Vial of Fate}">
 			<Attribs />
 			<Implicits>
 				<Mod>{variant:1}+240 to Accuracy Rating</Mod>
@@ -22721,7 +22721,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Tulborn" base_name="Spiraled Wand" league="Breach" source="Drops in Tul Breach or from unique{Tul, Creeping Avalanche}">
+		<Item ver="2" title="Tulborn" base_name="Spiraled Wand" league="Breach" source="Drops in Tul Breach or from unique{Tul, Creeping Avalanche}" upgrade="Upgrades to unique{Tulfall} using currency{Blessing of Tul}">
 			<Attribs level_req="24" />
 			<Implicits>
 				<Mod>(15-19)% increased Spell Damage</Mod>
