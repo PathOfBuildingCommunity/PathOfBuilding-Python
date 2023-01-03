@@ -86,6 +86,7 @@ class Item:
         self.armour_base_percentile = 0.0
         self.league = ""
         self.source = ""
+        self.upgrade = ""
         self.radius = ""
         self.talisman_tier = 0
         # tooltip text for the item stats, not DPS. Prevent recalculating mostly static values every time the TT is read
@@ -305,6 +306,8 @@ class Item:
                         self.league = m.group(2)
                     case "Source":
                         self.source = m.group(2)
+                    case "Upgrade":
+                        self.upgrade = m.group(2)
                     case "Radius":
                         self.radius = m.group(2)
                     case "Talisman Tier":
@@ -455,6 +458,7 @@ class Item:
         self.sockets = xml.get("sockets", "")
         self.league = xml.get("league", "")
         self.source = xml.get("source", "")
+        self.upgrade = xml.get("upgrade", "")
         self.corrupted = str_to_bool(xml.get("corrupted", "False"))
         attribs = xml.find("Attribs")
         if attribs is not None:
@@ -519,7 +523,7 @@ class Item:
 
     def save(self):
         """
-        Save internal structures back to a xml object
+        Save internal structures back to a xml object. Not used.
 
         :return: ET.ElementTree:
         """
@@ -610,6 +614,7 @@ class Item:
         if self.rarity == "UNIQUE":
             add_attrib_if_not_null(xml, "league", self.league)
             add_attrib_if_not_null(xml, "source", self.source)
+            add_attrib_if_not_null(xml, "upgrade", self.upgrade)
         add_attrib_if_not_null(xml, "unique_id", self.unique_id)
 
         # there is always an Attribs element, even if it is empty, which almost never happens

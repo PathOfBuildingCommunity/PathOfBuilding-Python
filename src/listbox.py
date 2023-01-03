@@ -38,7 +38,8 @@ class ListBox(QListWidget):
             self.key_press_handler(event.key(), ctrl_pressed, alt_pressed, shift_pressed, event)
         else:
             event.ignore()
+        super(ListBox, self).keyPressEvent(event)
 
     def set_delegate(self):
-        """Set the HTML delegate after the UI has initialized"""
+        """Set the HTML delegate after the UI has initialized. Allows for listboxes to not have to display colour"""
         self.setItemDelegate(self.delegate)
