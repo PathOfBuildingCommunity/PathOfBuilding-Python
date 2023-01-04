@@ -1003,6 +1003,7 @@ slot_map = {
     "Abyssal2": "Abyssal #2",
     "Abyssal3": "Abyssal #3",
     "Abyssal4": "Abyssal #4",
+    "Trinket": "Trinket",
 }
 
 slot_names = {

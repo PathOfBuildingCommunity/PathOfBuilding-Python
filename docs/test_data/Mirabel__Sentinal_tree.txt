@@ -1,0 +1,903 @@
+{
+	hashes={
+		[1]=662,
+		[2]=1203,
+		[3]=1593,
+		[4]=2219,
+		[5]=2828,
+		[6]=4713,
+		[7]=5152,
+		[8]=5743,
+		[9]=5916,
+		[10]=5935,
+		[11]=6712,
+		[12]=7444,
+		[13]=10031,
+		[14]=10635,
+		[15]=11505,
+		[16]=12536,
+		[17]=13164,
+		[18]=15064,
+		[19]=15365,
+		[20]=15631,
+		[21]=15868,
+		[22]=20832,
+		[23]=21974,
+		[24]=22285,
+		[25]=22627,
+		[26]=23027,
+		[27]=24383,
+		[28]=25831,
+		[29]=25970,
+		[30]=26196,
+		[31]=26270,
+		[32]=26712,
+		[33]=26725,
+		[34]=26866,
+		[35]=29049,
+		[36]=29061,
+		[37]=29353,
+		[38]=30302,
+		[39]=30380,
+		[40]=31080,
+		[41]=31931,
+		[42]=32241,
+		[43]=32816,
+		[44]=32932,
+		[45]=33287,
+		[46]=33435,
+		[47]=33657,
+		[48]=33923,
+		[49]=34171,
+		[50]=34423,
+		[51]=35288,
+		[52]=35724,
+		[53]=35958,
+		[54]=36047,
+		[55]=36678,
+		[56]=36949,
+		[57]=39713,
+		[58]=39790,
+		[59]=40059,
+		[60]=40653,
+		[61]=41251,
+		[62]=41415,
+		[63]=41472,
+		[64]=42760,
+		[65]=44202,
+		[66]=44298,
+		[67]=44429,
+		[68]=44799,
+		[69]=45341,
+		[70]=46897,
+		[71]=47197,
+		[72]=48118,
+		[73]=48822,
+		[74]=49254,
+		[75]=49412,
+		[76]=50340,
+		[77]=53118,
+		[78]=53793,
+		[79]=53884,
+		[80]=55190,
+		[81]=55332,
+		[82]=55649,
+		[83]=55993,
+		[84]=57222,
+		[85]=58218,
+		[86]=58556,
+		[87]=59005,
+		[88]=59928,
+		[89]=60031,
+		[90]=60472,
+		[91]=60769,
+		[92]=61198,
+		[93]=61217,
+		[94]=61308,
+		[95]=61471,
+		[96]=62017,
+		[97]=62363,
+		[98]=63048,
+		[99]=63282,
+		[100]=63965,
+		[101]=64210,
+		[102]=64406,
+		[103]=64426
+	},
+	["hashes_ex"]={
+		[1]=79,
+		[2]=81,
+		[3]=83,
+		[4]=85,
+		[5]=89,
+		[6]=110,
+		[7]=112,
+		[8]=113,
+		[9]=114,
+		[10]=115
+	},
+	items={
+		[1]={
+			baseType="Large Cluster Jewel",
+			descrText="Place into an allocated Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.",
+			enchantMods={
+				[1]="Adds 8 Passive Skills",
+				[2]="2 Added Passive Skills are Jewel Sockets",
+				[3]="Added Small Passive Skills grant: 12% increased Fire Damage"
+			},
+			explicitMods={
+				[1]="Added Small Passive Skills also grant: +6 to Maximum Energy Shield",
+				[2]="1 Added Passive Skill is Smoking Remains",
+				[3]="1 Added Passive Skill is Widespread Destruction"
+			},
+			frameType=2,
+			h=1,
+			icon="https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvSmV3ZWxzL05ld0dlbUJhc2UzIiwidyI6MSwiaCI6MSwic2NhbGUiOjF9XQ/db35e60885/NewGemBase3.png",
+			id="3b95c388fbcf6f47f6016b80523295a5ad23634ef046492fba7e357777f899d6",
+			identified=true,
+			ilvl=83,
+			inventoryId="PassiveJewels",
+			league="Standard",
+			name="Eagle Prism",
+			requirements={
+				[1]={
+					displayMode=0,
+					name="Level",
+					type=62,
+					values={
+						[1]={
+							[1]="54",
+							[2]=0
+						}
+					}
+				}
+			},
+			typeLine="Large Cluster Jewel",
+			verified=false,
+			w=1,
+			x=13,
+			y=0
+		},
+		[2]={
+			baseType="Small Cluster Jewel",
+			descrText="Place into an allocated Small, Medium or Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.",
+			enchantMods={
+				[1]="Adds 2 Passive Skills",
+				[2]="Added Small Passive Skills grant: 6% increased Mana Reservation Efficiency of Skills"
+			},
+			explicitMods={
+				[1]="Added Small Passive Skills also grant: 6% increased Mana Regeneration Rate",
+				[2]="Added Small Passive Skills also grant: +6 to Maximum Mana",
+				[3]="1 Added Passive Skill is Mortifying Aspect"
+			},
+			frameType=2,
+			h=1,
+			icon="https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvSmV3ZWxzL05ld0dlbUJhc2UxIiwidyI6MSwiaCI6MSwic2NhbGUiOjF9XQ/0eb1a9d981/NewGemBase1.png",
+			id="c8d4c749209198394f1379043a3e9d4c5164cd79fa7f469138f44344fb0d1ec5",
+			identified=true,
+			ilvl=83,
+			inventoryId="PassiveJewels",
+			league="Standard",
+			name="Loath Spark",
+			requirements={
+				[1]={
+					displayMode=0,
+					name="Level",
+					type=62,
+					values={
+						[1]={
+							[1]="58",
+							[2]=0
+						}
+					}
+				}
+			},
+			typeLine="Small Cluster Jewel",
+			verified=false,
+			w=1,
+			x=38,
+			y=0
+		},
+		[3]={
+			baseType="Medium Cluster Jewel",
+			descrText="Place into an allocated Medium or Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.",
+			enchantMods={
+				[1]="Adds 4 Passive Skills",
+				[2]="1 Added Passive Skill is a Jewel Socket",
+				[3]="Added Small Passive Skills grant: 12% increased Burning Damage"
+			},
+			explicitMods={
+				[1]="Added Small Passive Skills also grant: +5 to Intelligence",
+				[2]="1 Added Passive Skill is Brewed for Potency",
+				[3]="1 Added Passive Skill is Master of Fire"
+			},
+			frameType=2,
+			h=1,
+			icon="https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvSmV3ZWxzL05ld0dlbUJhc2UyIiwidyI6MSwiaCI6MSwic2NhbGUiOjF9XQ/78f6bf8356/NewGemBase2.png",
+			id="987d51fc7ffffa1b774dd0179bcaa2573cb1b4b31493880f3c80ff2a53ccfd5a",
+			identified=true,
+			ilvl=84,
+			implicitMods={
+				[1]="15% reduced Ignite Duration on you"
+			},
+			inventoryId="PassiveJewels",
+			league="Standard",
+			name="Soul Creed",
+			requirements={
+				[1]={
+					displayMode=0,
+					name="Level",
+					type=62,
+					values={
+						[1]={
+							[1]="60",
+							[2]=0
+						}
+					}
+				}
+			},
+			typeLine="Medium Cluster Jewel",
+			verified=false,
+			w=1,
+			x=35,
+			y=0
+		},
+		[4]={
+			baseType="Medium Cluster Jewel",
+			descrText="Place into an allocated Medium or Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.",
+			enchantMods={
+				[1]="Adds 5 Passive Skills",
+				[2]="1 Added Passive Skill is a Jewel Socket",
+				[3]="Added Small Passive Skills grant: 12% increased Burning Damage"
+			},
+			explicitMods={
+				[1]="Added Small Passive Skills also grant: +4 to Intelligence",
+				[2]="Added Small Passive Skills also grant: Regenerate 0.1% of Life per Second",
+				[3]="1 Added Passive Skill is Student of Decay",
+				[4]="1 Added Passive Skill is Wrapped in Flame"
+			},
+			frameType=2,
+			h=1,
+			icon="https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvSmV3ZWxzL05ld0dlbUJhc2UyIiwidyI6MSwiaCI6MSwic2NhbGUiOjF9XQ/78f6bf8356/NewGemBase2.png",
+			id="825239358360f0fd5645d674946d888f51defd129f5bfe98337adb93f679f6cf",
+			identified=true,
+			ilvl=83,
+			inventoryId="PassiveJewels",
+			league="Standard",
+			name="Honour Wound",
+			requirements={
+				[1]={
+					displayMode=0,
+					name="Level",
+					type=62,
+					values={
+						[1]={
+							[1]="54",
+							[2]=0
+						}
+					}
+				}
+			},
+			typeLine="Medium Cluster Jewel",
+			verified=false,
+			w=1,
+			x=33,
+			y=0
+		},
+		[5]={
+			baseType="Timeless Jewel",
+			descrText="Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.",
+			explicitMods={
+				[1]="Denoted service of 7971 dekhara in the akhara of Asenath\nPassives in radius are Conquered by the Maraketh",
+				[2]="Historic"
+			},
+			flavourText={
+				[1]="They believed themselves the most ordered, but that tradition turned their forests to salt."
+			},
+			frameType=3,
+			h=1,
+			icon="https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvSmV3ZWxzL01hcmFrZXRoQ2l2aWxpemF0aW9uIiwidyI6MSwiaCI6MSwic2NhbGUiOjF9XQ/8e18d378b4/MarakethCivilization.png",
+			id="40fbdb4edb1701c880a5648d25bd0dcdb26162afb3b643186a39318d04a720a9",
+			identified=true,
+			ilvl=79,
+			inventoryId="PassiveJewels",
+			league="Standard",
+			name="Brutal Restraint",
+			properties={
+				[1]={
+					displayMode=0,
+					name="Limited to",
+					values={
+						[1]={
+							[1]="1 Historic",
+							[2]=0
+						}
+					}
+				},
+				[2]={
+					displayMode=0,
+					name="Radius",
+					type=26,
+					values={
+						[1]={
+							[1]="Large",
+							[2]=0
+						}
+					}
+				}
+			},
+			typeLine="Timeless Jewel",
+			verified=false,
+			w=1,
+			x=18,
+			y=0
+		},
+		[6]={
+			baseType="Cobalt Jewel",
+			descrText="Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.",
+			explicitMods={
+				[1]="-74% to all Elemental Resistances",
+				[2]="Elemental Resistances are capped by your highest Maximum Elemental Resistance instead"
+			},
+			flavourText={
+				[1]="\"We awoke to a sudden jungle rupturing the valleys of our home.
+",
+				[2]="Grasping limbs coiled around us, into us. We sank into each other,
+",
+				[3]="then rose into the living sky. My family screams alongside me still.\""
+			},
+			frameType=3,
+			h=1,
+			icon="https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvSmV3ZWxzL0VudGFuZ2xlZEVsZW1lbnRzSmV3ZWwiLCJ3IjoxLCJoIjoxLCJzY2FsZSI6MX1d/781ab651c4/EntangledElementsJewel.png",
+			id="f2130228ba9139f18f1c282da4975ee3b11dd8d8fc20329e7786d6160ec34464",
+			identified=true,
+			ilvl=85,
+			implicitMods={
+				[1]="15% reduced Ignite Duration on you"
+			},
+			inventoryId="PassiveJewels",
+			league="Standard",
+			name="Melding of the Flesh",
+			properties={
+				[1]={
+					displayMode=0,
+					name="Limited to",
+					values={
+						[1]={
+							[1]="1",
+							[2]=0
+						}
+					}
+				}
+			},
+			typeLine="Cobalt Jewel",
+			verified=false,
+			w=1,
+			x=0,
+			y=0
+		}
+	},
+	["jewel_data"]={
+		[0]={
+			type="JewelInt"
+		},
+		[13]={
+			subgraph={
+				groups={
+					["expansion_13"]={
+						nodes={
+							[1]="81",
+							[2]="83",
+							[3]="85",
+							[4]="86",
+							[5]="87",
+							[6]="88",
+							[7]="89",
+							[8]="79",
+							[9]="1078"
+						},
+						orbits={
+							[0]=3
+						},
+						proxy="30275",
+						x=-8798.67,
+						y=-116.185
+					}
+				},
+				nodes={
+					[79]={
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/IncreasedFireDamage.png",
+						in={
+							[1]="89"
+						},
+						isNotable=true,
+						name="Smoking Remains",
+						orbit=3,
+						orbitIndex=1,
+						out={
+						},
+						skill="13790",
+						stats={
+							[1]="35% increased Fire Damage",
+							[2]="10% chance to create a Smoke Cloud on Kill"
+						}
+					},
+					[81]={
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/FireDamagenode.png",
+						in={
+							[1]="55190"
+						},
+						name="Fire Damage",
+						orbit=3,
+						orbitIndex=4,
+						out={
+						},
+						skill="13146",
+						stats={
+							[1]="12% increased Fire Damage",
+							[2]="+6 to maximum Energy Shield"
+						}
+					},
+					[83]={
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/FireDamagenode.png",
+						in={
+							[1]="81"
+						},
+						name="Fire Damage",
+						orbit=3,
+						orbitIndex=7,
+						out={
+						},
+						skill="13146",
+						stats={
+							[1]="12% increased Fire Damage",
+							[2]="+6 to maximum Energy Shield"
+						}
+					},
+					[85]={
+						expansionJewel={
+							index=0,
+							parent="55190",
+							proxy="25441",
+							size=1
+						},
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/MasteryBlank.png",
+						in={
+							[1]="83"
+						},
+						isJewelSocket=true,
+						name="Medium Jewel Socket",
+						orbit=3,
+						orbitIndex=9,
+						out={
+						},
+						skill="49080",
+						stats={
+						}
+					},
+					[86]={
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/FireDamagenode.png",
+						in={
+							[1]="85"
+						},
+						name="Fire Damage",
+						orbit=3,
+						orbitIndex=11,
+						out={
+						},
+						skill="13146",
+						stats={
+							[1]="12% increased Fire Damage",
+							[2]="+6 to maximum Energy Shield"
+						}
+					},
+					[87]={
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/IncreasedElementalDamage.png",
+						in={
+							[1]="86"
+						},
+						isNotable=true,
+						name="Widespread Destruction",
+						orbit=3,
+						orbitIndex=12,
+						out={
+						},
+						skill="36776",
+						stats={
+							[1]="6% increased Area of Effect",
+							[2]="20% increased Elemental Damage"
+						}
+					},
+					[88]={
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/FireDamagenode.png",
+						in={
+							[1]="87"
+						},
+						name="Fire Damage",
+						orbit=3,
+						orbitIndex=13,
+						out={
+						},
+						skill="13146",
+						stats={
+							[1]="12% increased Fire Damage",
+							[2]="+6 to maximum Energy Shield"
+						}
+					},
+					[89]={
+						expansionJewel={
+							index=2,
+							parent="55190",
+							proxy="53203",
+							size=1
+						},
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/MasteryBlank.png",
+						in={
+							[1]="88"
+						},
+						isJewelSocket=true,
+						name="Medium Jewel Socket",
+						orbit=3,
+						orbitIndex=15,
+						out={
+						},
+						skill="44169",
+						stats={
+						}
+					},
+					[1078]={
+						group="expansion_13",
+						icon="Art/2DArt/SkillIcons/passives/AltMasteryGroupFire.png",
+						in={
+						},
+						isMastery=true,
+						name="Fire Damage Mastery",
+						orbit=0,
+						orbitIndex=0,
+						out={
+						},
+						skill="43904",
+						stats={
+						}
+					}
+				}
+			},
+			type="JewelPassiveTreeExpansionLarge"
+		},
+		[18]={
+			radius=1800,
+			radiusVisual="Maraketh",
+			type="JewelTimeless"
+		},
+		[33]={
+			subgraph={
+				groups={
+					["expansion_33"]={
+						nodes={
+							[1]="90",
+							[2]="91",
+							[3]="93",
+							[4]="94",
+							[5]="95",
+							[6]="1090"
+						},
+						orbits={
+							[0]=2
+						},
+						proxy="25441",
+						x=-9143.74,
+						y=613.015
+					}
+				},
+				nodes={
+					[90]={
+						group="expansion_33",
+						icon="Art/2DArt/SkillIcons/passives/FireDamageOverTimeNode.png",
+						in={
+							[1]="49080"
+						},
+						name="Fire Damage over Time",
+						orbit=2,
+						orbitIndex=1,
+						out={
+						},
+						skill="31549",
+						stats={
+							[1]="12% increased Burning Damage",
+							[2]="Regenerate 0.1% of Life per second",
+							[3]="+4 to Intelligence"
+						}
+					},
+					[91]={
+						group="expansion_33",
+						icon="Art/2DArt/SkillIcons/passives/FireDamageOverTimeNotable.png",
+						in={
+							[1]="90"
+						},
+						isNotable=true,
+						name="Wrapped in Flame",
+						orbit=2,
+						orbitIndex=4,
+						out={
+						},
+						reminderText={
+							[1]="(Being Covered in Ash applies 20% less Movement Speed and 20% increased Fire Damage Taken, for 4 seconds)"
+						},
+						skill="10952",
+						stats={
+							[1]="20% increased Fire Damage",
+							[2]="Cannot be Chilled while Burning",
+							[3]="5% chance to Cover Enemies in Ash on Hit while you are Burning"
+						}
+					},
+					[93]={
+						expansionJewel={
+							index=0,
+							parent="49080",
+							proxy="3854",
+							size=0
+						},
+						group="expansion_33",
+						icon="Art/2DArt/SkillIcons/passives/MasteryBlank.png",
+						in={
+							[1]="91"
+						},
+						isJewelSocket=true,
+						name="Small Jewel Socket",
+						orbit=2,
+						orbitIndex=9,
+						out={
+						},
+						skill="24970",
+						stats={
+						}
+					},
+					[94]={
+						group="expansion_33",
+						icon="Art/2DArt/SkillIcons/passives/FireDamageOverTimeNode.png",
+						in={
+							[1]="93"
+						},
+						name="Fire Damage over Time",
+						orbit=2,
+						orbitIndex=12,
+						out={
+						},
+						skill="31549",
+						stats={
+							[1]="12% increased Burning Damage",
+							[2]="Regenerate 0.1% of Life per second",
+							[3]="+4 to Intelligence"
+						}
+					},
+					[95]={
+						group="expansion_33",
+						icon="Art/2DArt/SkillIcons/passives/ChaosResistNotable.png",
+						in={
+							[1]="94"
+						},
+						isNotable=true,
+						name="Student of Decay",
+						orbit=2,
+						orbitIndex=15,
+						out={
+						},
+						skill="26179",
+						stats={
+							[1]="25% increased Damage over Time",
+							[2]="+13% to Chaos Resistance"
+						}
+					},
+					[1090]={
+						group="expansion_33",
+						icon="Art/2DArt/SkillIcons/passives/AltFireDamageMastery.png",
+						in={
+						},
+						isMastery=true,
+						name="Fire Damage over Time Multiplier Mastery",
+						orbit=0,
+						orbitIndex=0,
+						out={
+						},
+						skill="57049",
+						stats={
+						}
+					}
+				}
+			},
+			type="JewelPassiveTreeExpansionMedium"
+		},
+		[35]={
+			subgraph={
+				groups={
+					["expansion_35"]={
+						nodes={
+							[1]="110",
+							[2]="112",
+							[3]="113",
+							[4]="109",
+							[5]="1108"
+						},
+						orbits={
+							[0]=2
+						},
+						proxy="53203",
+						x=-9204.17,
+						y=-818.535
+					}
+				},
+				nodes={
+					[109]={
+						group="expansion_35",
+						icon="Art/2DArt/SkillIcons/passives/DamageOverTimeNotable.png",
+						in={
+							[1]="113"
+						},
+						isNotable=true,
+						name="Brewed for Potency",
+						orbit=2,
+						orbitIndex=3,
+						out={
+						},
+						skill="4094",
+						stats={
+							[1]="24% increased Damage over Time",
+							[2]="10% increased Flask Charges gained",
+							[3]="20% increased Life and Mana Recovery from Flasks"
+						}
+					},
+					[110]={
+						group="expansion_35",
+						icon="Art/2DArt/SkillIcons/passives/FireDamageOverTimeNode.png",
+						in={
+							[1]="44169"
+						},
+						name="Fire Damage over Time",
+						orbit=2,
+						orbitIndex=7,
+						out={
+						},
+						skill="31549",
+						stats={
+							[1]="12% increased Burning Damage",
+							[2]="+5 to Intelligence"
+						}
+					},
+					[112]={
+						group="expansion_35",
+						icon="Art/2DArt/SkillIcons/passives/IncreasedFireDamage.png",
+						in={
+							[1]="110"
+						},
+						isNotable=true,
+						name="Master of Fire",
+						orbit=2,
+						orbitIndex=11,
+						out={
+						},
+						reminderText={
+							[1]="(Fire Exposure applies -10% to Fire Resistance for 4 seconds)"
+						},
+						skill="33482",
+						stats={
+							[1]="Nearby Enemies have Fire Exposure"
+						}
+					},
+					[113]={
+						expansionJewel={
+							index=0,
+							parent="44169",
+							proxy="22046",
+							size=0
+						},
+						group="expansion_35",
+						icon="Art/2DArt/SkillIcons/passives/MasteryBlank.png",
+						in={
+							[1]="112"
+						},
+						isJewelSocket=true,
+						name="Small Jewel Socket",
+						orbit=2,
+						orbitIndex=15,
+						out={
+						},
+						skill="14993",
+						stats={
+						}
+					},
+					[1108]={
+						group="expansion_35",
+						icon="Art/2DArt/SkillIcons/passives/AltFireDamageMastery.png",
+						in={
+						},
+						isMastery=true,
+						name="Fire Damage over Time Multiplier Mastery",
+						orbit=0,
+						orbitIndex=0,
+						out={
+						},
+						skill="57049",
+						stats={
+						}
+					}
+				}
+			},
+			type="JewelPassiveTreeExpansionMedium"
+		},
+		[38]={
+			subgraph={
+				groups={
+					["expansion_38"]={
+						nodes={
+							[1]="115",
+							[2]="114"
+						},
+						orbits={
+							[0]=1
+						},
+						proxy="22046",
+						x=-9513.17,
+						y=-1271.76
+					}
+				},
+				nodes={
+					[114]={
+						group="expansion_38",
+						icon="Art/2DArt/SkillIcons/passives/AuraEffectNotable.png",
+						in={
+							[1]="115"
+						},
+						isNotable=true,
+						name="Mortifying Aspect",
+						orbit=1,
+						orbitIndex=0,
+						out={
+						},
+						skill="32259",
+						stats={
+							[1]="+11% to Chaos Resistance",
+							[2]="Malevolence has 50% increased Mana Reservation Efficiency"
+						}
+					},
+					[115]={
+						group="expansion_38",
+						icon="Art/2DArt/SkillIcons/passives/AuraEffectNode.png",
+						in={
+							[1]="14993"
+						},
+						name="Reservation Efficiency",
+						orbit=1,
+						orbitIndex=2,
+						out={
+						},
+						skill="21796",
+						stats={
+							[1]="+6 to maximum Mana",
+							[2]="6% increased Mana Regeneration Rate",
+							[3]="6% increased Mana Reservation Efficiency of Skills"
+						}
+					}
+				}
+			},
+			type="JewelPassiveTreeExpansionSmall"
+		}
+	},
+	["mastery_effects"]={
+		[1]="3122307527",
+		[2]="2520153585",
+		[3]="3928030102",
+		[4]="755043084",
+		[5]="2253371485",
+		[6]="407383281",
+		[7]="3171003658",
+		[8]="1272873849"
+	}
+}

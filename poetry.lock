@@ -231,6 +231,17 @@ files = [
 test = ["enum34", "ipaddress", "mock", "pywin32", "wmi"]
 
 [[package]]
+name = "pyperclip"
+version = "1.8.2"
+description = "A cross-platform clipboard module for Python. (Only handles plain text for now.)"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pyperclip-1.8.2.tar.gz", hash = "sha256:105254a8b04934f0bc84e9c24eb360a591aaf6535c9def5f29d92af107a9bf57"},
+]
+
+[[package]]
 name = "pyqtdarktheme"
 version = "2.0.0"
 description = "Flat dark theme for PySide and PyQt."
@@ -438,4 +449,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "1236c1f499adbe85e227a29eaabf0dba3b8aaa0ab741e2031f355a6e4c543d3e"
+content-hash = "e204e8bf8c21b9f94a8b4a2e55d4ef06961807247a18bea098999a95acf31d3d"

@@ -6,12 +6,8 @@ External components are the status bar, toolbar (if exists), menus
 
 Icons by  Yusuke Kamiyamane (https://p.yusukekamiyamane.com/)
 """
-import re
-import os
-import platform
-import atexit
-import sys
-import datetime
+import re, os, platform, atexit, sys, datetime, pyperclip
+
 from typing import Union
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -718,6 +714,47 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             process = psutil.Process(os.getpid())
             message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
             self.statusbar_MainWindow.showMessage(message, 2000)
+
+    # Overridden function
+    def keyReleaseEvent(self, event):
+        """
+        Handle key presses into the general application (outside a widget's focus).
+         Mainly for Ctrl-V for pasting skill groups and items
+
+        :param: QKeyEvent. The event matrix
+        :return: N/A
+        """
+        print("MainWindow", event)
+        ctrl_pressed = event.keyCombination().keyboardModifiers() == Qt.ControlModifier
+        alt_pressed = event.keyCombination().keyboardModifiers() == Qt.AltModifier
+        shift_pressed = event.keyCombination().keyboardModifiers() == Qt.ShiftModifier
+        success = False
+        match event.key():
+            case Qt.Key_V:
+                if ctrl_pressed:
+                    print("MainWindow: Ctrl-V pressed")
+                    if self.skills_ui.internal_clipboard is not None:
+                        self.set_tab_focus()
+                        success = self.skills_ui.get_item_from_clipboard()
+                    elif self.items_ui.internal_clipboard is not None:
+                        self.set_tab_focus()
+                        success = self.items_ui.get_item_from_clipboard()
+                    else:
+                        # Assume it is going to come from outside the application, ingame or trade site
+                        data = pyperclip.paste()
+                        if data is not None and type(data) == str and "Item Class:" in data:
+                            if "Skill Gems" in data:
+                                success = self.skills_ui.get_item_from_clipboard(data)
+                            else:
+                                success = self.items_ui.get_item_from_clipboard(data)
+                        # match self.build.current_tab:
+                        #     case "SKILLS":
+                        #         self.skills_ui.get_item_from_clipboard()
+                        #     case "ITEMS":
+                        #         self.items_ui.get_item_from_clipboard()
+        if not success:
+            event.ignore()
+        super(MainWindow, self).keyPressEvent(event)
 
 
 # Start here

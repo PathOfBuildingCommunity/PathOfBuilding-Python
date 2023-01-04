@@ -19,7 +19,7 @@ class Mod:
         :param _line: the full line of the mod, including variant stanzas.
         """
         # this is the text without {variant}, {crafted}. At this point {range} is still present
-        self.line = re.sub(r"{variant:\d+}", "", _line.replace("{crafted}", ""))
+        self.line = re.sub(r"{variant:\d+}", "", _line.replace("{crafted}", "").replace("{fractured}", ""))
         # this is the text with the (xx-yy), eg '% increased Duration'.
         # It is to avoid recalculating this value needlessly
         self.line_without_range = None
@@ -37,7 +37,12 @@ class Mod:
         self.value = 0
 
         self.crafted = "{crafted}" in _line
-        self.tooltip_colour = self.crafted and ColourCodes.CRAFTED.value or ColourCodes.MAGIC.value
+        self.fractured = "{fractured}" in _line
+        self.tooltip_colour = ColourCodes.MAGIC.value
+        if self.crafted:
+            self.tooltip_colour = ColourCodes.CRAFTED.value
+        if self.fractured:
+            self.tooltip_colour = ColourCodes.FRACTURED.value
         # preformed text for adding to the tooltip. Let's set a default in case there is no 'range'
         self.tooltip = f"{html_colour_text(self.tooltip_colour, self.line)}<br/>"
 
@@ -64,7 +69,11 @@ class Mod:
     @property
     def text_for_xml(self):
         """Return the text formatted for the xml output"""
-        text = f'{self.variant_text and self.variant_text or ""}{self.crafted and "{crafted}" or ""}'
+        text = (
+            f'{self.variant_text and self.variant_text or ""}'
+            f'{self.crafted and "{crafted}" or ""}'
+            f'{self.fractured and "{fractured}" or ""}'
+        )
         if self.range >= 0:
             r = f"range:{self.range}".rstrip("0").rstrip(".")
             text += f"{{{r}}}"

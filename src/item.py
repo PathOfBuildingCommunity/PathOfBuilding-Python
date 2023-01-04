@@ -19,6 +19,9 @@ influence_colours = {
     "Redeemer Item": ColourCodes.EYRIE.value,
     "Searing Exarch Item": ColourCodes.CLEANSING.value,
     "Eater of Worlds Item": ColourCodes.TANGLE.value,
+    # these are ignored
+    # "Synthesised Item"
+    # "Fractured Item"
 }
 
 
@@ -139,10 +142,6 @@ class Item:
             self.implicitMods.append(Mod(f"{{crafted}}{mod}"))
         for mod in _json.get("implicitMods", []):
             self.implicitMods.append(Mod(mod))
-        # for mod in _json.get("scourgeModLines", []):
-        #     self.implicitMods.append(f"{{crafted}}{mod}")
-        # for mod in _json.get("implicitModLines", []):
-        #     self.implicitMods.append(f"{{crafted}}{mod}")
 
         self.properties = _json.get("properties", {})
         if self.properties:
@@ -333,6 +332,8 @@ class Item:
                                 m = re.search(r"{variant:([\d,]+)}(.*)", line)
                                 if self.curr_variant in m.group(1).split(","):
                                     self.implicitMods.append(mod)
+                            else:
+                                self.implicitMods.append(mod)
                         explicits_idx = line_idx
                         break
                     case "Has Alt Variant":
@@ -708,8 +709,13 @@ class Item:
         if self.limited_to != "":
             tip += f"<tr><td>Limited to: <b>{self.limited_to}</b></td></tr>"
         if self.requires:
-            for requirement in self.requires:
-                tip += f"<tr><td>Requires <b>{requirement}</b></td></tr>"
+            req = ""
+            for idx, requirement in enumerate(self.requires):
+                if idx == 0:
+                    req = f"Requires <b>{requirement}</b>"
+                else:
+                    req += f", <b>{requirement}</b>"
+                tip += f"<tr><td>{req}</td></tr>"
         if len(self.implicitMods) > 0:
             tip += f"<tr><td>"
             for mod in self.implicitMods:

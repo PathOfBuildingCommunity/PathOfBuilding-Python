@@ -60,6 +60,7 @@ class SkillsUI:
         self.json_gems = self.load_gems_json()
         # tracks the state of the triggers, to stop setting triggers more than once or disconnecting when not connected
         self.triggers_connected = False
+        self.internal_clipboard = None
 
         # dictionary for holding the GemUI representions of the gems in each socket group
         self.gem_ui_list = {}
@@ -645,6 +646,21 @@ class SkillsUI:
         """
         # print("socket_groups_rows_about_to_be_moved")
         self.socket_group_to_be_moved = source_parent
+
+    def get_item_from_clipboard(self, data=None):
+        """
+
+        :param data: str: the clipboard data or None. Sanity checked to be an Item Class of Gem
+        :return: bool: success
+        """
+        """Get an item from the windows or internal clipboard"""
+        print("SkillsUI.get_item_from_clipboard: Ctrl-V pressed")
+        if self.internal_clipboard is None:
+            print("real clipboard")
+        else:
+            print("Internal clipboard")
+            self.internal_clipboard = None
+        return False
 
     """
     ################################################### GEM UI ###################################################

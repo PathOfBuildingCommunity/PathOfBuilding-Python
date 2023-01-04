@@ -5,9 +5,8 @@ Abyssal sockets are precreated and are made visble or hidden based on what is in
 """
 
 from pathlib import Path
-import enum
+import re, enum, pyperclip
 import xml.etree.ElementTree as ET
-import re
 
 from qdarktheme.qtpy.QtCore import (
     Qt,
@@ -26,6 +25,13 @@ from item import Item
 from item_slot_ui import ItemSlotUI
 from craft_items_dialog import CraftItemsDlg
 
+import_classes = (
+    "Abyss Jewels, Amulets, Belts, Body Armours, Boots, Bows, Claws, Daggers, Gloves, Helmets, "
+    "Hybrid Flasks, Jewels, Life Flasks, Mana Flasks, One Hand Axes, One Hand Maces, One Hand Swords, "
+    "Quivers, Rings, Rune Daggers, Sceptres, Shields, Staves, Thrusting One Hand Swords, Trinkets, "
+    "Two Hand Axes, Two Hand Maces, Two Hand Swords, Utility Flasks, Wands, Warstaves,"
+)
+
 
 class ItemsUI:
     def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
@@ -37,6 +43,7 @@ class ItemsUI:
         self.current_itemset = None
         self.xml_itemsets = None
         self.triggers_connected = False
+        self.internal_clipboard = None
 
         self.base_items = read_json(Path(self.pob_config.exe_dir, "Data/base_items.json"))
 
@@ -61,8 +68,9 @@ class ItemsUI:
         self.win.groupbox_SocketedJewels.setVisible(False)
 
         """Reformat the xml that came from the lua. Temporary"""
-        self.rewrite_flat_files_to_xml()
+        # self.rewrite_flat_files_to_xml()
 
+        self.item_types = [""]
         self.uniques_items = []
         self.load_unique_items()
 
@@ -219,7 +227,6 @@ class ItemsUI:
             self.item_slot_ui_list[slot_name].delete_item(item)
 
     def load_unique_items(self):
-        item_types = [""]
         item_leagues = [""]
         u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
         for xml_item_type in list(u_xml.getroot()):
@@ -228,14 +235,15 @@ class ItemsUI:
                 new_item.load_from_xml_v2(xml_item, "UNIQUE")
                 self.uniques_items.append(new_item)
                 if new_item.type:
-                    item_types.append(new_item.type)
-                    item_types.append(new_item.sub_type)
+                    self.item_types.append(new_item.type)
+                    self.item_types.append(new_item.sub_type)
                 if new_item.league:
                     item_leagues.extend(new_item.league.split(", "))
 
         # Update the Import items type combo
+        self.item_types = sorted(set(self.item_types))
         self.win.combo_ItemsImportType.clear()
-        self.win.combo_ItemsImportType.addItems(sorted(set(item_types)))
+        self.win.combo_ItemsImportType.addItems(self.item_types)
         self.win.combo_ItemsImportType.setItemText(0, "Any Type")
         self.win.combo_ItemsImportType.view().setMinimumWidth(self.win.combo_ItemsImportType.minimumSizeHint().width())
         self.win.combo_ItemsImportLeague.clear()
@@ -375,7 +383,7 @@ class ItemsUI:
                     print("item_list_keypressed: Ctrl-C pressed")
             case Qt.Key_V:
                 if ctrl_pressed:
-                    print("item_list_keypressed: Ctrl-V pressed")
+                    self.get_item_from_clipboard()
             case Qt.Key_E:
                 if ctrl_pressed:
                     print("item_list_keypressed: Ctrl-E pressed")
@@ -406,6 +414,155 @@ class ItemsUI:
             # self.fill_item_slot_uis()
         else:
             print(f"Discarded: {dlg.item.name}")
+
+    def get_item_from_clipboard(self, data=None):
+        """
+        Get an item from the windows or internal clipboard
+
+        :param data: str: the clipboard data or None. Sanity checked to be an Item Class, but not of what type
+        :return: bool: success
+        """
+        # print("ItemsUI.get_item_from_clipboard: Ctrl-V pressed")
+        if self.internal_clipboard is None:
+            if data is None:
+                return False
+            else:
+                return self.process_item_from_clipboard(data)
+        else:
+            print("Internal clipboard")
+            self.internal_clipboard = None
+
+    def process_item_from_clipboard(self, data):
+        """
+        Process the string recieved during an item paste to make it usable by the Item().load function.
+
+        :param data: str: the text from the clipboard. It has been sanity checked and looks like an item.
+        :return: bool: success
+        """
+
+        def find_line(text, return_index=False):
+            i = [i for i, l in enumerate(lines) if text in l]
+            if i and i[0] != 0:
+                if return_index:
+                    return i[0]
+                else:
+                    return lines[i[0]]
+            else:
+                if return_index:
+                    return 0
+                else:
+                    return ""
+
+        def get_all_lines_between_delimiters(index):
+            _l = []
+            if index >= len(lines):
+                return _l
+            _line = lines[index]
+            if "----" in _line:
+                index += 1
+            while index < len(lines) and "----" not in lines[index]:
+                _l.append(lines[index])
+                index += 1
+            return _l
+
+        lines = [y for y in (x.strip(" \t\r\n") for x in data.splitlines()) if y]
+        # print("lines", lines)
+        item_class = lines.pop(0)
+        m = re.search(r"(.*): (.*)", item_class)
+        if m.group(2) not in import_classes:
+            print("Error: Dave, i don't know what to do with this:\nUnknown 'Item Class'\n", data)
+            return False
+        line = lines.pop(0).upper()  # should be rarity
+        if "RARITY" not in line:
+            print("Error: Dave, i don't know what to do with this:\nNo 'Rarity'\n", data)
+            return False
+        m = re.search(r"(.*): (.*)", line)
+        rarity = m.group(2)
+        new_item = f"Rarity: {rarity}\n"
+        # next one or two lines should be name and base name of item
+        names = get_all_lines_between_delimiters(0)
+        if not names:
+            print("Error: Dave, i don't know what to do with this:\nNo 'Name Data'\n", data)
+            return False
+        for name in names:
+            new_item += f"{name}\n"
+
+        line = find_line("Quality:")
+        if line != "":
+            m = re.search(r"Quality: [\+-](\d+)", line)
+            new_item += f"Quality: {m.group(1)}\n"
+
+        idx = find_line("Requirements:", True)
+        if idx > 0:
+            reqs = get_all_lines_between_delimiters(idx + 1)
+            if reqs:
+                requires = ""
+                for idx, req in enumerate(reqs):
+                    if idx == 0:
+                        requires = req.replace(":", "").replace(" (augmented)", "")
+                    else:
+                        requires += f', {req.replace(":", "").replace(" (augmented)", "")}'
+                new_item += f"Requires {requires}\n"
+
+        line = find_line("Talisman Tier:")
+        if line != "":
+            new_item += f"{line}\n"
+
+        # influences
+        influences = [x for x in lines if re.search(r" Item$", x)]
+        if influences:
+            for line in influences:
+                new_item += f"{line}\n"
+
+        for search_term in ("Sockets:", "Item Level:"):
+            line = find_line(search_term)
+            if line != "":
+                new_item += f"{line}\n"
+
+        # Assume that implicits and explicits are after "Item Level:"
+        # Some White items have no implicits or explicits
+        idx = find_line("Item Level:", True) + 2
+        plicits = get_all_lines_between_delimiters(idx)
+        if plicits:
+            # Enchants. PoB treats them as implicit crafts
+            # print("1. plicits", plicits)
+            implicits = ""
+            if " (enchant)" in plicits[0]:
+                for plicit in plicits:
+                    implicits += f'{{crafted}}{plicit.replace(" (enchant)", "")}\n'
+                    # get the next stanza
+                idx += len(plicits) + 1
+                plicits = get_all_lines_between_delimiters(idx)
+            # print("2. plicits", plicits)
+            if " (implicit)" in plicits[0]:
+                for plicit in plicits:
+                    if " (crafted)" in plicit:
+                        plicit = f'{{crafted}}{plicit.replace(" (crafted)", "")}'
+                    implicits += f'{plicit.replace(" (implicit)", "")}\n'
+                    # get the next stanza, as these will be explicits
+                plicits = get_all_lines_between_delimiters(idx + len(plicits) + 1)
+            implicits_len = len([y for y in (x.strip(" \t\r\n") for x in implicits.splitlines()) if y])
+            new_item += f"Implicits: {implicits_len}\n"
+            if implicits_len > 0:
+                new_item += f"{implicits}\n"
+            # Explicits
+            # print("3. plicits", plicits)
+            for plicit in plicits:
+                if " (crafted)" in plicit:
+                    plicit = f'{{crafted}}{plicit.replace(" (crafted)", "")}'
+                if " (fractured)" in plicit:
+                    plicit = f'{{fractured}}{plicit.replace(" (fractured)", "")}'
+                new_item += f"{plicit}\n"
+        # end plicits
+
+        if find_line("Corrupted") != "":
+            new_item += f"Corrupted\n"
+
+        print("new_item", new_item)
+        item = Item(self.base_items)
+        item.load_from_xml(ET.fromstring(f"<Item>{new_item}</Item>"))
+        self.add_item_to_itemlist_widget(item)
+        return True
 
     def load_from_xml(self, _items):
         """
@@ -580,8 +737,8 @@ class ItemsUI:
     def delete_all_itemsets(self):
         """Delete ALL itemsets"""
         # print("delete_all_itemsets")
-        for itemset in self.xml_itemsets:
-            self.xml_items.remove(itemset)
+        # for itemset in self.xml_itemsets:
+        #     self.xml_items.remove(itemset)
         self.current_itemset = None
         self.xml_itemsets.clear()
         self.win.combo_ItemSet.clear()

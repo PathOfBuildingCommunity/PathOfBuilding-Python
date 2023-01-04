@@ -1,0 +1,249 @@
+ingame
+------------------------------
+	Item Class: Sceptres
+	Rarity: Rare
+	Maelström Song
+	Void Sceptre
+	--------
+	Sceptre
+	Quality: +20% (augmented)
+	Physical Damage: 60-91 (augmented)
+	Critical Strike Chance: 6.20%
+	Attacks per Second: 1.25
+	Weapon Range: 11
+	--------
+	Requirements:
+	Level: 68
+	Str: 104
+	Int: 122
+	--------
+	Sockets: R-R
+	--------
+	Item Level: 69
+	--------
+	40% increased Elemental Damage (implicit)
+	--------
+	Adds 6 to 138 Lightning Damage to Spells
+	+35 to maximum Mana
+	31% increased Mana Regeneration Rate
+	30% increased Burning Damage
+	Damage Penetrates 6% Fire Resistance
+	16% increased Fire Damage (crafted)
+
+
+trade site
+------------------------------
+	Item Class: One Hand Swords
+	Rarity: Unique
+	United in Dream
+	Cutlass
+	--------
+	One Handed Sword
+	Physical Damage: 13-53
+	Critical Strike Chance: 5.00%
+	Attacks per Second: 1.55
+	Weapon Range: 11
+	--------
+	Requirements:
+	Level: 69
+	Str: 55
+	Dex: 79
+	--------
+	Sockets: R R-B
+	--------
+	Item Level: 86
+	--------
+	40% increased Global Accuracy Rating (implicit)
+	--------
+	Grants Level 25 Envy Skill
+	Minions deal 64% increased Damage
+	Minions have +29% to Chaos Resistance
+	Minions have 60% chance to Poison Enemies on Hit
+	Minions Leech 5% of Damage as Life against Poisoned Enemies
+	--------
+	They grow fat and ripe in slumber.
+	To be fed upon when he wakes.
+	--------
+	Note: ~price 27 chaos
+
+trade with Quality
+------------------
+	Item Class: One Hand Swords
+	Rarity: Unique
+	United in Dream
+	Cutlass
+	--------
+	One Handed Sword
+	Quality: +28% (augmented)
+	Physical Damage: 17-68 (augmented)
+	Critical Strike Chance: 5.00%
+	Attacks per Second: 1.55
+	Weapon Range: 11
+	--------
+	Requirements:
+	Level: 69
+	Str: 55
+	Dex: 79
+	--------
+	Sockets: B-R-G
+	--------
+	Item Level: 84
+	--------
+	40% increased Global Accuracy Rating (implicit)
+	--------
+	Grants Level 25 Envy Skill
+	Minions deal 69% increased Damage
+	Minions have +29% to Chaos Resistance
+	Minions have 60% chance to Poison Enemies on Hit
+	Minions Leech 5% of Damage as Life against Poisoned Enemies
+	--------
+	They grow fat and ripe in slumber.
+	To be fed upon when he wakes.
+	--------
+	Note: ~price 40 chaos
+
+Tabula ------
+	Item Class: Body Armours
+	Rarity: Unique
+	Tabula Rasa
+	Simple Robe
+	--------
+	Sockets: W-W-W-W-W-W 
+	--------
+	Item Level: 83
+
+
+No implicit ------
+Item Class: One Hand Axes
+Rarity: Unique
+Actum
+Butcher Axe
+--------
+One Handed Axe
+Physical Damage: 145-268 (augmented)
+Critical Strike Chance: 5.00%
+Attacks per Second: 1.30
+Weapon Range: 11
+--------
+Requirements:
+Level: 63
+Str: 149
+Dex: 76
+--------
+Item Level: 85
+--------
+Has no Sockets
+208% increased Physical Damage
+You have no Intelligence
+Critical Strike Chance is 21% for Hits with this Weapon
+--------
+Better to act without thought
+than to think without action.
+--------
+Note: ~price 7 chaos
+
+Normal : No implicit or explicit ------
+Item Class: Boots
+Rarity: Normal
+Antique Greaves
+--------
+Armour: 134
+--------
+Requirements:
+Level: 37
+Str: 67
+--------
+Sockets: R-B-R-B 
+--------
+Item Level: 38
+
+Trade - enchant and fractured mods -----------------
+Item Class: Claws
+Rarity: Rare
+Entropy Slicer
+Noble Claw
+--------
+Claw
+Quality: +30% (augmented)
+Physical Damage: 21-56
+Elemental Damage: 93-189 (augmented), 74-166 (augmented), 19-320 (augmented)
+Critical Strike Chance: 7.92% (augmented)
+Attacks per Second: 1.90 (augmented)
+Weapon Range: 11
+--------
+Requirements:
+Level: 65
+Dex: 105
+Int: 73
+--------
+Sockets: R-R-B 
+--------
+Item Level: 83
+--------
+Quality does not increase Physical Damage (enchant)
+1% increased Critical Strike Chance per 4% Quality (enchant)
+--------
+Grants 40 Life per Enemy Hit (implicit)
+--------
+Adds 93 to 189 Fire Damage (fractured)
+Adds 74 to 166 Cold Damage
+Adds 19 to 320 Lightning Damage
+Can have up to 3 Crafted Modifiers (crafted)
++20 to Strength and Intelligence (crafted)
+19% increased Attack Speed (crafted)
+25% increased Critical Strike Chance (crafted)
+--------
+Fractured Item
+--------
+Note: ~b/o 17.99 divine
+
+trade - gems ---------------------
+	Item Class: Active Skill Gems
+	Rarity: Gem
+	Volatile Dead
+	--------
+	Spell, AoE, Fire
+	Level: 1
+	Cost: 9 Mana
+	Cast Time: 0.80 sec
+	Critical Strike Chance: 5.00%
+	Effectiveness of Added Damage: 170%
+	--------
+	Requirements:
+	Level: 12
+	Dex: 21
+	Int: 14
+	--------
+	Corpses near the targeted location explode, dealing damage in a small area and creating an orb which moves towards nearby enemies before dealing spell damage in a larger area. The explosion of the corpse is not affected by modifiers to spell damage, and cannot be reflected.
+	--------
+	Deals 20 to 30 Fire Damage
+	Consumes up to 3 corpses
+	Explosion deals base Fire Damage equal to 3% of the corpse's Maximum Life
+	Maximum of 60 Orbs at a time
+	--------
+	Experience: 1/15249
+	--------
+	Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.
+
+
+	Item Class: Support Skill Gems
+	Rarity: Gem
+	Burning Damage Support
+	--------
+	Fire, Support
+	Level: 18
+	Cost & Reservation Multiplier: 130%
+	--------
+	Requirements:
+	Level: 66
+	Str: 66
+	Int: 46
+	--------
+	Supports any skill that hits enemies, or can deal burning damage directly.
+	--------
+	Supported Skills deal 32% more Burning Damage
+	--------
+	Experience: 5043516/62460771
+	--------
+	This is a Support Gem. It does not grant a bonus to your character, but to skills in sockets connected to it. Place into an item socket connected to a socket containing the Active Skill Gem you wish to augment. Right click to remove from a socket.
+
