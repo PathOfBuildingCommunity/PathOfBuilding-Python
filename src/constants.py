@@ -215,6 +215,14 @@ class ColourCodes(enum.Enum):
     PURPLE = "#FF00FF"
     AQUA = "#00FFFF"
     WHITE = "#FFFFFF"
+    R = STRENGTH
+    B = INTELLIGENCE
+    G = DEXTERITY
+    A = "#FFD700"  # Gold
+    W = WHITE
+    STR = STRENGTH
+    INT = INTELLIGENCE
+    DEX = DEXTERITY
 
 
 @enum.unique

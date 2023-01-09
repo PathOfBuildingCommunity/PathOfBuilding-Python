@@ -7,7 +7,7 @@ import re
 from qdarktheme.qtpy.QtCore import Slot, Qt
 from qdarktheme.qtpy.QtGui import QColor, QBrush
 
-from PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config
 from constants import ColourCodes
 

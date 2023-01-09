@@ -4,7 +4,7 @@
 
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QDialog, QPushButton, QFileDialog
-from dlg_Config import Ui_dlg_Config
+from ui.dlg_Config import Ui_dlg_Config
 
 
 class ConfigDlg(Ui_dlg_Config, QDialog):

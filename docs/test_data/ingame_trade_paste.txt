@@ -113,7 +113,11 @@ Tabula ------
 	Item Level: 83
 
 
-No implicit ------
+No implicit ------Revisit Item() variants. still showing up in toolips
+
+handle tags
+
+
 Item Class: One Hand Axes
 Rarity: Unique
 Actum

@@ -29,7 +29,7 @@ from pob_config import _debug, Config, str_to_bool, bool_to_str, print_a_xml_ele
 import pob_file
 import popup_dialogs
 from tree import Tree
-from PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from spec import Spec
 
 

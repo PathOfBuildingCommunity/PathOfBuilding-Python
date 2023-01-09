@@ -52,8 +52,8 @@ from tree_view import TreeView
 from import_dialog import ImportDlg
 from export_dialog import ExportDlg
 
-# pyside6-uic Assets\PoB_Main_Window.ui -o src\PoB_Main_Window.py
-from PoB_Main_Window import Ui_MainWindow
+# pyside6-uic Assets\PoB_Main_Window.ui -o src\ui\PoB_Main_Window.py
+from ui.PoB_Main_Window import Ui_MainWindow
 
 bandits = {
     "None": {"name": "Kill All", "tooltip": "2 Passives Points"},

@@ -265,11 +265,27 @@ class Item:
                 elif line.startswith("Requires"):
                     m = re.search(r"Requires (.*)", line)
                     for req in m.group(1).split(","):
-                        m = re.search(r"level (.*)", req.lower())
-                        if m is None:
-                            self.requires[req.strip()] = True
+                        if "level" in req.lower():
+                            m = re.search(r"(\w+) (\d+)", f"{req}")
+                            self.level_req = int(m.group(2))
+                        elif "class" in req.lower():
+                            m = re.search(r"(\w+) (\w+)", f"{req}")
+                            self.requires["Class"] = m.group(2)
                         else:
-                            self.level_req = int(m.group(1))
+                            m = re.search(r"(\d+) (\w+)", f"{req}")
+                            self.requires[m.group(2)] = int(m.group(1))
+
+                        # check for 'Level nnn' or 'nnn Attribute' eg '133 Int'. m.group(2) will always be the number
+                        # m = re.search(r"(\w+)? (\d+) (\w+)?", f" {req} ")
+                        # if m.group(1) and "level" in m.group(1).lower():
+                        #     self.level_req = int(m.group(2))
+                        # else:
+                        #     self.requires[m.group(3)] = int(m.group(2))
+                        # m = re.search(r"level (.*)", req.lower())
+                        # if m is None:
+                        #     self.requires[req.strip()] = True
+                        # else:
+                        #     self.level_req = int(m.group(1))
                     lines.pop(line_idx)
                 else:
                     # skip this line
@@ -426,7 +442,6 @@ class Item:
 
         self.title = xml.get("title", "")
         self.rarity = xml.get("rarity", default_rarity)
-        # print(self.title, self.rarity)
 
         # get all the variant information
         self.variant_entries_xml = xml.find("VariantEntries")
@@ -448,7 +463,6 @@ class Item:
 
         """!!!! use get_variant_value() for values that need variants !!!!"""
         self.base_name = get_variant_value(xml, "base_name", "oh noes")
-        # print(self.base_name)
         self.name = f'{self.title and f"{self.title}, " or ""}{self.base_name}'
         # remove any (information)
         m = re.search(r"(.*)(\(.*\))$", self.name)
@@ -516,8 +530,11 @@ class Item:
             else:
                 self.explicitMods.append(mod)
 
-        for requirement in xml.findall("Requires"):
-            self.requires[requirement.text] = True
+        requires_xml = xml.find("Requires")
+        if requires_xml is not None:
+            for req in requires_xml:
+                self.requires[req.tag] = req.text
+
         self.tooltip()
         return True
         # load_from_xml_v2
@@ -555,7 +572,7 @@ class Item:
         #     print(f"{text}\n\n")
         return ET.fromstring(f'<Item id="{self.id}">{text}</Item>')
 
-    # save_v2
+    # save
 
     def save_v2(self):
         """
@@ -660,8 +677,11 @@ class Item:
         xml.append(exp)
 
         # Requires are only present if there are some
-        for requirement in self.requires.keys():
-            xml.append(ET.fromstring(f"<Requires>{requirement}</Requires>"))
+        if self.requires:
+            requires = ET.fromstring("<Requires></Requires>")
+            for req in self.requires.keys():
+                requires.append(ET.fromstring(f"<{req}>{self.requires[req]}</{req}>"))
+            xml.append(requires)
 
         if len(self.variant_names) > 0:
             var_xml = ET.fromstring(f"<Variants></Variants>")
@@ -698,39 +718,56 @@ class Item:
             f'<table width="425">'
             f"<tr><th>"
         )
-        # name = self.title == "" and self.base_name or self.name
-        # tip += html_colour_text(rarity_colour, name)
         tip += html_colour_text(rarity_colour, self.name)
         for influence in self.influences:
             tip += f"<br/>{html_colour_text(influence_colours[influence], influence)}"
         tip += "</th></tr>"
-        if self.level_req > 0:
-            tip += f"<tr><td>Requires Level <b>{self.level_req}</b></td></tr>"
+
+        # stats
+        stats = ""
+        if self.type == "Weapon":
+            stats += f"{self.sub_type}<br/>"
+        if self.quality != 0:
+            stats += f"Quality: {self.quality}%<br/>"
+        if self.sockets != 0:
+            socket_text = ""
+            for socket in self.sockets:
+                if socket in "RBGAW":
+                    socket_text += html_colour_text(ColourCodes[socket].value, socket)
+                else:
+                    socket_text += socket
+            stats += f'Sockets: {socket_text.replace("-", "=")}<br/>'
+        if stats:
+            tip += f'<tr><td>{stats.rstrip("<br/>")}</td></tr>'
+
         if self.limited_to != "":
             tip += f"<tr><td>Limited to: <b>{self.limited_to}</b></td></tr>"
         if self.requires:
-            req = ""
-            for idx, requirement in enumerate(self.requires):
-                if idx == 0:
-                    req = f"Requires <b>{requirement}</b>"
-                else:
-                    req += f", <b>{requirement}</b>"
-                tip += f"<tr><td>{req}</td></tr>"
+            reqs = ""
+            if self.level_req > 0:
+                reqs += f"Level <b>{self.level_req}</b>"
+            for req in self.requires:
+                val = self.requires[req]
+                match req:
+                    case "Int" | "Dex" | "Str":
+                        reqs += f', <b>{html_colour_text(req, f"{val}")} {req}</b>'
+                    case "Class":
+                        reqs += f", <b>Class {html_colour_text(val.upper(), val)}</b>"
+                    case _:
+                        reqs += f", <b>{req}</b>"
+            if reqs:
+                tip += f'<tr><td>Requires {reqs.lstrip(", ")}</td></tr>'
         if len(self.implicitMods) > 0:
-            tip += f"<tr><td>"
+            mods = ""
             for mod in self.implicitMods:
-                tip += mod.tooltip
-            # mod tooltip's always end in <br/>, remove the last one
-            tip = tip[:-4]
-            tip += f"</td></tr>"
+                mods += mod.tooltip
+            tip += f'<tr><td>{mods.rstrip("<br/>")}</td></tr>'
         if len(self.explicitMods) > 0:
-            tip += f"<tr><td>"
+            mods = ""
             for mod in self.explicitMods:
                 if not mod.corrupted:
-                    tip += mod.tooltip
-            # mod tooltip's always end in <br/>, remove the last one
-            tip = tip[:-4]
-            tip += f"</td></tr>"
+                    mods += mod.tooltip
+            tip += f'<tr><td>{mods.rstrip("<br/>")}</td></tr>'
 
         if self.corrupted:
             tip += f'<tr><td>{html_colour_text("STRENGTH", "Corrupted")}</td></tr>'
@@ -753,14 +790,19 @@ class Item:
         if self.base_item is not None:
             self.type = self.base_item["type"]
             self.sub_type = self.base_item["sub-type"]
+            # check for any extra requires. Just attributes for now
+            reqs = self.base_item.get("requirements", None)
+            if reqs:
+                for tag in reqs:
+                    match tag:
+                        case "Dex" | "Int" | "Str":
+                            val = reqs.get(tag, None)
+                            # don't overwrite a current value
+                            if self.requires.get(tag, None) is None and val is not None and val != 0:
+                                self.requires[tag] = val
         elif "Flask" in new_name:
             self.type = "Flask"
             self.sub_type = "Flask"
-
-        # if self.base_item:
-        #     print(new_name, self.type, self.sub_type, self.base_item["tags"])
-        # else:
-        #     print(new_name, self.type, self.sub_type)
 
         match self.type:
             case "Shield":

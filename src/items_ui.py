@@ -16,7 +16,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QListWidgetItem,
 )
 
-from PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack, print_a_xml_element
 from pob_file import read_xml, write_xml, read_json
 from constants import slot_map, ColourCodes, slot_names
@@ -66,9 +66,6 @@ class ItemsUI:
         self.hide_equipped_items_slot_ui("Weapon 1 Swap", hidden=True)
         self.hide_equipped_items_slot_ui("Weapon 2 Swap", hidden=True)
         self.win.groupbox_SocketedJewels.setVisible(False)
-
-        """Reformat the xml that came from the lua. Temporary"""
-        # self.rewrite_flat_files_to_xml()
 
         self.item_types = [""]
         self.uniques_items = []
@@ -233,6 +230,7 @@ class ItemsUI:
             for xml_item in xml_item_type.findall("Item"):
                 new_item = Item(self.base_items)
                 new_item.load_from_xml_v2(xml_item, "UNIQUE")
+                new_item.quality = 20
                 self.uniques_items.append(new_item)
                 if new_item.type:
                     self.item_types.append(new_item.type)
@@ -260,51 +258,6 @@ class ItemsUI:
             new_item.load_from_xml_v2(xml_item, "RARE")
             self.rare_template_items.append(new_item)
 
-    def rewrite_flat_files_to_xml(self):
-        """Reformat the xml from the lua. Temporary"""
-
-        uniques = {}
-        u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques_flat.xml"))
-        for item_type in list(u_xml.getroot()):
-            # print(item_type.tag)
-            uniques[item_type.tag] = []
-            for _item in item_type.findall("Item"):
-                new_item = Item(self.base_items)
-                new_item.load_from_xml(_item)
-                new_item.rarity = "UNIQUE"
-                uniques[item_type.tag].append(new_item)
-        new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
-        new_root = new_xml.getroot()
-        for child_tag in uniques:
-            # print(child_tag)
-            child_xml = ET.fromstring(f"<{child_tag} />")
-            item_type = uniques[child_tag]
-            for item in item_type:
-                # we don't want to add extra work for when we are manually updating uniques.xml
-                item.curr_variant = ""
-                item_xml = item.save_v2()
-                item_xml.attrib.pop("rarity", None)
-                child_xml.append(item_xml)
-            new_root.append(child_xml)
-        write_xml("Data/uniques_new.xml", new_xml)
-        #
-        # templates = []
-        # t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates_flat.xml"))
-        # _xml_root = t_xml.getroot()
-        # for xml_item in t_xml.getroot().findall("Item"):
-        #     new_item = Item(self.base_items)
-        #     new_item.load_from_xml(xml_item)
-        #     new_item.rarity = "RARE"
-        #     templates.append(new_item)
-        # new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><RareTemplates></RareTemplates>"))
-        # new_root = new_xml.getroot()
-        # for item in templates:
-        #     # we don't want to add extra work for when we are manually updating uniques.xml
-        #     item_xml = item.save_v2()
-        #     item_xml.attrib.pop("rarity", None)
-        #     new_root.append(item_xml)
-        # write_xml("Data/rare_templates.xml", new_xml)
-
     def add_item_to_itemlist_widget(self, _item):
         """
         Add an Item() class to the list widget and internal lists.
@@ -312,10 +265,16 @@ class ItemsUI:
         :param _item: Item(). The item to be added to the list
         :return: the passed in Item() class object
         """
+        # ensure the item has a valid id. Yes, this process will leave unused numbers as items get deleted.
+        if _item.id == 0:
+            _id = len(self.itemlist_by_id) + 1
+            while self.itemlist_by_id.get(_id, 0) != 0:
+                _id += 1
+            _item.id = _id
         self.itemlist_by_id[_item.id] = _item
         lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
         lwi.setToolTip(_item.tooltip())
-        lwi.setWhatsThis(_item.name)
+        lwi.setData(Qt.UserRole, _item)
         self.win.list_Items.addItem(lwi)
         return _item
 
@@ -393,22 +352,31 @@ class ItemsUI:
     @Slot()
     def item_list_double_clicked(self, item: QListWidgetItem):
         """Actions for editing an item"""
-        dlg = CraftItemsDlg(self.pob_config, self.base_items, self.win)
-        dlg.item = item.whatsThis()
+        dlg = CraftItemsDlg(self.pob_config, self.base_items, False, self.win)
+        # _id = item.data(Qt.UserRole)
+        # if self.itemlist_by_id.get(_id, None):
+        #     dlg.item = self.itemlist_by_id.get(_id, None)
+        dlg.item = item.data(Qt.UserRole)
         _return = dlg.exec()
         if _return:
             print(f"Saved: {dlg.item.name}")
+            # probably nothing to do as dlg.item is the same record as in self.itemlist_by_id
+            # Maybe update the item text ?
+            self.itemlist_by_id[dlg.original_item.id] = dlg.item
+            item.setData(Qt.UserRole, dlg.item)
+            item.setText(html_colour_text(dlg.item.rarity, dlg.item.name))
         else:
             print(f"Discarded: {dlg.item.name}")
+            self.itemlist_by_id[dlg.original_item.id] = dlg.original_item
+            item.setData(Qt.UserRole, dlg.original_item)
 
     @Slot()
     def import_items_list_double_clicked(self, item: QListWidgetItem):
         """Actions for editing an item"""
-        dlg = CraftItemsDlg(self.pob_config, self.base_items, self.win)
+        dlg = CraftItemsDlg(self.pob_config, self.base_items, True, self.win)
         dlg.item = self.import_items_list[item.whatsThis()]
         _return = dlg.exec()
         if _return:
-            dlg.item.id = len(self.itemlist_by_id) + 1
             self.add_item_to_itemlist_widget(dlg.item)
             self.add_item_to_item_slot_ui(dlg.item)
             # self.fill_item_slot_uis()
@@ -558,10 +526,18 @@ class ItemsUI:
         if find_line("Corrupted") != "":
             new_item += f"Corrupted\n"
 
-        print("new_item", new_item)
+        # print("new_item", new_item)
+        dlg = CraftItemsDlg(self.pob_config, self.base_items, True, self.win)
         item = Item(self.base_items)
         item.load_from_xml(ET.fromstring(f"<Item>{new_item}</Item>"))
-        self.add_item_to_itemlist_widget(item)
+        # dlg.item is a property that triggers internal procedures. Don't set it to an empty Item and expect it work.
+        dlg.item = item
+        _return = dlg.exec()
+        if _return:
+            self.add_item_to_itemlist_widget(dlg.item)
+            self.add_item_to_item_slot_ui(dlg.item)
+        else:
+            print(f"Discarded: {dlg.item.name}")
         return True
 
     def load_from_xml(self, _items):

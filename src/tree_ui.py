@@ -7,7 +7,7 @@ import re
 from qdarktheme.qtpy.QtCore import QCoreApplication, Qt, Slot, QSize
 from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
 
-from PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from constants import tree_versions, PlayerClasses, _VERSION_str
 from pob_config import Config, _debug, print_call_stack
 from flow_layout import FlowLayout

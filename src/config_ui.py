@@ -60,7 +60,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QWidget,
 )
 
-from PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config
 from ui_utils import set_combo_index_by_data
 

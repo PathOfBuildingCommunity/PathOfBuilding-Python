@@ -8,7 +8,7 @@ import urllib3
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QDialog
 
-from dlg_ManageTree import Ui_Dialog
+from ui.dlg_ManageTree import Ui_Dialog
 from build import Build
 from constants import _VERSION, _VERSION_str, tree_versions
 from popup_dialogs import yes_no_dialog, NewTreePopup

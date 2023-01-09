@@ -12,6 +12,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>79</Dex>
+			<Str>79</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion/Energy Shield Helmet" base_name="Blizzard Crown" sockets="G-G-G-G">
 		<Attribs evasion="254" energy_shield="52" level_req="75" quality="20" />
@@ -25,6 +29,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>79</Dex>
+			<Int>79</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Helmet" base_name="Archdemon Crown" sockets="B-B-B-B">
 		<Attribs energy_shield="52" armour="254" level_req="75" quality="20" />
@@ -38,6 +46,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>79</Int>
+			<Str>79</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Helmet" base_name="Eternal Burgonet" sockets="R-R-R-R">
 		<Attribs armour="515" level_req="69" quality="20" />
@@ -51,6 +63,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>138</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Helmet" base_name="Lion Pelt" sockets="G-G-G-G">
 		<Attribs evasion="524" level_req="70" quality="20" />
@@ -64,6 +79,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>150</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Helmet" base_name="Hubris Circlet" sockets="B-B-B-B">
 		<Attribs energy_shield="110" level_req="69" quality="20" />
@@ -77,6 +95,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>154</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Evasion Helmet" base_name="Nightmare Bascinet" sockets="G-G-G-G">
 		<Attribs evasion="322" armour="224" level_req="67" quality="20" />
@@ -90,6 +111,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>85</Dex>
+			<Str>62</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Helmet" base_name="Praetor Crown" sockets="B-B-B-B">
 		<Attribs energy_shield="70" armour="222" level_req="68" quality="20" />
@@ -103,6 +128,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>91</Int>
+			<Str>62</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Helmet" base_name="Bone Helmet" sockets="B-B-B-B">
 		<Attribs energy_shield="55" armour="272" level_req="73" quality="20" />
@@ -116,6 +145,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>76</Int>
+			<Str>76</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion/Energy Shield Helmet" base_name="Deicide Mask" sockets="B-B-B-B">
 		<Attribs evasion="263" energy_shield="65" level_req="67" quality="20" />
@@ -129,6 +162,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>73</Dex>
+			<Int>88</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Ward Helmet" base_name="Runic Crown" sockets="G-G-G-G">
 		<Attribs level_req="68" quality="20" />
@@ -142,6 +179,11 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>66</Dex>
+			<Int>66</Int>
+			<Str>66</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Gloves" base_name="Sinistral Gloves" sockets="G-G-G-G">
 		<Attribs evasion="325" level_req="70" quality="20" />
@@ -155,6 +197,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>101</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Gloves" base_name="Nexus Gloves" sockets="B-B-B-B">
 		<Attribs energy_shield="65" level_req="70" quality="20" />
@@ -168,6 +213,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>101</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Gloves" base_name="Debilitation Gauntlets" sockets="R-R-R-R">
 		<Attribs armour="325" level_req="70" quality="20" />
@@ -181,6 +229,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>101</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Gloves" base_name="Apothecary's Gloves" sockets="B-B-B-B">
 		<Attribs energy_shield="40" armour="149" level_req="70" quality="20" />
@@ -194,6 +245,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>59</Int>
+			<Str>46</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Gloves" base_name="Titan Gauntlets" sockets="R-R-R-R">
 		<Attribs armour="334" level_req="69" quality="20" />
@@ -207,6 +262,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>98</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Gloves" base_name="Spiked Gloves" sockets="R-R-R-R">
 		<Attribs armour="304" level_req="70" quality="20" />
@@ -220,6 +278,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>95</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Gloves" base_name="Slink Gloves" sockets="G-G-G-G">
 		<Attribs evasion="334" level_req="70" quality="20" />
@@ -233,6 +294,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>95</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Gloves" base_name="Gripped Gloves" sockets="G-G-G-G">
 		<Attribs evasion="304" level_req="70" quality="20" />
@@ -246,6 +310,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>95</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Gloves" base_name="Sorcerer Gloves" sockets="B-B-B-B">
 		<Attribs energy_shield="68" level_req="69" quality="20" />
@@ -259,6 +326,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>97</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Gloves" base_name="Fingerless Silk Gloves" sockets="B-B-B-B">
 		<Attribs energy_shield="62" level_req="70" quality="20" />
@@ -272,6 +342,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>95</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Evasion Gloves" base_name="Dragonscale Gauntlets" sockets="G-G-G-G">
 		<Attribs evasion="167" armour="167" level_req="67" quality="20" />
@@ -285,6 +358,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>51</Dex>
+			<Str>51</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Gloves" base_name="Crusader Gloves" sockets="B-B-B-B">
 		<Attribs energy_shield="34" armour="167" level_req="66" quality="20" />
@@ -298,6 +375,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>51</Int>
+			<Str>51</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion/Energy Shield Gloves" base_name="Murder Mitts" sockets="G-G-G-G">
 		<Attribs evasion="167" energy_shield="34" level_req="67" quality="20" />
@@ -311,6 +392,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>51</Dex>
+			<Int>51</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Ward Gloves" base_name="Runic Gauntlets" sockets="G-G-G-G">
 		<Attribs level_req="69" quality="20" />
@@ -324,6 +409,11 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>38</Dex>
+			<Int>38</Int>
+			<Str>38</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Chest" base_name="Glorious Plate" sockets="R-R-R-R-R-R">
 		<Attribs armour="1070" level_req="68" quality="20" />
@@ -337,6 +427,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>191</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Chest" base_name="Astral Plate" sockets="R-R-R-R-R-R">
 		<Attribs armour="938" level_req="62" quality="20" />
@@ -350,6 +443,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>180</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Chest" base_name="Assassin's Garb" sockets="G-G-G-G-G-G">
 		<Attribs evasion="973" level_req="68" quality="20" />
@@ -363,6 +459,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>183</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Chest" base_name="Zodiac Leather" sockets="G-G-G-G-G-G">
 		<Attribs evasion="1178" level_req="65" quality="20" />
@@ -376,6 +475,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>197</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Chest" base_name="Vaal Regalia" sockets="B-B-B-B-B-B">
 		<Attribs energy_shield="236" level_req="68" quality="20" />
@@ -389,6 +491,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>194</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Evasion Chest" base_name="Triumphant Lamellar" sockets="G-G-G-G-G-G">
 		<Attribs evasion="659" armour="524" level_req="69" quality="20" />
@@ -402,6 +507,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>116</Dex>
+			<Str>95</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Chest" base_name="Saintly Chainmail" sockets="B-B-B-B-B-B">
 		<Attribs energy_shield="132" armour="553" level_req="70" quality="20" />
@@ -415,6 +524,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>115</Int>
+			<Str>99</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion/Energy Shield Chest" base_name="Carnal Armour" sockets="B-B-B-B-B-B">
 		<Attribs evasion="466" energy_shield="136" level_req="71" quality="20" />
@@ -428,6 +541,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>88</Dex>
+			<Int>122</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion/Energy Shield Boots" base_name="Fugitive Boots" sockets="B-B-B-B">
 		<Attribs evasion="155" energy_shield="44" level_req="70" quality="20" />
@@ -441,6 +558,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>56</Dex>
+			<Int>76</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Boots" base_name="Stormrider Boots" sockets="G-G-G-G">
 		<Attribs evasion="325" level_req="80" quality="20" />
@@ -454,6 +575,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>124</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Boots" base_name="Dreamquest Slippers" sockets="B-B-B-B">
 		<Attribs energy_shield="68" level_req="80" quality="20" />
@@ -467,6 +591,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>124</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Boots" base_name="Brimstone Treads" sockets="R-R-R-R">
 		<Attribs armour="325" level_req="80" quality="20" />
@@ -480,6 +607,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>124</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Boots" base_name="Titan Greaves" sockets="R-R-R-R">
 		<Attribs armour="334" level_req="68" quality="20" />
@@ -493,6 +623,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>120</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Boots" base_name="Slink Boots" sockets="G-G-G-G">
 		<Attribs evasion="340" level_req="69" quality="20" />
@@ -506,6 +639,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>120</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Boots" base_name="Sorcerer Boots" sockets="B-B-B-B">
 		<Attribs energy_shield="71" level_req="67" quality="20" />
@@ -519,6 +655,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>123</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Evasion Boots" base_name="Dragonscale Boots" sockets="G-G-G-G">
 		<Attribs evasion="167" armour="167" level_req="65" quality="20" />
@@ -532,6 +671,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>62</Dex>
+			<Str>62</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Evasion Boots" base_name="Two-Toned Boots (Armour/Evasion)" sockets="G-G-G-G">
 		<Attribs evasion="174" armour="174" level_req="70" quality="20" />
@@ -545,6 +688,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>62</Int>
+			<Str>62</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Boots" base_name="Crusader Boots" sockets="B-B-B-B">
 		<Attribs energy_shield="34" armour="167" level_req="64" quality="20" />
@@ -558,6 +705,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>62</Int>
+			<Str>62</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Boots" base_name="Two-Toned Boots (Armour/Energy Shield)" sockets="B-B-B-B">
 		<Attribs energy_shield="36" armour="174" level_req="70" quality="20" />
@@ -571,6 +722,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>62</Int>
+			<Str>62</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion/Energy Shield Boots" base_name="Murder Boots" sockets="G-G-G-G">
 		<Attribs evasion="256" energy_shield="25" level_req="69" quality="20" />
@@ -584,6 +739,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>82</Dex>
+			<Int>42</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion/Energy Shield Boots" base_name="Two-Toned Boots (Evasion/Energy Shield)" sockets="G-G-G-G">
 		<Attribs evasion="174" energy_shield="36" level_req="70" quality="20" />
@@ -597,6 +756,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>62</Int>
+			<Str>62</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Ward Boots" base_name="Runic Sabatons" sockets="G-G-G-G">
 		<Attribs level_req="69" quality="20" />
@@ -610,6 +773,11 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>46</Dex>
+			<Int>46</Int>
+			<Str>46</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Shield" base_name="Transfer-attuned Spirit Shield" sockets="B-B-B">
 		<Attribs energy_shield="77" level_req="70" quality="20" />
@@ -623,6 +791,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>159</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Shield" base_name="Cold-attuned Buckler" sockets="G-G-G">
 		<Attribs evasion="418" level_req="70" quality="20" />
@@ -636,6 +807,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>159</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Shield" base_name="Heat-attuned Tower Shield" sockets="R-R-R">
 		<Attribs armour="455" level_req="70" quality="20" />
@@ -649,6 +823,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>159</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour Shield" base_name="Pinnacle Tower Shield" sockets="R-R-R">
 		<Attribs armour="644" level_req="70" quality="20" />
@@ -662,6 +839,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>159</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion Shield" base_name="Imperial Buckler" sockets="G-G-G">
 		<Attribs evasion="607" level_req="69" quality="20" />
@@ -675,6 +855,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>159</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Shield" base_name="Titanium Spirit Shield" sockets="B-B-B">
 		<Attribs energy_shield="92" level_req="68" quality="20" />
@@ -688,6 +871,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>159</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Evasion Shield" base_name="Elegant Round Shield" sockets="G-G-G">
 		<Attribs evasion="204" armour="204" level_req="70" quality="20" />
@@ -701,6 +887,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>85</Dex>
+			<Str>85</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Armour/Energy Shield Shield" base_name="Archon Kite Shield" sockets="B-B-B">
 		<Attribs energy_shield="44" armour="215" level_req="68" quality="20" />
@@ -714,6 +904,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>85</Int>
+			<Str>85</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Evasion/Energy Shield Shield" base_name="Supreme Spiked Shield" sockets="G-G-G">
 		<Attribs evasion="334" energy_shield="68" level_req="70" quality="20" />
@@ -727,6 +921,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>85</Dex>
+			<Int>85</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Energy Shield Amulet" base_name="Seaglass Amulet">
 		<Attribs level_req="74" />
@@ -1295,6 +1493,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>82</Dex>
+			<Str>163</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 1H Axe" base_name="Vaal Hatchet" sockets="R-R-R">
 		<Attribs level_req="65" quality="20" />
@@ -1308,6 +1510,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>86</Dex>
+			<Str>140</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 1H Axe" base_name="Psychotic Axe" sockets="R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1321,6 +1527,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>84</Dex>
+			<Str>163</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 1H Axe" base_name="Psychotic Axe" sockets="R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1334,6 +1544,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>84</Dex>
+			<Str>163</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 2H Axe" base_name="Fleshripper" sockets="R-R-R-R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1347,6 +1561,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>84</Dex>
+			<Str>156</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 2H Axe" base_name="Despot Axe" sockets="R-R-R-R-R-R">
 		<Attribs level_req="66" quality="20" />
@@ -1360,6 +1578,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>86</Dex>
+			<Str>140</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 2H Axe" base_name="Apex Cleaver" sockets="G-G-G-G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -1399,6 +1621,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>212</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Bow" base_name="Thicket Bow" sockets="G-G-G-G-G-G">
 		<Attribs level_req="56" quality="20" />
@@ -1412,6 +1637,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>179</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Fire Bow" base_name="Solarine Bow" sockets="G-G-G-G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -1425,6 +1653,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>212</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+3 Bow" base_name="Thicket Bow" sockets="G-G-G-G-G-G">
 		<Attribs level_req="56" quality="20" />
@@ -1438,6 +1669,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>179</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical Claw" base_name="Gemini Claw" sockets="G-G-G">
 		<Attribs level_req="72" quality="20" />
@@ -1451,6 +1685,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>121</Dex>
+			<Int>121</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Claw" base_name="Imperial Claw" sockets="G-G-G">
 		<Attribs level_req="68" quality="20" />
@@ -1464,6 +1702,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>131</Dex>
+			<Int>95</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Chaos Claw" base_name="Void Fangs" sockets="G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -1477,6 +1719,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>113</Dex>
+			<Int>113</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical Dagger" base_name="Ambusher" sockets="G-G-G">
 		<Attribs level_req="60" quality="20" />
@@ -1490,6 +1736,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>113</Dex>
+			<Int>113</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Dagger" base_name="Ambusher" sockets="G-G-G">
 		<Attribs level_req="60" quality="20" />
@@ -1503,6 +1753,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>113</Dex>
+			<Int>113</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Dagger" base_name="Platinum Kris" sockets="B-B-B">
 		<Attribs level_req="64" quality="20" />
@@ -1516,6 +1770,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>76</Dex>
+			<Int>149</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical Dagger" base_name="Pneumatic Dagger" sockets="G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -1529,6 +1787,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>121</Dex>
+			<Int>121</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Dagger" base_name="Pneumatic Dagger" sockets="G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -1542,6 +1804,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>121</Dex>
+			<Int>121</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Dagger" base_name="Infernal Blade" sockets="G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -1555,6 +1821,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>121</Dex>
+			<Int>121</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Vagan Dagger" base_name="Royal Skean" sockets="B-B-B">
 		<Attribs level_req="50" quality="20" />
@@ -1570,6 +1840,10 @@
 		<Explicits>
 			<Mod>{custom}Hits can't be Evaded</Mod>
 		</Explicits>
+		<Requires>
+			<Dex>71</Dex>
+			<Int>102</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Sceptre" base_name="Void Sceptre" sockets="B-B-B">
 		<Attribs level_req="68" quality="20" />
@@ -1583,6 +1857,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>122</Int>
+			<Str>104</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Sceptre" base_name="Void Sceptre" sockets="B-B-B">
 		<Attribs level_req="68" quality="20" />
@@ -1596,6 +1874,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>122</Int>
+			<Str>104</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical Sceptre" base_name="Void Sceptre" sockets="B-B-B">
 		<Attribs level_req="68" quality="20" />
@@ -1609,6 +1891,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>122</Int>
+			<Str>104</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Sceptre" base_name="Oscillating Sceptre" sockets="B-B-B">
 		<Attribs level_req="30" quality="20" />
@@ -1622,6 +1908,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>64</Int>
+			<Str>44</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Sceptre" base_name="Oscillating Sceptre" sockets="B-B-B">
 		<Attribs level_req="30" quality="20" />
@@ -1635,6 +1925,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>64</Int>
+			<Str>44</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Sceptre" base_name="Stabilising Sceptre" sockets="B-B-B">
 		<Attribs level_req="50" quality="20" />
@@ -1648,6 +1942,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>102</Int>
+			<Str>71</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Sceptre" base_name="Stabilising Sceptre" sockets="B-B-B">
 		<Attribs level_req="50" quality="20" />
@@ -1661,6 +1959,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>102</Int>
+			<Str>71</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Sceptre" base_name="Alternating Sceptre" sockets="B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1674,6 +1976,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>131</Int>
+			<Str>95</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Sceptre" base_name="Alternating Sceptre" sockets="B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1687,6 +1993,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>131</Int>
+			<Str>95</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical Sceptre" base_name="Alternating Sceptre" sockets="B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1700,6 +2010,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>131</Int>
+			<Str>95</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 1H Mace" base_name="Behemoth Mace" sockets="R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1713,6 +2027,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>220</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 1H Mace" base_name="Behemoth Mace" sockets="R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1726,6 +2043,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>220</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 1H Mace" base_name="Boom Mace" sockets="R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1739,6 +2059,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>218</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 1H Mace" base_name="Boom Mace" sockets="R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1752,6 +2075,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>218</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 2H Mace" base_name="Coronal Maul" sockets="R-R-R-R-R-R">
 		<Attribs level_req="69" quality="20" />
@@ -1765,6 +2091,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>220</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 2H Mace" base_name="Coronal Maul" sockets="R-R-R-R-R-R">
 		<Attribs level_req="69" quality="20" />
@@ -1778,6 +2107,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>220</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 2H Mace" base_name="Impact Force Propagator" sockets="R-R-R-R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1791,6 +2123,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>220</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 2H Mace" base_name="Impact Force Propagator" sockets="R-R-R-R-R-R">
 		<Attribs level_req="70" quality="20" />
@@ -1804,6 +2139,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Str>220</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical Staff" base_name="Maelstrom Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="64" quality="20" />
@@ -1843,6 +2181,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Staff" base_name="Eventuality Rod" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1856,6 +2198,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1869,6 +2215,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Physical Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1882,6 +2232,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Fire Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1895,6 +2249,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Cold Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1908,6 +2266,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Lightning Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1921,6 +2283,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Chaos Staff" base_name="Eclipse Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1934,6 +2300,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1947,6 +2317,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Physical Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1960,6 +2334,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Fire Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1973,6 +2351,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Cold Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1986,6 +2368,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Lightning Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -1999,6 +2385,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="+5 Chaos Staff" base_name="Battery Staff" sockets="B-B-B-B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -2012,6 +2402,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>117</Int>
+			<Str>117</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 1H Sword" base_name="Tiger Hook" sockets="G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -2025,6 +2419,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>119</Dex>
+			<Str>119</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 1H Sword" base_name="Jewelled Foil" sockets="G-G-G">
 		<Attribs level_req="68" quality="20" />
@@ -2038,6 +2436,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>212</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 1H Sword" base_name="Eternal Sword" sockets="G-G-G">
 		<Attribs level_req="66" quality="20" />
@@ -2051,6 +2452,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>122</Dex>
+			<Str>104</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 1H Sword" base_name="Anarchic Spiritblade" sockets="G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -2064,6 +2469,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>121</Dex>
+			<Str>121</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 1H Sword" base_name="Anarchic Spiritblade" sockets="G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -2077,6 +2486,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>121</Dex>
+			<Str>121</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 1H Sword" base_name="Jewelled Foil" sockets="G-G-G">
 		<Attribs level_req="68" quality="20" />
@@ -2090,6 +2503,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>212</Dex>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical 2H Sword" base_name="Exquisite Blade" sockets="G-G-G-G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -2103,6 +2519,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>131</Dex>
+			<Str>119</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 2H Sword" base_name="Reaver Sword" sockets="G-G-G-G-G-G">
 		<Attribs level_req="59" quality="20" />
@@ -2116,6 +2536,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>119</Dex>
+			<Str>82</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental 2H Sword" base_name="Banishing Blade" sockets="G-G-G-G-G-G">
 		<Attribs level_req="70" quality="20" />
@@ -2129,6 +2553,10 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Dex>130</Dex>
+			<Str>130</Str>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical Wand" base_name="Imbued Wand" sockets="B-B-B">
 		<Attribs level_req="59" quality="20" />
@@ -2142,6 +2570,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>188</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Wand" base_name="Imbued Wand" sockets="B-B-B">
 		<Attribs level_req="59" quality="20" />
@@ -2155,6 +2586,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>188</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Wand" base_name="Prophecy Wand" sockets="B-B-B">
 		<Attribs level_req="68" quality="20" />
@@ -2168,6 +2602,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>245</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Physical Wand" base_name="Accumulator Wand" sockets="B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -2181,6 +2618,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>237</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Elemental Wand" base_name="Accumulator Wand" sockets="B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -2194,6 +2634,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>237</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Spell Wand" base_name="Accumulator Wand" sockets="B-B-B">
 		<Attribs level_req="70" quality="20" />
@@ -2207,6 +2650,9 @@
 		</Crafted>
 		<Implicits />
 		<Explicits />
+		<Requires>
+			<Int>237</Int>
+		</Requires>
 	</Item>
 	<Item ver="2" title="Jewel" base_name="Crimson Jewel">
 		<Attribs />
