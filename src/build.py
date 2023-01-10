@@ -65,8 +65,12 @@ class Build:
         self.tree_view = None
         self.items = None
         self.config = None
-        self.gems_by_name_or_id = None
+        self.last_account_hash = ""
+        self.last_character_hash = ""
+        self.last_realm = ""
+        self.last_league = ""
 
+        self.gems_by_name_or_id = None
         self.nodes_assigned, self.ascnodes_assigned, self.sockets_assigned = 0, 0, 0
 
         """Now fill out everything above out with a new build
@@ -262,6 +266,11 @@ class Build:
         self.root = _build_xml.getroot()
         self.build = self.root.find("Build")
         self.import_field = self.root.find("Import")
+        if self.import_field is not None:
+            self.last_account_hash = self.import_field.get("lastAccountHash", "")
+            self.last_character_hash = self.import_field.get("lastCharacterHash", "")
+            self.last_realm = self.import_field.get("lastRealm", "")
+            self.last_league = self.import_field.get("lastLeague", "")
         self.calcs = self.root.find("Calcs")
         self.skills = self.root.find("Skills")
         self.tree = self.root.find("Tree")
@@ -294,6 +303,10 @@ class Build:
         # pob = {"PathOfBuilding": {}}
         # pob["PathOfBuilding"]["Build"] = self.build
         # pob["PathOfBuilding"]["Import"] = self.import_field
+        self.import_field["lastAccountHash"] = self.last_account_hash
+        self.import_field["lastCharacterHash"] = self.last_character_hash
+        self.import_field["lastRealm"] = self.last_realm
+        self.import_field["lastLeague"] = self.last_league
         # pob["PathOfBuilding"]["Calcs"] = self.calcs
         # pob["PathOfBuilding"]["Skills"] = self.skills
         self.notes.text, self.notes_html.text = win.notes_ui.save()

@@ -3,8 +3,8 @@ Import dialog
 
 Open a dialog for importing a character.
 """
-import re
-import requests
+import re, requests
+from hashlib import sha1
 import xml.etree.ElementTree as ET
 from pprint import pprint
 
@@ -15,6 +15,7 @@ from ui.dlg_BuildImport import Ui_BuildImport
 from constants import valid_websites, website_list, http_headers
 from pob_config import Config, decode_base64_and_inflate, deflate_and_base64_encode, unique_sorted
 from build import Build
+from ui_utils import set_combo_index_by_text
 
 realm_list = {
     "PC": {
@@ -51,7 +52,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
     def __init__(self, _build: Build, _config: Config, parent):
         """
 
-        :param _build: A pointer of the build
+        :param _build: A pointer to the currently loaded build
         :param _config: A pointer to the settings
         :param _skills_ui: pointer to the ItemsUI() class for item saving
         :param parent: A pointer to MainWindowUI
@@ -268,6 +269,26 @@ class ImportDlg(Ui_BuildImport, QDialog):
 
         :return: N/A
         """
+
+        def find_matching_standard_league(league):
+            """
+            :param: str: non standard league name, but function will still work if a Standard league name is used.
+            :return: str
+            """
+            # Find a Standard league name for a given league name
+            # Reference https://api.pathofexile.com/league?realm=pc
+            if "Hardcore" in league:
+                return "Hardcore"
+            elif "HC SSF" in league:
+                # includes Ruthless "HC SSF R "
+                return "SSF Hardcore"
+            elif "SSF" in league:
+                # Any non HardCore SSF's - includes Ruthless "SSF R "
+                return "SSF Standard"
+            else:
+                # normal league and ruthless league (Sanctum, Ruthless Sanctum)
+                return "Standard"
+
         account_name = self.lineedit_Account.text()
         self.grpbox_CharImport.setEnabled(True)
         response = None
@@ -290,8 +311,27 @@ class ImportDlg(Ui_BuildImport, QDialog):
             # turn on controls and fill them
             self.grpbox_CharImport.setVisible(True)
             self.combo_League.clear()
-            self.combo_League.addItem("All")
             self.combo_League.addItems(unique_sorted([char["league"] for char in self.account_json]))
+            self.combo_League.addItem("All")
+            # Try to find the league that this character was imported from, if available
+            # combo_League's trigger will fill out combo_CharList
+            if self.build.last_league:
+                set_combo_index_by_text(self.combo_League, self.build.last_league)
+                if self.combo_League.currentText() != self.build.last_league:
+                    # Current league may not exist any more, try move to the equivalent standard league
+                    standard_league = find_matching_standard_league(self.build.last_league)
+                    set_combo_index_by_text(self.combo_League, standard_league)
+                    if self.combo_League.currentText() != standard_league:
+                        # Give up and select the first
+                        self.combo_League.setCurrentIndex(0)
+                    else:
+                        self.build.last_league = self.combo_League.currentText()
+            if self.build.last_character_hash:
+                char_hash = self.build.last_character_hash
+                for idx in range(self.combo_CharList.count()):
+                    if char_hash == sha1(self.combo_CharList.itemText(idx).encode('utf-8')).hexdigest():
+                        self.combo_CharList.setCurrentIndex(idx)
+                        break
             self.combo_League.setFocus()
 
     def download_character_data(self):
@@ -305,6 +345,11 @@ class ImportDlg(Ui_BuildImport, QDialog):
         self.character_data = None
         account_name = self.lineedit_Account.text()
         char_name = self.combo_CharList.currentText()
+        self.build.last_character_hash = sha1(char_name.encode('utf-8')).hexdigest()
+        self.build.last_account_hash = sha1(account_name.encode('utf-8')).hexdigest()
+        self.build.last_league = self.combo_League.currentText()
+        self.build.last_realm = self.combo_Realm.currentText()
+
         realm_code = realm_list.get(self.combo_Realm.currentText(), "pc")
         params = {"accountName": account_name, "character": char_name, "realm": realm_code}
 
