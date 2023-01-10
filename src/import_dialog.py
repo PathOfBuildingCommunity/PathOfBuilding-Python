@@ -73,6 +73,13 @@ class ImportDlg(Ui_BuildImport, QDialog):
 
         self.setupUi(self)
         self.fill_character_history()
+        if self.build.last_account_hash:
+            acct_hash = self.build.last_account_hash
+            for idx in range(self.combo_Account_History.count()):
+                if acct_hash == sha1(self.combo_Account_History.itemText(idx).encode('utf-8')).hexdigest():
+                    self.combo_Account_History.setCurrentIndex(idx)
+                    self.lineedit_Account.setText(self.combo_Account_History.currentText())
+                    break
 
         self.combo_Import.setItemData(0, "THIS")
         self.combo_Import.setItemData(1, "NEW")
@@ -86,7 +93,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         self.btn_ImportBuildSharing.clicked.connect(self.import_from_code)
         self.lineedit_Account.returnPressed.connect(self.download_character_information)
         self.lineedit_BuildShare.textChanged.connect(self.validate_build_sharing_text)
-        self.comboAccount_History.currentTextChanged.connect(self.change_account_name)
+        self.combo_Account_History.currentTextChanged.connect(self.change_account_name)
         self.combo_League.currentTextChanged.connect(self.change_league_name)
         self.combo_Import.currentTextChanged.connect(self.change_import_selection_data)
         self.lineedit_BuildShare.setFocus()
@@ -221,7 +228,8 @@ class ImportDlg(Ui_BuildImport, QDialog):
 
     @Slot()
     def change_account_name(self, text):
-        """Set Account lineedit based on comboAccount_History"""
+        """Set Account lineedit based on combo_Account_History"""
+        self.config.last_account_name = text
         self.lineedit_Account.setText(text)
         self.character_data = None
 
@@ -311,8 +319,8 @@ class ImportDlg(Ui_BuildImport, QDialog):
             # turn on controls and fill them
             self.grpbox_CharImport.setVisible(True)
             self.combo_League.clear()
-            self.combo_League.addItems(unique_sorted([char["league"] for char in self.account_json]))
             self.combo_League.addItem("All")
+            self.combo_League.addItems(unique_sorted([char["league"] for char in self.account_json]))
             # Try to find the league that this character was imported from, if available
             # combo_League's trigger will fill out combo_CharList
             if self.build.last_league:
@@ -385,7 +393,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         # pprint(passive_tree)
 
     def fill_character_history(self):
-        self.comboAccount_History.clear()
-        self.comboAccount_History.addItems(self.config.accounts())
-        self.comboAccount_History.setCurrentText(self.config.last_account_name)
+        self.combo_Account_History.clear()
+        self.combo_Account_History.addItems(self.config.accounts())
+        set_combo_index_by_text(self.combo_Account_History, self.config.last_account_name)
         self.lineedit_Account.setText(self.config.last_account_name)

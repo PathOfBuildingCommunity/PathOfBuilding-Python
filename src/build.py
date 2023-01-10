@@ -300,27 +300,17 @@ class Build:
         Save the build to the filename recorded in the build Class
         :return: N/A
         """
-        # pob = {"PathOfBuilding": {}}
-        # pob["PathOfBuilding"]["Build"] = self.build
-        # pob["PathOfBuilding"]["Import"] = self.import_field
-        self.import_field["lastAccountHash"] = self.last_account_hash
-        self.import_field["lastCharacterHash"] = self.last_character_hash
-        self.import_field["lastRealm"] = self.last_realm
-        self.import_field["lastLeague"] = self.last_league
-        # pob["PathOfBuilding"]["Calcs"] = self.calcs
-        # pob["PathOfBuilding"]["Skills"] = self.skills
+        self.import_field.set("lastAccountHash", self.last_account_hash)
+        self.import_field.set("lastCharacterHash", self.last_character_hash)
+        self.import_field.set("lastRealm", self.last_realm)
+        self.import_field.set("lastLeague", self.last_league)
         self.notes.text, self.notes_html.text = win.notes_ui.save()
         win.stats.save(self.build)
         win.skills_ui.save()
         win.items_ui.save()
         win.config_ui.save()
-        # pob["PathOfBuilding"]["TreeView"] = self.tree_view
-        # pob["PathOfBuilding"]["Items"] = self.items
-        # pob["PathOfBuilding"]["Tree"] = self.tree
         for spec in self.specs:
             spec.save()
-        # pob_file.write_xml_from_dict("builds/test.xml", pob)
-        # # pob_file.write_xml_from_dict(self.filename, pob)
 
         """Debug Please leave until build is mostly complete"""
         # print("build")

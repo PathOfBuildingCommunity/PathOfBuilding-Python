@@ -100,7 +100,7 @@
     </property>
    </item>
   </widget>
-  <widget class="QComboBox" name="comboAccount_History">
+  <widget class="QComboBox" name="combo_Account_History">
    <property name="geometry">
     <rect>
      <x>410</x>
@@ -440,7 +440,7 @@
   <tabstop>combo_Realm</tabstop>
   <tabstop>lineedit_Account</tabstop>
   <tabstop>btn_StartImport</tabstop>
-  <tabstop>comboAccount_History</tabstop>
+  <tabstop>combo_Account_History</tabstop>
   <tabstop>combo_League</tabstop>
   <tabstop>combo_Import</tabstop>
   <tabstop>combo_CharList</tabstop>
