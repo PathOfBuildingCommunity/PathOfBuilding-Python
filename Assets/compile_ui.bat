@@ -1,3 +1,5 @@
+pushd %~dp0
+
 pyside6-uic PoB_Main_Window.ui -o ..\src\ui\PoB_Main_Window.py
 pyside6-uic dlgConfig.ui -o ..\src\ui\dlg_Config.py
 pyside6-uic dlgBuildImport.ui -o ..\src\ui\dlg_BuildImport.py
