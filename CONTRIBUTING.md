@@ -22,6 +22,16 @@ Install it like so (Powershell):
     poetry install
     ```
 
+## Compiling UI/QRC
+Two commands to help generate the UI and QRC:
+```shell
+.\Assets\compile_ui
+.\Assets\compile_qrc
+```
+
+## Obtaining initial base_items.json data
+In the `Data/` folder, we are currently ignoring `base_items.json`. Create one for yourself locally, and utilize the `base_items.json` data found in this [repo](https://github.com/brather1ng/RePoE/tree/master/RePoE/data).
+
 ## Before submitting your PR
 
 * Style guide:
