@@ -8,10 +8,10 @@ import urllib3
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QDialog
 
-from ui.dlg_ManageTree import Ui_Dialog
+from views.dlgManageTree import Ui_Dialog
 from build import Build
 from constants import _VERSION, _VERSION_str, tree_versions
-from popup_dialogs import yes_no_dialog, NewTreePopup
+from dialogs.popup_dialogs import yes_no_dialog, NewTreePopup
 
 
 class ManageTreeDlg(Ui_Dialog, QDialog):

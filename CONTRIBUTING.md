@@ -23,14 +23,13 @@ Install it like so (Powershell):
     ```
 
 ## Compiling UI/QRC
-Two commands to help generate the UI and QRC:
+If you would like to manually generate UI/QRC you can execute a Python script:
 ```shell
-.\Assets\compile_ui
-.\Assets\compile_qrc
+python build-ui.py
 ```
 
 ## Obtaining initial base_items.json data
-In the `Data/` folder, we are currently ignoring `base_items.json`. Create one for yourself locally, and utilize the `base_items.json` data found in this [repo](https://github.com/brather1ng/RePoE/tree/master/RePoE/data).
+In the `data/` folder, we are currently ignoring `base_items.json`. Create one for yourself locally, and utilize the `base_items.json` data found in this [repo](https://github.com/brather1ng/RePoE/tree/master/RePoE/data).
 
 ## Before submitting your PR
 

@@ -27,9 +27,9 @@ from constants import (
 )
 from pob_config import _debug, Config, str_to_bool, bool_to_str, print_a_xml_element, print_call_stack
 import pob_file
-import popup_dialogs
+import dialogs.popup_dialogs as popup_dialogs
 from tree import Tree
-from ui.PoB_Main_Window import Ui_MainWindow
+from views.PoB_Main_Window import Ui_MainWindow
 from spec import Spec
 
 

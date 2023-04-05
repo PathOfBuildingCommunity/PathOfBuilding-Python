@@ -4,16 +4,15 @@ This Class manages all the elements and owns some elements of the "TREE" tab
 """
 import re
 
-from qdarktheme.qtpy.QtCore import QCoreApplication, Qt, Slot, QSize
+from qdarktheme.qtpy.QtCore import Qt, Slot, QSize
 from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
 
-from ui.PoB_Main_Window import Ui_MainWindow
+from views.PoB_Main_Window import Ui_MainWindow
 from constants import tree_versions, PlayerClasses, _VERSION_str
-from pob_config import Config, _debug, print_call_stack
+from pob_config import Config
 from flow_layout import FlowLayout
-from manage_tree_dialog import ManageTreeDlg
-from popup_dialogs import yes_no_dialog, ImportTreePopup, ExportTreePopup
-from tree_view import TreeView
+from dialogs.manage_tree_dialog import ManageTreeDlg
+from dialogs.popup_dialogs import yes_no_dialog, ImportTreePopup, ExportTreePopup
 
 
 class TreeUI:

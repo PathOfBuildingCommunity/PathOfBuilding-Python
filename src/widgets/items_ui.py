@@ -16,14 +16,14 @@ from qdarktheme.qtpy.QtWidgets import (
     QListWidgetItem,
 )
 
-from ui.PoB_Main_Window import Ui_MainWindow
+from views.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack, print_a_xml_element
 from pob_file import read_xml, write_xml, read_json
 from constants import slot_map, ColourCodes, slot_names
 from ui_utils import HTMLDelegate, html_colour_text
 from item import Item
-from item_slot_ui import ItemSlotUI
-from craft_items_dialog import CraftItemsDlg
+from widgets.item_slot_ui import ItemSlotUI
+from dialogs.craft_items_dialog import CraftItemsDlg
 
 import_classes = (
     "Abyss Jewels, Amulets, Belts, Body Armours, Boots, Bows, Claws, Daggers, Gloves, Helmets, "
@@ -45,7 +45,7 @@ class ItemsUI:
         self.triggers_connected = False
         self.internal_clipboard = None
 
-        self.base_items = read_json(Path(self.pob_config.exe_dir, "Data/base_items.json"))
+        self.base_items = read_json(Path(self.pob_config.exe_dir, "data/base_items.json"))
 
         # set the key_event - handler - self.item_list_keypressed
         self.win.list_Items.key_press_handler = self.item_list_keypressed
@@ -225,7 +225,7 @@ class ItemsUI:
 
     def load_unique_items(self):
         item_leagues = [""]
-        u_xml = read_xml(Path(self.pob_config.exe_dir, "Data/uniques.xml"))
+        u_xml = read_xml(Path(self.pob_config.exe_dir, "data/uniques.xml"))
         for xml_item_type in list(u_xml.getroot()):
             for xml_item in xml_item_type.findall("Item"):
                 new_item = Item(self.base_items)
@@ -252,7 +252,7 @@ class ItemsUI:
         )
 
     def load_rare_template_items(self):
-        t_xml = read_xml(Path(self.pob_config.exe_dir, "Data/rare_templates.xml"))
+        t_xml = read_xml(Path(self.pob_config.exe_dir, "data/rare_templates.xml"))
         for xml_item in t_xml.getroot().findall("Item"):
             new_item = Item(self.base_items)
             new_item.load_from_xml_v2(xml_item, "RARE")

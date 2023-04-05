@@ -9,13 +9,13 @@ import re
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QListWidgetItem
 
-from ui.PoB_Main_Window import Ui_MainWindow
+from views.PoB_Main_Window import Ui_MainWindow
 from constants import ColourCodes, empty_socket_group, empty_gem
 from pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
 from pob_file import read_json
 from ui_utils import set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
-from popup_dialogs import yes_no_dialog
-from gem_ui import GemUI
+from dialogs.popup_dialogs import yes_no_dialog
+from widgets.gem_ui import GemUI
 
 DefaultGemLevel_info = {
     "normalMaximum": {
@@ -246,7 +246,7 @@ class SkillsUI:
 
         # read in all gems but remove all invalid/unreleased ones
         # "Afflictions" will be removed by this (no display_name), so maybe a different list for them
-        gems = read_json(Path(self.pob_config.exe_dir, "Data/gems.json"))
+        gems = read_json(Path(self.pob_config.exe_dir, "data/gems.json"))
         if gems is None:
             return None
         gems_list = list(gems.keys())

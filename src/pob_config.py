@@ -148,7 +148,7 @@ class Config:
         self.build_dir = Path(self.exe_dir, "builds")
         if not self.build_dir.exists():
             self.build_dir.mkdir()
-        self.tree_data_path = Path(self.exe_dir, "TreeData")
+        self.tree_data_path = Path(self.exe_dir, "tree_data")
         if not self.tree_data_path.exists():
             self.tree_data_path.mkdir()
         self.read()
@@ -527,7 +527,7 @@ class Config:
             dlg.check_BuildWarnings.setChecked(self.show_warnings)
             dlg.check_Tooltips.setChecked(self.slot_only_tooltips)
 
-        dlg = self.loader.load(Path(self.exe_dir, "dlgConfig.ui"), self.win)
+        dlg = self.loader.load(Path(self.exe_dir, "ui-files/dlgConfig.ui"), self.win)
         # Force discard to close the dialog
         discard = dlg.btnBox.button(QDialogButtonBox.Discard)
         discard.clicked.connect(dlg.reject)

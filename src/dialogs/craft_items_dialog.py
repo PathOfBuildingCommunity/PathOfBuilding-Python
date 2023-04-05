@@ -11,7 +11,7 @@ from qdarktheme.qtpy.QtWidgets import QDialog, QDialogButtonBox
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
 
-from ui.dlg_CraftItems import Ui_CraftItems
+from views.dlgCraftItems import Ui_CraftItems
 from pob_config import Config
 from item import Item
 from ui_utils import set_combo_index_by_text

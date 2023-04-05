@@ -18,7 +18,7 @@ from pob_config import Config, _debug
 
 from tree_graphics_item import TreeGraphicsItem
 from build import Build
-from popup_dialogs import MasteryPopup
+from dialogs.popup_dialogs import MasteryPopup
 
 
 class TreeView(QGraphicsView):
