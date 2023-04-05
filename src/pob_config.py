@@ -81,7 +81,11 @@ def _debug(*text):
     """
     if pob_debug:
         lines = traceback.format_stack()
-        print(f"{datetime.datetime.now()}: {text}", ":", lines[-2].strip().partition("\n")[0])
+        print(
+            f"{datetime.datetime.now()}: {text}",
+            ":",
+            lines[-2].strip().partition("\n")[0],
+        )
 
 
 def print_a_xml_element(the_element):
@@ -558,7 +562,9 @@ class Config:
             self.node_power_theme = dlg.combo_NP_Colours.currentIndex()
             self.beta_mode = dlg.check_Beta.isChecked()
             self.show_titlebar_name = dlg.check_ShowBuildName.isChecked()
-            self.show_thousands_separators = dlg.check_ShowThousandsSeparators.isChecked()
+            self.show_thousands_separators = (
+                dlg.check_ShowThousandsSeparators.isChecked()
+            )
             self.thousands_separator = dlg.lineedit_ThousandsSeparator.text()
             self.decimal_separator = dlg.lineedit_DecimalSeparator.text()
             self.default_gem_quality = dlg.spin_GemQuality.value()

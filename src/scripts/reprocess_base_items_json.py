@@ -104,7 +104,14 @@ for item_id in base_items_json:
     if item_class not in wanted_item_classes:
         continue
     if item["release_state"] in ("released", "unique_only"):
-        for tag in ["inventory_height", "inventory_width", "visual_identity", "release_state", "name", "item_class"]:
+        for tag in [
+            "inventory_height",
+            "inventory_width",
+            "visual_identity",
+            "release_state",
+            "name",
+            "item_class",
+        ]:
             del item[tag]
         item["sub-type"] = item_class
         if item_class in weapon_classes:
@@ -122,7 +129,11 @@ for item_id in base_items_json:
             for tag in ("dexterity", "intelligence", "strength"):
                 val = item.get("requirements", {})[tag]
                 if val != 0:
-                    new_tag = tag.replace("dexterity", "G").replace("intelligence", "B").replace("strength", "R")
+                    new_tag = (
+                        tag.replace("dexterity", "G")
+                        .replace("intelligence", "B")
+                        .replace("strength", "R")
+                    )
                     reqs[new_tag] = item["requirements"][tag]
             if reqs:
                 initial_sockets = ""

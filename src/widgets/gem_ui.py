@@ -6,11 +6,31 @@ import xml.etree.ElementTree as ET
 
 from qdarktheme.qtpy.QtCore import QRect, Slot, QSize, Qt
 from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
-from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QPushButton, QListWidgetItem, QSpinBox, QWidget
+from qdarktheme.qtpy.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QPushButton,
+    QListWidgetItem,
+    QSpinBox,
+    QWidget,
+)
 
-from pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
+from pob_config import (
+    Config,
+    _debug,
+    str_to_bool,
+    index_exists,
+    bool_to_str,
+    print_a_xml_element,
+    print_call_stack,
+)
 from constants import ColourCodes, empty_gem
-from ui_utils import set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
+from ui_utils import (
+    set_combo_index_by_data,
+    set_combo_index_by_text,
+    HTMLDelegate,
+    html_colour_text,
+)
 
 
 class GemUI(QWidget):
@@ -100,7 +120,9 @@ class GemUI(QWidget):
             self.spin_gem_count.valueChanged.disconnect(self.save)
             self.check_gem_enabled.stateChanged.disconnect(self.save)
             self.combo_gem_variant.currentTextChanged.disconnect(self.save)
-            self.combo_gem_list.currentTextChanged.disconnect(self.combo_gem_list_changed)
+            self.combo_gem_list.currentTextChanged.disconnect(
+                self.combo_gem_list_changed
+            )
         except RuntimeError:
             pass
 
@@ -135,7 +157,9 @@ class GemUI(QWidget):
             self.coloured_text = self.gem.get("coloured_text")
             # set the editbox portion of combobox to the correct colour
             colour = self.gem.get("colour", ColourCodes.NORMAL.value)
-            self.combo_gem_list.setStyleSheet(f"QComboBox:!editable {{color: {colour}}}")
+            self.combo_gem_list.setStyleSheet(
+                f"QComboBox:!editable {{color: {colour}}}"
+            )
 
             # If the comboBox was empty before calling this function, then return
             if self.xml_gem is None:
@@ -254,12 +278,16 @@ class GemUI(QWidget):
                 add_colour(self.combo_gem_list.count() - 1)
 
         # set the ComboBox dropdown width.
-        self.combo_gem_list.view().setMinimumWidth(self.combo_gem_list.minimumSizeHint().width())
+        self.combo_gem_list.view().setMinimumWidth(
+            self.combo_gem_list.minimumSizeHint().width()
+        )
         # ToDo: Sort by other methods
         # Sort Alphabetically
         self.combo_gem_list.model().sort(0)
         if self.xml_gem is not None and self.skill_id != "":
-            self.combo_gem_list.setCurrentIndex(set_combo_index_by_data(self.combo_gem_list, self.skill_id))
+            self.combo_gem_list.setCurrentIndex(
+                set_combo_index_by_data(self.combo_gem_list, self.skill_id)
+            )
         else:
             self.combo_gem_list.setCurrentIndex(-1)
 

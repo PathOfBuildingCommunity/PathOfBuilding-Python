@@ -99,7 +99,9 @@ if __name__ == "__main__":
     name, characters = import_characters(args.account_name)
     if characters and "error" not in characters:
         current_league_characters = [
-            character["name"] for character in characters if character["league"] == current_league
+            character["name"]
+            for character in characters
+            if character["league"] == current_league
         ]
         print(f"[{current_league.upper()}] Characters: {current_league_characters}")
         passive_tree = import_passive_tree(name, current_league_characters[0])

@@ -35,7 +35,9 @@ class ListBox(QListWidget):
         alt_pressed = event.keyCombination().keyboardModifiers() == Qt.AltModifier
         shift_pressed = event.keyCombination().keyboardModifiers() == Qt.ShiftModifier
         if self.key_press_handler:
-            self.key_press_handler(event.key(), ctrl_pressed, alt_pressed, shift_pressed, event)
+            self.key_press_handler(
+                event.key(), ctrl_pressed, alt_pressed, shift_pressed, event
+            )
         else:
             event.ignore()
         super(ListBox, self).keyPressEvent(event)

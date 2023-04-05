@@ -11,7 +11,13 @@ need to be supported for backwards compatibility reason.
 """
 from qdarktheme.qtpy.QtCore import QLineF, QRectF, Qt
 from qdarktheme.qtpy.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
-from qdarktheme.qtpy.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
+from qdarktheme.qtpy.QtWidgets import (
+    QFrame,
+    QGraphicsEllipseItem,
+    QGraphicsScene,
+    QGraphicsView,
+    QDialogButtonBox,
+)
 
 from constants import ColourCodes, class_backgrounds, Layers, PlayerClasses
 from pob_config import Config, _debug
@@ -134,7 +140,9 @@ class TreeView(QGraphicsView):
                     for node_id in set(node.nodes_out + node.nodes_in):
                         if node_id in self.build.current_spec.nodes:
                             if _item.node_type == "Mastery":
-                                if self.mastery_popup(self.build.current_tree.nodes[_item.node_id]):
+                                if self.mastery_popup(
+                                    self.build.current_tree.nodes[_item.node_id]
+                                ):
                                     self.build.current_spec.nodes.append(_item.node_id)
                             else:
                                 self.build.current_spec.nodes.append(_item.node_id)
@@ -142,7 +150,10 @@ class TreeView(QGraphicsView):
             elif event.button() == Qt.RightButton:
                 # look for Mastery and popup a dialog
                 # print("RightButton", _item.node_type)
-                if _item.node_type == "Mastery" and _item.node_id in self.build.current_spec.nodes:
+                if (
+                    _item.node_type == "Mastery"
+                    and _item.node_id in self.build.current_spec.nodes
+                ):
                     self.mastery_popup(self.build.current_tree.nodes[_item.node_id])
             self.add_tree_images()
             # count the new nodes ...
@@ -178,7 +189,10 @@ class TreeView(QGraphicsView):
         :return: bool: True if an effect was chosen
         """
         dlg = MasteryPopup(
-            self.config.app.tr, node, self.build.current_spec, self.build.current_tree.mastery_effects_nodes[node.name]
+            self.config.app.tr,
+            node,
+            self.build.current_spec,
+            self.build.current_tree.mastery_effects_nodes[node.name],
         )
         # 0 is discard, 1 is save
         _return = dlg.exec()
@@ -199,7 +213,9 @@ class TreeView(QGraphicsView):
         :return: ptr to the created TreeGraphicsItem
         """
         if pixmap is None or pixmap == "":
-            print(f"tree_view.add_picture called with information. pixmap: {pixmap},  x:{x}, y: {y}")
+            print(
+                f"tree_view.add_picture called with information. pixmap: {pixmap},  x:{x}, y: {y}"
+            )
             return None
         image = TreeGraphicsItem(self.config, pixmap, z, selectable)
         image.setPos(x, y)
@@ -291,7 +307,11 @@ class TreeView(QGraphicsView):
             :param z_value: Layers: which layer shall we draw it.
             :return: a reference to the circle.
             """
-            _image = _node.inactive_overlay_image is None and _node.inactive_image or _node.inactive_overlay_image
+            _image = (
+                _node.inactive_overlay_image is None
+                and _node.inactive_image
+                or _node.inactive_overlay_image
+            )
             _spot = QGraphicsEllipseItem(
                 _image.pos().x() + _image.offset().x(),
                 _image.pos().y() + _image.offset().y(),
@@ -370,7 +390,9 @@ class TreeView(QGraphicsView):
                 # Draw active lines
                 if node.type not in ("ClassStart", "Mastery"):
                     in_out_nodes = []
-                    for other_node_id in set(node.nodes_out + node.nodes_in) & set(active_nodes):
+                    for other_node_id in set(node.nodes_out + node.nodes_in) & set(
+                        active_nodes
+                    ):
                         other_node = tree.nodes.get(other_node_id, None)
                         if (
                             other_node is not None
@@ -409,14 +431,21 @@ class TreeView(QGraphicsView):
                 item.setOpacity(dim)
 
         # Draw spots for comparing trees
-        if self.win.tree_ui.check_Compare.isChecked() and self.build.compare_spec is not None:
+        if (
+            self.win.tree_ui.check_Compare.isChecked()
+            and self.build.compare_spec is not None
+        ):
             current = set(self.build.current_spec.nodes)
-            nodes_not_in_compare_spec = [x for x in self.build.compare_spec.nodes if x not in current]
+            nodes_not_in_compare_spec = [
+                x for x in self.build.compare_spec.nodes if x not in current
+            ]
             for node in nodes_not_in_compare_spec:
                 add_compare_spot(tree.nodes[node], Qt.green, 6)
 
             compare = set(self.build.compare_spec.nodes)
-            nodes_not_in_current_spec = [x for x in self.build.current_spec.nodes if x not in compare]
+            nodes_not_in_current_spec = [
+                x for x in self.build.current_spec.nodes if x not in compare
+            ]
             for node in nodes_not_in_current_spec:
                 add_compare_spot(tree.nodes[node], Qt.red, 6)
             # Can add lines too. How to find the node that connects back to an active node ?

@@ -32,16 +32,24 @@ class NotesUI:
         self.modified = False
 
         # Add content to Colour ComboBox
-        self.win.combo_Notes_Colour.addItems([colour.name.title() for colour in ColourCodes])
+        self.win.combo_Notes_Colour.addItems(
+            [colour.name.title() for colour in ColourCodes]
+        )
         for index in range(self.win.combo_Notes_Colour.count()):
-            colour = ColourCodes[self.win.combo_Notes_Colour.itemText(index).upper()].value
-            self.win.combo_Notes_Colour.setItemData(index, QBrush(colour), Qt.ForegroundRole)
+            colour = ColourCodes[
+                self.win.combo_Notes_Colour.itemText(index).upper()
+            ].value
+            self.win.combo_Notes_Colour.setItemData(
+                index, QBrush(colour), Qt.ForegroundRole
+            )
 
         self.win.btn_ConvertToText.setVisible(False)
         self.win.btn_ConvertToText.clicked.connect(self.convert_to_text)
         self.win.combo_Notes_Font.currentFontChanged.connect(self.set_notes_font)
         self.win.spin_Notes_FontSize.valueChanged.connect(self.set_notes_font_size)
-        self.win.combo_Notes_Colour.currentTextChanged.connect(self.set_notes_font_colour)
+        self.win.combo_Notes_Colour.currentTextChanged.connect(
+            self.set_notes_font_colour
+        )
 
     def load(self, _notes_html, _notes):
         """
@@ -85,14 +93,18 @@ class NotesUI:
         # remove single charactor colours for their full versions
         for idx in range(10):
             while f"^{idx}" in text:
-                text = text.replace(f"^{idx}", f"^{colorEscape[idx].value.replace('#', 'x')}")
+                text = text.replace(
+                    f"^{idx}", f"^{colorEscape[idx].value.replace('#', 'x')}"
+                )
 
         # search for the lua colour codes and replace them with span tags
         m = re.search(r"(\^x[0-9A-Fa-f]{6})", text)
         while m is not None:
             # get the colour from the match
             c = re.search(r"([0-9A-Fa-f]{6})", m.group(1))
-            text = text.replace(m.group(1), f'</span><span style="color:#{c.group(1)};">')
+            text = text.replace(
+                m.group(1), f'</span><span style="color:#{c.group(1)};">'
+            )
             m = re.search(r"(\^x[0-9A-Fa-f]{6})", text)
 
         # check for a leading closing span tag

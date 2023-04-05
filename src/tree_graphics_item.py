@@ -64,7 +64,9 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
 
         :return: str: the tooltip
         """
-        tool_tip = self.node_name and f"{self.node_name}, {self.node_id}" or f"{self.node_id}"
+        tool_tip = (
+            self.node_name and f"{self.node_name}, {self.node_id}" or f"{self.node_id}"
+        )
         tool_tip += self.data and f", {self.data}" or ""
         if self.node_sd != "":
             for line in self.node_sd:

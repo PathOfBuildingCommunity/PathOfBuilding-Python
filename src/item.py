@@ -478,11 +478,17 @@ class Item:
         attribs = xml.find("Attribs")
         if attribs is not None:
             self.evasion = int(attribs.get("evasion", "0"))
-            self.evasion_base_percentile = float(attribs.get("evasion_base_percentile", "0.0"))
+            self.evasion_base_percentile = float(
+                attribs.get("evasion_base_percentile", "0.0")
+            )
             self.energy_shield = int(attribs.get("energy_shield", "0"))
-            self.energy_shield_base_percentile = float(attribs.get("energy_shield_base_percentile", "0.0"))
+            self.energy_shield_base_percentile = float(
+                attribs.get("energy_shield_base_percentile", "0.0")
+            )
             self.armour = int(attribs.get("armour", "0"))
-            self.armour_base_percentile = float(attribs.get("armour_base_percentile", "0.0"))
+            self.armour_base_percentile = float(
+                attribs.get("armour_base_percentile", "0.0")
+            )
             self.limited_to = attribs.get("limited_to", "")
             self.ilevel = int(attribs.get("ilevel", "0"))
             # self.level_req = int(get_variant_value(attribs, "level_req", "0"))
@@ -546,7 +552,9 @@ class Item:
         :return: ET.ElementTree:
         """
         text = f"Rarity: {self.rarity}\n"
-        text += self.title and f"{self.title}\n{self.base_name}\n" or f"{self.base_name}\n"
+        text += (
+            self.title and f"{self.title}\n{self.base_name}\n" or f"{self.base_name}\n"
+        )
         text += f"Unique ID: {self.unique_id}\n"
         text += f"Item Level: {self.ilevel}\n"
         text += f"Quality: {self.quality}\n"
@@ -611,7 +619,9 @@ class Item:
             :return: The value of the last variant read, with the {variant:x} text
             """
             if self.variant_entries_xml is None:
-                self.variant_entries_xml = ET.fromstring("<VariantEntries></VariantEntries>")
+                self.variant_entries_xml = ET.fromstring(
+                    "<VariantEntries></VariantEntries>"
+                )
             entries = self.variant_entries.get(entry_name, None)
             if entries is None:
                 xml.set(entry_name, value)
@@ -619,7 +629,9 @@ class Item:
                 _xml.set(entry_name, "variant")
                 for entry in entries:
                     if entry != "":
-                        self.variant_entries_xml.append(ET.fromstring(f"<{entry_name}>{entry}</{entry_name}>"))
+                        self.variant_entries_xml.append(
+                            ET.fromstring(f"<{entry_name}>{entry}</{entry_name}>")
+                        )
 
         xml = ET.fromstring(f'<Item ver="2"></Item>')
         add_attrib_if_not_null(xml, "id", self.id)
@@ -638,11 +650,17 @@ class Item:
         # there is always an Attribs element, even if it is empty, which almost never happens
         attribs = ET.fromstring(f"<Attribs />")
         add_attrib_if_not_null(attribs, "evasion", self.evasion)
-        add_attrib_if_not_null(attribs, "evasion_base_percentile", self.evasion_base_percentile)
+        add_attrib_if_not_null(
+            attribs, "evasion_base_percentile", self.evasion_base_percentile
+        )
         add_attrib_if_not_null(attribs, "energy_shield", self.energy_shield)
-        add_attrib_if_not_null(attribs, "energy_shield_base_percentile", self.energy_shield_base_percentile)
+        add_attrib_if_not_null(
+            attribs, "energy_shield_base_percentile", self.energy_shield_base_percentile
+        )
         add_attrib_if_not_null(attribs, "armour", self.armour)
-        add_attrib_if_not_null(attribs, "armour_base_percentile", self.armour_base_percentile)
+        add_attrib_if_not_null(
+            attribs, "armour_base_percentile", self.armour_base_percentile
+        )
         add_attrib_if_not_null(attribs, "limited_to", self.limited_to)
         add_attrib_if_not_null(attribs, "ilevel", self.ilevel)
         add_attrib_if_not_null(attribs, "level_req", self.level_req)
@@ -688,7 +706,9 @@ class Item:
             add_attrib_if_not_null(var_xml, "current", self.curr_variant)
             for num, variant in enumerate(self.variant_names, 1):
                 # at this point (Nov2022) 'num' isn't used but it makes reading/editing the xml a little easier
-                var_xml.append(ET.fromstring(f'<Variant num="{num}">{variant}</Variant>'))
+                var_xml.append(
+                    ET.fromstring(f'<Variant num="{num}">{variant}</Variant>')
+                )
             if len(self.alt_variants) > 1:
                 # always write the value, even if it's 0 (that means no choice made)
                 for alt in self.alt_variants.keys():
@@ -798,7 +818,11 @@ class Item:
                         case "Dex" | "Int" | "Str":
                             val = reqs.get(tag, None)
                             # don't overwrite a current value
-                            if self.requires.get(tag, None) is None and val is not None and val != 0:
+                            if (
+                                self.requires.get(tag, None) is None
+                                and val is not None
+                                and val != 0
+                            ):
                                 self.requires[tag] = val
         elif "Flask" in new_name:
             self.type = "Flask"
@@ -811,7 +835,12 @@ class Item:
                 if "twohand" in self.base_item["tags"]:
                     self.slots = ["Weapon 1", "Weapon 1 Swap"]
                 else:
-                    self.slots = ["Weapon 1", "Weapon 1 Swap", "Weapon 2", "Weapon 2 Swap"]
+                    self.slots = [
+                        "Weapon 1",
+                        "Weapon 1 Swap",
+                        "Weapon 2",
+                        "Weapon 2 Swap",
+                    ]
             case "Ring":
                 self.slots = ["Ring 1", "Ring 2"]
             case "Flask":

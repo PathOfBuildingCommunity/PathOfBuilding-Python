@@ -5,7 +5,14 @@ This Class manages all the elements and owns some elements of the "TREE" tab
 import re
 
 from qdarktheme.qtpy.QtCore import Qt, Slot, QSize
-from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
+from qdarktheme.qtpy.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QDialog,
+)
 
 from views.PoB_Main_Window import Ui_MainWindow
 from constants import tree_versions, PlayerClasses, _VERSION_str
@@ -64,7 +71,9 @@ class TreeUI:
         self.btn_Export.clicked.connect(self.export_tree)
 
         self.label_Search = QLabel()
-        self.label_Search.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+        self.label_Search.setAlignment(
+            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter
+        )
         self.label_Search.setMinimumSize(QSize(50, 22))
         self.label_Search.setText("Search:")
         self.layout_tree_tools.addWidget(self.label_Search)
@@ -76,7 +85,9 @@ class TreeUI:
         self.check_show_node_power.setMinimumSize(QSize(50, 22))
         self.check_show_node_power.setText(self.tr("Show Node Power:"))
         self.check_show_node_power.setLayoutDirection(Qt.RightToLeft)
-        self.check_show_node_power.stateChanged.connect(self.set_show_node_power_visibility)
+        self.check_show_node_power.stateChanged.connect(
+            self.set_show_node_power_visibility
+        )
         self.check_show_node_power.setEnabled(False)
         self.layout_tree_tools.addWidget(self.check_show_node_power)
         self.combo_show_node_power = QComboBox()
@@ -125,7 +136,11 @@ class TreeUI:
         :return: N/A
         """
         self.combo_compare.setVisible(checked_state > 0)
-        self.build.compare_spec = checked_state > 0 and self.build.specs[self.combo_compare.currentIndex()] or None
+        self.build.compare_spec = (
+            checked_state > 0
+            and self.build.specs[self.combo_compare.currentIndex()]
+            or None
+        )
         self.win.gview_Tree.add_tree_images(False)
 
     @Slot()
@@ -189,8 +204,14 @@ class TreeUI:
 
     def reset_tree(self):
         print("reset_tree")
-        if yes_no_dialog(self.win, self.tr("Resetting your Tree"), self.tr("Are you sure? It could be dangerous.")):
-            start_node = self.build.current_tree.classes[self.build.current_class]["startNodeId"]
+        if yes_no_dialog(
+            self.win,
+            self.tr("Resetting your Tree"),
+            self.tr("Are you sure? It could be dangerous."),
+        ):
+            start_node = self.build.current_tree.classes[self.build.current_class][
+                "startNodeId"
+            ]
             self.build.current_spec.nodes = [start_node]
             self.win.gview_Tree.add_tree_images(False)
 

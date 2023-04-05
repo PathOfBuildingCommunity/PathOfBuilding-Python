@@ -28,7 +28,10 @@ from ui_utils import HTMLDelegate, html_colour_text
 
 def yes_no_dialog(win, title, text):
     """Return true if the user selects Yes."""
-    return QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No) == QMessageBox.Yes
+    return (
+        QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No)
+        == QMessageBox.Yes
+    )
 
 
 def ok_dialog(win, title, text, btn_text="OK"):
@@ -286,7 +289,9 @@ class ExportTreePopup(QDialog):
             self.lineedit.setSelection(0, len(url))
             self.btn_shrink.setText(self.tr("Done"))
         except requests.RequestException as e:
-            self.win.update_status_bar(f"Error retrieving 'Data': {response.reason} ({response.status_code}).")
+            self.win.update_status_bar(
+                f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+            )
             self.btn_shrink.setEnabled(True)
             self.btn_shrink.setText(self.shrink_text)
             print(f"Error accessing 'http://poeurl.com': {e}.")

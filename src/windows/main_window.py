@@ -68,6 +68,7 @@ bandits = {
     },
 }
 
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, _app) -> None:
         super(MainWindow, self).__init__()
@@ -165,7 +166,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Dump the placeholder Graphics View and add our own
         # Cannot be set in TreeUI() init due to recursion error.
         self.gview_Tree = TreeView(self, self.config, self.build)
-        self.vlayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gview_Tree)
+        self.vlayout_tabTree.replaceWidget(
+            self.graphicsView_PlaceHolder, self.gview_Tree
+        )
         # destroy the old object
         self.graphicsView_PlaceHolder.setParent(None)
 
@@ -180,7 +183,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.layout_config.addItem(self.grpbox_6)
 
         # set the ComboBox dropdown width.
-        self.combo_Bandits.view().setMinimumWidth(self.combo_Bandits.minimumSizeHint().width())
+        self.combo_Bandits.view().setMinimumWidth(
+            self.combo_Bandits.minimumSizeHint().width()
+        )
 
         """
             End: Do what the QT Designer cannot yet do 
@@ -193,17 +198,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for idx, bandit_name in enumerate(bandits.keys()):
             bandit_info = bandits[bandit_name]
             self.combo_Bandits.addItem(bandit_info.get("name"), bandit_name)
-            self.combo_Bandits.setItemData(idx, html_colour_text("TANGLE", bandit_info.get("tooltip")), Qt.ToolTipRole)
+            self.combo_Bandits.setItemData(
+                idx,
+                html_colour_text("TANGLE", bandit_info.get("tooltip")),
+                Qt.ToolTipRole,
+            )
         self.combo_MajorGods.clear()
         for idx, god_name in enumerate(pantheon_major_gods.keys()):
             god_info = pantheon_major_gods[god_name]
             self.combo_MajorGods.addItem(god_info.get("name"), god_name)
-            self.combo_MajorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
+            self.combo_MajorGods.setItemData(
+                idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole
+            )
         self.combo_MinorGods.clear()
         for idx, god_name in enumerate(pantheon_minor_gods.keys()):
             god_info = pantheon_minor_gods[god_name]
             self.combo_MinorGods.addItem(god_info.get("name"), god_name)
-            self.combo_MinorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
+            self.combo_MinorGods.setItemData(
+                idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole
+            )
 
         self.menu_Builds.addSeparator()
         self.set_recent_builds_menu_items(self.config)
@@ -241,7 +254,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             width of the dropdowns. So reapply the current theme in an attempt to force the correct colours.
         """
         # don't use self.switch_theme
-        QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
+        QApplication.instance().setStyleSheet(
+            qdarktheme.load_stylesheet(self._theme, self._border_radius)
+        )
 
     def setup_ui(self):
         """Called after show(). Call setup_ui for all UI classes that need it"""
@@ -401,7 +416,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not tree_id:
             return
 
-        full_clear = self.build.change_tree(self.tree_ui.combo_manage_tree.currentData())
+        full_clear = self.build.change_tree(
+            self.tree_ui.combo_manage_tree.currentData()
+        )
 
         # update label_points
         self.display_number_node_points(-1)
@@ -495,7 +512,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             and html_colour_text("RED", f"{self.build.ascnodes_assigned}")
             or f"{self.build.ascnodes_assigned}"
         )
-        self.label_points.setText(f" {nodes_assigned} / {self.max_points}    {ascnodes_assigned} / 8 ")
+        self.label_points.setText(
+            f" {nodes_assigned} / {self.max_points}    {ascnodes_assigned} / 8 "
+        )
 
     # Do all actions needed to change between light and dark
     @Slot()
@@ -515,7 +534,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.action_Theme.setText("Dark")
 
         self.config.theme = new_theme
-        QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
+        QApplication.instance().setStyleSheet(
+            qdarktheme.load_stylesheet(self._theme, self._border_radius)
+        )
 
     @Slot()
     def set_tab_focus(self, index):
@@ -538,7 +559,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Focus a Widget
         tab_focus.get(index).setFocus()
         # update the build
-        self.build.current_tab = self.tab_main.tabWhatsThis(self.tab_main.currentIndex())
+        self.build.current_tab = self.tab_main.tabWhatsThis(
+            self.tab_main.currentIndex()
+        )
         # Turn on / off actions as needed
         self.action_ManageTrees.setVisible(self.build.current_tab == "TREE")
 
@@ -585,12 +608,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             :param _filename:
             :return:
             """
-            _action.triggered.connect(lambda checked: self._open_previous_build(checked, _idx, _filename))
+            _action.triggered.connect(
+                lambda checked: self._open_previous_build(checked, _idx, _filename)
+            )
 
         recent_builds = config.recent_builds()
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
-                filename = re.sub(".xml", "", str(Path(value).relative_to(self.config.build_path)))
+                filename = re.sub(
+                    ".xml", "", str(Path(value).relative_to(self.config.build_path))
+                )
                 _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
 
@@ -633,7 +660,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkill.clear()
 
         self.combo_MainSkill.currentTextChanged.disconnect(self.main_skill_text_changed)
-        self.combo_MainSkill.currentIndexChanged.disconnect(self.main_skill_index_changed)
+        self.combo_MainSkill.currentIndexChanged.disconnect(
+            self.main_skill_index_changed
+        )
 
         # backup the current index, reload combo with new values and reset to a valid current_index
         # each line is a colon separated of socket group label and gem list
@@ -642,7 +671,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for line in _list:
             _label, _gem_list = line.split(":")
             self.combo_MainSkill.addItem(_label, _gem_list)
-        self.combo_MainSkill.view().setMinimumWidth(self.combo_MainSkill.minimumSizeHint().width())
+        self.combo_MainSkill.view().setMinimumWidth(
+            self.combo_MainSkill.minimumSizeHint().width()
+        )
         # In case the new list is shorter or empty
         current_index = min(max(0, current_index), len(_list))
         # print("load_main_skill_combo.current_index 2", current_index)
@@ -665,13 +696,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.combo_MainSkill.currentData() is None:
             return
         try:
-            self.combo_MainSkillActive.currentTextChanged.disconnect(self.active_skill_changed)
+            self.combo_MainSkillActive.currentTextChanged.disconnect(
+                self.active_skill_changed
+            )
         except RuntimeError:
             pass
 
         self.combo_MainSkillActive.clear()
-        self.combo_MainSkillActive.addItems(self.combo_MainSkill.currentData().split(", "))
-        self.combo_MainSkillActive.view().setMinimumWidth(self.combo_MainSkillActive.minimumSizeHint().width())
+        self.combo_MainSkillActive.addItems(
+            self.combo_MainSkill.currentData().split(", ")
+        )
+        self.combo_MainSkillActive.view().setMinimumWidth(
+            self.combo_MainSkillActive.minimumSizeHint().width()
+        )
         self.combo_MainSkillActive.setCurrentIndex(0)
 
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
@@ -703,7 +740,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # we only care for when the message clears
         if pob_debug and message is None or message == "":
             process = psutil.Process(os.getpid())
-            message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
+            message = (
+                f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
+            )
             self.statusbar_MainWindow.showMessage(message, 2000)
 
     # Overridden function
@@ -733,7 +772,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     else:
                         # Assume it is going to come from outside the application, ingame or trade site
                         data = pyperclip.paste()
-                        if data is not None and type(data) == str and "Item Class:" in data:
+                        if (
+                            data is not None
+                            and type(data) == str
+                            and "Item Class:" in data
+                        ):
                             if "Skill Gems" in data:
                                 success = self.skills_ui.get_item_from_clipboard(data)
                             else:
