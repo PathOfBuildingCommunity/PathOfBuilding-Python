@@ -13,8 +13,8 @@ dlg*.py
 *.orig
 *.bak
 settings.xml
-base_items.json
-mods.json
+#base_items.json
+#mods.json
 
 # C extensions
 *.so
