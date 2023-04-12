@@ -1,4 +1,0 @@
-#!/bin/sh
-poetry=$(find ~ -type f -iname poetry | head -n1)
-env=$($poetry env list --full-path | awk '/pathofbuilding-python/{print $1}')
-${env}/bin/pyside6-rcc PoB.qrc -o ../src/PoB_rc.py

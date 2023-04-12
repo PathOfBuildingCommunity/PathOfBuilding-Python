@@ -6,12 +6,32 @@ import xml.etree.ElementTree as ET
 
 from qdarktheme.qtpy.QtCore import Slot, QSize, Qt
 from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
-from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QListWidgetItem, QSpinBox, QWidget
+from qdarktheme.qtpy.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QLabel,
+    QListWidgetItem,
+    QSpinBox,
+    QWidget,
+)
 
-from pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
+from pob_config import (
+    Config,
+    _debug,
+    str_to_bool,
+    index_exists,
+    bool_to_str,
+    print_a_xml_element,
+    print_call_stack,
+)
 from constants import ColourCodes, slot_map
-from ui_utils import set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
-from popup_dialogs import yes_no_dialog
+from ui_utils import (
+    set_combo_index_by_data,
+    set_combo_index_by_text,
+    HTMLDelegate,
+    html_colour_text,
+)
+from dialogs.popup_dialogs import yes_no_dialog
 from item import Item
 
 
@@ -58,7 +78,9 @@ class ItemSlotUI(QWidget):
         self.label.setGeometry(1, 5, indent and 105 or 95, 22)
         self.label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.combo_item_list = QComboBox(self)
-        self.combo_item_list.setGeometry(indent and 110 or 100, 3, indent and 320 or 330, 22)
+        self.combo_item_list.setGeometry(
+            indent and 110 or 100, 3, indent and 320 or 330, 22
+        )
         self.combo_item_list.setDuplicatesEnabled(True)
         self.combo_item_list.addItem("None", 0)
         self.combo_item_list.setCurrentIndex(0)
@@ -100,12 +122,16 @@ class ItemSlotUI(QWidget):
 
     def sizeHint(self) -> QSize:
         """Return a known size. Without this the default row height is about 22"""
-        return QSize(self.label.width() + self.combo_item_list.width() + 5, self.widget_height)
+        return QSize(
+            self.label.width() + self.combo_item_list.width() + 5, self.widget_height
+        )
 
     def add_item(self, _item: Item):
         """add an item to the drop down"""
         self.combo_item_list.addItem(_item.name, _item)
-        self.combo_item_list.view().setMinimumWidth(self.combo_item_list.minimumSizeHint().width() + 50)
+        self.combo_item_list.view().setMinimumWidth(
+            self.combo_item_list.minimumSizeHint().width() + 50
+        )
 
     def delete_item(self, _item: Item):
         """delete an item from the drop down"""
@@ -134,7 +160,10 @@ class ItemSlotUI(QWidget):
         """
         # print("set_default_item", self.title, self.combo_item_list.currentIndex(), self.combo_item_list.count())
 
-        if self.combo_item_list.currentIndex() == 0 and self.combo_item_list.count() > 0:
+        if (
+            self.combo_item_list.currentIndex() == 0
+            and self.combo_item_list.count() > 0
+        ):
             # Split out the number for those titles that have numbers
             title_parts = self.title.split(" ")
             match self.type:

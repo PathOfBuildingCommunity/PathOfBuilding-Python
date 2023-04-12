@@ -81,7 +81,11 @@ def _debug(*text):
     """
     if pob_debug:
         lines = traceback.format_stack()
-        print(f"{datetime.datetime.now()}: {text}", ":", lines[-2].strip().partition("\n")[0])
+        print(
+            f"{datetime.datetime.now()}: {text}",
+            ":",
+            lines[-2].strip().partition("\n")[0],
+        )
 
 
 def print_a_xml_element(the_element):
@@ -148,7 +152,7 @@ class Config:
         self.build_dir = Path(self.exe_dir, "builds")
         if not self.build_dir.exists():
             self.build_dir.mkdir()
-        self.tree_data_path = Path(self.exe_dir, "TreeData")
+        self.tree_data_path = Path(self.exe_dir, "tree_data")
         if not self.tree_data_path.exists():
             self.tree_data_path.mkdir()
         self.read()
@@ -527,7 +531,7 @@ class Config:
             dlg.check_BuildWarnings.setChecked(self.show_warnings)
             dlg.check_Tooltips.setChecked(self.slot_only_tooltips)
 
-        dlg = self.loader.load(Path(self.exe_dir, "dlgConfig.ui"), self.win)
+        dlg = self.loader.load(Path(self.exe_dir, "ui-files/dlgConfig.ui"), self.win)
         # Force discard to close the dialog
         discard = dlg.btnBox.button(QDialogButtonBox.Discard)
         discard.clicked.connect(dlg.reject)
@@ -558,7 +562,9 @@ class Config:
             self.node_power_theme = dlg.combo_NP_Colours.currentIndex()
             self.beta_mode = dlg.check_Beta.isChecked()
             self.show_titlebar_name = dlg.check_ShowBuildName.isChecked()
-            self.show_thousands_separators = dlg.check_ShowThousandsSeparators.isChecked()
+            self.show_thousands_separators = (
+                dlg.check_ShowThousandsSeparators.isChecked()
+            )
             self.thousands_separator = dlg.lineedit_ThousandsSeparator.text()
             self.decimal_separator = dlg.lineedit_DecimalSeparator.text()
             self.default_gem_quality = dlg.spin_GemQuality.value()

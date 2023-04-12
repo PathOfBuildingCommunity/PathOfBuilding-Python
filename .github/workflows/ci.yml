@@ -1,0 +1,27 @@
+name: CI Checks
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: '1.4.2'
+
+      - name: Install dependencies
+        run: poetry install --no-interaction
+
+      - name: Format check
+        run: |
+          black ./src --check

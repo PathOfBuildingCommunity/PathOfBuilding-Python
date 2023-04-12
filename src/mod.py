@@ -6,7 +6,14 @@ Numeric values default to None so that they can be checked for non use. -1 or 0 
 import xml.etree.ElementTree as ET
 import re
 
-from pob_config import Config, _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
+from pob_config import (
+    Config,
+    _debug,
+    index_exists,
+    str_to_bool,
+    bool_to_str,
+    print_call_stack,
+)
 from pob_file import read_xml, write_xml
 from constants import slot_map, ColourCodes
 from ui_utils import HTMLDelegate, html_colour_text
@@ -19,7 +26,11 @@ class Mod:
         :param _line: the full line of the mod, including variant stanzas.
         """
         # this is the text without {variant}, {crafted}. At this point {range} is still present
-        self.line = re.sub(r"{variant:\d+}", "", _line.replace("{crafted}", "").replace("{fractured}", ""))
+        self.line = re.sub(
+            r"{variant:\d+}",
+            "",
+            _line.replace("{crafted}", "").replace("{fractured}", ""),
+        )
         # this is the text with the (xx-yy), eg '% increased Duration'.
         # It is to avoid recalculating this value needlessly
         self.line_without_range = None

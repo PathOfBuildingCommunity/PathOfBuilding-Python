@@ -98,7 +98,10 @@ pantheon_major_gods = {
         "tooltip": "6% additional Physical Damage Reduction while there is only one nearby Enemy\n"
         "20% chance to take 50% less Area Damage from Hits",
     },
-    "Arakaali": {"name": "Soul of Arakaali", "tooltip": "10% reduced Damage taken from Damage Over Time"},
+    "Arakaali": {
+        "name": "Soul of Arakaali",
+        "tooltip": "10% reduced Damage taken from Damage Over Time",
+    },
 }
 
 pantheon_minor_gods = {
@@ -111,12 +114,18 @@ pantheon_minor_gods = {
         "name": "Soul of Yugul",
         "tooltip": "You and your Minions take 50% reduced Reflected Damage\n50% chance to Reflect Hexes",
     },
-    "Abberath": {"name": "Soul of Abberath", "tooltip": "60% less Duration of Ignite on You"},
+    "Abberath": {
+        "name": "Soul of Abberath",
+        "tooltip": "60% less Duration of Ignite on You",
+    },
     "Tukohama": {
         "name": "Soul of Tukohama",
         "tooltip": "While stationary, gain 3% additional Physical Damage Reduction every second, up to a maximum of 9%",
     },
-    "Garukhan": {"name": "Soul of Garukhan", "tooltip": "60% reduced Effect of Shock on you"},
+    "Garukhan": {
+        "name": "Soul of Garukhan",
+        "tooltip": "60% reduced Effect of Shock on you",
+    },
     "Ralakesh": {
         "name": "Soul of Ralakesh",
         "tooltip": "25% reduced Physical Damage over Time taken while moving\n"
@@ -318,7 +327,10 @@ ascendancy_positions = {
     "Ascendant": {"x": -7800.0 / global_scale_factor, "y": 7200 / global_scale_factor},
     "Berserker": {"x": -10400 / global_scale_factor, "y": 3700 / global_scale_factor},
     "Chieftain": {"x": -10400 / global_scale_factor, "y": 2200 / global_scale_factor},
-    "Chieftain_g3": {"x": -10580 / global_scale_factor, "y": 2507 / global_scale_factor},
+    "Chieftain_g3": {
+        "x": -10580 / global_scale_factor,
+        "y": 2507 / global_scale_factor,
+    },
     "Juggernaut": {"x": -10400 / global_scale_factor, "y": 5200 / global_scale_factor},
     "Deadeye": {"x": 10200 / global_scale_factor, "y": 2200 / global_scale_factor},
     "Pathfinder": {"x": 10200 / global_scale_factor, "y": 3700 / global_scale_factor},
@@ -949,7 +961,13 @@ stats_list = [
     },
 ]
 
-valid_websites = ["pastebin.com", "pastebinp.com", "pobb.in", "rentry.co", "poe.ninja/pob"]
+valid_websites = [
+    "pastebin.com",
+    "pastebinp.com",
+    "pobb.in",
+    "rentry.co",
+    "poe.ninja/pob",
+]
 website_list = {
     "pastebin.com": {
         "id": "Pastebin",

@@ -79,7 +79,9 @@ class HTMLDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         options = QStyleOptionViewItem(option)
         self.initStyleOption(options, index)
-        style = QApplication.style() if options.widget is None else options.widget.style()
+        style = (
+            QApplication.style() if options.widget is None else options.widget.style()
+        )
 
         doc = QTextDocument()
         doc.setHtml(options.text)
