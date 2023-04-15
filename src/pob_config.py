@@ -138,7 +138,7 @@ class Config:
         self.win = _win
         self.app = _app
         self.screen_rect = self.app.primaryScreen().size()
-        # self.loader = QUiLoader()
+        self.loader = QUiLoader()
 
         # this is the xml tree representing the xml
         self.root = None
@@ -531,7 +531,7 @@ class Config:
             dlg.check_BuildWarnings.setChecked(self.show_warnings)
             dlg.check_Tooltips.setChecked(self.slot_only_tooltips)
 
-        dlg = self.loader.load(Path(self.exe_dir, "ui-files/dlgConfig.ui"), self.win)
+        dlg = self.loader.load(Path(self.exe_dir, "ui_files/dlgConfig.ui"), self.win)
         # Force discard to close the dialog
         discard = dlg.btnBox.button(QDialogButtonBox.Discard)
         discard.clicked.connect(dlg.reject)
