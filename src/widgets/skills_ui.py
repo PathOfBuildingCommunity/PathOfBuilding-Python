@@ -290,7 +290,7 @@ class SkillsUI:
 
         # read in all gems but remove all invalid/unreleased ones
         # "Afflictions" will be removed by this (no display_name), so maybe a different list for them
-        gems = read_json(Path(self.pob_config.exe_dir, "data/gems.json"))
+        gems = read_json(Path(self.pob_config.exe_dir, "Data/gems.json"))
         if gems is None:
             return None
         gems_list = list(gems.keys())
