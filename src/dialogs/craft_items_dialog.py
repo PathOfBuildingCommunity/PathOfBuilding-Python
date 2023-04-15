@@ -21,7 +21,7 @@ from constants import ColourCodes
 class CraftItemsDlg(Ui_CraftItems, QDialog):
     """Craft Items dialog"""
 
-    def __init__(self, _config: Config, _base_items, import_item=False, parent=None):
+    def __init__(self, _config: Config, _base_items, _mods, import_item=False, parent=None):
         """
 
         :param _config:
@@ -32,6 +32,7 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         super().__init__(parent)
         self.config = _config
         self.base_items = _base_items
+        self.mods = _mods
 
         self._item = None
         # copy a copy of the item as passed in for

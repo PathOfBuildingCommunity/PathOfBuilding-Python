@@ -36,6 +36,32 @@ def generate_py_from_ui():
     exe = get_uic_exe()
     for path in Path("./src/ui_files/").glob('*.ui'):
         outpath = Path('src', 'views', path.name).with_suffix('.py')
+        ui_time = os.path.getmtime(path)
+        if os.path.isfile(outpath) and ui_time == os.path.getmtime(outpath):
+            print(f"skipping {path}, exists and no change.")
+            pass
+        else:
+            print(path, '>>', outpath)
+
+            cmd = [os.fspath(exe), '-g', 'python', str(path), '-o', str(outpath)]
+            proc = Popen(cmd, stderr=PIPE)
+            out, err = proc.communicate()
+            if err:
+                msg = err.decode("utf-8")
+                command = ' '.join(cmd)
+                print(f"Error: {msg}\nwhile executing '{command}'")
+            else:
+                os.utime(outpath, (ui_time, ui_time))
+
+def generate_qrc():
+    exe = get_rcc_exe()
+    path = "./Assets/PoB.qrc"
+    outpath = Path('src', 'PoB_rc').with_suffix('.py')
+    ui_time = os.path.getmtime(path)
+    if os.path.isfile(outpath) and ui_time == os.path.getmtime(outpath):
+        print(f"skipping {path}, exists and no change.")
+        pass
+    else:
         print(path, '>>', outpath)
 
         cmd = [os.fspath(exe), '-g', 'python', str(path), '-o', str(outpath)]
@@ -45,20 +71,8 @@ def generate_py_from_ui():
             msg = err.decode("utf-8")
             command = ' '.join(cmd)
             print(f"Error: {msg}\nwhile executing '{command}'")
-
-def generate_qrc():
-    exe = get_rcc_exe()
-    path = "./Assets/PoB.qrc"
-    outpath = Path('src', 'PoB_rc').with_suffix('.py')
-    print(path, '>>', outpath)
-
-    cmd = [os.fspath(exe), '-g', 'python', str(path), '-o', str(outpath)]
-    proc = Popen(cmd, stderr=PIPE)
-    out, err = proc.communicate()
-    if err:
-        msg = err.decode("utf-8")
-        command = ' '.join(cmd)
-        print(f"Error: {msg}\nwhile executing '{command}'")
+        else:
+            os.utime(outpath, (ui_time, ui_time))
 
 
 generate_py_from_ui()

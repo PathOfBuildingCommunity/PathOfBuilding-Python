@@ -19,6 +19,7 @@ from pob_config import (
     deflate_and_base64_encode,
     unique_sorted,
 )
+from pob_file import write_json
 from build import Build
 from ui_utils import set_combo_index_by_text
 
@@ -432,6 +433,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             "character": char_info,
         }
         # pprint(passive_tree)
+        # write_json("builds/" + char_name + "_items.json", items)
 
     def fill_character_history(self):
         self.combo_Account_History.clear()
