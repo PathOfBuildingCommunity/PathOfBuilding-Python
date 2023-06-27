@@ -7,7 +7,7 @@ sys.path.insert(1, "../")
 from item import Item
 from pob_file import read_xml, write_xml, read_json
 
-base_items = read_json("../Data/base_items.json")
+base_items = read_json("../data/base_items.json")
 
 uniques = {}
 u_xml = read_xml("uniques_flat.xml")
@@ -21,6 +21,7 @@ for item_type in list(u_xml.getroot()):
         if new_item.base_name == "Unset Ring" and new_item.sockets == "":
             new_item.sockets = "W"
         uniques[item_type.tag].append(new_item)
+
 new_xml = ET.ElementTree(
     ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>")
 )
@@ -36,7 +37,7 @@ for child_tag in uniques:
         item_xml.attrib.pop("rarity", None)
         child_xml.append(item_xml)
     new_root.append(child_xml)
-write_xml("../Data/uniques_new.xml", new_xml)
+write_xml("../data/uniques.xml.new", new_xml)
 
 # templates = []
 # t_xml = read_xml("rare_templates_flat.xml"))
@@ -53,4 +54,4 @@ write_xml("../Data/uniques_new.xml", new_xml)
 #     item_xml = item.save_v2()
 #     item_xml.attrib.pop("rarity", None)
 #     new_root.append(item_xml)
-# write_xml("Data/rare_templates_new.xml", new_xml)
+# write_xml("../data/rare_templates.xml.new", new_xml)

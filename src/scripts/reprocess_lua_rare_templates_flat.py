@@ -7,7 +7,7 @@ sys.path.insert(1, "../")
 from item import Item
 from pob_file import read_xml, write_xml, read_json
 
-base_items = read_json("../Data/base_items.json")
+base_items = read_json("../data/base_items.json")
 
 templates = []
 t_xml = read_xml("rare_templates_flat.xml")
@@ -28,4 +28,4 @@ for item in templates:
     item_xml = item.save_v2()
     item_xml.attrib.pop("rarity", None)
     new_root.append(item_xml)
-write_xml("../Data/rare_templates_new.xml", new_xml)
+write_xml("../data/rare_templates.xml.new", new_xml)

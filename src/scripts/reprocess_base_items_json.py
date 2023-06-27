@@ -163,4 +163,4 @@ for item_id in base_items_json:
         base_items[name] = item
     # process implicits ?
 
-write_json("../Data/base_items.json", base_items)
+write_json("../data/base_items.json_new", base_items)

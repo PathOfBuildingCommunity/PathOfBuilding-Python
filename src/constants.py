@@ -12,15 +12,16 @@ All values should only be scaled on point of entry, ie: when they are first proc
 global_scale_factor = 2.5
 pob_debug = True
 
-_VERSION_str = "3_20"
+_VERSION_str = "3_21"
 tree_versions = {
     "3_18": "3.18",
     "3_19": "3.19",
     "3_20": "3.20",
+    "3_21": "3.21",
+    "3_22": "3.22",
 }
 _VERSION = tree_versions[_VERSION_str]
 
-# http_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'}
 http_headers = {"User-Agent": "Path of Building Community - Python", "Accept": ""}
 
 # Default config incase the settings file doesn't exist
