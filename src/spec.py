@@ -61,9 +61,7 @@ class Spec:
 
     @property
     def classId(self):
-        return PlayerClasses(
-            int(self.xml_spec.get("classId", PlayerClasses.SCION.value))
-        )
+        return PlayerClasses(int(self.xml_spec.get("classId", PlayerClasses.SCION.value)))
 
     def classId_str(self):
         """Return a string of the current Class"""
@@ -153,7 +151,7 @@ class Spec:
             self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
             output = m.group(2).split("?")
-            decoded_str = base64.b64decode(output[0], "-_")
+            decoded_str = base64.urlsafe_b64decode(output[0], "-_")
             # print(type(decoded_str), decoded_str)
             # print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
 
@@ -188,11 +186,7 @@ class Spec:
 
                 cluster_count = decoded_str[nodes_end]
                 cluster_start = nodes_end + 1
-                cluster_end = (
-                    cluster_count == 0
-                    and cluster_start
-                    or cluster_start + (cluster_count * 2)
-                )
+                cluster_end = cluster_count == 0 and cluster_start or cluster_start + (cluster_count * 2)
                 # print("cluster_start, end", cluster_start, cluster_end, cluster_count)
                 if cluster_count > 0:
                     decoded_cluster_nodes = decoded_str[cluster_start:cluster_end]
@@ -205,19 +199,12 @@ class Spec:
                     for idx in range(0, len(decoded_cluster_nodes), 2):
                         # print(''.join('{:02x} '.format(x) for x in cluster_nodes[idx:idx + 2]))
                         # print(idx, int.from_bytes(decoded_cluster_nodes[idx : idx + 2], "big") + 65536)
-                        self.nodes.append(
-                            int.from_bytes(decoded_cluster_nodes[idx : idx + 2], "big")
-                            + 65536
-                        )
+                        self.nodes.append(int.from_bytes(decoded_cluster_nodes[idx : idx + 2], "big") + 65536)
 
                 mastery_count = decoded_str[cluster_end]
                 if mastery_count > 0:
                     mastery_start = cluster_end + 1
-                    mastery_end = (
-                        mastery_count == 0
-                        and mastery_start
-                        or mastery_start + (mastery_count * 4)
-                    )
+                    mastery_end = mastery_count == 0 and mastery_start or mastery_start + (mastery_count * 4)
                     # print("mastery_start, end", mastery_start, mastery_end, mastery_count)
                     decoded_mastery_nodes = decoded_str[mastery_start:mastery_end]
                     # print(
@@ -228,12 +215,8 @@ class Spec:
                     for idx in range(0, len(decoded_mastery_nodes), 4):
                         # print(''.join('{:02x} '.format(x) for x in decoded_mastery_nodes[idx:idx + 4]))
                         # print(idx, int.from_bytes(decoded_mastery_nodes[idx:idx+2], "big"))
-                        m_id = int.from_bytes(
-                            decoded_mastery_nodes[idx + 2 : idx + 4], "big"
-                        )
-                        m_effect = int.from_bytes(
-                            decoded_mastery_nodes[idx : idx + 2], "big"
-                        )
+                        m_id = int.from_bytes(decoded_mastery_nodes[idx + 2 : idx + 4], "big")
+                        m_effect = int.from_bytes(decoded_mastery_nodes[idx : idx + 2], "big")
                         # print(m_id, m_effect)
                         self.masteryEffects[m_id] = m_effect
 
@@ -273,7 +256,7 @@ class Spec:
         # string = " ".join('{:02x}'.format(x) for x in byte_stream)
         # print(string)
 
-        encoded_string = base64.b64encode(byte_stream, b"-_").decode("utf-8")
+        encoded_string = base64.urlsafe_b64encode(byte_stream, b"-_").decode("utf-8")
         return f"https://www.pathofexile.com/passive-skill-tree/{encoded_string}"
 
     def set_mastery_effects_from_string(self, new_effects):
@@ -354,11 +337,7 @@ class Spec:
         self.xml_spec.append(sockets)
         if len(self.jewels) > 0:
             for node_id in self.jewels.keys():
-                sockets.append(
-                    ET.fromstring(
-                        f'<Socket nodeId="{node_id}" itemId="{self.jewels[node_id]}"/>'
-                    )
-                )
+                sockets.append(ET.fromstring(f'<Socket nodeId="{node_id}" itemId="{self.jewels[node_id]}"/>'))
 
     def load_from_json(self, title, json_tree, json_character):
         """

@@ -113,7 +113,7 @@ def decode_base64_and_inflate(byte_array):
     :return: a string of real characters
     """
     try:
-        decoded_data = base64.b64decode(byte_array, "-_")
+        decoded_data = base64.urlsafe_b64decode(byte_array, "-_")
         return zlib.decompress(decoded_data, 0)
     except:
         return None
@@ -127,7 +127,7 @@ def deflate_and_base64_encode(string_val):
     """
     try:
         zlibbed_str = zlib.compress(string_val)
-        return base64.b64encode(zlibbed_str, "-_")
+        return base64.urlsafe_b64encode(zlibbed_str, "-_")
     except:
         return None
 
@@ -562,9 +562,7 @@ class Config:
             self.node_power_theme = dlg.combo_NP_Colours.currentIndex()
             self.beta_mode = dlg.check_Beta.isChecked()
             self.show_titlebar_name = dlg.check_ShowBuildName.isChecked()
-            self.show_thousands_separators = (
-                dlg.check_ShowThousandsSeparators.isChecked()
-            )
+            self.show_thousands_separators = dlg.check_ShowThousandsSeparators.isChecked()
             self.thousands_separator = dlg.lineedit_ThousandsSeparator.text()
             self.decimal_separator = dlg.lineedit_DecimalSeparator.text()
             self.default_gem_quality = dlg.spin_GemQuality.value()
