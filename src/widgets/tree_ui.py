@@ -222,7 +222,7 @@ class TreeUI:
             variable = ""
             if ggg is not None:
                 self.build.current_spec.URL = url
-                self.build.current_spec.set_nodes_from_GGG_url()
+                self.build.current_spec.set_nodes_from_ggg_url()
             if poep is not None:
                 self.build.current_spec.set_nodes_from_poeplanner_url(url)
             if ggg is not None or poep is not None:
