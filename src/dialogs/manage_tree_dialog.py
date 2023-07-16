@@ -37,21 +37,15 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
             item.setFlags(item.flags() | Qt.ItemIsEditable)
         self.add_detail_to_spec_names()
 
-        self.btnConvert.setToolTip(
-            self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}")
-        )
+        self.btnConvert.setToolTip(self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}"))
 
         self.btnNew.clicked.connect(self.new_spec)
         self.btnCopy.clicked.connect(self.duplicate_specs)
         self.btnConvert.clicked.connect(self.convert_specs)
         self.btnDelete.clicked.connect(self.delete_specs)
         self.btnClose.clicked.connect(self.close)
-        self.list_Trees.model().rowsMoved.connect(
-            self.specs_rows_moved, Qt.QueuedConnection
-        )
-        self.list_Trees.model().rowsAboutToBeMoved.connect(
-            self.specs_rows_about_to_be_moved, Qt.QueuedConnection
-        )
+        self.list_Trees.model().rowsMoved.connect(self.specs_rows_moved, Qt.QueuedConnection)
+        self.list_Trees.model().rowsAboutToBeMoved.connect(self.specs_rows_about_to_be_moved, Qt.QueuedConnection)
 
     def connect_triggers(self):
         if self.triggers_connected:
@@ -78,9 +72,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         self.disconnect_triggers()
         for idx, spec in enumerate(self.build.specs):
             text = (
-                spec.treeVersion != _VERSION_str
-                and f"[{tree_versions[spec.treeVersion]}] {spec.title}"
-                or spec.title
+                spec.treeVersion != _VERSION_str and f"[{tree_versions[spec.treeVersion]}] {spec.title}" or spec.title
             )
             text += f" ({spec.ascendClassId_str()}, {len(spec.nodes)} points)"
             self.list_Trees.item(idx).setText(text)

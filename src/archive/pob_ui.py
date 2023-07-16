@@ -54,19 +54,13 @@ class RightPane:
         """Set up ui."""
         # Tree tab
         self.tabTree = QWidget()
-        win.addTab(
-            self.tabTree, QCoreApplication.translate("MainWindow", "&Tree", None)
-        )
+        win.addTab(self.tabTree, QCoreApplication.translate("MainWindow", "&Tree", None))
         # Skills tab
         self.tabSkills = QWidget()
-        win.addTab(
-            self.tabSkills, QCoreApplication.translate("MainWindow", "&Skills", None)
-        )
+        win.addTab(self.tabSkills, QCoreApplication.translate("MainWindow", "&Skills", None))
         # Items tab
         self.tabItems = QWidget()
-        win.addTab(
-            self.tabItems, QCoreApplication.translate("MainWindow", "&Items", None)
-        )
+        win.addTab(self.tabItems, QCoreApplication.translate("MainWindow", "&Items", None))
         # Notes tab
         self.notes_text_edit = QTextEdit()
         self.notes_text_edit.setLineWrapMode(QTextEdit.NoWrap)
@@ -95,15 +89,11 @@ class RightPane:
         self.colour_combo_box.setMinimumSize(QSize(140, 0))
         self.colour_combo_box.addItems(color_codes.keys())
         self.font_layout.addWidget(self.colour_combo_box)
-        self.horizontal_spacer = QSpacerItem(
-            88, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
+        self.horizontal_spacer = QSpacerItem(88, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.font_layout.addItem(self.horizontal_spacer)
         self.nt_layout.addLayout(self.font_layout)
 
-        self.nt_layout.addWidget(
-            self.notes_text_edit, 0, Qt.AlignHCenter & Qt.AlignVCenter
-        )
+        self.nt_layout.addWidget(self.notes_text_edit, 0, Qt.AlignHCenter & Qt.AlignVCenter)
         self.nt_widget.setLayout(self.nt_layout)
         win.addTab(self.nt_widget, "&Notes")
         # RightPane
@@ -138,9 +128,7 @@ class LeftPane:
 
         major_god_label = QLabel(win)
         self.formLayout.setWidget(1, QFormLayout.LabelRole, major_god_label)
-        major_god_label.setText(
-            QCoreApplication.translate("MainWindow", "Major Gods:", None)
-        )
+        major_god_label.setText(QCoreApplication.translate("MainWindow", "Major Gods:", None))
         self.major_god_comboBox = QComboBox(win)
         self.major_god_comboBox.addItem("God1")
         self.major_god_comboBox.addItem("God2")
@@ -178,9 +166,7 @@ class PobUi:
         self.action_exit = QAction("E&xit")
         self.action_exit.setShortcut("Ctrl+X")
         self.menu_builds = menubar.addMenu("&Builds")
-        self.menu_builds.addActions(
-            (self.action_new, self.action_open, self.action_save)
-        )
+        self.menu_builds.addActions((self.action_new, self.action_open, self.action_save))
         self.menu_builds.addSeparator()
         self.menu_builds.addAction(self.action_exit)
         self.menu_builds.addSeparator()
@@ -209,9 +195,7 @@ class PobUi:
         menu_theme.addActions(self.actions_theme)
         menu_theme.addSeparator()
         # Tech Demo. Switch just one entry
-        self.actions_theme_dark_light = QAction(
-            "Light"
-        )  # opposite of the default theme
+        self.actions_theme_dark_light = QAction("Light")  # opposite of the default theme
         self.actions_theme_dark_light.setShortcut("Ctrl+0")
         menu_theme.addAction(self.actions_theme_dark_light)
 
@@ -255,13 +239,9 @@ class PobUi:
         self.tabs.currentChanged.connect(self.set_tab_focus)
 
         # Notes Tab Actions
-        self.right_pane.font_combo_box.currentFontChanged.connect(
-            self.set_notes_font
-        )  #
+        self.right_pane.font_combo_box.currentFontChanged.connect(self.set_notes_font)  #
         self.right_pane.font_spin_box.valueChanged.connect(self.set_notes_font_size)  #
-        self.right_pane.colour_combo_box.currentTextChanged.connect(
-            self.set_notes_font_colour
-        )  #
+        self.right_pane.colour_combo_box.currentTextChanged.connect(self.set_notes_font_colour)  #
         # tab indexes are 0 based
         self.tab_focus = {
             0: self.right_pane.tabTree,
@@ -308,9 +288,7 @@ class PobUi:
     @Slot()
     def set_notes_font(self):
         # action = self.sender()
-        self.right_pane.notes_text_edit.setCurrentFont(
-            self.right_pane.font_combo_box.currentFont()
-        )
+        self.right_pane.notes_text_edit.setCurrentFont(self.right_pane.font_combo_box.currentFont())
         self.right_pane.notes_text_edit.setFocus()
 
     # PoB_UI

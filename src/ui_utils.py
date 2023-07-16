@@ -79,9 +79,7 @@ class HTMLDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         options = QStyleOptionViewItem(option)
         self.initStyleOption(options, index)
-        style = (
-            QApplication.style() if options.widget is None else options.widget.style()
-        )
+        style = QApplication.style() if options.widget is None else options.widget.style()
 
         doc = QTextDocument()
         doc.setHtml(options.text)
@@ -101,6 +99,10 @@ class HTMLDelegate(QStyledItemDelegate):
 
     def sizeHint(self, option, index):
         """Inherited function to return the max width of all text items"""
-        # print("HTMLDelegate.sizeHint", self._list.objectName(), index.row())
-        self.doc.setHtml(self._list.item(index.row()).text())
+        if type(index) == int:
+            # print("HTMLDelegate.sizeHint", self._list.objectName(), index)
+            self.doc.setHtml(self._list.item(index).text())
+        else:
+            # print("HTMLDelegate.sizeHint", self._list.objectName(), index.row())
+            self.doc.setHtml(self._list.item(index.row()).text())
         return QSize(self.doc.idealWidth() + 20, self.doc.size().height())

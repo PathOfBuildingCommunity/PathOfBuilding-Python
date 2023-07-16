@@ -71,9 +71,7 @@ class TreeUI:
         self.btn_Export.clicked.connect(self.export_tree)
 
         self.label_Search = QLabel()
-        self.label_Search.setAlignment(
-            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter
-        )
+        self.label_Search.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.label_Search.setMinimumSize(QSize(50, 22))
         self.label_Search.setText("Search:")
         self.layout_tree_tools.addWidget(self.label_Search)
@@ -85,9 +83,7 @@ class TreeUI:
         self.check_show_node_power.setMinimumSize(QSize(50, 22))
         self.check_show_node_power.setText(self.tr("Show Node Power:"))
         self.check_show_node_power.setLayoutDirection(Qt.RightToLeft)
-        self.check_show_node_power.stateChanged.connect(
-            self.set_show_node_power_visibility
-        )
+        self.check_show_node_power.stateChanged.connect(self.set_show_node_power_visibility)
         self.check_show_node_power.setEnabled(False)
         self.layout_tree_tools.addWidget(self.check_show_node_power)
         self.combo_show_node_power = QComboBox()
@@ -136,11 +132,7 @@ class TreeUI:
         :return: N/A
         """
         self.combo_compare.setVisible(checked_state > 0)
-        self.build.compare_spec = (
-            checked_state > 0
-            and self.build.specs[self.combo_compare.currentIndex()]
-            or None
-        )
+        self.build.compare_spec = checked_state > 0 and self.build.specs[self.combo_compare.currentIndex()] or None
         self.win.gview_Tree.add_tree_images(False)
 
     @Slot()
@@ -209,9 +201,7 @@ class TreeUI:
             self.tr("Resetting your Tree"),
             self.tr("Are you sure? It could be dangerous."),
         ):
-            start_node = self.build.current_tree.classes[self.build.current_class][
-                "startNodeId"
-            ]
+            start_node = self.build.current_tree.classes[self.build.current_class]["startNodeId"]
             self.build.current_spec.nodes = [start_node]
             self.win.gview_Tree.add_tree_images(False)
 
@@ -227,20 +217,17 @@ class TreeUI:
             url = dlg.lineedit.text()
 
             # check the validity of what was passed in
-            m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", url)
-            # group(1) is None or a version
-            # group(2) is always the encoded string, with any variables
-            if m is not None:
-                # output[0] will be the encoded string and the rest will variable=value
-                output = m.group(2).split("?")
+            ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", url + "==")
+            poep = re.search(r"http.*poeplanner.com/(.*)", url + "==")
+            variable = ""
+            if ggg is not None:
                 self.build.current_spec.URL = url
-                # del output[0]
-                # output is a now a list of variable=value or an empty list
-                # variables = output
-                # print(variables)
-                # use variables as the title for the spec
-                self.build.current_spec.set_nodes_from_url()
+                self.build.current_spec.set_nodes_from_GGG_url()
+            if poep is not None:
+                self.build.current_spec.set_nodes_from_poeplanner_url(url)
+            if ggg is not None or poep is not None:
                 self.win.gview_Tree.add_tree_images(True)
+                self.win.change_tree("Refresh")
 
     def export_tree(self):
         """Export the current nodes as a URL"""

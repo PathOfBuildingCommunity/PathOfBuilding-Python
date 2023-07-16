@@ -28,10 +28,7 @@ from ui_utils import HTMLDelegate, html_colour_text
 
 def yes_no_dialog(win, title, text):
     """Return true if the user selects Yes."""
-    return (
-        QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No)
-        == QMessageBox.Yes
-    )
+    return QMessageBox.question(win, title, text, QMessageBox.Yes, QMessageBox.No) == QMessageBox.Yes
 
 
 def ok_dialog(win, title, text, btn_text="OK"):
@@ -86,10 +83,11 @@ class MasteryPopup(QDialog):
         self.listbox = QListWidget()
         for idx, effect in enumerate(self.effects):
             item = QListWidgetItem()
+            item.setData(20, idx)
             tooltip = effect.get("reminderText", None)
             stats = " ".join(effect["stats"])
             effects_assigned_node = assigned_effects.get(effect["effect"], -1)
-            # if effect is assigned elsewhere, make it unselectable. Make this node's effect green if it has one.
+            # if effect is assigned elsewhere, make it unselectable. Make this node's effect green if it's assigned.
             match effects_assigned_node:
                 case -1:
                     # unassigned
@@ -97,14 +95,14 @@ class MasteryPopup(QDialog):
                 case node.id:
                     # assigned to this node
                     item.setText(html_colour_text("GREEN", stats))
-                    tooltip = tr("(Currently Assigned)")
+                    tooltip = tr(f"(Currently Assigned), {effect}")
                     self.selected_row = idx
                     self.selected_effect = effect["effect"]
                 case _:
                     # assigned to another node
                     item.setFlags(Qt.NoItemFlags)
                     item.setText(html_colour_text("RED", stats))
-                    tooltip = tr("(Already Assigned)")
+                    tooltip = tr(f"(Already Assigned), {effect}")
             if tooltip is not None:
                 item.setToolTip(" ".join(tooltip))
             self.listbox.addItem(item)
@@ -142,10 +140,11 @@ class MasteryPopup(QDialog):
         :param: current_item: QListWidgetItem: the selected item. Not used
         :return: N/A
         """
-        current_row = self.listbox.currentRow()
+        current_row = current_item.data(20)
         self.selected_row = current_row
         effect = self.effects[current_row]
         self.selected_effect = effect["effect"]
+        # print("effect_selected: item, row, effect", QListWidgetItem(current_item).data(20), current_row, effect)
         self.accept()
 
     def effect_row_changed(self, current_row):
@@ -174,7 +173,7 @@ class ImportTreePopup(QDialog):
         """
         super().__init__()
         self.label_intro_text = tr("Enter passive tree URL.")
-        self.label_legit_text = tr(html_colour_text("GREEN", "Seems valid. Lets go."))
+        self.label_seems_legit_text = tr(html_colour_text("GREEN", "Seems valid. Lets go."))
         self.label_not_valid_text = tr(html_colour_text("RED", "Not valid. Try again."))
         self.setWindowTitle(tr("Import tree from URL"))
         self.setWindowIcon(QIcon(":/Art/Icons/paper-plane-return.png"))
@@ -209,13 +208,22 @@ class ImportTreePopup(QDialog):
             self.label.setText(self.label_intro_text)
         else:
             # check the validity of what was passed in
-            m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", text)
-            if m is not None:
+            ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", text + "==")
+            poep = re.search(r"http.*poeplanner.com/(.*)", text + "==")
+            if ggg is not None:
                 # output[0] will be the encoded string and the rest will variable=value, which we don't care about
-                output = m.group(2).split("?")
-                decoded_str = base64.b64decode(output[0], "-_")
+                output = ggg.group(2).split("?")
+                decoded_str = base64.urlsafe_b64decode(output[0])
                 self.btn_import.setEnabled(decoded_str and len(decoded_str) > 7)
-                self.label.setText(self.label_legit_text)
+                self.label.setText(self.label_seems_legit_text)
+            elif poep is not None:
+                # Remove any variables at the end (probably not required for poeplanner)
+                output = poep.group(1).split("?")
+                decoded_str = base64.urlsafe_b64decode(output[0])
+                self.btn_import.setEnabled(decoded_str and len(decoded_str) > 15)
+                self.label.setText(
+                    self.label_seems_legit_text + " Tree nodes and Bandits info only. Cluster nodes won't show."
+                )
             else:
                 self.btn_import.setEnabled(False)
                 self.label.setText(self.label_not_valid_text)
@@ -289,9 +297,7 @@ class ExportTreePopup(QDialog):
             self.lineedit.setSelection(0, len(url))
             self.btn_shrink.setText(self.tr("Done"))
         except requests.RequestException as e:
-            self.win.update_status_bar(
-                f"Error retrieving 'Data': {response.reason} ({response.status_code})."
-            )
+            self.win.update_status_bar(f"Error retrieving 'Data': {response.reason} ({response.status_code}).")
             self.btn_shrink.setEnabled(True)
             self.btn_shrink.setText(self.shrink_text)
             print(f"Error accessing 'http://poeurl.com': {e}.")

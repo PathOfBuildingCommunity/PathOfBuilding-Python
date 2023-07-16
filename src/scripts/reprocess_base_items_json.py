@@ -129,11 +129,7 @@ for item_id in base_items_json:
             for tag in ("dexterity", "intelligence", "strength"):
                 val = item.get("requirements", {})[tag]
                 if val != 0:
-                    new_tag = (
-                        tag.replace("dexterity", "G")
-                        .replace("intelligence", "B")
-                        .replace("strength", "R")
-                    )
+                    new_tag = tag.replace("dexterity", "G").replace("intelligence", "B").replace("strength", "R")
                     reqs[new_tag] = item["requirements"][tag]
             if reqs:
                 initial_sockets = ""

@@ -38,7 +38,8 @@ default_spec = f'\
     <Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}">\
     </Spec>'
 
-default_view_mode = "ITEMS"
+# default_view_mode = "ITEMS"
+default_view_mode = "TREE"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
@@ -351,6 +352,28 @@ ascendancy_positions = {
     "Assassin": {"x": 10200 / global_scale_factor, "y": -5200 / global_scale_factor},
     "Saboteur": {"x": 10200 / global_scale_factor, "y": -2200 / global_scale_factor},
     "Trickster": {"x": 10200 / global_scale_factor, "y": -3700 / global_scale_factor},
+}
+
+bandits = {
+    "None": {"name": "Kill All", "tooltip": "2 Passives Points"},
+    "Oak": {
+        "name": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)",
+        "tooltip": "Regenerate 1% of Life per second\n"
+        "2% additional Physical Damage Reduction\n"
+        "20% increased Physical Damage",
+    },
+    "Kraityn": {
+        "name": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)",
+        "tooltip": "6% increased Attack and Cast Speed\n"
+        "10% chance to avoid Elemental Ailments\n"
+        "6% increased Movement Speed",
+    },
+    "Alira": {
+        "name": "Alira (Mana Regen, Crit Multiplier, Resists)",
+        "tooltip": "Regenerate 5 Mana per second\n"
+        "+20% to Critical Strike Multiplier\n"
+        "+15% to all Elemental Resistances",
+    },
 }
 
 

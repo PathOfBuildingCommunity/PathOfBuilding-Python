@@ -99,9 +99,7 @@ class MainWindow(QMainWindow):
     def _change_theme(self) -> None:
         action = self.sender()
         self._theme = action.text()
-        QApplication.instance().setStyleSheet(
-            qdarktheme.load_stylesheet(self._theme, self._border_radius)
-        )
+        QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
 
     # Tech Demo. Switch just one menu item
     @Slot()
@@ -113,9 +111,7 @@ class MainWindow(QMainWindow):
         else:
             self._theme = "light"
             action.setText("Dark")
-        QApplication.instance().setStyleSheet(
-            qdarktheme.load_stylesheet(self._theme, self._border_radius)
-        )
+        QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
 
 
 if __name__ == "__main__":

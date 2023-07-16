@@ -17,11 +17,7 @@ for xml_item in t_xml.getroot().findall("Item"):
     new_item.load_from_xml(xml_item)
     new_item.rarity = "RARE"
     templates.append(new_item)
-new_xml = ET.ElementTree(
-    ET.fromstring(
-        "<?xml version='1.0' encoding='utf-8'?><RareTemplates></RareTemplates>"
-    )
-)
+new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><RareTemplates></RareTemplates>"))
 new_root = new_xml.getroot()
 for item in templates:
     # we don't want to add extra work for when we are manually updating uniques.xml

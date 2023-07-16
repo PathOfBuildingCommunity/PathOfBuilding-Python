@@ -22,9 +22,7 @@ for item_type in list(u_xml.getroot()):
             new_item.sockets = "W"
         uniques[item_type.tag].append(new_item)
 
-new_xml = ET.ElementTree(
-    ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>")
-)
+new_xml = ET.ElementTree(ET.fromstring("<?xml version='1.0' encoding='utf-8'?><Uniques></Uniques>"))
 new_root = new_xml.getroot()
 for child_tag in uniques:
     # print(child_tag)

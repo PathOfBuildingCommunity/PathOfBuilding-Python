@@ -82,16 +82,9 @@ class ImportDlg(Ui_BuildImport, QDialog):
         if self.build.last_account_hash:
             acct_hash = self.build.last_account_hash
             for idx in range(self.combo_Account_History.count()):
-                if (
-                    acct_hash
-                    == sha1(
-                        self.combo_Account_History.itemText(idx).encode("utf-8")
-                    ).hexdigest()
-                ):
+                if acct_hash == sha1(self.combo_Account_History.itemText(idx).encode("utf-8")).hexdigest():
                     self.combo_Account_History.setCurrentIndex(idx)
-                    self.lineedit_Account.setText(
-                        self.combo_Account_History.currentText()
-                    )
+                    self.lineedit_Account.setText(self.combo_Account_History.currentText())
                     break
 
         self.combo_Import.setItemData(0, "THIS")
@@ -139,9 +132,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         # get the website and the code as separate 'group' variables
         #   (1) is the website and (2) is the code (not used here)
         m = re.search(r"http[s]?://([a-z0-9.\-]+)/(.*)", text)
-        if (
-            m is not None and m.group(1) in valid_websites
-        ) or decode_base64_and_inflate(text) is not None:
+        if (m is not None and m.group(1) in valid_websites) or decode_base64_and_inflate(text) is not None:
             self.btn_ImportBuildSharing.setEnabled(True)
 
     @Slot()
@@ -166,9 +157,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             # if the text was a meaninful url and it was a supported url, let's get the code
             response = None
             try:
-                url = website_list[m.group(1)]["downloadURL"].replace(
-                    "CODE", m.group(2)
-                )
+                url = website_list[m.group(1)]["downloadURL"].replace("CODE", m.group(2))
                 response = requests.get(url, headers=http_headers, timeout=6.0)
                 code = decode_base64_and_inflate(response.content)
             except requests.RequestException as e:
@@ -321,9 +310,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             realm_code = realm_list.get(self.combo_Realm.currentText(), "pc")
             url = f"{realm_code['hostName']}character-window/get-characters"
             params = {"accountName": account_name, "realm": realm_code}
-            response = requests.get(
-                url, params=params, headers=http_headers, timeout=6.0
-            )
+            response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             self.account_json = response.json()
         except requests.RequestException as e:
             self.status = f"Error retrieving 'Account': {response.reason} ({response.status_code})."
@@ -339,18 +326,14 @@ class ImportDlg(Ui_BuildImport, QDialog):
             self.grpbox_CharImport.setVisible(True)
             self.combo_League.clear()
             self.combo_League.addItem("All")
-            self.combo_League.addItems(
-                unique_sorted([char["league"] for char in self.account_json])
-            )
+            self.combo_League.addItems(unique_sorted([char["league"] for char in self.account_json]))
             # Try to find the league that this character was imported from, if available
             # combo_League's trigger will fill out combo_CharList
             if self.build.last_league:
                 set_combo_index_by_text(self.combo_League, self.build.last_league)
                 if self.combo_League.currentText() != self.build.last_league:
                     # Current league may not exist any more, try move to the equivalent standard league
-                    standard_league = find_matching_standard_league(
-                        self.build.last_league
-                    )
+                    standard_league = find_matching_standard_league(self.build.last_league)
                     set_combo_index_by_text(self.combo_League, standard_league)
                     if self.combo_League.currentText() != standard_league:
                         # Give up and select the first
@@ -360,12 +343,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             if self.build.last_character_hash:
                 char_hash = self.build.last_character_hash
                 for idx in range(self.combo_CharList.count()):
-                    if (
-                        char_hash
-                        == sha1(
-                            self.combo_CharList.itemText(idx).encode("utf-8")
-                        ).hexdigest()
-                    ):
+                    if char_hash == sha1(self.combo_CharList.itemText(idx).encode("utf-8")).hexdigest():
                         self.combo_CharList.setCurrentIndex(idx)
                         break
             self.combo_League.setFocus()
@@ -398,9 +376,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         response = None
         try:
             url = f"{realm_code['hostName']}character-window/get-passive-skills"
-            response = requests.get(
-                url, params=params, headers=http_headers, timeout=6.0
-            )
+            response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             passive_tree = response.json()
         except requests.RequestException as e:
             print(f"Error retrieving 'Passive Tree': {e}.")
@@ -412,15 +388,11 @@ class ImportDlg(Ui_BuildImport, QDialog):
         response = None
         try:
             url = f"{realm_code['hostName']}character-window/get-items"
-            response = requests.get(
-                url, params=params, headers=http_headers, timeout=6.0
-            )
+            response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             items = response.json()
         except requests.RequestException as e:
             print(f"Error retrieving 'Items': {e}.")
-            self.status = (
-                f"Error retrieving 'Items': {response.reason} ({response.status_code})."
-            )
+            self.status = f"Error retrieving 'Items': {response.reason} ({response.status_code})."
             print(vars(response))
 
         # lets add the jewels and items together
@@ -438,7 +410,5 @@ class ImportDlg(Ui_BuildImport, QDialog):
     def fill_character_history(self):
         self.combo_Account_History.clear()
         self.combo_Account_History.addItems(self.config.accounts())
-        set_combo_index_by_text(
-            self.combo_Account_History, self.config.last_account_name
-        )
+        set_combo_index_by_text(self.combo_Account_History, self.config.last_account_name)
         self.lineedit_Account.setText(self.config.last_account_name)

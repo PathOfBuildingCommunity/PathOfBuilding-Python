@@ -185,9 +185,7 @@ class Tree:
     @version.setter
     def version(self, new_vers):
         self._version = new_vers
-        self.tree_version_path = Path(
-            self.config.tree_data_path, re.sub("\.", "_", str(new_vers))
-        )
+        self.tree_version_path = Path(self.config.tree_data_path, re.sub("\.", "_", str(new_vers)))
         self.json_file_path = Path(self.tree_version_path, "tree.json")
         self.legion_path = Path(self.config.tree_data_path, "legion")
 
@@ -279,9 +277,7 @@ class Tree:
 
         self.skillsPerOrbit = self.constants["skillsPerOrbit"]
         self.orbitRadii = self.constants["orbitRadii"]
-        self.orbitRadii = [
-            i / global_scale_factor for i in self.constants["orbitRadii"]
-        ]
+        self.orbitRadii = [i / global_scale_factor for i in self.constants["orbitRadii"]]
 
         self.orbit_anglesByOrbit = {}
         for orbit, skillsInOrbit in enumerate(self.skillsPerOrbit):
@@ -294,9 +290,7 @@ class Tree:
         for class_id, _class in enumerate(self.classes):
             # create the first ascendancy for each class as; "0" = None
             _class.update({0: {"name": "None"}})
-            for ascend_class_id, _ascend_class in enumerate(
-                _class.get("ascendancies", None)
-            ):
+            for ascend_class_id, _ascend_class in enumerate(_class.get("ascendancies", None)):
                 ascend_name_map[_ascend_class.get("name")] = {
                     "classId": class_id,
                     "class": _class,
@@ -306,9 +300,7 @@ class Tree:
 
         sprite_sheets = {}
         # Process a sprite map list for loading the image
-        self.process_sprite_map(
-            skill_sprites, sprite_sheets, self.tree_version_path, zoom_text
-        )
+        self.process_sprite_map(skill_sprites, sprite_sheets, self.tree_version_path, zoom_text)
 
         # """Now do the legion sprite import"""
         # legion_sprites = pob_file.read_json(Path(self.legion_path, "tree-legion.json"))
@@ -450,32 +442,18 @@ class Tree:
         # Assign node artwork assets
         if node.type == "Mastery":
             # This is the icon that appears in the center of many groups
-            this_nodes_effect_list = self.mastery_effects_nodes.setdefault(
-                node.name, []
-            )
+            this_nodes_effect_list = self.mastery_effects_nodes.setdefault(node.name, [])
             if node.id not in this_nodes_effect_list:
                 this_nodes_effect_list.append(node.id)
             if node.masteryEffects:
                 node.masterySprites = {
-                    "activeIcon": self.spriteMap[node.activeIcon][
-                        "masteryActiveSelected"
-                    ],
-                    "inactiveIcon": self.spriteMap[node.inactiveIcon][
-                        "masteryInactive"
-                    ],
-                    "activeEffectImage": self.spriteMap[node.activeEffectImage][
-                        "masteryActiveEffect"
-                    ],
+                    "activeIcon": self.spriteMap[node.activeIcon]["masteryActiveSelected"],
+                    "inactiveIcon": self.spriteMap[node.inactiveIcon]["masteryInactive"],
+                    "activeEffectImage": self.spriteMap[node.activeEffectImage]["masteryActiveEffect"],
                 }
-                node.inactive_sprite = self.spriteMap[node.inactiveIcon][
-                    "masteryInactive"
-                ]
-                node.active_sprite = self.spriteMap[node.activeIcon][
-                    "masteryActiveSelected"
-                ]
-                node.activeEffectImage = self.spriteMap[node.activeEffectImage][
-                    "masteryActiveEffect"
-                ]
+                node.inactive_sprite = self.spriteMap[node.inactiveIcon]["masteryInactive"]
+                node.active_sprite = self.spriteMap[node.activeIcon]["masteryActiveSelected"]
+                node.activeEffectImage = self.spriteMap[node.activeEffectImage]["masteryActiveEffect"]
             else:
                 # No active image
                 node.sprites = self.spriteMap[node.icon]["mastery"]
@@ -489,9 +467,7 @@ class Tree:
         #       if x is not None # which works only on None
         if not node.sprites and not node.masterySprites:
             # No active image
-            node.sprites = self.spriteMap[
-                "Art/2DArt/SkillIcons/passives/MasteryBlank.png"
-            ]["normalInactive"]
+            node.sprites = self.spriteMap["Art/2DArt/SkillIcons/passives/MasteryBlank.png"]["normalInactive"]
             node.inactive_sprite = node.sprites
             _debug(node.type, node.inactive_sprite)
 
@@ -513,39 +489,20 @@ class Tree:
                 # Chieftain has two groups (3 and 7) with different start positions
                 if _a_name == "Chieftain" and node.g == 3:
                     _a_name = "Chieftain_g3"
-                node.x = (
-                    ascendancy_positions[_a_name]["x"]
-                    + math.sin(node.angle) * orbit_radius
-                )
-                node.y = (
-                    ascendancy_positions[_a_name]["y"]
-                    - math.cos(node.angle) * orbit_radius
-                )
+                node.x = ascendancy_positions[_a_name]["x"] + math.sin(node.angle) * orbit_radius
+                node.y = ascendancy_positions[_a_name]["y"] - math.cos(node.angle) * orbit_radius
 
-            if (
-                node.inactive_sprite
-                and node.inactive_sprite.get("handle", None) is not None
-            ):
+            if node.inactive_sprite and node.inactive_sprite.get("handle", None) is not None:
                 node.inactive_image = add_sprite(node.inactive_sprite)
-            if (
-                node.active_sprite
-                and node.active_sprite.get("handle", None) is not None
-            ):
+            if node.active_sprite and node.active_sprite.get("handle", None) is not None:
                 node.active_image = add_sprite(node.active_sprite, Layers.active)
-            if (
-                node.activeEffectImage
-                and node.activeEffectImage.get("handle", None) is not None
-            ):
-                node.activeEffectImage = add_sprite(
-                    node.activeEffectImage, Layers.active_effect
-                )
+            if node.activeEffectImage and node.activeEffectImage.get("handle", None) is not None:
+                node.activeEffectImage = add_sprite(node.activeEffectImage, Layers.active_effect)
 
             # "ClassStart" might belong in treeView still depending on the size of the active asset
             if node.type == "ClassStart":
                 # No active image
-                node.inactiveOverlay = self.spriteMap["PSStartNodeBackgroundInactive"][
-                    "startNode"
-                ]
+                node.inactiveOverlay = self.spriteMap["PSStartNodeBackgroundInactive"]["startNode"]
                 add_sprite(node.inactiveOverlay)
             elif node.type == "AscendClassStart":
                 # No active image
@@ -557,11 +514,7 @@ class Tree:
                 if node.overlay:
                     node.rsq = node.overlay["rsq"]
                     node.size = node.overlay["size"]
-                    _layer = (
-                        node.type == "Notable"
-                        and Layers.key_overlays
-                        or Layers.small_overlays
-                    )
+                    _layer = node.type == "Notable" and Layers.key_overlays or Layers.small_overlays
 
                     # inactive overlay image
                     inactive_overlay_name = node.overlay.get(
@@ -569,24 +522,16 @@ class Tree:
                         "",
                     )
                     overlay_type = f"{'Ascendancy' in inactive_overlay_name and 'ascendancy' or 'frame'}"
-                    node.inactiveOverlay = self.spriteMap[inactive_overlay_name][
-                        overlay_type
-                    ]
-                    node.inactive_overlay_image = add_sprite(
-                        node.inactiveOverlay, _layer
-                    )
+                    node.inactiveOverlay = self.spriteMap[inactive_overlay_name][overlay_type]
+                    node.inactive_overlay_image = add_sprite(node.inactiveOverlay, _layer)
                     node.inactive_overlay_image.node_isoverlay = True
                     # active overlay image
                     active_overlay_name = node.overlay.get(
                         f"alloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
                         "",
                     )
-                    node.activeOverlay = self.spriteMap[active_overlay_name][
-                        overlay_type
-                    ]
-                    node.active_overlay_image = add_sprite(
-                        node.activeOverlay, Layers.active
-                    )
+                    node.activeOverlay = self.spriteMap[active_overlay_name][overlay_type]
+                    node.active_overlay_image = add_sprite(node.activeOverlay, Layers.active)
                     node.active_overlay_image.node_isoverlay = True
         # process_node
 
@@ -635,19 +580,10 @@ class Tree:
                     self.notableMap[node.dn.lower()] = node
             else:
                 self.ascendancyMap[node.dn.lower()] = node
-                if (
-                    class_notables.get(
-                        ascend_name_map[node.ascendancyName]["class"]["name"], None
-                    )
-                    is None
-                ):
-                    class_notables[
-                        ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = {}
+                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
+                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
                 if ascend_name_map[node.ascendancyName]["class"]["name"] != "Scion":
-                    class_notables[
-                        ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = node.dn
+                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
         else:
             node.type = "Normal"
             # Add all notables in the Scion Ascendancy, by excluding all the little nodes
@@ -659,18 +595,9 @@ class Tree:
                 and "Passive" not in node.dn
             ):
                 self.ascendancyMap[node.dn.lower()] = node
-                if (
-                    class_notables.get(
-                        ascend_name_map[node.ascendancyName]["class"]["name"], None
-                    )
-                    is None
-                ):
-                    class_notables[
-                        ascend_name_map[node.ascendancyName]["class"]["name"]
-                    ] = {}
-                class_notables[
-                    ascend_name_map[node.ascendancyName]["class"]["name"]
-                ] = node.dn
+                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
+                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
+                class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
         # set_node_type
 
     def process_sprite_map(self, sprite_list, sprite_map, sprite_path, index):
@@ -709,9 +636,7 @@ class Tree:
             # We don't use a background tile
             if _type == "background":
                 continue
-            _data = sprite_list[_type].get(index, None) or sprite_list[_type].get(
-                "1", None
-            )
+            _data = sprite_list[_type].get(index, None) or sprite_list[_type].get("1", None)
             if _data is None:
                 continue
             # overwrite skill_sprites' filename attribute to a valid runtime filename
@@ -734,10 +659,7 @@ class Tree:
                 h = int(coord["h"])
                 # Get a copy of the original image, cropped to coords()
                 image = pixmap.copy(x, y, w, h)
-                if (
-                    name == "GroupBackgroundLargeHalfAlt"
-                    or name == "PSGroupBackground3"
-                ):
+                if name == "GroupBackgroundLargeHalfAlt" or name == "PSGroupBackground3":
                     image = mirror_image(image)
                     h *= 2
                 self.spriteMap[name][_type] = {
@@ -824,9 +746,9 @@ class Tree:
 
         # Large background
         elif _group["oo"].get(3, False):
-            sprite = self.spriteMap[
-                is_expansion and "GroupBackgroundLargeHalfAlt" or "PSGroupBackground3"
-            ]["groupBackground"]
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundLargeHalfAlt" or "PSGroupBackground3"][
+                "groupBackground"
+            ]
             __image = self.add_picture(
                 sprite["handle"],
                 _group["x"],
@@ -840,9 +762,9 @@ class Tree:
 
         # Medium background
         elif _group["oo"].get(2, False):
-            sprite = self.spriteMap[
-                is_expansion and "GroupBackgroundMediumAlt" or "PSGroupBackground2"
-            ]["groupBackground"]
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundMediumAlt" or "PSGroupBackground2"][
+                "groupBackground"
+            ]
             __image = self.add_picture(
                 sprite["handle"],
                 _group["x"],
@@ -856,9 +778,9 @@ class Tree:
 
         # Small background
         elif _group["oo"].get(1, False):
-            sprite = self.spriteMap[
-                is_expansion and "GroupBackgroundSmallAlt" or "PSGroupBackground1"
-            ]["groupBackground"]
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundSmallAlt" or "PSGroupBackground1"][
+                "groupBackground"
+            ]
             __image = self.add_picture(
                 sprite["handle"],
                 _group["x"],

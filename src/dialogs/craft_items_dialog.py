@@ -71,9 +71,7 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
             combo.clear()
             for idx, letter in enumerate("RBGAW"):
                 combo.addItem(letter)
-                combo.setItemData(
-                    idx, QBrush(ColourCodes[letter].value), Qt.ForegroundRole
-                )
+                combo.setItemData(idx, QBrush(ColourCodes[letter].value), Qt.ForegroundRole)
 
     @property
     def item(self):
@@ -90,9 +88,7 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         if self.triggers_connected:
             return
         for idx in range(len(self.socket_widgets)):
-            self.socket_widgets[idx].currentTextChanged.connect(
-                self.change_socket_combo
-            )
+            self.socket_widgets[idx].currentTextChanged.connect(self.change_socket_combo)
         for idx in range(len(self.socket_connectors)):
             self.socket_connectors[idx].stateChanged.connect(self.change_socket_combo)
 
@@ -100,13 +96,9 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         if not self.triggers_connected:
             return
         for idx in range(len(self.socket_widgets)):
-            self.socket_widgets[idx].currentTextChanged.disconnect(
-                self.change_socket_combo
-            )
+            self.socket_widgets[idx].currentTextChanged.disconnect(self.change_socket_combo)
         for idx in range(len(self.socket_connectors)):
-            self.socket_connectors[idx].stateChanged.disconnect(
-                self.change_socket_combo
-            )
+            self.socket_connectors[idx].stateChanged.disconnect(self.change_socket_combo)
 
     def fill_widgets(self):
         self.disconnect_triggers()
@@ -170,7 +162,5 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
                 else:
                     connector = self.socket_connectors[idx].isChecked() and "-" or " "
                     sockets += f'{socket}{self.socket_connectors[idx].isHidden() and "" or connector}'
-                self.socket_widgets[idx].setStyleSheet(
-                    f"QComboBox:!editable {{color: {ColourCodes[socket].value}}}"
-                )
+                self.socket_widgets[idx].setStyleSheet(f"QComboBox:!editable {{color: {ColourCodes[socket].value}}}")
         self.item.sockets = sockets.rstrip("-").rstrip(" ")

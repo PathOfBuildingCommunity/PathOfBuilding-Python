@@ -8,10 +8,7 @@ Icons by  Yusuke Kamiyamane (https://p.yusukekamiyamane.com/)
 """
 import sys
 
-from typing import Union
-import xml.etree.ElementTree as ET
 
-import qdarktheme
 from qdarktheme.qtpy.QtGui import QFontDatabase, QFont
 from qdarktheme.qtpy.QtWidgets import QApplication
 

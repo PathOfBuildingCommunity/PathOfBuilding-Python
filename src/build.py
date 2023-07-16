@@ -19,6 +19,7 @@ from constants import (
     PlayerClasses,
     _VERSION,
     _VERSION_str,
+    bandits,
     empty_build,
     empty_gem,
     empty_socket_group,
@@ -38,6 +39,7 @@ import dialogs.popup_dialogs as popup_dialogs
 from tree import Tree
 from views.PoB_Main_Window import Ui_MainWindow
 from spec import Spec
+from ui_utils import set_combo_index_by_data
 
 
 class Build:
@@ -166,6 +168,11 @@ class Build:
     def bandit(self, new_name):
         self.build.set("bandit", new_name)
         self.set_config_tag_item("Input", "bandit", "string", new_name)
+        set_combo_index_by_data(self.win.combo_Bandits, self.bandit)
+
+    def set_bandit_by_number(self, new_int):
+        """Use a number to set the bandit name. Used by import from poeplanner mainly"""
+        self.bandit = list(bandits.keys())[new_int]
 
     @property
     def pantheonMajorGod(self):
@@ -240,9 +247,7 @@ class Build:
                         return int(_value)
         return None
 
-    def set_config_tag_item(
-        self, key, name, value_type, new_value=Union[str, int, bool]
-    ):
+    def set_config_tag_item(self, key, name, value_type, new_value=Union[str, int, bool]):
         """
         Get an item from the <Config> ... </Config> tag set
 
@@ -261,9 +266,7 @@ class Build:
                         new_value = f"{new_value}"
                 return _input.set(value_type, new_value)
         # if we get here, the key/ name combo was not found, lets make one and add it
-        self.config.append(
-            ET.fromstring(f'<{key} name="{name}" {value_type}="{new_value}" />')
-        )
+        self.config.append(ET.fromstring(f'<{key} name="{name}" {value_type}="{new_value}" />'))
 
     def new(self, _build_xml):
         """
@@ -401,9 +404,7 @@ class Build:
         different_version = self.current_spec.treeVersion != new_spec.treeVersion
         # Check if this version is loaded
         if self.trees.get(new_spec.treeVersion, None) is None:
-            self.trees[new_spec.treeVersion] = Tree(
-                self.pob_config, new_spec.treeVersion
-            )
+            self.trees[new_spec.treeVersion] = Tree(self.pob_config, new_spec.treeVersion)
         self.current_tree = self.trees[new_spec.treeVersion]
 
         self.activeSpec = tree_id
@@ -450,9 +451,7 @@ class Build:
         self.tree.remove(xml_spec)
         self.tree.insert(destination, xml_spec)
 
-    def new_spec(
-        self, new_title="", version=_VERSION_str, xml_spec=None, destination=-1
-    ):
+    def new_spec(self, new_title="", version=_VERSION_str, xml_spec=None, destination=-1):
         """
         Add a new empty tree/Spec
 
@@ -486,9 +485,7 @@ class Build:
         # converting to a string ensures it is copied and not one element that is shared.
         # internet rumour indicates .clone() and .copy() may not be good enough
         new_xml_spec = ET.fromstring(ET.tostring(self.specs[source].xml_spec))
-        return self.new_spec(
-            new_title="", xml_spec=new_xml_spec, destination=destination
-        )
+        return self.new_spec(new_title="", xml_spec=new_xml_spec, destination=destination)
 
     def convert_spec(self, source, destination):
         """
@@ -569,9 +566,7 @@ class Build:
         # add to combo
         self.win.tree_ui.fill_current_tree_combo()
         # show tree
-        self.win.tree_ui.combo_manage_tree.setCurrentIndex(
-            self.win.tree_ui.combo_manage_tree.count() - 1
-        )
+        self.win.tree_ui.combo_manage_tree.setCurrentIndex(self.win.tree_ui.combo_manage_tree.count() - 1)
 
     def import_gems_json(self, json_items):
         """
@@ -592,12 +587,7 @@ class Build:
             """
             for _prop in _json_gem.get("properties"):
                 if _prop.get("name") == _name:
-                    value = (
-                        _prop.get("values")[0][0]
-                        .replace(" (Max)", "")
-                        .replace("+", "")
-                        .replace("%", "")
-                    )
+                    value = _prop.get("values")[0][0].replace(" (Max)", "").replace("+", "").replace("%", "")
                     return value
             return _default
 

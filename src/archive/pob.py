@@ -106,9 +106,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         font_layout.addItem(horizontal_spacer)
         layout.addLayout(font_layout)
 
-        layout.addWidget(
-            self.notes_text_edit, 0, QtCore.Qt.AlignHCenter & QtCore.Qt.AlignVCenter
-        )
+        layout.addWidget(self.notes_text_edit, 0, QtCore.Qt.AlignHCenter & QtCore.Qt.AlignVCenter)
         widget.setLayout(layout)
         self.tabWidget.addTab(widget, "&Notes")
 

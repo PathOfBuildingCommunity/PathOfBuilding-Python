@@ -73,9 +73,9 @@ def update_mod_name_with_numbers(_stat, _min, _max):
     _min_str = f"{_min}".replace(".0", "")
     _max_str = f"{_max}".replace(".0", "")
     if _min != _max:
-        numbers = f'{_format}({_min_str}-{_max_str})'
+        numbers = f"{_format}({_min_str}-{_max_str})"
     else:
-        numbers = f'{_format}{_max_str}'
+        numbers = f"{_format}{_max_str}"
     if "{0} to {1}" in _stat["name"]:
         _stat["name"] = _stat["name"].replace("{0}", f"{_format}{_min_str}").replace("{1}", f"{_format}{_max_str}")
     else:

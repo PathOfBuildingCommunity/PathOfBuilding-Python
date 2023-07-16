@@ -107,22 +107,16 @@ class SkillsUI:
         # Button triggers are right to remain connected at all times as they are user initiated.
         self.win.btn_NewSocketGroup.clicked.connect(self.new_socket_group)
         self.win.btn_DeleteSocketGroup.clicked.connect(self.delete_socket_group)
-        self.win.btn_DeleteAllSocketGroups.clicked.connect(
-            self.delete_all_socket_groups
-        )
+        self.win.btn_DeleteAllSocketGroups.clicked.connect(self.delete_all_socket_groups)
         # self.win.btn_SkillsManage.clicked.connect(self.manage_skill_sets)
 
         self.socket_group_to_be_moved = None
-        self.win.list_SocketGroups.model().rowsMoved.connect(
-            self.socket_groups_rows_moved, Qt.QueuedConnection
-        )
+        self.win.list_SocketGroups.model().rowsMoved.connect(self.socket_groups_rows_moved, Qt.QueuedConnection)
         self.win.list_SocketGroups.model().rowsAboutToBeMoved.connect(
             self.socket_groups_rows_about_to_be_moved, Qt.QueuedConnection
         )
         self.skill_gem_to_be_moved = None
-        self.win.list_Skills.model().rowsMoved.connect(
-            self.skill_gem_rows_moved, Qt.QueuedConnection
-        )
+        self.win.list_Skills.model().rowsMoved.connect(self.skill_gem_rows_moved, Qt.QueuedConnection)
         self.win.list_Skills.model().rowsAboutToBeMoved.connect(
             self.skill_gem_rows_about_to_be_moved, Qt.QueuedConnection
         )
@@ -158,9 +152,7 @@ class SkillsUI:
         # clean up
         self.change_skill_set(-1)
 
-        self.win.check_SortByDPS.setChecked(
-            str_to_bool(self.xml_skills.get("sortGemsByDPS", "True"))
-        )
+        self.win.check_SortByDPS.setChecked(str_to_bool(self.xml_skills.get("sortGemsByDPS", "True")))
         set_combo_index_by_data(
             self.win.combo_SortByDPS,
             self.xml_skills.get("sortGemsByDPSField", "FullDPS"),
@@ -192,9 +184,7 @@ class SkillsUI:
         value = self.xml_skills.get("matchGemLevelToCharacterLevel", "NotFound")
         if value != "NotFound":
             if str_to_bool(value):
-                set_combo_index_by_data(
-                    self.win.combo_DefaultGemLevel, "characterLevel"
-                )
+                set_combo_index_by_data(self.win.combo_DefaultGemLevel, "characterLevel")
 
         # self.win.spin_DefaultGemLevel.setValue(int(level))
         # self.win.check_MatchToLevel.setChecked(
@@ -225,9 +215,7 @@ class SkillsUI:
             self.skill_sets_list.append(_set)
             self.win.combo_SkillSet.addItem(_set.get("title", f"Default{idx}"), idx)
         # set the SkillSet ComboBox dropdown width.
-        self.win.combo_SkillSet.view().setMinimumWidth(
-            self.win.combo_SkillSet.minimumSizeHint().width()
-        )
+        self.win.combo_SkillSet.view().setMinimumWidth(self.win.combo_SkillSet.minimumSizeHint().width())
 
         self.connect_skill_triggers()
 
@@ -241,27 +229,17 @@ class SkillsUI:
         The gems have been saving themselves to the xml object whenever there was a change,
           so we only need to get the other UI widget's values
         """
-        self.xml_skills.set(
-            "sortGemsByDPS", bool_to_str(self.win.check_SortByDPS.isChecked())
-        )
+        self.xml_skills.set("sortGemsByDPS", bool_to_str(self.win.check_SortByDPS.isChecked()))
         # self.xml_skills.set("matchGemLevelToCharacterLevel", bool_to_str(self.win.check_MatchToLevel.isChecked()))
         self.xml_skills.set(
             "showAltQualityGems",
             bool_to_str(self.win.check_ShowGemQualityVariants.isChecked()),
         )
-        self.xml_skills.set(
-            "sortGemsByDPSField", self.win.combo_SortByDPS.currentData()
-        )
-        self.xml_skills.set(
-            "showSupportGemTypes", self.win.combo_ShowSupportGems.currentData()
-        )
-        self.xml_skills.set(
-            "showSupportGemTypes", self.win.combo_DefaultGemLevel.currentData()
-        )
+        self.xml_skills.set("sortGemsByDPSField", self.win.combo_SortByDPS.currentData())
+        self.xml_skills.set("showSupportGemTypes", self.win.combo_ShowSupportGems.currentData())
+        self.xml_skills.set("showSupportGemTypes", self.win.combo_DefaultGemLevel.currentData())
         # self.xml_skills.set("defaultGemLevel", str(self.win.spin_DefaultGemLevel.value()))
-        self.xml_skills.set(
-            "defaultGemQuality", str(self.win.spin_DefaultGemQuality.value())
-        )
+        self.xml_skills.set("defaultGemQuality", str(self.win.spin_DefaultGemQuality.value()))
         return self.xml_skills
 
     def load_gems_json(self):
@@ -351,18 +329,10 @@ class SkillsUI:
         # update the socket group label when something changes
         self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
         self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
-        self.win.check_SocketGroupEnabled.stateChanged.connect(
-            self.save_socket_group_settings
-        )
-        self.win.check_SocketGroup_FullDPS.stateChanged.connect(
-            self.save_socket_group_settings
-        )
-        self.win.lineedit_SkillLabel.textChanged.connect(
-            self.save_socket_group_settings
-        )
-        self.win.combo_SocketedIn.currentIndexChanged.connect(
-            self.save_socket_group_settings
-        )
+        self.win.check_SocketGroupEnabled.stateChanged.connect(self.save_socket_group_settings)
+        self.win.check_SocketGroup_FullDPS.stateChanged.connect(self.save_socket_group_settings)
+        self.win.lineedit_SkillLabel.textChanged.connect(self.save_socket_group_settings)
+        self.win.combo_SocketedIn.currentIndexChanged.connect(self.save_socket_group_settings)
 
     def disconnect_skill_triggers(self):
         """disconnect skill orientated triggers when updating widgets"""
@@ -373,21 +343,11 @@ class SkillsUI:
             return
         self.triggers_connected = False
         self.win.combo_SkillSet.currentIndexChanged.disconnect(self.change_skill_set)
-        self.win.list_SocketGroups.currentRowChanged.disconnect(
-            self.change_socket_group
-        )
-        self.win.check_SocketGroupEnabled.stateChanged.disconnect(
-            self.save_socket_group_settings
-        )
-        self.win.check_SocketGroup_FullDPS.stateChanged.disconnect(
-            self.save_socket_group_settings
-        )
-        self.win.lineedit_SkillLabel.textChanged.disconnect(
-            self.save_socket_group_settings
-        )
-        self.win.combo_SocketedIn.currentIndexChanged.disconnect(
-            self.save_socket_group_settings
-        )
+        self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
+        self.win.check_SocketGroupEnabled.stateChanged.disconnect(self.save_socket_group_settings)
+        self.win.check_SocketGroup_FullDPS.stateChanged.disconnect(self.save_socket_group_settings)
+        self.win.lineedit_SkillLabel.textChanged.disconnect(self.save_socket_group_settings)
+        self.win.combo_SocketedIn.currentIndexChanged.disconnect(self.save_socket_group_settings)
 
     """
     ################################################### SKILL SET ###################################################
@@ -428,9 +388,7 @@ class SkillsUI:
         xml_socket_groups = xml_set.findall("Skill")
 
         for idx, xml_group in enumerate(xml_socket_groups):
-            self.win.list_SocketGroups.addItem(
-                self.define_socket_group_label(None, xml_group)
-            )
+            self.win.list_SocketGroups.addItem(self.define_socket_group_label(None, xml_group))
 
         # Load the left hand socket group (under "Main Skill") widgets
         self.load_main_skill_combo()
@@ -465,9 +423,7 @@ class SkillsUI:
         _gem_list = ""
         for xml_gem in xml_group.findall("Gem"):
             # If this gem is not a support gem and is enabled (the far right widget)
-            if "Support" not in xml_gem.get("skillId") and str_to_bool(
-                xml_gem.get("enabled")
-            ):
+            if "Support" not in xml_gem.get("skillId") and str_to_bool(xml_gem.get("enabled")):
                 _gem_list += f'{xml_gem.get("nameSpec")}, '
 
         if _gem_list == "":
@@ -478,9 +434,7 @@ class SkillsUI:
             _label = _gem_list
 
         # set enabled based on the group control and whether there is an active skill in the group
-        enabled = str_to_bool(xml_group.get("enabled")) and not (
-            _label == "" or _label == "-no active skills-"
-        )
+        enabled = str_to_bool(xml_group.get("enabled")) and not (_label == "" or _label == "-no active skills-")
         full_dps = str_to_bool(xml_group.get("includeInFullDPS", "False"))
         active = self.win.combo_MainSkill.currentText() == _label and enabled
 
@@ -524,10 +478,7 @@ class SkillsUI:
         """Delete a socket group"""
         # print("delete_socket_group")
         self.disconnect_skill_triggers()
-        if (
-            self.xml_current_skill_set is not None
-            and self.xml_current_socket_group is not None
-        ):
+        if self.xml_current_skill_set is not None and self.xml_current_socket_group is not None:
             idx = self.win.list_SocketGroups.currentRow()
             self.win.list_SocketGroups.takeItem(idx)
             del self.xml_current_skill_set[idx]
@@ -537,9 +488,7 @@ class SkillsUI:
             else:
                 self.connect_skill_triggers()
                 # Trigger the filling out of the RHS UI elements using change_socket_group -> load_socket_group
-                self.win.list_SocketGroups.setCurrentRow(
-                    min(idx, self.win.list_SocketGroups.count())
-                )
+                self.win.list_SocketGroups.setCurrentRow(min(idx, self.win.list_SocketGroups.count()))
         self.update_socket_group_labels()
         self.load_main_skill_combo()
         self.connect_skill_triggers()
@@ -577,9 +526,7 @@ class SkillsUI:
         # Add new group to xml and Socket Group list, and then show the update
         self.xml_current_skill_set.append(ET.fromstring(empty_socket_group))
         idx = len(self.xml_current_skill_set) - 1
-        self.win.list_SocketGroups.addItem(
-            self.define_socket_group_label(xml_group=self.xml_current_skill_set[idx])
-        )
+        self.win.list_SocketGroups.addItem(self.define_socket_group_label(xml_group=self.xml_current_skill_set[idx]))
         self.update_socket_group_labels()
         # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
         self.win.list_SocketGroups.setCurrentRow(idx)
@@ -592,10 +539,7 @@ class SkillsUI:
         """
         self.win.load_main_skill_combo(
             # whatsThis has the un-coloured/un-altered text
-            [
-                self.win.list_SocketGroups.item(i).whatsThis()
-                for i in range(self.win.list_SocketGroups.count())
-            ]
+            [self.win.list_SocketGroups.item(i).whatsThis() for i in range(self.win.list_SocketGroups.count())]
         )
 
     def clear_socket_group_settings(self):
@@ -645,22 +589,14 @@ class SkillsUI:
             # assign and setup new group
             self.xml_current_socket_group = self.xml_current_skill_set[_index]
             if self.xml_current_socket_group is not None:
-                self.build.check_socket_group_for_an_active_gem(
-                    self.xml_current_socket_group
-                )
-                self.win.lineedit_SkillLabel.setText(
-                    self.xml_current_socket_group.get("label")
-                )
-                set_combo_index_by_text(
-                    self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot")
-                )
+                self.build.check_socket_group_for_an_active_gem(self.xml_current_socket_group)
+                self.win.lineedit_SkillLabel.setText(self.xml_current_socket_group.get("label"))
+                set_combo_index_by_text(self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot"))
                 self.win.check_SocketGroupEnabled.setChecked(
                     str_to_bool(self.xml_current_socket_group.get("enabled", "False"))
                 )
                 self.win.check_SocketGroup_FullDPS.setChecked(
-                    str_to_bool(
-                        self.xml_current_socket_group.get("includeInFullDPS", "False")
-                    )
+                    str_to_bool(self.xml_current_socket_group.get("includeInFullDPS", "False"))
                 )
                 for idx, gem in enumerate(self.xml_current_socket_group.findall("Gem")):
                     self.create_gem_ui(idx, gem)
@@ -679,15 +615,9 @@ class SkillsUI:
         """
         if self.xml_current_socket_group is not None:
             # print(f"save_socket_group_settings, {type(info)}, '{info}'")
-            self.xml_current_socket_group.set(
-                "slot", self.win.combo_SocketedIn.currentText()
-            )
-            self.xml_current_socket_group.set(
-                "label", self.win.lineedit_SkillLabel.text()
-            )
-            self.xml_current_socket_group.set(
-                "enabled", bool_to_str(self.win.check_SocketGroupEnabled.isChecked())
-            )
+            self.xml_current_socket_group.set("slot", self.win.combo_SocketedIn.currentText())
+            self.xml_current_socket_group.set("label", self.win.lineedit_SkillLabel.text())
+            self.xml_current_socket_group.set("enabled", bool_to_str(self.win.check_SocketGroupEnabled.isChecked()))
             self.xml_current_socket_group.set(
                 "includeInFullDPS",
                 bool_to_str(self.win.check_SocketGroup_FullDPS.isChecked()),
@@ -699,9 +629,7 @@ class SkillsUI:
             self.load_main_skill_combo()
 
     @Slot()
-    def socket_groups_rows_moved(
-        self, parent, start, end, destination, destination_row
-    ):
+    def socket_groups_rows_moved(self, parent, start, end, destination, destination_row):
         """
         Respond to a socket group being moved, by moving it's matching xml element. It's called 4 times (sometimes)
 
@@ -804,16 +732,12 @@ class SkillsUI:
         item = QListWidgetItem()
         self.win.list_Skills.addItem(item)
         gem_ui = GemUI(item, self.gems_by_name_or_id, self.gem_ui_notify, gem)
-        gem_ui.fill_gem_list(
-            self.json_gems, self.win.combo_ShowSupportGems.currentText()
-        )
+        gem_ui.fill_gem_list(self.json_gems, self.win.combo_ShowSupportGems.currentText())
         item.setSizeHint(gem_ui.sizeHint())
         self.win.list_Skills.setItemWidget(item, gem_ui)
 
         # this one is for deleting the gem
-        gem_ui.btn_GemRemove.clicked.connect(
-            lambda checked: self.gem_remove_checkbox_selected(item, gem_ui)
-        )
+        gem_ui.btn_GemRemove.clicked.connect(lambda checked: self.gem_remove_checkbox_selected(item, gem_ui))
 
     def clear_gem_ui_list(self):
         """
@@ -864,10 +788,7 @@ class SkillsUI:
         row = self.win.list_Skills.row(item)
         self.win.list_Skills.takeItem(row)
         xml_gem = gem_ui.xml_gem
-        if (
-            self.xml_current_socket_group is not None
-            and xml_gem in self.xml_current_socket_group.findall("Gem")
-        ):
+        if self.xml_current_socket_group is not None and xml_gem in self.xml_current_socket_group.findall("Gem"):
             # print("gem_ui_notify", row, ui)
             # self.remove_gem_ui(_key)
             self.xml_current_socket_group.remove(xml_gem)

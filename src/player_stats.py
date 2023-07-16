@@ -57,9 +57,7 @@ class PlayerStats:
                         if "d" in _fmt:
                             _value = int(_value)
                         if _value < 0:
-                            _str_value = html_colour_text(
-                                "NEGATIVE", _fmt.format(_value)
-                            )
+                            _str_value = html_colour_text("NEGATIVE", _fmt.format(_value))
                         else:
                             _str_value = _fmt.format(_value)
                         # Cannot use html_colour_text() on this

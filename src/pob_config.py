@@ -113,7 +113,7 @@ def decode_base64_and_inflate(byte_array):
     :return: a string of real characters
     """
     try:
-        decoded_data = base64.urlsafe_b64decode(byte_array, "-_")
+        decoded_data = base64.urlsafe_b64decode(byte_array)
         return zlib.decompress(decoded_data, 0)
     except:
         return None
@@ -127,7 +127,7 @@ def deflate_and_base64_encode(string_val):
     """
     try:
         zlibbed_str = zlib.compress(string_val)
-        return base64.urlsafe_b64encode(zlibbed_str, "-_")
+        return base64.urlsafe_b64encode(zlibbed_str)
     except:
         return None
 

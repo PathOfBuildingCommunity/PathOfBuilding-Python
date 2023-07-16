@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 import base64
 import re
 
-from constants import default_spec, PlayerClasses, _VERSION, _VERSION_str
+from constants import bandits, default_spec, PlayerClasses, _VERSION, _VERSION_str
 from pob_config import print_call_stack, print_a_xml_element
 
 
@@ -33,6 +33,7 @@ class Spec:
         self.set_mastery_effects_from_string(self.xml_spec.get("masteryEffects", ""))
 
         self.nodes = []
+        self.ascendancy_nodes = []
         self.extended_hashes = []
         self.set_nodes_from_string(self.xml_spec.get("nodes", "0"))
 
@@ -107,10 +108,13 @@ class Spec:
     @treeVersion.setter
     def treeVersion(self, new_version):
         """
+        Set the tree version string in the XML
         :param new_version: str
         :return:
         """
-        self.xml_spec.set("treeVersion", new_version)
+        # ensure it is formatted correctly (n_nn). Remove dots and a trailing subversion
+        tmp_list = re.split(r"\.|_|/", new_version)
+        self.xml_spec.set("treeVersion", f"{tmp_list[0]}_{tmp_list[1]}")
 
     @property
     def URL(self):
@@ -133,13 +137,15 @@ class Spec:
             self.xml_spec.append(xml_url)
         xml_url.text = new_url
 
-    def set_nodes_from_url(self):
+    def set_nodes_from_GGG_url(self):
         """
         This function sets the nodes from the self.URL property. This allows us to set the URL for legacy purposes
         without actually disturbing the node information we have.
 
         :return: N/A
         """
+        endian = "big"
+
         if self.URL is None:
             return
         m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", self.URL)
@@ -151,13 +157,13 @@ class Spec:
             self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
             output = m.group(2).split("?")
-            decoded_str = base64.urlsafe_b64decode(output[0], "-_")
+            decoded_str = base64.urlsafe_b64decode(output[0])
             # print(type(decoded_str), decoded_str)
-            # print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
+            print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
 
             # the decoded_str is 0 based, so every index will be one smaller than the equivalent in lua
             if decoded_str and len(decoded_str) > 7:
-                version = int.from_bytes(decoded_str[0:4], "big")
+                version = int.from_bytes(decoded_str[0:4], endian)
                 print(f"Valid tree found, {version}")
 
                 self.classId = decoded_str[4]
@@ -165,7 +171,7 @@ class Spec:
 
                 nodes_start = version >= 4 and 7 or 6
                 nodes_end = version >= 5 and 7 + (decoded_str[6] * 2) or -1
-                # print("nodes_start, end", nodes_start, nodes_end)
+                print("nodes_start, end, count", nodes_start, nodes_end, decoded_str[6])
                 decoded_nodes = decoded_str[nodes_start:nodes_end]
                 # print(f"nodes: {len(nodes)},", "".join('{:02x} '.format(x) for x in nodes))
                 # print("")
@@ -173,12 +179,8 @@ class Spec:
                 # now decode the nodes structure to numbers
                 self.nodes = []
                 for i in range(0, len(decoded_nodes), 2):
-                    # print(
-                    #     i,
-                    #     " ".join("{:02x}".format(x) for x in decoded_nodes[i : i + 2]),
-                    #     int.from_bytes(decoded_nodes[i : i + 2], "big"),
-                    # )
-                    self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], "big"))
+                    # print(i, int.from_bytes(decoded_nodes[i : i + 2], endian))
+                    self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], endian))
 
                 if version < 5:
                     self.masteryEffects = {}
@@ -186,43 +188,155 @@ class Spec:
 
                 cluster_count = decoded_str[nodes_end]
                 cluster_start = nodes_end + 1
-                cluster_end = cluster_count == 0 and cluster_start or cluster_start + (cluster_count * 2)
-                # print("cluster_start, end", cluster_start, cluster_end, cluster_count)
+                cluster_end = cluster_start + (cluster_count * 2)
+                print("cluster_start, end", cluster_start, cluster_end, cluster_count)
                 if cluster_count > 0:
                     decoded_cluster_nodes = decoded_str[cluster_start:cluster_end]
-                    # cluster_nodes = decoded_str[cluster_start:cluster_start+(cluster_count * 2)]
-                    # print(
-                    #     f"decoded_cluster_nodes: {len(decoded_cluster_nodes)},",
-                    #     "".join("{:02x} ".format(x) for x in decoded_cluster_nodes),
-                    # )
                     # now decode the cluster nodes structure to numbers
-                    for idx in range(0, len(decoded_cluster_nodes), 2):
-                        # print(''.join('{:02x} '.format(x) for x in cluster_nodes[idx:idx + 2]))
-                        # print(idx, int.from_bytes(decoded_cluster_nodes[idx : idx + 2], "big") + 65536)
-                        self.nodes.append(int.from_bytes(decoded_cluster_nodes[idx : idx + 2], "big") + 65536)
+                    for i in range(0, len(decoded_cluster_nodes), 2):
+                        # print(''.join('{:02x} '.format(x) for x in cluster_nodes[i:i + 2]))
+                        print(i, int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
+                        self.nodes.append(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
 
                 mastery_count = decoded_str[cluster_end]
+                mastery_start = cluster_end + 1
+                mastery_end = mastery_start + (mastery_count * 4)
                 if mastery_count > 0:
-                    mastery_start = cluster_end + 1
-                    mastery_end = mastery_count == 0 and mastery_start or mastery_start + (mastery_count * 4)
-                    # print("mastery_start, end", mastery_start, mastery_end, mastery_count)
+                    self.masteryEffects = {}
+                    print("mastery_start, end", mastery_start, mastery_end, mastery_count)
                     decoded_mastery_nodes = decoded_str[mastery_start:mastery_end]
-                    # print(
-                    #     f"decoded_mastery_nodes: {len(decoded_mastery_nodes)},",
-                    #     "".join("{:02x} ".format(x) for x in decoded_mastery_nodes),
-                    # )
                     # now decode the mastery nodes structure to numbers
-                    for idx in range(0, len(decoded_mastery_nodes), 4):
-                        # print(''.join('{:02x} '.format(x) for x in decoded_mastery_nodes[idx:idx + 4]))
-                        # print(idx, int.from_bytes(decoded_mastery_nodes[idx:idx+2], "big"))
-                        m_id = int.from_bytes(decoded_mastery_nodes[idx + 2 : idx + 4], "big")
-                        m_effect = int.from_bytes(decoded_mastery_nodes[idx : idx + 2], "big")
-                        # print(m_id, m_effect)
+                    for i in range(0, len(decoded_mastery_nodes), 4):
+                        # print(''.join('{:02x} '.format(x) for x in decoded_mastery_nodes[i:i + 2]))
+                        # print(''.join('{:02x} '.format(x) for x in decoded_mastery_nodes[i + 2:i + 4]))
+                        m_id = int.from_bytes(decoded_mastery_nodes[i + 2 : i + 4], endian)
+                        m_effect = int.from_bytes(decoded_mastery_nodes[i : i + 2], endian)
+                        print("id", m_id, "effect", m_effect)
                         self.masteryEffects[m_id] = m_effect
+                        self.nodes.append(m_id)
+
+    def set_nodes_from_poeplanner_url(self, poep_url):
+        """
+        This function sets the nodes from poeplnner url.
+
+        :return: N/A
+        """
+        endian = "little"
+
+        def b_to_i(byte_array, begin, end, length=0):
+            """Grabs end->begin bytes and returns an int"""
+            if length == 0:
+                return int.from_bytes(byte_array[begin:end], endian)
+            else:
+                return int.from_bytes(byte_array[begin : begin + length], endian)
+
+        def get_tree_version(minor):
+            """Translates poeplanner internal tree version to GGG version"""
+            # fmt: off
+            tree_versions = { # poeplanner id: ggg version
+                26: 21, 25: 20, 24: 19, 23: 18, 22: 17, 21: 16, 19: 15, 18: 14, 17: 13, 16: 12, 15: 11, 14: 10,
+            }
+            # fmt: on
+            return tree_versions.get(minor, -1)
+
+        if poep_url is None:
+            return
+        m = re.search(r"http.*poeplanner.com/(.*)", poep_url)
+        # group(1) is always the encoded string
+        if m is not None:
+            # Remove any variables at the end (probably not required for poeplanner)
+            tmp_output = m.group(1).split("?")
+            encoded_str = tmp_output[0]
+            del tmp_output[0]
+            variables = tmp_output  # a list of variable=value or an empty list
+
+            decoded_str = base64.urlsafe_b64decode(encoded_str)
+            print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
+            if decoded_str and len(decoded_str) > 10:
+                # 0-1 is version ?
+                version = b_to_i(decoded_str, 0, 2)
+
+                # 2 is ??
+
+                # 3-6 is tree version_version
+                minor_version = get_tree_version(b_to_i(decoded_str,5,6))
+                self.treeVersion = minor_version < 0 and _VERSION_str or f"{b_to_i(decoded_str,3,4)}_{minor_version}"
+
+                # 7 is Class, 8 is Ascendancy
+                self.classId = decoded_str[7]
+                self.ascendClassId = decoded_str[8]
+
+                # 9 is Bandit
+                self.build.set_bandit_by_number(decoded_str[9])
+
+                # 10 is node count, followed by the node numbers
+                idx = 10
+                nodes_count = b_to_i(decoded_str, idx, idx + 1)
+                nodes_start = idx + 2
+                nodes_end = nodes_start + (nodes_count * 2)
+                print("nodes_start, end, count", nodes_start, nodes_end, nodes_count)
+                decoded_nodes = decoded_str[nodes_start:nodes_end]
+                # print(f"nodes: {len(nodes)},", "".join('{:02x} '.format(x) for x in nodes))
+
+                # now decode the nodes structure to numbers
+                self.nodes = []
+                for i in range(0, len(decoded_nodes), 2):
+                    # print(i, b_to_i(decoded_nodes, i, i + 2))
+                    self.nodes.append(b_to_i(decoded_nodes, i, i + 2))
+
+                # Clusters
+                idx = nodes_end
+                clusters_count = b_to_i(decoded_str, idx, idx + 1)
+                clusters_start = idx + 2
+                clusters_end = clusters_start + (clusters_count * 2)
+                print("clusters_start, end, count", clusters_start, clusters_end, clusters_count)
+                if clusters_count > 0:
+                    decoded_cluster_nodes = decoded_str[clusters_start:clusters_end]
+                    # print(f"cluster_nodes: {len(cluster_nodes)},", "".join("{:02x} ".format(x) for x in cluster_nodes))
+                    # now decode the clusters structure to numbers
+                    for i in range(0, len(decoded_cluster_nodes), 2):
+                        # print("".join("{:02x} ".format(x) for x in decoded_cluster_nodes[i : i + 2]))
+                        print(i, b_to_i(decoded_cluster_nodes, i, i + 2) + 65536)
+                        self.nodes.append(b_to_i(decoded_cluster_nodes, i, i + 2) + 65536)
+
+                # Ascendancy Nodes
+                idx = clusters_end
+                ascendancy_count = b_to_i(decoded_str, idx, idx + 1)
+                ascendancy_start = idx + 2
+                ascendancy_end = ascendancy_start + (ascendancy_count * 2)
+                print("ascendancy_start, end, count", ascendancy_start, ascendancy_end, ascendancy_count)
+                if ascendancy_count > 0:
+                    decoded_ascendancy_nodes = decoded_str[ascendancy_start:ascendancy_end]
+                    # print(f"ascendancy_nodes: {len(decoded_ascendancy_nodes)},", "".join("{:02x} ".format(x) for x in decoded_ascendancy_nodes))
+                    for i in range(0, len(decoded_ascendancy_nodes), 2):
+                        # print("".join("{:02x} ".format(x) for x in decoded_ascendancy_nodes[i : i + 2]))
+                        print(i, b_to_i(decoded_ascendancy_nodes, i, i + 2))
+                        self.nodes.append(b_to_i(decoded_ascendancy_nodes, i, i + 2))
+
+                # Masteries
+                idx = ascendancy_end
+                mastery_count = b_to_i(decoded_str, idx, idx + 1)
+                mastery_start = idx + 2
+                mastery_end = mastery_start + (mastery_count * 4)
+                print("mastery_start, end, count", mastery_start, mastery_end, mastery_count)
+                if mastery_count > 0:
+                    self.masteryEffects = {}
+                    decoded_mastery_nodes = decoded_str[mastery_start:mastery_end]
+                    # print(f"mastery_nodes: {len(mastery_nodes)},", "".join("{:02x} ".format(x) for x in mastery_nodes))
+                    # now decode the mastery nodes structure to numbers
+                    for i in range(0, len(decoded_mastery_nodes), 4):
+                        # print("".join("{:02x} ".format(x) for x in decoded_mastery_nodes[i : i + 4]))
+                        # print(idx, b_to_i(decoded_mastery_nodes, i, i + 2), b_to_i(mastery_nodes, i + 2, i + 4))
+                        m_id = b_to_i(decoded_mastery_nodes, i, i + 2)
+                        m_effect = b_to_i(decoded_mastery_nodes, i + 2, i + 4)
+                        print("id", m_id, "effect", m_effect)
+                        self.masteryEffects[m_id] = m_effect
+                        self.nodes.append(m_id)
 
     def export_nodes_to_url(self):
+        endian = "big"
         byte_stream = bytearray()
-        byte_stream.extend(self.internal_version.to_bytes(4, "big"))
+        byte_stream.extend(self.internal_version.to_bytes(4, endian))
         byte_stream.append(self.classId)
         byte_stream.append(self.ascendClassId)
 
@@ -239,24 +353,24 @@ class Spec:
 
         byte_stream.append(len(nodes))
         for node in self.nodes:
-            byte_stream.extend(node.to_bytes(2, "big"))
+            byte_stream.extend(node.to_bytes(2, endian))
         # print(''.join('{:02x} '.format(x) for x in byte_stream))
 
         byte_stream.append(len(cluster_nodes))
         for cluster_node in cluster_nodes:
             cluster_node -= 65536
-            byte_stream.extend(cluster_node.to_bytes(2, "big"))
+            byte_stream.extend(cluster_node.to_bytes(2, endian))
         # print(''.join('{:02x} '.format(x) for x in byte_stream))
 
         byte_stream.append(len(self.masteryEffects))
         for mastery_node in self.masteryEffects:
-            byte_stream.extend(self.masteryEffects[mastery_node].to_bytes(2, "big"))
-            byte_stream.extend(mastery_node.to_bytes(2, "big"))
+            byte_stream.extend(self.masteryEffects[mastery_node].to_bytes(2, endian))
+            byte_stream.extend(mastery_node.to_bytes(2, endian))
 
         # string = " ".join('{:02x}'.format(x) for x in byte_stream)
         # print(string)
 
-        encoded_string = base64.urlsafe_b64encode(byte_stream, b"-_").decode("utf-8")
+        encoded_string = base64.urlsafe_b64encode(byte_stream).decode("utf-8")
         return f"https://www.pathofexile.com/passive-skill-tree/{encoded_string}"
 
     def set_mastery_effects_from_string(self, new_effects):
@@ -278,6 +392,7 @@ class Spec:
 
     def set_mastery_effect(self, node_id, effect_id):
         """add one node id from mastery effects"""
+        print("set_mastery_effect", node_id, effect_id)
         self.masteryEffects[node_id] = int(effect_id)
 
     def remove_mastery_effect(self, node_id):
