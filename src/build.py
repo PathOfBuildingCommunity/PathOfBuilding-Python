@@ -544,7 +544,7 @@ class Build:
             self.new(_build_pob)
             self.name = Path(Path(filename).name).stem
 
-    def import_passive_tree_jewels_json(self, json_tree, json_character):
+    def import_passive_tree_jewels_ggg_json(self, json_tree, json_character):
         """
         Import the tree (and later the jewels)
 
@@ -558,7 +558,7 @@ class Build:
         # print("import_passive_tree_jewels_json", json_tree)
         new_spec = self.new_spec()
         self.name = f"Imported {json_character.get('name', '')}"
-        new_spec.load_from_json(self.name, json_tree, json_character)
+        new_spec.load_from_ggg_json(self.name, json_tree, json_character)
         self.current_class = new_spec.classId
         self.ascendClassName = json_character.get("class", "")
         self.level = json_character.get("level", 1)
@@ -568,7 +568,7 @@ class Build:
         # show tree
         self.win.tree_ui.combo_manage_tree.setCurrentIndex(self.win.tree_ui.combo_manage_tree.count() - 1)
 
-    def import_gems_json(self, json_items):
+    def import_gems_ggg_json(self, json_items):
         """
         Import skills from the json supplied by GGG and convert it to xml.
 

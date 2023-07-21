@@ -143,7 +143,7 @@ class Spec:
         if length == 0:
             return int.from_bytes(byte_array[begin:end], endian)
         else:
-            return int.from_bytes(byte_array[begin: begin + length], endian)
+            return int.from_bytes(byte_array[begin : begin + length], endian)
 
     def import_regular_nodes(self, decoded_str, start, count, endian):
         """
@@ -163,7 +163,7 @@ class Spec:
         self.nodes = []
         for i in range(0, len(decoded_nodes), 2):
             # print(i, int.from_bytes(decoded_nodes[i : i + 2], endian))
-            self.nodes.append(int.from_bytes(decoded_nodes[i: i + 2], endian))
+            self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], endian))
         return end
 
     def import_cluster_nodes(self, decoded_str, start, count, endian):
@@ -183,8 +183,8 @@ class Spec:
             # now decode the cluster nodes structure to numbers
             for i in range(0, len(decoded_cluster_nodes), 2):
                 # print(''.join('{:02x} '.format(x) for x in cluster_nodes[i:i + 2]))
-                print(i, int.from_bytes(decoded_cluster_nodes[i: i + 2], endian) + 65536)
-                self.nodes.append(int.from_bytes(decoded_cluster_nodes[i: i + 2], endian) + 65536)
+                print(i, int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
+                self.nodes.append(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
         return end
 
     def import_mastery_nodes(self, decoded_str, start, count, endian):
@@ -208,11 +208,11 @@ class Spec:
                 # print(''.join('{:02x} '.format(x) for x in decoded_mastery_nodes[i + 2:i + 4]))
                 if endian == "little":
                     # poeplanner has these two round the other way too
-                    m_id = int.from_bytes(decoded_mastery_nodes[i: i + 2], endian)
-                    m_effect = int.from_bytes(decoded_mastery_nodes[i + 2: i + 4], endian)
+                    m_id = int.from_bytes(decoded_mastery_nodes[i : i + 2], endian)
+                    m_effect = int.from_bytes(decoded_mastery_nodes[i + 2 : i + 4], endian)
                 else:
-                    m_id = int.from_bytes(decoded_mastery_nodes[i + 2: i + 4], endian)
-                    m_effect = int.from_bytes(decoded_mastery_nodes[i: i + 2], endian)
+                    m_id = int.from_bytes(decoded_mastery_nodes[i + 2 : i + 4], endian)
+                    m_effect = int.from_bytes(decoded_mastery_nodes[i : i + 2], endian)
                 print("id", m_id, "effect", m_effect)
                 self.masteryEffects[m_id] = m_effect
                 self.nodes.append(m_id)
@@ -256,8 +256,11 @@ class Spec:
         if m is not None:
             self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             if self.treeVersion not in tree_versions.keys():
-                ok_dialog(self.build.win, f"Invalid tree version: {re.sub('_', '.', self.treeVersion)}",
-                          f"Valid tree versions are: {list(tree_versions.values())}")
+                ok_dialog(
+                    self.build.win,
+                    f"Invalid tree version: {re.sub('_', '.', self.treeVersion)}",
+                    f"Valid tree versions are: {list(tree_versions.values())}",
+                )
                 self.treeVersion = _VERSION_str
                 return
             # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
@@ -329,8 +332,11 @@ class Spec:
                 minor_version = get_tree_version(self.b_to_i(decoded_str, 5, 6, endian))
                 self.treeVersion = minor_version < 0 and _VERSION_str or f"{major_version}_{minor_version}"
                 if self.treeVersion not in tree_versions.keys():
-                    ok_dialog(self.build.win, f"Invalid tree version: {re.sub('_', '.', self.treeVersion)}",
-                              f"Valid tree versions are: {list(tree_versions.values())}")
+                    ok_dialog(
+                        self.build.win,
+                        f"Invalid tree version: {re.sub('_', '.', self.treeVersion)}",
+                        f"Valid tree versions are: {list(tree_versions.values())}",
+                    )
                     self.treeVersion = _VERSION_str
                     return
 
@@ -479,7 +485,7 @@ class Spec:
             for node_id in self.jewels.keys():
                 sockets.append(ET.fromstring(f'<Socket nodeId="{node_id}" itemId="{self.jewels[node_id]}"/>'))
 
-    def load_from_json(self, title, json_tree, json_character):
+    def load_from_ggg_json(self, title, json_tree, json_character):
         """
         Import the tree (and later the jewels)
 

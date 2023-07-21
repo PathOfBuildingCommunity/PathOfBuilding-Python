@@ -320,7 +320,9 @@ class TreeView(QGraphicsView):
 
         # leave the print in till we have everything working.
         # It is what tells us how often the assets are being redrawn.
-        _debug(f"add_tree_images, full_clear={full_clear}", )
+        _debug(
+            f"add_tree_images, full_clear={full_clear}",
+        )
         if self.build.current_tree is None:
             return
 

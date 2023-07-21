@@ -3,7 +3,7 @@ Import dialog
 
 Open a dialog for importing a character.
 """
-import re, requests
+import json, re, requests
 from hashlib import sha1
 import xml.etree.ElementTree as ET
 from pprint import pprint
@@ -21,7 +21,7 @@ from pob_config import (
 )
 from pob_file import write_json
 from build import Build
-from ui_utils import set_combo_index_by_text
+from ui_utils import html_colour_text, set_combo_index_by_text
 
 realm_list = {
     "PC": {
@@ -67,6 +67,12 @@ class ImportDlg(Ui_BuildImport, QDialog):
         self.build = _build
         self.config = _config
         self.win = parent
+        # validation variable for importing a PoB build
+        self.pob_base64_encoded = False
+        # validation variable for importing a PoB build via url (type is the result of a re.search)
+        self.pob_valid_url = None
+        # validation variable for importing a poeplanner json
+        self.poep_json_import = False
 
         # A temporary variable to hold the account list of characters.
         # Needs to be sharable so trigger functions can access it
@@ -118,6 +124,26 @@ class ImportDlg(Ui_BuildImport, QDialog):
     def close_dialog(self):
         self.done(0)
 
+    def test_import_text_for_poeplanner_json(self, text):
+        """
+        Validate that this text is from poeplanner.com. json import must have at least these components (see below)
+        :param text: str: text to test
+        :return: boolean; True if test passes.
+        """
+        bad_text = "P 0 B"
+        try:
+            text_json = json.loads(text)
+            return (
+                int(text_json.get("version", "0")) > 0
+                and text_json.get("calculatedStats", bad_text) != bad_text
+                and text_json.get("equipment", bad_text) != bad_text
+                and text_json.get("helpedBandit", bad_text) != bad_text
+                and text_json.get("skills", bad_text) != bad_text
+                and text_json.get("tree", bad_text) != bad_text
+            )
+        except (KeyError, json.decoder.JSONDecodeError):
+            return False
+
     @Slot()
     def validate_build_sharing_text(self):
         """
@@ -129,18 +155,30 @@ class ImportDlg(Ui_BuildImport, QDialog):
         text = self.lineedit_BuildShare.text().strip()
         if text == "":
             return
+        self.test_import_text_for_poeplanner_json(text)
+        # Test for various formats
+        self.pob_base64_encoded = decode_base64_and_inflate(text) is not None
+        self.poep_json_import = self.test_import_text_for_poeplanner_json(text)
         # get the website and the code as separate 'group' variables
         #   (1) is the website and (2) is the code (not used here)
-        m = re.search(r"http[s]?://([a-z0-9.\-]+)/(.*)", text)
-        if (m is not None and m.group(1) in valid_websites) or decode_base64_and_inflate(text) is not None:
+        self.pob_valid_url = re.search(r"http[s]?://([a-z0-9.\-]+)/(.*)", text)
+        if (
+            (self.pob_valid_url is not None and self.pob_valid_url.group(1) in valid_websites)
+            or self.pob_base64_encoded
+            or self.poep_json_import
+        ):
             self.btn_ImportBuildSharing.setEnabled(True)
+        else:
+            self.pob_base64_encoded = False
+            self.poep_json_import = False
+            self.pob_valid_url = None
 
     @Slot()
     def import_from_code(self, text):
         """
         Import the whole character's data
         Attempt to break up the text in lineedit control into a meaningful url to see if it's a url
-        that we support *OR* if it's a validate import code.
+        that we support *OR* if it's a validate import code *OR* that is is a valid json from poeplanner.com
         Close dialog if successful
         :return: N/A
         """
@@ -149,32 +187,56 @@ class ImportDlg(Ui_BuildImport, QDialog):
             return
         if self.combo_Import.currentData() == "NEW":
             self.win.build_new()
-        # Attempt to break up the text in lineedit control into a meaningful url.
-        # get the website and the code as separate 'group' variables
-        #   (1) is the website and (2) is the code
-        m = re.search(r"http[s]?://([a-z0-9.\-]+)/(.*)", text)
-        if m is not None and m.group(1) in valid_websites:
+
+        # Test for various formats
+        # self.pob_valid_url is set in validate_build_sharing_text
+        if self.pob_valid_url is not None:
             # if the text was a meaninful url and it was a supported url, let's get the code
             response = None
             try:
-                url = website_list[m.group(1)]["downloadURL"].replace("CODE", m.group(2))
+                website = self.pob_valid_url.group(1)
+                url_code = self.pob_valid_url.group(2)
+                url = website_list[website]["downloadURL"].replace("CODE", url_code)
                 response = requests.get(url, headers=http_headers, timeout=6.0)
                 code = decode_base64_and_inflate(response.content)
             except requests.RequestException as e:
-                self.status = f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+                self.status = html_colour_text(
+                    "RED", f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+                )
                 print(f"Error retrieving 'Data': {e}.")
                 return
-        else:
-            # check the code is valid
+        elif self.pob_base64_encoded:
+            # decode the string and return a possibly valid code.
             code = decode_base64_and_inflate(text)
+        elif self.poep_json_import:
+            # import the json for better or worse. No errors. Just do it.
+            self.import_all_from_poep_json(json.loads(text))
+            self.done(0)
+            return
+        else:
+            # If we can't get a resolution, return with a standard error.
+            code = None
 
         if code is None:
-            self.status = f"Code failed to decode."
+            self.status = html_colour_text("RED", f"Code failed to decode.")
             print(f"Code failed to decode.")
             return
         else:
             self.xml = ET.ElementTree(ET.fromstring(code))
             self.done(0)
+
+    def import_all_from_poep_json(self, poep_json):
+        """
+
+        :param poep_json: json object:
+        :return:
+        """
+        # self.import_passive_tree_jewels_selected()
+        self.win.items_ui.load_from_poep_json(poep_json["equipment"],
+                                              'Imported from poeplanner',
+                                              True,
+                                              )
+        # self.import_skills_selected()
 
     @Slot()
     def import_all_selected(self):
@@ -194,7 +256,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         if self.check_DeleteJewels.isChecked():
             # ToDo: Do something clever to remove jewels
             pass
-        self.build.import_passive_tree_jewels_json(
+        self.build.import_passive_tree_jewels_ggg_json(
             self.character_data.get("tree"), self.character_data.get("character")
         )
         self.btn_Close.setFocus()
@@ -208,7 +270,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             self.download_character_data()
         json_character = self.character_data.get("character")
         # A lot of technology is built into the ItemsUI() class, lets reuse that
-        self.win.items_ui.load_from_json(
+        self.win.items_ui.load_from_ggg_json(
             self.character_data["items"],
             f'Imported {json_character.get("name", "")}',
             self.check_DeleteItems.isChecked(),
@@ -227,7 +289,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         if self.check_DeleteSkills.isChecked():
             # ToDo: Do something clever to remove skills. Later when you have Manage Skill Sets dialog working
             pass
-        skillset = self.build.import_gems_json(self.character_data.get("items"))
+        skillset = self.build.import_gems_ggg_json(self.character_data.get("items"))
         self.win.skills_ui.load(self.build.skills)
         self.win.combo_SkillSet.setCurrentIndex(skillset - 1)
         self.btn_Close.setFocus()
@@ -313,7 +375,9 @@ class ImportDlg(Ui_BuildImport, QDialog):
             response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
             self.account_json = response.json()
         except requests.RequestException as e:
-            self.status = f"Error retrieving 'Account': {response.reason} ({response.status_code})."
+            self.status = html_colour_text(
+                "RED", f"Error retrieving 'Account': {response.reason} ({response.status_code})."
+            )
             print(f"Error retrieving 'Account': {e}.")
             print(vars(response))
             return
@@ -380,7 +444,9 @@ class ImportDlg(Ui_BuildImport, QDialog):
             passive_tree = response.json()
         except requests.RequestException as e:
             print(f"Error retrieving 'Passive Tree': {e}.")
-            self.status = f"Error retrieving 'Passive Tree': {response.reason} ({response.status_code})."
+            self.status = html_colour_text(
+                "RED", f"Error retrieving 'Passive Tree': {response.reason} ({response.status_code})."
+            )
             print(vars(response))
 
         # get items
@@ -392,7 +458,9 @@ class ImportDlg(Ui_BuildImport, QDialog):
             items = response.json()
         except requests.RequestException as e:
             print(f"Error retrieving 'Items': {e}.")
-            self.status = f"Error retrieving 'Items': {response.reason} ({response.status_code})."
+            self.status = html_colour_text(
+                "RED", f"Error retrieving 'Items': {response.reason} ({response.status_code})."
+            )
             print(vars(response))
 
         # lets add the jewels and items together

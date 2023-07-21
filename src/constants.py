@@ -38,8 +38,8 @@ default_spec = f'\
     <Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}">\
     </Spec>'
 
-# default_view_mode = "ITEMS"
-default_view_mode = "TREE"
+default_view_mode = "ITEMS"
+# default_view_mode = "TREE"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
@@ -1028,27 +1028,28 @@ website_list = {
 # names for importing from json converting to xml entry names
 slot_map = {
     "Weapon": "Weapon 1",
-    "Weapon2": "Weapon 2",
-    "Offhand": "Weapon 1 Swap",
+    "Weapon1": "Weapon 1",
+    "Offhand": "Weapon 2",
+    "Weapon2": "Weapon 1 Swap",
     "Offhand2": "Weapon 2 Swap",
     "Helm": "Helmet",
+    "Helmet": "Helmet",
     "BodyArmour": "Body Armour",
+    "Body": "Body Armour",
     "Gloves": "Gloves",
     "Boots": "Boots",
     "Amulet": "Amulet",
     "Ring": "Ring 1",
+    "Ring1": "Ring 1",
     "Ring2": "Ring 2",
     "Belt": "Belt",
-    "Flask": "Flask",
-    "PassiveJewels": "PassiveJewels",
-    "Weapon1": "Weapon 1",
-    "Offhand1": "Weapon 1 Swap",
-    "Ring1": "Ring 1",
+    "Flask": "Flask 1",
     "Flask1": "Flask 1",
     "Flask2": "Flask 2",
     "Flask3": "Flask 3",
     "Flask4": "Flask 4",
     "Flask5": "Flask 5",
+    "PassiveJewels": "PassiveJewels",
     "Abyssal1": "Abyssal #1",
     "Abyssal2": "Abyssal #2",
     "Abyssal3": "Abyssal #3",

@@ -100,7 +100,7 @@ class Item:
         self.variant_entries_xml = None
         self.alt_variants = {}
 
-    def load_from_json(self, _json):
+    def load_from_ggg_json(self, _json):
         """
         Load internal structures from the downloaded json
         """
@@ -180,7 +180,46 @@ class Item:
                 if key in influence_colours.keys():
                     self.influences.append(key)
         self.tooltip()
-        # load_from_json
+        # load_from_ggg_json
+
+    def load_from_poep_json(self, _json):
+        """
+        Load internal structures from the downloaded json
+        !!! Important note. Not everything comes through. Corrupted and Influences are two that i've noted aren't there.
+        Crafts are just part of the explicits
+        """
+        # Example {'name': "The Poet's Pen", 'baseName': 'Carved Wand', 'uniqueName': "The Poet's Pen",
+        # 'rarity': 'UNIQUE', 'quality': 20, 'baseStatRoll': 1, 'implicits': ['15% increased Spell Damage'],
+        # 'explicits': ['+1 to Level of Socketed Active Skill Gems per 25 Player Levels',
+        # 'Trigger a Socketed Spell when you Attack with this Weapon, with a 0.25 second Cooldown',
+        # 'Adds 3 to 5 Physical Damage to Attacks with this Weapon per 3 Player Levels', '8% increased Attack Speed']}
+        self.base_name = _json.get("baseName", "")
+        # for magic and normal items, name is blank
+        self.title = _json.get("name", "")
+        self.name = f'{self.title and f"{self.title}, " or ""}{self.base_name}'
+        self._slot = slot_map[_json["slot"].title()]
+        self.rarity = _json.get("rarity", "")
+        self.quality = _json.get("quality", "0")
+        # import doesn't have socket info
+        self.sockets = self.base_item.get("initial_sockets", "")
+        # import doesn't have corruption info
+        # import doesn't have influence info
+        # import doesn't have craft info
+
+        # Mods
+        for mod in _json.get("explicits", []):
+            self.full_explicitMods_list.append(Mod(mod))
+        self.explicitMods = self.full_explicitMods_list
+
+        for mod in _json.get("enchants", []):
+            self.implicitMods.append(Mod(f"{{crafted}}{mod}"))
+        for mod in _json.get("scourgeMods", []):
+            self.implicitMods.append(Mod(f"{{crafted}}{mod}"))
+        for mod in _json.get("implicits", []):
+            self.implicitMods.append(Mod(mod))
+
+        self.tooltip()
+        # load_from_ggg_json
 
     def load_from_xml(self, xml, debug_lines=False):
         """
@@ -729,7 +768,7 @@ class Item:
             stats += f"{self.sub_type}<br/>"
         if self.quality != 0:
             stats += f"Quality: {self.quality}%<br/>"
-        if self.sockets != 0:
+        if self.sockets != "":
             socket_text = ""
             for socket in self.sockets:
                 if socket in "RBGAW":
@@ -772,6 +811,7 @@ class Item:
         if self.corrupted:
             tip += f'<tr><td>{html_colour_text("STRENGTH", "Corrupted")}</td></tr>'
         tip += f"</table>"
+        # self.base_tooltip_text = tip
         return tip
 
     @property

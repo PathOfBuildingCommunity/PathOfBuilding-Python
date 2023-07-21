@@ -82,6 +82,7 @@ class ItemSlotUI(QWidget):
         self.combo_item_list.setDuplicatesEnabled(True)
         self.combo_item_list.addItem("None", 0)
         self.combo_item_list.setCurrentIndex(0)
+        self.combo_item_list.currentIndexChanged.connect(self.set_tooltip)
         if self.type == "Flask":
             self.cb_active = QCheckBox(self)
             # Flasks are never indented, so no need to mention it.
@@ -141,11 +142,21 @@ class ItemSlotUI(QWidget):
         self.combo_item_list.addItem("None", 0)
         self.active = False
 
+    @Slot()
+    def set_tooltip(self):
+        """Set the comboBox's tooltip"""
+        print("settootip")
+        if self.combo_item_list.currentIndex() == 0:
+            self.combo_item_list.setToolTip("")
+        item = self.combo_item_list.currentData()
+        if type(item) == Item:
+            self.combo_item_list.setToolTip(item.tooltip())
+
     def set_active_item_text(self, _text):
         """Set the combo's active item by text"""
         set_combo_index_by_text(self.combo_item_list, _text)
 
-    def set_default_item(self):
+    def set_default_item(self, item=None):
         """
         Set a default item if there is no slot information to set it (for example json download)
         For slots with more than one entry (eg: Flasks), try to fill out slots with different items.
@@ -155,24 +166,32 @@ class ItemSlotUI(QWidget):
         # print("set_default_item", self.title, self.combo_item_list.currentIndex(), self.combo_item_list.count())
 
         if self.combo_item_list.currentIndex() == 0 and self.combo_item_list.count() > 0:
-            # Split out the number for those titles that have numbers
-            title_parts = self.title.split(" ")
-            match self.type:
-                case "Flask" | "Weapon" | "Ring":
-                    idx = int(title_parts[-1])
-                    if self.combo_item_list.count() > idx:
-                        self.combo_item_list.setCurrentIndex(idx)
-                    else:
-                        self.combo_item_list.setCurrentIndex(0)
-                case "AbyssJewel":
-                    title_parts = self.title[-1].split("#")
-                    idx = int(title_parts[-1])
-                    if self.combo_item_list.count() > idx:
-                        self.combo_item_list.setCurrentIndex(idx)
-                    else:
-                        self.combo_item_list.setCurrentIndex(0)
-                case _:
-                    if self.combo_item_list.count() > 1:
-                        self.combo_item_list.setCurrentIndex(1)
-                    else:
-                        self.combo_item_list.setCurrentIndex(0)
+            if item is not None:
+                if self.title == item.slot:
+                    self.set_active_item_text(item.name)
+            else:
+                # Split out the number for those titles that have numbers
+                title_parts = self.title.split(" ")
+                match self.type:
+                    case "Flask" | "Weapon" | "Ring":
+                        idx = int(title_parts[-1])
+                        if self.combo_item_list.count() > idx:
+                            self.combo_item_list.setCurrentIndex(idx)
+                        else:
+                            self.clear_default_item()
+                    case "AbyssJewel":
+                        title_parts = self.title[-1].split("#")
+                        idx = int(title_parts[-1])
+                        if self.combo_item_list.count() > idx:
+                            self.combo_item_list.setCurrentIndex(idx)
+                        else:
+                            self.clear_default_item()
+                    case _:
+                        if self.combo_item_list.count() > 1:
+                            self.combo_item_list.setCurrentIndex(1)
+                        else:
+                            self.clear_default_item()
+
+    def clear_default_item(self):
+        """Remove the default item, so the control is blank. Useful for offhand when using a two handed Weapon"""
+        self.combo_item_list.setCurrentIndex(0)
