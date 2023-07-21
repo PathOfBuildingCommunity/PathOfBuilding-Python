@@ -67,13 +67,9 @@ class ItemsUI:
         self.item_slot_ui_list = {}
         for item_label in slot_names.values():
             self.create_equipped_item_slot_ui(item_label)
-        for name in (
-            "Weapon 1",
-            "Weapon 2",
-            "Weapon 1 Swap",
-            "Weapon 2 Swap",
-            "Body Armour",
-        ):
+        self.item_slot_ui_list["Weapon 1"].other_weapon_slot = self.item_slot_ui_list["Weapon 2"]
+        self.item_slot_ui_list["Weapon 1 Swap"].other_weapon_slot = self.item_slot_ui_list["Weapon 2 Swap"]
+        for name in ("Weapon 1", "Weapon 2", "Weapon 1 Swap", "Weapon 2 Swap", "Body Armour"):
             self.create_equipped_abyssal_socket_slots(name, 6)
         for name in ("Helmet", "Gloves", "Boots"):
             self.create_equipped_abyssal_socket_slots(name, 4)
@@ -657,10 +653,12 @@ class ItemsUI:
         for idx, text_item in enumerate(_items["equippedItems"]):
             build_item_idx = int(text_item["buildItemIndex"])
             _items["buildItems"][build_item_idx]["slot"] = text_item["slot"].title()
+            # _items["buildItems"][build_item_idx]["slot2"] = slot_map[text_item["slot"].title()]
         # Find the end of the itemlist_by_id list
         id_base = len(self.itemlist_by_id) == 0 and 1 or max(self.itemlist_by_id.keys())
         # add the items to the list box
         for idx, text_item in enumerate(_items["buildItems"]):
+            print(text_item)
             new_item = Item(self.base_items)
             new_item.load_from_poep_json(text_item)
             # new_item.id = id_base + idx
@@ -736,7 +734,8 @@ class ItemsUI:
 
             for slot_ui in self.abyssal_item_slot_ui_list:
                 slot_ui.setHidden(True)
-            # Process the Slot entries and set default items
+
+            """ Process the Slot entries and set default items"""
             slots = self.xml_current_itemset.findall("Slot")
             if len(slots) > 0:
                 for slot_xml in slots:

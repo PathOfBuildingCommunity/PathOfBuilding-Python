@@ -230,12 +230,17 @@ class ImportDlg(Ui_BuildImport, QDialog):
 
         :param poep_json: json object:
         :return:
+        import doesn't have socket, corruption, influence info.
+        import doesn't have separate craft info. It is linked in with explicits.
+        import doesn't have unique names for Magic and normal items. This makes it difficult for the system to
+            assign the correct slot
         """
         # self.import_passive_tree_jewels_selected()
-        self.win.items_ui.load_from_poep_json(poep_json["equipment"],
-                                              'Imported from poeplanner',
-                                              True,
-                                              )
+        self.win.items_ui.load_from_poep_json(
+            poep_json["equipment"],
+            "Imported from poeplanner",
+            True,
+        )
         # self.import_skills_selected()
 
     @Slot()

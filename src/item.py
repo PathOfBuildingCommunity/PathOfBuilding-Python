@@ -197,7 +197,10 @@ class Item:
         # for magic and normal items, name is blank
         self.title = _json.get("name", "")
         self.name = f'{self.title and f"{self.title}, " or ""}{self.base_name}'
-        self._slot = slot_map[_json["slot"].title()]
+        # Slot info will only be present for equipped items
+        self._slot = _json.get("slot", "")
+        if self._slot != "":
+            self._slot = slot_map[self._slot.title()]
         self.rarity = _json.get("rarity", "")
         self.quality = _json.get("quality", "0")
         # import doesn't have socket info
@@ -830,7 +833,8 @@ class Item:
         if self.base_item is not None:
             self.type = self.base_item["type"]
             self.sub_type = self.base_item["sub-type"]
-            # check for any extra requires. Just attributes for now
+            self.two_hand = "twohand" in self.base_item["tags"]
+            # check for any extra requires. Just attributes for now.
             reqs = self.base_item.get("requirements", None)
             if reqs:
                 for tag in reqs:
@@ -848,7 +852,7 @@ class Item:
             case "Shield":
                 self.slots = ["Weapon 2", "Weapon 2 Swap"]
             case "Weapon":
-                if "twohand" in self.base_item["tags"]:
+                if self.two_hand:
                     self.slots = ["Weapon 1", "Weapon 1 Swap"]
                 else:
                     self.slots = [

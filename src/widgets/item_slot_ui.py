@@ -52,7 +52,10 @@ class ItemSlotUI(QWidget):
         self.widget_height = 26
         # self.setGeometry(0, 0, 320, self.widget_height)
         self.setMinimumHeight(self.widget_height)
+        self.other_weapon_slot: ItemSlotUI = None
 
+        # preserve the original name, EG: "Weapon 1 Swap"
+        self.slot_name = title
         if "Weapon" in title:
             self.type = "Weapon"
             match title:
@@ -82,7 +85,7 @@ class ItemSlotUI(QWidget):
         self.combo_item_list.setDuplicatesEnabled(True)
         self.combo_item_list.addItem("None", 0)
         self.combo_item_list.setCurrentIndex(0)
-        self.combo_item_list.currentIndexChanged.connect(self.set_tooltip)
+        self.combo_item_list.currentIndexChanged.connect(self.combobox_change_text)
         if self.type == "Flask":
             self.cb_active = QCheckBox(self)
             # Flasks are never indented, so no need to mention it.
@@ -143,14 +146,18 @@ class ItemSlotUI(QWidget):
         self.active = False
 
     @Slot()
-    def set_tooltip(self):
+    def combobox_change_text(self, _text):
         """Set the comboBox's tooltip"""
-        print("settootip")
+        # print("settootip")
         if self.combo_item_list.currentIndex() == 0:
             self.combo_item_list.setToolTip("")
-        item = self.combo_item_list.currentData()
-        if type(item) == Item:
-            self.combo_item_list.setToolTip(item.tooltip())
+        else:
+            item = self.combo_item_list.currentData()
+            if type(item) == Item:
+                self.combo_item_list.setToolTip(item.tooltip())
+                # Clear the other slot if this is a two-hander
+                if item.two_hand:
+                    self.other_weapon_slot.clear_default_item()
 
     def set_active_item_text(self, _text):
         """Set the combo's active item by text"""
@@ -167,10 +174,10 @@ class ItemSlotUI(QWidget):
 
         if self.combo_item_list.currentIndex() == 0 and self.combo_item_list.count() > 0:
             if item is not None:
-                if self.title == item.slot:
+                if self.slot_name == item.slot:
                     self.set_active_item_text(item.name)
             else:
-                # Split out the number for those titles that have numbers
+                # Split out the number for those titles that have numbers (don't use slot_name)
                 title_parts = self.title.split(" ")
                 match self.type:
                     case "Flask" | "Weapon" | "Ring":
