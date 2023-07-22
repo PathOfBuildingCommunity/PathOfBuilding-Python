@@ -22,6 +22,7 @@ from pob_config import (
 )
 from pob_file import read_json
 from ui_utils import (
+    _debug,
     set_combo_index_by_data,
     set_combo_index_by_text,
     HTMLDelegate,
@@ -370,7 +371,7 @@ class SkillsUI:
         self.win.combo_SkillSet.addItem(itemset_name, new_skillset)
         # set the SkillSet ComboBox dropdown width.
         self.win.combo_SkillSet.view().setMinimumWidth(self.win.combo_SkillSet.minimumSizeHint().width())
-        # self.change_itemset(len(self.itemsets) - 1)
+        self.win.combo_SkillSet.setCurrentIndex(len(self.skill_sets_list) - 1)
         self.connect_skill_triggers()
         return new_skillset
 
@@ -567,6 +568,8 @@ class SkillsUI:
         # print("new_socket_group")
         # Add new group to xml and Socket Group list, and then show the update
         new_socket_group = ET.fromstring(empty_socket_group)
+        if self.xml_current_skill_set is None:
+            self.xml_current_skill_set = self.new_skill_set()
         self.xml_current_skill_set.append(new_socket_group)
         idx = len(self.xml_current_skill_set) - 1
         self.win.list_SocketGroups.addItem(self.define_socket_group_label(xml_group=self.xml_current_skill_set[idx]))
@@ -907,6 +910,78 @@ class SkillsUI:
         # print("skill_gem_rows_about_to_be_moved")
         self.socket_group_to_be_moved = source_parent
 
+    def import_gems_ggg_json(self, json_items, delete_all):
+        """
+        Import skills from the json supplied by GGG and convert it to xml.
+
+        :param json_items: json import of the item data.
+        :param delete_all: bool: True will delete everything first.
+        :return: int: number of skillsets
+        """
+
+        def get_property(_json_gem, _name, _default):
+            """
+            Get a property from a list of property tags. Not all properties appear mandatory.
+
+            :param _json_gem: the gem reference from the json download
+            :param _name: the name of the property
+            :param _default: a default value to be used if the property is not listed
+            :return:
+            """
+            for _prop in _json_gem.get("properties"):
+                if _prop.get("name") == _name:
+                    value = _prop.get("values")[0][0].replace(" (Max)", "").replace("+", "").replace("%", "")
+                    return value
+            return _default
+
+        # print("import_gems_ggg_json", len(json_items["items"]))
+        if len(json_items["items"]) <= 0:
+            return
+        if delete_all:
+            self.delete_all_socket_groups(False)
+            self.delete_all_skill_sets(False)
+
+        json_character = json_items.get("character")
+        # Make a new skill set
+        self.xml_current_skill_set = self.new_skill_set(f"Imported {json_character.get('name', '')}")
+        self.delete_all_socket_groups(False)
+
+        # loop through all items and look for gems in socketedItems
+        for item in json_items["items"]:
+            if item.get("socketedItems", None) is not None:
+                # setup tracking of socket group changes in one item
+                current_socket_group = None
+                current_socket_group_number = -1
+                for idx, json_gem in enumerate(item.get("socketedItems")):
+                    # let's get the group # for this socket ...
+                    this_group = item["sockets"][idx]["group"]
+                    # ... so we can make a new one if needed
+                    if this_group != current_socket_group_number:
+                        self.check_socket_group_for_an_active_gem(current_socket_group)
+                        current_socket_group_number = this_group
+                        current_socket_group = self.new_socket_group()
+                        current_socket_group.set("slot", slot_map[item["inventoryId"]])
+                    xml_gem = ET.fromstring(empty_gem)
+                    current_socket_group.append(xml_gem)
+                    xml_gem.set("level", get_property(json_gem, "Level", "1"))
+                    xml_gem.set("quality", get_property(json_gem, "Quality", "0"))
+
+                    _name = json_gem["baseType"].replace(" Support", "")
+                    xml_gem.set("nameSpec", _name)
+                    xml_gem.set("skillId", self.gems_by_name_or_id[_name]["skillId"])
+
+                    base_item = self.gems_by_name_or_id[_name]["base_item"]
+                    xml_gem.set("gemId", base_item.get("id"))
+
+                    match json_gem["typeLine"]:
+                        case "Anomalous":
+                            xml_gem.set("qualityId", "Alternate1")
+                        case "Divergent":
+                            xml_gem.set("qualityId", "Alternate2")
+                        case "Phantasmal":
+                            xml_gem.set("qualityId", "Alternate3")
+                self.check_socket_group_for_an_active_gem(current_socket_group)
+
     def import_from_poep_json(self, json_skills, skillset_name):
         """
         Import skills from poeplanner.com json import
@@ -918,6 +993,7 @@ class SkillsUI:
         self.delete_all_skill_sets(False)
         self.xml_current_skill_set = self.new_skill_set(skillset_name)
         self.delete_all_socket_groups(False)
+
         for json_group in json_skills["groups"]:
             current_socket_group = self.new_socket_group()
             _slot = json_group.get("equipmentSlot", "")
@@ -946,8 +1022,6 @@ class SkillsUI:
                         xml_gem.set("qualityId", "Alternate3")
 
             self.check_socket_group_for_an_active_gem(current_socket_group)
-
-        self.win.combo_SkillSet.setCurrentIndex(0)
 
 
 # def test() -> None:

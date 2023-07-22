@@ -62,7 +62,7 @@ class Build:
         self.compare_spec = None
 
         # variables from the xml
-        self.build_xml = None
+        self.xml_build = None
         self.root = None
         self.build = None
         self.import_field = None
@@ -277,7 +277,7 @@ class Build:
         :return: N/A
         """
         self.name = "Default"
-        self.build_xml = _build_xml
+        self.xml_build = _build_xml
         self.root = _build_xml.getroot()
         self.build = self.root.find("Build")
         self.import_field = self.root.find("Import")
@@ -351,8 +351,8 @@ class Build:
         """Debug Please leave until build is mostly complete"""
 
         # Temporarily write to a test file to not corrupt the original and make for easy compare
-        pob_file.write_xml("builds/_test.xml", self.build_xml)
-        # pob_file.write_xml(self.filename, self.build_xml)
+        pob_file.write_xml("builds/_test.xml", self.xml_build)
+        # pob_file.write_xml(self.filename, self.xml_build)
 
     def save_as(self, filename):
         """
@@ -566,7 +566,7 @@ class Build:
         # print("import_passive_tree_jewels_json", json_tree)
         new_spec = self.new_spec()
         self.name = f"Imported {json_character.get('name', '')}"
-        new_spec.load_from_ggg_json(self.name, json_tree, json_character)
+        new_spec.load_from_ggg_json(json_tree, json_character)
         self.current_class = new_spec.classId
         self.ascendClassName = json_character.get("class", "")
         self.level = json_character.get("level", 1)
@@ -594,73 +594,3 @@ class Build:
 
         # add to combo, willl be the only tree there, so it will be shown
         self.win.tree_ui.fill_current_tree_combo()
-
-    def import_gems_ggg_json(self, json_items):
-        """
-        Import skills from the json supplied by GGG and convert it to xml.
-
-        :param json_items: json import of the item data.
-        :return: int: number of skillsets
-        """
-
-        def get_property(_json_gem, _name, _default):
-            """
-            Get a property from a list of property tags. Not all properties appear mandatory.
-
-            :param _json_gem: the gem reference from the json download
-            :param _name: the name of the property
-            :param _default: a default value to be used if the property is not listed
-            :return:
-            """
-            for _prop in _json_gem.get("properties"):
-                if _prop.get("name") == _name:
-                    value = _prop.get("values")[0][0].replace(" (Max)", "").replace("+", "").replace("%", "")
-                    return value
-            return _default
-
-        if len(json_items["items"]) <= 0:
-            return
-        json_character = json_items.get("character")
-        # Make a new skill set
-        skill_set = ET.fromstring(
-            f'<SkillSet id="{len(self.skills)}" title="Imported {json_character.get("name", "")}" />'
-        )
-        self.skills.append(skill_set)
-
-        # loop through all items and look for gems in socketedItems
-        for item in json_items["items"]:
-            if item.get("socketedItems", None) is not None:
-                # setup tracking of socket group changes in one item
-                current_socket_group = None
-                current_socket_group_number = -1
-                for idx, json_gem in enumerate(item.get("socketedItems")):
-                    # let's get the group # for this socket ...
-                    this_group = item["sockets"][idx]["group"]
-                    # ... so we can make a new one if needed
-                    if this_group != current_socket_group_number:
-                        self.check_socket_group_for_an_active_gem(current_socket_group)
-                        current_socket_group_number = this_group
-                        current_socket_group = ET.fromstring(empty_socket_group)
-                        current_socket_group.set("slot", slot_map[item["inventoryId"]])
-                        skill_set.append(current_socket_group)
-                    xml_gem = ET.fromstring(empty_gem)
-                    current_socket_group.append(xml_gem)
-                    xml_gem.set("level", get_property(json_gem, "Level", "1"))
-                    xml_gem.set("quality", get_property(json_gem, "Quality", "0"))
-
-                    _name = json_gem["baseType"].replace(" Support", "")
-                    xml_gem.set("nameSpec", _name)
-                    xml_gem.set("skillId", self.gems_by_name_or_id[_name]["skillId"])
-
-                    base_item = self.gems_by_name_or_id[_name]["base_item"]
-                    xml_gem.set("gemId", base_item.get("id"))
-
-                    match json_gem["typeLine"]:
-                        case "Anomalous":
-                            xml_gem.set("qualityId", "Alternate1")
-                        case "Divergent":
-                            xml_gem.set("qualityId", "Alternate2")
-                        case "Phantasmal":
-                            xml_gem.set("qualityId", "Alternate3")
-                self.check_socket_group_for_an_active_gem(current_socket_group)
-        return len(self.skills)

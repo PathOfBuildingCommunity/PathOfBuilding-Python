@@ -19,7 +19,7 @@ from pob_config import (
     deflate_and_base64_encode,
     unique_sorted,
 )
-from pob_file import write_json
+from pob_file import write_json, read_json
 from build import Build
 from ui_utils import html_colour_text, set_combo_index_by_text
 
@@ -60,7 +60,6 @@ class ImportDlg(Ui_BuildImport, QDialog):
 
         :param _build: A pointer to the currently loaded build
         :param _config: A pointer to the settings
-        :param _skills_ui: pointer to the ItemsUI() class for item saving
         :param parent: A pointer to MainWindowUI
         """
         super().__init__(parent)
@@ -290,11 +289,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         # download the data if one of the other buttons hasn't done it yet.
         if self.character_data is None:
             self.download_character_data()
-        if self.check_DeleteSkills.isChecked():
-            self.win.skills_ui.delete_all_skill_sets()
-        skillset = self.build.import_gems_ggg_json(self.character_data.get("items"))
-        self.win.skills_ui.load(self.build.skills)
-        self.win.combo_SkillSet.setCurrentIndex(skillset - 1)
+        self.win.skills_ui.import_gems_ggg_json(self.character_data.get("items"), self.check_DeleteSkills.isChecked())
         self.btn_Close.setFocus()
 
     @Slot()

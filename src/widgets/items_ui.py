@@ -608,8 +608,6 @@ class ItemsUI:
             self.delete_all_itemsets()
         self.new_itemset(itemset_name)
         self.itemsets = self.xml_items.findall("ItemSet")
-        for _item_set in self.itemsets:
-            print("self.itemsets 2", _item_set.get("title", "Default"))
         id_base = len(self.itemlist_by_id) == 0 and 1 or max(self.itemlist_by_id.keys())
         # add the items to the list box
         for idx, text_item in enumerate(_items["items"]):

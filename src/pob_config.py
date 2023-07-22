@@ -53,7 +53,7 @@ def index_exists(_list_or_dict, index):
     try:
         _l = _list_or_dict[index]
         return True
-    except (IndexError, KeyError):
+    except (IndexError, KeyError, TypeError):
         return False
 
 
@@ -95,6 +95,9 @@ def print_a_xml_element(the_element):
     :param the_element: xml element
     :return: N/A
     """
+    if the_element is None:
+        print(the_element)
+        return
     lines = traceback.format_stack()
     print(lines[-2].strip())
     print(ET.tostring(the_element, encoding="utf8").decode("utf8"))
