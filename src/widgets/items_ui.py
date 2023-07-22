@@ -658,7 +658,7 @@ class ItemsUI:
         id_base = len(self.itemlist_by_id) == 0 and 1 or max(self.itemlist_by_id.keys())
         # add the items to the list box
         for idx, text_item in enumerate(_items["buildItems"]):
-            print(text_item)
+            # print(text_item)
             new_item = Item(self.base_items)
             new_item.load_from_poep_json(text_item)
             # new_item.id = id_base + idx

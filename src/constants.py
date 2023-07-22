@@ -38,8 +38,9 @@ default_spec = f'\
     <Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}">\
     </Spec>'
 
-default_view_mode = "ITEMS"
-# default_view_mode = "TREE"
+# default_view_mode = "ITEMS"
+# default_view_mode = "SKILLS"
+default_view_mode = "TREE"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\

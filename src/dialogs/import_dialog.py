@@ -235,7 +235,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         import doesn't have unique names for Magic and normal items. This makes it difficult for the system to
             assign the correct slot
         """
-        # self.import_passive_tree_jewels_selected()
+        self.build.import_passive_tree_jewels_poep_json(poep_json["tree"], poep_json["calculatedStats"])
         self.win.items_ui.load_from_poep_json(
             poep_json["equipment"],
             "Imported from poeplanner",

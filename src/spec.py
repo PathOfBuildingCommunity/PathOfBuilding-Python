@@ -485,11 +485,10 @@ class Spec:
             for node_id in self.jewels.keys():
                 sockets.append(ET.fromstring(f'<Socket nodeId="{node_id}" itemId="{self.jewels[node_id]}"/>'))
 
-    def load_from_ggg_json(self, title, json_tree, json_character):
+    def load_from_ggg_json(self, json_tree, json_character):
         """
         Import the tree (and later the jewels)
 
-        :param title: str: New title
         :param json_tree: json import of tree and jewel data
         :param json_character: json import of the character information
         :return: N/A
@@ -501,8 +500,27 @@ class Spec:
         #   with the quotient being "the value is the selected effect hash"
         for effect in json_tree.get("mastery_effects", []):
             self.masteryEffects[int(effect) % 65536] = int(effect) // 65536
-        self.title = title
         self.classId = json_character.get("classId", 0)
         self.ascendClassId = json_character.get("ascendancyClass", 0)
+        # write nodes and stuff to xml
+        self.save()
+
+    def load_from_poep_json(self, json_tree):
+        """
+        Import the tree (and later the jewels)
+
+        :param json_tree: json import of tree and jewel data
+        :return: N/A
+        """
+        self.nodes = json_tree.get("selectedNodeHashes", "0")
+        self.extended_hashes = json_tree.get("selectedExtendedNodeHashes", [])
+        # for the json import, this is a list of:
+        # { "effectHash": 28638, "masteryHash": 64128 }
+        for mastery_effect in json_tree.get("selectedMasteryEffects", []):
+            mastery_node = int(mastery_effect["masteryHash"])
+            self.nodes.append(mastery_node)
+            self.masteryEffects[mastery_node] = int(mastery_effect["effectHash"])
+        self.classId = json_tree.get("classIndex", 0)
+        self.ascendClassId = json_tree.get("ascendancyIndex", 0)
         # write nodes and stuff to xml
         self.save()

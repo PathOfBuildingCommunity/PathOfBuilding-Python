@@ -141,6 +141,7 @@ class Build:
     @level.setter
     def level(self, new_level):
         self.build.set("level", f"{new_level}")
+        self.win.spin_level.setValue(new_level)
 
     @property
     def mainSocketGroup(self):
@@ -508,15 +509,22 @@ class Build:
 
     def delete_spec(self, index):
         """
-        Add a new empty tree/Spec
+        Delete a tree/Spec
 
         :param index: int: The index into self.specs and self.tree
         :return:  N/A
         """
         # print("build.delete_spec")
-        xml_spec = self.specs[index].xml_spec
-        self.tree.remove(xml_spec)
-        del self.specs[index]
+        if index == "all":
+            # Then remove all
+            for count in range(len(self.specs)):
+                xml_spec = self.specs[0].xml_spec
+                self.tree.remove(xml_spec)
+                del self.specs[count]
+        elif 0 < index < len(self.specs):
+            xml_spec = self.specs[index].xml_spec
+            self.tree.remove(xml_spec)
+            del self.specs[index]
 
     """
     ################################################### IMPORT ###################################################
@@ -567,6 +575,25 @@ class Build:
         self.win.tree_ui.fill_current_tree_combo()
         # show tree
         self.win.tree_ui.combo_manage_tree.setCurrentIndex(self.win.tree_ui.combo_manage_tree.count() - 1)
+
+    def import_passive_tree_jewels_poep_json(self, json_tree, json_stats):
+        """
+        Import the tree (and later the jewels)
+
+        :param json_tree: json import of character, tree and jewel data
+        :param json_stats: json import of stats
+        :return: N/A
+        """
+        self.delete_spec("all")
+        vers = json_tree.get("version", _VERSION_str).split(".")
+        new_spec = self.new_spec("Imported from poeplanner", f"{vers[0]}_{vers[1]}")
+        new_spec.load_from_poep_json(json_tree)
+        self.current_class = new_spec.classId
+        self.ascendClassName = json_tree.get("ascendancy", "")
+        self.level = json_stats.get("level", 1)
+
+        # add to combo, willl be the only tree there, so it will be shown
+        self.win.tree_ui.fill_current_tree_combo()
 
     def import_gems_ggg_json(self, json_items):
         """
