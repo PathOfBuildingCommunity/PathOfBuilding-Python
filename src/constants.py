@@ -37,10 +37,15 @@ default_config = '<PathOfBuilding>\
 default_spec = f'\
     <Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}">\
     </Spec>'
+default_skill_set = '<SkillSet id="0" title="Default">\
+            <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
+            enabled="true" slot="" mainActiveSkill="1">\
+            </Skill>\
+        </SkillSet>'
 
 # default_view_mode = "ITEMS"
-# default_view_mode = "SKILLS"
-default_view_mode = "TREE"
+default_view_mode = "SKILLS"
+# default_view_mode = "TREE"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
@@ -49,11 +54,7 @@ empty_build = f'<PathOfBuilding>\
     <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="1"\
                sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL"\
                showAltQualityGems="false">\
-        <SkillSet id="0" title="Default">\
-            <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
-            enabled="true" slot="" mainActiveSkill="1">\
-            </Skill>\
-        </SkillSet>\
+        {default_skill_set}\
     </Skills>\
     <Items activeItemSet="1">\
         <ItemSet useSecondWeaponSet="false" id="1"/>\

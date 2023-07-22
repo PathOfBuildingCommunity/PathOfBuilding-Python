@@ -505,7 +505,7 @@ class Spec:
         # write nodes and stuff to xml
         self.save()
 
-    def load_from_poep_json(self, json_tree):
+    def import_from_poep_json(self, json_tree):
         """
         Import the tree (and later the jewels)
 

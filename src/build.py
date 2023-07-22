@@ -587,7 +587,7 @@ class Build:
         self.delete_spec("all")
         vers = json_tree.get("version", _VERSION_str).split(".")
         new_spec = self.new_spec("Imported from poeplanner", f"{vers[0]}_{vers[1]}")
-        new_spec.load_from_poep_json(json_tree)
+        new_spec.import_from_poep_json(json_tree)
         self.current_class = new_spec.classId
         self.ascendClassName = json_tree.get("ascendancy", "")
         self.level = json_stats.get("level", 1)

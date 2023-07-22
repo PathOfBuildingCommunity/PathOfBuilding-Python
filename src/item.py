@@ -182,7 +182,7 @@ class Item:
         self.tooltip()
         # load_from_ggg_json
 
-    def load_from_poep_json(self, _json):
+    def import_from_poep_json(self, _json):
         """
         Load internal structures from the downloaded json
         !!! Important note. Not everything comes through. Corrupted and Influences are two that i've noted aren't there.

@@ -227,20 +227,19 @@ class ImportDlg(Ui_BuildImport, QDialog):
 
     def import_all_from_poep_json(self, poep_json):
         """
-
+        Import the whole character's data from poeplanner.com web site
         :param poep_json: json object:
         :return:
         import doesn't have socket, corruption, influence info.
         import doesn't have separate craft info. It is linked in with explicits.
         import doesn't have unique names for Magic and normal items. This makes it difficult for the system to
-            assign the correct slot
+            assign the correct slot, for weapons and flasks.
         """
+        # The build manages all the different specs, so it is effectively the equivalent of spec_ui
         self.build.import_passive_tree_jewels_poep_json(poep_json["tree"], poep_json["calculatedStats"])
-        self.win.items_ui.load_from_poep_json(
-            poep_json["equipment"],
-            "Imported from poeplanner",
-            True,
-        )
+        # the individual _ui modules look after items and skills
+        self.win.items_ui.import_from_poep_json(poep_json["equipment"], "Imported from poeplanner")
+        self.win.skills_ui.import_from_poep_json(poep_json["skills"], "Imported from poeplanner")
         # self.import_skills_selected()
 
     @Slot()
@@ -292,8 +291,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         if self.character_data is None:
             self.download_character_data()
         if self.check_DeleteSkills.isChecked():
-            # ToDo: Do something clever to remove skills. Later when you have Manage Skill Sets dialog working
-            pass
+            self.win.skills_ui.delete_all_skill_sets()
         skillset = self.build.import_gems_ggg_json(self.character_data.get("items"))
         self.win.skills_ui.load(self.build.skills)
         self.win.combo_SkillSet.setCurrentIndex(skillset - 1)

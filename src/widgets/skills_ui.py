@@ -10,7 +10,7 @@ from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QListWidgetItem
 
 from views.PoB_Main_Window import Ui_MainWindow
-from constants import ColourCodes, empty_socket_group, empty_gem
+from constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map
 from pob_config import (
     Config,
     _debug,
@@ -354,6 +354,26 @@ class SkillsUI:
     """
 
     @Slot()
+    def new_skill_set(self, itemset_name="Default"):
+        """Create a new Skill Set and add it to the XML
+
+        :param itemset_name: str: A potential new name for this itemset
+        :return: XML: The new Itemset
+        """
+        self.disconnect_skill_triggers()
+        new_skillset = ET.fromstring(default_skill_set)
+        new_skillset.set("title", itemset_name)
+        new_skillset.set("id", str(len(self.skill_sets_list) + 1))
+        self.skill_sets_list.append(new_skillset)
+        self.xml_skills.append(new_skillset)
+
+        self.win.combo_SkillSet.addItem(itemset_name, new_skillset)
+        # set the SkillSet ComboBox dropdown width.
+        self.win.combo_SkillSet.view().setMinimumWidth(self.win.combo_SkillSet.minimumSizeHint().width())
+        # self.change_itemset(len(self.itemsets) - 1)
+        self.connect_skill_triggers()
+        return new_skillset
+
     def change_skill_set(self, new_index):
         """
         This triggers when the user changes skill sets using the combobox. (self.load calls it too)
@@ -397,6 +417,28 @@ class SkillsUI:
         # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
         self.win.list_SocketGroups.setCurrentRow(0)
         # Use change_socket_group using mainActiveSkill -1
+
+    def delete_all_skill_sets(self, prompt=True):
+        """Delete all skill sets
+
+        :param prompt: boolean: If called programatically from importing a build, this should be false,
+                                elsewise prompt the user to be sure.
+        :return: N/A
+        """
+        # print("delete_all_skill_sets")
+        tr = self.pob_config.app.tr
+        if not prompt or yes_no_dialog(
+            self.win,
+            tr("Delete all Skill Sets"),
+            tr(" This action has no undo. Are you sure ?"),
+        ):
+            self.disconnect_skill_triggers()
+            for itemset in list(self.xml_skills.findall("ItemSet")):
+                self.xml_skills.remove(itemset)
+            self.xml_current_skill_set = None
+            self.skill_sets_list.clear()
+            self.win.combo_SkillSet.clear()
+            self.connect_skill_triggers()
 
     """
     ################################################### SOCKET GROUP ###################################################
@@ -464,7 +506,7 @@ class SkillsUI:
 
         :return: N/A
         """
-        # print("update_socket_group_labels")
+        # print("update_socket_group_labels", self.win.list_SocketGroups.count())
         if self.win.list_SocketGroups.count() == 0:
             return
         # print_a_xml_element(self.xml_current_socket_group)
@@ -506,7 +548,7 @@ class SkillsUI:
         if len(list(self.xml_current_skill_set)) == 0:
             return
         tr = self.pob_config.app.tr
-        if yes_no_dialog(
+        if not prompt or yes_no_dialog(
             self.win,
             tr("Delete all Socket Groups"),
             tr(" This action has no undo. Are you sure ?"),
@@ -524,12 +566,14 @@ class SkillsUI:
         """Create a new socket group. Actions for when the new socket group button is pressed."""
         # print("new_socket_group")
         # Add new group to xml and Socket Group list, and then show the update
-        self.xml_current_skill_set.append(ET.fromstring(empty_socket_group))
+        new_socket_group = ET.fromstring(empty_socket_group)
+        self.xml_current_skill_set.append(new_socket_group)
         idx = len(self.xml_current_skill_set) - 1
         self.win.list_SocketGroups.addItem(self.define_socket_group_label(xml_group=self.xml_current_skill_set[idx]))
         self.update_socket_group_labels()
         # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
         self.win.list_SocketGroups.setCurrentRow(idx)
+        return new_socket_group
 
     def load_main_skill_combo(self):
         """
@@ -566,14 +610,28 @@ class SkillsUI:
         :return: N/A
         """
         # print("change_socket_group", _new_group)
-        self.disconnect_skill_triggers()
-
-        # Set mainActiveSkill +1
-
         # Clean up and save objects. If _index = -1, then this is the only thing emptying these widgets
+        # these routines have the connect and ddisconnect routines
         if index_exists(self.xml_current_skill_set, _new_group):
             self.clear_socket_group_settings()
             self.load_socket_group(_new_group)
+
+    def check_socket_group_for_an_active_gem(self, _sg):
+        """
+        Check a socket group and if the first gem is not an active gem, find an active gem in the group
+        and if found, set it to be first.
+
+        :param _sg: ET.element: the socket group to check
+        :return: N/A
+        """
+        if _sg is not None:
+            for _idx, _gem in enumerate(_sg.findall("Gem")):
+                # find the first active gem and move it if it's index is not 0
+                if "Support" not in _gem.get("skillId"):
+                    if _idx != 0:
+                        _sg.remove(_gem)
+                        _sg.insert(0, _gem)
+                    break
 
     def load_socket_group(self, _index):
         """
@@ -760,20 +818,21 @@ class SkillsUI:
         # self.gem_ui_list.clear()
         self.win.list_Skills.clear()
 
-    # def remove_gem_ui(self, index):
-    #     """
-    #     Remove a GemUI class. TBA on full actions needed.
-    #
-    #     :param index: int: index of frame/GemUI() to remove
-    #     :return:
-    #     """
-    #     print("remove_gem_ui")
-    #     if index_exists(self.gem_ui_list, index):
-    #         # self.current_skill_set[_index].remove(self.gem_ui_list[index].gem)
-    #         del self.gem_ui_list[index]
-    #     # update all gem_ui's index in case the one being deleted was in the middle
-    #     for idx, key in enumerate(self.gem_ui_list.keys()):
-    #         self.gem_ui_list[key].index = idx
+    def remove_gem_ui(self, index):
+        """
+        Remove a GemUI class. TBA on full actions needed.
+
+        :param index: int: index of frame/GemUI() to remove
+        :return:
+        """
+        return
+        #     print("remove_gem_ui")
+        #     if index_exists(self.gem_ui_list, index):
+        #         # self.current_skill_set[_index].remove(self.gem_ui_list[index].gem)
+        #         del self.gem_ui_list[index]
+        #     # update all gem_ui's index in case the one being deleted was in the middle
+        #     for idx, key in enumerate(self.gem_ui_list.keys()):
+        #         self.gem_ui_list[key].index = idx
 
     @Slot()
     def gem_remove_checkbox_selected(self, item, gem_ui):
@@ -847,6 +906,48 @@ class SkillsUI:
         """
         # print("skill_gem_rows_about_to_be_moved")
         self.socket_group_to_be_moved = source_parent
+
+    def import_from_poep_json(self, json_skills, skillset_name):
+        """
+        Import skills from poeplanner.com json import
+        :param json_skills: json: just the skills portion
+        :param skillset_name: str: the name of the skill set
+        :return: N/A
+        """
+        self.delete_all_socket_groups(False)
+        self.delete_all_skill_sets(False)
+        self.xml_current_skill_set = self.new_skill_set(skillset_name)
+        self.delete_all_socket_groups(False)
+        for json_group in json_skills["groups"]:
+            current_socket_group = self.new_socket_group()
+            _slot = json_group.get("equipmentSlot", "")
+            if _slot != "":
+                current_socket_group.set("slot", slot_map[_slot.title()])
+            for idx, json_gem in enumerate(json_group.get("skillGems")):
+                xml_gem = ET.fromstring(empty_gem)
+                current_socket_group.append(xml_gem)
+                xml_gem.set("level", str(json_gem.get("level", 1)))
+                xml_gem.set("quality", str(json_gem.get("quality", 0)))
+                xml_gem.set("enabled", bool_to_str(json_gem.get("enabled", False)))
+
+                _name = json_gem["name"].replace(" Support", "")
+                xml_gem.set("nameSpec", _name)
+                xml_gem.set("skillId", self.gems_by_name_or_id[_name]["skillId"])
+
+                base_item = self.gems_by_name_or_id[_name]["base_item"]
+                xml_gem.set("gemId", base_item.get("id"))
+
+                match json_gem["qualityVariant"]:
+                    case "Anomalous":
+                        xml_gem.set("qualityId", "Alternate1")
+                    case "Divergent":
+                        xml_gem.set("qualityId", "Alternate2")
+                    case "Phantasmal":
+                        xml_gem.set("qualityId", "Alternate3")
+
+            self.check_socket_group_for_an_active_gem(current_socket_group)
+
+        self.win.combo_SkillSet.setCurrentIndex(0)
 
 
 # def test() -> None:

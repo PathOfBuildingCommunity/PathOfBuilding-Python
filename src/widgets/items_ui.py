@@ -622,16 +622,15 @@ class ItemsUI:
         self.show_itemset(0, True)
         self.connect_item_triggers()
 
-    def load_from_poep_json(self, _items, itemset_name, delete_it_all):
+    def import_from_poep_json(self, json_items, itemset_name):
         """
         Load internal structures from the poeplanner.com json object.
 
-        :param _items: Reference to the downloaded json <equipment> tag set
+        :param json_items: Reference to the downloaded json <equipment> tag set
         :param itemset_name: str: A potential new name for this itemset
-        :param delete_it_all: bool: delete all current items and itemsets
         :return: N/A
         """
-        # print("items_ui.load_from_poep_json")
+        # print("items_ui.import_from_poep_json")
         """
         Example docs/test_data/LittleXyllyBleeder_poeplanner_import.json
         format under equipment is buildItems and equippedItems. 
@@ -642,25 +641,21 @@ class ItemsUI:
 
         """
         self.disconnect_item_triggers()
-        if delete_it_all:
-            self.delete_all_items()
-            self.delete_all_itemsets()
-            # reattach the itemsets to xml_items
-            # self.xml_items.append(self.xml_current_itemset)
+        self.delete_all_items()
+        self.delete_all_itemsets()
         self.xml_current_itemset = self.new_itemset(itemset_name)
 
         # get the slots and add them to the main buildItems array
-        for idx, text_item in enumerate(_items["equippedItems"]):
+        for idx, text_item in enumerate(json_items["equippedItems"]):
             build_item_idx = int(text_item["buildItemIndex"])
-            _items["buildItems"][build_item_idx]["slot"] = text_item["slot"].title()
-            # _items["buildItems"][build_item_idx]["slot2"] = slot_map[text_item["slot"].title()]
+            json_items["buildItems"][build_item_idx]["slot"] = text_item["slot"].title()
         # Find the end of the itemlist_by_id list
         id_base = len(self.itemlist_by_id) == 0 and 1 or max(self.itemlist_by_id.keys())
         # add the items to the list box
-        for idx, text_item in enumerate(_items["buildItems"]):
+        for idx, text_item in enumerate(json_items["buildItems"]):
             # print(text_item)
             new_item = Item(self.base_items)
-            new_item.load_from_poep_json(text_item)
+            new_item.import_from_poep_json(text_item)
             # new_item.id = id_base + idx
             self.add_item_to_itemlist_widget(new_item)
             self.itemlist_by_id[new_item.id] = new_item
