@@ -364,12 +364,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     self.config.build_path,
         #     app.tr("Build Files (*.xml)"),
         # )
-        # if filename != "":
-        #     print(f"filename: {filename}")
-        self.build.save(self)
-        # print("selected_filter: %s" % selected_filter)
-        # write the file
-        # self.build.save_build(filename)
+        filename = "builds/_test.xml"
+        if filename != "":
+            print(f"Saving to filename: {filename}")
+            self.build.save_to_xml()
+            # print("selected_filter: %s" % selected_filter)
+            # write the file
+            # self.build.save_build_to_file(filename)
+            self.build.save_build_to_file(filename)
 
     @Slot()
     def change_tree(self, tree_id):
@@ -549,6 +551,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @Slot()
     def open_export_dialog(self):
+        self.build.save_to_xml(1)
         dlg = ExportDlg(self.build, self.config, self)
         dlg.exec()
 

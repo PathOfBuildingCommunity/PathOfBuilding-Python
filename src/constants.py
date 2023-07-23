@@ -21,39 +21,36 @@ tree_versions = {
     "3_22": "3.22",
 }
 _VERSION = tree_versions[_VERSION_str]
-
-http_headers = {"User-Agent": "Path of Building Community - Python", "Accept": ""}
+default_view_mode = "ITEMS"
+# default_view_mode = "SKILLS"
+# default_view_mode = "TREE"
 
 # Default config incase the settings file doesn't exist
 default_config = '<PathOfBuilding>\
-    <Misc theme="Dark" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1"\
-        nodePowerTheme="0" connectionProtocol="0" thousandsSeparator="" decimalSeparator=""\
-        showThousandsSeparators="true" betaTest="false" defaultGemQuality="0" buildSortMode="NAME"\
-        proxyURL="" buildPath="" />\
-    <recentBuilds/>\
-    <size width="800" height="600"/>\
-    </PathOfBuilding>'
+<Misc theme="Dark" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1" \
+nodePowerTheme="0" connectionProtocol="0" thousandsSeparator="" decimalSeparator="" \
+showThousandsSeparators="true" betaTest="false" defaultGemQuality="0" buildSortMode="NAME" \
+proxyURL="" buildPath="" />\
+   <recentBuilds/>\
+   <size width="800" height="600"/>\
+</PathOfBuilding>'
 
-default_spec = f'\
-    <Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" treeVersion="{_VERSION_str}">\
-    </Spec>'
+default_spec = f'<Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" \
+treeVersion="{_VERSION_str}"></Spec>'
 default_skill_set = '<SkillSet id="0" title="Default">\
-            <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
-            enabled="true" slot="" mainActiveSkill="1">\
-            </Skill>\
-        </SkillSet>'
+  <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot="" mainActiveSkill="1"></Skill>\
+</SkillSet>'
 
-# default_view_mode = "ITEMS"
-default_view_mode = "SKILLS"
-# default_view_mode = "TREE"
 empty_build = f'<PathOfBuilding>\
     <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
-     mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None"></Build>\
+     mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">\
+            <PlayerStat stat="AverageHit" value="0"/>\
+     </Build>\
     <Import/>\
     <Calcs/>\
     <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="1"\
-               sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL"\
-               showAltQualityGems="false">\
+        sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL"\
+        showAltQualityGems="false">\
         {default_skill_set}\
     </Skills>\
     <Items activeItemSet="1">\
@@ -75,10 +72,10 @@ empty_build = f'<PathOfBuilding>\
 </PathOfBuilding>'
 
 empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
-    enabled="true" slot="" mainActiveSkill="1"/>'
+enabled="true" slot="" mainActiveSkill="1"/>'
 
-empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default"\
-    gemId="" enabled="true" quality="0" count="1" nameSpec=""/>'
+empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default" \
+gemId="" enabled="true" quality="0" count="1" nameSpec=""/>'
 
 resistance_penalty = {
     0: "None",
@@ -987,6 +984,14 @@ stats_list = [
     },
 ]
 
+get_http_headers = {"User-Agent": "Path of Building Community - Python", "Accept": ""}
+post_http_headers = {
+    "User-Agent": "Path of Building Community - Python",
+    "Accept": "",
+    "Accept-Encoding": "gzip, deflate",
+    "Content-Type": "text/html; charset=utf-8",
+}
+
 valid_websites = [
     "pastebin.com",
     "pastebinp.com",
@@ -995,17 +1000,6 @@ valid_websites = [
     "poe.ninja/pob",
 ]
 website_list = {
-    "pastebin.com": {
-        "id": "Pastebin",
-        "downloadURL": "https://pastebin.com/raw/CODE",
-        "codeOut": "",
-        "postUrl": "https://pastebin.com/api/api_post.php",
-        "postFields": "api_dev_key=c4757f22e50e65e21c53892fd8e0a9ff&api_paste_private=1&api_option=paste&api_paste_code=",
-    },
-    "pastebinp.com": {
-        "id": "PastebinProxy",
-        "downloadURL": "https://pastebinp.com/raw/CODE",
-    },
     "pobb.in": {
         "id": "POBBin",
         "downloadURL": "https://pobb.in/pob/CODE",
@@ -1013,16 +1007,29 @@ website_list = {
         "postUrl": "https://pobb.in/pob/",
         "postFields": "",
     },
-    "rentry.co": {
-        "id": "Rentry",
-        "downloadURL": "https://rentry.co/paste/CODE/raw",
+    "pastebin.com": {
+        "id": "Pastebin",
+        "downloadURL": "https://pastebin.com/raw/CODE",
+        "codeOut": "",
+        "postUrl": "https://pastebin.com/api/api_post.php",
+        # "postFields": "api_dev_key=c4757f22e50e65e21c53892fd8e0a9ff&api_paste_private=1&api_option=paste&api_paste_code=CODE",
+        "api_dev_key": "c4757f22e50e65e21c53892fd8e0a9ff",
     },
     "poe.ninja": {
         "id": "PoeNinja",
         "downloadURL": "https://poe.ninja/pob/raw/CODE",
         "codeOut": "",
         "postUrl": "https://poe.ninja/pob/api/api_post.php",
-        "postFields": "api_paste_code=",
+        # "postUrl": "https://httpbin.org/post",
+        "postFields": "api_paste_code=CODE",
+    },
+    "pastebinp.com": {
+        "id": "PastebinProxy",
+        "downloadURL": "https://pastebinp.com/raw/CODE",
+    },
+    "rentry.co": {
+        "id": "Rentry",
+        "downloadURL": "https://rentry.co/paste/CODE/raw",
     },
     "Error": {"note": "If you get here, it's broken"},
 }

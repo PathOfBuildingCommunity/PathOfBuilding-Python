@@ -22,7 +22,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QVBoxLayout,
 )
 
-from constants import ColourCodes, _VERSION_str, http_headers, tree_versions
+from constants import ColourCodes, _VERSION_str, get_http_headers, tree_versions
 from ui_utils import HTMLDelegate, html_colour_text
 
 
@@ -291,7 +291,7 @@ class ExportTreePopup(QDialog):
         url = f"http://poeurl.com/shrink.php?url={self.lineedit.text()}"
         response = None
         try:
-            response = requests.get(url, headers=http_headers, timeout=6.0)
+            response = requests.get(url, headers=get_http_headers, timeout=6.0)
             url = f'http://poeurl.com/{response.content.decode("utf-8")}'
             self.lineedit.setText(url)
             self.lineedit.setSelection(0, len(url))

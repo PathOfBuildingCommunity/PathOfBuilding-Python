@@ -269,16 +269,16 @@ class Build:
         # if we get here, the key/ name combo was not found, lets make one and add it
         self.config.append(ET.fromstring(f'<{key} name="{name}" {value_type}="{new_value}" />'))
 
-    def new(self, _build_xml):
+    def new(self, _xml):
         """
         common function to load internal variables from the dictionary
 
-        :param _build_xml: xml tree object from loading the source XML or the default one
+        :param _xml: xml tree object from loading the source XML or the default one
         :return: N/A
         """
         self.name = "Default"
-        self.xml_build = _build_xml
-        self.root = _build_xml.getroot()
+        self.xml_build = _xml
+        self.root = _xml.getroot()
         self.build = self.root.find("Build")
         self.import_field = self.root.find("Import")
         if self.import_field is not None:
@@ -310,20 +310,21 @@ class Build:
         self.current_spec = self.specs[self.activeSpec]
         # new
 
-    def save(self, win: Ui_MainWindow):
+    def save_to_xml(self, version=2):
         """
         Save the build to the filename recorded in the build Class
+        :param:version: int. 1 for version 1 xml data,  2 for updated.
         :return: N/A
         """
         self.import_field.set("lastAccountHash", self.last_account_hash)
         self.import_field.set("lastCharacterHash", self.last_character_hash)
         self.import_field.set("lastRealm", self.last_realm)
         self.import_field.set("lastLeague", self.last_league)
-        self.notes.text, self.notes_html.text = win.notes_ui.save()
-        win.stats.save(self.build)
-        win.skills_ui.save()
-        win.items_ui.save()
-        win.config_ui.save()
+        self.notes.text, self.notes_html.text = self.win.notes_ui.save()
+        self.win.stats.save(self.build)
+        self.win.skills_ui.save()
+        self.win.items_ui.save(version)
+        self.win.config_ui.save()
         for spec in self.specs:
             spec.save()
 
@@ -350,8 +351,15 @@ class Build:
         # print(ET.tostring(self.config, encoding='utf8').decode('utf8'))
         """Debug Please leave until build is mostly complete"""
 
+    def save_build_to_file(self, filename):
+        """
+        Save the build to file. Separated from the save routine above so export can use the above save routine.
+
+        :param filename:
+        :return:
+        """
         # Temporarily write to a test file to not corrupt the original and make for easy compare
-        pob_file.write_xml("builds/_test.xml", self.xml_build)
+        pob_file.write_xml(filename, self.xml_build)
         # pob_file.write_xml(self.filename, self.xml_build)
 
     def save_as(self, filename):

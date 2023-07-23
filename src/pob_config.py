@@ -128,11 +128,11 @@ def deflate_and_base64_encode(string_val):
     :param string_val: a string or real characters
     :return: a byte array or the compressed and encoded string_val
     """
-    try:
-        zlibbed_str = zlib.compress(string_val)
-        return base64.urlsafe_b64encode(zlibbed_str)
-    except:
-        return None
+    # try:
+    zlibbed_str = zlib.compress(string_val)
+    return base64.urlsafe_b64encode(zlibbed_str)
+    # except:
+    #     return None
 
 
 class Config:
@@ -148,23 +148,26 @@ class Config:
         self.tree = None
         # easy access to the Misc tag
         self.misc = None
+        self.pastebin = None
 
         # Path and directory variables
         self.exe_dir = Path.cwd()
         self.settings_file = Path(self.exe_dir, "settings.xml")
-        self.build_dir = Path(self.exe_dir, "builds")
-        if not self.build_dir.exists():
-            self.build_dir.mkdir()
         self.tree_data_path = Path(self.exe_dir, "tree_data")
         if not self.tree_data_path.exists():
             self.tree_data_path.mkdir()
         self.read()
+        if self.build_path == "":
+            self.build_path = Path(self.exe_dir, "builds")
+        if not Path(self.build_path).exists():
+            Path(self.build_path).mkdir()
 
     def reset(self):
         """Reset to default config"""
         self.tree = ET.ElementTree(ET.fromstring(default_config))
         self.root = self.tree.getroot()
         self.misc = self.root.find("Misc")
+        self.pastebin = self.root.find("Misc")
 
     def read(self):
         """Set self.root with the contents of the settings file"""
@@ -182,13 +185,42 @@ class Config:
         self.root = self.tree.getroot()
         self.misc = self.root.find("Misc")
         if self.misc is None:
-            print("Misc not found")
+            print("Misc section not found, creating ...")
             self.misc = ET.Element("Misc")
             self.root.append(self.misc)
+        self.pastebin = self.root.find("pastebin")
+        if self.pastebin is None:
+            print("pastebin section not found, creating ...")
+            self.pastebin = ET.Element("pastebin")
+            self.root.append(self.pastebin)
 
     def write(self):
         """Write the settings file"""
         pob_file.write_xml(self.settings_file, self.tree)
+
+    @property
+    def pastebin_dev_api_key(self):
+        return self.pastebin.get("dev_api_key", "")
+
+    @pastebin_dev_api_key.setter
+    def pastebin_dev_api_key(self, new_key):
+        self.pastebin.set("dev_api_key", new_key)
+
+    @property
+    def pastebin_user_api_key(self):
+        return self.pastebin.get("user_api_key", "")
+
+    @pastebin_user_api_key.setter
+    def pastebin_user_api_key(self, new_key):
+        self.pastebin.set("user_api_key", new_key)
+
+    @property
+    def pastebin_user_name(self):
+        return self.pastebin.get("user_name", "")
+
+    @pastebin_user_name.setter
+    def pastebin_user_name(self, new_key):
+        self.pastebin.set("user_name", new_key)
 
     @property
     def theme(self):
@@ -341,10 +373,7 @@ class Config:
 
     @property
     def build_path(self):
-        _dir = self.misc.get("buildPath", "")
-        if _dir == "":
-            _dir = self.build_dir
-        return _dir
+        return self.misc.get("buildPath", "")
 
     @build_path.setter
     def build_path(self, new_path):

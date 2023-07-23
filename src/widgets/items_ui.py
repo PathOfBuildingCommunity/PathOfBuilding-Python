@@ -395,7 +395,6 @@ class ItemsUI:
         if _return:
             self.add_item_to_itemlist_widget(dlg.item)
             self.add_item_to_item_slot_ui(dlg.item)
-            # self.fill_item_slot_uis()
         else:
             print(f"Discarded: {dlg.item.name}")
 
@@ -664,10 +663,13 @@ class ItemsUI:
         self.save()
         self.connect_item_triggers()
 
-    def save(self):
+    def save(self, version=2):
         """
-        Save internal structures back to a xml object
+        Save the *current itemset* back to a xml object.
+        This is called by import_from_poep_json, the main SaveAs routines and the change itemset,
+        prior to showing the new set.
 
+        :param:version: int. 1 for version 1 xml data,  2 for updated.
         :return: ET.ElementTree:
         """
         if self.win.list_Items.count() > 0:
@@ -677,11 +679,15 @@ class ItemsUI:
             for child in list(self.xml_items.findall("Item")):
                 self.xml_items.remove(child)
             for _id in self.itemlist_by_id:
-                self.xml_items.append(self.itemlist_by_id[_id].save_v2())
+                match version:
+                    case 1:
+                        self.xml_items.append(self.itemlist_by_id[_id].save())
+                    case 2:
+                        self.xml_items.append(self.itemlist_by_id[_id].save_v2())
 
-            # Remove legacy <Slot /> entries
-            for child in list(self.xml_current_itemset.findall("Slot")):
-                self.xml_current_itemset.remove(child)
+        # As these entries do not overwrite, remove the old entries, and add the new ones.
+        for child in list(self.xml_current_itemset.findall("Slot")):
+            self.xml_current_itemset.remove(child)
 
         # Add slot information
         for slot_ui_name in self.item_slot_ui_list:
