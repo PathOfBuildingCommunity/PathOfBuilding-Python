@@ -42,7 +42,7 @@ default_skill_set = '<SkillSet id="0" title="Default">\
 </SkillSet>'
 
 empty_build = f'<PathOfBuilding>\
-    <Build level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
+    <Build version="2" level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">\
             <PlayerStat stat="AverageHit" value="0"/>\
      </Build>\

@@ -202,12 +202,20 @@ class Build:
         self.build.set("targetVersion", new_name)
 
     @property
+    def version(self):
+        return int(self.build.get("version", "2"))
+
+    @version.setter
+    def version(self, curr_ver):
+        self.build.set("version", str(curr_ver))
+
+    @property
     def viewMode(self):
         return self.build.get("viewMode")
 
     @viewMode.setter
-    def viewMode(self, curr_tab):
-        self.build.set("viewMode", curr_tab.upper())
+    def viewMode(self, curr_mode):
+        self.build.set("viewMode", curr_mode.upper())
 
     @property
     def current_spec(self):
@@ -320,7 +328,7 @@ class Build:
         self.import_field.set("lastCharacterHash", self.last_character_hash)
         self.import_field.set("lastRealm", self.last_realm)
         self.import_field.set("lastLeague", self.last_league)
-        self.notes.text, self.notes_html.text = self.win.notes_ui.save()
+        self.notes.text, self.notes_html.text = self.win.notes_ui.save(version)
         self.win.stats.save(self.build)
         self.win.skills_ui.save()
         self.win.items_ui.save(version)

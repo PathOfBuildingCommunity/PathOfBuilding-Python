@@ -60,16 +60,21 @@ class NotesUI:
                 self.win.btn_ConvertToText.setVisible(True)
                 self.win.textedit_Notes.setPlainText(_notes.strip())
 
-    def save(self):
+    def save(self, version=2):
         """
         Save internal structures back to the build object
 
+        :param:version: int. 1 for version 1 xml data,  2 for updated.
         :return: two strings represnting the plain text and the html text
         """
         _notes_html = self.win.textedit_Notes.document().toHtml()
         _notes = self.win.textedit_Notes.document().toPlainText()
         self.modified = False
-        return _notes, _notes_html
+        match version:
+            case 1:
+                return _notes, None
+            case 2:
+                return _notes, _notes_html
 
     def convert_to_text(self):
         """

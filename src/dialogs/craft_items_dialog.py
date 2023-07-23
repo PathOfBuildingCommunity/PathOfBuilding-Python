@@ -83,7 +83,6 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         self.original_item = newitem
         # go via text so we get a unique python object
         self._item.load_from_xml_v2(newitem.save_v2())
-        print(self.original_item, newitem, self._item)
         self.fill_widgets()
 
     def connect_triggers(self):

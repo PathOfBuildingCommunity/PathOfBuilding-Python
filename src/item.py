@@ -785,7 +785,6 @@ class Item:
             tip += f"<tr><td>Limited to: <b>{self.limited_to}</b></td></tr>"
         reqs = ""
         if self.requires:
-            print(self.title, self.level_req)
             if self.level_req > 0:
                 reqs += f"Level <b>{self.level_req}</b>"
             for req in self.requires:
@@ -798,7 +797,6 @@ class Item:
                     case _:
                         reqs += f", <b>{req}</b>"
         else:
-            print(self.title, self.level_req)
             if self.level_req > 0:
                 reqs += f"Level <b>{self.level_req}</b>"
         if reqs:

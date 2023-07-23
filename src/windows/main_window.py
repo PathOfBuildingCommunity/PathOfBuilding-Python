@@ -78,6 +78,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Start with an empty build
         self.build = Build(self.config, self)
+        self.current_filename = self.config.build_path
 
         # Setup UI Classes()
         self.stats = PlayerStats(self.config, self)
@@ -265,7 +266,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         # Logic for checking we need to save and save if needed, goes here...
         # if build.needs_saving:
-        # if ui_utils.yes_no_dialog(app.tr("Save build"), app.tr("build name goes here"))
+        # if ui_utils.yes_no_dialog(self.app.tr("Save build"), self.app.tr("build name goes here"))
         if self.build.build is not None:
             if not self.build.ask_for_save_if_modified():
                 return
@@ -280,7 +281,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         # Logic for checking we need to save and save if needed, goes here...
         # if build.needs_saving:
-        # if ui_utils.yes_no_dialog(app.tr("Save build"), app.tr("build name goes here"))
+        # if ui_utils.yes_no_dialog(self.app.tr("Save build"), self.app.tr("build name goes here"))
         filename, selected_filter = QFileDialog.getOpenFileName(
             self,
             self.app.tr("Open a build"),
@@ -303,7 +304,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         # Or does the logic for checking we need to save and save if needed, go here ???
         # if self.build.needs_saving:
-        # if ui_utils.save_yes_no(app.tr("Save build"), app.tr("build name goes here"))
+        # if ui_utils.save_yes_no(self.app.tr("Save build"), self.app.tr("build name goes here"))
 
         # open the file using the filename in the build.
         self.build_loader(value)
@@ -357,17 +358,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         return: N/A
         """
-        # filename, selected_filter = QFileDialog.getSaveFileName(
-        #     self,
-        #     app.tr("Save File"),
-        #     app.tr("Save build"),
-        #     self.config.build_path,
-        #     app.tr("Build Files (*.xml)"),
-        # )
-        filename = "builds/_test.xml"
+        # mydialog_ = QFileDialog()
+        # mydialog_.setNameFilter()
+        # cb_ = QComboBox()
+        # l = mydialog_.layout()
+        # print(type(l), l)
+        #     # .addWidget(cb_)
+        # mydialog_.exec()
+
+        build_files_text = self.app.tr('Build Files')
+        # self.current_filename = f"{self.config.build_path}/_test.xml"
+        e = "v2 Build Files (*.xml2)"
+        filename, selected_filter = QFileDialog.getSaveFileName(
+            self,
+            self.app.tr("Save File"),
+            self.current_filename,
+            # self.config.build_path,
+            f"v2 {build_files_text} (*.xml2);;v1 {build_files_text} (*.xml)"
+        )
+        # Chosen file version
         if filename != "":
+            self.build.version = int(re.search(r"(\d)", selected_filter).group(1))
             print(f"Saving to filename: {filename}")
-            self.build.save_to_xml()
+            self.build.save_to_xml(self.build.version)
             # print("selected_filter: %s" % selected_filter)
             # write the file
             # self.build.save_build_to_file(filename)
@@ -703,7 +716,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param: QKeyEvent. The event matrix
         :return: N/A
         """
-        print("MainWindow", event)
+        # print("MainWindow", event)
         ctrl_pressed = event.keyCombination().keyboardModifiers() == Qt.ControlModifier
         alt_pressed = event.keyCombination().keyboardModifiers() == Qt.AltModifier
         shift_pressed = event.keyCombination().keyboardModifiers() == Qt.ShiftModifier
