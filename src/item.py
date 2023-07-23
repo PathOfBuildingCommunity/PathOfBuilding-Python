@@ -527,7 +527,6 @@ class Item:
             self.armour_base_percentile = float(attribs.get("armour_base_percentile", "0.0"))
             self.limited_to = attribs.get("limited_to", "")
             self.ilevel = int(attribs.get("ilevel", "0"))
-            # self.level_req = int(get_variant_value(attribs, "level_req", "0"))
             self.level_req = int(attribs.get("level_req", "0"))
             self.quality = int(attribs.get("quality", "0"))
             self.radius = attribs.get("radius", "")
@@ -784,8 +783,9 @@ class Item:
 
         if self.limited_to != "":
             tip += f"<tr><td>Limited to: <b>{self.limited_to}</b></td></tr>"
+        reqs = ""
         if self.requires:
-            reqs = ""
+            print(self.title, self.level_req)
             if self.level_req > 0:
                 reqs += f"Level <b>{self.level_req}</b>"
             for req in self.requires:
@@ -797,8 +797,12 @@ class Item:
                         reqs += f", <b>Class {html_colour_text(val.upper(), val)}</b>"
                     case _:
                         reqs += f", <b>{req}</b>"
-            if reqs:
-                tip += f'<tr><td>Requires {reqs.lstrip(", ")}</td></tr>'
+        else:
+            print(self.title, self.level_req)
+            if self.level_req > 0:
+                reqs += f"Level <b>{self.level_req}</b>"
+        if reqs:
+            tip += f'<tr><td>Requires {reqs.lstrip(", ")}</td></tr>'
         if len(self.implicitMods) > 0:
             mods = ""
             for mod in self.implicitMods:
@@ -855,12 +859,8 @@ class Item:
                 if self.two_hand:
                     self.slots = ["Weapon 1", "Weapon 1 Swap"]
                 else:
-                    self.slots = [
-                        "Weapon 1",
-                        "Weapon 1 Swap",
-                        "Weapon 2",
-                        "Weapon 2 Swap",
-                    ]
+                    # Put primary weapons before alt weapons for auto filling of item slots
+                    self.slots = ["Weapon 1", "Weapon 2", "Weapon 1 Swap", "Weapon 2 Swap"]
             case "Ring":
                 self.slots = ["Ring 1", "Ring 2"]
             case "Flask":
