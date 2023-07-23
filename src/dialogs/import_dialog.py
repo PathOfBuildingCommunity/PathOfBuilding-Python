@@ -12,13 +12,8 @@ from qdarktheme.qtpy.QtWidgets import QDialog
 from qdarktheme.qtpy.QtCore import Qt, Slot
 
 from views.dlgBuildImport import Ui_BuildImport
-from constants import valid_websites, website_list, http_headers
-from pob_config import (
-    Config,
-    decode_base64_and_inflate,
-    deflate_and_base64_encode,
-    unique_sorted,
-)
+from constants import valid_websites, website_list, get_http_headers
+from pob_config import Config, decode_base64_and_inflate, deflate_and_base64_encode, unique_sorted
 from pob_file import write_json, read_json
 from build import Build
 from ui_utils import html_colour_text, set_combo_index_by_text
@@ -196,7 +191,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
                 website = self.pob_valid_url.group(1)
                 url_code = self.pob_valid_url.group(2)
                 url = website_list[website]["downloadURL"].replace("CODE", url_code)
-                response = requests.get(url, headers=http_headers, timeout=6.0)
+                response = requests.get(url, headers=get_http_headers, timeout=6.0)
                 code = decode_base64_and_inflate(response.content)
             except requests.RequestException as e:
                 self.status = html_colour_text(
@@ -370,7 +365,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             realm_code = realm_list.get(self.combo_Realm.currentText(), "pc")
             url = f"{realm_code['hostName']}character-window/get-characters"
             params = {"accountName": account_name, "realm": realm_code}
-            response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
+            response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
             self.account_json = response.json()
         except requests.RequestException as e:
             self.status = html_colour_text(
@@ -438,8 +433,13 @@ class ImportDlg(Ui_BuildImport, QDialog):
         response = None
         try:
             url = f"{realm_code['hostName']}character-window/get-passive-skills"
-            response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
-            passive_tree = response.json()
+            response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
+            if response.status_code != 220:
+                self.status = html_colour_text(
+                    "RED", f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+                )
+            else:
+                passive_tree = response.json()
         except requests.RequestException as e:
             print(f"Error retrieving 'Passive Tree': {e}.")
             self.status = html_colour_text(
@@ -452,7 +452,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         response = None
         try:
             url = f"{realm_code['hostName']}character-window/get-items"
-            response = requests.get(url, params=params, headers=http_headers, timeout=6.0)
+            response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
             items = response.json()
         except requests.RequestException as e:
             print(f"Error retrieving 'Items': {e}.")

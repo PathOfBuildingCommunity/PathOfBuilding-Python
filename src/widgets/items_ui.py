@@ -389,6 +389,7 @@ class ItemsUI:
     @Slot()
     def import_items_list_double_clicked(self, item: QListWidgetItem):
         """Actions for editing an item"""
+        print("import_items_list_double_clicked")
         dlg = CraftItemsDlg(self.pob_config, self.base_items, True, self.win)
         dlg.item = self.import_items_list[item.whatsThis()]
         _return = dlg.exec()

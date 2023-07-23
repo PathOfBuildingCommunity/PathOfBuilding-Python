@@ -34,9 +34,10 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         self.base_items = _base_items
         self.mods = _mods
 
-        self._item = None
-        # copy a copy of the item as passed in for
-        self.original_item = Item(_base_items)
+        # duplicate of the item as passed in
+        self._item = Item(_base_items)
+        # save a copy of the item as passed in for recovering if dlg cancelled or reset is used.
+        self.original_item = None
         self.setupUi(self)
         self.triggers_connected = False
 
@@ -79,9 +80,10 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
 
     @item.setter
     def item(self, newitem: Item):
-        self._item = newitem
+        self.original_item = newitem
         # go via text so we get a unique python object
-        self.original_item.load_from_xml_v2(newitem.save_v2())
+        self._item.load_from_xml_v2(newitem.save_v2())
+        print(self.original_item, newitem, self._item)
         self.fill_widgets()
 
     def connect_triggers(self):

@@ -109,6 +109,15 @@ class ItemSlotUI(QWidget):
             return item.id
 
     @property
+    def current_item(self):
+        """Get the id number of the combo's current entry"""
+        item = self.combo_item_list.currentData()
+        if item == 0:  # "None"
+            return None
+        else:
+            return item
+
+    @property
     def active(self) -> bool:
         """Return is a flask is active or not. Ignores non-flasks"""
         if self.cb_active is not None:
@@ -135,13 +144,18 @@ class ItemSlotUI(QWidget):
         """delete an item from the drop down"""
         for i in range(self.combo_item_list.count()):
             if self.combo_item_list.itemData(i) == _item:
+                self.clear_item_slot(_item)
                 self.combo_item_list.removeItem(i)
                 return
 
     def clear(self):
         """clear the combo box"""
         # print("self.combo_item_list.clear")
-        self.combo_item_list.clear()
+        # for each item, self.clear_item_slot(_item)
+        while self.combo_item_list.count() > 0:
+            self.clear_item_slot()
+            self.combo_item_list.removeItem(0)
+        # self.combo_item_list.clear()
         self.combo_item_list.addItem("None", 0)
         self.active = False
 
@@ -174,8 +188,10 @@ class ItemSlotUI(QWidget):
 
         if self.combo_item_list.currentIndex() == 0 and self.combo_item_list.count() > 0:
             if item is not None:
-                if self.slot_name == item.slot:
+                if self.slot_name in item.slots and item.slot is None:
+                    self.clear_item_slot()
                     self.set_active_item_text(item.name)
+                    item.slot = self.title
             else:
                 # Split out the number for those titles that have numbers (don't use slot_name)
                 title_parts = self.title.split(" ")
@@ -199,6 +215,17 @@ class ItemSlotUI(QWidget):
                         else:
                             self.clear_default_item()
 
+    def clear_item_slot(self, _item=None):
+        """
+        Remove the current item's slot value, or the passed in item's slot
+        :param _item:
+        :return:
+        """
+        item = _item is None and self.current_item or _item
+        if item is not None:
+            item.slot = ""
+
     def clear_default_item(self):
         """Remove the default item, so the control is blank. Useful for offhand when using a two handed Weapon"""
+        self.clear_item_slot()
         self.combo_item_list.setCurrentIndex(0)
