@@ -4,10 +4,10 @@ This Class if communicating between the calculation Classes and the UI Classes
 
 from operator import itemgetter
 
-from views.PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config
 from constants import stats_list, ColourCodes
-from ui_utils import html_colour_text
+from widgets.ui_utils import html_colour_text
 
 
 class PlayerStats:

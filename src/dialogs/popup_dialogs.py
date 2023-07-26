@@ -23,7 +23,7 @@ from qdarktheme.qtpy.QtWidgets import (
 )
 
 from constants import ColourCodes, _VERSION_str, get_http_headers, tree_versions
-from ui_utils import HTMLDelegate, html_colour_text
+from widgets.ui_utils import HTMLDelegate, html_colour_text
 
 
 def yes_no_dialog(win, title, text):

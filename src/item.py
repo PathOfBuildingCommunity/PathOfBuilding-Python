@@ -7,7 +7,7 @@ import re
 
 from pob_config import _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
 from constants import slot_map, slot_names, ColourCodes
-from ui_utils import html_colour_text
+from widgets.ui_utils import html_colour_text
 from mod import Mod
 
 influence_colours = {
@@ -858,7 +858,12 @@ class Item:
                     self.slots = ["Weapon 1", "Weapon 1 Swap"]
                 else:
                     # Put primary weapons before alt weapons for auto filling of item slots
-                    self.slots = ["Weapon 1", "Weapon 2", "Weapon 1 Swap", "Weapon 2 Swap"]
+                    self.slots = [
+                        "Weapon 1",
+                        "Weapon 2",
+                        "Weapon 1 Swap",
+                        "Weapon 2 Swap",
+                    ]
             case "Ring":
                 self.slots = ["Ring 1", "Ring 2"]
             case "Flask":

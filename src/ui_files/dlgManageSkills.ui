@@ -14,7 +14,7 @@
    <string>Manage Skill Sets</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="PoB.qrc">
+   <iconset resource="../../Assets/PoB.qrc">
     <normaloff>:/Art/Icons/edit-list-order.png</normaloff>:/Art/Icons/edit-list-order.png</iconset>
   </property>
   <widget class="QListWidget" name="list_Trees">
@@ -159,7 +159,7 @@
   <tabstop>btnDelete</tabstop>
  </tabstops>
  <resources>
-  <include location="PoB.qrc"/>
+  <include location="../../Assets/PoB.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -14,7 +14,7 @@
    <string>Manage Trees</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="PoB.qrc">
+   <iconset resource="../../Assets/PoB.qrc">
     <normaloff>:/Art/Icons/tree--pencil.png</normaloff>:/Art/Icons/tree--pencil.png</iconset>
   </property>
   <widget class="QListWidget" name="list_Trees">
@@ -179,7 +179,7 @@
   <tabstop>btnConvert</tabstop>
  </tabstops>
  <resources>
-  <include location="PoB.qrc"/>
+  <include location="../../Assets/PoB.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -37,9 +37,9 @@ from pob_config import (
 import pob_file
 import dialogs.popup_dialogs as popup_dialogs
 from tree import Tree
-from views.PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from spec import Spec
-from ui_utils import set_combo_index_by_data
+from widgets.ui_utils import set_combo_index_by_data
 
 
 class Build:
@@ -203,11 +203,11 @@ class Build:
 
     @property
     def version(self):
-        return int(self.build.get("version", "2"))
+        return self.build.get("version", "2")
 
     @version.setter
     def version(self, curr_ver):
-        self.build.set("version", str(curr_ver))
+        self.build.set("version", curr_ver)
 
     @property
     def viewMode(self):
@@ -318,10 +318,10 @@ class Build:
         self.current_spec = self.specs[self.activeSpec]
         # new
 
-    def save_to_xml(self, version=2):
+    def save_to_xml(self, version="2"):
         """
         Save the build to the filename recorded in the build Class
-        :param:version: int. 1 for version 1 xml data,  2 for updated.
+        :param:version: str. 1 for version 1 xml data,  2 for updated.
         :return: N/A
         """
         self.import_field.set("lastAccountHash", self.last_account_hash)

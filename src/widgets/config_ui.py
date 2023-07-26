@@ -60,12 +60,12 @@ from qdarktheme.qtpy.QtWidgets import (
     QWidget,
 )
 
-from views.PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config
-from ui_utils import set_combo_index_by_data
+from widgets.ui_utils import set_combo_index_by_data
 
 # from constants import _VERSION
-# from ui_utils import FlowLayout
+# from widgets.ui_utils import FlowLayout
 
 
 class ConfigUI:

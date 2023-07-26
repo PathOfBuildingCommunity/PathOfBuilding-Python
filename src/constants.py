@@ -158,6 +158,7 @@ class Layers(enum.IntEnum):
 
 class ColourCodes(enum.Enum):
     NORMAL = "#F0F0F0"
+    NONE = "#F0F0F0"
     BLACK = "#000000"
     MAGIC = "#8888FF"
     RARE = "#FFFF77"
@@ -180,7 +181,8 @@ class ColourCodes(enum.Enum):
     NEGATIVE = "#DD0022"
     OFFENCE = "#E07030"
     DEFENCE = "#8080E0"
-    SCION = "#FFF0F0"
+    # SCION = "#FFF0F0"
+    SCION = GEM
     MARAUDER = "#E05030"
     RANGER = "#70FF70"
     WITCH = "#7070FF"

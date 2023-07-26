@@ -21,7 +21,7 @@ from qdarktheme.qtpy.QtCore import QRect, Qt
 from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter, QPen, QColor
 from qdarktheme.qtpy.QtWidgets import QGraphicsLineItem
 
-import ui_utils
+from dialogs.popup_dialogs import critical_dialog
 from pob_config import Config, _debug
 from constants import (
     ColourCodes,
@@ -236,7 +236,7 @@ class Tree:
         json_dict = OrderedDict(pob_file.read_json(self.json_file_path))
         if json_dict is None:
             tr = self.config.app.tr
-            ui_utils.critical_dialog(
+            critical_dialog(
                 self.config.win,
                 f"{tr('Load Tree')}: v{self.version}",
                 f"{tr('An error occurred to trying load')}:\n{self.json_file_path}",
@@ -305,7 +305,7 @@ class Tree:
         # """Now do the legion sprite import"""
         # legion_sprites = pob_file.read_json(Path(self.legion_path, "tree-legion.json"))
         # if not legion_sprites:
-        #     ui_utils.critical_dialog(
+        #     critical_dialog(
         #         self.config.win,
         #         "f{self.config.app.tr('Load File')}",
         #         "f{self.config.app.tr('An error occurred to trying load')}:\n{self.legion_file_path}",

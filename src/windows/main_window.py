@@ -1,4 +1,4 @@
-import re, os, platform, atexit, sys, datetime, pyperclip
+import atexit, datetime, glob, os, platform, pyperclip, re, sys
 
 from typing import Union
 import xml.etree.ElementTree as ET
@@ -28,12 +28,13 @@ from constants import (
     program_title,
     resistance_penalty,
 )
-from ui_utils import html_colour_text, set_combo_index_by_data
 from pob_config import Config, _debug, index_exists, print_a_xml_element
+from pob_file import read_xml, read_xml_as_dict
 from flow_layout import FlowLayout
 from build import Build
 
 from player_stats import PlayerStats
+from widgets.ui_utils import html_colour_text, set_combo_index_by_data
 from widgets.calcs_ui import CalcsUI
 from widgets.config_ui import ConfigUI
 from widgets.items_ui import ItemsUI
@@ -43,8 +44,9 @@ from widgets.tree_ui import TreeUI
 from tree_view import TreeView
 from dialogs.import_dialog import ImportDlg
 from dialogs.export_dialog import ExportDlg
+from dialogs.browse_file_dialog import BrowseFileDlg
 
-from views.PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -279,17 +281,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
-        # Logic for checking we need to save and save if needed, goes here...
-        # if build.needs_saving:
-        # if ui_utils.yes_no_dialog(self.app.tr("Save build"), self.app.tr("build name goes here"))
-        filename, selected_filter = QFileDialog.getOpenFileName(
-            self,
-            self.app.tr("Open a build"),
-            str(self.config.build_path),
-            f"{self.app.tr('Build Files')} (*.xml)",
-        )
-        if filename != "":
-            self.build_loader(filename)
+        dlg = BrowseFileDlg(self.build, self.config, "Open", self)
+        if dlg.exec():
+            # Logic for checking we need to save and save if needed, goes here...
+            # if build.needs_saving:
+            #    if ui_utils.yes_no_dialog(self.app.tr("Save build"), self.app.tr("build name goes here")):
+            #       self.save()
+            if dlg.selected_file != "":
+                self.build_loader(dlg.selected_file)
 
     # Open a previous build as shown on the Build Menu
     @Slot()
@@ -366,7 +365,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     # .addWidget(cb_)
         # mydialog_.exec()
 
-        build_files_text = self.app.tr('Build Files')
+        build_files_text = self.app.tr("Build Files")
         # self.current_filename = f"{self.config.build_path}/_test.xml"
         e = "v2 Build Files (*.xml2)"
         filename, selected_filter = QFileDialog.getSaveFileName(
@@ -374,11 +373,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.app.tr("Save File"),
             self.current_filename,
             # self.config.build_path,
-            f"v2 {build_files_text} (*.xml2);;v1 {build_files_text} (*.xml)"
+            f"v2 {build_files_text} (*.xml2);;v1 {build_files_text} (*.xml)",
         )
         # Chosen file version
         if filename != "":
-            self.build.version = int(re.search(r"(\d)", selected_filter).group(1))
+            self.build.version = re.search(r"(\d)", selected_filter).group(1)
             print(f"Saving to filename: {filename}")
             self.build.save_to_xml(self.build.version)
             # print("selected_filter: %s" % selected_filter)

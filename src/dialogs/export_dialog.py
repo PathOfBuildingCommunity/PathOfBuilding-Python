@@ -11,11 +11,17 @@ import pyperclip
 from qdarktheme.qtpy.QtWidgets import QDialog
 from qdarktheme.qtpy.QtCore import Qt, Slot, QTimer
 
-from views.dlgBuildExport import Ui_BuildExport
-from pob_config import Config, decode_base64_and_inflate, deflate_and_base64_encode, print_a_xml_element, unique_sorted
+from ui.dlgBuildExport import Ui_BuildExport
+from pob_config import (
+    Config,
+    decode_base64_and_inflate,
+    deflate_and_base64_encode,
+    print_a_xml_element,
+    unique_sorted,
+)
 from build import Build
 from constants import get_http_headers, post_http_headers, website_list
-from ui_utils import html_colour_text, set_combo_index_by_text
+from widgets.ui_utils import html_colour_text, set_combo_index_by_text
 
 
 class ExportDlg(Ui_BuildExport, QDialog):
@@ -79,7 +85,7 @@ class ExportDlg(Ui_BuildExport, QDialog):
             website = self.combo_ShareSite.currentText()
             website_info = website_list[website]
             url = website_info["postUrl"]
-            params = website_info.get("postFields","").replace("CODE", self.code)
+            params = website_info.get("postFields", "").replace("CODE", self.code)
             print("url", url)
             print("params", params)
 
@@ -98,16 +104,18 @@ class ExportDlg(Ui_BuildExport, QDialog):
             print("response", response)
             print(f"response, {response.reason} ({response.status_code}).")
             if response.status_code == 200:
-                code_url = website_info.get("codeOut","")
+                code_url = website_info.get("codeOut", "")
                 self.lineEdit_Code.setText(f"{code_url}{response.text}")
                 self.on_show()
             else:
                 self.status = html_colour_text(
-                    "RED", f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+                    "RED",
+                    f"Error retrieving 'Data': {response.reason} ({response.status_code}).",
                 )
         except requests.RequestException as e:
             self.status = html_colour_text(
-                "RED", f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+                "RED",
+                f"Error retrieving 'Data': {response.reason} ({response.status_code}).",
             )
             print(f"Error retrieving 'Data': {e}.")
             return

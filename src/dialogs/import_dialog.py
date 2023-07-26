@@ -11,12 +11,17 @@ from pprint import pprint
 from qdarktheme.qtpy.QtWidgets import QDialog
 from qdarktheme.qtpy.QtCore import Qt, Slot
 
-from views.dlgBuildImport import Ui_BuildImport
+from ui.dlgBuildImport import Ui_BuildImport
 from constants import valid_websites, website_list, get_http_headers
-from pob_config import Config, decode_base64_and_inflate, deflate_and_base64_encode, unique_sorted
+from pob_config import (
+    Config,
+    decode_base64_and_inflate,
+    deflate_and_base64_encode,
+    unique_sorted,
+)
 from pob_file import write_json, read_json
 from build import Build
-from ui_utils import html_colour_text, set_combo_index_by_text
+from widgets.ui_utils import html_colour_text, set_combo_index_by_text
 
 realm_list = {
     "PC": {
@@ -195,7 +200,8 @@ class ImportDlg(Ui_BuildImport, QDialog):
                 code = decode_base64_and_inflate(response.content)
             except requests.RequestException as e:
                 self.status = html_colour_text(
-                    "RED", f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+                    "RED",
+                    f"Error retrieving 'Data': {response.reason} ({response.status_code}).",
                 )
                 print(f"Error retrieving 'Data': {e}.")
                 return
@@ -369,7 +375,8 @@ class ImportDlg(Ui_BuildImport, QDialog):
             self.account_json = response.json()
         except requests.RequestException as e:
             self.status = html_colour_text(
-                "RED", f"Error retrieving 'Account': {response.reason} ({response.status_code})."
+                "RED",
+                f"Error retrieving 'Account': {response.reason} ({response.status_code}).",
             )
             print(f"Error retrieving 'Account': {e}.")
             print(vars(response))
@@ -436,14 +443,16 @@ class ImportDlg(Ui_BuildImport, QDialog):
             response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
             if response.status_code != 220:
                 self.status = html_colour_text(
-                    "RED", f"Error retrieving 'Data': {response.reason} ({response.status_code})."
+                    "RED",
+                    f"Error retrieving 'Data': {response.reason} ({response.status_code}).",
                 )
             else:
                 passive_tree = response.json()
         except requests.RequestException as e:
             print(f"Error retrieving 'Passive Tree': {e}.")
             self.status = html_colour_text(
-                "RED", f"Error retrieving 'Passive Tree': {response.reason} ({response.status_code})."
+                "RED",
+                f"Error retrieving 'Passive Tree': {response.reason} ({response.status_code}).",
             )
             print(vars(response))
 
@@ -457,7 +466,8 @@ class ImportDlg(Ui_BuildImport, QDialog):
         except requests.RequestException as e:
             print(f"Error retrieving 'Items': {e}.")
             self.status = html_colour_text(
-                "RED", f"Error retrieving 'Items': {response.reason} ({response.status_code})."
+                "RED",
+                f"Error retrieving 'Items': {response.reason} ({response.status_code}).",
             )
             print(vars(response))
 

@@ -140,7 +140,10 @@ class TreeView(QGraphicsView):
                     for node_id in set(node.nodes_out + node.nodes_in):
                         if node_id in self.build.current_spec.nodes:
                             if _item.node_type == "Mastery":
-                                print("mastery_popup", self.build.current_tree.nodes[_item.node_id])
+                                print(
+                                    "mastery_popup",
+                                    self.build.current_tree.nodes[_item.node_id],
+                                )
                                 if self.mastery_popup(self.build.current_tree.nodes[_item.node_id]):
                                     self.build.current_spec.nodes.append(_item.node_id)
                             else:

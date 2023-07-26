@@ -17,7 +17,7 @@
    <string>Settings</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="PoB.qrc">
+   <iconset resource="../../Assets/PoB.qrc">
     <normaloff>:/Art/Icons/construction.png</normaloff>:/Art/Icons/construction.png</iconset>
   </property>
   <property name="modal">
@@ -552,7 +552,7 @@
   <tabstop>check_Tooltips</tabstop>
  </tabstops>
  <resources>
-  <include location="PoB.qrc"/>
+  <include location="../../Assets/PoB.qrc"/>
  </resources>
  <connections>
   <connection>

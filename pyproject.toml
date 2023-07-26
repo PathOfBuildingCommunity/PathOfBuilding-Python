@@ -30,3 +30,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+
+[tool.black]
+# Match pyCharm's width
+line-length = '120'
+force-exclude = '.*/ui/.*|^/src/PoB_rc.py'

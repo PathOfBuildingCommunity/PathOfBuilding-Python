@@ -14,7 +14,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QDialog,
 )
 
-from views.PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from constants import tree_versions, PlayerClasses, _VERSION_str
 from pob_config import Config
 from flow_layout import FlowLayout

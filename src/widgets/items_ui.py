@@ -16,7 +16,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QListWidgetItem,
 )
 
-from views.PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import (
     Config,
     _debug,
@@ -28,7 +28,7 @@ from pob_config import (
 )
 from pob_file import read_xml, write_xml, read_json
 from constants import slot_map, ColourCodes, slot_names
-from ui_utils import HTMLDelegate, html_colour_text
+from widgets.ui_utils import HTMLDelegate, html_colour_text
 from item import Item
 from widgets.item_slot_ui import ItemSlotUI
 from dialogs.craft_items_dialog import CraftItemsDlg
@@ -69,7 +69,13 @@ class ItemsUI:
             self.create_equipped_item_slot_ui(item_label)
         self.item_slot_ui_list["Weapon 1"].other_weapon_slot = self.item_slot_ui_list["Weapon 2"]
         self.item_slot_ui_list["Weapon 1 Swap"].other_weapon_slot = self.item_slot_ui_list["Weapon 2 Swap"]
-        for name in ("Weapon 1", "Weapon 2", "Weapon 1 Swap", "Weapon 2 Swap", "Body Armour"):
+        for name in (
+            "Weapon 1",
+            "Weapon 2",
+            "Weapon 1 Swap",
+            "Weapon 2 Swap",
+            "Body Armour",
+        ):
             self.create_equipped_abyssal_socket_slots(name, 6)
         for name in ("Helmet", "Gloves", "Boots"):
             self.create_equipped_abyssal_socket_slots(name, 4)
@@ -663,13 +669,13 @@ class ItemsUI:
         self.save()
         self.connect_item_triggers()
 
-    def save(self, version=2):
+    def save(self, version="2"):
         """
         Save the *current itemset* back to a xml object.
         This is called by import_from_poep_json, the main SaveAs routines and the change itemset,
         prior to showing the new set.
 
-        :param:version: int. 1 for version 1 xml data,  2 for updated.
+        :param:version: str. 1 for version 1 xml data,  2 for updated.
         :return: ET.ElementTree:
         """
         if self.win.list_Items.count() > 0:
@@ -680,9 +686,9 @@ class ItemsUI:
                 self.xml_items.remove(child)
             for _id in self.itemlist_by_id:
                 match version:
-                    case 1:
+                    case "1":
                         self.xml_items.append(self.itemlist_by_id[_id].save())
-                    case 2:
+                    case "2":
                         self.xml_items.append(self.itemlist_by_id[_id].save_v2())
 
         # As these entries do not overwrite, remove the old entries, and add the new ones.

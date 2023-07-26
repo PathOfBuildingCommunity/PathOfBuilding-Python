@@ -25,7 +25,7 @@ from pob_config import (
     print_call_stack,
 )
 from constants import ColourCodes, slot_map
-from ui_utils import (
+from widgets.ui_utils import (
     set_combo_index_by_data,
     set_combo_index_by_text,
     HTMLDelegate,

@@ -35,7 +35,7 @@ def get_rcc_exe():
 def generate_py_from_ui():
     exe = get_uic_exe()
     for path in Path("./src/ui_files/").glob('*.ui'):
-        outpath = Path('src', 'views', path.name).with_suffix('.py')
+        outpath = Path('src', 'ui', path.name).with_suffix('.py')
         ui_time = os.path.getmtime(path)
         if os.path.isfile(outpath) and ui_time == os.path.getmtime(outpath):
             print(f"skipping {path}, exists and no change.")

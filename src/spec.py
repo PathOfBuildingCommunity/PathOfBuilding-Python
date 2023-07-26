@@ -5,7 +5,14 @@ import xml.etree.ElementTree as ET
 import base64
 import re
 
-from constants import bandits, default_spec, tree_versions, PlayerClasses, _VERSION, _VERSION_str
+from constants import (
+    bandits,
+    default_spec,
+    tree_versions,
+    PlayerClasses,
+    _VERSION,
+    _VERSION_str,
+)
 from pob_config import print_call_stack, print_a_xml_element
 from dialogs.popup_dialogs import ok_dialog
 

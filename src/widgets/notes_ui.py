@@ -7,7 +7,7 @@ import re
 from qdarktheme.qtpy.QtCore import Slot, Qt
 from qdarktheme.qtpy.QtGui import QBrush
 
-from views.PoB_Main_Window import Ui_MainWindow
+from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config
 from constants import ColourCodes
 
@@ -60,20 +60,20 @@ class NotesUI:
                 self.win.btn_ConvertToText.setVisible(True)
                 self.win.textedit_Notes.setPlainText(_notes.strip())
 
-    def save(self, version=2):
+    def save(self, version="2"):
         """
         Save internal structures back to the build object
 
-        :param:version: int. 1 for version 1 xml data,  2 for updated.
-        :return: two strings represnting the plain text and the html text
+        :param:version: str. 1 for version 1 xml data,  2 for updated.
+        :return: two strings representing the plain text and the html text
         """
         _notes_html = self.win.textedit_Notes.document().toHtml()
         _notes = self.win.textedit_Notes.document().toPlainText()
         self.modified = False
         match version:
-            case 1:
+            case "1":
                 return _notes, None
-            case 2:
+            case "2":
                 return _notes, _notes_html
 
     def convert_to_text(self):

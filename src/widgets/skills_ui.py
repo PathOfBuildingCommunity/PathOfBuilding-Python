@@ -9,8 +9,14 @@ import re
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QListWidgetItem
 
-from views.PoB_Main_Window import Ui_MainWindow
-from constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map
+from ui.PoB_Main_Window import Ui_MainWindow
+from constants import (
+    ColourCodes,
+    default_skill_set,
+    empty_socket_group,
+    empty_gem,
+    slot_map,
+)
 from pob_config import (
     Config,
     _debug,
@@ -21,7 +27,7 @@ from pob_config import (
     print_call_stack,
 )
 from pob_file import read_json
-from ui_utils import (
+from widgets.ui_utils import (
     _debug,
     set_combo_index_by_data,
     set_combo_index_by_text,

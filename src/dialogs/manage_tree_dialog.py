@@ -8,7 +8,7 @@ import urllib3
 from qdarktheme.qtpy.QtCore import Qt, Slot
 from qdarktheme.qtpy.QtWidgets import QDialog
 
-from views.dlgManageTree import Ui_Dialog
+from ui.dlgManageTree import Ui_Dialog
 from build import Build
 from constants import _VERSION, _VERSION_str, tree_versions
 from dialogs.popup_dialogs import yes_no_dialog, NewTreePopup
@@ -35,7 +35,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         for index in range(self.list_Trees.count()):
             item = self.list_Trees.item(index)
             item.setFlags(item.flags() | Qt.ItemIsEditable)
-        self.add_detail_to_spec_names()
+        self.add_detail_to_spec_names()  # turns on triggers
 
         self.btnConvert.setToolTip(self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}"))
 

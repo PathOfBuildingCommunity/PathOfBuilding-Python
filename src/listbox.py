@@ -7,7 +7,7 @@ Currently only needed .
 
 from qdarktheme.qtpy.QtWidgets import QListWidget
 from qdarktheme.qtpy.QtCore import Qt
-from ui_utils import HTMLDelegate
+from widgets.ui_utils import HTMLDelegate
 
 
 class ListBox(QListWidget):

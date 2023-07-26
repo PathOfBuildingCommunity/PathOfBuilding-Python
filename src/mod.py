@@ -16,7 +16,7 @@ from pob_config import (
 )
 from pob_file import read_xml, write_xml
 from constants import slot_map, ColourCodes
-from ui_utils import HTMLDelegate, html_colour_text
+from widgets.ui_utils import HTMLDelegate, html_colour_text
 
 
 class Mod:
