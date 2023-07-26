@@ -21,8 +21,8 @@ tree_versions = {
     "3_22": "3.22",
 }
 _VERSION = tree_versions[_VERSION_str]
-default_view_mode = "ITEMS"
-# default_view_mode = "SKILLS"
+# default_view_mode = "ITEMS"
+default_view_mode = "SKILLS"
 # default_view_mode = "TREE"
 
 # Default config incase the settings file doesn't exist
@@ -48,8 +48,8 @@ empty_build = f'<PathOfBuilding>\
      </Build>\
     <Import/>\
     <Calcs/>\
-    <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="1"\
-        sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL"\
+    <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="1" \
+        sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL" \
         showAltQualityGems="false">\
         {default_skill_set}\
     </Skills>\
@@ -181,7 +181,6 @@ class ColourCodes(enum.Enum):
     NEGATIVE = "#DD0022"
     OFFENCE = "#E07030"
     DEFENCE = "#8080E0"
-    # SCION = "#FFF0F0"
     SCION = GEM
     MARAUDER = "#E05030"
     RANGER = "#70FF70"

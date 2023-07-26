@@ -2421,6 +2421,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <addaction name="action_New"/>
     <addaction name="action_Open"/>
     <addaction name="action_Save"/>
+    <addaction name="action_SaveAs"/>
     <addaction name="action_Import"/>
     <addaction name="action_Export"/>
     <addaction name="separator"/>
@@ -2617,6 +2618,24 @@ li.checked::marker { content: &quot;\2612&quot;; }
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="action_SaveAs">
+   <property name="icon">
+    <iconset theme="document-open" resource="../../Assets/PoB.qrc">
+     <normaloff>:/Art/Icons/downloads-folder.png</normaloff>:/Art/Icons/downloads-folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save &amp;As</string>
+   </property>
+   <property name="toolTip">
+    <string>Save this build</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
  </widget>

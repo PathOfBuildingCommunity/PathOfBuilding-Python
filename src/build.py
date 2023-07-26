@@ -366,19 +366,7 @@ class Build:
         :param filename:
         :return:
         """
-        # Temporarily write to a test file to not corrupt the original and make for easy compare
         pob_file.write_xml(filename, self.xml_build)
-        # pob_file.write_xml(self.filename, self.xml_build)
-
-    def save_as(self, filename):
-        """
-        Save the build to a new name
-
-        :param filename:
-        :return: N/A
-        """
-        self.filename = filename
-        self.save()
 
     def ask_for_save_if_modified(self):
         """

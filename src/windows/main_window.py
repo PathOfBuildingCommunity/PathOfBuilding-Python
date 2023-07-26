@@ -28,8 +28,9 @@ from constants import (
     program_title,
     resistance_penalty,
 )
-from pob_config import Config, _debug, index_exists, print_a_xml_element
-from pob_file import read_xml, read_xml_as_dict
+
+from pob_config import Config, _debug, print_a_xml_element
+from dialogs.popup_dialogs import yes_no_dialog
 from flow_layout import FlowLayout
 from build import Build
 
@@ -199,7 +200,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Theme.triggered.connect(self.switch_theme)
         self.action_New.triggered.connect(self.build_new)
         self.action_Open.triggered.connect(self.build_open)
-        self.action_Save.triggered.connect(self.build_save_as)
+        self.action_Save.triggered.connect(self.build_save)
+        self.action_SaveAs.triggered.connect(self.build_save_as)
         # self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
         self.action_Settings.triggered.connect(self.config.open_settings_dialog)
         self.action_Import.triggered.connect(self.open_import_dialog)
@@ -268,7 +270,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         # Logic for checking we need to save and save if needed, goes here...
         # if build.needs_saving:
-        # if ui_utils.yes_no_dialog(self.app.tr("Save build"), self.app.tr("build name goes here"))
+        #     if yes_no_dialog(self.app.tr("Save build"), self.app.tr("build name goes here"))
         if self.build.build is not None:
             if not self.build.ask_for_save_if_modified():
                 return
@@ -285,7 +287,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if dlg.exec():
             # Logic for checking we need to save and save if needed, goes here...
             # if build.needs_saving:
-            #    if ui_utils.yes_no_dialog(self.app.tr("Save build"), self.app.tr("build name goes here")):
+            #    if yes_no_dialog(self.app.tr("Save build"), self.app.tr("build name goes here")):
             #       self.save()
             if dlg.selected_file != "":
                 self.build_loader(dlg.selected_file)
@@ -308,33 +310,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # open the file using the filename in the build.
         self.build_loader(value)
 
-    def build_loader(self, xml=Union[str, Path, ET.ElementTree]):
+    def build_loader(self, filename_or_xml=Union[str, Path, ET.ElementTree]):
         """
         Common actions for UI components when we are loading a build.
 
-        :param xml: Path: the filename of file to be loaded, or "Default" if called from the New action.
-        :param xml: String: build name, commonly "Default" when called from the New action.
-        :param xml: ET.ElementTree: the xml of a file that was loaded or downloaded.
+        :param filename_or_xml: Path: the filename of file to be loaded, or "Default" if called from the New action.
+        :param filename_or_xml: String: build name, commonly "Default" when called from the New action.
+        :param filename_or_xml: ET.ElementTree: the xml of a file that was loaded or downloaded.
         :return: N/A
         """
         self.loading = True
         new = True
-        if type(xml) is ET.ElementTree:
-            self.build.new(xml)
+        self.build.filename = ""
+        if type(filename_or_xml) is ET.ElementTree:
+            self.build.new(filename_or_xml)
         else:
-            new = xml == "Default"
+            new = filename_or_xml == "Default"
             if not new:
                 # open the file
-                self.build.load_from_file(xml)
+                self.build.load_from_file(filename_or_xml)
+                self.build.filename = filename_or_xml
             else:
                 self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
-                pass
+                return
 
         # if everything worked, lets update the UI
         if self.build.build is not None:
             # _debug("build_loader")
             if not new:
-                self.config.add_recent_build(xml)
+                self.config.add_recent_build(self.build.filename)
             # Config needs to be set before the tree, as the change_tree function uses/sets it also.
             self.config_ui.load(self.build.config)
             self.set_current_tab()
@@ -351,6 +355,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loading = False
 
     @Slot()
+    def build_save(self):
+        """
+        Actions required to get a filename to save a build to. Should call build_save() if user doesn't cancel.
+
+        return: N/A
+        """
+        if self.build.filename == "":
+            self.build_save_as()
+        else:
+            print(f"Saving to v{self.build.version} file: {self.build.filename}")
+            self.build.save_to_xml(self.build.version)
+            # write the file
+            self.build.save_build_to_file(self.build.filename)
+
+    @Slot()
     def build_save_as(self):
         """
         Actions required to get a filename to save a build to. Should call build_save() if user doesn't cancel.
@@ -365,25 +384,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     # .addWidget(cb_)
         # mydialog_.exec()
 
-        build_files_text = self.app.tr("Build Files")
-        # self.current_filename = f"{self.config.build_path}/_test.xml"
-        e = "v2 Build Files (*.xml2)"
-        filename, selected_filter = QFileDialog.getSaveFileName(
-            self,
-            self.app.tr("Save File"),
-            self.current_filename,
-            # self.config.build_path,
-            f"v2 {build_files_text} (*.xml2);;v1 {build_files_text} (*.xml)",
-        )
-        # Chosen file version
-        if filename != "":
-            self.build.version = re.search(r"(\d)", selected_filter).group(1)
-            print(f"Saving to filename: {filename}")
-            self.build.save_to_xml(self.build.version)
-            # print("selected_filter: %s" % selected_filter)
-            # write the file
-            # self.build.save_build_to_file(filename)
-            self.build.save_build_to_file(filename)
+        dlg = BrowseFileDlg(self.build, self.config, "Save", self)
+        if dlg.exec():
+            # Selected file has been checked for existing and ok'd if it does
+            filename = dlg.selected_file
+            print("build_save_as, file_chosen", filename)
+            if filename != "":
+                self.build.version = dlg.rBtn_v2.isChecked() and "2" or "1"
+                self.build.filename = filename
+                self.build_save()
 
     @Slot()
     def change_tree(self, tree_id):
