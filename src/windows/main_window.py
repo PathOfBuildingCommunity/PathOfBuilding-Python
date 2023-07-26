@@ -332,7 +332,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build.filename = filename_or_xml
             else:
                 self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
-                return
 
         # if everything worked, lets update the UI
         if self.build.build is not None:

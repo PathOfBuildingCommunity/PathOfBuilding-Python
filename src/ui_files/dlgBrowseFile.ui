@@ -37,6 +37,25 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="btn_CurrDir">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -132,7 +151,7 @@
    <item>
     <layout class="QHBoxLayout" name="hLayout_Buttons">
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="hSpacer_Buttons">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -145,7 +164,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="btnOpenSave">
+      <widget class="QPushButton" name="btn_Task">
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
@@ -161,7 +180,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnClose">
+      <widget class="QPushButton" name="btn_Close">
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
@@ -188,8 +207,11 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>list_Files</tabstop>
   <tabstop>lineEdit_CurrDir</tabstop>
+  <tabstop>list_Files</tabstop>
+  <tabstop>lineEdit_SaveAs</tabstop>
+  <tabstop>rBtn_v2</tabstop>
+  <tabstop>rBtn_v1</tabstop>
  </tabstops>
  <resources>
   <include location="../../Assets/PoB.qrc"/>

@@ -6,7 +6,7 @@ Open a dialog for Opening or Saving a character.
 
 import glob, os, re
 
-from qdarktheme.qtpy.QtWidgets import QDialog, QListWidgetItem, QWidget
+from qdarktheme.qtpy.QtWidgets import QDialog, QListWidgetItem, QFileDialog
 from qdarktheme.qtpy.QtCore import Qt, Slot
 
 from build import Build
@@ -23,24 +23,25 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
 
     def __init__(self, _build: Build, _config: Config, task, parent=None):
         super().__init__(parent)
+        self.win = parent
         self.build = _build
         self.config = _config
         self.selected_file = ""
         self.triggers_connected = False
-        self.Save = task == "Save"
-        self.Open = task == "Open"
+        self.save = task == "Save"
+        self.open = task == "Open"
 
         # UI Commands below this one
         self.setupUi(self)
         self.setWindowTitle(f"{self.windowTitle()} - {task}")
 
-        self.btnClose.clicked.connect(self.close)
-        self.btnOpenSave.clicked.connect(self.file_chosen)
-        self.list_Files.itemClicked.connect(self.list_file_clicked)
-
-        self.btnOpenSave.setText(f"&{task}")
+        self.btn_Close.clicked.connect(self.close)
+        self.btn_CurrDir.clicked.connect(self.change_dir_clicked)
+        self.btn_Task.clicked.connect(self.task_button_clicked)
+        self.btn_Task.setText(f"&{task}")
+        # Hide or Show the Save file components depending on the task.
         for idx in range(0, self.hLayout_SaveAs.count()):
-            self.hLayout_SaveAs.itemAt(idx).widget().setHidden(self.Open)
+            self.hLayout_SaveAs.itemAt(idx).widget().setHidden(not self.save)
 
         self.list_Files.set_delegate()
         self.list_Files_width = self.list_Files.width()
@@ -63,19 +64,23 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         QDialog.resizeEvent(self, event)
 
     def connect_triggers(self):
+        """Manage the triggers to prevent trigger storms"""
         if self.triggers_connected:
             return
+        self.list_Files.itemClicked.connect(self.list_file_clicked)
         self.list_Files.itemDoubleClicked.connect(self.list_file_double_clicked)
-        self.lineEdit_CurrDir.textChanged.connect(self.current_dir_changed)
-        self.lineEdit_CurrDir.editingFinished.connect(self.editing_finished)
+        self.lineEdit_CurrDir.textChanged.connect(self.lineedit_currdir_changed)
+        self.lineEdit_CurrDir.editingFinished.connect(self.lineedit_currdir_editing_finished)
         self.triggers_connected = True
 
     def disconnect_triggers(self):
+        """Manage the triggers to prevent trigger storms"""
         if not self.triggers_connected:
             return
+        self.list_Files.itemClicked.connect(self.list_file_clicked)
         self.list_Files.itemDoubleClicked.disconnect(self.list_file_double_clicked)
-        self.lineEdit_CurrDir.textChanged.disconnect(self.current_dir_changed)
-        self.lineEdit_CurrDir.editingFinished.disconnect(self.editing_finished)
+        self.lineEdit_CurrDir.textChanged.disconnect(self.lineedit_currdir_changed)
+        self.lineEdit_CurrDir.editingFinished.disconnect(self.lineedit_currdir_editing_finished)
         self.triggers_connected = False
 
     def get_file_info(self, filename, max_length):
@@ -115,9 +120,12 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
 
     def fill_list_box(self, this_dir):
         """
+        Search the current directory and find files and subdirectories.
+        Add each to the list box.
+        For files, call get_file_info first.
 
         :param this_dir:
-        :return:
+        :return: N/A
         """
         self.list_Files.clear()
         self.lineEdit_CurrDir.setText(this_dir)
@@ -128,23 +136,21 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         for name in dirs:
             self.add_path_to_listbox(f"{name}", f"{name}", "", True)
 
-        # name = self.get_file_info("_test.xml2")
-        # self.add_path_to_listbox(name, False)
-        # self.label.setText(name)
         files_grabbed = glob.glob("*.xml") + glob.glob("*.xml2")
-        # Don't use listBox's sort method as it puts the directories at the bottom
-        files_grabbed.sort()
-        # find longest name
-        max_length = max([len(s) for s in files_grabbed])
-        for filename in files_grabbed:
-            text, class_name = self.get_file_info(filename, max_length)
-            if text != "":
-                self.add_path_to_listbox(filename, text, class_name, False)
+        if files_grabbed:
+            # Don't use listBox's sort method as it puts the directories at the bottom
+            files_grabbed.sort(key=str.casefold)
+            # find longest name
+            max_length = max([len(s) for s in files_grabbed])
+            for filename in files_grabbed:
+                text, class_name = self.get_file_info(filename, max_length)
+                if text != "":
+                    self.add_path_to_listbox(filename, text, class_name, False)
 
     def add_path_to_listbox(self, filename, _text, class_name, is_dir):
         """
-
-        :param filename: name of file in current directory
+        Add one directory or file to the listbox.
+        :param filename: name of file in current directory, no html tags.
         :param _text: The name of the file, class name and verions (with colours).
         :param class_name: The class name (for tooltip colour).
         :param is_dir: True if a directory
@@ -164,37 +170,14 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         self.list_Files.addItem(lwi)
         return lwi
 
-    @Slot()
-    def file_chosen(self):
-        path = self.list_Files.currentItem().whatsThis()
-        save_name = self.lineEdit_SaveAs.text()
-        if self.Save:
-            if save_name == "":
-                return
-            else:
-                extension = os.path.splitext(save_name)[1]
-                if extension == "":
-                    extension = self.rBtn_v2.isChecked() and "xml2" or "xml"
-                    save_name = f"{save_name}.{extension}"
-                if os.path.exists(save_name):
-                    if not yes_no_dialog(self, "Overwrite file", f"{save_name} exists. Overwrite"):
-                        return
-                self.selected_file = os.path.join(self.lineEdit_CurrDir.text(),save_name)
-                print("file_chosen", self.selected_file)
-        else:
-            print("file_chosen", path)
-            if "[" in self.list_Files.currentItem().text():  # is_dir
-                self.change_dir(path)
-            else:
-                self.selected_file = path
-        self.accept()
-
-    @Slot()
-    def current_dir_changed(self, new_dir):
-        # print(f"current_dir_changed {new_dir}")
-        self.change_dir(new_dir)
-
     def change_dir(self, new_dir):
+        """
+        Change directory if the directory exists and will refill the list box.
+        May get called during editing of the directory text box is being edited.
+        This function is essentially the orchestrator of the Dialog, and is the only function that control the triggers.
+        :param new_dir: str: the directory to change to.
+        :return: N/A
+        """
         # print(f"change_dir {new_dir}")
         self.disconnect_triggers()
         if os.path.exists(new_dir):
@@ -202,26 +185,108 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             self.lineEdit_CurrDir.setText(new_dir)
             self.fill_list_box(new_dir)
         self.list_Files.setFocus()
+        # Guarantee that currentItem() is never None.
+        self.list_Files.setCurrentRow(0)
         self.connect_triggers()
 
-    def editing_finished(self):
+    @Slot()
+    def lineedit_currdir_changed(self, new_dir):
+        # print(f"current_dir_changed {new_dir}")
+        self.change_dir(new_dir)
+
+    @Slot()
+    def lineedit_currdir_editing_finished(self):
+        """ After the directory text box has finished being edited, change directory. """
         # print("editing_finished", self.lineEdit_CurrDir.text())
-        # forcibly refill the list box by calling the only function with trigger controls
+        # forcibly refill the list box
         self.change_dir(self.lineEdit_CurrDir.text())
 
     @Slot()
+    def change_dir_clicked(self):
+        """ the change dir button is selecte, open a directory chooser dialog. """
+        new_dir = str(QFileDialog.getExistingDirectory(self.win, "Select Directory"))
+        if new_dir != "":
+            self.change_dir(new_dir)
+
+    @Slot()
     def list_file_clicked(self, item: QListWidgetItem):
+        """
+        Populate the SaveAs text box as files are selected in the list
+        :param item: QListWidgetItem. The item selected
+        :return: N/A
+        """
         # print("list_file_clicked")
         if "[" in item.text():  # is_dir
             return
         else:
+            # Clean the toolTip. The toolTip is the only place we can get the cleanest copy of the file name
             self.lineEdit_SaveAs.setText(re.sub('<[^<]+?>', '', item.toolTip()))
 
     @Slot()
     def list_file_double_clicked(self, item: QListWidgetItem):
+        """
+        Selecting a file or directory for opening / saving
+        :param item: QListWidgetItem. The item selected
+        :return: N/A
+        """
         # print("list_file_double_clicked")
         if "[" in item.text():  # is_dir
             self.change_dir(item.whatsThis())
         else:
             # do something interesting, like return with the information
-            self.file_chosen()
+            self.file_chosen(item)
+
+    @Slot()
+    def task_button_clicked(self):
+        """
+        Selecting a file or directory for opening / saving
+        :return: N/A
+        """
+        print("task_button_clicked")
+        curr_item = self.list_Files.currentItem()
+        # Only change directory on task button being pressed if we are an Open Dialog
+        # *OR* is Save Dialog and lineEdit_SaveAs is empty
+        # (this is mainly for keyboard usage)
+        if self.open and "[" in curr_item.text():  # is_dir
+            self.change_dir(curr_item.whatsThis())
+            return
+        if self.save and "[" in curr_item.text() and self.lineEdit_SaveAs.text() == "":  # is_dir
+            self.change_dir(curr_item.whatsThis())
+            return
+        # do something interesting, like return with the information
+        self.file_chosen(curr_item)
+
+    def file_chosen(self, curr_item: QListWidgetItem):
+        """
+        Actions to be taken when the task button is pressed, but not changing directories.
+        Changing directories is done by the calling functions.
+        :param: curr_item: QListWidgetItem. Passed in from callers. Guaranteed to be not None.
+        :return: N/A
+        """
+        print("file_chosen", curr_item.whatsThis())
+        # If we are here then an item was selected
+        if self.save:
+            save_name = self.lineEdit_SaveAs.text()
+            if save_name == "":
+                return
+            extension = os.path.splitext(save_name)[1]
+            if extension == "":
+                extension = self.rBtn_v2.isChecked() and "xml2" or "xml"
+                save_name = f"{save_name}.{extension}"
+            if os.path.exists(save_name):
+                if not yes_no_dialog(self, "Overwrite file", f"{save_name} exists. Overwrite"):
+                    return
+            self.selected_file = os.path.join(self.lineEdit_CurrDir.text(), save_name)
+            self.accept()
+        if self.open:
+            self.selected_file = curr_item.whatsThis()
+            self.accept()
+
+    @Slot()
+    def rename_file(self):
+        """"""
+        curr_item = self.list_Files.currentItem()
+        # Don't try to rename the parent directory.
+        if curr_item.text() == '[..]':
+            return
+        # Need to know whether to popup a dialog orpress F2, like Manage Trees (including it's name bug)
