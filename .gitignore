@@ -8,6 +8,7 @@ __pycache__/
 PoB_rc.py
 PoB_Main_Window.py
 dlg*.py
+src/ui/*.py
 
 # Developer specific
 *.orig

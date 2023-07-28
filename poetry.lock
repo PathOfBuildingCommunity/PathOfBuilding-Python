@@ -328,63 +328,63 @@ darkdetect = ">=0.7.1,<0.8.0"
 
 [[package]]
 name = "pyside6"
-version = "6.4.1"
+version = "6.5.2"
 description = "Python bindings for the Qt cross-platform application and UI framework"
 category = "main"
 optional = false
 python-versions = "<3.12,>=3.7"
 files = [
-    {file = "PySide6-6.4.1-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:a5e56ce84db3453a1522d7bebaeb161f3c95fd5eeeb159f76e79615294772e8a"},
-    {file = "PySide6-6.4.1-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:e0730024e682dd98ec3637432c98bf682bc8f3e64083acf681a62a1a1a9e2beb"},
-    {file = "PySide6-6.4.1-cp37-abi3-win_amd64.whl", hash = "sha256:c9674ccb1c36e60c458c4a14edbfecf72a331430e18501f7b667f9db496291df"},
-    {file = "PySide6-6.4.1-pp39-pypy39_pp73-macosx_10_9_universal2.whl", hash = "sha256:357af1b85febe54f8c9c3b785ac8d869d40a024bded765525e46cd2b99f6b53a"},
-    {file = "PySide6-6.4.1-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:03261b61652c0a45ccfb6f34cbbcb3449490926401e9e150b528a862a9f97a95"},
-    {file = "PySide6-6.4.1-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:88ad906b21a6db13f5046ebec5247972cff5559aa6d462465600c8bc2655d491"},
+    {file = "PySide6-6.5.2-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:b509e4d3ffde4a594d70000f881452643c9aaed800bad2959882075c01f72428"},
+    {file = "PySide6-6.5.2-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:e6d879ca0f8827a7866856fbedd08857e4bd8f9a858dc998dea10d1913e97938"},
+    {file = "PySide6-6.5.2-cp37-abi3-win_amd64.whl", hash = "sha256:0356dc73c138c25b980d716e425801a61d4aa1d9f7811cf8a825499edfd4d1ae"},
+    {file = "PySide6-6.5.2-pp39-pypy39_pp73-macosx_10_9_universal2.whl", hash = "sha256:f0944cb0da34dc3b0bb62c7a20b6618667760eccdaa4262a90ba7f64b19fb783"},
+    {file = "PySide6-6.5.2-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:ca259b4377eb74e4c9cb74a2afb18c37658f0c83dc18229d1f325974739f6df2"},
+    {file = "PySide6-6.5.2-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:ad82cb12f805c5bec7693d6f1c0d6e4ae4b9462eb368a81bc0d3091de8fae76e"},
 ]
 
 [package.dependencies]
-PySide6-Addons = "6.4.1"
-PySide6-Essentials = "6.4.1"
-shiboken6 = "6.4.1"
+PySide6-Addons = "6.5.2"
+PySide6-Essentials = "6.5.2"
+shiboken6 = "6.5.2"
 
 [[package]]
 name = "pyside6-addons"
-version = "6.4.1"
+version = "6.5.2"
 description = "Python bindings for the Qt cross-platform application and UI framework (Addons)"
 category = "main"
 optional = false
 python-versions = "<3.12,>=3.7"
 files = [
-    {file = "PySide6_Addons-6.4.1-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:6174d39112ad3ec5fbc86aaaccda71756d8809e716a86bb09e38ed3dcae6d952"},
-    {file = "PySide6_Addons-6.4.1-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:4530b6b46cec721eb0a3960f2cb618e17ef100ee5b0cbfa95201e87bd4a6b3e8"},
-    {file = "PySide6_Addons-6.4.1-cp37-abi3-win_amd64.whl", hash = "sha256:91873aaefa01736bf39148b19fc62ab824000e9cdd1db9ebf98b5e0712f0f946"},
-    {file = "PySide6_Addons-6.4.1-pp39-pypy39_pp73-macosx_10_9_universal2.whl", hash = "sha256:aa87ade042bfde316479f2dddbc2c66000a0e65ff5bd24291375a21758e07d36"},
-    {file = "PySide6_Addons-6.4.1-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:d0daf2b685a28f51d2880478b1fd3441c943f8ecfbd41b7dbea3563eb78e8913"},
-    {file = "PySide6_Addons-6.4.1-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:509ae75aabaf191b07e8e1819efaba1a8bfeda692efbfb8eb5adbfcc8a534d35"},
+    {file = "PySide6_Addons-6.5.2-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:a31cb7eca2e8cd80332e131124ed9ad197610a2a80eac4f2bd58e9124e38060a"},
+    {file = "PySide6_Addons-6.5.2-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:bea98d823179b814109dcf3ac6c8a0eddf886570aa9ef8ef09b6bae37bc227ca"},
+    {file = "PySide6_Addons-6.5.2-cp37-abi3-win_amd64.whl", hash = "sha256:c77e06fd511cc8b9292c01724504d6806c33c1f5904bc59f5a8c560a74c15438"},
+    {file = "PySide6_Addons-6.5.2-pp39-pypy39_pp73-macosx_10_9_universal2.whl", hash = "sha256:15bf592e54b3409853c3db23bdb20fb14725b84d50feee862e8b2a3a8a3a0627"},
+    {file = "PySide6_Addons-6.5.2-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:26b55a658fed94a0b3c09927b408663860aca530bf6e83040dcb8fdcc221877d"},
+    {file = "PySide6_Addons-6.5.2-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:793a53b7db32f7780fa9571a14f0bce3700604247127cdb2125b380c577a92eb"},
 ]
 
 [package.dependencies]
-PySide6-Essentials = "6.4.1"
-shiboken6 = "6.4.1"
+PySide6-Essentials = "6.5.2"
+shiboken6 = "6.5.2"
 
 [[package]]
 name = "pyside6-essentials"
-version = "6.4.1"
+version = "6.5.2"
 description = "Python bindings for the Qt cross-platform application and UI framework (Essentials)"
 category = "main"
 optional = false
 python-versions = "<3.12,>=3.7"
 files = [
-    {file = "PySide6_Essentials-6.4.1-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:f980e9c8ee9b2304d6c71e499e96f351c82e28cbfcf6cc6cde0feffd706af330"},
-    {file = "PySide6_Essentials-6.4.1-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:457d73bb38cf7fb573a24da00ecb9aa7b8cf6a4cb5cc8ffcce2c241502a6e774"},
-    {file = "PySide6_Essentials-6.4.1-cp37-abi3-win_amd64.whl", hash = "sha256:0d3052ab72daebc15381fb095b673dd75cf4d2f1dc8680b7aabe27537cdde352"},
-    {file = "PySide6_Essentials-6.4.1-pp39-pypy39_pp73-macosx_10_9_universal2.whl", hash = "sha256:3b36d605f28b742dfc676816d440ba6baa51c6f31dd2dbf3a44e28edcf006523"},
-    {file = "PySide6_Essentials-6.4.1-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:aadd06c09dc51e5894d2fce70210906ce7d981686ceddfff69c47e4227bc1706"},
-    {file = "PySide6_Essentials-6.4.1-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:4cade08b091a128ca5567a8d23fd25b1825dc18648cfb71dd002f0935ee4c3cc"},
+    {file = "PySide6_Essentials-6.5.2-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:c9606de7afaee57f2c0861cc4b973bd630556dd38ec0d1542560cba81c27ab81"},
+    {file = "PySide6_Essentials-6.5.2-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:1620e82b38714a1570b142c01694d0415a25526517b24620ff9b00c9f76cfca9"},
+    {file = "PySide6_Essentials-6.5.2-cp37-abi3-win_amd64.whl", hash = "sha256:e67b10f96f0ac5ed24d7e3c4985d37c70550a9dee6f38b127faf5e5341151665"},
+    {file = "PySide6_Essentials-6.5.2-pp39-pypy39_pp73-macosx_10_9_universal2.whl", hash = "sha256:149f1db77d82f35c6a88a403f5297645ebe737df28e163ac4dc402dfa0b961ee"},
+    {file = "PySide6_Essentials-6.5.2-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:4be6ed964cb863823f2788717b9a6ba8f1d94eb3fa2bf1584f4621ab5e021e27"},
+    {file = "PySide6_Essentials-6.5.2-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:6b21cf78b33554f793d409d79b828d9578d34200c86f813ef1b8dac756589b71"},
 ]
 
 [package.dependencies]
-shiboken6 = "6.4.1"
+shiboken6 = "6.5.2"
 
 [[package]]
 name = "requests"
@@ -410,18 +410,18 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "shiboken6"
-version = "6.4.1"
+version = "6.5.2"
 description = "Python/C++ bindings helper module"
 category = "main"
 optional = false
 python-versions = "<3.12,>=3.7"
 files = [
-    {file = "shiboken6-6.4.1-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:6d61061df739e5ed9595f925e4d1de9c98bdabb995ee29d0be88a873a6171e85"},
-    {file = "shiboken6-6.4.1-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:41e67b67f65626bdd909f9c5fd5f80231ee6ae43418b331590ba225b3cfabd5b"},
-    {file = "shiboken6-6.4.1-cp37-abi3-win_amd64.whl", hash = "sha256:ed6158e8abe4a28530fba27c367dd78038d338f27d44cc8b863cf1fdb8977f2e"},
-    {file = "shiboken6-6.4.1-pp39-pypy39_pp73-macosx_10_9_universal2.whl", hash = "sha256:1c3efc307ed20bf9cea5ceafc089032b33aba95297f70e469b5a19f1070eb1e8"},
-    {file = "shiboken6-6.4.1-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:7cee2cb6becd29e55913468602fa90554895ad38448d57f1d2ebe681014b087d"},
-    {file = "shiboken6-6.4.1-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:44f81fe7faa4ee3a313e687c8a4852bba454116822e76f80339b2aa0512cfc6a"},
+    {file = "shiboken6-6.5.2-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:ba7af130d34ea03e329baebd80982d2635aee7e58dbb07a07085509a501ed03f"},
+    {file = "shiboken6-6.5.2-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:3fbc35ff3c19e7d39433671bfc1be3d7fa9d071bfdd0ffe1c2a4d27acd6cf6a5"},
+    {file = "shiboken6-6.5.2-cp37-abi3-win_amd64.whl", hash = "sha256:558bdb3b0ccc8aac5f9029eabfd6ad8d41f93a87cd7f54395e07732fce39280d"},
+    {file = "shiboken6-6.5.2-pp39-pypy39_pp73-macosx_10_9_universal2.whl", hash = "sha256:4e073b40734a7f9cc6ac289c735362967bb45c34f591f7c0fab7cef1d62e6a66"},
+    {file = "shiboken6-6.5.2-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:cc89759aabafce49b629b189ed7c81986fedaac695714a4eed1aaeb16783c6a9"},
+    {file = "shiboken6-6.5.2-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:e60d8dd3292e3f87662b9e37ae5c558c519f8250da627c473b68bd8d24ed3243"},
 ]
 
 [[package]]
@@ -520,4 +520,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "e204e8bf8c21b9f94a8b4a2e55d4ef06961807247a18bea098999a95acf31d3d"
+content-hash = "3267ff690379ebb3075eff810ad9914cc68f4c354337521da4a9d2e03ffdf8a2"
