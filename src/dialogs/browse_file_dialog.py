@@ -166,7 +166,12 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             lwi = QListWidgetItem(_text)
             _path = os.path.abspath(os.path.join(self.lineEdit_CurrDir.text(), filename))
             lwi.setToolTip(f"<nobr>{html_colour_text(class_name, filename)}</nobr>")
-        lwi.setWhatsThis(_path)
+        info = {
+            "filename": filename,
+            "path": _path,
+            "class_name": class_name,
+        }
+        lwi.setData(Qt.UserRole, info)
         self.list_Files.addItem(lwi)
         return lwi
 
@@ -196,14 +201,14 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
 
     @Slot()
     def lineedit_currdir_editing_finished(self):
-        """ After the directory text box has finished being edited, change directory. """
+        """After the directory text box has finished being edited, change directory."""
         # print("editing_finished", self.lineEdit_CurrDir.text())
         # forcibly refill the list box
         self.change_dir(self.lineEdit_CurrDir.text())
 
     @Slot()
     def change_dir_clicked(self):
-        """ the change dir button is selecte, open a directory chooser dialog. """
+        """the change dir button is selecte, open a directory chooser dialog."""
         new_dir = str(QFileDialog.getExistingDirectory(self.win, "Select Directory"))
         if new_dir != "":
             self.change_dir(new_dir)
@@ -220,7 +225,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             return
         else:
             # Clean the toolTip. The toolTip is the only place we can get the cleanest copy of the file name
-            self.lineEdit_SaveAs.setText(re.sub('<[^<]+?>', '', item.toolTip()))
+            self.lineEdit_SaveAs.setText(re.sub("<[^<]+?>", "", item.toolTip()))
 
     @Slot()
     def list_file_double_clicked(self, item: QListWidgetItem):
@@ -230,8 +235,9 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         :return: N/A
         """
         # print("list_file_double_clicked")
+        info = item.data(Qt.UserRole)
         if "[" in item.text():  # is_dir
-            self.change_dir(item.whatsThis())
+            self.change_dir(info["path"])
         else:
             # do something interesting, like return with the information
             self.file_chosen(item)
@@ -244,14 +250,15 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         """
         print("task_button_clicked")
         curr_item = self.list_Files.currentItem()
+        info = curr_item.data(Qt.UserRole)
         # Only change directory on task button being pressed if we are an Open Dialog
         # *OR* is Save Dialog and lineEdit_SaveAs is empty
         # (this is mainly for keyboard usage)
         if self.open and "[" in curr_item.text():  # is_dir
-            self.change_dir(curr_item.whatsThis())
+            self.change_dir(info["path"])
             return
         if self.save and "[" in curr_item.text() and self.lineEdit_SaveAs.text() == "":  # is_dir
-            self.change_dir(curr_item.whatsThis())
+            self.change_dir(info["path"])
             return
         # do something interesting, like return with the information
         self.file_chosen(curr_item)
@@ -263,7 +270,8 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         :param: curr_item: QListWidgetItem. Passed in from callers. Guaranteed to be not None.
         :return: N/A
         """
-        print("file_chosen", curr_item.whatsThis())
+        info = curr_item.data(Qt.UserRole)
+        print("file_chosen", info["path"])
         # If we are here then an item was selected
         if self.save:
             save_name = self.lineEdit_SaveAs.text()
@@ -279,14 +287,17 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             self.selected_file = os.path.join(self.lineEdit_CurrDir.text(), save_name)
             self.accept()
         if self.open:
-            self.selected_file = curr_item.whatsThis()
+            self.selected_file = info["path"]
             self.accept()
 
     @Slot()
     def rename_file(self):
         """"""
         curr_item = self.list_Files.currentItem()
+        info = curr_item.data(Qt.UserRole)
         # Don't try to rename the parent directory.
-        if curr_item.text() == '[..]':
+        if curr_item.text() == "[..]":
+            old_name = info["name"]
             return
-        # Need to know whether to popup a dialog orpress F2, like Manage Trees (including it's name bug)
+        # Need to know whether to popup a dialog or press F2, like Manage Trees (including it's name bug)
+        # os.rename
