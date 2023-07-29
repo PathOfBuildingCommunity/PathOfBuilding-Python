@@ -5,16 +5,14 @@ Abyssal sockets are precreated and are made visble or hidden based on what is in
 """
 
 from pathlib import Path
-import re, enum, pyperclip
+import re, enum
 import xml.etree.ElementTree as ET
 
-from qdarktheme.qtpy.QtCore import (
-    Qt,
-    Slot,
-)
-from qdarktheme.qtpy.QtWidgets import (
-    QListWidgetItem,
-)
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtWidgets import QListWidgetItem
+
+# from qdarktheme.qtpy.QtCore import Qt, Slot
+# from qdarktheme.qtpy.QtWidgets import QListWidgetItem
 
 from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import (
@@ -53,8 +51,8 @@ class ItemsUI:
         self.triggers_connected = False
         self.internal_clipboard = None
 
-        self.base_items = read_json(Path(self.pob_config.exe_dir, "data/base_items.json"))
-        self.mods = read_json(Path(self.pob_config.exe_dir, "data/mods.json"))
+        self.base_items = read_json(Path(self.pob_config.data_dir, "data/base_items.json"))
+        self.mods = read_json(Path(self.pob_config.data_dir, "data/mods.json"))
 
         # set the key_event - handler - self.item_list_keypressed
         self.win.list_Items.key_press_handler = self.item_list_keypressed
@@ -250,7 +248,7 @@ class ItemsUI:
 
     def load_unique_items(self):
         item_leagues = [""]
-        u_xml = read_xml(Path(self.pob_config.exe_dir, "data/uniques.xml"))
+        u_xml = read_xml(Path(self.pob_config.data_dir, "data/uniques.xml"))
         for xml_item_type in list(u_xml.getroot()):
             for xml_item in xml_item_type.findall("Item"):
                 new_item = Item(self.base_items)
@@ -277,7 +275,7 @@ class ItemsUI:
         )
 
     def load_rare_template_items(self):
-        t_xml = read_xml(Path(self.pob_config.exe_dir, "data/rare_templates.xml"))
+        t_xml = read_xml(Path(self.pob_config.data_dir, "data/rare_templates.xml"))
         for xml_item in t_xml.getroot().findall("Item"):
             new_item = Item(self.base_items)
             new_item.load_from_xml_v2(xml_item, "RARE")

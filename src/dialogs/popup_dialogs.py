@@ -6,9 +6,9 @@ import re
 import base64
 import requests
 
-from qdarktheme.qtpy.QtCore import Slot, Qt, QSize
-from qdarktheme.qtpy.QtGui import QGuiApplication, QIcon
-from qdarktheme.qtpy.QtWidgets import (
+from PySide6.QtCore import Slot, Qt, QSize
+from PySide6.QtGui import QGuiApplication, QIcon
+from PySide6.QtWidgets import (
     QComboBox,
     QDialog,
     QDialogButtonBox,
@@ -21,6 +21,22 @@ from qdarktheme.qtpy.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
 )
+
+# from qdarktheme.qtpy.QtCore import Slot, Qt, QSize
+# from qdarktheme.qtpy.QtGui import QGuiApplication, QIcon
+# from qdarktheme.qtpy.QtWidgets import (
+#     QComboBox,
+#     QDialog,
+#     QDialogButtonBox,
+#     QLabel,
+#     QLineEdit,
+#     QListWidget,
+#     QListWidgetItem,
+#     QMessageBox,
+#     QPushButton,
+#     QHBoxLayout,
+#     QVBoxLayout,
+# )
 
 from constants import ColourCodes, _VERSION_str, get_http_headers, tree_versions
 from widgets.ui_utils import HTMLDelegate, html_colour_text

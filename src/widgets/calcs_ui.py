@@ -2,64 +2,6 @@
 This Class manages all the elements and owns some elements of the "CALCS" tab
 """
 
-from qdarktheme.qtpy.QtCore import (
-    QCoreApplication,
-    QDir,
-    QRect,
-    QRectF,
-    QSize,
-    Qt,
-    Slot,
-)
-from qdarktheme.qtpy.QtGui import (
-    QAction,
-    QActionGroup,
-    QFont,
-    QIcon,
-    QPixmap,
-    QBrush,
-    QColor,
-    QPainter,
-)
-from qdarktheme.qtpy.QtWidgets import (
-    QApplication,
-    QCheckBox,
-    QColorDialog,
-    QComboBox,
-    QDockWidget,
-    QFileDialog,
-    QFontComboBox,
-    QFontDialog,
-    QFormLayout,
-    QFrame,
-    QGraphicsLineItem,
-    QGraphicsPixmapItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QMainWindow,
-    QMenuBar,
-    QMessageBox,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QSpacerItem,
-    QSpinBox,
-    QSplitter,
-    QStackedWidget,
-    QStatusBar,
-    QStyle,
-    QTabWidget,
-    QTextEdit,
-    QToolBar,
-    QToolBox,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
-
 from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config
 from constants import _VERSION

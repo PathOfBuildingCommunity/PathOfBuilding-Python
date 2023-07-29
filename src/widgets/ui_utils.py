@@ -2,9 +2,9 @@
 Utilities for the UI that do not have dependencies on MainWindow
 """
 
-from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
-from qdarktheme.qtpy.QtGui import QAbstractTextDocumentLayout, QTextDocument
-from qdarktheme.qtpy.QtWidgets import (
+from PySide6.QtCore import Qt, QMargins, QPoint, QRect, QSize
+from PySide6.QtGui import QAbstractTextDocumentLayout, QTextDocument
+from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
     QLabel,
@@ -14,6 +14,19 @@ from qdarktheme.qtpy.QtWidgets import (
     QStyleOptionViewItem,
     QStyledItemDelegate,
 )
+
+# from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
+# from qdarktheme.qtpy.QtGui import QAbstractTextDocumentLayout, QTextDocument
+# from qdarktheme.qtpy.QtWidgets import (
+#     QApplication,
+#     QComboBox,
+#     QLabel,
+#     QMessageBox,
+#     QSizePolicy,
+#     QStyle,
+#     QStyleOptionViewItem,
+#     QStyledItemDelegate,
+# )
 
 from pob_config import _debug
 from constants import ColourCodes

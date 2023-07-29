@@ -6,8 +6,11 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import re
 
-from qdarktheme.qtpy.QtCore import Qt, Slot
-from qdarktheme.qtpy.QtWidgets import QListWidgetItem
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtWidgets import QListWidgetItem
+
+# from qdarktheme.qtpy.QtCore import Qt, Slot
+# from qdarktheme.qtpy.QtWidgets import QListWidgetItem
 
 from ui.PoB_Main_Window import Ui_MainWindow
 from constants import (
@@ -118,14 +121,14 @@ class SkillsUI:
         # self.win.btn_SkillsManage.clicked.connect(self.manage_skill_sets)
 
         self.socket_group_to_be_moved = None
-        self.win.list_SocketGroups.model().rowsMoved.connect(self.socket_groups_rows_moved, Qt.QueuedConnection)
+        self.win.list_SocketGroups.model().rowsMoved.connect(self.socket_groups_rows_moved)  # , Qt.QueuedConnection)
         self.win.list_SocketGroups.model().rowsAboutToBeMoved.connect(
-            self.socket_groups_rows_about_to_be_moved, Qt.QueuedConnection
+            self.socket_groups_rows_about_to_be_moved  # , Qt.QueuedConnection
         )
         self.skill_gem_to_be_moved = None
-        self.win.list_Skills.model().rowsMoved.connect(self.skill_gem_rows_moved, Qt.QueuedConnection)
+        self.win.list_Skills.model().rowsMoved.connect(self.skill_gem_rows_moved)  # , Qt.QueuedConnection)
         self.win.list_Skills.model().rowsAboutToBeMoved.connect(
-            self.skill_gem_rows_about_to_be_moved, Qt.QueuedConnection
+            self.skill_gem_rows_about_to_be_moved  # , Qt.QueuedConnection
         )
 
         # Do NOT turn on skill triggers here
@@ -275,7 +278,7 @@ class SkillsUI:
 
         # read in all gems but remove all invalid/unreleased ones
         # "Afflictions" will be removed by this (no display_name), so maybe a different list for them
-        gems = read_json(Path(self.pob_config.exe_dir, "data/gems.json"))
+        gems = read_json(Path(self.pob_config.data_dir, "data/gems.json"))
         if gems is None:
             return None
         gems_list = list(gems.keys())

@@ -5,8 +5,11 @@ Open a dialog for importing a character.
 """
 
 import urllib3
-from qdarktheme.qtpy.QtCore import Qt, Slot
-from qdarktheme.qtpy.QtWidgets import QDialog
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtWidgets import QDialog
+
+# from qdarktheme.qtpy.QtCore import Qt, Slot
+# from qdarktheme.qtpy.QtWidgets import QDialog
 
 from ui.dlgManageTree import Ui_Dialog
 from build import Build

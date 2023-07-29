@@ -1,0 +1,2 @@
+#!/bin/bash
+pip3 install -U $(pip3 list --outdated | grep -vE 'Package|^-' | awk '{print $1}')

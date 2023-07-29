@@ -1,14 +1,26 @@
-import atexit, datetime, glob, os, platform, pyperclip, re, sys
+import atexit, datetime, glob, os, platform, pyperclip, re, sys, tempfile
 
 from typing import Union
 import xml.etree.ElementTree as ET
 from pathlib import Path
 import psutil
 
-import qdarktheme
-from qdarktheme.qtpy.QtCore import Qt, Slot
-from qdarktheme.qtpy.QtGui import QFontDatabase, QFont
-from qdarktheme.qtpy.QtWidgets import (
+# import qdarktheme
+# from qdarktheme.qtpy.QtCore import Qt, Slot
+# from qdarktheme.qtpy.QtGui import QFontDatabase, QFont
+# from qdarktheme.qtpy.QtWidgets import (
+#     QApplication,
+#     QComboBox,
+#     QFileDialog,
+#     QLabel,
+#     QMainWindow,
+#     QSpinBox,
+#     QWidget,
+# )
+
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtGui import QFontDatabase, QFont
+from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
     QFileDialog,
@@ -229,7 +241,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             width of the dropdowns. So reapply the current theme in an attempt to force the correct colours.
         """
         # don't use self.switch_theme
-        QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
+        # QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
+        # print(QApplication.instance().styleSheet())
+        with open(f"c:/git/PathOfBuilding-Python/Assets/test_{self._theme}.qss", "r") as fh:
+            QApplication.instance().setStyleSheet(fh.read())
+        # QApplication.instance().setStyleSheet("c:/git/PathOfBuilding-Python/Assets/test.qss")
+        # print("styleSheet", QApplication.instance().styleSheet())
+
+        # Remove splash screen if we are an executable
+        if "NUITKA_ONEFILE_PARENT" in os.environ:
+            # Use this code to signal the splash screen removal.
+            splash_filenames = glob.glob(f"{tempfile.gettempdir()}/onefile_*_splash_feedback.tmp")
+            if splash_filenames:
+                for filename in splash_filenames:
+                    print("Splash found: ", filename)
+                    os.unlink(filename)
 
     def setup_ui(self):
         """Called after show(). Call setup_ui for all UI classes that need it"""
@@ -522,7 +548,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.action_Theme.setText("Dark")
 
         self.config.theme = new_theme
-        QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
+        with open(f"c:/git/PathOfBuilding-Python/Assets/test_{self._theme}.qss", "r") as fh:
+            QApplication.instance().setStyleSheet(fh.read())
+        # QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
 
     @Slot()
     def set_tab_focus(self, index):

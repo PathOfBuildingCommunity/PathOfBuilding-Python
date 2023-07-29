@@ -4,16 +4,20 @@ A class to show and manage the gem ui on the right hand side of the Skills tab.
 
 import xml.etree.ElementTree as ET
 
-from qdarktheme.qtpy.QtCore import QRect, Slot, QSize, Qt
-from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
-from qdarktheme.qtpy.QtWidgets import (
-    QCheckBox,
-    QComboBox,
-    QPushButton,
-    QListWidgetItem,
-    QSpinBox,
-    QWidget,
-)
+from PySide6.QtCore import QRect, Slot, QSize, Qt
+from PySide6.QtGui import QColor, QBrush, QIcon
+from PySide6.QtWidgets import QCheckBox, QComboBox, QPushButton, QListWidgetItem, QSpinBox, QWidget
+
+# from qdarktheme.qtpy.QtCore import QRect, Slot, QSize, Qt
+# from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
+# from qdarktheme.qtpy.QtWidgets import (
+#     QCheckBox,
+#     QComboBox,
+#     QPushButton,
+#     QListWidgetItem,
+#     QSpinBox,
+#     QWidget,
+# )
 
 from pob_config import (
     Config,

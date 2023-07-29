@@ -8,16 +8,21 @@ This is a base PoB class. It doesn't import any other PoB ui classes
 """
 
 from pathlib import Path
-import xml.etree.ElementTree as ET
-import traceback
 import base64
+import datetime
+import glob
 import itertools
 import operator
+import os
+import tempfile
+import traceback
+import xml.etree.ElementTree as ET
 import zlib
-import datetime
 
-from qdarktheme.qtpy.QtCore import QSize, Slot
-from qdarktheme.qtpy.QtWidgets import QFileDialog, QDialogButtonBox
+# from qdarktheme.qtpy.QtCore import QSize, Slot
+# from qdarktheme.qtpy.QtWidgets import QFileDialog, QDialogButtonBox
+from PySide6.QtCore import QSize, Slot
+from PySide6.QtWidgets import QFileDialog, QDialogButtonBox
 from PySide6.QtUiTools import QUiLoader
 
 import pob_file
@@ -152,8 +157,13 @@ class Config:
 
         # Path and directory variables
         self.exe_dir = Path.cwd()
+        self.data_dir = (
+            "NUITKA_ONEFILE_PARENT" in os.environ
+            and Path(tempfile.gettempdir(), f"PoB_{os.environ['NUITKA_ONEFILE_PARENT']}")
+            or self.exe_dir
+        )
         self.settings_file = Path(self.exe_dir, "settings.xml")
-        self.tree_data_path = Path(self.exe_dir, "tree_data")
+        self.tree_data_path = Path(self.data_dir, "tree_data")
         if not self.tree_data_path.exists():
             self.tree_data_path.mkdir()
         self.read()

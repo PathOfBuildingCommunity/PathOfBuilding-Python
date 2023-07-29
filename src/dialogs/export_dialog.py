@@ -8,8 +8,11 @@ import urllib3, re, requests
 import xml.etree.ElementTree as ET
 import pyperclip
 
-from qdarktheme.qtpy.QtWidgets import QDialog
-from qdarktheme.qtpy.QtCore import Qt, Slot, QTimer
+from PySide6.QtWidgets import QDialog
+from PySide6.QtCore import Qt, Slot, QTimer
+
+# from qdarktheme.qtpy.QtWidgets import QDialog
+# from qdarktheme.qtpy.QtCore import Qt, Slot, QTimer
 
 from ui.dlgBuildExport import Ui_BuildExport
 from pob_config import (

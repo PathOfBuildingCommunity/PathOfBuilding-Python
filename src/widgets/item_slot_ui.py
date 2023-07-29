@@ -4,16 +4,13 @@ A class to show and manage the item slots ui on the left hand side of the Items 
 
 import xml.etree.ElementTree as ET
 
-from qdarktheme.qtpy.QtCore import Slot, QSize, Qt
-from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
-from qdarktheme.qtpy.QtWidgets import (
-    QCheckBox,
-    QComboBox,
-    QLabel,
-    QListWidgetItem,
-    QSpinBox,
-    QWidget,
-)
+from PySide6.QtCore import Slot, QSize, Qt
+from PySide6.QtGui import QColor, QBrush, QIcon
+from PySide6.QtWidgets import QCheckBox, QComboBox, QLabel, QListWidgetItem, QSpinBox, QWidget
+
+# from qdarktheme.qtpy.QtCore import Slot, QSize, Qt
+# from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
+# from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QListWidgetItem, QSpinBox, QWidget
 
 from pob_config import (
     Config,

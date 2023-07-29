@@ -8,8 +8,11 @@ from hashlib import sha1
 import xml.etree.ElementTree as ET
 from pprint import pprint
 
-from qdarktheme.qtpy.QtWidgets import QDialog
-from qdarktheme.qtpy.QtCore import Qt, Slot
+from PySide6.QtWidgets import QDialog
+from PySide6.QtCore import Qt, Slot
+
+# from qdarktheme.qtpy.QtWidgets import QDialog
+# from qdarktheme.qtpy.QtCore import Qt, Slot
 
 from ui.dlgBuildImport import Ui_BuildImport
 from constants import valid_websites, website_list, get_http_headers

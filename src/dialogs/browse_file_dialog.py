@@ -6,8 +6,11 @@ Open a dialog for Opening or Saving a character.
 
 import glob, os, re
 
-from qdarktheme.qtpy.QtWidgets import QDialog, QListWidgetItem, QFileDialog
-from qdarktheme.qtpy.QtCore import Qt, Slot
+from PySide6.QtWidgets import QDialog, QListWidgetItem, QFileDialog
+from PySide6.QtCore import Qt, Slot
+
+# from qdarktheme.qtpy.QtWidgets import QDialog, QListWidgetItem, QFileDialog
+# from qdarktheme.qtpy.QtCore import Qt, Slot
 
 from build import Build
 from constants import ColourCodes

@@ -17,9 +17,13 @@ import math
 from collections import OrderedDict
 from pathlib import Path
 
-from qdarktheme.qtpy.QtCore import QRect, Qt
-from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter, QPen, QColor
-from qdarktheme.qtpy.QtWidgets import QGraphicsLineItem
+from PySide6.QtCore import QRect, Qt
+from PySide6.QtGui import QPixmap, QImage, QPainter, QPen, QColor
+from PySide6.QtWidgets import QGraphicsLineItem
+
+# from qdarktheme.qtpy.QtCore import QRect, Qt
+# from qdarktheme.qtpy.QtGui import QPixmap, QImage, QPainter, QPen, QColor
+# from qdarktheme.qtpy.QtWidgets import QGraphicsLineItem
 
 from dialogs.popup_dialogs import critical_dialog
 from pob_config import Config, _debug

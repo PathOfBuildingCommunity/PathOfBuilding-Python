@@ -5,8 +5,11 @@ This is a compilation of many examples on the internet and PoB original content.
 
 import warnings
 
-from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
-from qdarktheme.qtpy.QtWidgets import QLayout, QSizePolicy
+from PySide6.QtCore import Qt, QMargins, QPoint, QRect, QSize
+from PySide6.QtWidgets import QLayout, QSizePolicy
+
+# from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
+# from qdarktheme.qtpy.QtWidgets import QLayout, QSizePolicy
 
 
 class FlowLayout(QLayout):

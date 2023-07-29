@@ -4,8 +4,11 @@ This Class manages all the elements and owns some elements of the "NOTES" tab
 
 import re
 
-from qdarktheme.qtpy.QtCore import Slot, Qt
-from qdarktheme.qtpy.QtGui import QBrush
+from PySide6.QtCore import Slot, Qt
+from PySide6.QtGui import QBrush
+
+# from qdarktheme.qtpy.QtCore import Slot, Qt
+# from qdarktheme.qtpy.QtGui import QBrush
 
 from ui.PoB_Main_Window import Ui_MainWindow
 from pob_config import Config

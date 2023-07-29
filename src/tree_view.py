@@ -9,15 +9,13 @@ A Tree instance is tied to a Version of the Tree as released by GGG and thus old
 need to be supported for backwards compatibility reason.
 
 """
-from qdarktheme.qtpy.QtCore import QLineF, QRectF, Qt
-from qdarktheme.qtpy.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
-from qdarktheme.qtpy.QtWidgets import (
-    QFrame,
-    QGraphicsEllipseItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QDialogButtonBox,
-)
+from PySide6.QtCore import QLineF, QRectF, Qt
+from PySide6.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
+from PySide6.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
+
+# from qdarktheme.qtpy.QtCore import QLineF, QRectF, Qt
+# from qdarktheme.qtpy.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
+# from qdarktheme.qtpy.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
 
 from constants import ColourCodes, class_backgrounds, Layers, PlayerClasses
 from pob_config import Config, _debug, print_call_stack
