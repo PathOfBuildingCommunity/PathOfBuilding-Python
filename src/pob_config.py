@@ -26,7 +26,7 @@ from PySide6.QtWidgets import QFileDialog, QDialogButtonBox
 from PySide6.QtUiTools import QUiLoader
 
 import pob_file
-from constants import pob_debug, default_config
+from constants import pob_debug, def_theme, default_config
 
 
 def str_to_bool(in_str):
@@ -157,15 +157,13 @@ class Config:
 
         # Path and directory variables
         self.exe_dir = Path.cwd()
-        self.data_dir = (
+        self.extracted_dir = (
             "NUITKA_ONEFILE_PARENT" in os.environ
             and Path(tempfile.gettempdir(), f"PoB_{os.environ['NUITKA_ONEFILE_PARENT']}")
             or self.exe_dir
         )
+        self.data_dir = Path(self.extracted_dir, "data")
         self.settings_file = Path(self.exe_dir, "settings.xml")
-        self.tree_data_path = Path(self.data_dir, "tree_data")
-        if not self.tree_data_path.exists():
-            self.tree_data_path.mkdir()
         self.read()
         if self.build_path == "":
             self.build_path = Path(self.exe_dir, "builds")
@@ -234,14 +232,11 @@ class Config:
 
     @property
     def theme(self):
-        _theme = self.misc.get("theme", "Dark")
-        if _theme not in ("Dark", "Light"):
-            _theme = "Dark"
-        return _theme
+        return self.misc.get("theme", def_theme).lower()
 
     @theme.setter
     def theme(self, new_theme):
-        self.misc.set("theme", new_theme and "Dark" or "Light")
+        self.misc.set("theme", new_theme.lower())
 
     @property
     def slot_only_tooltips(self):

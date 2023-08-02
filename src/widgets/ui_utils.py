@@ -36,11 +36,14 @@ def html_colour_text(colour, text):
     """
     Put text into html span tags.
 
-    :param colour: string: the #colour to be used or ColourCodes name
+    :param colour: string: the #colour to be used or ColourCodes name, can also be rgba( n, n, n, n.nnn )
     :param text: the text to be coloured
     :return: str:
     """
-    c = colour[0] == "#" and colour or ColourCodes[colour.upper()].value
+    if colour[0] == "#" or "rgb" in colour:
+        c = colour
+    else:
+        c = ColourCodes[colour.upper()].value
     newline = "\n"
     return f'<span style="color:{c};">{text.replace(newline,"<BR>")}</span>'
 

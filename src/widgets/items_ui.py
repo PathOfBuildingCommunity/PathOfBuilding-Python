@@ -51,12 +51,13 @@ class ItemsUI:
         self.triggers_connected = False
         self.internal_clipboard = None
 
-        self.base_items = read_json(Path(self.pob_config.data_dir, "data/base_items.json"))
-        self.mods = read_json(Path(self.pob_config.data_dir, "data/mods.json"))
+        self.base_items = read_json(Path(self.pob_config.data_dir, "base_items.json"))
+        self.mods = read_json(Path(self.pob_config.data_dir, "mods.json"))
 
         # set the key_event - handler - self.item_list_keypressed
         self.win.list_Items.key_press_handler = self.item_list_keypressed
         self.win.list_Items.set_delegate()
+        self.win.list_Items.qss_listbox_default_text = self.win.qss_listbox_default_text
 
         """Create the ui elements for displaying on the left side of the tab"""
         # list of abyssal ui's for ease of hiding them during itemset changes
@@ -248,7 +249,7 @@ class ItemsUI:
 
     def load_unique_items(self):
         item_leagues = [""]
-        u_xml = read_xml(Path(self.pob_config.data_dir, "data/uniques.xml"))
+        u_xml = read_xml(Path(self.pob_config.data_dir, "uniques.xml"))
         for xml_item_type in list(u_xml.getroot()):
             for xml_item in xml_item_type.findall("Item"):
                 new_item = Item(self.base_items)
@@ -275,7 +276,7 @@ class ItemsUI:
         )
 
     def load_rare_template_items(self):
-        t_xml = read_xml(Path(self.pob_config.data_dir, "data/rare_templates.xml"))
+        t_xml = read_xml(Path(self.pob_config.data_dir, "rare_templates.xml"))
         for xml_item in t_xml.getroot().findall("Item"):
             new_item = Item(self.base_items)
             new_item.load_from_xml_v2(xml_item, "RARE")

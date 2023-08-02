@@ -23,7 +23,8 @@ def read_xml_as_dict(filename):
                 xml_content = xml_file.read()
                 _dict = xmltodict.parse(xml_content)
                 return _dict
-        except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
+        # parent of IOError, OSError *and* WindowsError where available
+        except EnvironmentError:
             print(f"Unable to open {_fn}")
     return None
 
@@ -40,10 +41,8 @@ def read_xml(filename):
             with _fn.open("r") as xml_file:
                 tree = ET.parse(_fn)
                 return tree
-        except (
-            EnvironmentError,
-            ET.ParseError,
-        ):  # parent of IOError, OSError *and* WindowsError where available
+        # parent of IOError, OSError *and* WindowsError where available
+        except (EnvironmentError, FileNotFoundError, ET.ParseError):
             print(f"Unable to open {_fn}")
     return None
 

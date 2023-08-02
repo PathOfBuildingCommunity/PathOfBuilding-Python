@@ -91,7 +91,7 @@
       <enum>Qt::IgnoreAction</enum>
      </property>
      <property name="alternatingRowColors">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::SingleSelection</enum>
@@ -131,6 +131,12 @@
      </item>
      <item>
       <widget class="QRadioButton" name="rBtn_v2">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>22</height>
+        </size>
+       </property>
        <property name="text">
         <string>v&amp;2</string>
        </property>
@@ -141,6 +147,12 @@
      </item>
      <item>
       <widget class="QRadioButton" name="rBtn_v1">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>22</height>
+        </size>
+       </property>
        <property name="text">
         <string>v&amp;1</string>
        </property>
@@ -150,6 +162,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="hLayout_Buttons">
+     <property name="spacing">
+      <number>12</number>
+     </property>
      <item>
       <spacer name="hSpacer_Buttons">
        <property name="orientation">
@@ -165,6 +180,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btn_Task">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
@@ -181,6 +202,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btn_Close">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>

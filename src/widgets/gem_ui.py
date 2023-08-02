@@ -81,7 +81,7 @@ class GemUI(QWidget):
         cross_icon.addFile(":/Art/Icons/cross.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_GemRemove.setIcon(cross_icon)
         self.combo_gem_list = QComboBox(self)
-        self.combo_gem_list.setGeometry(30, 1, 260, 22)
+        self.combo_gem_list.setGeometry(30, 2, 260, 22)
         self.combo_gem_list.setDuplicatesEnabled(False)
         self.spin_gem_level = QSpinBox(self)
         self.spin_gem_level.setGeometry(300, 1, 50, 24)

@@ -47,6 +47,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             self.hLayout_SaveAs.itemAt(idx).widget().setHidden(not self.save)
 
         self.list_Files.set_delegate()
+        self.list_Files.qss_listbox_default_text = self.win.qss_listbox_default_text
         self.list_Files_width = self.list_Files.width()
         self.max_filename_width = 100
 
@@ -113,7 +114,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             text = f" Level {level} {_class} (v{version})"
 
             colour = ColourCodes[class_name.upper()].value
-            normal = ColourCodes["NORMAL"].value
+            normal = self.list_Files.qss_listbox_default_text  # Default text's colour
             return (
                 f'<pre style="color:{normal};">{name}{spacer}<span style="color:{colour};">{text}</span></pre>',
                 class_name,
@@ -160,7 +161,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         :return: QListWidgetItem: the item added.
         """
         if is_dir:
-            lwi = QListWidgetItem(html_colour_text("NORMAL", f"[{_text}]"))
+            lwi = QListWidgetItem(html_colour_text(self.list_Files.qss_listbox_default_text, f"[{_text}]"))
             # If _name is .., then add the parent directory, else the subdirectory
             path = _text == ".." and os.pardir or _text
             _path = os.path.abspath(os.path.join(self.lineEdit_CurrDir.text(), path))

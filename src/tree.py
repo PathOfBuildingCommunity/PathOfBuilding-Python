@@ -189,9 +189,9 @@ class Tree:
     @version.setter
     def version(self, new_vers):
         self._version = new_vers
-        self.tree_version_path = Path(self.config.tree_data_path, re.sub("\.", "_", str(new_vers)))
+        self.tree_version_path = Path(self.config.data_dir, re.sub(r"\.", "_", str(new_vers)))
         self.json_file_path = Path(self.tree_version_path, "tree.json")
-        self.legion_path = Path(self.config.tree_data_path, "legion")
+        self.legion_path = Path(self.config.data_dir, "legion")
 
     def add_picture(self, name, x, y, ox, oy, z=0):
         """

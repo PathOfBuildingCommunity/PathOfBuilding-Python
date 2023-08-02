@@ -26,56 +26,57 @@ default_view_mode = "SKILLS"
 # default_view_mode = "TREE"
 
 # Default config incase the settings file doesn't exist
-default_config = '<PathOfBuilding>\
-<Misc theme="Dark" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1" \
-nodePowerTheme="0" connectionProtocol="0" thousandsSeparator="" decimalSeparator="" \
-showThousandsSeparators="true" betaTest="false" defaultGemQuality="0" buildSortMode="NAME" \
-proxyURL="" buildPath="" />\
-   <recentBuilds/>\
-   <size width="800" height="600"/>\
-</PathOfBuilding>'
+def_theme = "dark"
+default_config = f"""<PathOfBuilding>
+<Misc theme="{def_theme}" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1" 
+nodePowerTheme="0" connectionProtocol="0" thousandsSeparator="" decimalSeparator="" 
+showThousandsSeparators="true" betaTest="false" defaultGemQuality="0" buildSortMode="NAME" 
+proxyURL="" buildPath="" />
+   <recentBuilds/>
+   <size width="800" height="600"/>
+</PathOfBuilding>"""
 
-default_spec = f'<Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" \
-treeVersion="{_VERSION_str}"></Spec>'
-default_skill_set = '<SkillSet id="0" title="Default">\
-  <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot="" mainActiveSkill="1"></Skill>\
-</SkillSet>'
+default_spec = f"""<Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" 
+treeVersion="{_VERSION_str}"></Spec>"""
+default_skill_set = """<SkillSet id="0" title="Default">
+  <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot="" mainActiveSkill="1"></Skill>
+</SkillSet>"""
 
-empty_build = f'<PathOfBuilding>\
-    <Build version="2" level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"\
-     mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">\
-            <PlayerStat stat="AverageHit" value="0"/>\
-     </Build>\
-    <Import/>\
-    <Calcs/>\
-    <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="1" \
-        sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL" \
-        showAltQualityGems="false">\
-        {default_skill_set}\
-    </Skills>\
-    <Items activeItemSet="1">\
-        <ItemSet useSecondWeaponSet="false" id="1"/>\
-    </Items>\
-    <Tree activeSpec="1">\
-        {default_spec}\
-    </Tree>\
-    <Notes/>\
-    <NotesHTML/>\
-    <TreeView searchStr="" zoomY="0" showHeatMap="nil" zoomLevel="3" showStatDifferences="true" zoomX="0"/>\
-    <Config>\
-        <Input name="resistancePenalty" number="0"/>\
-        <Input name="pantheonMinorGod" string="None"/>\
-        <Input name="enemyIsBoss" string="None"/>\
-        <Input name="pantheonMajorGod" string="None"/>\
-        <Input name="bandit" string="None"/>\
-    </Config>\
-</PathOfBuilding>'
+empty_build = f"""<PathOfBuilding>
+    <Build version="2" level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"
+     mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">
+            <PlayerStat stat="AverageHit" value="0"/>
+     </Build>
+    <Import/>
+    <Calcs/>
+    <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="1" 
+        sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL" 
+        showAltQualityGems="false">
+        {default_skill_set}
+    </Skills>
+    <Items activeItemSet="1">
+        <ItemSet useSecondWeaponSet="false" id="1"/>
+    </Items>
+    <Tree activeSpec="1">
+        {default_spec}
+    </Tree>
+    <Notes/>
+    <NotesHTML/>
+    <TreeView searchStr="" zoomY="0" showHeatMap="nil" zoomLevel="3" showStatDifferences="true" zoomX="0"/>
+    <Config>
+        <Input name="resistancePenalty" number="0"/>
+        <Input name="pantheonMinorGod" string="None"/>
+        <Input name="enemyIsBoss" string="None"/>
+        <Input name="pantheonMajorGod" string="None"/>
+        <Input name="bandit" string="None"/>
+    </Config>
+</PathOfBuilding>"""
 
-empty_socket_group = '<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" \
-enabled="true" slot="" mainActiveSkill="1"/>'
+empty_socket_group = """<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" 
+enabled="true" slot="" mainActiveSkill="1"/>"""
 
-empty_gem = '<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default" \
-gemId="" enabled="true" quality="0" count="1" nameSpec=""/>'
+empty_gem = """<Gem enableGlobal2="false" level="1" enableGlobal1="true" skillId="" qualityId="Default" 
+gemId="" enabled="true" quality="0" count="1" nameSpec=""/>"""
 
 resistance_penalty = {
     0: "None",
@@ -226,6 +227,7 @@ class ColourCodes(enum.Enum):
     PURPLE = "#FF00FF"
     AQUA = "#00FFFF"
     WHITE = "#FFFFFF"
+    SILVER = "#C0C0C0"
     R = STRENGTH
     B = INTELLIGENCE
     G = DEXTERITY

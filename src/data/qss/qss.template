@@ -1,0 +1,191 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-style: none;
+    border-image: unset;
+    outline: none;
+}
+QWidget {
+    background: rgba( qss_background );
+    color: rgba( qss_selection_bckgrd );
+    selection-color: rgba( qss_selection_bckgrd );
+    selection-background-color: rgba( qss_selection_bckgrd_colour );
+    border-radius: 4px;
+}
+
+/* Put a box around control */
+ListBox:hover,
+QCheckBox:hover,
+QRadioButton:hover,
+QComboBox:hover,
+QPushButton:hover,
+QAbstractSpinBox:hover,
+QLineEdit:hover,
+QTextEdit:hover,
+QPlainTextEdit:hover,
+QAbstractView:hover,
+QTabBar::tab:hover,
+QSpinBox::up-button:hover,
+QSpinBox::down-button:hover
+{
+    border: 1px solid rgba( qss_hover_borders );
+}
+
+/* Show disabled as dimmer */
+*:disabled
+{
+    color: grey;
+}
+
+
+/* QCheckBox, */
+QCheckBox::indicator {
+    left: 2px;
+}
+QCheckBox::indicator::unchecked  {
+	border: 1px solid rgba( qss_checkbox_radio_indicator_borders );
+	border-radius: 4px;
+}
+QCheckBox::indicator::checked {
+	background-color: qradialgradient( cx:0.5, cy:0.5, fx:0.5, fy:0.5, radius:0.6, stop:0 rgba( qss_checkbox_radio_enabled_indicator ), stop:1 rgba( qss_background ) );
+	border: 1px solid rgba( qss_checkbox_radio_indicator_borders );
+	border-radius: 4px;
+}
+
+
+/* QRadioButton */
+QRadioButton::indicator::unchecked {
+	border: 1px solid rgba( qss_checkbox_radio_indicator_borders );
+	border-radius: 4px;
+}
+QRadioButton::indicator::checked {
+	background-color: qradialgradient( cx:0.5, cy:0.5, fx:0.5, fy:0.5, radius:0.6, stop:0 rgba( qss_checkbox_radio_enabled_indicator ), stop:1 rgba( qss_background ) );
+	border: 1px solid rgba( qss_checkbox_radio_indicator_borders );
+	border-radius: 4px;
+}
+
+
+QAction::separator,
+QMenu::separator {
+	height: 1px;
+	background: rgba( qss_menu_sep );
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+QMenu::item {
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+QMenuBar::item:selected {
+    padding: 4px;
+    background: rgba( qss_tab_selected_borders, 0.188 );
+}
+
+
+/* QTabWidget */
+/* Needed, stops a coloured line around the right and bottom */
+QTabWidget::pane {
+    border: 1px solid rgba( qss_box_borders );
+}
+/* QTabBar */
+QTabBar::tab {
+    border-style: solid;
+	min-width: 15ex;
+    padding: 5px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+QTabBar::tab:top {
+    border-bottom-width: 2px;
+    margin: 3px 6px 0 0;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+QTabBar::tab:selected {
+    border-color: rgba( qss_tab_selected_borders, 0.500 );
+}
+QTabBar::tab:!selected {
+    margin-top: 2px; /* make non-selected tabs look smaller */
+}
+
+
+QComboBox,
+QPushButton {
+    border: 1px solid rgba( qss_box_borders );
+    padding: 4px 8px;
+}
+
+
+/* Lists and Boxes */
+QTextEdit,
+QGroupBox,
+ListBox,    /* Custom Widget */
+QListWidget,
+QListView {
+    border: 1px solid rgba( qss_box_borders );
+    /* background-color: rgba( qss_background ); */
+}
+
+
+ListBox::item,
+QListWidget::item {
+    /* background-color: rgba( qss_background ); */
+    color: rgba( qss_checkbox_radio_indicator_borders );
+}
+
+QToolTip {
+    border: 1px solid rgba( qss_box_borders );
+    background-color: rgba( qss_background );
+    color: rgba( qss_checkbox_radio_indicator_borders );
+    padding: 1px;
+}
+
+/* Spinboxes arrow */
+QAbstractSpinBox::up-arrow {
+    image: url( qss_spin_up_arrow );
+    width: 7px;
+    height: 7px;
+}
+QAbstractSpinBox::down-arrow {
+    image: url( qss_spin_dn_arrow );
+    width: 7px;
+    height: 7px;
+}
+
+/* QScrollBar */
+QScrollBar {
+    background: rgba( qss_tab_selected_borders, 0.063 );
+    border-radius: 3px;
+}
+QScrollBar::handle {
+    background: rgba( qss_tab_selected_borders, 0.188 );
+    border-radius: 3px;
+}
+QScrollBar::handle:hover {
+    background: rgba( qss_tab_selected_borders, 0.271 );
+}
+QScrollBar::handle:pressed {
+    background: rgba( qss_tab_selected_borders, 0.376 );
+}
+/* Control the start and end position of the 'handle'. Stop it colliding with the 'arrows' */
+QScrollBar::handle:horizontal {
+    min-width: 15px;
+    margin: 4px 14px;
+}
+QScrollBar::handle:horizontal:hover {
+    margin: 2px 14px;
+}
+QScrollBar::handle:vertical {
+    min-height: 15px;
+    margin: 14px 4px;
+}
+QScrollBar::handle:vertical:hover {
+    margin: 14px 2px;
+}
+/* Stop the scrollbar being white(ish) */
+QScrollBar::sub-page, QScrollBar::add-page {
+    background: transparent;
+}

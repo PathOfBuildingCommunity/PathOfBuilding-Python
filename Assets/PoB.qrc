@@ -176,6 +176,12 @@
     <file>TreeData/VerdantOil.png</file>
     <file>TreeData/VioletOil.png</file>
   </qresource>
+  <qresource prefix="Qss">
+    <file>qss/down_arrow_dark.png</file>
+    <file>qss/down_arrow_light.png</file>
+    <file>qss/up_arrow_dark.png</file>
+    <file>qss/up_arrow_light.png</file>
+  </qresource>
   <qresource prefix="Font">
     <file>Font/NotoSansMono-Regular.ttf</file>
     <file>Font/NotoSans-Regular.ttf</file>

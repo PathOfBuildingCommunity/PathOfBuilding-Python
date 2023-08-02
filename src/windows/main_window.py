@@ -19,7 +19,7 @@ import psutil
 # )
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QFontDatabase, QFont
+from PySide6.QtGui import QAction, QActionGroup, QFontDatabase, QFont
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
@@ -33,6 +33,7 @@ from PySide6.QtWidgets import (
 from constants import (
     PlayerClasses,
     bandits,
+    def_theme,
     empty_build,
     pantheon_major_gods,
     pantheon_minor_gods,
@@ -73,21 +74,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.loader = QUiLoader()
         # ToDo investigate if some settings need to be changed per o/s
 
-        self.setupUi(self)
         # When False stop all the images being deleted and being recreated
         self.refresh_tree = True
 
-        self._theme = "dark"
-        self._border_radius = "rounded"
-        self.start_pos = None
+        self.curr_theme: QAction = None  # The QAction representing the current theme (to turn off check mark)
+        self.qss_listbox_default_text = f"rgba( 255, 255, 255, 0.500 )"
+
         # Flag to stop some actions happening in triggers during loading
         self.loading = False
 
         self.max_points = 123
         self.config = Config(self, _app)
         self.resize(self.config.size)
-        self.switch_theme(self.config.theme == "Dark")
-        self.action_Theme.setChecked(self.config.theme == "Dark")
+
+        self.setupUi(self)
+
         atexit.register(self.exit_handler)
         self.setWindowTitle(program_title)  # Do not translate
 
@@ -122,9 +123,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # add widgets to the Toolbar
         widget_spacer = QWidget()  # spacers cannot go into the toolbar, only Widgets
         widget_spacer.setMinimumSize(10, 0)
-        self.toolbar_MainWindow.insertWidget(self.action_Theme, widget_spacer)
-        widget_spacer = QWidget()
-        widget_spacer.setMinimumSize(50, 0)
+        # self.toolbar_MainWindow.insertWidget(self.action_Theme, widget_spacer)
+        # widget_spacer = QWidget()
+        # widget_spacer.setMinimumSize(50, 0)
         self.toolbar_MainWindow.addWidget(widget_spacer)
         self.label_points = QLabel()
         self.label_points.setMinimumSize(100, 0)
@@ -137,20 +138,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.spin_level = QSpinBox()
         self.spin_level.setMinimum(1)
         self.spin_level.setMaximum(100)
+        self.spin_level.setMinimumSize(10, 22)
         self.toolbar_MainWindow.addWidget(self.spin_level)
 
         widget_spacer = QWidget()
-        widget_spacer.setMinimumSize(100, 0)
+        widget_spacer.setMinimumSize(100, 22)
         self.toolbar_MainWindow.addWidget(widget_spacer)
 
         self.combo_classes = QComboBox()
-        self.combo_classes.setMinimumSize(100, 0)
+        self.combo_classes.setMinimumSize(100, 22)
         self.combo_classes.setDuplicatesEnabled(False)
         for idx in PlayerClasses:
             self.combo_classes.addItem(idx.name.title(), idx)
         self.toolbar_MainWindow.addWidget(self.combo_classes)
         self.combo_ascendancy = QComboBox()
-        self.combo_ascendancy.setMinimumSize(100, 0)
+        self.combo_ascendancy.setMinimumSize(100, 22)
         self.combo_ascendancy.setDuplicatesEnabled(False)
         self.combo_ascendancy.addItem("None", 0)
         self.combo_ascendancy.addItem("Ascendant", 1)
@@ -207,9 +209,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menu_Builds.addSeparator()
         self.set_recent_builds_menu_items(self.config)
 
+        # file = "c:/git/PathOfBuilding-Python.sus/src/data/qss/material-blue.qss"
+        # with open(file, "r") as fh:
+        #     QApplication.instance().setStyleSheet(fh.read())
+        self.setup_theme_actions()
+        self.switch_theme(self.config.theme, self.curr_theme)
+
         # Connect our Actions / triggers
         self.tab_main.currentChanged.connect(self.set_tab_focus)
-        self.action_Theme.triggered.connect(self.switch_theme)
         self.action_New.triggered.connect(self.build_new)
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save)
@@ -236,18 +243,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # ToDo: check to see if there is a previous build to load and load it here
         self.build_loader("Default")
 
-        """
-        From time to time, comboBoxes don't show the correct colours. It could be because of changing the
-            width of the dropdowns. So reapply the current theme in an attempt to force the correct colours.
-        """
-        # don't use self.switch_theme
-        # QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
-        # print(QApplication.instance().styleSheet())
-        with open(f"c:/git/PathOfBuilding-Python/Assets/test_{self._theme}.qss", "r") as fh:
-            QApplication.instance().setStyleSheet(fh.read())
-        # QApplication.instance().setStyleSheet("c:/git/PathOfBuilding-Python/Assets/test.qss")
-        # print("styleSheet", QApplication.instance().styleSheet())
-
         # Remove splash screen if we are an executable
         if "NUITKA_ONEFILE_PARENT" in os.environ:
             # Use this code to signal the splash screen removal.
@@ -260,6 +255,114 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setup_ui(self):
         """Called after show(). Call setup_ui for all UI classes that need it"""
         self.items_ui.setup_ui()
+
+    # Setup menu entries for all valid recent builds in the settings file
+    def set_recent_builds_menu_items(self, config: Config):
+        """
+        Read the config for recent builds and create menu entries for them
+        return: N/A
+        """
+
+        # Lambdas in python share the variable scope they're created in
+        # so make a function containing just the lambda
+        def make_connection(_idx, _filename):
+            """
+            Connect the menu item to _open_previous_build passing in extra information
+            :param _idx:
+            :param _filename:
+            :return: N/A
+            """
+            _action.triggered.connect(lambda checked: self._open_previous_build(checked, _idx, _filename))
+
+        recent_builds = config.recent_builds()
+        for idx, value in enumerate(recent_builds):
+            if value is not None and value != "":
+                filename = re.sub(".xml.*", "", str(Path(value).relative_to(self.config.build_path)))
+                _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
+                make_connection(value, idx)
+
+    def setup_theme_actions(self):
+        """
+        Dynamically create actions on the Theme menu and connect the to switch_theme()
+        :return: N/A
+        """
+
+        # Lambdas in python share the variable scope they're created in
+        # so make a function containing just the lambda
+        def make_connection(name, _action):
+            """
+            Connect the menu item to _open_previous_build passing in extra information.
+            :param name: str; the name of the file but no extension.
+            :param _action: QAction; the current action.
+            :return: N/A
+            """
+            _action.triggered.connect(lambda checked: self.switch_theme(name, _action))
+
+        themes = [os.path.basename(x) for x in glob.glob(f"{self.config.data_dir}/qss/*.colours")]
+        # print("setup_theme_actions", themes)
+        for value in themes:
+            _name = os.path.splitext(value)[0]
+            action: QAction = self.menu_Theme.addAction(_name.title())
+            action.setCheckable(True)
+            if _name == self.config.theme:
+                print("Config theme", _name)
+                self.curr_theme = action
+                action.setChecked(True)
+            make_connection(_name, action)
+
+    @Slot()
+    # Do all actions needed to change between light and dark
+    def switch_theme(self, new_theme, selected_action):
+        """
+        Set the new theme based on the name passed through.
+        The text of the action has a capital letter but the qdarktheme styles are lowercase.
+        :param new_theme: str: A name of a theme file.
+        :param selected_action: QAction: The object representing the selected manu item.
+
+        :return: N/A
+        """
+
+        def find_action(test):
+            """
+            Find the QAction that has 'test' name
+            :param test: str: thestring to test
+            :return: QAction or None
+            """
+            for action in self.menu_Theme.actions():
+                print(action)
+            for action in self.menu_Theme.actions():
+                if action.text() == test:
+                    return action
+            return None
+
+        # print("switch_theme, new_theme, self.curr_theme : ", new_theme, self.curr_theme)
+        file = Path(self.config.data_dir, "qss", f"{new_theme}.colours")
+        new_theme = Path.exists(file) and new_theme or def_theme
+        try:
+            with open(Path(self.config.data_dir, "qss", "qss.template"), "r") as template_file:
+                template = template_file.read()
+            with open(Path(self.config.data_dir, "qss", f"{new_theme}.colours"), "r") as colour_file:
+                colours = colour_file.read().splitlines()
+                for line in colours:
+                    m = re.search(r"^(qss_\w+)::(.*)$", line)
+                    if m:
+                        if m.group(1) == "qss_listbox_default_text":
+                            self.qss_listbox_default_text = f"rgba( {m.group(2)} )"
+                        template = re.sub(r"\b" + m.group(1) + r"\b", m.group(2), template)
+                        # template = template.replace(m.group(1), m.group(2))
+
+            QApplication.instance().setStyleSheet(template)
+            # Uncheck old entry. First time through, this could be None.
+            if self.curr_theme is not None:
+                self.curr_theme.setChecked(False)
+            self.config.theme = new_theme
+            self.curr_theme = selected_action
+            if self.curr_theme is not None:
+                #     self.curr_theme.setChecked(False)
+                self.curr_theme.setChecked(True)
+        # parent of IOError, OSError *and* WindowsError where available
+        except (EnvironmentError, FileNotFoundError, ET.ParseError):
+            print(f"Unable to open theme files.")
 
     def exit_handler(self):
         """
@@ -530,28 +633,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.label_points.setText(f" {nodes_assigned} / {self.max_points}    {ascnodes_assigned} / 8 ")
 
-    # Do all actions needed to change between light and dark
-    @Slot()
-    def switch_theme(self, new_theme):
-        """
-        Set the new theme based on the state of the action.
-        The text of the action has a capital letter but the qdarktheme styles are lowercase
-
-        :param new_theme: Boolean: state of the action
-        :return: N/A
-        """
-        if new_theme:
-            self._theme = "dark"
-            self.action_Theme.setText("Light")
-        else:
-            self._theme = "light"
-            self.action_Theme.setText("Dark")
-
-        self.config.theme = new_theme
-        with open(f"c:/git/PathOfBuilding-Python/Assets/test_{self._theme}.qss", "r") as fh:
-            QApplication.instance().setStyleSheet(fh.read())
-        # QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(self._theme, self._border_radius))
-
     @Slot()
     def set_tab_focus(self, index):
         """
@@ -602,33 +683,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.build.save_to_xml(1)
         dlg = ExportDlg(self.build, self.config, self)
         dlg.exec()
-
-    # Setup menu entries for all valid recent builds in the settings file
-    def set_recent_builds_menu_items(self, config: Config):
-        """
-        Read the config for recent builds and create menu entries for them
-
-        return: N/A
-        """
-
-        # Lambdas in python share the variable scope they're created in
-        # so make a function containing just the lambda
-        def make_connection(_idx, _filename):
-            """
-            Connect the menu item to _open_previous_build passing in extra information
-
-            :param _idx:
-            :param _filename:
-            :return:
-            """
-            _action.triggered.connect(lambda checked: self._open_previous_build(checked, _idx, _filename))
-
-        recent_builds = config.recent_builds()
-        for idx, value in enumerate(recent_builds):
-            if value is not None and value != "":
-                filename = re.sub(".xml", "", str(Path(value).relative_to(self.config.build_path)))
-                _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
-                make_connection(value, idx)
 
     def set_current_tab(self, tab_name=""):
         """

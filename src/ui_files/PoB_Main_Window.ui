@@ -200,6 +200,9 @@ QAction {padding-left: 2px;}</string>
             </item>
             <item row="3" column="0">
              <widget class="QTextEdit" name="textedit_Statistics">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="font">
                <font>
                 <family>Noto Mono</family>
@@ -264,7 +267,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>5</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -1130,7 +1133,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      <enum>Qt::MoveAction</enum>
                     </property>
                     <property name="alternatingRowColors">
-                     <bool>true</bool>
+                     <bool>false</bool>
                     </property>
                     <property name="horizontalScrollMode">
                      <enum>QAbstractItemView::ScrollPerPixel</enum>
@@ -2432,14 +2435,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <property name="title">
      <string>&amp;Settings</string>
     </property>
-    <widget class="QMenu" name="menuTheme">
+    <widget class="QMenu" name="menu_Theme">
      <property name="title">
-      <string>Theme</string>
+      <string>Theme ...</string>
      </property>
-     <addaction name="action_Theme"/>
+     <property name="icon">
+      <iconset resource="../../Assets/PoB.qrc">
+       <normaloff>:/Art/Icons/yin-yang.png</normaloff>:/Art/Icons/yin-yang.png</iconset>
+     </property>
     </widget>
     <addaction name="action_Settings"/>
-    <addaction name="menuTheme"/>
+    <addaction name="menu_Theme"/>
    </widget>
    <addaction name="menu_Builds"/>
    <addaction name="menu_Settings"/>
@@ -2537,30 +2543,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="action_Theme">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../../Assets/PoB.qrc">
-     <normaloff>:/Art/Icons/yin-yang.png</normaloff>:/Art/Icons/yin-yang.png</iconset>
-   </property>
-   <property name="text">
-    <string>Light &amp;Theme</string>
-   </property>
-   <property name="toolTip">
-    <string>Change the theme between the light and the dark</string>
-   </property>
-   <property name="whatsThis">
-    <string>light</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>

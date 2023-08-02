@@ -17,14 +17,29 @@ class ListBox(QListWidget):
     """PoB UI ListBox"""
 
     def __init__(self, parent=None):
+        """
+        Init Custom ListBox
+        :param qss_listbox_default_text: some colours for the rgba() html colour stanza
+        :param parent:
+        """
         super().__init__(parent)
 
         # Respond to key presses if desired
         self.key_press_handler = None
+        self._qss_listbox_default_text = "rgba( 255, 255, 255, 0.500 )"
 
         # Allow us to print in colour
         self.delegate = HTMLDelegate()
         self.delegate._list = self
+        self.setProperty("class", "ListBox")
+
+    @property
+    def qss_listbox_default_text(self):
+        return self._qss_listbox_default_text
+
+    @qss_listbox_default_text.setter
+    def qss_listbox_default_text(self, new_colours):
+        self._qss_listbox_default_text = new_colours
 
     # Overridden function
     def keyReleaseEvent(self, event):
