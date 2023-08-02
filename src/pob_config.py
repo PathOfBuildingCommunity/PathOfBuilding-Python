@@ -19,8 +19,6 @@ import traceback
 import xml.etree.ElementTree as ET
 import zlib
 
-# from qdarktheme.qtpy.QtCore import QSize, Slot
-# from qdarktheme.qtpy.QtWidgets import QFileDialog, QDialogButtonBox
 from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QFileDialog, QDialogButtonBox
 from PySide6.QtUiTools import QUiLoader

@@ -15,19 +15,6 @@ from PySide6.QtWidgets import (
     QStyledItemDelegate,
 )
 
-# from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
-# from qdarktheme.qtpy.QtGui import QAbstractTextDocumentLayout, QTextDocument
-# from qdarktheme.qtpy.QtWidgets import (
-#     QApplication,
-#     QComboBox,
-#     QLabel,
-#     QMessageBox,
-#     QSizePolicy,
-#     QStyle,
-#     QStyleOptionViewItem,
-#     QStyledItemDelegate,
-# )
-
 from pob_config import _debug
 from constants import ColourCodes
 

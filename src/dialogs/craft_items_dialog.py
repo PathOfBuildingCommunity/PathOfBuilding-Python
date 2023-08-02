@@ -11,10 +11,6 @@ from PySide6.QtWidgets import QDialog, QDialogButtonBox
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QColor, QBrush, QIcon
 
-# from qdarktheme.qtpy.QtWidgets import QDialog, QDialogButtonBox
-# from qdarktheme.qtpy.QtCore import Qt, Slot
-# from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
-
 from ui.dlgCraftItems import Ui_CraftItems
 from pob_config import Config
 from item import Item

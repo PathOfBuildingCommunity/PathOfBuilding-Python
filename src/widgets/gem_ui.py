@@ -8,33 +8,9 @@ from PySide6.QtCore import QRect, Slot, QSize, Qt
 from PySide6.QtGui import QColor, QBrush, QIcon
 from PySide6.QtWidgets import QCheckBox, QComboBox, QPushButton, QListWidgetItem, QSpinBox, QWidget
 
-# from qdarktheme.qtpy.QtCore import QRect, Slot, QSize, Qt
-# from qdarktheme.qtpy.QtGui import QColor, QBrush, QIcon
-# from qdarktheme.qtpy.QtWidgets import (
-#     QCheckBox,
-#     QComboBox,
-#     QPushButton,
-#     QListWidgetItem,
-#     QSpinBox,
-#     QWidget,
-# )
-
-from pob_config import (
-    Config,
-    _debug,
-    str_to_bool,
-    index_exists,
-    bool_to_str,
-    print_a_xml_element,
-    print_call_stack,
-)
+from pob_config import _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
 from constants import ColourCodes, empty_gem
-from widgets.ui_utils import (
-    set_combo_index_by_data,
-    set_combo_index_by_text,
-    HTMLDelegate,
-    html_colour_text,
-)
+from widgets.ui_utils import set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
 
 
 class GemUI(QWidget):

@@ -22,22 +22,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-# from qdarktheme.qtpy.QtCore import Slot, Qt, QSize
-# from qdarktheme.qtpy.QtGui import QGuiApplication, QIcon
-# from qdarktheme.qtpy.QtWidgets import (
-#     QComboBox,
-#     QDialog,
-#     QDialogButtonBox,
-#     QLabel,
-#     QLineEdit,
-#     QListWidget,
-#     QListWidgetItem,
-#     QMessageBox,
-#     QPushButton,
-#     QHBoxLayout,
-#     QVBoxLayout,
-# )
-
 from constants import ColourCodes, _VERSION_str, get_http_headers, tree_versions
 from widgets.ui_utils import HTMLDelegate, html_colour_text
 

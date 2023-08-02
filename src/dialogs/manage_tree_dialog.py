@@ -8,9 +8,6 @@ import urllib3
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QDialog
 
-# from qdarktheme.qtpy.QtCore import Qt, Slot
-# from qdarktheme.qtpy.QtWidgets import QDialog
-
 from ui.dlgManageTree import Ui_Dialog
 from build import Build
 from constants import _VERSION, _VERSION_str, tree_versions

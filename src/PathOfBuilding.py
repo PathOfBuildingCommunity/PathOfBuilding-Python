@@ -6,6 +6,8 @@
 # nuitka-project: --windows-icon-from-ico=Assets/Icons/PathOfBuilding.ico
 # nuitka-project: --onefile-tempdir-spec="%TEMP%/PoB_%PID%"
 # nuitka-project: --onefile-no-compression
+# nuitka-project: --quiet
+# nuitka-project: --clean-cache=all
 
 """
 Path of Building main class
@@ -21,9 +23,6 @@ import sys
 
 from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QApplication
-
-# from qdarktheme.qtpy.QtGui import QFontDatabase, QFont
-# from qdarktheme.qtpy.QtWidgets import QApplication
 
 from windows.main_window import MainWindow
 

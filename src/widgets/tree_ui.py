@@ -7,9 +7,6 @@ import re
 from PySide6.QtCore import Qt, Slot, QSize
 from PySide6.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
 
-# from qdarktheme.qtpy.QtCore import Qt, Slot, QSize
-# from qdarktheme.qtpy.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
-
 from ui.PoB_Main_Window import Ui_MainWindow
 from constants import tree_versions, PlayerClasses, _VERSION_str
 from pob_config import Config

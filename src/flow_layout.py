@@ -8,9 +8,6 @@ import warnings
 from PySide6.QtCore import Qt, QMargins, QPoint, QRect, QSize
 from PySide6.QtWidgets import QLayout, QSizePolicy
 
-# from qdarktheme.qtpy.QtCore import Qt, QMargins, QPoint, QRect, QSize
-# from qdarktheme.qtpy.QtWidgets import QLayout, QSizePolicy
-
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=0, spacing=-1):

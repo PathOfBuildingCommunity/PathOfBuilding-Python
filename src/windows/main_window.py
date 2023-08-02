@@ -5,19 +5,6 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import psutil
 
-# import qdarktheme
-# from qdarktheme.qtpy.QtCore import Qt, Slot
-# from qdarktheme.qtpy.QtGui import QFontDatabase, QFont
-# from qdarktheme.qtpy.QtWidgets import (
-#     QApplication,
-#     QComboBox,
-#     QFileDialog,
-#     QLabel,
-#     QMainWindow,
-#     QSpinBox,
-#     QWidget,
-# )
-
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction, QActionGroup, QFontDatabase, QFont
 from PySide6.QtWidgets import (
@@ -283,7 +270,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def setup_theme_actions(self):
         """
-        Dynamically create actions on the Theme menu and connect the to switch_theme()
+        Dynamically create actions on the Theme menu and connect the action to switch_theme()
         :return: N/A
         """
 
@@ -305,7 +292,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             action: QAction = self.menu_Theme.addAction(_name.title())
             action.setCheckable(True)
             if _name == self.config.theme:
-                print("Config theme", _name)
+                # print("Config theme", _name)
                 self.curr_theme = action
                 action.setChecked(True)
             make_connection(_name, action)
@@ -315,7 +302,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def switch_theme(self, new_theme, selected_action):
         """
         Set the new theme based on the name passed through.
-        The text of the action has a capital letter but the qdarktheme styles are lowercase.
+        The text of the action has a capital letter but the filenames are lowercase.
         :param new_theme: str: A name of a theme file.
         :param selected_action: QAction: The object representing the selected manu item.
 

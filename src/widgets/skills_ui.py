@@ -9,9 +9,6 @@ import re
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QListWidgetItem
 
-# from qdarktheme.qtpy.QtCore import Qt, Slot
-# from qdarktheme.qtpy.QtWidgets import QListWidgetItem
-
 from ui.PoB_Main_Window import Ui_MainWindow
 from constants import (
     ColourCodes,
