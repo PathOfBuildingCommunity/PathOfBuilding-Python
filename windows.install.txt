@@ -1,12 +1,12 @@
 Parts of this install have a depenceny on libraries from Microsoft Visual C++ Redistributable for Visual Studio 2022
 If you get an error "MSVCP140.dll missing",  see bottom of this document for how to source the required files
 
-Download https://www.python.org/ftp/python/3.11.1/python-3.11.1-embed-amd64.zip
+Download https://www.python.org/ftp/python/3.11.2/python-3.11.2-embed-amd64.zip
 Extract it somewhere you can find it again. EG: c:\Python311
 
 Add this location to your path, in Win10/11 this has been buried in settings.
 Open Settings, Click on System
-Scroll down to About. 
+Scroll down to About.
 On the right hand side, under "Related Settings" (Win11 is "Related Links"), select "Advanced System Settings"
 	This will popup a system properties window, with the "Advanced" tab selected
 Select the "Environment Variables..." button near the bottom of this window

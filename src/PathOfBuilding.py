@@ -27,22 +27,22 @@ from PySide6.QtWidgets import QApplication
 from windows.main_window import MainWindow
 
 # Start here
-print("os.getcwd", os.getcwd())
-if "NUITKA_ONEFILE_PARENT" in os.environ:
-    print("TEMP: ", os.environ["TEMP"])
-    print("NUITKA_ONEFILE_PARENT: ", os.environ["NUITKA_ONEFILE_PARENT"])
+# This is  NUITKA debugging info so folk can understand the diffference between the extracted directory and
+# the directory the Execuatable was run from
+# print("os.getcwd", os.getcwd())
+# if "NUITKA_ONEFILE_PARENT" in os.environ:
+#     print("TEMP: ", os.environ["TEMP"])
+#     print("NUITKA_ONEFILE_PARENT: ", os.environ["NUITKA_ONEFILE_PARENT"])
+
+# Logging to a file, not spam to screen or get lost if no console
 # sys.stdout = open("PathOfBuilding.log", 'a')
+
 main_app = QApplication(sys.argv)
 main_app.setStyle("fusion")
-
-# font for stats box. To line things up, we need a Mono font.
+# font for stats box. To line things up, we need a Mono font. (could use <pre> now that I know it exists. PSH 20230802)
 QFontDatabase.addApplicationFont(":/Font/Font/NotoSansMono-Regular.ttf")
 # system wide font
 QApplication.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 9))
-
-# import time
-#
-# time.sleep(60)
 
 window = MainWindow(main_app)
 window.show()
