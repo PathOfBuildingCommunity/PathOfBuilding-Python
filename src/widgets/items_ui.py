@@ -54,7 +54,6 @@ class ItemsUI:
         # set the key_event - handler - self.item_list_keypressed
         self.win.list_Items.key_press_handler = self.item_list_keypressed
         self.win.list_Items.set_delegate()
-        self.win.list_Items.qss_listbox_default_text = self.win.qss_listbox_default_text
 
         """Create the ui elements for displaying on the left side of the tab"""
         # list of abyssal ui's for ease of hiding them during itemset changes

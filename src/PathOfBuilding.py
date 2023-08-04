@@ -28,13 +28,14 @@ from windows.main_window import MainWindow
 
 # Start here
 # This is  NUITKA debugging info so folk can understand the diffference between the extracted directory and
-# the directory the Execuatable was run from
+# the directory the Executable was run from:
 # print("os.getcwd", os.getcwd())
 # if "NUITKA_ONEFILE_PARENT" in os.environ:
 #     print("TEMP: ", os.environ["TEMP"])
 #     print("NUITKA_ONEFILE_PARENT: ", os.environ["NUITKA_ONEFILE_PARENT"])
 
 # Logging to a file, not spam to screen or get lost if no console
+# ToDo: Remove comment when we stop building.
 # sys.stdout = open("PathOfBuilding.log", 'a')
 
 main_app = QApplication(sys.argv)

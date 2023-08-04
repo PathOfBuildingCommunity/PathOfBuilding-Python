@@ -86,7 +86,6 @@ class SkillsUI:
         self.gem_ui_list = {}
 
         self.win.list_SocketGroups.set_delegate()
-        self.win.list_SocketGroups.qss_listbox_default_text = self.win.qss_listbox_default_text
 
         tr = self.pob_config.app.tr
         self.win.combo_SortByDPS.addItem(tr("Full DPS"), "FullDPS")

@@ -1,6 +1,7 @@
 #!/bin/bash
 [ -e /usr/bin/patchelf ] || { echo 'install patchelf. apt/dnf/yum install patchelf'; exit 1; }
-[ -e /usr/bin/gcc ]      || { echo 'install gcc. apt/dnf/yum install gcc ccache'; exit 1; }
+[ -e /usr/bin/gcc ]      || { echo 'install gcc. apt/dnf/yum install gcc13 gcc13-c++ ccache'; exit 1; }
+[ -e /usr/include/python3.11 ] || { echo 'install python3-dev. openSUSE desired patterns-devel-python-devel_python3'; exit 1; }
 cp -f PathOfBuilding_v2.png PathOfBuilding.png
 # --disable-console
 python -m nuitka src/PathOfBuilding.py

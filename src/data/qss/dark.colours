@@ -22,5 +22,5 @@ qss_checkbox_radio_indicator_borders::192, 192, 192, 1.000
 qss_spin_up_arrow:: :Qss/qss/up_arrow_light.png
   # Spin box down arrow url. Must be relative to self.config.data_dir or in the PoB.qrc
 qss_spin_dn_arrow:: :Qss/qss/down_arrow_light.png
-  # The custom ListBox has html rendering so the default text doesn't work. Add something appropriate.
-qss_listbox_default_text::255, 255, 255, 0.800
+  # The custom ListBox / Tooltip has html rendering so the default text doesn't work. Add something appropriate.
+qss_default_text::255, 255, 255, 0.800

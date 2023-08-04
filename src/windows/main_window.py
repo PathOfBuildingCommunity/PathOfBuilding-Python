@@ -57,6 +57,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             f"{datetime.datetime.now()}. {program_title}, running on {platform.system()} {platform.release()}; {platform.version()}"
         )
         self.app = _app
+        self.tr = self.app.tr
         self._os = platform.system()
         # self.loader = QUiLoader()
         # ToDo investigate if some settings need to be changed per o/s
@@ -65,7 +66,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.refresh_tree = True
 
         self.curr_theme: QAction = None  # The QAction representing the current theme (to turn off check mark)
-        self.qss_listbox_default_text = f"rgba( 255, 255, 255, 0.500 )"
+        self.qss_default_text = f"rgba( 255, 255, 255, 0.500 )"
 
         # Flag to stop some actions happening in triggers during loading
         self.loading = False
@@ -333,8 +334,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 for line in colours:
                     m = re.search(r"^(qss_\w+)::(.*)$", line)
                     if m:
-                        if m.group(1) == "qss_listbox_default_text":
-                            self.qss_listbox_default_text = f"rgba( {m.group(2)} )"
+                        if m.group(1) == "qss_default_text":
+                            self.qss_default_text = f"rgba( {m.group(2)} )"
                         template = re.sub(r"\b" + m.group(1) + r"\b", m.group(2), template)
                         # template = template.replace(m.group(1), m.group(2))
 
@@ -560,8 +561,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         new_class = self.combo_classes.currentData()
         if self.build.current_spec.classId == new_class and self.refresh_tree:
             return
-        # if not self.loading and len(self.build.current_spec.nodes) > 1:
-        #     self.tree_ui.reset_tree()
+        if not self.loading:
+            if len(self.build.current_spec.nodes) > 1 and not yes_no_dialog(
+                self,
+                self.tr("Resetting your Tree"),
+                self.tr("Are you sure? It could be dangerous."),
+            ):
+                # Undo the class change
+                self.combo_classes.setCurrentIndex(self.build.current_spec.classId)
+                return
 
         # GUI Changes
         # Changing the ascendancy combobox, will trigger it's signal/slot.
@@ -578,7 +586,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.build.current_class = self.combo_classes.currentData()
             self.build.className = selected_class
             self.build.current_class = new_class
-            self.gview_Tree.add_tree_images()
+            self.build.reset_tree()
+            self.gview_Tree.add_tree_images(True)
 
     @Slot()
     def ascendancy_changed(self, selected_ascendancy):
@@ -667,7 +676,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @Slot()
     def open_export_dialog(self):
-        self.build.save_to_xml(1)
+        self.build.save_to_xml("1")
         dlg = ExportDlg(self.build, self.config, self)
         dlg.exec()
 

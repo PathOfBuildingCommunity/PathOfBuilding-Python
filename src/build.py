@@ -35,11 +35,12 @@ from pob_config import (
     print_call_stack,
 )
 import pob_file
-import dialogs.popup_dialogs as popup_dialogs
+
 from tree import Tree
 from ui.PoB_Main_Window import Ui_MainWindow
 from spec import Spec
 from widgets.ui_utils import set_combo_index_by_data
+from dialogs.popup_dialogs import critical_dialog, yes_no_dialog
 
 
 class Build:
@@ -328,7 +329,11 @@ class Build:
         self.import_field.set("lastCharacterHash", self.last_character_hash)
         self.import_field.set("lastRealm", self.last_realm)
         self.import_field.set("lastLeague", self.last_league)
-        self.notes.text, self.notes_html.text = self.win.notes_ui.save(version)
+        match version:
+            case "1":
+                self.notes.text, dummy_var = self.win.notes_ui.save(version)
+            case "2":
+                self.notes.text, self.notes_html.text = self.win.notes_ui.save(version)
         self.win.stats.save(self.build)
         self.win.skills_ui.save()
         self.win.items_ui.save(version)
@@ -544,7 +549,7 @@ class Build:
         _build_pob = pob_file.read_xml(filename)
         if _build_pob is None:
             tr = self.pob_config.app.tr
-            popup_dialogs.critical_dialog(
+            critical_dialog(
                 self.pob_config.win,
                 tr("Load Build"),
                 f"{tr('An error occurred to trying load')}:\n{filename}",
@@ -598,3 +603,14 @@ class Build:
 
         # add to combo, willl be the only tree there, so it will be shown
         self.win.tree_ui.fill_current_tree_combo()
+
+    def reset_tree(self):
+        """
+        Actions for the build for resetting the tree.
+        :return:
+        """
+        self.current_spec.nodes.clear()
+        start_node = self.current_tree.classes[self.current_class]["startNodeId"]
+        print("build.reset_tree", start_node)
+        self.current_spec.nodes = [start_node]
+        self.win.gview_Tree.add_tree_images(True)

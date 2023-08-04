@@ -187,17 +187,6 @@ class TreeUI:
         self.build.compare_spec = self.build.specs[index]
         self.win.gview_Tree.add_tree_images(False)
 
-    def reset_tree(self):
-        print("reset_tree")
-        if yes_no_dialog(
-            self.win,
-            self.tr("Resetting your Tree"),
-            self.tr("Are you sure? It could be dangerous."),
-        ):
-            start_node = self.build.current_tree.classes[self.build.current_class]["startNodeId"]
-            self.build.current_spec.nodes = [start_node]
-            self.win.gview_Tree.add_tree_images(False)
-
     def import_tree(self):
         """
         Import a passive tree URL.
@@ -248,6 +237,19 @@ class TreeUI:
         """
         self.win.gview_Tree.add_tree_images(True)
         self.search_text_changed()
+
+    def reset_tree(self):
+        """
+
+        :return:
+        """
+        print("reset_tree")
+        if yes_no_dialog(
+            self.win,
+            self.tr("Resetting your Tree"),
+            self.tr("Are you sure? It could be dangerous."),
+        ):
+            self.build.reset_tree()
 
 
 def test() -> None:

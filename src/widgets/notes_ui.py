@@ -70,6 +70,7 @@ class NotesUI:
         _notes_html = self.win.textedit_Notes.document().toHtml()
         _notes = self.win.textedit_Notes.document().toPlainText()
         self.modified = False
+        # print(f"NotesUI.save. {version}")
         match version:
             case "1":
                 return _notes, None

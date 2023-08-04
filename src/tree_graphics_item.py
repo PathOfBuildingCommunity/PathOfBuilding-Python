@@ -8,6 +8,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QGraphicsPixmapItem
 
 from pob_config import Config
+from widgets.ui_utils import html_colour_text
 
 
 class TreeGraphicsItem(QGraphicsPixmapItem):
@@ -20,6 +21,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
     ) -> None:
         super(TreeGraphicsItem, self).__init__()
         self.config = _config
+        self.win = self.config.win
         self.filename = ""
         self.data = ""
         self.setPixmap(_image)
@@ -71,7 +73,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
                 tool_tip += f"\n{line}"
         tool_tip += self.node_reminder and f"\n{self.node_reminder}" or ""
         tool_tip += self.filename and f"\n{self.filename}" or ""
-        return tool_tip
+        return html_colour_text(self.win.qss_default_text, tool_tip)
 
     # not sure if this is needed
     # def hoverLeaveEvent(self, event):
