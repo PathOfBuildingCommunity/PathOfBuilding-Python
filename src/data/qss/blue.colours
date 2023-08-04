@@ -1,26 +1,25 @@
 # character is a comment
   #263238   Background
-qss_background::38, 50, 56, 1.000
+qss_background~~38, 50, 56, 1.000
   #4d5157   Color and selection-color
-qss_selection_bckgrd::77, 81, 87, 1.000
+qss_selection_bckgrd~~77, 81, 87, 1.000
   #FFFFFF   selection-background-color
-qss_selection_bckgrd_colour::255, 255, 255, 0.500
+qss_selection_bckgrd_colour~~255, 255, 255, 0.500
   #AFBDC4   Hover borders
-qss_hover_borders::175, 189, 196, 1.000
+qss_hover_borders~~175, 189, 196, 1.000
   #546E7A   teal. Separator
-qss_menu_sep::84, 110, 122, 1.000
+qss_menu_sep~~84, 110, 122, 1.000
   #e6e5e5   Box borders
-qss_box_borders::230, 229, 229, 1.000
-  #000000   Tab selected borders. Scrollbar handles / QMenuBar::item:selected (different shades used)
+qss_box_borders~~230, 229, 229, 1.000
+  #000000   Tab selected borders. Scrollbar handles / QMenuBar~~item:selected (different shades used)
   ### Three numbers only
-qss_tab_selected_borders::0, 0, 0
+qss_tab_selected_borders~~0, 0, 0
   #0000FF   Blue. CheckBox / Radio enabled indicator
-qss_checkbox_radio_enabled_indicator::0, 0, 255, 1.000
+qss_checkbox_radio_enabled_indicator~~0, 0, 255, 1.000
   #c0c0c0   silver. CheckBox / Radio indicator borders
-qss_checkbox_radio_indicator_borders::192, 192, 192, 1.000
+qss_checkbox_radio_indicator_borders~~192, 192, 192, 1.000
   # Spin box up arrow url. Must be relative to self.config.data_dir or in the PoB.qrc
-qss_spin_up_arrow::url(:Qss/qss/up_arrow_dark.png)
+qss_spin_up_arrow~~:Qss/qss/up_arrow_dark.png
   # Spin box down arrow url. Must be relative to self.config.data_dir or in the PoB.qrc
-qss_spin_dn_arrow::url(:Qss/qss/down_arrow_dark.png)
+qss_spin_dn_arrow~~:Qss/qss/down_arrow_dark.png
   # The custom ListBox / Tooltip has html rendering so the default text doesn't work. Add something appropriate.
-qss_default_text::0, 0, 0, 0.800

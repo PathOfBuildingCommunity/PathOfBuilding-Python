@@ -65,7 +65,9 @@ QRadioButton::indicator::checked {
 	border-radius: 4px;
 }
 
-
+QMenu{
+	padding-left: 2px;
+}
 QAction::separator,
 QMenu::separator {
 	height: 1px;
@@ -76,6 +78,7 @@ QMenu::separator {
 	margin-bottom: 5px;
 }
 QMenu::item {
+	padding-left: 2px;
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
@@ -136,21 +139,24 @@ QListWidget::item {
     color: rgba( qss_checkbox_radio_indicator_borders );
 }
 
+QToolButton, QAction, QWidgetAction,
 QToolTip {
     border: 1px solid rgba( qss_box_borders );
     background-color: rgba( qss_background );
-    color: rgba( qss_checkbox_radio_indicator_borders );
-    padding: 1px;
+    color: rgba( qss_default_text );
+    padding: 2px;
 }
 
 /* Spinboxes arrow */
 QAbstractSpinBox::up-arrow {
-    image: url( qss_spin_up_arrow );
+	/* There cannot be a space after ( or before ) */
+    image: url(qss_spin_up_arrow);
     width: 7px;
     height: 7px;
 }
 QAbstractSpinBox::down-arrow {
-    image: url( qss_spin_dn_arrow );
+	/* There cannot be a space after ( or before ) */
+    image: url(qss_spin_dn_arrow);
     width: 7px;
     height: 7px;
 }

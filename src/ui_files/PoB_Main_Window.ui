@@ -19,12 +19,6 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QMenu {padding-left: 2px;}
-QMenu::item {padding-left: 2px;}
-QMenu::item:selected {background-color: rgb(0, 85, 127);color: rgb(255, 255, 255);}
-QAction {padding-left: 2px;}</string>
-  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="hlayout_MainWindow">
     <property name="leftMargin">

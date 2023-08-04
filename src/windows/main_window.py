@@ -14,7 +14,9 @@ from PySide6.QtWidgets import (
     QLabel,
     QMainWindow,
     QSpinBox,
+    QToolButton,
     QWidget,
+    QWidgetAction,
 )
 
 from constants import (
@@ -99,15 +101,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
             Start: Do what the QT Designer cannot yet do 
         """
-        # Remove the space that the icon reserves. If you want check boxes or icons, then delete this section
-        # This could be a pydarktheme issue as against the pyside6 / designer
-        # ToDo: Is it best to put this in QTdesigner or here (currently in designer)
-        # self.menubar_MainWindow.setStyleSheet(
-        #     "QMenu {padding-left: 0px;}"
-        #     "QMenu::item {padding-left: 0px;}"
-        #     "QMenu::item:selected {background-color: rgb(0, 85, 127);color: rgb(255, 255, 255);}"
-        #     "QAction {padding-left: 0px;}"
-        # )
         # add widgets to the Toolbar
         widget_spacer = QWidget()  # spacers cannot go into the toolbar, only Widgets
         widget_spacer.setMinimumSize(10, 0)
@@ -196,6 +189,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.menu_Builds.addSeparator()
         self.set_recent_builds_menu_items(self.config)
+
+        # Collect original tooltip text for Actions (for managing the text color thru qss - switch_theme)
+        # Must be before the first call to switch_theme
+        self.toolbar_buttons = {}
+        for widget in self.toolbar_MainWindow.children():
+            if type(widget) == QToolButton:
+                self.toolbar_buttons[widget.toolTip()] = widget
 
         # file = "c:/git/PathOfBuilding-Python.sus/src/data/qss/material-blue.qss"
         # with open(file, "r") as fh:
@@ -309,20 +309,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
-
-        def find_action(test):
-            """
-            Find the QAction that has 'test' name
-            :param test: str: thestring to test
-            :return: QAction or None
-            """
-            for action in self.menu_Theme.actions():
-                print(action)
-            for action in self.menu_Theme.actions():
-                if action.text() == test:
-                    return action
-            return None
-
         # print("switch_theme, new_theme, self.curr_theme : ", new_theme, self.curr_theme)
         file = Path(self.config.data_dir, "qss", f"{new_theme}.colours")
         new_theme = Path.exists(file) and new_theme or def_theme
@@ -332,12 +318,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             with open(Path(self.config.data_dir, "qss", f"{new_theme}.colours"), "r") as colour_file:
                 colours = colour_file.read().splitlines()
                 for line in colours:
-                    m = re.search(r"^(qss_\w+)::(.*)$", line)
+                    m = re.search(r"^(qss_\w+)~~(.*)$", line)
                     if m:
                         if m.group(1) == "qss_default_text":
                             self.qss_default_text = f"rgba( {m.group(2)} )"
+                            for tooltip_text in self.toolbar_buttons.keys():
+                                self.toolbar_buttons[tooltip_text].setToolTip(
+                                    html_colour_text(self.qss_default_text, tooltip_text)
+                                )
                         template = re.sub(r"\b" + m.group(1) + r"\b", m.group(2), template)
-                        # template = template.replace(m.group(1), m.group(2))
 
             QApplication.instance().setStyleSheet(template)
             # Uncheck old entry. First time through, this could be None.
