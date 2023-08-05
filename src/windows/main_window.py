@@ -31,7 +31,7 @@ from constants import (
     resistance_penalty,
 )
 
-from pob_config import Config, _debug, print_a_xml_element
+from pob_config import Config, _debug, print_a_xml_element, print_call_stack
 from dialogs.popup_dialogs import yes_no_dialog
 from flow_layout import FlowLayout
 from build import Build
@@ -133,7 +133,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.combo_classes.addItem(idx.name.title(), idx)
         self.toolbar_MainWindow.addWidget(self.combo_classes)
         self.combo_ascendancy = QComboBox()
-        self.combo_ascendancy.setMinimumSize(100, 22)
+        self.combo_ascendancy.setMinimumSize(125, 22)
         self.combo_ascendancy.setDuplicatesEnabled(False)
         self.combo_ascendancy.addItem("None", 0)
         self.combo_ascendancy.addItem("Ascendant", 1)
@@ -194,6 +194,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Must be before the first call to switch_theme
         self.toolbar_buttons = {}
         for widget in self.toolbar_MainWindow.children():
+            # QActions are joined to the toolbar using QToolButtons.
             if type(widget) == QToolButton:
                 self.toolbar_buttons[widget.toolTip()] = widget
 
@@ -551,7 +552,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.build.current_spec.classId == new_class and self.refresh_tree:
             return
         if not self.loading:
-            if len(self.build.current_spec.nodes) > 1 and not yes_no_dialog(
+            node_num = self.build.ascendClassName == "None" and 1 or 2
+            if len(self.build.current_spec.nodes) > node_num and not yes_no_dialog(
                 self,
                 self.tr("Resetting your Tree"),
                 self.tr("Are you sure? It could be dangerous."),
@@ -582,17 +584,51 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def ascendancy_changed(self, selected_ascendancy):
         """
         Actions required for changing ascendancies.
-
-        :param  selected_ascendancy: String of the selected text
-                "None" will occur when refilling the combobox or when the user chooses it
-                "" will occur during a combobox clear
+        :param  selected_ascendancy: String of the selected text.
+                "None" will occur when refilling the combobox or when the user chooses it.
+                "" will occur during a combobox clear.
         :return:
         """
-        # "" will occur during a combobox clear
+        # print(f"ascendancy_changed: '{selected_ascendancy}'", self.refresh_tree)
         if selected_ascendancy == "":
+            # "" will occur during a combobox clear (changing class)
             return
+        new_ascendancy = self.combo_ascendancy.currentData()
+        curr_ascendancy_name = self.build.ascendClassName
+        current_tree = self.build.current_tree
+        if curr_ascendancy_name != "None":
+            if not self.loading:
+                current_nodes = set(self.build.current_spec.nodes)
+                # ascendancy start node is *NOT* in this list.
+                nodes_in_ascendancy = [
+                    x for x in current_tree.ascendancyMap[curr_ascendancy_name] if x in current_nodes
+                ]
+                if len(nodes_in_ascendancy) > 1:
+                    if not yes_no_dialog(
+                        self,
+                        self.tr("Resetting your Ascendancy"),
+                        self.tr("Are you sure? It could be dangerous. Your current ascendancy points will be removed."),
+                    ):
+                        # Don't alert on Undoing the class change.
+                        self.loading = True
+                        # Undo the class change.
+                        self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
+                        self.loading = False
+                        return
+                    else:
+                        # We do want to reset nodes.
+                        for node_id in nodes_in_ascendancy:
+                            self.build.current_spec.nodes.remove(node_id)
+
+                    # Remove old start node.
+                    self.build.current_spec.nodes.remove(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
+
+            if selected_ascendancy != "None":
+                # add new start node.
+                self.build.current_spec.nodes.append(current_tree.ascendancy_start_nodes[selected_ascendancy])
+
         if self.refresh_tree:
-            self.build.current_spec.ascendClassId = self.combo_ascendancy.currentData()
+            self.build.current_spec.ascendClassId = new_ascendancy
             self.build.ascendClassName = selected_ascendancy
             self.gview_Tree.add_tree_images()
 

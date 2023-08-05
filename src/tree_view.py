@@ -131,6 +131,7 @@ class TreeView(QGraphicsView):
                 else:
                     current_tree_nodes = self.build.current_tree.nodes
                     node = current_tree_nodes[_item.node_id]
+                    # Check to see if node is connected to an active node
                     for node_id in set(node.nodes_out + node.nodes_in):
                         if node_id in self.build.current_spec.nodes:
                             if _item.node_type == "Mastery":
@@ -384,7 +385,7 @@ class TreeView(QGraphicsView):
                         if (
                             other_node is not None
                             and other_node.type not in ("ClassStart", "Mastery")
-                            # This stops lines crossing out of the Ascendency circles
+                            # This stops lines crossing out of the Ascendancy circles
                             and node.ascendancyName == other_node.ascendancyName
                         ):
                             in_out_nodes.append(other_node)

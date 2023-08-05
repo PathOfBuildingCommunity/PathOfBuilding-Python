@@ -53,7 +53,7 @@ class Build:
         self.search_text = ""
         self.need_saving = True
         self.current_tab = "TREE"
-        # Load the default tree into the array
+        # An dict of tree versions used in the build. Load the default tree first.
         self.trees = {_VERSION_str: Tree(self.pob_config, _VERSION_str)}
         self.current_tree = self.trees.get(_VERSION_str)
         # list of specs in this build

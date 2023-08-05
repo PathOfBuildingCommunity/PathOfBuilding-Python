@@ -157,7 +157,7 @@ class Tree:
         # Should this be a dict of GraphicItems
         self.spriteMap = {}
         self.assets = {}
-        # list of images for the ascendency circles
+        # list of images for the ascendancy circles
         self.ascendancy_group_list = []
         # dictionary, by name, of node start ids for each ascendancy
         self.ascendancy_start_nodes = {}
@@ -368,7 +368,7 @@ class Tree:
                     if (
                         other_node is not None
                         and other_node.type not in ("ClassStart", "Mastery")
-                        # This stops lines crossing out of the Ascendency circles
+                        # This stops lines crossing out of the Ascendancy circles
                         and node.ascendancyName == other_node.ascendancyName
                     ):
                         in_out_nodes.append(other_node)
@@ -549,7 +549,7 @@ class Tree:
             _class = self.classes[node.classStartIndex]
             _class["startNodeId"] = node.id
         elif node.isAscendancyStart:
-            # node.type = "AscendClassStart"
+            # node.type = "AscendClassStart" ??
             node.type = "Normal"
             ascend_name_map[node.ascendancyName]["ascendClass"]["startNodeId"] = node.id
             self.ascendancy_start_nodes[node.ascendancyName] = node.id
@@ -570,34 +570,57 @@ class Tree:
             self.keystoneMap[node.dn.lower()] = node
         elif node.isNotable:
             node.type = "Notable"
-            if node.ascendancyName == "":
-                # Some nodes have duplicate names in the tree data for some reason, even though they're not on the tree
-                # Only add them if they're actually part of a group (i.e. in the tree)
-                # Add everything otherwise, because cluster jewel notables don't have a group
-                if self.notableMap.get(node.dn.lower(), None) is None:
-                    self.notableMap[node.dn.lower()] = node
-                elif node.g >= 0:
-                    self.notableMap[node.dn.lower()] = node
-            else:
-                self.ascendancyMap[node.dn.lower()] = node
-                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
-                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
-                if ascend_name_map[node.ascendancyName]["class"]["name"] != "Scion":
-                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
+            # Some nodes have duplicate names in the tree data for some reason, even though they're not on the tree
+            # Only add them if they're actually part of a group (i.e. in the tree)
+            # Add everything otherwise, because cluster jewel notables don't have a group
+            if self.notableMap.get(node.dn.lower(), None) is None:
+                self.notableMap[node.dn.lower()] = node
+            elif node.g >= 0:
+                self.notableMap[node.dn.lower()] = node
         else:
             node.type = "Normal"
             # Add all notables in the Scion Ascendancy, by excluding all the little nodes
-            if (
-                node.ascendancyName == "Ascendant"
-                and "Dexterity" not in node.dn
-                and "Intelligence" not in node.dn
-                and "Strength" not in node.dn
-                and "Passive" not in node.dn
-            ):
-                self.ascendancyMap[node.dn.lower()] = node
-                if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
-                    class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
-                class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
+
+        # get all the Ascendancy nodes in a separate lists, but don't include the ascendancy start node
+        if node.ascendancyName != "" and not node.isAscendancyStart:
+            if self.ascendancyMap.get(node.ascendancyName, None) is None:
+                self.ascendancyMap[node.ascendancyName] = []
+            match node.ascendancyName:
+                case "Ascendant":
+                    if (
+                        "Dexterity" not in node.dn
+                        and "Intelligence" not in node.dn
+                        and "Strength" not in node.dn
+                        and "Passive" not in node.dn
+                    ):
+                        self.ascendancyMap[node.ascendancyName].append(node.id)
+                case _:
+                    self.ascendancyMap[node.ascendancyName].append(node.id)
+
+        # if node.ascendancyName != "" and node.ascendancyName != "Ascendant":
+        #     if self.ascendancyMap.get(node.ascendancyName, None) is None:
+        #         self.ascendancyMap[node.ascendancyName] = []
+        #     self.ascendancyMap[node.ascendancyName].append(node.id)
+        # ToDo: What is class_notables for ? Copied from lua
+        # if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
+        #     class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
+        # if ascend_name_map[node.ascendancyName]["class"]["name"] != "Scion":
+        #     class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
+
+        # if (
+        #     node.ascendancyName == "Ascendant"
+        #     and "Dexterity" not in node.dn
+        #     and "Intelligence" not in node.dn
+        #     and "Strength" not in node.dn
+        #     and "Passive" not in node.dn
+        # ):
+        #     self.ascendancyMap[node.ascendancyName] = []
+        #     self.ascendancyMap[node.ascendancyName].append(node.id)
+        # ToDo: What is class_notables for ? Copied from lua
+        # if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
+        #     class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
+        # class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
+
         # set_node_type
 
     def process_sprite_map(self, sprite_list, sprite_map, sprite_path, index):
