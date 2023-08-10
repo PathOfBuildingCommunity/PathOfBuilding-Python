@@ -2,10 +2,10 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import sys, re
 
-sys.path.insert(1, "../")
-
 from item import Item
 from pob_file import read_xml, write_xml, read_json
+
+sys.path.insert(1, "../")
 
 base_items = read_json("../data/base_items.json")
 

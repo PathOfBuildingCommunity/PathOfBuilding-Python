@@ -16,6 +16,7 @@ QWidget {
 
 /* Put a box around control */
 ListBox:hover,
+QListWidget:hover,
 QCheckBox:hover,
 QRadioButton:hover,
 QComboBox:hover,
@@ -48,7 +49,7 @@ QCheckBox::indicator::unchecked  {
 	border-radius: 4px;
 }
 QCheckBox::indicator::checked {
-	background-color: qradialgradient( cx:0.5, cy:0.5, fx:0.5, fy:0.5, radius:0.6, stop:0 rgba( qss_checkbox_radio_enabled_indicator ), stop:1 rgba( qss_background ) );
+	background-color: qradialgradient( cx:0.5, cy:0.5, fx:0.5, fy:0.5, radius:0.8, stop:0 rgba( qss_checkbox_radio_enabled_indicator ), stop:1 rgba( qss_background ) );
 	border: 1px solid rgba( qss_checkbox_radio_indicator_borders );
 	border-radius: 4px;
 }
@@ -60,7 +61,7 @@ QRadioButton::indicator::unchecked {
 	border-radius: 4px;
 }
 QRadioButton::indicator::checked {
-	background-color: qradialgradient( cx:0.5, cy:0.5, fx:0.5, fy:0.5, radius:0.6, stop:0 rgba( qss_checkbox_radio_enabled_indicator ), stop:1 rgba( qss_background ) );
+	background-color: qradialgradient( cx:0.5, cy:0.5, fx:0.5, fy:0.5, radius:0.8, stop:0 rgba( qss_checkbox_radio_enabled_indicator ), stop:1 rgba( qss_background ) );
 	border: 1px solid rgba( qss_checkbox_radio_indicator_borders );
 	border-radius: 4px;
 }
@@ -130,13 +131,15 @@ QListWidget,
 QListView {
     border: 1px solid rgba( qss_box_borders );
     /* background-color: rgba( qss_background ); */
+    selection-color: rgba( qss_selection_bckgrd );
+    selection-background-color: rgba( qss_selection_bckgrd_colour );
 }
 
 
 ListBox::item,
 QListWidget::item {
     /* background-color: rgba( qss_background ); */
-    color: rgba( qss_checkbox_radio_indicator_borders );
+    color: rgba( qss_tab_selected_borders );
 }
 
 QToolButton, QAction, QWidgetAction,

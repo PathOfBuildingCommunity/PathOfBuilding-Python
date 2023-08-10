@@ -48,9 +48,9 @@ class TreeView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setFrameShape(QFrame.NoFrame)
         self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
-        # set a background of black this stops the tree looking ugly when 'light' theme is selected
+        # set a background of black as this stops the tree looking ugly when 'light' theme is selected.
+        # ascendancy-background-3.jpg also has a hard coded black background.
         self.setBackgroundBrush(QBrush(Qt.black, Qt.SolidPattern))
-        # self.setBackgroundBrush(QBrush("#181818", Qt.SolidPattern))
 
         self._char_class_bkgnd_image = None
         self.fitInView(True, 0.1)
@@ -158,7 +158,7 @@ class TreeView(QGraphicsView):
     # Function Overridden
     def fitInView(self, scale=True, factor=None):
         """
-        Part of the zoom facility
+        Part of the zoom facility.
         :param scale: Not used.
         :param factor: Scale factor.
         :return: N/A

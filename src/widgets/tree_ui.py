@@ -22,6 +22,7 @@ class TreeUI:
         self.win = _win
         self.build = self.win.build
         self._curr_class = PlayerClasses.SCION
+        self.dlg = None  # Is a dialog active
 
         self.win.action_ManageTrees.triggered.connect(self.open_manage_trees)
 
@@ -150,11 +151,14 @@ class TreeUI:
     def open_manage_trees(self):
         """
         and we need a dialog ...
-        :return:
+        :return: N/A
         """
-        dlg = ManageTreeDlg(self.build, self.win)
-        dlg.exec()
-        self.fill_current_tree_combo()
+        # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another time.
+        if self.dlg is None:
+            self.dlg = ManageTreeDlg(self.build, self.win)
+            self.dlg.exec()
+            self.dlg = None
+            self.fill_current_tree_combo()
 
     def fill_current_tree_combo(self):
         """
@@ -252,10 +256,10 @@ class TreeUI:
             self.build.reset_tree()
 
 
-def test() -> None:
-    tree_ui = TreeUI()
-    print(tree_ui)
+# def test() -> None:
+#     tree_ui = TreeUI()
+#     print(tree_ui)
 
 
-if __name__ == "__main__":
-    test()
+# if __name__ == "__main__":
+#     test()

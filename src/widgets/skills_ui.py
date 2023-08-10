@@ -36,6 +36,7 @@ from widgets.ui_utils import (
 )
 from dialogs.popup_dialogs import yes_no_dialog
 from widgets.gem_ui import GemUI
+from dialogs.skillsets_dialog import ManageSkillsDlg
 
 DefaultGemLevel_info = {
     "normalMaximum": {
@@ -81,6 +82,7 @@ class SkillsUI:
         # tracks the state of the triggers, to stop setting triggers more than once or disconnecting when not connected
         self.triggers_connected = False
         self.internal_clipboard = None
+        self.dlg = None  # Is a dialog active
 
         # dictionary for holding the GemUI representions of the gems in each socket group
         self.gem_ui_list = {}
@@ -115,7 +117,7 @@ class SkillsUI:
         self.win.btn_NewSocketGroup.clicked.connect(self.new_socket_group)
         self.win.btn_DeleteSocketGroup.clicked.connect(self.delete_socket_group)
         self.win.btn_DeleteAllSocketGroups.clicked.connect(self.delete_all_socket_groups)
-        # self.win.btn_SkillsManage.clicked.connect(self.manage_skill_sets)
+        self.win.btn_SkillsManage.clicked.connect(self.manage_skill_sets)
 
         self.socket_group_to_be_moved = None
         self.win.list_SocketGroups.model().rowsMoved.connect(self.socket_groups_rows_moved)  # , Qt.QueuedConnection)
@@ -446,6 +448,17 @@ class SkillsUI:
             self.skill_sets_list.clear()
             self.win.combo_SkillSet.clear()
             self.connect_skill_triggers()
+
+    def manage_skill_sets(self):
+        """
+        and we need a dialog ...
+        :return: N/A
+        """
+        # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another time.
+        if self.dlg is None:
+            self.dlg = ManageSkillsDlg(self, self.pob_config, self.win)
+            self.dlg.exec()
+            self.dlg = None
 
     """
     ################################################### SOCKET GROUP ###################################################

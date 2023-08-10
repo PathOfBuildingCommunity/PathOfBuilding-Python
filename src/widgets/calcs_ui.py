@@ -32,9 +32,9 @@ class CalcsUI:
         pass
 
 
-def test() -> None:
-    calcs_ui = CalcsUI()
-    print(calcs_ui)
+# def test() -> None:
+#     calcs_ui = CalcsUI()
+#     print(calcs_ui)
 
 
 if __name__ == "__main__":

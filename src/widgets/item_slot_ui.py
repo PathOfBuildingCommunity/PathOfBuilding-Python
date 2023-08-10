@@ -74,11 +74,6 @@ class ItemSlotUI(QWidget):
         else:
             self.cb_active = None
 
-    # @property
-    # def title(self):
-    #     """The label's text"""
-    #     return self.label.text()
-
     @property
     def current_item_id(self):
         """Get the id number of the combo's current entry"""

@@ -6,15 +6,15 @@ Open a dialog for importing a character.
 
 import urllib3
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QListWidgetItem
 
-from ui.dlgManageTree import Ui_Dialog
+from ui.dlgManageTree import Ui_ManageTree
 from build import Build
 from constants import _VERSION, _VERSION_str, tree_versions
 from dialogs.popup_dialogs import yes_no_dialog, NewTreePopup
 
 
-class ManageTreeDlg(Ui_Dialog, QDialog):
+class ManageTreeDlg(Ui_ManageTree, QDialog):
     """Manage Trees dialog"""
 
     def __init__(self, _build: Build, parent=None):
@@ -22,19 +22,23 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         self.build = _build
         self.http = urllib3.PoolManager()
         self.spec_to_be_moved = None
-        self.triggers_connected = False
         self.item_being_edited = None
+        self.triggers_connected = False
 
         self.setupUi(self)
 
         for spec in self.build.specs:
-            self.list_Trees.addItem(spec.title)
+            title = spec.get("title", "Default")
+            lwi = QListWidgetItem(title)
+            lwi.setData(Qt.UserRole, spec)
+            lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
+            self.list_Trees.addItem(lwi)
 
         self.list_Trees.setFocus()
         self.list_Trees.setCurrentRow(0)
-        for index in range(self.list_Trees.count()):
-            item = self.list_Trees.item(index)
-            item.setFlags(item.flags() | Qt.ItemIsEditable)
+        # for index in range(self.list_Trees.count()):
+        #     item = self.list_Trees.item(index)
+        #     item.setFlags(item.flags() | Qt.ItemIsEditable)
         self.add_detail_to_spec_names()  # turns on triggers
 
         self.btnConvert.setToolTip(self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}"))
@@ -104,7 +108,6 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
                 event.ignore()
         else:
             event.ignore()
-
         super(ManageTreeDlg, self).keyPressEvent(event)
 
     def duplicate_specs(self):
@@ -133,7 +136,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         self.add_detail_to_spec_names()
 
     def delete_specs(self):
-        copied_items = sorted(self.list_Trees.selectedItems())
+        copied_items = self.list_Trees.selectedItems()
         if len(copied_items) <= 0:
             return
         text = "You are about to delete the following Passives Trees\n"
@@ -157,6 +160,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         if _return and new_name != "":
             spec = self.build.new_spec(new_name, version)
             self.list_Trees.addItem(spec.title)
+            # lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
 
     @Slot()
     def list_item_changed(self, item):
@@ -177,6 +181,7 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         """
         self.disconnect_triggers()
         self.item_being_edited = item
+        # Reset the text, removing the spec version information
         row = self.list_Trees.currentRow()
         item.setText(self.build.specs[row].title)
         self.connect_triggers()
@@ -192,9 +197,9 @@ class ManageTreeDlg(Ui_Dialog, QDialog):
         # print("list_current_item_changed")
         if self.item_being_edited == previous:
             self.list_item_changed(previous)
-            # Abandon previous edit
-            # self.item_being_edited = None
             self.add_detail_to_spec_names()
+        # Abandon previous edit
+        self.item_being_edited = None
 
     @Slot()
     def specs_rows_moved(self, parent, start, end, destination, destination_row):

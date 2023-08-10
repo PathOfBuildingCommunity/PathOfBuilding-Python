@@ -4,6 +4,7 @@ Represents and manages one Spec in the XML.
 import xml.etree.ElementTree as ET
 import base64
 import re
+from pathlib import Path
 
 from constants import (
     bandits,
@@ -152,10 +153,10 @@ class Spec:
         else:
             return int.from_bytes(byte_array[begin : begin + length], endian)
 
-    def import_regular_nodes(self, decoded_str, start, count, endian):
+    def import_regular_nodes(self, decoded_data, start, count, endian):
         """
         Import all the regular nodes from an URl
-        :param decoded_str:
+        :param decoded_data:
         :param start:
         :param count: This needs to be passed in as it's one byte in ggg url and two in poeplanner
         :param endian: big (ggg) or little (poeplanner)
@@ -164,19 +165,19 @@ class Spec:
         end = start + (count * 2)
 
         print("nodes: start, end, count", start, end, count)
-        decoded_nodes = decoded_str[start:end]
+        decoded_nodes = decoded_data[start:end]
 
         # now decode the nodes structure to numbers
         self.nodes = []
         for i in range(0, len(decoded_nodes), 2):
-            # print(i, int.from_bytes(decoded_nodes[i : i + 2], endian))
+            print(i, int.from_bytes(decoded_nodes[i : i + 2], endian))
             self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], endian))
         return end
 
-    def import_cluster_nodes(self, decoded_str, start, count, endian):
+    def import_cluster_nodes(self, decoded_data, start, count, endian):
         """
         Import the cluster nodes from an URL
-        :param decoded_str:
+        :param decoded_data:
         :param start:
         :param count: This needs to be passed in as it's one byte in ggg url and two in poeplanner
         :param endian: big (ggg) or little (poeplanner)
@@ -186,18 +187,18 @@ class Spec:
         end = start + (count * 2)
         print("cluster: start, end", start, end, count)
         if count > 0:
-            decoded_cluster_nodes = decoded_str[start:end]
+            decoded_cluster_nodes = decoded_data[start:end]
             # now decode the cluster nodes structure to numbers
             for i in range(0, len(decoded_cluster_nodes), 2):
                 # print(''.join('{:02x} '.format(x) for x in cluster_nodes[i:i + 2]))
-                print(i, int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
+                # print(i, int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
                 self.nodes.append(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
         return end
 
-    def import_mastery_nodes(self, decoded_str, start, count, endian):
+    def import_mastery_nodes(self, decoded_data, start, count, endian):
         """
         Import the mastery nodes from an URL
-        :param decoded_str:
+        :param decoded_data:
         :param start:
         :param count: This needs to be passed in as it's one byte in ggg url and two in poeplanner
         :param endian: big (ggg) or little (poeplanner)
@@ -208,7 +209,7 @@ class Spec:
         print("mastery: start, end, count", start, end, count)
         if count > 0:
             self.masteryEffects = {}
-            decoded_mastery_nodes = decoded_str[start:end]
+            decoded_mastery_nodes = decoded_data[start:end]
             # now decode the mastery nodes structure to numbers
             for i in range(0, len(decoded_mastery_nodes), 4):
                 # print(''.join('{:02x} '.format(x) for x in decoded_mastery_nodes[i:i + 2]))
@@ -224,10 +225,10 @@ class Spec:
                 self.masteryEffects[m_id] = m_effect
                 self.nodes.append(m_id)
 
-    def import_ascendancy_nodes(self, decoded_str, start, count, endian):
+    def import_ascendancy_nodes(self, decoded_data, start, count, endian):
         """
         Import the ascendancy nodes from an URL from poeplpanner
-        :param decoded_str:
+        :param decoded_data:
         :param start:
         :param count: This needs to be passed in as it's one byte in ggg url and two in poeplanner
         :param endian: big (ggg) or little (poeplanner)
@@ -236,7 +237,7 @@ class Spec:
         end = start + (count * 2)
         print("ascendancy: start, end, count", start, end, count)
         if count > 0:
-            decoded_ascendancy_nodes = decoded_str[start:end]
+            decoded_ascendancy_nodes = decoded_data[start:end]
             # print(f"ascendancy_nodes: {len(decoded_ascendancy_nodes)},", "".join("{:02x} ".format(x) for x in decoded_ascendancy_nodes))
             for i in range(0, len(decoded_ascendancy_nodes), 2):
                 # print("".join("{:02x} ".format(x) for x in decoded_ascendancy_nodes[i : i + 2]))
@@ -272,31 +273,37 @@ class Spec:
                 return
             # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
             output = m.group(2).split("?")
-            decoded_str = base64.urlsafe_b64decode(output[0])
-            # print(type(decoded_str), decoded_str)
-            # print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
+            decoded_data = base64.urlsafe_b64decode(output[0])
+            # print(type(decoded_data), decoded_data)
+            # print(f"decoded_data: {len(decoded_data)},", "".join("{:02x} ".format(x) for x in decoded_data))
+            # _fn = Path("tree.bin")
+            # try:
+            #     with _fn.open("wb") as f:
+            #         f.write(decoded_data)
+            # except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
+            #     print(f"Unable to write to {_fn}")
 
-            # the decoded_str is 0 based, so every index will be one smaller than the equivalent in lua
-            if decoded_str and len(decoded_str) > 7:
-                version = self.b_to_i(decoded_str, 0, 4, endian)
+            # the decoded_data is 0 based, so every index will be one smaller than the equivalent in lua
+            if decoded_data and len(decoded_data) > 7:
+                version = self.b_to_i(decoded_data, 0, 4, endian)
                 print(f"Valid tree found, version: {version}")
 
-                self.classId = decoded_str[4]
-                self.ascendClassId = version >= 4 and decoded_str[5] or 0
+                self.classId = decoded_data[4]
+                self.ascendClassId = version >= 4 and decoded_data[5] or 0
 
                 # Nodes, Ascendancies are in here also
                 idx = 6
-                nodes_count = self.b_to_i(decoded_str, idx, idx + 1, endian)
-                idx = self.import_regular_nodes(decoded_str, idx + 1, nodes_count, endian)
+                nodes_count = self.b_to_i(decoded_data, idx, idx + 1, endian)
+                idx = self.import_regular_nodes(decoded_data, idx + 1, nodes_count, endian)
 
                 # Clusters
-                cluster_count = decoded_str[idx]
-                idx = self.import_cluster_nodes(decoded_str, idx + 1, cluster_count, endian)
+                cluster_count = decoded_data[idx]
+                idx = self.import_cluster_nodes(decoded_data, idx + 1, cluster_count, endian)
 
                 # Mastery
-                mastery_count = decoded_str[idx]
+                mastery_count = decoded_data[idx]
                 mastery_start = idx + 1
-                self.import_mastery_nodes(decoded_str, mastery_start, mastery_count, endian)
+                self.import_mastery_nodes(decoded_data, mastery_start, mastery_count, endian)
 
     def set_nodes_from_poeplanner_url(self, poep_url):
         """
@@ -326,17 +333,17 @@ class Spec:
             del tmp_output[0]
             variables = tmp_output  # a list of variable=value or an empty list
 
-            decoded_str = base64.urlsafe_b64decode(encoded_str)
-            # print(f"decoded_str: {len(decoded_str)},", "".join("{:02x} ".format(x) for x in decoded_str))
-            if decoded_str and len(decoded_str) > 10:
+            decoded_data = base64.urlsafe_b64decode(encoded_str)
+            # print(f"decoded_data: {len(decoded_data)},", "".join("{:02x} ".format(x) for x in decoded_data))
+            if decoded_data and len(decoded_data) > 10:
                 # 0-1 is version ?
-                version = self.b_to_i(decoded_str, 0, 2, endian)
+                version = self.b_to_i(decoded_data, 0, 2, endian)
 
                 # 2 is ??
 
                 # 3-6 is tree version_version
-                major_version = self.b_to_i(decoded_str, 3, 4, endian)
-                minor_version = get_tree_version(self.b_to_i(decoded_str, 5, 6, endian))
+                major_version = self.b_to_i(decoded_data, 3, 4, endian)
+                minor_version = get_tree_version(self.b_to_i(decoded_data, 5, 6, endian))
                 self.treeVersion = minor_version < 0 and _VERSION_str or f"{major_version}_{minor_version}"
                 if self.treeVersion not in tree_versions.keys():
                     ok_dialog(
@@ -348,28 +355,28 @@ class Spec:
                     return
 
                 # 7 is Class, 8 is Ascendancy
-                self.classId = decoded_str[7]
-                self.ascendClassId = decoded_str[8]
+                self.classId = decoded_data[7]
+                self.ascendClassId = decoded_data[8]
 
                 # 9 is Bandit
-                self.build.set_bandit_by_number(decoded_str[9])
+                self.build.set_bandit_by_number(decoded_data[9])
 
                 # Nodes
                 idx = 10
-                nodes_count = self.b_to_i(decoded_str, idx, idx + 1, endian)
-                idx = self.import_regular_nodes(decoded_str, idx + 2, nodes_count, endian)
+                nodes_count = self.b_to_i(decoded_data, idx, idx + 1, endian)
+                idx = self.import_regular_nodes(decoded_data, idx + 2, nodes_count, endian)
 
                 # Clusters
-                cluster_count = self.b_to_i(decoded_str, idx, idx + 1, endian)
-                idx = self.import_cluster_nodes(decoded_str, idx + 2, cluster_count, endian)
+                cluster_count = self.b_to_i(decoded_data, idx, idx + 1, endian)
+                idx = self.import_cluster_nodes(decoded_data, idx + 2, cluster_count, endian)
 
                 # Ascendancy Nodes
-                ascendancy_count = self.b_to_i(decoded_str, idx, idx + 1, endian)
-                idx = self.import_ascendancy_nodes(decoded_str, idx + 2, ascendancy_count, endian)
+                ascendancy_count = self.b_to_i(decoded_data, idx, idx + 1, endian)
+                idx = self.import_ascendancy_nodes(decoded_data, idx + 2, ascendancy_count, endian)
 
                 # Masteries
-                mastery_count = self.b_to_i(decoded_str, idx, idx + 1, endian)
-                self.import_mastery_nodes(decoded_str, idx + 2, mastery_count, endian)
+                mastery_count = self.b_to_i(decoded_data, idx, idx + 1, endian)
+                self.import_mastery_nodes(decoded_data, idx + 2, mastery_count, endian)
 
     def export_nodes_to_url(self):
         endian = "big"

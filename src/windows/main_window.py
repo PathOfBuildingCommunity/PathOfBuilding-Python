@@ -56,7 +56,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, _app) -> None:
         super(MainWindow, self).__init__()
         print(
-            f"{datetime.datetime.now()}. {program_title}, running on {platform.system()} {platform.release()}; {platform.version()}"
+            f"{datetime.datetime.now()}. {program_title}, running on {platform.system()} {platform.release()};"
+            f" {platform.version()}"
         )
         self.app = _app
         self.tr = self.app.tr
@@ -199,6 +200,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.toolbar_buttons[widget.toolTip()] = widget
 
         # file = "c:/git/PathOfBuilding-Python.sus/src/data/qss/material-blue.qss"
+        # file = "c:/git/PathOfBuilding-Python.sus/src/data/qss/test_dark.qss"
         # with open(file, "r") as fh:
         #     QApplication.instance().setStyleSheet(fh.read())
         self.setup_theme_actions()

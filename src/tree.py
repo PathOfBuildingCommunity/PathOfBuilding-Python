@@ -597,29 +597,11 @@ class Tree:
                 case _:
                     self.ascendancyMap[node.ascendancyName].append(node.id)
 
-        # if node.ascendancyName != "" and node.ascendancyName != "Ascendant":
-        #     if self.ascendancyMap.get(node.ascendancyName, None) is None:
-        #         self.ascendancyMap[node.ascendancyName] = []
-        #     self.ascendancyMap[node.ascendancyName].append(node.id)
         # ToDo: What is class_notables for ? Copied from lua
         # if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
         #     class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
         # if ascend_name_map[node.ascendancyName]["class"]["name"] != "Scion":
         #     class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
-
-        # if (
-        #     node.ascendancyName == "Ascendant"
-        #     and "Dexterity" not in node.dn
-        #     and "Intelligence" not in node.dn
-        #     and "Strength" not in node.dn
-        #     and "Passive" not in node.dn
-        # ):
-        #     self.ascendancyMap[node.ascendancyName] = []
-        #     self.ascendancyMap[node.ascendancyName].append(node.id)
-        # ToDo: What is class_notables for ? Copied from lua
-        # if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:
-        #     class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = {}
-        # class_notables[ascend_name_map[node.ascendancyName]["class"]["name"]] = node.dn
 
         # set_node_type
 
@@ -663,7 +645,7 @@ class Tree:
             if _data is None:
                 continue
             # overwrite skill_sprites' filename attribute to a valid runtime filename
-            filename = Path(re.sub("(\?.*)$", "", _data["filename"])).name
+            filename = Path(re.sub(r"(\?.*)$", "", _data["filename"])).name
             filename = Path(sprite_path, filename)
             _data["filename"] = filename
             pixmap = sprite_map.get(filename, None)

@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QHBoxLayout,
+    QStyleOptionViewItem,
     QVBoxLayout,
 )
 
@@ -329,7 +330,6 @@ class NewTreePopup(QDialog):
         self.combo_tree_version.setCurrentIndex(len(tree_versions) - 1)
 
         self.btn_exit = QPushButton("Don't Save")
-        # self.btn_exit.setEnabled(False)
         self.button_box = QDialogButtonBox(QDialogButtonBox.Save)
         self.button_box.rejected.connect(self.reject)
         self.button_box.accepted.connect(self.accept)
@@ -340,6 +340,38 @@ class NewTreePopup(QDialog):
         # self.hlayout.addWidget(self.label)
         self.hlayout.addWidget(self.lineedit)
         self.hlayout.addWidget(self.combo_tree_version)
+
+        self.vlayout = QVBoxLayout()
+        self.vlayout.addLayout(self.hlayout)
+        self.vlayout.addWidget(self.button_box)
+        self.setLayout(self.vlayout)
+
+
+class LineEditPopup(QDialog):
+    def __init__(self, tr, title):
+        """
+        Initialize
+        :param tr: App translate function
+        """
+        super().__init__()
+        # self.label_intro_text = tr(title)
+        self.setWindowTitle(tr(title))
+        self.setWindowIcon(QIcon(":/Art/Icons/edit-list-order.png"))
+
+        self.lineedit = QLineEdit()
+        self.lineedit.setMinimumWidth(400)
+        self.lineedit.setPlaceholderText("New Item Set, Rename Me")
+
+        self.btn_exit = QPushButton("Don't Save")
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Save)
+        self.button_box.rejected.connect(self.reject)
+        self.button_box.accepted.connect(self.accept)
+        self.button_box.addButton(self.btn_exit, QDialogButtonBox.RejectRole)
+        self.button_box.setCenterButtons(True)
+
+        self.hlayout = QHBoxLayout()
+        # self.hlayout.addWidget(self.label)
+        self.hlayout.addWidget(self.lineedit)
 
         self.vlayout = QVBoxLayout()
         self.vlayout.addLayout(self.hlayout)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dlg_Config</class>
- <widget class="QDialog" name="dlg_Config">
+ <class>Config</class>
+ <widget class="QDialog" name="Config">
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
@@ -558,7 +558,7 @@
   <connection>
    <sender>btnBox</sender>
    <signal>accepted()</signal>
-   <receiver>dlg_Config</receiver>
+   <receiver>Config</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -574,7 +574,7 @@
   <connection>
    <sender>btnBox</sender>
    <signal>rejected()</signal>
-   <receiver>dlg_Config</receiver>
+   <receiver>Config</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

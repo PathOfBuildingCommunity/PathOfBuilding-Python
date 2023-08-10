@@ -27,6 +27,7 @@ from widgets.ui_utils import HTMLDelegate, html_colour_text
 from item import Item
 from widgets.item_slot_ui import ItemSlotUI
 from dialogs.craft_items_dialog import CraftItemsDlg
+from dialogs.itemsets_dialog import ManageItemsDlg
 
 import_classes = (
     "Abyss Jewels, Amulets, Belts, Body Armours, Boots, Bows, Claws, Daggers, Gloves, Helmets, "
@@ -47,9 +48,11 @@ class ItemsUI:
         self.itemsets = None
         self.triggers_connected = False
         self.internal_clipboard = None
+        self.dlg = None  # Is a dialog active
 
         self.base_items = read_json(Path(self.pob_config.data_dir, "base_items.json"))
         self.mods = read_json(Path(self.pob_config.data_dir, "mods.json"))
+        # print(self.mods.keys())
 
         # set the key_event - handler - self.item_list_keypressed
         self.win.list_Items.key_press_handler = self.item_list_keypressed
@@ -64,6 +67,8 @@ class ItemsUI:
             self.create_equipped_item_slot_ui(item_label)
         self.item_slot_ui_list["Weapon 1"].other_weapon_slot = self.item_slot_ui_list["Weapon 2"]
         self.item_slot_ui_list["Weapon 1 Swap"].other_weapon_slot = self.item_slot_ui_list["Weapon 2 Swap"]
+        self.item_slot_ui_list["Weapon 2"].other_weapon_slot = self.item_slot_ui_list["Weapon 1"]  # Needed ?
+        self.item_slot_ui_list["Weapon 2 Swap"].other_weapon_slot = self.item_slot_ui_list["Weapon 1 Swap"]  # Needed ?
         for name in (
             "Weapon 1",
             "Weapon 2",
@@ -96,6 +101,7 @@ class ItemsUI:
         self.win.combo_ItemsImportSource.currentTextChanged.connect(self.fill_import_items_list)
         self.win.combo_ItemsImportSearchSource.currentTextChanged.connect(self.change_import_search_widgets)
         self.win.lineedit_ItemsImportSearch.textChanged.connect(self.change_import_search_widgets)
+        self.win.btn_ManageItem.clicked.connect(self.manage_item_button_clicked)
 
     def setup_ui(self):
         """Call setupUI on all UI classes that need it"""
@@ -690,15 +696,15 @@ class ItemsUI:
         for child in list(self.xml_current_itemset.findall("Slot")):
             self.xml_current_itemset.remove(child)
 
-        # Add slot information
+        # Add current set slot information
         for slot_ui_name in self.item_slot_ui_list:
             slot_ui = self.item_slot_ui_list[slot_ui_name]
             item_id = slot_ui.current_item_id
-            item_xml = ET.fromstring(f'<Slot name="{slot_ui_name}" itemId="{item_id}"/>')
+            slot_xml = ET.fromstring(f'<Slot name="{slot_ui_name}" itemId="{item_id}"/>')
             if "Flask" in slot_ui_name:
-                item_xml.set("active", bool_to_str(slot_ui.active))
-            item_xml.set("itemPbURL", slot_ui.itemPbURL)
-            self.xml_current_itemset.append(item_xml)
+                slot_xml.set("active", bool_to_str(slot_ui.active))
+            slot_xml.set("itemPbURL", slot_ui.itemPbURL)
+            self.xml_current_itemset.append(slot_xml)
 
     def clear_controls(self, loading=False):
         """
@@ -771,19 +777,44 @@ class ItemsUI:
         :return: XML: The new Itemset
         """
         # print("new_itemset", itemset_name, len(self.itemsets))
-        new_itemset = ET.fromstring(f'<ItemSet useSecondWeaponSet="false" id="{len(self.itemsets)+1}"/>')
-        new_itemset.set("title", itemset_name)
-        self.itemsets.append(new_itemset)
-        self.xml_items.append(new_itemset)
-        self.win.combo_ItemSet.addItem(itemset_name, new_itemset)
-        # self.change_itemset(len(self.itemsets) - 1)
-        return new_itemset
+        new_set_xml = ET.fromstring(f'<ItemSet useSecondWeaponSet="false" id="{len(self.itemsets)+1}"/>')
+        new_set_xml.set("title", itemset_name)
+        self.itemsets.append(new_set_xml)
+        self.xml_items.append(new_set_xml)
+        self.win.combo_ItemSet.addItem(itemset_name, new_set_xml)
+        # Add slot information
+        for slot_ui_name in self.item_slot_ui_list:
+            slot_ui = self.item_slot_ui_list[slot_ui_name]
+            item_id = slot_ui.current_item_id
+            slot_xml = ET.fromstring(f'<Slot name="{slot_ui_name}" itemId="0"/>')
+            new_set_xml.append(slot_xml)
+        return new_set_xml
 
+    @Slot()
     def change_itemset(self, _index):
         """React to the the itemset combo being changed"""
         # _debug("change_itemset", _index)
         if 0 <= _index < len(self.itemsets):
             self.show_itemset(_index)
+
+    def delete_itemset(self, itemset):
+        """
+        Delete ONE itemset
+        :param: xml.etree.ElementTree: the item to be removed.
+        """
+        # print("delete_itemset")
+        try:
+            index = self.itemsets.index(itemset)
+        except ValueError:
+            return
+        self.xml_items.remove(itemset)
+        self.itemsets.remove(itemset)
+        if self.xml_current_itemset == itemset:
+            if len(self.itemsets) == 0:
+                self.xml_current_itemset = None
+            else:
+                self.xml_current_itemset = self.xml_items[index == 0 and 0 or index - 1]
+        self.win.combo_ItemSet.removeItem(index)
 
     def delete_all_itemsets(self):
         """Delete ALL itemsets"""
@@ -794,12 +825,42 @@ class ItemsUI:
         self.itemsets.clear()
         self.win.combo_ItemSet.clear()
 
+    def move_set(self, start, destination):
+        """
+        Move a set entry. This is called by the manage tree dialog.
+
+        :param start: int: the index of the spec to be moved
+        :param destination: the index where to insert the moved spec
+        :return:
+        """
+        _set = self.itemsets[start]
+        xml_set = self.xml_items[start]
+        if start < destination:
+            # need to decrement dest by one as we are going to remove start first
+            destination -= 1
+        self.itemsets.remove(_set)
+        self.itemsets.insert(destination, _set)
+        self.xml_items.remove(xml_set)
+        self.xml_items.insert(destination, xml_set)
+
     def delete_all_items(self):
         """Delete all items"""
         # print("delete_all_items")
         for child in list(self.xml_items.findall("Item")):
             self.xml_items.remove(child)
         self.clear_controls(True)
+
+    @Slot()
+    def manage_item_button_clicked(self):
+        """
+        and we need a dialog ...
+        :return: N/A
+        """
+        # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another time.
+        if self.dlg is None:
+            self.dlg = ManageItemsDlg(self, self.pob_config, self.win)
+            self.dlg.exec()
+            self.dlg = None
 
     @Slot()
     def fill_import_items_list(self, text):

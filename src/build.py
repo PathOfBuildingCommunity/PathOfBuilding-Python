@@ -156,7 +156,7 @@ class Build:
 
     @property
     def resistancePenalty(self):
-        return self.get_config_tag_item("Input", "resistancePenalty", "number", 0)
+        return self.get_config_tag_item("Input", "resistancePenalty", "number", "0")
 
     @resistancePenalty.setter
     def resistancePenalty(self, new_name):

@@ -36,9 +36,9 @@ class ConfigUI:
         self.build.pantheonMinorGod = self.win.combo_MinorGods.currentData()
 
 
-def test() -> None:
-    config_ui = ConfigUI()
-    print(config_ui)
+# def test() -> None:
+#     config_ui = ConfigUI()
+#     print(config_ui)
 
 
 if __name__ == "__main__":

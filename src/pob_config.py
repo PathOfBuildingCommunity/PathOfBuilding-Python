@@ -432,7 +432,7 @@ class Config:
         # get all builds into an object so we can delete them from the live xml tree without crashing
         builds = _recent.findall("build")
         for idx, build in enumerate(builds):
-            if idx < 10:
+            if idx <= 10:
                 output.append(build.text)
             else:
                 _recent.remove(build)
@@ -532,7 +532,7 @@ class Config:
             :return: Path
             """
             print("setting_directory_dialog")
-            directory = QFileDialog.getExistingDirectory(self, "Select Build Path")
+            directory = QFileDialog.getExistingDirectory(self, caption="Select Build Path")
             if directory != "":
                 dlg.lineedit_BuildPath.setText(directory)
 

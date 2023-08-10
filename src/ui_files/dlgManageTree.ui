@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ManageTree</class>
+ <widget class="QDialog" name="ManageTree">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -42,7 +42,7 @@
     <enum>Qt::MoveAction</enum>
    </property>
    <property name="alternatingRowColors">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="selectionMode">
     <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -76,7 +76,7 @@
     <string>Ctrl+N</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="lbl_Info">
    <property name="geometry">
     <rect>
      <x>20</x>

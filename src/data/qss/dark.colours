@@ -4,7 +4,7 @@ qss_background~~32, 33, 36, 1.000
   #4d5157   light grey. color and selection-color
 qss_selection_bckgrd~~228, 231, 235, 1.000
   #202124   very dark grey. selection-background-color
-qss_selection_bckgrd_colour~~32, 33, 36, 0.500
+qss_selection_bckgrd_colour~~186, 191, 196, 0.200
   #78879b   blue grey. hover borders
 qss_hover_borders~~120, 135, 155, 1.000
   #546E7A   teal. separator
@@ -15,7 +15,7 @@ qss_box_borders~~63, 64, 66, 1.000
   ### Three numbers only
 qss_tab_selected_borders~~255, 255, 255
   #5f9af4   light blue. CheckBox / Radio enabled indicator
-qss_checkbox_radio_enabled_indicator~~95, 154, 244, 0.400
+qss_checkbox_radio_enabled_indicator~~0, 0, 255, 1.000
   #c0c0c0   silver. CheckBox / Radio indicator borders
 qss_checkbox_radio_indicator_borders~~192, 192, 192, 1.000
   # Spin box up arrow url. Must be relative to self.config.data_dir or in the PoB.qrc

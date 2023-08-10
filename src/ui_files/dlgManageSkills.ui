@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ManageSkillSet</class>
+ <widget class="QDialog" name="ManageSkillSet">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,7 +17,7 @@
    <iconset resource="../../Assets/PoB.qrc">
     <normaloff>:/Art/Icons/edit-list-order.png</normaloff>:/Art/Icons/edit-list-order.png</iconset>
   </property>
-  <widget class="QListWidget" name="list_Trees">
+  <widget class="QListWidget" name="list_Skills">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -42,7 +42,7 @@
     <enum>Qt::MoveAction</enum>
    </property>
    <property name="alternatingRowColors">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="selectionMode">
     <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -76,7 +76,7 @@
     <string>Ctrl+N</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="lbl_Info">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -154,7 +154,7 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>list_Trees</tabstop>
+  <tabstop>list_Skills</tabstop>
   <tabstop>btnCopy</tabstop>
   <tabstop>btnDelete</tabstop>
  </tabstops>

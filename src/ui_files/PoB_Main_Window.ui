@@ -261,7 +261,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>5</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -651,7 +651,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                </widget>
                <widget class="QPushButton" name="btn_SkillsManage">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="geometry">
                  <rect>
@@ -1401,10 +1401,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      <bool>true</bool>
                     </property>
                    </widget>
-                   <widget class="QPushButton" name="btn_ItemManage">
+                   <widget class="QPushButton" name="btn_ManageItem">
                     <property name="geometry">
                      <rect>
-                      <x>365</x>
+                      <x>360</x>
                       <y>1</y>
                       <width>75</width>
                       <height>24</height>
