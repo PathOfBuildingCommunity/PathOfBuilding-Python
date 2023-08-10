@@ -248,7 +248,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         Selecting a file or directory for opening / saving
         :return: N/A
         """
-        print("task_button_clicked")
+        # print("task_button_clicked")
         curr_item = self.list_Files.currentItem()
         info = curr_item.data(Qt.UserRole)
         # Only change directory on task button being pressed if we are an Open Dialog
@@ -271,7 +271,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         :return: N/A
         """
         info = curr_item.data(Qt.UserRole)
-        print("file_chosen", info["path"])
+        # print("file_chosen", info["path"])
         # If we are here then an item was selected
         if self.save:
             save_name = self.lineEdit_SaveAs.text()

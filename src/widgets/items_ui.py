@@ -825,7 +825,7 @@ class ItemsUI:
         self.itemsets.clear()
         self.win.combo_ItemSet.clear()
 
-    def move_set(self, start, destination):
+    def move_itemset(self, start, destination):
         """
         Move a set entry. This is called by the manage tree dialog.
 
@@ -842,6 +842,35 @@ class ItemsUI:
         self.itemsets.insert(destination, _set)
         self.xml_items.remove(xml_set)
         self.xml_items.insert(destination, xml_set)
+        # Turn off triggers whist moving the combobox to stop unnecessary updates)
+        self.disconnect_item_triggers()
+        curr_index = self.win.combo_ItemSet.currentIndex()
+        self.win.combo_ItemSet.removeItem(start)
+        self.win.combo_ItemSet.insertItem(destination, _set.get("title", "Default"), _set)
+        # set the SkillSet ComboBox dropdown width.
+        self.win.combo_ItemSet.view().setMinimumWidth(self.win.combo_ItemSet.minimumSizeHint().width())
+        if start == curr_index:
+            self.win.combo_ItemSet.setCurrentIndex(destination)
+        self.connect_item_triggers()
+
+    def copy_itemset(self, index, new_name):
+        """
+        Copy a set and return the new copy
+        :param index: the row the current set is on.
+        :param new_name: str: the new set's name
+        :return: xml.etree.ElementTree: The new set
+        """
+        _set = self.itemsets[index]
+        xml_set = self.xml_items[index]
+        index += 1
+        new_set = ET.fromstring(ET.tostring(xml_set))
+        new_set.set("title", new_name)
+        self.itemsets.insert(index, new_set)
+        self.xml_items.insert(index, new_set)
+        self.disconnect_item_triggers()
+        self.win.combo_ItemSet.insertItem(index, new_set.get("title", "Default"), new_set)
+        self.connect_item_triggers()
+        return new_set
 
     def delete_all_items(self):
         """Delete all items"""

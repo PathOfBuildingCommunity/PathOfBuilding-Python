@@ -360,7 +360,7 @@ class LineEditPopup(QDialog):
 
         self.lineedit = QLineEdit()
         self.lineedit.setMinimumWidth(400)
-        self.lineedit.setPlaceholderText("New Item Set, Rename Me")
+        self.lineedit.setPlaceholderText("I'm empty, type in me ...")
 
         self.btn_exit = QPushButton("Don't Save")
         self.button_box = QDialogButtonBox(QDialogButtonBox.Save)
@@ -377,3 +377,13 @@ class LineEditPopup(QDialog):
         self.vlayout.addLayout(self.hlayout)
         self.vlayout.addWidget(self.button_box)
         self.setLayout(self.vlayout)
+
+    @property
+    def placeholder_text(self):
+        """Do nothing, we just need to declare the property"""
+        pass
+
+    @placeholder_text.setter
+    def placeholder_text(self, new_text):
+        """Do nothing, we just need to declare the property"""
+        self.lineedit.setPlaceholderText(new_text)

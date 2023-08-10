@@ -202,7 +202,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         self.item_being_edited = None
 
     @Slot()
-    def specs_rows_moved(self, parent, start, end, destination, destination_row):
+    def specs_rows_moved(self, parent, start, end, destination, dest_row):
         """
         Respond to a spec being moved, by moving it's matching entry in build's list. It's called 4 times (sometimes)
 
@@ -210,7 +210,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         :param start: int: where the row was moved from.
         :param end: int: not Used. It's the same as start as multi-selection is not allowed.
         :param destination: QModelIndex: not Used.
-        :param destination_row: int: The destination row.
+        :param dest_row: int: The destination row.
         :return: N/A
         """
         # print("specs_rows_moved")
@@ -219,7 +219,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         if self.spec_to_be_moved is None:
             return
         # Do move
-        self.build.move_spec(start, destination_row)
+        self.build.move_spec(start, dest_row)
 
         # reset to none, this one we only respond to the first call of the four.
         self.spec_to_be_moved = None
@@ -230,8 +230,8 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         source_parent,
         source_start,
         source_end,
-        destination_parent,
-        destination_row,
+        dest_parent,
+        dest_row,
     ):
         """
         Setup for a spec move. It's called 4 times (sometimes)
@@ -239,8 +239,8 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         :param source_parent: QModelIndex: Used to notify the move
         :param source_start: int: not Used
         :param source_end: int: not Used
-        :param destination_parent: QModelIndex: not Used
-        :param destination_row: int: not Used
+        :param dest_parent: QModelIndex: not Used
+        :param dest_row: int: not Used
         :return: N/A
         """
         # print("specs_rows_about_to_be_moved")
