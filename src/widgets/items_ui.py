@@ -108,6 +108,16 @@ class ItemsUI:
         # Delay setting the delegate so not all 1167 rows (Jan2023) are processed multiple times during startup
         self.win.list_ImportItems.set_delegate()
 
+    @property
+    def activeItemSet(self):
+        # Use a property to ensure the correct +/- 1
+        return max(int(self.xml_items.get("activeItemSet", 1)) - 1, 0)
+
+    @activeItemSet.setter
+    # Use a property to ensure the correct +/- 1
+    def activeItemSet(self, new_set):
+        self.xml_items.set("activeItemSet", f"{new_set + 1}")
+
     def connect_item_triggers(self):
         """re-connect widget triggers that need to be disconnected during loading and other processing"""
         # print("connect_item_triggers", self.triggers_connected)
@@ -677,7 +687,7 @@ class ItemsUI:
         prior to showing the new set.
 
         :param:version: str. 1 for version 1 xml data,  2 for updated.
-        :return: ET.ElementTree:
+        :return: xml.etree.ElementTree
         """
         if self.win.list_Items.count() > 0:
             # leave this here for a bit to pick out one item
@@ -705,6 +715,11 @@ class ItemsUI:
                 slot_xml.set("active", bool_to_str(slot_ui.active))
             slot_xml.set("itemPbURL", slot_ui.itemPbURL)
             self.xml_current_itemset.append(slot_xml)
+        self.activeItemSet = self.win.combo_ItemSet.currentIndex()
+        # Renumber skillsets in case they have been moved, created or deleted.
+        for idx, _set in enumerate(self.xml_items.findall("ItemSet"), 1):
+            _set.set("id", str(idx))
+        return self.xml_items
 
     def clear_controls(self, loading=False):
         """

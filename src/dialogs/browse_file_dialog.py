@@ -5,6 +5,7 @@ Open a dialog for Opening or Saving a character.
 """
 
 import glob, os, re
+import xml
 
 from PySide6.QtWidgets import QDialog, QListWidgetItem, QFileDialog
 from PySide6.QtCore import Qt, Slot
@@ -92,7 +93,11 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         :param max_length: int: of the longest name
         :return: str, str: "", "" if invalid xml, or colourized name and class name
         """
-        xml_file = read_xml_as_dict(filename)
+        try:
+            xml_file = read_xml_as_dict(filename)
+        except xml.parsers.expat.ExpatError:  # Corrupt file
+            return "", ""
+
         xml_build = xml_file.get("PathOfBuilding", {}).get("Build", {})
         if xml_build != {}:
             name = os.path.splitext(filename)[0]

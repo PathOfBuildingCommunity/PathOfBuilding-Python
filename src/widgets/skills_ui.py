@@ -207,16 +207,19 @@ class SkillsUI:
         self.win.combo_SkillSet.view().setMinimumWidth(self.win.combo_SkillSet.minimumSizeHint().width())
 
         self.connect_skill_triggers()
+        # make sure this is loaded after the skillset's
+        self.activeSkillSet = self.xml_skills.get("self.activeSkillSet", len(self.skill_sets_list))
 
         # activate trigger to run change_skill_set
         active_skill_set = min(self.activeSkillSet, len(self.skill_sets_list) - 1)
-        self.win.combo_SkillSet.setCurrentIndex(active_skill_set)
+        self.win.combo_SkillSet.setCurrentIndex(active_skill_set - 1)
 
     def save(self):
         """
         Save internal structures back to the build's skills object.
         The gems have been saving themselves to the xml object whenever there was a change,
           so we only need to get the other UI widget's values
+        :return : xml.etree.ElementTree
         """
         self.xml_skills.set("sortGemsByDPS", bool_to_str(self.win.check_SortByDPS.isChecked()))
         # self.xml_skills.set("matchGemLevelToCharacterLevel", bool_to_str(self.win.check_MatchToLevel.isChecked()))
@@ -226,9 +229,13 @@ class SkillsUI:
         )
         self.xml_skills.set("sortGemsByDPSField", self.win.combo_SortByDPS.currentData())
         self.xml_skills.set("showSupportGemTypes", self.win.combo_ShowSupportGems.currentData())
-        self.xml_skills.set("showSupportGemTypes", self.win.combo_DefaultGemLevel.currentData())
+        self.xml_skills.set("defaultGemLevel", self.win.combo_DefaultGemLevel.currentData())
         # self.xml_skills.set("defaultGemLevel", str(self.win.spin_DefaultGemLevel.value()))
         self.xml_skills.set("defaultGemQuality", str(self.win.spin_DefaultGemQuality.value()))
+        self.activeSkillSet = self.win.combo_SkillSet.currentIndex()
+        # Renumber skillsets in case they have been moved, created or deleted.
+        for idx, _set in enumerate(self.xml_skills.findall("SkillSet"), 1):
+            _set.set("id", str(idx))
         return self.xml_skills
 
     def load_gems_json(self):
