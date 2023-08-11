@@ -8,6 +8,56 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 import xmltodict
 import json
+import os
+import xml
+
+from constants import ColourCodes
+
+
+def get_file_info(win, filename, max_length, max_filename_width=40, html=True):
+    """
+    Open the xml and get the class information, level and version. Format a line for display on the listbox.
+    Take into account the maximum width of the listbox and trim names as needed.
+
+    :param win: windows.main_window.MainWindow: pointer to the mainwindow.
+    :param filename: name of file in current directory.
+    :param max_length: int: of the longest name.
+    :param max_filename_width: int: Maximum number of characters of the filename to be shown.
+    :param html: bool: If True return the text as html formatted.
+    :return: str, str: "", "" if invalid xml, or colourized name and class name.
+    """
+    try:
+        xml_file = read_xml_as_dict(filename)
+    except xml.parsers.expat.ExpatError:  # Corrupt file
+        return "", ""
+
+    xml_build = xml_file.get("PathOfBuilding", {}).get("Build", {})
+    if xml_build != {}:
+        name = os.path.splitext(filename)[0]
+        # Get the maximum length of a name, trimming it if need be
+        name = len(name) > max_filename_width and (name[:max_filename_width] + "..") or name
+        # Create a spacer string of the correct length to right justify the class info
+        spacer = (min(max_length, max_filename_width) - len(name) + 4) * " "
+
+        # The information on the right
+        version = xml_build.get("@version", "1")
+        level = xml_build.get("@level", "1")
+        class_name = xml_build.get("@className", "1")
+        ascend_class_name = xml_build.get("@ascendClassName", "None")
+        _class = ascend_class_name == "None" and class_name or ascend_class_name
+        info_text = f" Level {level} {_class} (v{version})"
+
+        colour = ColourCodes[class_name.upper()].value
+        normal = win.qss_default_text  # Default text's colour
+        if html:
+            return (
+                f'<pre style="color:{normal};">{name}{spacer}<span style="color:{colour};">{info_text}</span></pre>',
+                class_name,
+            )
+        else:
+            return f"{name}{spacer}{info_text}", class_name
+    else:
+        return "", ""
 
 
 def read_xml_as_dict(filename):
@@ -83,7 +133,7 @@ def json_to_et(json_content):
     """
     Convert a json string into a ET.ElementTree
     :param json_content: String: the json content
-    :return: ET.ElementTree
+    :return: xml.etree.ElementTree
     """
     # convert via a dictionary
     _dict = json.loads(json_content)

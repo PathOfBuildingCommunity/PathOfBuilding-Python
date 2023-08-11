@@ -107,6 +107,7 @@ class ManageItemsDlg(Ui_ManageItemSet, QDialog):
             _set = self.item_ui.new_itemset(new_name)
             lwi = QListWidgetItem(new_name)
             lwi.setData(Qt.UserRole, _set)
+            lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
             self.list_Items.addItem(lwi)
 
     @Slot()

@@ -584,7 +584,7 @@ class Item:
         """
         Save internal structures back to a xml object. Not used.
 
-        :return: ET.ElementTree:
+        :return: xml.etree.ElementTree:
         """
         text = f"Rarity: {self.rarity}\n"
         text += self.title and f"{self.title}\n{self.base_name}\n" or f"{self.base_name}\n"

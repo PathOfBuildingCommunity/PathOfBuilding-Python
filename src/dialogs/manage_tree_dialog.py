@@ -36,9 +36,6 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
 
         self.list_Trees.setFocus()
         self.list_Trees.setCurrentRow(0)
-        # for index in range(self.list_Trees.count()):
-        #     item = self.list_Trees.item(index)
-        #     item.setFlags(item.flags() | Qt.ItemIsEditable)
         self.add_detail_to_spec_names()  # turns on triggers
 
         self.btnConvert.setToolTip(self.btnConvert.toolTip().replace("_VERSION", f"{_VERSION}"))
@@ -159,8 +156,10 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         version = dlg.combo_tree_version.currentData()
         if _return and new_name != "":
             spec = self.build.new_spec(new_name, version)
-            self.list_Trees.addItem(spec.title)
-            # lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
+            lwi = QListWidgetItem(new_name)
+            lwi.setData(Qt.UserRole, spec)
+            lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
+            self.list_Trees.addItem(lwi)
 
     @Slot()
     def list_item_changed(self, item):

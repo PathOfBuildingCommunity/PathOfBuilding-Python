@@ -31,23 +31,23 @@ from constants import (
     resistance_penalty,
 )
 
-from pob_config import Config, _debug, print_a_xml_element, print_call_stack
+from build import Build
+from dialogs.browse_file_dialog import BrowseFileDlg
+from dialogs.export_dialog import ExportDlg
+from dialogs.import_dialog import ImportDlg
 from dialogs.popup_dialogs import yes_no_dialog
 from flow_layout import FlowLayout
-from build import Build
-
 from player_stats import PlayerStats
-from widgets.ui_utils import html_colour_text, set_combo_index_by_data
+from pob_config import Config, _debug, print_a_xml_element, print_call_stack
+from pob_file import get_file_info
+from tree_view import TreeView
 from widgets.calcs_ui import CalcsUI
 from widgets.config_ui import ConfigUI
 from widgets.items_ui import ItemsUI
 from widgets.notes_ui import NotesUI
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
-from tree_view import TreeView
-from dialogs.import_dialog import ImportDlg
-from dialogs.export_dialog import ExportDlg
-from dialogs.browse_file_dialog import BrowseFileDlg
+from widgets.ui_utils import html_colour_text, MenuProxyStyle, set_combo_index_by_data
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -68,7 +68,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # When False stop all the images being deleted and being recreated
         self.refresh_tree = True
 
-        self.curr_theme: QAction = None  # The QAction representing the current theme (to turn off check mark)
+        # The QAction representing the current theme (to turn off the menu's check mark)
+        self.curr_theme: QAction = None
         self.qss_default_text = f"rgba( 255, 255, 255, 0.500 )"
 
         # Flag to stop some actions happening in triggers during loading
@@ -226,6 +227,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
 
+        # Add in StyleProxy
+        # self._proxy = MenuProxyStyle(self.menu_Builds.style())
+        # self.menu_Builds.setStyle(self._proxy)
+
         # Start the statusbar self updating
         self.update_status_bar()
 
@@ -247,29 +252,66 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """Called after show(). Call setup_ui for all UI classes that need it"""
         self.items_ui.setup_ui()
 
-    # Setup menu entries for all valid recent builds in the settings file
     def set_recent_builds_menu_items(self, config: Config):
         """
+        Setup menu entries for all valid recent builds in the settings file
         Read the config for recent builds and create menu entries for them
         return: N/A
         """
 
-        # Lambdas in python share the variable scope they're created in
-        # so make a function containing just the lambda
+        def make_connection(_full_path):
+            """
+            Connect the menu item to _open_previous_build passing in extra information
+            Lambdas in python share the variable scope they're created in
+            so make a function containing just the lambda
+            :param _full_path: full path to the file, to be sent to the
+            :return: N/A
+            """
+            _action.triggered.connect(lambda checked: self._open_previous_build(checked, _full_path))
+
+        os.chdir(self.config.build_path)
+        max_length = 80
+        recent_builds = config.recent_builds()
+        for idx, full_path in enumerate(recent_builds):
+            if full_path is not None and full_path != "":
+                filename = Path(full_path).relative_to(self.config.build_path)
+                text, class_name = get_file_info(self, filename, max_length, 70)
+                _action = QWidgetAction(self.menu_Builds)
+                ql = QLabel(text)
+                _action.setDefaultWidget(ql)
+                self.menu_Builds.addAction(_action)
+                make_connection(full_path)
+
+    def set_recent_builds_menu_items1(self, config: Config):
+        """
+        Setup menu entries for all valid recent builds in the settings file
+        Read the config for recent builds and create menu entries for them
+        return: N/A
+        """
+
         def make_connection(_idx, _filename):
             """
             Connect the menu item to _open_previous_build passing in extra information
+            Lambdas in python share the variable scope they're created in
+            so make a function containing just the lambda
             :param _idx:
             :param _filename:
             :return: N/A
             """
             _action.triggered.connect(lambda checked: self._open_previous_build(checked, _idx, _filename))
 
+        os.chdir(self.config.build_path)
+        max_length = 60
         recent_builds = config.recent_builds()
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
-                filename = re.sub(".xml.*", "", str(Path(value).relative_to(self.config.build_path)))
-                _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
+                filename = Path(value).relative_to(self.config.build_path)
+                # name = re.sub(r".xml\d?", "", str(Path(value).relative_to(self.config.build_path)))
+                text, class_name = get_file_info(self, filename, max_length, 40, False)
+                # print("set_recent_builds_menu_items: text, class_name", text, class_name)
+                _action = self.menu_Builds.addAction(f"&{idx}.  {text}")
+                _action.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 10))
+                # _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
 
     def setup_theme_actions(self):
@@ -278,11 +320,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
 
-        # Lambdas in python share the variable scope they're created in
-        # so make a function containing just the lambda
         def make_connection(name, _action):
             """
             Connect the menu item to _open_previous_build passing in extra information.
+            Lambdas in python share the variable scope they're created in
+            so make a function containing just the lambda
             :param name: str; the name of the file but no extension.
             :param _action: QAction; the current action.
             :return: N/A
@@ -403,13 +445,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # Open a previous build as shown on the Build Menu
     @Slot()
-    def _open_previous_build(self, checked, value, index):
+    def _open_previous_build(self, checked, full_path):
         """
         React to a previous build being selected from the "Build" menu.
 
         :param checked: Boolean: a value for if it's checked or not, always False
-        :param value: String: Fullpath name of the build to load
-        :param index: Integer: index of chosen menu item
+        :param full_path: String: Fullpath name of the build to load
         :return: N/A
         """
         # Or does the logic for checking we need to save and save if needed, go here ???
@@ -417,7 +458,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # if ui_utils.save_yes_no(self.app.tr("Save build"), self.app.tr("build name goes here"))
 
         # open the file using the filename in the build.
-        self.build_loader(value)
+        self.build_loader(full_path)
 
     def build_loader(self, filename_or_xml=Union[str, Path, ET.ElementTree]):
         """

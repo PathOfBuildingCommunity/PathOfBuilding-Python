@@ -38,7 +38,7 @@ proxyURL="" buildPath="" />
 
 default_spec = f"""<Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" 
 treeVersion="{_VERSION_str}"></Spec>"""
-default_skill_set = """<SkillSet id="0" title="Default">
+default_skill_set = """<SkillSet id="1" title="Default">
   <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot="" mainActiveSkill="1"></Skill>
 </SkillSet>"""
 

@@ -4,19 +4,20 @@ File Dialog
 Open a dialog for Opening or Saving a character.
 """
 
-import glob, os, re
-import xml
+import glob
+import os
+import re
 
 from PySide6.QtWidgets import QDialog, QListWidgetItem, QFileDialog
 from PySide6.QtCore import Qt, Slot
 
 from build import Build
-from constants import ColourCodes
 from dialogs.popup_dialogs import yes_no_dialog
 from pob_config import Config
-from pob_file import read_xml_as_dict
-from ui.dlgBrowseFile import Ui_BrowseFile
+from pob_file import get_file_info
 from widgets.ui_utils import html_colour_text
+
+from ui.dlgBrowseFile import Ui_BrowseFile
 
 
 class BrowseFileDlg(Ui_BrowseFile, QDialog):
@@ -84,45 +85,6 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         self.lineEdit_CurrDir.editingFinished.disconnect(self.lineedit_currdir_editing_finished)
         self.triggers_connected = False
 
-    def get_file_info(self, filename, max_length):
-        """
-        Open the xml and get the class information, level and version. Format a line for display on the listbox.
-        Take into account the maximum width of the listbox and trim names as needed.
-
-        :param filename: name of file in current directory
-        :param max_length: int: of the longest name
-        :return: str, str: "", "" if invalid xml, or colourized name and class name
-        """
-        try:
-            xml_file = read_xml_as_dict(filename)
-        except xml.parsers.expat.ExpatError:  # Corrupt file
-            return "", ""
-
-        xml_build = xml_file.get("PathOfBuilding", {}).get("Build", {})
-        if xml_build != {}:
-            name = os.path.splitext(filename)[0]
-            # Get the maximum length of a name, trimming it ifneed be
-            name = len(name) > self.max_filename_width and (name[: self.max_filename_width] + "..") or name
-            # Create a spacer string of the correct length to right justify the class info
-            spacer = (min(max_length, self.max_filename_width) - len(name) + 4) * " "
-
-            # The information on the right
-            version = xml_build.get("@version", "1")
-            level = xml_build.get("@level", "1")
-            class_name = xml_build.get("@className", "1")
-            ascend_class_name = xml_build.get("@ascendClassName", "None")
-            _class = ascend_class_name == "None" and class_name or ascend_class_name
-            text = f" Level {level} {_class} (v{version})"
-
-            colour = ColourCodes[class_name.upper()].value
-            normal = self.win.qss_default_text  # Default text's colour
-            return (
-                f'<pre style="color:{normal};">{name}{spacer}<span style="color:{colour};">{text}</span></pre>',
-                class_name,
-            )
-        else:
-            return "", ""
-
     def fill_list_box(self, this_dir):
         """
         Search the current directory and find files and subdirectories.
@@ -148,7 +110,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             # find longest name
             max_length = max([len(s) for s in files_grabbed])
             for filename in files_grabbed:
-                text, class_name = self.get_file_info(filename, max_length)
+                text, class_name = get_file_info(self.win, filename, max_length, self.max_filename_width)
                 if text != "":
                     self.add_path_to_listbox(filename, text, class_name, False)
 

@@ -3,17 +3,8 @@ Utilities for the UI that do not have dependencies on MainWindow
 """
 
 from PySide6.QtCore import Qt, QMargins, QPoint, QRect, QSize
-from PySide6.QtGui import QAbstractTextDocumentLayout, QTextDocument
-from PySide6.QtWidgets import (
-    QApplication,
-    QComboBox,
-    QLabel,
-    QMessageBox,
-    QSizePolicy,
-    QStyle,
-    QStyleOptionViewItem,
-    QStyledItemDelegate,
-)
+from PySide6.QtGui import QAbstractTextDocumentLayout, QPalette, QTextDocument
+from PySide6.QtWidgets import QApplication, QComboBox, QProxyStyle, QStyle, QStyleOptionViewItem, QStyledItemDelegate
 
 from pob_config import _debug
 from constants import ColourCodes

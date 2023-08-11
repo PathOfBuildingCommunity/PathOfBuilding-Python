@@ -66,7 +66,10 @@ QRadioButton::indicator::checked {
 	border-radius: 4px;
 }
 
-QMenu{
+QMenuBar::drop-down {
+    border: 1px solid rgba( qss_box_borders );
+}
+QMenu {
 	padding-left: 2px;
 }
 QAction::separator,
@@ -83,9 +86,13 @@ QMenu::item {
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
-QMenuBar::item:selected {
-    padding: 4px;
-    background: rgba( qss_tab_selected_borders, 0.188 );
+QMenu::item:selected, QMenu > .QLabel::Hover {
+    background: rgba(qss_tab_selected_borders, 0.188);
+}
+QMenu::icon {
+    padding-left: 10px;
+    width: 14px;
+    height: 14px;
 }
 
 
@@ -117,6 +124,7 @@ QTabBar::tab:!selected {
 
 
 QComboBox,
+QLineEdit,
 QPushButton {
     border: 1px solid rgba( qss_box_borders );
     padding: 4px 8px;

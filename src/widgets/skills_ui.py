@@ -127,7 +127,7 @@ class SkillsUI:
     @activeSkillSet.setter
     # Use a property to ensure the correct +/- 1
     def activeSkillSet(self, new_set):
-        self.xml_skills.set("activeSkillSet", f"{new_set + 1}")
+        self.xml_skills.set("activeSkillSet", f"{int(new_set) + 1}")
 
     def load(self, _skills):
         """
@@ -208,11 +208,11 @@ class SkillsUI:
 
         self.connect_skill_triggers()
         # make sure this is loaded after the skillset's
-        self.activeSkillSet = self.xml_skills.get("self.activeSkillSet", len(self.skill_sets_list))
+        # self.activeSkillSet = self.xml_skills.get("activeSkillSet", len(self.skill_sets_list))
 
         # activate trigger to run change_skill_set
-        active_skill_set = min(self.activeSkillSet, len(self.skill_sets_list) - 1)
-        self.win.combo_SkillSet.setCurrentIndex(active_skill_set - 1)
+        # active_skill_set = min(self.activeSkillSet, len(self.skill_sets_list) - 1)
+        self.win.combo_SkillSet.setCurrentIndex(self.activeSkillSet)
 
     def save(self):
         """

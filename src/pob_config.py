@@ -432,7 +432,7 @@ class Config:
         # get all builds into an object so we can delete them from the live xml tree without crashing
         builds = _recent.findall("build")
         for idx, build in enumerate(builds):
-            if idx <= 10:
+            if idx <= 20:
                 output.append(build.text)
             else:
                 _recent.remove(build)

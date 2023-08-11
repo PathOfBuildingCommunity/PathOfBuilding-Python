@@ -107,6 +107,7 @@ class ManageSkillsDlg(Ui_ManageSkillSet, QDialog):
             new_set = self.skill_ui.new_skill_set(new_name)
             lwi = QListWidgetItem(new_name)
             lwi.setData(Qt.UserRole, new_set)
+            lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
             self.list_Skills.addItem(lwi)
 
     @Slot()
