@@ -27,6 +27,8 @@ class Spec:
         """
         self.internal_version = 6
         self.build = build
+        self.tr = self.build.pob_config.app.tr
+
         self.def_spec = ET.fromstring(default_spec)
         if _spec is None:
             _spec = self.def_spec
@@ -264,13 +266,16 @@ class Spec:
         if m is not None:
             self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             if self.treeVersion not in tree_versions.keys():
+                v = re.sub("_", ".", self.treeVersion)
                 ok_dialog(
                     self.build.win,
-                    f"Invalid tree version: {re.sub('_', '.', self.treeVersion)}",
-                    f"Valid tree versions are: {list(tree_versions.values())}",
+                    f"{self.tr('Invalid tree version')}: {v}",
+                    f"{self.tr('Valid tree versions are')}:\n{str(list(tree_versions.values()))[1:-1]}\n\n"
+                    f"{self.tr('This will be converted to ')}{_VERSION}\n",
                 )
+                self.title = f"{self.title} ({self.tr('was')} v{v})"
                 self.treeVersion = _VERSION_str
-                return
+
             # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
             output = m.group(2).split("?")
             decoded_data = base64.urlsafe_b64decode(output[0])
@@ -286,7 +291,7 @@ class Spec:
             # the decoded_data is 0 based, so every index will be one smaller than the equivalent in lua
             if decoded_data and len(decoded_data) > 7:
                 version = self.b_to_i(decoded_data, 0, 4, endian)
-                print(f"Valid tree found, version: {version}")
+                print(self.tr(f"Valid tree found, version: {version}"))
 
                 self.classId = decoded_data[4]
                 self.ascendClassId = version >= 4 and decoded_data[5] or 0
@@ -346,13 +351,15 @@ class Spec:
                 minor_version = get_tree_version(self.b_to_i(decoded_data, 5, 6, endian))
                 self.treeVersion = minor_version < 0 and _VERSION_str or f"{major_version}_{minor_version}"
                 if self.treeVersion not in tree_versions.keys():
+                    v = re.sub("_", ".", self.treeVersion)
                     ok_dialog(
                         self.build.win,
-                        f"Invalid tree version: {re.sub('_', '.', self.treeVersion)}",
-                        f"Valid tree versions are: {list(tree_versions.values())}",
+                        f"{self.tr('Invalid tree version')}: {v}",
+                        f"{self.tr('Valid tree versions are')}:\n{str(list(tree_versions.values()))[1:-1]}\n\n"
+                        f"{self.tr('This will be converted to ')}{_VERSION}\n",
                     )
+                    self.title = f"{self.title} ({self.tr('was')} v{v})"
                     self.treeVersion = _VERSION_str
-                    return
 
                 # 7 is Class, 8 is Ascendancy
                 self.classId = decoded_data[7]

@@ -161,6 +161,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
             lwi.setData(Qt.UserRole, spec)
             lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
             self.list_Trees.addItem(lwi)
+            self.add_detail_to_spec_names()
 
     @Slot()
     def list_item_changed(self, item):

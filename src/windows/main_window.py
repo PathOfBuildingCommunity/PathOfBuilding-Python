@@ -275,8 +275,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if full_path is not None and full_path != "":
                 filename = Path(full_path).relative_to(self.config.build_path)
                 text, class_name = get_file_info(self, filename, max_length, 70)
-                _action = QWidgetAction(self.menu_Builds)
                 ql = QLabel(text)
+                _action = QWidgetAction(self.menu_Builds)
                 _action.setDefaultWidget(ql)
                 self.menu_Builds.addAction(_action)
                 make_connection(full_path)

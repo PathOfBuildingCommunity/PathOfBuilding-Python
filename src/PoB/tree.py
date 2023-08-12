@@ -34,7 +34,6 @@ from PoB.constants import (
     tree_versions,
 )
 from PoB.pob_file import read_json
-
 from PoB.node import Node
 from widgets.tree_graphics_item import TreeGraphicsItem
 
@@ -234,7 +233,10 @@ class Tree:
         :return:
         """
         print(f"Loading Tree: {tree_versions[self.version]}")
-        json_dict = OrderedDict(read_json(self.json_file_path))
+        try:
+            json_dict = OrderedDict(read_json(self.json_file_path))
+        except TypeError:
+            json_dict = None
         if json_dict is None:
             tr = self.config.app.tr
             critical_dialog(
@@ -304,7 +306,7 @@ class Tree:
         self.process_sprite_map(skill_sprites, sprite_sheets, self.tree_version_path, zoom_text)
 
         # """Now do the legion sprite import"""
-        # legion_sprites = pob_file.read_json(Path(self.legion_path, "tree-legion.json"))
+        # legion_sprites = read_json(Path(self.legion_path, "tree-legion.json"))
         # if not legion_sprites:
         #     critical_dialog(
         #         self.config.win,

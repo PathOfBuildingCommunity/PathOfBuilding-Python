@@ -10,6 +10,7 @@ numerous Passive Trees (at various Player Levels, or various Cluster Jewels)
 associated with a Player.
 """
 
+import re
 import xml.etree.ElementTree as ET
 from pprint import pprint
 from pathlib import Path
@@ -24,7 +25,7 @@ from PoB.constants import (
     empty_gem,
     empty_socket_group,
     program_title,
-    slot_map,
+    tree_versions,
 )
 from PoB.pob_config import (
     _debug,
@@ -34,12 +35,13 @@ from PoB.pob_config import (
     print_a_xml_element,
     print_call_stack,
 )
-
 from PoB.tree import Tree
-from ui.PoB_Main_Window import Ui_MainWindow
 from PoB.spec import Spec
-from widgets.ui_utils import set_combo_index_by_data
+from PoB.pob_file import read_xml, write_xml
 from dialogs.popup_dialogs import critical_dialog, yes_no_dialog
+from widgets.ui_utils import set_combo_index_by_data
+
+from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class Build:
@@ -284,6 +286,8 @@ class Build:
         :param _xml: xml tree object from loading the source XML or the default one
         :return: N/A
         """
+        tr = self.pob_config.app.tr
+
         self.name = "Default"
         self.xml_build = _xml
         self.root = _xml.getroot()
@@ -308,6 +312,27 @@ class Build:
         self.config = self.root.find("Config")
 
         self.specs.clear()
+        # Find invalid trees, alert and convert to latest
+        invalid_spec_versions = set()
+        for xml_spec in self.tree.findall("Spec"):
+            vers = xml_spec.get("treeVersion", _VERSION_str)
+            if vers not in tree_versions.keys():
+                v = re.sub("_", ".", vers)
+                invalid_spec_versions.add(v)
+                xml_spec.set("treeVersion", _VERSION_str)
+                title = xml_spec.get("title", "Default")
+                xml_spec.set("title", f"{title} ({tr('was')} v{v})")
+            pass
+        if invalid_spec_versions:
+            critical_dialog(
+                self.pob_config.win,
+                f"{tr('Load build')}: v{self.version}",
+                f"{tr('The build contains the following unsupported Tree versions')}:\n"
+                f"{str(invalid_spec_versions)[1:-1]}\n\n"
+                f"{tr('These will be converted to ')}{_VERSION}\n",
+                tr("Close"),
+            )
+
         # Do not use self.new_spec() as this will duplicate the xml information
         for xml_spec in self.tree.findall("Spec"):
             self.specs.append(Spec(self, xml_spec))
@@ -370,7 +395,7 @@ class Build:
         :param filename:
         :return:
         """
-        pob_file.write_xml(filename, self.xml_build)
+        write_xml(filename, self.xml_build)
 
     def ask_for_save_if_modified(self):
         """
@@ -472,6 +497,8 @@ class Build:
         """
         # print("build.new_spec")
         spec = Spec(self, xml_spec, version)
+        spec.classId = self.current_spec.classId
+        spec.ascendClassId = self.current_spec.ascendClassId
         if new_title != "":
             spec.title = new_title
         if destination == -1:
@@ -545,7 +572,7 @@ class Build:
         :param filename: str() XML file to load
         :return: N/A
         """
-        _build_pob = pob_file.read_xml(filename)
+        _build_pob = read_xml(filename)
         if _build_pob is None:
             tr = self.pob_config.app.tr
             critical_dialog(

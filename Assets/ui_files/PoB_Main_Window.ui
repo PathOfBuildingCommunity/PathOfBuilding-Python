@@ -662,7 +662,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  </rect>
                 </property>
                 <property name="text">
-                 <string>Manage ...</string>
+                 <string>&amp;Manage ...</string>
+                </property>
+                <property name="shortcut">
+                 <string>Ctrl+M</string>
                 </property>
                </widget>
                <widget class="QPushButton" name="btn_DeleteSocketGroup">
@@ -1411,7 +1414,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </rect>
                     </property>
                     <property name="text">
-                     <string>Manage ...</string>
+                     <string>&amp;Manage ...</string>
+                    </property>
+                    <property name="shortcut">
+                     <string>Ctrl+M</string>
                     </property>
                    </widget>
                    <widget class="QLabel" name="label">
