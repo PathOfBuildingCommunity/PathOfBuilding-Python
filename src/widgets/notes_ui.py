@@ -7,9 +7,10 @@ import re
 from PySide6.QtCore import Slot, Qt
 from PySide6.QtGui import QBrush
 
+from PoB.constants import ColourCodes
+from PoB.pob_config import Config
+
 from ui.PoB_Main_Window import Ui_MainWindow
-from pob_config import Config
-from constants import ColourCodes
 
 colorEscape = [
     ColourCodes.BLACK,  # ^0

@@ -11,7 +11,7 @@ import json
 import os
 import xml
 
-from constants import ColourCodes
+from PoB.constants import ColourCodes
 
 
 def get_file_info(win, filename, max_length, max_filename_width=40, html=True):

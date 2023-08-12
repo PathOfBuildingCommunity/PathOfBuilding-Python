@@ -8,10 +8,11 @@ import urllib3
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QDialog, QListWidgetItem
 
-from ui.dlgManageTree import Ui_ManageTree
-from build import Build
-from constants import _VERSION, _VERSION_str, tree_versions
+from PoB.build import Build
+from PoB.constants import _VERSION, _VERSION_str, tree_versions
 from dialogs.popup_dialogs import yes_no_dialog, NewTreePopup
+
+from ui.dlgManageTree import Ui_ManageTree
 
 
 class ManageTreeDlg(Ui_ManageTree, QDialog):
@@ -28,7 +29,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         self.setupUi(self)
 
         for spec in self.build.specs:
-            title = spec.get("title", "Default")
+            title = spec.title
             lwi = QListWidgetItem(title)
             lwi.setData(Qt.UserRole, spec)
             lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)

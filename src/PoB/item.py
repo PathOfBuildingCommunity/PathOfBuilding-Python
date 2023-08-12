@@ -5,10 +5,10 @@ A class to encapsulate one item
 import xml.etree.ElementTree as ET
 import re
 
-from pob_config import _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
-from constants import slot_map, slot_names, ColourCodes
+from PoB.pob_config import _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
+from PoB.constants import slot_map, slot_names, ColourCodes
+from PoB.mod import Mod
 from widgets.ui_utils import html_colour_text
-from mod import Mod
 
 influence_colours = {
     "Shaper Item": ColourCodes.SHAPER.value,

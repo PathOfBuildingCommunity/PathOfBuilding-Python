@@ -12,7 +12,7 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QListWidgetItem
 
 from ui.PoB_Main_Window import Ui_MainWindow
-from pob_config import (
+from PoB.pob_config import (
     Config,
     _debug,
     index_exists,
@@ -21,13 +21,13 @@ from pob_config import (
     print_call_stack,
     print_a_xml_element,
 )
-from pob_file import read_xml, write_xml, read_json
-from constants import slot_map, ColourCodes, slot_names
-from widgets.ui_utils import HTMLDelegate, html_colour_text
-from item import Item
-from widgets.item_slot_ui import ItemSlotUI
+from PoB.pob_file import read_xml, write_xml, read_json
+from PoB.constants import slot_map, ColourCodes, slot_names
+from PoB.item import Item
 from dialogs.craft_items_dialog import CraftItemsDlg
 from dialogs.itemsets_dialog import ManageItemsDlg
+from widgets.item_slot_ui import ItemSlotUI
+from widgets.ui_utils import HTMLDelegate, html_colour_text
 
 import_classes = (
     "Abyss Jewels, Amulets, Belts, Body Armours, Boots, Bows, Claws, Daggers, Gloves, Helmets, "

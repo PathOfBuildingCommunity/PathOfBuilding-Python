@@ -7,9 +7,10 @@ Open a dialog for importing a character.
 from PySide6.QtWidgets import QDialog, QListWidgetItem
 from PySide6.QtCore import Qt, Slot, QTimer
 
-from pob_config import Config, print_a_xml_element, unique_sorted
+from PoB.pob_config import Config, print_a_xml_element, unique_sorted
 from widgets.ui_utils import html_colour_text, set_combo_index_by_text
 from dialogs.popup_dialogs import LineEditPopup, yes_no_dialog
+
 from ui.dlgManageSkills import Ui_ManageSkillSet
 
 

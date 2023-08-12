@@ -12,6 +12,7 @@ This holds, in memory, a copy of the tree data and doesn't know about any active
 
 It is referenced by the TreeView class to display the tree
 """
+
 import re
 import math
 from collections import OrderedDict
@@ -22,8 +23,8 @@ from PySide6.QtGui import QPixmap, QImage, QPainter, QPen, QColor
 from PySide6.QtWidgets import QGraphicsLineItem
 
 from dialogs.popup_dialogs import critical_dialog
-from pob_config import Config, _debug
-from constants import (
+from PoB.pob_config import Config, _debug
+from PoB.constants import (
     ColourCodes,
     Layers,
     PlayerClasses,
@@ -32,10 +33,10 @@ from constants import (
     global_scale_factor,
     tree_versions,
 )
-import pob_file
+from PoB.pob_file import read_json
 
-from tree_graphics_item import TreeGraphicsItem
-from node import Node
+from PoB.node import Node
+from widgets.tree_graphics_item import TreeGraphicsItem
 
 
 nodeOverlay = {
@@ -233,7 +234,7 @@ class Tree:
         :return:
         """
         print(f"Loading Tree: {tree_versions[self.version]}")
-        json_dict = OrderedDict(pob_file.read_json(self.json_file_path))
+        json_dict = OrderedDict(read_json(self.json_file_path))
         if json_dict is None:
             tr = self.config.app.tr
             critical_dialog(

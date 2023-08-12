@@ -23,7 +23,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from constants import ColourCodes, _VERSION_str, get_http_headers, tree_versions
+from PoB.constants import ColourCodes, _VERSION_str, get_http_headers, tree_versions
 from widgets.ui_utils import HTMLDelegate, html_colour_text
 
 

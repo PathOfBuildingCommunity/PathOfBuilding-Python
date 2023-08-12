@@ -2619,7 +2619,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <customwidget>
    <class>ListBox</class>
    <extends>QListWidget</extends>
-   <header>listbox</header>
+   <header>widgets/listbox</header>
   </customwidget>
  </customwidgets>
  <tabstops>

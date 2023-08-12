@@ -2,12 +2,10 @@
 This Class manages all the elements and owns some elements of the "CONFIG" tab
 """
 
-from ui.PoB_Main_Window import Ui_MainWindow
-from pob_config import Config
+from PoB.pob_config import Config
 from widgets.ui_utils import set_combo_index_by_data
 
-# from constants import _VERSION
-# from widgets.ui_utils import FlowLayout
+from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class ConfigUI:

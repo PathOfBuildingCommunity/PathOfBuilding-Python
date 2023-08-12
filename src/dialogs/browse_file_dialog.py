@@ -11,10 +11,10 @@ import re
 from PySide6.QtWidgets import QDialog, QListWidgetItem, QFileDialog
 from PySide6.QtCore import Qt, Slot
 
-from build import Build
+from PoB.build import Build
 from dialogs.popup_dialogs import yes_no_dialog
-from pob_config import Config
-from pob_file import get_file_info
+from PoB.pob_config import Config
+from PoB.pob_file import get_file_info
 from widgets.ui_utils import html_colour_text
 
 from ui.dlgBrowseFile import Ui_BrowseFile

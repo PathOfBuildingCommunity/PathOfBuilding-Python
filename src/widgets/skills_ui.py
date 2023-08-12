@@ -9,14 +9,15 @@ import re
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QListWidgetItem
 
-from ui.PoB_Main_Window import Ui_MainWindow
-from constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map
-from pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
-from pob_file import read_json
+from PoB.constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map
+from PoB.pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
+from PoB.pob_file import read_json
 from widgets.ui_utils import _debug, set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
 from dialogs.popup_dialogs import yes_no_dialog
 from widgets.gem_ui import GemUI
 from dialogs.skillsets_dialog import ManageSkillsDlg
+
+from ui.PoB_Main_Window import Ui_MainWindow
 
 DefaultGemLevel_info = {
     "normalMaximum": {

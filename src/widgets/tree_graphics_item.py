@@ -7,7 +7,7 @@ This class represents a graphical instance of one visual element of a Passive Tr
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QGraphicsPixmapItem
 
-from pob_config import Config
+from PoB.pob_config import Config
 from widgets.ui_utils import html_colour_text
 
 

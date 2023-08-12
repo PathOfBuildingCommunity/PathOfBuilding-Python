@@ -60,7 +60,7 @@ def generate_py_from_ui():
 def generate_qrc():
     exe = get_rcc_exe()
     path = "./Assets/PoB.qrc"
-    outpath = Path("src", "PoB_rc").with_suffix(".py")
+    outpath = Path("src", "ui", "PoB_rc").with_suffix(".py")
     ui_time = os.path.getmtime(path)
     if os.path.isfile(outpath) and ui_time == os.path.getmtime(outpath):
         print(f"skipping {path}, exists and no change.")

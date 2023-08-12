@@ -15,7 +15,7 @@ from pprint import pprint
 from pathlib import Path
 from typing import Union
 
-from constants import (
+from PoB.constants import (
     PlayerClasses,
     _VERSION,
     _VERSION_str,
@@ -26,7 +26,7 @@ from constants import (
     program_title,
     slot_map,
 )
-from pob_config import (
+from PoB.pob_config import (
     _debug,
     Config,
     str_to_bool,
@@ -34,11 +34,10 @@ from pob_config import (
     print_a_xml_element,
     print_call_stack,
 )
-import pob_file
 
-from tree import Tree
+from PoB.tree import Tree
 from ui.PoB_Main_Window import Ui_MainWindow
-from spec import Spec
+from PoB.spec import Spec
 from widgets.ui_utils import set_combo_index_by_data
 from dialogs.popup_dialogs import critical_dialog, yes_no_dialog
 
@@ -56,7 +55,7 @@ class Build:
         # An dict of tree versions used in the build. Load the default tree first.
         self.trees = {_VERSION_str: Tree(self.pob_config, _VERSION_str)}
         self.current_tree = self.trees.get(_VERSION_str)
-        # list of specs in this build
+        # list of xml specs in this build
         self.specs = []
         self.activeSpec = 0
         self._current_spec = None

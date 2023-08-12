@@ -6,11 +6,10 @@ from pathlib import Path
 import psutil
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QAction, QActionGroup, QFontDatabase, QFont
+from PySide6.QtGui import QAction, QFont
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
-    QFileDialog,
     QLabel,
     QMainWindow,
     QSpinBox,
@@ -19,7 +18,7 @@ from PySide6.QtWidgets import (
     QWidgetAction,
 )
 
-from constants import (
+from PoB.constants import (
     PlayerClasses,
     bandits,
     def_theme,
@@ -31,22 +30,22 @@ from constants import (
     resistance_penalty,
 )
 
-from build import Build
+from PoB.build import Build
+from PoB.pob_config import Config, _debug, print_a_xml_element, print_call_stack
+from PoB.pob_file import get_file_info
 from dialogs.browse_file_dialog import BrowseFileDlg
 from dialogs.export_dialog import ExportDlg
 from dialogs.import_dialog import ImportDlg
 from dialogs.popup_dialogs import yes_no_dialog
-from flow_layout import FlowLayout
-from player_stats import PlayerStats
-from pob_config import Config, _debug, print_a_xml_element, print_call_stack
-from pob_file import get_file_info
-from tree_view import TreeView
 from widgets.calcs_ui import CalcsUI
 from widgets.config_ui import ConfigUI
+from widgets.flow_layout import FlowLayout
 from widgets.items_ui import ItemsUI
 from widgets.notes_ui import NotesUI
+from widgets.player_stats import PlayerStats
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
+from widgets.tree_view import TreeView
 from widgets.ui_utils import html_colour_text, set_combo_index_by_data
 
 from ui.PoB_Main_Window import Ui_MainWindow

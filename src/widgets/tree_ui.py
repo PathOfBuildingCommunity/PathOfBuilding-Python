@@ -7,12 +7,13 @@ import re
 from PySide6.QtCore import Qt, Slot, QSize
 from PySide6.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
 
-from ui.PoB_Main_Window import Ui_MainWindow
-from constants import tree_versions, PlayerClasses, _VERSION_str
-from pob_config import Config
-from flow_layout import FlowLayout
+from PoB.constants import tree_versions, PlayerClasses, _VERSION_str
+from PoB.pob_config import Config
 from dialogs.manage_tree_dialog import ManageTreeDlg
 from dialogs.popup_dialogs import yes_no_dialog, ImportTreePopup, ExportTreePopup
+from widgets.flow_layout import FlowLayout
+
+from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class TreeUI:

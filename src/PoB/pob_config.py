@@ -23,8 +23,8 @@ from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QFileDialog, QDialogButtonBox
 from PySide6.QtUiTools import QUiLoader
 
-import pob_file
-from constants import pob_debug, def_theme, default_config
+from PoB.pob_file import read_xml, write_xml
+from PoB.constants import pob_debug, def_theme, default_config
 
 
 def str_to_bool(in_str):
@@ -175,7 +175,7 @@ class Config:
         """Set self.root with the contents of the settings file"""
         if self.settings_file.exists():
             try:
-                self.tree = pob_file.read_xml(self.settings_file)
+                self.tree = read_xml(self.settings_file)
             except ET.ParseError:
                 self.reset()
         else:
@@ -198,7 +198,7 @@ class Config:
 
     def write(self):
         """Write the settings file"""
-        pob_file.write_xml(self.settings_file, self.tree)
+        write_xml(self.settings_file, self.tree)
 
     @property
     def pastebin_dev_api_key(self):
@@ -562,7 +562,7 @@ class Config:
             dlg.check_BuildWarnings.setChecked(self.show_warnings)
             dlg.check_Tooltips.setChecked(self.slot_only_tooltips)
 
-        dlg = self.loader.load(Path(self.exe_dir, "ui_files/dlgConfig.ui"), self.win)
+        dlg = self.loader.load(Path(self.exe_dir, "../Assets/ui_files/dlgConfig.ui"), self.win)
         # Force discard to close the dialog
         discard = dlg.btnBox.button(QDialogButtonBox.Discard)
         discard.clicked.connect(dlg.reject)

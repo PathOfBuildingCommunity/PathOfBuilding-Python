@@ -6,8 +6,8 @@ from PySide6.QtCore import Qt, QMargins, QPoint, QRect, QSize
 from PySide6.QtGui import QAbstractTextDocumentLayout, QPalette, QTextDocument
 from PySide6.QtWidgets import QApplication, QComboBox, QProxyStyle, QStyle, QStyleOptionViewItem, QStyledItemDelegate
 
-from pob_config import _debug
-from constants import ColourCodes
+from PoB.pob_config import _debug
+from PoB.constants import ColourCodes
 
 
 def html_colour_text(colour, text):

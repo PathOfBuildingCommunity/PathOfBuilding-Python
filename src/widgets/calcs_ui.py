@@ -2,9 +2,9 @@
 This Class manages all the elements and owns some elements of the "CALCS" tab
 """
 
+from PoB.pob_config import Config
+
 from ui.PoB_Main_Window import Ui_MainWindow
-from pob_config import Config
-from constants import _VERSION
 
 
 class CalcsUI:

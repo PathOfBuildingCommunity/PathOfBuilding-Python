@@ -230,7 +230,7 @@
   <customwidget>
    <class>ListBox</class>
    <extends>QListWidget</extends>
-   <header>listbox</header>
+   <header>widgets/listbox</header>
   </customwidget>
  </customwidgets>
  <tabstops>

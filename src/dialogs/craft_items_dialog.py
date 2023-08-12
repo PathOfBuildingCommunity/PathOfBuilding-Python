@@ -11,11 +11,12 @@ from PySide6.QtWidgets import QDialog, QDialogButtonBox
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QColor, QBrush, QIcon
 
-from ui.dlgCraftItems import Ui_CraftItems
-from pob_config import Config
-from item import Item
+from PoB.constants import ColourCodes
+from PoB.pob_config import Config
+from PoB.item import Item
 from widgets.ui_utils import set_combo_index_by_text
-from constants import ColourCodes
+
+from ui.dlgCraftItems import Ui_CraftItems
 
 
 class CraftItemsDlg(Ui_CraftItems, QDialog):

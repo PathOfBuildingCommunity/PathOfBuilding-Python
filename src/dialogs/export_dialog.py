@@ -11,17 +11,12 @@ import pyperclip
 from PySide6.QtWidgets import QDialog
 from PySide6.QtCore import Qt, Slot, QTimer
 
-from ui.dlgBuildExport import Ui_BuildExport
-from pob_config import (
-    Config,
-    decode_base64_and_inflate,
-    deflate_and_base64_encode,
-    print_a_xml_element,
-    unique_sorted,
-)
-from build import Build
-from constants import get_http_headers, post_http_headers, website_list
+from PoB.pob_config import Config, deflate_and_base64_encode, print_a_xml_element
+from PoB.build import Build
+from PoB.constants import get_http_headers, post_http_headers, website_list
 from widgets.ui_utils import html_colour_text, set_combo_index_by_text
+
+from ui.dlgBuildExport import Ui_BuildExport
 
 
 class ExportDlg(Ui_BuildExport, QDialog):

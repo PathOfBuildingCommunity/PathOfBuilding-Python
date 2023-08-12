@@ -6,7 +6,7 @@ import base64
 import re
 from pathlib import Path
 
-from constants import (
+from PoB.constants import (
     bandits,
     default_spec,
     tree_versions,
@@ -14,7 +14,7 @@ from constants import (
     _VERSION,
     _VERSION_str,
 )
-from pob_config import print_call_stack, print_a_xml_element
+from PoB.pob_config import print_call_stack, print_a_xml_element
 from dialogs.popup_dialogs import ok_dialog
 
 
