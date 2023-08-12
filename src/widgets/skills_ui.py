@@ -547,7 +547,7 @@ class SkillsUI:
             _gem_list = "-no active skills-"
         else:
             _gem_list = _gem_list.rstrip(", ")
-        if _label == "":
+        if _label == "" or _label is None:
             _label = _gem_list
 
         # set enabled based on the group control and whether there is an active skill in the group

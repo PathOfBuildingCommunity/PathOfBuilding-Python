@@ -36,7 +36,13 @@ class PlayerStats:
         self.win.textedit_Statistics.clear()
         for stat in self.build.findall("PlayerStat"):
             _stat = stat.get("stat")
-            _value = float(stat.get("value"))
+            try:
+                # Sometimes there is an entry like '<PlayerStat stat="SkillDPS" value="table: 0x209a50f0" />'
+                _value = float(stat.get("value"))
+            except ValueError:
+                print(f"Error in {_stat}. Value was '{stat.get('value', 'Error Value')}'")
+                self.build.remove(stat)
+                break
             self.stats[_stat] = stat
             # print("_stat", _stat, _value)
             if _value != 0:
