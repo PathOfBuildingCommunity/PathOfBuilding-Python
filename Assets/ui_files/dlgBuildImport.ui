@@ -14,7 +14,7 @@
    <string>Character Import</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../Assets/PoB.qrc">
+   <iconset resource="../PoB.qrc">
     <normaloff>:/Art/Icons/paper-plane-return.png</normaloff>:/Art/Icons/paper-plane-return.png</iconset>
   </property>
   <widget class="QLabel" name="label_Import">
@@ -453,7 +453,7 @@
   <tabstop>btn_Skills</tabstop>
  </tabstops>
  <resources>
-  <include location="../../Assets/PoB.qrc"/>
+  <include location="../PoB.qrc"/>
  </resources>
  <connections/>
 </ui>

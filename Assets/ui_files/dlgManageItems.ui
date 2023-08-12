@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ManageSkillSet</class>
- <widget class="QDialog" name="ManageSkillSet">
+ <class>ManageItemSet</class>
+ <widget class="QDialog" name="ManageItemSet">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Manage Skill Sets</string>
+   <string>Manage Item Sets</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../Assets/PoB.qrc">
+   <iconset resource="../PoB.qrc">
     <normaloff>:/Art/Icons/edit-list-order.png</normaloff>:/Art/Icons/edit-list-order.png</iconset>
   </property>
-  <widget class="QListWidget" name="list_Skills">
+  <widget class="QListWidget" name="list_Items">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -154,12 +154,12 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>list_Skills</tabstop>
+  <tabstop>list_Items</tabstop>
   <tabstop>btnCopy</tabstop>
   <tabstop>btnDelete</tabstop>
  </tabstops>
  <resources>
-  <include location="../../Assets/PoB.qrc"/>
+  <include location="../PoB.qrc"/>
  </resources>
  <connections/>
 </ui>

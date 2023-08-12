@@ -2434,7 +2434,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
       <string>Theme ...</string>
      </property>
      <property name="icon">
-      <iconset resource="../../Assets/PoB.qrc">
+      <iconset resource="../PoB.qrc">
        <normaloff>:/Art/Icons/yin-yang.png</normaloff>:/Art/Icons/yin-yang.png</iconset>
      </property>
     </widget>
@@ -2472,7 +2472,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </widget>
   <action name="action_New">
    <property name="icon">
-    <iconset theme="appointment-new" resource="../../Assets/PoB.qrc">
+    <iconset theme="appointment-new" resource="../PoB.qrc">
      <normaloff>:/Art/Icons/add-folder.png</normaloff>:/Art/Icons/add-folder.png</iconset>
    </property>
    <property name="text">
@@ -2490,7 +2490,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </action>
   <action name="action_Save">
    <property name="icon">
-    <iconset theme="document-open" resource="../../Assets/PoB.qrc">
+    <iconset theme="document-open" resource="../PoB.qrc">
      <normaloff>:/Art/Icons/downloads-folder.png</normaloff>:/Art/Icons/downloads-folder.png</iconset>
    </property>
    <property name="text">
@@ -2508,7 +2508,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </action>
   <action name="action_Exit">
    <property name="icon">
-    <iconset theme="application-exit" resource="../../Assets/PoB.qrc">
+    <iconset theme="application-exit" resource="../PoB.qrc">
      <normaloff>:/Art/Icons/door-open-out.png</normaloff>:/Art/Icons/door-open-out.png</iconset>
    </property>
    <property name="text">
@@ -2526,7 +2526,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </action>
   <action name="action_Open">
    <property name="icon">
-    <iconset resource="../../Assets/PoB.qrc">
+    <iconset resource="../PoB.qrc">
      <normaloff>:/Art/Icons/opened-folder.png</normaloff>:/Art/Icons/opened-folder.png</iconset>
    </property>
    <property name="text">
@@ -2544,7 +2544,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </action>
   <action name="action_ManageTrees">
    <property name="icon">
-    <iconset resource="../../Assets/PoB.qrc">
+    <iconset resource="../PoB.qrc">
      <normaloff>:/Art/Icons/tree--pencil.png</normaloff>:/Art/Icons/tree--pencil.png</iconset>
    </property>
    <property name="text">
@@ -2556,7 +2556,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </action>
   <action name="action_Settings">
    <property name="icon">
-    <iconset theme="application-exit" resource="../../Assets/PoB.qrc">
+    <iconset theme="application-exit" resource="../PoB.qrc">
      <normaloff>:/Art/Icons/construction.png</normaloff>:/Art/Icons/construction.png</iconset>
    </property>
    <property name="text">
@@ -2568,7 +2568,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </action>
   <action name="action_Import">
    <property name="icon">
-    <iconset resource="../../Assets/PoB.qrc">
+    <iconset resource="../PoB.qrc">
      <normaloff>:/Art/Icons/paper-plane-return.png</normaloff>:/Art/Icons/paper-plane-return.png</iconset>
    </property>
    <property name="text">
@@ -2583,7 +2583,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </action>
   <action name="action_Export">
    <property name="icon">
-    <iconset resource="../../Assets/PoB.qrc">
+    <iconset resource="../PoB.qrc">
      <normaloff>:/Art/Icons/paper-plane.png</normaloff>:/Art/Icons/paper-plane.png</iconset>
    </property>
    <property name="text">
@@ -2598,7 +2598,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </action>
   <action name="action_SaveAs">
    <property name="icon">
-    <iconset theme="document-open" resource="../../Assets/PoB.qrc">
+    <iconset theme="document-open" resource="../PoB.qrc">
      <normaloff>:/Art/Icons/downloads-folder.png</normaloff>:/Art/Icons/downloads-folder.png</iconset>
    </property>
    <property name="text">
@@ -2637,7 +2637,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>graphicsView_PlaceHolder</tabstop>
  </tabstops>
  <resources>
-  <include location="../../Assets/PoB.qrc"/>
+  <include location="../PoB.qrc"/>
  </resources>
  <connections>
   <connection>

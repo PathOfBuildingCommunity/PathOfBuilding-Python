@@ -14,7 +14,7 @@
    <string>Export current character. Generate a code to share this build with other Path of Building users.</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../Assets/PoB.qrc">
+   <iconset resource="../PoB.qrc">
     <normaloff>:/Art/Icons/paper-plane.png</normaloff>:/Art/Icons/paper-plane.png</iconset>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
@@ -237,7 +237,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../../Assets/PoB.qrc"/>
+  <include location="../PoB.qrc"/>
  </resources>
  <connections>
   <connection>

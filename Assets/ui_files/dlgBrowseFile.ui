@@ -14,7 +14,7 @@
    <string>Manage Files</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../Assets/PoB.qrc">
+   <iconset resource="../PoB.qrc">
     <normaloff>:/Art/Icons/edit-list-order.png</normaloff>:/Art/Icons/edit-list-order.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -241,7 +241,7 @@
   <tabstop>rBtn_v1</tabstop>
  </tabstops>
  <resources>
-  <include location="../../Assets/PoB.qrc"/>
+  <include location="../PoB.qrc"/>
  </resources>
  <connections/>
 </ui>

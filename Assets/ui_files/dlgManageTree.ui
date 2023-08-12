@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ManageItemSet</class>
- <widget class="QDialog" name="ManageItemSet">
+ <class>ManageTree</class>
+ <widget class="QDialog" name="ManageTree">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Manage Item Sets</string>
+   <string>Manage Trees</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../Assets/PoB.qrc">
-    <normaloff>:/Art/Icons/edit-list-order.png</normaloff>:/Art/Icons/edit-list-order.png</iconset>
+   <iconset resource="../PoB.qrc">
+    <normaloff>:/Art/Icons/tree--pencil.png</normaloff>:/Art/Icons/tree--pencil.png</iconset>
   </property>
-  <widget class="QListWidget" name="list_Items">
+  <widget class="QListWidget" name="list_Trees">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -67,7 +67,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="toolTip">
-    <string>New _VERSION tree.  (Ctrl-N)</string>
+    <string>New tree.  (Ctrl-N)</string>
    </property>
    <property name="text">
     <string>&amp;New</string>
@@ -136,6 +136,25 @@
     <string>Del</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="btnConvert">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>50</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="toolTip">
+    <string>Convert selections to _VERSION. Convert will ignore Tree that are the current version</string>
+   </property>
+   <property name="text">
+    <string>Con&amp;vert</string>
+   </property>
+  </widget>
   <widget class="QPushButton" name="btnClose">
    <property name="geometry">
     <rect>
@@ -154,12 +173,13 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>list_Items</tabstop>
+  <tabstop>list_Trees</tabstop>
   <tabstop>btnCopy</tabstop>
   <tabstop>btnDelete</tabstop>
+  <tabstop>btnConvert</tabstop>
  </tabstops>
  <resources>
-  <include location="../../Assets/PoB.qrc"/>
+  <include location="../PoB.qrc"/>
  </resources>
  <connections/>
 </ui>
