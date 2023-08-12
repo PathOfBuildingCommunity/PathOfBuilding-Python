@@ -47,7 +47,7 @@ from widgets.items_ui import ItemsUI
 from widgets.notes_ui import NotesUI
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
-from widgets.ui_utils import html_colour_text, MenuProxyStyle, set_combo_index_by_data
+from widgets.ui_utils import html_colour_text, set_combo_index_by_data
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
