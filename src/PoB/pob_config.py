@@ -446,7 +446,7 @@ class Config:
         """
         Adds one build to the list of recent builds
         :param filename: string: name of build xml
-        :returns: n/a
+        :returns: bool: True if added to the list. False if already on the list.
         """
         _recent = self.root.find("recentBuilds")
         found = [element for element in _recent.iter() if element.text == filename]
@@ -454,6 +454,7 @@ class Config:
             build = ET.Element("build")
             build.text = filename
             _recent.insert(0, build)
+        return len(found) == 0
 
     @property
     def last_account_name(self):

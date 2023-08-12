@@ -268,7 +268,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             """
             _action.triggered.connect(lambda checked: self._open_previous_build(checked, _full_path))
 
-        os.chdir(self.config.build_path)
+        os.chdir(config.build_path)
         max_length = 80
         recent_builds = config.recent_builds()
         for idx, full_path in enumerate(recent_builds):
@@ -280,6 +280,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 _action.setDefaultWidget(ql)
                 self.menu_Builds.addAction(_action)
                 make_connection(full_path)
+
+    def add_recent_build_menu_item(self):
+        """
+        Add this file (either Open or Save As) to the recent menu list. refreshing the menu if the name is a new one.
+        :return: N/A
+        """
+        if self.config.add_recent_build(self.build.filename):
+            for entry in self.menu_Builds.children():
+                if type(entry) == QWidgetAction:
+                    self.menu_Builds.removeAction(entry)
+            self.set_recent_builds_menu_items(self.config)
 
     def set_recent_builds_menu_items1(self, config: Config):
         """
@@ -486,7 +497,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.build.build is not None:
             # _debug("build_loader")
             if not new:
-                self.config.add_recent_build(self.build.filename)
+                self.add_recent_build_menu_item()
             # Config needs to be set before the tree, as the change_tree function uses/sets it also.
             self.config_ui.load(self.build.config)
             self.set_current_tab()
@@ -541,6 +552,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build.version = dlg.rBtn_v2.isChecked() and "2" or "1"
                 self.build.filename = filename
                 self.build_save()
+                self.add_recent_build_menu_item()
 
     @Slot()
     def change_tree(self, tree_id):
