@@ -190,7 +190,7 @@ class Tree:
         self.json_file_path = Path(self.tree_version_path, "tree.json")
         self.legion_path = Path(self.config.data_dir, "legion")
 
-    def add_picture(self, name, x, y, ox, oy, z=0):
+    def add_picture(self, name, x, y, ox, oy, z=0, node=None):
         """
         Add a picture
         :param name: string or pixmap to be added
@@ -199,9 +199,10 @@ class Tree:
         :param ox: it's position in the scene
         :param oy: it's position in the scene
         :param z: Layers: which layer to use:
+        :param node: Node: The associated node, so we can load up TreeGraphicsItem variables
         :return: ptr to the created TreeGraphicsItem
         """
-        image = TreeGraphicsItem(self.config, name, z, True)
+        image = TreeGraphicsItem(self.config, name, node, z, True)
         image.setPos(x, y)
         image.setOffset(ox, oy)
         if z not in [Layers.active, Layers.active_effect]:
@@ -424,14 +425,7 @@ class Tree:
             :param _layer: the layer this sprite is to be added in
             :return: a reference to the tree graphic image added
             """
-            sprite = self.add_picture(
-                _sprite["handle"],
-                node.x,
-                node.y,
-                _sprite["ox"],
-                _sprite["oy"],
-                _layer,
-            )
+            sprite = self.add_picture(_sprite["handle"], node.x, node.y, _sprite["ox"], _sprite["oy"], _layer, node)
             sprite.node_id = node.id
             sprite.filename = node.icon
             sprite.node_sd = node.sd
@@ -590,21 +584,11 @@ class Tree:
             node.type = "Normal"
             # Add all notables in the Scion Ascendancy, by excluding all the little nodes
 
-        # get all the Ascendancy nodes in a separate lists, but don't include the ascendancy start node
+        # get all the Ascendancy nodes in separate lists, but don't include the ascendancy start node
         if node.ascendancyName != "" and not node.isAscendancyStart:
             if self.ascendancyMap.get(node.ascendancyName, None) is None:
                 self.ascendancyMap[node.ascendancyName] = []
-            match node.ascendancyName:
-                case "Ascendant":
-                    if (
-                        "Dexterity" not in node.dn
-                        and "Intelligence" not in node.dn
-                        and "Strength" not in node.dn
-                        and "Passive" not in node.dn
-                    ):
-                        self.ascendancyMap[node.ascendancyName].append(node.id)
-                case _:
-                    self.ascendancyMap[node.ascendancyName].append(node.id)
+            self.ascendancyMap[node.ascendancyName].append(node.id)
 
         # ToDo: What is class_notables for ? Copied from lua
         # if class_notables.get(ascend_name_map[node.ascendancyName]["class"]["name"], None) is None:

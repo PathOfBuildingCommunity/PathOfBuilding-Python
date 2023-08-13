@@ -254,8 +254,8 @@ class_backgrounds = {
     PlayerClasses.SCION: {"n": "", "x": 0, "y": 0},
     PlayerClasses.MARAUDER: {
         "n": "BackgroundStr",
-        "x": -3500 / global_scale_factor,
-        "y": 350 / global_scale_factor,
+        "x": -3700 / global_scale_factor,
+        "y": 250 / global_scale_factor,
     },
     PlayerClasses.RANGER: {
         "n": "BackgroundDex",

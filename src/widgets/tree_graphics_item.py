@@ -12,13 +12,7 @@ from widgets.ui_utils import html_colour_text
 
 
 class TreeGraphicsItem(QGraphicsPixmapItem):
-    def __init__(
-        self,
-        _config: Config,
-        _image: str,
-        z_value=0,
-        selectable=False,
-    ) -> None:
+    def __init__(self, _config: Config, _image: str, node, z_value=0, selectable=False) -> None:
         super(TreeGraphicsItem, self).__init__()
         self.config = _config
         self.win = self.config.win
@@ -47,8 +41,16 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         self.node_type = ""
         self.node_reminder = ""
         self.node_isoverlay = False
-
-        # turn all those data's into properties ?
+        self.node_classStartIndex = -1
+        self.node_isAscendancyStart = False
+        if node is not None:
+            self.node_id = node.id
+            self.node_sd = node.sd
+            self.node_name = node.name
+            self.node_type = node.type
+            self.node_reminder = node.reminderText
+            self.node_classStartIndex = node.classStartIndex
+            self.node_isAscendancyStart = node.isAscendancyStart
 
     # Inherited, don't change definition
     def setScale(self, scale: int = 1):
