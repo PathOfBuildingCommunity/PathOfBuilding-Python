@@ -1,0 +1,8 @@
+#!/bin/bash
+# Intermediate install file. Needs more sense and sensibility.
+
+pip3.11 install wheel
+pip3.11 install -r requirements.txt
+pip3.11 install PathOfBuilding_Python-*-py3-none-any.whl
+# setup.py/wheel will copy the file but not with executable flag on it.
+chmod +x ~/.local/bin/PathOfBuilding.sh

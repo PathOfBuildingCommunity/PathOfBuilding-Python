@@ -1,0 +1,1 @@
+black src/*.py src/scripts/*.py

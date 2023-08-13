@@ -5,7 +5,7 @@ from Lua to Python. Currently, it is mostly intended for exploring ideas on how 
 accomplish this.
 
 ## Install
-This project targets Python 3.10. You need to have Python 3.10 installed
+This project targets Python 3.11. You need to have Python 3.11.2 or later installed
 to run this project. Start off by cloning the repository like so:
 ```commandline
 git clone -b dev https://github.com/PathOfBuildingCommunity/PathOfBuilding-Python.git

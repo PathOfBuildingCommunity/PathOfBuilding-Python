@@ -9,6 +9,10 @@ Install it like so (Powershell):
     ```shell
     (Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py -UseBasicParsing).Content | python -
     ```
+  or so (Curl):
+    ```shell
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    ```
 * Run this command to clone the repository:
     ```shell
     git clone -b dev https://github.com/PathOfBuildingCommunity/PathOfBuilding.git
@@ -17,6 +21,15 @@ Install it like so (Powershell):
     ```shell
     poetry install
     ```
+
+## Compiling UI/QRC
+If you would like to manually generate UI/QRC you can execute a Python script:
+```shell
+python build-ui.py
+```
+
+## Obtaining initial base_items.json data
+In the `data/` folder, we are currently ignoring `base_items.json`. Create one for yourself locally, and utilize the `base_items.json` data found in this [repo](https://github.com/brather1ng/RePoE/tree/master/RePoE/data).
 
 ## Before submitting your PR
 
@@ -82,3 +95,15 @@ Cinnabarit#1341.
     ```shell
     git push -f origin dev
     ```
+
+## Formatting guide line
+A superset of PEP 8, PEP 257, PEP 484 and black. In case of contradictions, black is right. Here's a primer on the specifics:
+* class/type names: CamelCase
+* variable/function/module/file names: snake_case
+* variables with values that do not change during program execution: UPPER_SNAKE_CASE. These could be literals or enum variants.
+* mark module- or class-level implementation details by prepending a single underscore, like _variable, _method
+* do not shadow built-ins (even id, help and the like). Instead, append a single underscore, like id_, help_.
+* likewise for reserved keywords (class_, import_, etc. Please no klass, clazz or similar!)
+
+In the specific case of third-party libraries with divergent style conventions, follow theirs. This is in line with PEP 8.
+

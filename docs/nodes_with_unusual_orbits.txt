@@ -1,0 +1,607 @@
+C:\git\PathOfBuilding-Python\.venv\Scripts\python.exe C:/git/PathOfBuilding-Python/src/PathOfBuilding.py
+Loading Tree: 3.18
+29294 Berserker 0
+409 Guardian 0
+17765 Juggernaut 0
+30940 Hierophant 0
+24704 Chieftain 0
+61871 Inquisitor 0
+49951 Position Proxy 1
+22046 Position Proxy 1
+3854 Position Proxy 1
+4194 Berserker 0
+57052 Chieftain 1
+42144 Hierophant 0
+61072 Juggernaut 0
+43962 Inquisitor 0
+5624 Crusader 0
+30919 Guardian 0
+43195 Slayer 0
+52282 Tenacity 0
+34774 Gladiator 1
+39598 Champion 0
+35754 Ascendant 0
+8281 Elementalist 0
+10099 Necromancer 0
+12597 Occultist 0
+8656 Raider 0
+44298 Elemental Mastery 0
+63184 Sword Mastery 0
+24224 Axe Mastery 0
+9327 Pathfinder 0
+40849 Persistence 0
+34567 Deadeye 1
+43122 Assassin 0
+62416 Staff Mastery 0
+6778 Trickster 0
+14832 Mace Mastery 0
+58556 Divine Shield 0
+31961 Resolute Technique 0
+26712 Armour 1
+35288 Armour 1
+55190 Large Jewel Socket 1
+58827 Saboteur 0
+19732 The Agnostic 0
+43647 Minion Offence Mastery 0
+26270 Intelligence 0
+60472 Strength 0
+23027 Strength 0
+44202 Strength 0
+29353 Strength 0
+59928 Strength 0
+63723 Strength 0
+5233 Strength 0
+16810 Shield Mastery 0
+31292 Mace Mastery 0
+43601 Bleeding Mastery 0
+52074 Impale Mastery 0
+38377 Totem Mastery 0
+33823 Critical Mastery 0
+34487 Totem Mastery 0
+44948 Mana Mastery 0
+53517 Life Mastery 0
+4139 Life Mastery 0
+64406 Armour Mastery 0
+2841 Life Mastery 0
+26196 Basic Jewel Socket 0
+37641 Armour and Energy Shield Mastery 0
+30393 Armour and Energy Shield Mastery 0
+41415 Life Mastery 0
+50570 Strength 0
+52220 Physical Mastery 0
+41970 Ancestral Bond 0
+64210 Intelligence 0
+57279 Blood Magic 0
+11505 Fire Mastery 0
+47197 Reservation Mastery 0
+3644 Strength 0
+48717 Armour Mastery 0
+35070 Position Proxy 1
+40439 Brand Mastery 0
+32241 Life Mastery 0
+22285 Strength 0
+48349 Staff Mastery 0
+7444 Intelligence 0
+29199 Intelligence 0
+28862 Leech Mastery 0
+48505 Life Mastery 0
+40114 Position Proxy 1
+39713 Glancing Blows 0
+48267 Fire Mastery 0
+25031 Warcry Mastery 0
+44941 Avatar of Fire 0
+28284 Attributes Mastery 0
+16123 Critical Mastery 0
+42343 Runebinder 0
+38921 Block Mastery 0
+58540 Axe Mastery 0
+15631 Strength 0
+44967 Strength 0
+10221 Strength 0
+27475 Position Proxy 1
+63268 Fire Mastery 0
+59728 Area of Effect Damage 0
+62303 Mana and Reduced Mana Cost 0
+27931 Mace Mastery 0
+14930 Strength 0
+23090 Call to Arms 0
+14505 Minion Offence Mastery 0
+18361 Position Proxy 1
+32245 Expertise 0
+50197 Ancestral Knowledge 0
+64077 Warrior Training 0
+65308 Diamond Skin 0
+25535 Shield Mastery 0
+6968 Staff Mastery 0
+59013 Mace Mastery 0
+33435 Holy Dominion 0
+62023 Attack Mastery 0
+54849 Minion Offence Mastery 0
+50071 Dual Wielding Mastery 0
+25011 Life Mastery 0
+59335 Fortify Mastery 0
+8460 Warcry Mastery 0
+48144 Link Mastery 0
+52462 Armour Mastery 0
+52875 Attack Mastery 0
+63425 Zealot's Oath 0
+5726 Elemental Mastery 0
+2491 Large Jewel Socket 1
+18901 Melee Damage 1
+62319 Melee Damage 1
+17735 Intelligence 0
+49254 Retribution 0
+26866 Sanctity 0
+44908 Strength 0
+2913 Dexterity 0
+50862 Strength 0
+44606 Intelligence 0
+58449 Born to Fight 0
+24383 Warrior's Blood 0
+49412 Strength 0
+26523 Strength 0
+52502 Elemental Damage 1
+20987 Elemental Damage 1
+7960 Large Jewel Socket 1
+45558 Shield Mastery 0
+48290 Minion Defence Mastery 0
+56595 Attack Mastery 0
+34400 Strength 0
+25934 Two Hand Mastery 0
+24720 Imbalanced Guard 0
+487 Strength 0
+53216 Life Mastery 0
+36678 Intelligence 0
+48128 Position Proxy 1
+21650 Eternal Youth 0
+5230 Staff Mastery 0
+7956 Position Proxy 1
+61992 Minion Offence Mastery 0
+64128 Reservation Mastery 0
+50540 Curse Mastery 0
+54340 Armour Mastery 0
+38706 Way of the Warrior 0
+26697 Sword Mastery 0
+38320 Fire Mastery 0
+56029 Agility 0
+39332 Staff Mastery 0
+17127 Resistance and Ailment Protection Mastery 0
+3471 Energy Shield Mastery 0
+35724 Damage and Mana 0
+17352 Mana and Life 0
+33988 Melee Damage 0
+13009 Dexterity 0
+5456 Might 0
+39416 Minion Offence Mastery 0
+12503 Resistance and Ailment Protection Mastery 0
+14056 Strength 0
+34601 Proficiency 0
+33657 Resistance and Ailment Protection Mastery 0
+22627 Life and Armour 0
+8556 Attack Mastery 0
+35221 Accuracy Mastery 0
+63447 Intelligence 6
+39841 Intelligence 6
+35038 Wand Mastery 0
+2828 Damage Over Time Mastery 0
+12169 Physical Mastery 0
+18025 Hard Knocks 0
+22088 Elemental Overload 0
+46340 Intelligence 0
+61343 Brand Mastery 0
+61525 TEMPLAR 0
+47175 MARAUDER 0
+34098 Mind Over Matter 0
+22703 Strength 0
+24914 Strength 0
+35118 Two Hand Mastery 0
+57257 The Impaler 0
+40907 Unwavering Stance 0
+27307 Energy Shield Mastery 0
+6912 Two Hand Mastery 0
+43818 Life Mastery 0
+23547 Chaos Mastery 0
+61785 Curse Mastery 0
+42760 Intelligence 6
+7938 Intelligence 6
+55332 Intelligence 6
+14021 Intelligence 6
+51583 Critical Mastery 0
+63710 Bleeding Mastery 0
+6741 Strength 0
+48982 Impale Mastery 0
+60398 Intelligence 0
+10729 Energy Shield Mastery 0
+43374 Strength 0
+18750 Flask Mastery 0
+32730 Gladiator 0
+8732 Mana Mastery 0
+21143 Brand Mastery 0
+240 Lightning Mastery 0
+17818 Crimson Dance 0
+26608 Totem Mastery 0
+62015 Warcry Mastery 0
+12239 Physical Mastery 0
+28039 Axe Mastery 0
+18378 Occultist 0
+34552 Minion Offence Mastery 0
+38436 Shield Mastery 0
+35859 Leech Mastery 0
+30691 Intelligence 0
+51974 Fortify Mastery 0
+31875 Strength 0
+50288 Iron Will 0
+28680 Caster Mastery 0
+24865 Strength 0
+63559 Mana Mastery 0
+5348 Elemental Mastery 0
+12382 Life Mastery 0
+4397 Intelligence 0
+8629 Attack Mastery 0
+34723 Charge Mastery 0
+63976 Shaper 0
+12125 Life Mastery 0
+35977 Warcry Mastery 0
+23796 Curse Mastery 0
+10661 Iron Reflexes 0
+476 Strength 0
+44184 Intelligence 0
+30225 Lightning Walker 0
+1031 Intelligence 0
+62588 Life Mastery 0
+12926 Iron Grip 0
+24083 Strength 0
+22970 Minion Defence Mastery 0
+45175 Necromantic Aegis 0
+53188 Mana Mastery 0
+6230 Basic Jewel Socket 0
+41522 Duration Mastery 0
+34927 Fire Mastery 0
+25186 Mana Mastery 0
+34009 Master of the Arena 0
+34031 Strength 0
+55152 Totem Mastery 0
+62662 Physical Damage 1
+17674 Physical Damage 1
+13782 Physical Damage 1
+65154 Totem Mastery 0
+19750 Armour and Evasion Mastery 0
+45358 Armour Mastery 0
+36542 Intelligence 6
+37569 Intelligence 6
+27193 Life Mastery 0
+32509 Caster Mastery 0
+16023 Elementalist 0
+24984 Champion 0
+58816 Lightning Mastery 0
+16246 Tranquility 0
+4367 Intelligence 0
+38900 Area of Effect 6
+38805 Area of Effect 6
+21075 Area of Effect Damage 5
+15711 Blast Radius 5
+1957 Cast Speed 5
+739 Cast Speed 5
+18866 Cast Speed 5
+53493 Annihilation 5
+27929 Deep Wisdom 6
+59650 Energy Shield and Mana Regeneration 6
+6949 Energy Shield and Recovery 5
+19374 Energy Shield 5
+55643 Energy Shield 5
+27611 Lord of the Dead 6
+40637 Minion Damage and Life 6
+9650 Minion Damage and Life 6
+25222 Minion Attack and Cast Speed 6
+11420 Arcanist's Dominion 6
+44723 Spell Critical Strike Chance 6
+1346 Spell Critical Strike Chance 6
+16790 Spell Critical Strike Chance 5
+21934 Spell Damage 6
+36774 Spell Damage 6
+17579 Spell Damage 6
+33296 Spell Damage 6
+54447 WITCH 0
+62596 Mystic Talents 0
+50986 DUELIST 0
+35568 Armour, Evasion and Life 1
+59718 Armour, Evasion and Life 1
+50306 Armour, Evasion and Life 1
+56001 Strength 0
+16544 Dexterity 0
+18240 Energy Shield Mastery 0
+22497 Cast Speed 1
+8643 Cast Speed 1
+63845 Cast Speed 1
+58833 Seven 0
+31683 Basic Jewel Socket 0
+19144 Sentinel 0
+4707 Charge Mastery 0
+54127 Basic Jewel Socket 0
+32210 Intelligence 6
+21678 Intelligence 6
+57949 Damage Over Time Mastery 0
+39836 Reservation Mastery 0
+13862 Mana Mastery 0
+48859 Mana Mastery 0
+29993 Duration Mastery 0
+35179 Movement Speed 1
+60532 Movement Speed 1
+9009 Movement Speed 1
+37795 Shield Mastery 0
+17201 Dexterity 0
+48807 Art of the Gladiator 0
+45019 Flask Mastery 0
+60170 Cold Mastery 0
+24334 Link Mastery 0
+48007 Mana Mastery 0
+60247 Solipsism 0
+48768 Basic Jewel Socket 0
+8544 Dexterity 0
+22959 Curse Mastery 0
+39338 Two Hand Mastery 0
+56116 Magebane 0
+19501 Intelligence 0
+28863 Attack Mastery 0
+56128 Wand Mastery 0
+6580 Dexterity 0
+5415 Minion Damage, Aura Effect 0
+43988 Doomsday 0
+38235 Life Mastery 0
+33545 Harrier 0
+8948 Intelligence 0
+46665 Flask Mastery 0
+50757 Evasion Mastery 0
+6507 Reservation Mastery 0
+59926 Mine Mastery 0
+19711 Dexterity 0
+26393 Minion Defence Mastery 0
+11596 Mace Mastery 0
+18663 Minion Instability 0
+60791 Necromancer 0
+24552 Bow Mastery 0
+56207 Hardened Scars 0
+11651 Intelligence 0
+27659 Dexterity 0
+23540 Conduit 0
+9083 Minion Defence Mastery 0
+21324 Block Mastery 0
+29937 Dexterity 0
+50679 Versatile Combatant 0
+35085 Critical Mastery 0
+33795 Slayer 0
+63482 Lightning Mastery 0
+6338 Energy Shield Mastery 0
+55348 Attack Mastery 0
+41225 Minion Defence Mastery 0
+25446 Leech Mastery 0
+47242 Minion Offence Mastery 0
+5408 Dexterity 0
+40196 Caster Mastery 0
+19749 Fire Mastery 0
+33678 Charge Mastery 0
+20010 Dexterity 0
+10808 Vaal Pact 0
+37671 Intelligence 0
+47059 Impale Mastery 0
+25349 Bow Mastery 0
+23950 Wicked Ward 0
+17380 Cold Mastery 0
+24481 Life Mastery 0
+32710 Intelligence 6
+38176 Intelligence 6
+49651 Intelligence 6
+41635 Intelligence 6
+4492 Attributes Mastery 0
+39085 Elemental Equilibrium 0
+62235 Armour and Evasion Mastery 0
+25281 Life Mastery 0
+31703 Pain Attunement 0
+56589 Dexterity 0
+51761 Dual Wielding Mastery 0
+6363 Dexterity 0
+44683 SIX 0
+50459 RANGER 0
+40271 Fire Mastery 0
+48411 Wand Mastery 0
+4424 Axe Mastery 0
+27415 Intelligence 0
+38129 Damage and Energy Shield 0
+36874 Wisdom of the Glade 0
+55230 Leech Mastery 0
+5296 Intelligence 6
+33310 Intelligence 6
+42533 Accuracy Mastery 0
+32278 Minion Offence Mastery 0
+63139 Strength 0
+23471 Dexterity 6
+59501 Blind Mastery 0
+15027 Beef 0
+9586 Critical Mastery 0
+32345 Alacrity 0
+444 Dexterity 5
+52904 Dexterity 5
+2094 Evasion and Life 0
+21301 Strength 0
+465 Projectile Damage and Attack Speed 0
+31818 Resistance and Ailment Protection Mastery 0
+14113 Caster Mastery 0
+53828 Wand Mastery 0
+12873 Resistance and Ailment Protection Mastery 0
+3883 Evasion Mastery 0
+53738 Mine Mastery 0
+10153 Physique 0
+10204 Sword Mastery 0
+53615 Reservation Mastery 0
+41307 Deadly Inclinations 0
+11334 Intelligence 6
+15549 Intelligence 6
+58563 Mark Mastery 0
+21801 Chaos Mastery 0
+60834 Damage Over Time Mastery 0
+56075 Eldritch Battery 0
+37502 Bow Mastery 0
+3469 Dexterity 0
+49639 Supreme Ego 0
+37147 Position Proxy 1
+89 Mine Mastery 0
+63754 Position Proxy 1
+3042 Life Mastery 0
+53759 Cleansed Thoughts 0
+49605 Intelligence 0
+17411 Caster Mastery 0
+52157 Soul Siphon 0
+10166 Mine Mastery 0
+7023 Cold Mastery 0
+5237 Dexterity 0
+50338 Ballistics 0
+6538 Intelligence 0
+38662 Dexterity 0
+61306 Dexterity 0
+9458 Flask Mastery 0
+9355 Strength 0
+49978 Dexterity 0
+4011 Dexterity 0
+63620 Precise Technique 0
+40132 Evasion 1
+58854 Evasion 1
+46882 Large Jewel Socket 1
+1891 Mana 0
+59009 Mana 0
+21984 Large Jewel Socket 1
+22618 Mana 1
+21033 Mana 1
+35894 Trickery 0
+5823 Coordination 0
+42178 Point Blank 0
+62853 Dagger Mastery 0
+17906 Trap Mastery 0
+41016 Flask Mastery 0
+43495 Leech Mastery 0
+21835 Life 0
+9877 Life 0
+46761 Flask Mastery 0
+15409 Dagger Mastery 0
+37532 Lightning Mastery 0
+8370 Attributes Mastery 0
+13387 Elemental Mastery 0
+64709 Dexterity 0
+25058 Blood Siphon 0
+65224 Aspect of the Eagle 0
+55491 Reservation Mastery 0
+20730 Spell Suppression Mastery 0
+64217 Aspect of Stone 0
+8938 Dexterity 0
+62759 Mark Mastery 0
+38579 Poison Mastery 0
+30679 Dexterity 0
+8872 Dual Wielding Mastery 0
+11032 Evasion and Energy Shield Mastery 0
+65528 Evasion Mastery 0
+6570 Curse Mastery 0
+46965 Saboteur 0
+60737 Sleight of Hand 0
+54413 Spell Suppression Mastery 0
+62791 Lethe Shade 0
+44470 Position Proxy 1
+53365 Claw Mastery 0
+60440 Intelligence 0
+60210 Poison Mastery 0
+54600 Position Proxy 1
+12518 Claw Mastery 0
+47212 Projectile Mastery 0
+56023 Projectile Mastery 0
+52714 Prowess 0
+60180 Thief's Craft 0
+11239 Wind Dancer 0
+11455 Chaos Inoculation 0
+41866 Dexterity 5
+60942 Dexterity 5
+4788 Claw Mastery 0
+59252 Dexterity 0
+59606 Dexterity 0
+39718 Dexterity 0
+22266 Dexterity 0
+27733 Caster Mastery 0
+31508 Aspect of the Lynx 0
+37504 Intuition 0
+41163 Evasion Mastery 0
+41989 Resourcefulness 0
+35313 Position Proxy 1
+6384 Leech Mastery 0
+24050 Coldhearted Calculation 0
+46408 Fangs of the Viper 0
+857 Energy Shield Mastery 0
+47294 Damage Over Time Mastery 0
+37616 Trap Mastery 0
+27819 Position Proxy 1
+44540 Trap Mastery 0
+47362 Life and Energy Shield on Kill 0
+1767 Life and Energy Shield on Kill 0
+20675 Physical Mastery 0
+27865 Bow Mastery 0
+38568 Blind Mastery 0
+34317 Elemental Mastery 0
+63843 Dexterity 0
+7112 Dexterity 0
+9393 Flask Mastery 0
+44179 Cold Mastery 0
+42361 Chaos Mastery 0
+48660 Elemental Mastery 0
+32555 Dexterity 0
+36858 Intelligence 0
+63861 Critical Mastery 0
+16141 Leech Mastery 0
+27371 Evasion Mastery 0
+44316 Life Mastery 0
+23616 Physical and Chaos Damage 0
+1215 Evasion and Energy Shield Mastery 0
+7488 Leech Mastery 0
+54922 Arrow Dancing 0
+10495 Mana Mastery 0
+61834 Basic Jewel Socket 0
+292 Life Mastery 0
+64042 Physical Mastery 0
+1205 Poison Mastery 0
+49820 Spell Suppression Mastery 0
+53456 Intelligence 0
+54887 Cold Mastery 0
+31197 Dagger Mastery 0
+31039 Critical Mastery 0
+58302 Accuracy Mastery 0
+20736 Flask Mastery 0
+35255 Ghost Dance 0
+23407 Perfect Agony 0
+19725 Resistance and Ailment Protection Mastery 0
+26148 Accuracy Mastery 0
+24426 Ghost Reaver 0
+18182 Intelligence 0
+56295 Intelligence 0
+46277 Dexterity 0
+49900 Dexterity 0
+36287 Dexterity 0
+20807 Dexterity 0
+12412 Dexterity 0
+48508 Totem Mastery 0
+27872 Mine Mastery 0
+54307 Acrobatics 0
+32763 Large Jewel Socket 1
+23334 Projectile Damage 1
+6797 Projectile Damage 1
+7634 Dagger Mastery 0
+19050 Claw Mastery 0
+28903 Poison Mastery 0
+10429 Trap Mastery 0
+6427 Bow Mastery 0
+31291 Sword Mastery 0
+5826 Projectile Mastery 0
+57006 Vengeant Cascade 0
+36414 Position Proxy 1
+56439 Position Proxy 1
+10643 Position Proxy 1
+58229 Assassin 0
+64111 Pathfinder 0
+55236 Trickster 0
+18635 Saboteur 0
+58427 Raider 0
+56856 Deadeye 0

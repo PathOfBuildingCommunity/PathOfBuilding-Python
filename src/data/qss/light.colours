@@ -1,0 +1,28 @@
+# character is a comment
+  #f8f9fa   light grey. Background
+qss_background~~248, 249, 250, 1.000
+  #f0f2f4   very dark grey. alternate row background
+qss_alt_background~~240, 242, 244, 0.800
+  #4d5157   dark grey. Color and selection-color
+qss_selection_bckgrd~~77, 81, 87, 1.000
+  #FFFFFF   white. selection-background-color
+qss_selection_bckgrd_colour~~255, 255, 255, 0.500
+  #78879b   blue grey. Hover borders
+qss_hover_borders~~120, 135, 155, 1.000
+  #546E7A   teal. Separator
+qss_menu_sep~~84, 110, 122, 1.000
+  #e6e5e5   lighter grey. Box borders
+qss_box_borders~~230, 229, 229, 1.000
+  #000000   Tab selected borders. Scrollbar handles / QMenuBar~~item:selected (different shades used)
+  ### Three numbers only
+qss_tab_selected_borders~~0, 0, 0
+  #0000FF   Blue. CheckBox / Radio enabled indicator
+qss_checkbox_radio_enabled_indicator~~0, 0, 255, 1.000
+  #c0c0c0   silver. CheckBox / Radio indicator borders
+qss_checkbox_radio_indicator_borders~~192, 192, 192, 1.000
+  # Spin box up arrow url. Must be relative to self.config.data_dir or in the PoB.qrc
+qss_spin_up_arrow~~ :Qss/qss/up_arrow_dark.png
+  # Spin box down arrow url. Must be relative to self.config.data_dir or in the PoB.qrc
+qss_spin_dn_arrow~~ :Qss/qss/down_arrow_dark.png
+  # The custom ListBox / Tooltip has html rendering so the default text doesn't work. Add something appropriate.
+qss_default_text~~0, 0, 0, 0.800

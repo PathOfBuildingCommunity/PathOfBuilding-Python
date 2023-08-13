@@ -1,0 +1,7 @@
+#!/bin/bash
+# Generate UI files to PY files
+rm -rf build
+
+python setup.py bdist_wheel
+
+rm -rf build

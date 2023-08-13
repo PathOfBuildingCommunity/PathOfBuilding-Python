@@ -1,0 +1,2 @@
+json formatted data files
+https://poedat.erosson.org/pypoe/v1/tree/

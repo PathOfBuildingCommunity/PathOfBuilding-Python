@@ -6,14 +6,18 @@ authors = ["ppoelzl <33464174+ppoelzl@users.noreply.github.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.11"
+python = ">=3.9,<3.12"
 requests = "^2.26.0"
 SLPP = "^1.2.3"
-PySide6 = "6.3.1"
-PySide6-Addons = "6.3.1"
-PySide6-Essentials = "6.3.1"
+PySide6 = "^6.5.2"
+PySide6-Addons = "^6.5.2"
+PySide6-Essentials = "^6.5.2"
 xmltodict = "0.13.0"
-pyqtdarktheme = "1.1.0"
+beautifulsoup4 = "^4.11.1"
+psutil = "^5.9.1"
+luadata = "^1.0.5"
+pyperclip = "^1.8.2"
+nuitka = "^1.7.8"
  
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
@@ -26,3 +30,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+
+[tool.black]
+# Match pyCharm's width
+line-length = '120'
+force-exclude = '.*/ui/.*|^/src/PoB_rc.py'
