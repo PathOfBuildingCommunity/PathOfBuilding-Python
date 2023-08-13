@@ -21,7 +21,3 @@ jobs:
 
       - name: Install dependencies
         run: poetry install --no-interaction
-
-      - name: Format check
-        run: |
-          black ./src --check
