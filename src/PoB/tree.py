@@ -17,6 +17,7 @@ import re
 import math
 from collections import OrderedDict
 from pathlib import Path
+import pprint
 
 from PySide6.QtCore import QRect, Qt
 from PySide6.QtGui import QPixmap, QImage, QPainter, QPen, QColor
@@ -301,9 +302,8 @@ class Tree:
                     "ascendClass": _ascend_class,
                 }
 
-        sprite_sheets = {}
         # Process a sprite map list for loading the image
-        self.process_sprite_map(skill_sprites, sprite_sheets, self.tree_version_path, zoom_text)
+        self.process_sprite_map(skill_sprites, self.sprite_sheets, self.tree_version_path, zoom_text)
 
         # """Now do the legion sprite import"""
         # legion_sprites = read_json(Path(self.legion_path, "tree-legion.json"))
@@ -317,7 +317,7 @@ class Tree:
         # else:
         #     # Process a sprite map list for loading the image (downloading it too later)
         #     self.process_sprite_map(
-        #         legion_sprites["legionSprites"], sprite_sheets, self.legion_path, 0
+        #         legion_sprites["legionSprites"], self.sprite_sheets, self.legion_path, 0
         #     )
         #
         # """Now do the other asset's import"""
@@ -334,6 +334,9 @@ class Tree:
             group["oo"] = {}
             for orbit in group["orbits"]:
                 group["oo"][orbit] = True
+            # Add the group backgrounds
+            if not group.get("isProxy", False):
+                self.render_group_background(group, g)
 
         # """ Create a dictionary list of nodes of class Node()
         #     self.nodes = dictionary from the json"""
@@ -384,28 +387,22 @@ class Tree:
                         lines_db[index] = True
                         self.add_line(node.x, node.y, other_node.x, other_node.y)
 
-        # Add the group backgrounds
-        for g in self.groups:
-            group = self.groups[g]
-            if not group.get("isProxy", False):
-                self.render_group_background(group, g)
-
-            # ToDo: Temporary code for data checking purposes
-            # ToDo: Leave in place until all coding, including calcs are complete
-            # from pprint import pprint
-            # _path = Path("temp")
-            # if not _path.exists():
-            #     _path.mkdir()
-            # with open(f"{_path}/{node.id}.txt", "w") as fout:
-            #     # pprint(vars(node), fout)
-            #     pprint(
-            #         dict(
-            #             (name, getattr(node, name))
-            #             for name in dir(node)
-            #             if not name.startswith("__")
-            #         ),
-            #         fout,
-            #     )
+        # ToDo: Temporary code for data checking purposes
+        # ToDo: Leave in place until all coding, including calcs are complete
+        # from pprint import pprint
+        # _path = Path("temp")
+        # if not _path.exists():
+        #     _path.mkdir()
+        # with open(f"{_path}/{node.id}.txt", "w") as fout:
+        #     # pprint(vars(node), fout)
+        #     pprint(
+        #         dict(
+        #             (name, getattr(node, name))
+        #             for name in dir(node)
+        #             if not name.startswith("__")
+        #         ),
+        #         fout,
+        #     )
 
         # load
 
@@ -466,6 +463,11 @@ class Tree:
             if node.type not in ("Socket", "ClassStart"):
                 node.inactive_sprite = node.sprites[f"{node.type.lower()}Inactive"]
                 node.active_sprite = node.sprites[f"{node.type.lower()}Active"]
+            # This is the pretty icon over the class start; with the red, blue and green dots.
+            if node.type == "ClassStart":
+                node.inactive_sprite = self.spriteMap[node.startArt]["startNode"]
+                node.active_sprite = self.spriteMap[node.startArt]["startNode"]
+
         # setting this to "if node.sprites is not None:" makes the sprites disappear
         #       if x is not None # which works only on None
         if not node.sprites and not node.masterySprites:
@@ -713,7 +715,7 @@ class Tree:
                 "width": _result.width,
                 "height": _result.height,
             }
-        # with open("temp/spriteMap.txt", "a") as f_out:
+        # with open("spriteMap.txt", "w") as f_out:
         #     pprint(self.spriteMap, f_out)
 
         # process_assets
