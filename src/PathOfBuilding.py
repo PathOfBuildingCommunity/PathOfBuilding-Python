@@ -21,8 +21,9 @@ Splashscreen by https://creator.nightcafe.studio
 import os
 import sys
 
-from PySide6.QtGui import QFontDatabase, QFont
+from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QCoreApplication, Qt
 
 from windows.main_window import MainWindow
 
@@ -38,8 +39,9 @@ from windows.main_window import MainWindow
 # ToDo: Remove comment when we stop building.
 # sys.stdout = open("PathOfBuilding.log", 'a')
 
+QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
 main_app = QApplication(sys.argv)
-main_app.setStyle("fusion")
+
 # font for stats box. To line things up, we need a Mono font. (could use <pre> now that I know it exists. PSH 20230802)
 QFontDatabase.addApplicationFont(":/Font/Font/NotoSansMono-Regular.ttf")
 # system wide font

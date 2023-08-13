@@ -53,7 +53,7 @@ class Build:
         self.filename = ""
         self.search_text = ""
         self.need_saving = True
-        self.current_tab = "TREE"
+        # self.current_tab = "TREE"
         # An dict of tree versions used in the build. Load the default tree first.
         self.trees = {_VERSION_str: Tree(self.pob_config, _VERSION_str)}
         self.current_tree = self.trees.get(_VERSION_str)
@@ -478,7 +478,7 @@ class Build:
         spec = self.specs[start]
         xml_spec = spec.xml_spec
         if start < destination:
-            # need to decrement dest by one as we are going to remove start first
+            # need to decrement destination by one as we are going to remove start first
             destination -= 1
         self.specs.remove(spec)
         self.specs.insert(destination, spec)
@@ -556,7 +556,7 @@ class Build:
                 xml_spec = self.specs[0].xml_spec
                 self.tree.remove(xml_spec)
                 del self.specs[count]
-        elif 0 < index < len(self.specs):
+        elif 0 <= index < len(self.specs):
             xml_spec = self.specs[index].xml_spec
             self.tree.remove(xml_spec)
             del self.specs[index]

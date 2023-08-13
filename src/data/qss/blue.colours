@@ -1,6 +1,8 @@
 # character is a comment
   #263238   Background
 qss_background~~38, 50, 56, 1.000
+  #60636c   very dark grey. alternate row background
+qss_alt_background~~96, 99, 108, 0.300
   #4d5157   Color and selection-color
 qss_selection_bckgrd~~77, 81, 87, 1.000
   #FFFFFF   selection-background-color

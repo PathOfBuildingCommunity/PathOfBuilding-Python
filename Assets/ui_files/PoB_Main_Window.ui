@@ -584,6 +584,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <height>22</height>
                  </rect>
                 </property>
+                <property name="maxVisibleItems">
+                 <number>15</number>
+                </property>
                 <property name="placeholderText">
                  <string>&lt;empty&gt;</string>
                 </property>
@@ -1397,6 +1400,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                     <property name="currentText">
                      <string notr="true"/>
                     </property>
+                    <property name="maxVisibleItems">
+                     <number>15</number>
+                    </property>
                     <property name="placeholderText">
                      <string>&lt;empty&gt;</string>
                     </property>
@@ -1464,6 +1470,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                       <width>150</width>
                       <height>22</height>
                      </rect>
+                    </property>
+                    <property name="maxVisibleItems">
+                     <number>15</number>
                     </property>
                     <item>
                      <property name="text">
@@ -1539,6 +1548,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                             <height>0</height>
                            </size>
                           </property>
+                          <property name="maxVisibleItems">
+                           <number>15</number>
+                          </property>
                           <item>
                            <property name="text">
                             <string>Any Slot</string>
@@ -1609,6 +1621,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                             <height>0</height>
                            </size>
                           </property>
+                          <property name="maxVisibleItems">
+                           <number>15</number>
+                          </property>
                           <item>
                            <property name="text">
                             <string>Any Type</string>
@@ -1627,6 +1642,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                             <height>0</height>
                            </size>
                           </property>
+                          <property name="maxVisibleItems">
+                           <number>15</number>
+                          </property>
                           <item>
                            <property name="text">
                             <string>Sort by Name</string>
@@ -1641,6 +1659,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                             <width>150</width>
                             <height>0</height>
                            </size>
+                          </property>
+                          <property name="maxVisibleItems">
+                           <number>15</number>
                           </property>
                           <item>
                            <property name="text">
@@ -1664,6 +1685,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                             <width>150</width>
                             <height>0</height>
                            </size>
+                          </property>
+                          <property name="maxVisibleItems">
+                           <number>15</number>
                           </property>
                           <item>
                            <property name="text">
@@ -1697,6 +1721,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                             <width>150</width>
                             <height>0</height>
                            </size>
+                          </property>
+                          <property name="maxVisibleItems">
+                           <number>15</number>
                           </property>
                           <item>
                            <property name="text">
@@ -1754,6 +1781,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                           <width>90</width>
                           <height>22</height>
                          </rect>
+                        </property>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
                         </property>
                         <item>
                          <property name="text">
@@ -1864,6 +1894,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                  <property name="currentText">
                   <string>Noto Sans</string>
                  </property>
+                 <property name="maxVisibleItems">
+                  <number>15</number>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -1905,6 +1938,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                    <width>140</width>
                    <height>0</height>
                   </size>
+                 </property>
+                 <property name="maxVisibleItems">
+                  <number>15</number>
                  </property>
                 </widget>
                </item>

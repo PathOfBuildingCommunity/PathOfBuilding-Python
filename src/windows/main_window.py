@@ -94,7 +94,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.items_ui = ItemsUI(self.config, self)
         self.notes_ui = NotesUI(self.config, self)
         self.skills_ui = SkillsUI(self.config, self.build, self)
-        self.tree_ui = TreeUI(self.config, self.frame_TreeTools, self)
+        self.tree_ui = TreeUI(self.config, self.build, self.frame_TreeTools, self)
 
         # share the goodness
         self.build.gems_by_name_or_id = self.skills_ui.gems_by_name_or_id
@@ -212,7 +212,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save)
         self.action_SaveAs.triggered.connect(self.build_save_as)
-        # self.action_ManageTrees.triggered.connect(self.tree_ui.open_manage_trees)
         self.action_Settings.triggered.connect(self.config.open_settings_dialog)
         self.action_Import.triggered.connect(self.open_import_dialog)
         self.action_Export.triggered.connect(self.open_export_dialog)
@@ -225,10 +224,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
-
-        # Add in StyleProxy
-        # self._proxy = MenuProxyStyle(self.menu_Builds.style())
-        # self.menu_Builds.setStyle(self._proxy)
 
         # Start the statusbar self updating
         self.update_status_bar()
@@ -393,7 +388,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 #     self.curr_theme.setChecked(False)
                 self.curr_theme.setChecked(True)
         # parent of IOError, OSError *and* WindowsError where available
-        except (EnvironmentError, FileNotFoundError, ET.ParseError):
+        except (EnvironmentError, FileNotFoundError):
             print(f"Unable to open theme files.")
 
     def exit_handler(self):
@@ -729,9 +724,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Focus a Widget
         tab_focus.get(index).setFocus()
         # update the build
-        self.build.current_tab = self.tab_main.tabWhatsThis(self.tab_main.currentIndex())
+        self.build.viewMode = self.tab_main.tabWhatsThis(self.tab_main.currentIndex())
         # Turn on / off actions as needed
-        self.action_ManageTrees.setVisible(self.build.current_tab == "TREE")
+        self.action_ManageTrees.setVisible(self.build.viewMode == "TREE")
 
     @Slot()
     def open_import_dialog(self):
@@ -903,7 +898,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                 success = self.skills_ui.get_item_from_clipboard(data)
                             else:
                                 success = self.items_ui.get_item_from_clipboard(data)
-                        # match self.build.current_tab:
+                        # match self.build.viewMode:
                         #     case "SKILLS":
                         #         self.skills_ui.get_item_from_clipboard()
                         #     case "ITEMS":

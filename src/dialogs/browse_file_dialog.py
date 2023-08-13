@@ -128,7 +128,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             # If _name is .., then add the parent directory, else the subdirectory
             path = _text == ".." and os.pardir or _text
             _path = os.path.abspath(os.path.join(self.lineEdit_CurrDir.text(), path))
-            lwi.setToolTip(os.path.basename(_path))
+            lwi.setToolTip(f"<nobr>{html_colour_text(self.win.qss_default_text, _path)}</nobr>")
         else:
             lwi = QListWidgetItem(_text)
             _path = os.path.abspath(os.path.join(self.lineEdit_CurrDir.text(), filename))

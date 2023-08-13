@@ -8,7 +8,7 @@ import urllib3
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QDialog, QListWidgetItem
 
-from PoB.build import Build
+from PoB.build import Build, _debug, print_call_stack
 from PoB.constants import _VERSION, _VERSION_str, tree_versions
 from dialogs.popup_dialogs import yes_no_dialog, NewTreePopup
 
@@ -21,7 +21,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
     def __init__(self, _build: Build, parent=None):
         super().__init__(parent)
         self.build = _build
-        self.http = urllib3.PoolManager()
+        self.win = parent
         self.spec_to_be_moved = None
         self.item_being_edited = None
         self.triggers_connected = False
@@ -50,6 +50,8 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         self.list_Trees.model().rowsAboutToBeMoved.connect(self.specs_rows_about_to_be_moved, Qt.QueuedConnection)
 
     def connect_triggers(self):
+        # print("connect_triggers", self.triggers_connected)
+        # print_call_stack(True)
         if self.triggers_connected:
             return
         self.list_Trees.itemDoubleClicked.connect(self.list_item_double_clicked)
@@ -58,6 +60,8 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         self.triggers_connected = True
 
     def disconnect_triggers(self):
+        # print("disconnect_triggers", self.triggers_connected)
+        # print_call_stack(True)
         if not self.triggers_connected:
             return
         self.list_Trees.itemDoubleClicked.disconnect(self.list_item_double_clicked)
@@ -164,40 +168,40 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
             self.add_detail_to_spec_names()
 
     @Slot()
-    def list_item_changed(self, item):
+    def list_item_changed(self, lwi):
         """Update line text after the user hits enter or clicks away"""
         # print("list_current_text_changed", item.text())
         self.item_being_edited = None
         row = self.list_Trees.currentRow()
-        self.build.specs[row].title = item.text()
+        self.build.specs[row].title = lwi.text()
         self.add_detail_to_spec_names()
 
     @Slot()
-    def list_item_double_clicked(self, item):
+    def list_item_double_clicked(self, lwi):
         """
         Set up the list widget for editing this item.
 
-        :param item: QListWidgetItem:
+        :param lwi: QListWidgetItem:
         :return: N/A
         """
         self.disconnect_triggers()
-        self.item_being_edited = item
+        self.item_being_edited = lwi
         # Reset the text, removing the spec version information
         row = self.list_Trees.currentRow()
-        item.setText(self.build.specs[row].title)
+        lwi.setText(self.build.specs[row].title)
         self.connect_triggers()
 
     @Slot()
-    def list_current_item_changed(self, current, previous):
+    def list_current_item_changed(self, current_lwi, previous_lwi):
         """
 
-        :param current: QListWidgetItem:
-        :param previous: QListWidgetItem:
+        :param current_lwi: QListWidgetItem:
+        :param previous_lwi: QListWidgetItem:
         :return: N/A
         """
-        # print("list_current_item_changed")
-        if self.item_being_edited == previous:
-            self.list_item_changed(previous)
+        print("list_current_item_changed", current_lwi, previous_lwi)
+        if self.item_being_edited == previous_lwi:
+            self.list_item_changed(previous_lwi)
             self.add_detail_to_spec_names()
         # Abandon previous edit
         self.item_being_edited = None

@@ -1,6 +1,8 @@
 # character is a comment
   #f8f9fa   light grey. Background
 qss_background~~248, 249, 250, 1.000
+  #f0f2f4   very dark grey. alternate row background
+qss_alt_background~~240, 242, 244, 0.800
   #4d5157   dark grey. Color and selection-color
 qss_selection_bckgrd~~77, 81, 87, 1.000
   #FFFFFF   white. selection-background-color

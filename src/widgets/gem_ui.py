@@ -59,6 +59,7 @@ class GemUI(QWidget):
         self.combo_gem_list = QComboBox(self)
         self.combo_gem_list.setGeometry(30, 2, 260, 22)
         self.combo_gem_list.setDuplicatesEnabled(False)
+        self.combo_gem_list.setMaxVisibleItems(15)
         self.spin_gem_level = QSpinBox(self)
         self.spin_gem_level.setGeometry(300, 1, 50, 24)
         self.spin_gem_level.setMinimum(1)

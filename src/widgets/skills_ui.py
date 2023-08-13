@@ -509,7 +509,7 @@ class SkillsUI:
         and we need a dialog ...
         :return: N/A
         """
-        # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another time.
+        # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another instance.
         if self.dlg is None:
             self.dlg = ManageSkillsDlg(self, self.pob_config, self.win)
             self.dlg.exec()

@@ -41,7 +41,7 @@ def generate_py_from_ui():
         outpath = Path("src", "ui", path.name).with_suffix(".py")
         ui_time = os.path.getmtime(path)
         if os.path.isfile(outpath) and ui_time == os.path.getmtime(outpath):
-            print(f"skipping {path}, exists and no change.")
+            print(f"skipping {outpath}, exists and no change.")
             pass
         else:
             print(path, ">>", outpath)
@@ -63,7 +63,7 @@ def generate_qrc():
     outpath = Path("src", "PoB_rc").with_suffix(".py")
     ui_time = os.path.getmtime(path)
     if os.path.isfile(outpath) and ui_time == os.path.getmtime(outpath):
-        print(f"skipping {path}, exists and no change.")
+        print(f"skipping {outpath}, exists and no change.")
         pass
     else:
         print(path, ">>", outpath)

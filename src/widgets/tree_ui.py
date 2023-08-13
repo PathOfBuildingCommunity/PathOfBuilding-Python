@@ -17,11 +17,11 @@ from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class TreeUI:
-    def __init__(self, _config: Config, frame_tree_tools, _win: Ui_MainWindow) -> None:
+    def __init__(self, _config: Config, _build, frame_tree_tools, _win: Ui_MainWindow) -> None:
         self.config = _config
         self.tr = self.config.app.tr
         self.win = _win
-        self.build = self.win.build
+        self.build = _build
         self._curr_class = PlayerClasses.SCION
         self.dlg = None  # Is a dialog active
 
@@ -146,7 +146,7 @@ class TreeUI:
         Respond to Ctrl-M and open the appropriate dialog
         :return: N/A
         """
-        print("Ctrl-M", type(self))
+        # print("Ctrl-M", type(self))
         self.open_manage_trees()
 
     def open_manage_trees(self):
@@ -154,7 +154,7 @@ class TreeUI:
         and we need a dialog ...
         :return: N/A
         """
-        # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another time.
+        # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another instance.
         if self.dlg is None:
             self.dlg = ManageTreeDlg(self.build, self.win)
             self.dlg.exec()
@@ -191,6 +191,19 @@ class TreeUI:
         """
         self.build.compare_spec = self.build.specs[index]
         self.win.gview_Tree.add_tree_images(False)
+
+    def reset_tree(self):
+        """
+
+        :return:
+        """
+        print("reset_tree")
+        if yes_no_dialog(
+            self.win,
+            self.tr("Resetting your Tree"),
+            self.tr("Are you sure? It could be dangerous."),
+        ):
+            self.build.reset_tree()
 
     def import_tree(self):
         """
@@ -242,19 +255,6 @@ class TreeUI:
         """
         self.win.gview_Tree.add_tree_images(True)
         self.search_text_changed()
-
-    def reset_tree(self):
-        """
-
-        :return:
-        """
-        print("reset_tree")
-        if yes_no_dialog(
-            self.win,
-            self.tr("Resetting your Tree"),
-            self.tr("Are you sure? It could be dangerous."),
-        ):
-            self.build.reset_tree()
 
 
 # def test() -> None:

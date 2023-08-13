@@ -12,7 +12,7 @@ All values should only be scaled on point of entry, ie: when they are first proc
 global_scale_factor = 2.5
 pob_debug = True
 
-_VERSION_str = "3_22"
+_VERSION_str = "3_19"
 tree_versions = {
     "3_18": "3.18",
     "3_19": "3.19",

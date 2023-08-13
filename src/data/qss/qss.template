@@ -143,11 +143,16 @@ QListView {
     selection-background-color: rgba( qss_selection_bckgrd_colour );
 }
 
+ListBox,
+QListView,
+QAbstractItemView {
+	alternate-background-color: rgba( qss_alt_background );
+}
 
 ListBox::item,
 QListWidget::item {
     /* background-color: rgba( qss_background ); */
-    color: rgba( qss_tab_selected_borders );
+    color: rgba( qss_tab_selected_borders, 0.800 );
 }
 
 QToolButton, QAction, QWidgetAction,
