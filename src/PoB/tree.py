@@ -334,9 +334,6 @@ class Tree:
             group["oo"] = {}
             for orbit in group["orbits"]:
                 group["oo"][orbit] = True
-            # Add the group backgrounds
-            if not group.get("isProxy", False):
-                self.render_group_background(group, g)
 
         # """ Create a dictionary list of nodes of class Node()
         #     self.nodes = dictionary from the json"""
@@ -386,6 +383,13 @@ class Tree:
                     if not lines_db.get(index, False):
                         lines_db[index] = True
                         self.add_line(node.x, node.y, other_node.x, other_node.y)
+
+        # Add the group backgrounds
+        # DO NOT join this 'for g' loop with the one above. It makes the backgrounds disappear
+        for g in self.groups:
+            group = self.groups[g]
+            if not group.get("isProxy", False):
+                self.render_group_background(group, g)
 
         # ToDo: Temporary code for data checking purposes
         # ToDo: Leave in place until all coding, including calcs are complete
