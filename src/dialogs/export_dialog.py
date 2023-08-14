@@ -11,10 +11,10 @@ import pyperclip
 from PySide6.QtWidgets import QDialog
 from PySide6.QtCore import Qt, Slot, QTimer
 
-from PoB.pob_config import Config, deflate_and_base64_encode, print_a_xml_element
+from PoB.pob_config import Config
 from PoB.build import Build
 from PoB.constants import get_http_headers, post_http_headers, website_list
-from widgets.ui_utils import html_colour_text, set_combo_index_by_text
+from widgets.ui_utils import html_colour_text, deflate_and_base64_encode, print_a_xml_element, set_combo_index_by_text
 
 from ui.dlgBuildExport import Ui_BuildExport
 

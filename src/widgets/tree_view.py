@@ -14,10 +14,11 @@ from PySide6.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
 from PySide6.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
 
 from PoB.constants import ColourCodes, class_backgrounds, Layers, PlayerClasses
-from PoB.pob_config import Config, _debug, print_call_stack
+from PoB.pob_config import Config
 from PoB.build import Build
 from dialogs.popup_dialogs import MasteryPopup
 from widgets.tree_graphics_item import TreeGraphicsItem
+from widgets.ui_utils import _debug, print_call_stack
 
 
 class TreeView(QGraphicsView):

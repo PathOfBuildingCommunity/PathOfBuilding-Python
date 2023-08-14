@@ -86,6 +86,10 @@ QMenu::item {
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
+QMenuBar::item:selected {
+    padding: 4px;
+    background: rgba( qss_tab_selected_borders, 0.188 );
+}
 QMenu::item:selected, QMenu > .QLabel::Hover {
     background: rgba(qss_tab_selected_borders, 0.188);
 }

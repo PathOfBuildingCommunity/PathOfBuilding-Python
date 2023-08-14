@@ -14,7 +14,7 @@ from PoB.constants import (
     _VERSION,
     _VERSION_str,
 )
-from PoB.pob_config import print_call_stack, print_a_xml_element
+from widgets.ui_utils import print_call_stack, print_a_xml_element
 from dialogs.popup_dialogs import ok_dialog
 
 

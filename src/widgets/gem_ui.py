@@ -6,11 +6,17 @@ import xml.etree.ElementTree as ET
 
 from PySide6.QtCore import QRect, Slot, QSize, Qt
 from PySide6.QtGui import QColor, QBrush, QIcon
-from PySide6.QtWidgets import QCheckBox, QComboBox, QPushButton, QListWidgetItem, QSpinBox, QWidget
+from PySide6.QtWidgets import QCheckBox, QComboBox, QPushButton, QSpinBox, QWidget
 
 from PoB.constants import ColourCodes, empty_gem
-from PoB.pob_config import _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
-from widgets.ui_utils import set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
+from widgets.ui_utils import (
+    _debug,
+    str_to_bool,
+    bool_to_str,
+    print_a_xml_element,
+    print_call_stack,
+    set_combo_index_by_data,
+)
 
 
 class GemUI(QWidget):

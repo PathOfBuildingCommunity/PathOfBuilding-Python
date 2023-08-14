@@ -31,7 +31,7 @@ from PoB.constants import (
 )
 
 from PoB.build import Build
-from PoB.pob_config import Config, _debug, print_a_xml_element, print_call_stack
+from PoB.pob_config import Config
 from PoB.pob_file import get_file_info
 from dialogs.browse_file_dialog import BrowseFileDlg
 from dialogs.export_dialog import ExportDlg
@@ -46,7 +46,7 @@ from widgets.player_stats import PlayerStats
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
 from widgets.tree_view import TreeView
-from widgets.ui_utils import html_colour_text, set_combo_index_by_data
+from widgets.ui_utils import _debug, html_colour_text, print_a_xml_element, print_call_stack, set_combo_index_by_data
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -504,7 +504,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
-            self.statusbar_MainWindow.showMessage(f"Loaded: {self.build.name}", 10000)
+            self.update_status_bar(f"Loaded: {self.build.name}", 10)
 
         self.loading = False
 
@@ -852,19 +852,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.skills_ui.update_socket_group_labels()
 
     @Slot()
-    def update_status_bar(self, message=None):
+    def update_status_bar(self, message=None, timeout=2):
         """
         Update the status bar. Use default text if no message is supplied.
         This triggers when the message is set and when it is cleared after the time out.
 
-        :param message: string: the message
+        :param message: string: the message.
+        :param timeout: int: time for the message to be shown, in secs
         :return: N/A
         """
         # we only care for when the message clears
         if pob_debug and message is None or message == "":
             process = psutil.Process(os.getpid())
             message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
-            self.statusbar_MainWindow.showMessage(message, 2000)
+            self.statusbar_MainWindow.showMessage(message, timeout * 1000)
 
     # Overridden function
     def keyReleaseEvent(self, event):

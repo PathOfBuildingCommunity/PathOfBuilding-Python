@@ -24,7 +24,7 @@ from PySide6.QtGui import QPixmap, QImage, QPainter, QPen, QColor
 from PySide6.QtWidgets import QGraphicsLineItem
 
 from dialogs.popup_dialogs import critical_dialog
-from PoB.pob_config import Config, _debug
+from PoB.pob_config import Config
 from PoB.constants import (
     ColourCodes,
     Layers,
@@ -37,7 +37,7 @@ from PoB.constants import (
 from PoB.pob_file import read_json
 from PoB.node import Node
 from widgets.tree_graphics_item import TreeGraphicsItem
-
+from widgets.ui_utils import _debug
 
 nodeOverlay = {
     "Normal": {

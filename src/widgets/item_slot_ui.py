@@ -8,11 +8,8 @@ from PySide6.QtCore import Slot, QSize, Qt
 from PySide6.QtGui import QColor, QBrush, QIcon
 from PySide6.QtWidgets import QCheckBox, QComboBox, QLabel, QListWidgetItem, QSpinBox, QWidget
 
-from PoB.pob_config import _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
-from PoB.constants import ColourCodes, slot_map
 from PoB.item import Item
-from dialogs.popup_dialogs import yes_no_dialog
-from widgets.ui_utils import set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
+from widgets.ui_utils import _debug, print_a_xml_element, print_call_stack, set_combo_index_by_text
 
 
 class ItemSlotUI(QWidget):

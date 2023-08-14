@@ -12,10 +12,16 @@ from PySide6.QtWidgets import QDialog
 from PySide6.QtCore import Qt, Slot
 
 from PoB.constants import valid_websites, website_list, get_http_headers
-from PoB.pob_config import Config, decode_base64_and_inflate, deflate_and_base64_encode, unique_sorted
+from PoB.pob_config import Config
 from PoB.pob_file import write_json, read_json
 from PoB.build import Build
-from widgets.ui_utils import html_colour_text, set_combo_index_by_text
+from widgets.ui_utils import (
+    decode_base64_and_inflate,
+    deflate_and_base64_encode,
+    html_colour_text,
+    set_combo_index_by_text,
+    unique_sorted,
+)
 
 from ui.dlgBuildImport import Ui_BuildImport
 
