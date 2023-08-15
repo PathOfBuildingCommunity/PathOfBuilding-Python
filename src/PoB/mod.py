@@ -21,7 +21,7 @@ class Mod:
         self.line = re.sub(
             r"{variant:\d+}",
             "",
-            _line.replace("{crafted}", "").replace("{fractured}", ""),
+            _line.replace("{crafted}", "").replace("{fractured}", "").replace("{crucible}", ""),
         )
         # this is the text with the (xx-yy), eg '% increased Duration'.
         # It is to avoid recalculating this value needlessly
@@ -41,11 +41,14 @@ class Mod:
 
         self.crafted = "{crafted}" in _line
         self.fractured = "{fractured}" in _line
+        self.crucible = "{crucible}" in _line
         self.tooltip_colour = ColourCodes.MAGIC.value
         if self.crafted:
             self.tooltip_colour = ColourCodes.CRAFTED.value
         if self.fractured:
             self.tooltip_colour = ColourCodes.FRACTURED.value
+        if self.crucible:
+            self.tooltip_colour = ColourCodes.CRUCIBLE.value
         # preformed text for adding to the tooltip. Let's set a default in case there is no 'range'
         self.tooltip = f"{html_colour_text(self.tooltip_colour, self.line)}<br/>"
 
@@ -76,6 +79,7 @@ class Mod:
             f'{self.variant_text and self.variant_text or ""}'
             f'{self.crafted and "{crafted}" or ""}'
             f'{self.fractured and "{fractured}" or ""}'
+            f'{self.crucible and "{crucible}" or ""}'
         )
         if self.range >= 0:
             r = f"range:{self.range}".rstrip("0").rstrip(".")

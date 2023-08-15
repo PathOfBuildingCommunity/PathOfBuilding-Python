@@ -670,7 +670,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                             self.build.current_spec.nodes.remove(node_id)
 
                     # Remove old start node.
-                    self.build.current_spec.nodes.remove(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
+                    try:
+                        self.build.current_spec.nodes.remove(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
+                    except ValueError:
+                        pass
 
         if selected_ascendancy != "None":
             # add new start node.

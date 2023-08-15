@@ -207,6 +207,7 @@ class ColourCodes(enum.Enum):
     BRITTLEBG = "#00122B"
     SAPBG = "#261500"
     SCOURGE = "#FF6E25"
+    CRUCIBLE = "#FFA500"
     GRAY = "#D3D3D3"
     LIGHTGRAY = "#808B96"
     DARKGRAY = "#696969"

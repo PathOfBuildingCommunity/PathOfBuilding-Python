@@ -143,6 +143,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
                 and text_json.get("tree", bad_text) != bad_text
             )
         except (KeyError, json.decoder.JSONDecodeError):
+            print("test_import_text_for_poeplanner_json test failed")
             return False
 
     @Slot()
@@ -443,13 +444,16 @@ class ImportDlg(Ui_BuildImport, QDialog):
         try:
             url = f"{realm_code['hostName']}character-window/get-passive-skills"
             response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
-            if response.status_code != 220:
+            print("response.status_code", response.status_code)
+            if response.status_code != 200:
                 self.status = html_colour_text(
                     "RED",
                     f"Error retrieving 'Data': {response.reason} ({response.status_code}).",
                 )
             else:
                 passive_tree = response.json()
+                pprint(passive_tree)
+                write_json(self.config.build_path + "/" + char_name + "_passive_tree.json", passive_tree)
         except requests.RequestException as e:
             print(f"Error retrieving 'Passive Tree': {e}.")
             self.status = html_colour_text(
@@ -465,6 +469,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             url = f"{realm_code['hostName']}character-window/get-items"
             response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
             items = response.json()
+            write_json(self.config.build_path + "/" + char_name + "_items.json", items)
         except requests.RequestException as e:
             print(f"Error retrieving 'Items': {e}.")
             self.status = html_colour_text(
@@ -474,8 +479,10 @@ class ImportDlg(Ui_BuildImport, QDialog):
             print(vars(response))
 
         # lets add the jewels and items together
-        for idx, jewel in enumerate(passive_tree.get("items", [])):
-            items["items"].insert(idx, jewel)
+        if passive_tree:
+            for idx, jewel in enumerate(passive_tree.get("items", [])):
+                items["items"].insert(idx, jewel)
+
         char_info = items.get("character", None)
         self.character_data = {
             "tree": passive_tree,
