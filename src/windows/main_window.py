@@ -644,7 +644,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot for the Classes combobox. Triggers the curr_class property actions.
 
-        :param selected_class: String of the selected text
+        :param selected_class: String of the selected text.
         :return:
         """
         new_class = self.combo_classes.currentData()
@@ -666,8 +666,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # This is good as it will set the ascendancy back to 'None'
         self.combo_ascendancy.clear()
         self.combo_ascendancy.addItem("None", 0)
-        _class = self.build.current_tree.classes[new_class.value]
-        for idx, _ascendancy in enumerate(_class["ascendancies"], 1):
+        class_json = self.build.current_tree.classes[new_class.value]
+        for idx, _ascendancy in enumerate(class_json["ascendancies"], 1):
             self.combo_ascendancy.addItem(_ascendancy["name"], idx)
 
         if self.refresh_tree:
@@ -694,7 +694,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         current_tree = self.build.current_tree
         current_spec = self.build.current_spec
-        new_ascendancy = self.combo_ascendancy.currentData()
         curr_ascendancy_name = current_spec.ascendClassId_str()
         if curr_ascendancy_name != "None":
             if not self.loading:
@@ -729,7 +728,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build.current_spec.nodes.add(current_tree.ascendancy_start_nodes[selected_ascendancy])
 
         if self.refresh_tree:
-            self.build.current_spec.ascendClassId = new_ascendancy
+            self.build.current_spec.ascendClassId = self.combo_ascendancy.currentData()
             self.build.ascendClassName = selected_ascendancy
             self.gview_Tree.add_tree_images()
 

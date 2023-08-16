@@ -138,7 +138,7 @@ class TreeView(QGraphicsView):
                     current_tree_nodes = self.build.current_tree.nodes
                     node = current_tree_nodes[_item.node_id]
                     # Check to see if node is connected to an active node
-                    for node_id in set(node.nodes_out + node.nodes_in):
+                    for node_id in node.nodes_out.union(node.nodes_in):
                         if node_id in self.build.current_spec.nodes:
                             if _item.node_type == "Mastery":
                                 print(
@@ -387,7 +387,7 @@ class TreeView(QGraphicsView):
                 # Draw active lines
                 if node.type not in ("ClassStart", "Mastery"):
                     in_out_nodes = []
-                    for other_node_id in set(node.nodes_out + node.nodes_in) & set(active_nodes):
+                    for other_node_id in node.nodes_out.union(node.nodes_in) & active_nodes:
                         other_node = tree.nodes.get(other_node_id, None)
                         if (
                             other_node is not None

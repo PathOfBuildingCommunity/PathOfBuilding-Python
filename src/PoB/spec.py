@@ -106,10 +106,10 @@ class Spec:
     def ascendClassId_str(self):
         """Return a string of the current Ascendancy"""
         # get a list of ascendancies from the current tree's json
-        _class = self.build.current_tree.classes[self.classId]
-        ascendancies = [_ascendancy["name"] for _ascendancy in _class["ascendancies"]]
+        class_json = self.build.current_tree.classes[self.classId]
+        ascendancies = [_ascendancy["name"] for _ascendancy in class_json["ascendancies"]]
         # insert the class name for when ascendClassId == 0
-        ascendancies.insert(0, self.classId_str())
+        ascendancies.insert(0, "None")
         # Return the current ascendancy's name
         return ascendancies[self.ascendClassId]
 
@@ -485,8 +485,9 @@ class Spec:
         :param new_nodes: str
         :return: N/A
         """
+        print("set_extended_hashes_from_string")
         if new_nodes:
-            self.nodes = new_nodes.split(",")
+            self.nodes = set(new_nodes.split(","))
 
     def save(self):
         """

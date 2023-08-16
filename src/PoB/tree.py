@@ -366,8 +366,8 @@ class Tree:
             node = self.nodes[node_id]
             if node.type not in ("ClassStart", "Mastery"):
                 in_out_nodes = []
-                # for other_node_id in set(node.nodes_out + node.nodes_in) & set(self.nodes):
-                for other_node_id in node.nodes_out + node.nodes_in:
+                # for other_node_id in node.nodes_out + node.nodes_in:
+                for other_node_id in node.nodes_out.union(node.nodes_in):
                     other_node = self.nodes.get(other_node_id, None)
                     if (
                         other_node is not None

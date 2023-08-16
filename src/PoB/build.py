@@ -637,5 +637,6 @@ class Build:
         """
         self.current_spec.nodes.clear()
         start_node = self.current_tree.classes[self.current_class]["startNodeId"]
-        self.current_spec.nodes = [start_node]
+        self.current_spec.nodes.add(start_node)
+        # self.current_spec.nodes = [start_node]
         self.win.gview_Tree.add_tree_images(True)
