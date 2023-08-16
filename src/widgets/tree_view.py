@@ -146,9 +146,11 @@ class TreeView(QGraphicsView):
                                     self.build.current_tree.nodes[_item.node_id],
                                 )
                                 if self.mastery_popup(self.build.current_tree.nodes[_item.node_id]):
-                                    self.build.current_spec.nodes.append(_item.node_id)
+                                    # self.build.current_spec.nodes.append(_item.node_id)
+                                    self.build.current_spec.nodes.add(_item.node_id)
                             else:
-                                self.build.current_spec.nodes.append(_item.node_id)
+                                # self.build.current_spec.nodes.append(_item.node_id)
+                                self.build.current_spec.nodes.add(_item.node_id)
                             break
             elif event.button() == Qt.RightButton:
                 # look for Mastery and popup a dialog

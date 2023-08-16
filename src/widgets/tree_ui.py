@@ -55,9 +55,9 @@ class TreeUI:
         self.btn_Reset = QPushButton()
         self.btn_Import = QPushButton()
         self.btn_Export = QPushButton()
-        self.btn_Reset.setText(f'{self.tr("Reset Tree")} ...')
-        self.btn_Import.setText(f'{self.tr("Import Tree")} ...')
-        self.btn_Export.setText(f'{self.tr("Export Tree")} ...')
+        self.btn_Reset.setText(f'{self.tr("&Reset Tree")} ...')
+        self.btn_Import.setText(f'{self.tr("I&mport Tree")} ...')
+        self.btn_Export.setText(f'{self.tr("E&xport Tree")} ...')
         self.layout_tree_tools.addWidget(self.btn_Reset)
         self.layout_tree_tools.addWidget(self.btn_Import)
         self.layout_tree_tools.addWidget(self.btn_Export)
@@ -214,20 +214,7 @@ class TreeUI:
         dlg = ImportTreePopup(self.config.app.tr)
         _return = dlg.exec()
         if _return:
-            url = dlg.lineedit.text()
-
-            # check the validity of what was passed in
-            ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", url + "==")
-            poep = re.search(r"http.*poeplanner.com/(.*)", url + "==")
-            variable = ""
-            if ggg is not None:
-                self.build.current_spec.URL = url
-                self.build.current_spec.set_nodes_from_ggg_url()
-            if poep is not None:
-                self.build.current_spec.set_nodes_from_poeplanner_url(url)
-            if ggg is not None or poep is not None:
-                self.win.gview_Tree.add_tree_images(True)
-                self.win.change_tree("Refresh")
+            self.win.import_tree(dlg.lineedit.text())
 
     def export_tree(self):
         """Export the current nodes as a URL"""

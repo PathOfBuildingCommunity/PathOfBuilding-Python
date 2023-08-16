@@ -66,6 +66,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # When False stop all the images being deleted and being recreated
         self.refresh_tree = True
+        self.triggers_connected = False
 
         # The QAction representing the current theme (to turn off the menu's check mark)
         self.curr_theme: QAction = None
@@ -218,12 +219,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.statusbar_MainWindow.messageChanged.connect(self.update_status_bar)
 
         self.combo_Bandits.currentTextChanged.connect(self.display_number_node_points)
-        self.combo_classes.currentTextChanged.connect(self.class_changed)
-        self.combo_ascendancy.currentTextChanged.connect(self.ascendancy_changed)
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
+        self.connect_widget_triggers()
 
         # Start the statusbar self updating
         self.update_status_bar()
@@ -245,6 +245,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setup_ui(self):
         """Called after show(). Call setup_ui for all UI classes that need it"""
         self.items_ui.setup_ui()
+
+    def connect_widget_triggers(self):
+        """re-connect widget triggers that need to be disconnected during loading and other processing"""
+        # print("connect_item_triggers", self.triggers_connected)
+        # print_call_stack(idx=-4)
+        if self.triggers_connected:
+            # Don't re-connect
+            return
+        self.triggers_connected = True
+        self.combo_classes.currentTextChanged.connect(self.class_changed)
+        self.combo_ascendancy.currentTextChanged.connect(self.ascendancy_changed)
+
+    def disconnect_widget_triggers(self):
+        """disconnect widget triggers that need to be disconnected during loading and other processing"""
+        # print("disconnect_item_triggers", self.triggers_connected)
+        # print_call_stack(idx=-4)
+        if not self.triggers_connected:
+            # Don't disconnect if not connected
+            return
+        self.triggers_connected = False
+        self.combo_classes.currentTextChanged.disconnect(self.class_changed)
+        self.combo_ascendancy.currentTextChanged.disconnect(self.ascendancy_changed)
 
     def set_recent_builds_menu_items(self, config: Config):
         """
@@ -549,6 +571,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build_save()
                 self.add_recent_build_menu_item()
 
+    def import_tree(self, url):
+        """
+        Import Tree.
+        main_window needs to own this as it has control of the triggers.
+
+        :param url: passive tree URL.
+        :return: N/A
+        """
+        # print("win.import_tree", url)
+        # self.disconnect_widget_triggers()
+        # Which url has been imported
+        ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", url + "==")
+        poep = re.search(r"http.*poeplanner.com/(.*)", url + "==")
+        if ggg is not None:
+            self.build.current_spec.URL = url
+            self.build.current_spec.set_nodes_from_ggg_url()
+        if poep is not None:
+            self.build.current_spec.set_nodes_from_poeplanner_url(url)
+        if ggg is not None or poep is not None:
+            self.loading = True
+            self.change_tree("Refresh")
+            # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
+            # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
+            self.loading = False
+        # self.connect_widget_triggers()
+        # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
+        # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
+
     @Slot()
     def change_tree(self, tree_id):
         """
@@ -642,9 +692,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if selected_ascendancy == "":
             # "" will occur during a combobox clear (changing class)
             return
-        new_ascendancy = self.combo_ascendancy.currentData()
-        curr_ascendancy_name = self.build.ascendClassName
         current_tree = self.build.current_tree
+        current_spec = self.build.current_spec
+        new_ascendancy = self.combo_ascendancy.currentData()
+        curr_ascendancy_name = current_spec.ascendClassId_str()
         if curr_ascendancy_name != "None":
             if not self.loading:
                 current_nodes = set(self.build.current_spec.nodes)
@@ -669,15 +720,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         for node_id in nodes_in_ascendancy:
                             self.build.current_spec.nodes.remove(node_id)
 
-                    # Remove old start node.
-                    try:
-                        self.build.current_spec.nodes.remove(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
-                    except ValueError:
-                        pass
+                # Remove old start node.
+                self.build.current_spec.nodes.discard(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
 
-        if selected_ascendancy != "None":
-            # add new start node.
-            self.build.current_spec.nodes.append(current_tree.ascendancy_start_nodes[selected_ascendancy])
+            if selected_ascendancy != "None":
+                # add new start node.
+                # self.build.current_spec.nodes.append(current_tree.ascendancy_start_nodes[selected_ascendancy])
+                self.build.current_spec.nodes.add(current_tree.ascendancy_start_nodes[selected_ascendancy])
 
         if self.refresh_tree:
             self.build.current_spec.ascendClassId = new_ascendancy
