@@ -9,7 +9,7 @@ from PySide6.QtCore import Qt, Slot, QTimer
 
 from PoB.pob_config import Config
 from dialogs.popup_dialogs import LineEditPopup, yes_no_dialog
-
+from widgets.ui_utils import html_colour_text
 from ui.dlgManageItems import Ui_ManageItemSet
 
 
@@ -27,6 +27,7 @@ class ManageItemsDlg(Ui_ManageItemSet, QDialog):
 
         # UI Commands below this one
         self.setupUi(self)
+
         for _set in self.item_ui.itemsets:
             title = _set.get("title", "Default")
             lwi = QListWidgetItem(title)
@@ -152,9 +153,9 @@ class ManageItemsDlg(Ui_ManageItemSet, QDialog):
         self.set_being_edited = None
         row = self.list_Items.currentRow()
         _set = self.item_ui.itemsets[row]
+        _set.set("title", lwi.text())
         xml_set = self.item_ui.xml_items[row]
-        _set["title"] = lwi.text()
-        xml_set["title"] = lwi.text()
+        xml_set.set("title", lwi.text())
 
     @Slot()
     def list_item_double_clicked(self, lwi):

@@ -21,9 +21,9 @@ tree_versions = {
     "3_22": "3.22",
 }
 _VERSION = tree_versions[_VERSION_str]
-# default_view_mode = "ITEMS"
+default_view_mode = "ITEMS"
 # default_view_mode = "SKILLS"
-default_view_mode = "TREE"
+# default_view_mode = "TREE"
 
 # Default config incase the settings file doesn't exist
 def_theme = "dark"

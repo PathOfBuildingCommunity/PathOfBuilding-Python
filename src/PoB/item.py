@@ -753,11 +753,9 @@ class Item:
             for mod in self.fracturedMods:
                 fracture_xml.append(ET.fromstring(f"<Mod>{mod.text_for_xml}</Mod>"))
             xml.append(fracture_xml)
-        print("self.crucibleMods", self.crucibleMods)
         if self.crucibleMods:
             crucible_xml = ET.fromstring(f"<Crucible></Crucible>")
             for mod in self.crucibleMods:
-                print("crucible_xml", mod.text_for_xml)
                 crucible_xml.append(ET.fromstring(f"<Mod>{mod.text_for_xml}</Mod>"))
             xml.append(crucible_xml)
 

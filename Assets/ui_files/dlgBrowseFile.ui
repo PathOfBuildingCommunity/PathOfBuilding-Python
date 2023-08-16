@@ -69,9 +69,6 @@
      <property name="styleSheet">
       <string notr="true"/>
      </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
