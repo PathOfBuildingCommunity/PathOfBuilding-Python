@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Config</class>
- <widget class="QDialog" name="Config">
+ <class>Settings</class>
+ <widget class="QDialog" name="Settings">
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
@@ -10,8 +10,20 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>496</height>
+    <height>500</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>400</width>
+    <height>500</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Settings</string>
@@ -42,7 +54,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <property name="standardButtons">
-    <set>QDialogButtonBox::Discard|QDialogButtonBox::RestoreDefaults|QDialogButtonBox::Save</set>
+    <set>QDialogButtonBox::Discard|QDialogButtonBox::Reset|QDialogButtonBox::RestoreDefaults|QDialogButtonBox::Save</set>
    </property>
    <property name="centerButtons">
     <bool>true</bool>
@@ -63,7 +75,7 @@
    <widget class="QLabel" name="label_Protocol">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>0</x>
       <y>22</y>
       <width>120</width>
       <height>16</height>
@@ -82,7 +94,7 @@
    <widget class="QLabel" name="label_Proxy">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>0</x>
       <y>52</y>
       <width>120</width>
       <height>16</height>
@@ -101,7 +113,7 @@
    <widget class="QLabel" name="label_BuildPath">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>0</x>
       <y>82</y>
       <width>120</width>
       <height>16</height>
@@ -120,7 +132,7 @@
    <widget class="QLabel" name="label_NP_Colours">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>0</x>
       <y>112</y>
       <width>120</width>
       <height>16</height>
@@ -139,12 +151,22 @@
    <widget class="QComboBox" name="combo_Proxy">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>130</x>
       <y>49</y>
-      <width>69</width>
-      <height>26</height>
+      <width>90</width>
+      <height>24</height>
      </rect>
     </property>
+    <item>
+     <property name="text">
+      <string>None</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>HTTPS</string>
+     </property>
+    </item>
     <item>
      <property name="text">
       <string>HTTP</string>
@@ -152,7 +174,7 @@
     </item>
     <item>
      <property name="text">
-      <string>SOCKS</string>
+      <string>SOCKS5</string>
      </property>
     </item>
     <item>
@@ -164,7 +186,7 @@
    <widget class="QComboBox" name="combo_Protocol">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>130</x>
       <y>18</y>
       <width>69</width>
       <height>26</height>
@@ -189,7 +211,7 @@
    <widget class="QComboBox" name="combo_NP_Colours">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>130</x>
       <y>108</y>
       <width>121</width>
       <height>26</height>
@@ -214,7 +236,7 @@
    <widget class="QLineEdit" name="lineedit_BuildPath">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>130</x>
       <y>80</y>
       <width>204</width>
       <height>22</height>
@@ -243,9 +265,9 @@
    <widget class="QLineEdit" name="lineedit_Proxy">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>220</x>
       <y>50</y>
-      <width>164</width>
+      <width>155</width>
       <height>22</height>
      </rect>
     </property>
@@ -558,7 +580,7 @@
   <connection>
    <sender>btnBox</sender>
    <signal>accepted()</signal>
-   <receiver>Config</receiver>
+   <receiver>Settings</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -574,7 +596,7 @@
   <connection>
    <sender>btnBox</sender>
    <signal>rejected()</signal>
-   <receiver>Config</receiver>
+   <receiver>Settings</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

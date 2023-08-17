@@ -10,9 +10,19 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QListWidgetItem
 
 from PoB.constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map
-from PoB.pob_config import Config, _debug, str_to_bool, index_exists, bool_to_str, print_a_xml_element, print_call_stack
+from PoB.pob_config import Config
 from PoB.pob_file import read_json
-from widgets.ui_utils import _debug, set_combo_index_by_data, set_combo_index_by_text, HTMLDelegate, html_colour_text
+from widgets.ui_utils import (
+    _debug,
+    bool_to_str,
+    html_colour_text,
+    index_exists,
+    print_a_xml_element,
+    print_call_stack,
+    set_combo_index_by_data,
+    set_combo_index_by_text,
+    str_to_bool,
+)
 from dialogs.popup_dialogs import yes_no_dialog
 from widgets.gem_ui import GemUI
 from dialogs.skillsets_dialog import ManageSkillsDlg

@@ -31,7 +31,7 @@ from PoB.constants import (
 )
 
 from PoB.build import Build
-from PoB.pob_config import Config, _debug, print_a_xml_element, print_call_stack
+from PoB.pob_config import Config
 from PoB.pob_file import get_file_info
 from dialogs.browse_file_dialog import BrowseFileDlg
 from dialogs.export_dialog import ExportDlg
@@ -46,7 +46,7 @@ from widgets.player_stats import PlayerStats
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
 from widgets.tree_view import TreeView
-from widgets.ui_utils import html_colour_text, set_combo_index_by_data
+from widgets.ui_utils import _debug, html_colour_text, print_a_xml_element, print_call_stack, set_combo_index_by_data
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -66,6 +66,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # When False stop all the images being deleted and being recreated
         self.refresh_tree = True
+        self.triggers_connected = False
 
         # The QAction representing the current theme (to turn off the menu's check mark)
         self.curr_theme: QAction = None
@@ -218,12 +219,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.statusbar_MainWindow.messageChanged.connect(self.update_status_bar)
 
         self.combo_Bandits.currentTextChanged.connect(self.display_number_node_points)
-        self.combo_classes.currentTextChanged.connect(self.class_changed)
-        self.combo_ascendancy.currentTextChanged.connect(self.ascendancy_changed)
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
+        self.connect_widget_triggers()
 
         # Start the statusbar self updating
         self.update_status_bar()
@@ -245,6 +245,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setup_ui(self):
         """Called after show(). Call setup_ui for all UI classes that need it"""
         self.items_ui.setup_ui()
+
+    def connect_widget_triggers(self):
+        """re-connect widget triggers that need to be disconnected during loading and other processing"""
+        # print("connect_item_triggers", self.triggers_connected)
+        # print_call_stack(idx=-4)
+        if self.triggers_connected:
+            # Don't re-connect
+            return
+        self.triggers_connected = True
+        self.combo_classes.currentTextChanged.connect(self.class_changed)
+        self.combo_ascendancy.currentTextChanged.connect(self.ascendancy_changed)
+
+    def disconnect_widget_triggers(self):
+        """disconnect widget triggers that need to be disconnected during loading and other processing"""
+        # print("disconnect_item_triggers", self.triggers_connected)
+        # print_call_stack(idx=-4)
+        if not self.triggers_connected:
+            # Don't disconnect if not connected
+            return
+        self.triggers_connected = False
+        self.combo_classes.currentTextChanged.disconnect(self.class_changed)
+        self.combo_ascendancy.currentTextChanged.disconnect(self.ascendancy_changed)
 
     def set_recent_builds_menu_items(self, config: Config):
         """
@@ -504,7 +526,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
-            self.statusbar_MainWindow.showMessage(f"Loaded: {self.build.name}", 10000)
+            self.update_status_bar(f"Loaded: {self.build.name}", 10)
 
         self.loading = False
 
@@ -548,6 +570,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build.filename = filename
                 self.build_save()
                 self.add_recent_build_menu_item()
+
+    def import_tree(self, url):
+        """
+        Import Tree.
+        main_window needs to own this as it has control of the triggers.
+
+        :param url: passive tree URL.
+        :return: N/A
+        """
+        # print("win.import_tree", url)
+        # self.disconnect_widget_triggers()
+        # Which url has been imported
+        ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", url + "==")
+        poep = re.search(r"http.*poeplanner.com/(.*)", url + "==")
+        if ggg is not None:
+            self.build.current_spec.URL = url
+            self.build.current_spec.set_nodes_from_ggg_url()
+        if poep is not None:
+            self.build.current_spec.set_nodes_from_poeplanner_url(url)
+        if ggg is not None or poep is not None:
+            self.loading = True
+            self.change_tree("Refresh")
+            # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
+            # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
+            self.loading = False
+        # self.connect_widget_triggers()
+        # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
+        # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
 
     @Slot()
     def change_tree(self, tree_id):
@@ -594,7 +644,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot for the Classes combobox. Triggers the curr_class property actions.
 
-        :param selected_class: String of the selected text
+        :param selected_class: String of the selected text.
         :return:
         """
         new_class = self.combo_classes.currentData()
@@ -616,8 +666,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # This is good as it will set the ascendancy back to 'None'
         self.combo_ascendancy.clear()
         self.combo_ascendancy.addItem("None", 0)
-        _class = self.build.current_tree.classes[new_class.value]
-        for idx, _ascendancy in enumerate(_class["ascendancies"], 1):
+        class_json = self.build.current_tree.classes[new_class.value]
+        for idx, _ascendancy in enumerate(class_json["ascendancies"], 1):
             self.combo_ascendancy.addItem(_ascendancy["name"], idx)
 
         if self.refresh_tree:
@@ -642,9 +692,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if selected_ascendancy == "":
             # "" will occur during a combobox clear (changing class)
             return
-        new_ascendancy = self.combo_ascendancy.currentData()
-        curr_ascendancy_name = self.build.ascendClassName
         current_tree = self.build.current_tree
+        current_spec = self.build.current_spec
+        curr_ascendancy_name = current_spec.ascendClassId_str()
         if curr_ascendancy_name != "None":
             if not self.loading:
                 current_nodes = set(self.build.current_spec.nodes)
@@ -669,15 +719,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         for node_id in nodes_in_ascendancy:
                             self.build.current_spec.nodes.remove(node_id)
 
-                    # Remove old start node.
-                    self.build.current_spec.nodes.remove(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
+                # Remove old start node.
+                self.build.current_spec.nodes.discard(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
 
             if selected_ascendancy != "None":
                 # add new start node.
-                self.build.current_spec.nodes.append(current_tree.ascendancy_start_nodes[selected_ascendancy])
+                # self.build.current_spec.nodes.append(current_tree.ascendancy_start_nodes[selected_ascendancy])
+                self.build.current_spec.nodes.add(current_tree.ascendancy_start_nodes[selected_ascendancy])
 
         if self.refresh_tree:
-            self.build.current_spec.ascendClassId = new_ascendancy
+            self.build.current_spec.ascendClassId = self.combo_ascendancy.currentData()
             self.build.ascendClassName = selected_ascendancy
             self.gview_Tree.add_tree_images()
 
@@ -852,19 +903,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.skills_ui.update_socket_group_labels()
 
     @Slot()
-    def update_status_bar(self, message=None):
+    def update_status_bar(self, message=None, timeout=2):
         """
         Update the status bar. Use default text if no message is supplied.
         This triggers when the message is set and when it is cleared after the time out.
 
-        :param message: string: the message
+        :param message: string: the message.
+        :param timeout: int: time for the message to be shown, in secs
         :return: N/A
         """
         # we only care for when the message clears
         if pob_debug and message is None or message == "":
             process = psutil.Process(os.getpid())
             message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
-            self.statusbar_MainWindow.showMessage(message, 2000)
+            self.statusbar_MainWindow.showMessage(message, timeout * 1000)
 
     # Overridden function
     def keyReleaseEvent(self, event):

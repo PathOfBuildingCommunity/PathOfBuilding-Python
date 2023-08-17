@@ -8,16 +8,9 @@ This is a base PoB class. It doesn't import any other PoB ui classes
 """
 
 from pathlib import Path
-import base64
-import datetime
-import glob
-import itertools
-import operator
 import os
 import tempfile
-import traceback
 import xml.etree.ElementTree as ET
-import zlib
 
 from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QFileDialog, QDialogButtonBox
@@ -26,112 +19,8 @@ from PySide6.QtUiTools import QUiLoader
 from PoB.pob_file import read_xml, write_xml
 from PoB.constants import pob_debug, def_theme, default_config
 
-
-def str_to_bool(in_str):
-    """
-    Return a boolean from a string. As the settings could be manipulated by a human, we can't trust eval()
-      EG: eval('os.system(`rm -rf /`)')
-    :param: in_str: String: The setting to be evaluated
-    :returns: True if it looks like it could be true, otherwise False
-    """
-    return in_str.lower() in ("yes", "true", "t", "1", "on")
-
-
-def bool_to_str(in_bool):
-    """
-    Return a string from a boolean.
-    :param: in_bool: Boolean: The setting to be evaluated
-    :returns: String: true or false
-    """
-    return in_bool and "true" or "false"
-
-
-def index_exists(_list_or_dict, index):
-    """
-    Test if a list contains a given index
-    :param _list_or_dict: object to be tested
-    :param index: index to be tested
-    :return: Boolean: True / False
-    """
-    try:
-        _l = _list_or_dict[index]
-        return True
-    except (IndexError, KeyError, TypeError):
-        return False
-
-
-def print_call_stack(full=False, idx=-3):
-    """
-    Ahh debug. It's wonderful
-    :param: full: Bool: True if you want the full stack trace,
-            elsewise just print the parent of the function that called this
-    :return: N/A
-    """
-    lines = traceback.format_stack()
-    if full:
-        for line in lines[:-2]:
-            print(line.strip())
-    else:
-        print(lines[idx].strip())
-    print("------\n")
-
-
-def _debug(*text):
-    """
-    print a debug line if debug is enabled
-    :param: text: list. The info to print
-    :return: N/A
-    """
-    if pob_debug:
-        lines = traceback.format_stack()
-        print(f"{datetime.datetime.now()}: {text}", ":", lines[-2].strip().partition("\n")[0])
-
-
-def print_a_xml_element(the_element):
-    """
-    Debug: Print the contents so you can see what happened and why 'it' isn't working.
-    Prints the parent caller to help track when there are many of them.
-    :param the_element: xml element
-    :return: N/A
-    """
-    if the_element is None:
-        print(the_element)
-        return
-    lines = traceback.format_stack()
-    print(lines[-2].strip())
-    print(ET.tostring(the_element, encoding="utf8").decode("utf8"))
-    print()
-
-
-def unique_sorted(values):
-    """Return a sorted list of the given values, without duplicates."""
-    return map(operator.itemgetter(0), itertools.groupby(sorted(values)))
-
-
-def decode_base64_and_inflate(byte_array):
-    """
-    Decode a byte array and then zlib inflate it to make real characters
-    :param byte_array: an array like you get fro downloading from pastebin or pobb.in
-    :return: a string of real characters
-    """
-    try:
-        decoded_data = base64.urlsafe_b64decode(byte_array)
-        return zlib.decompress(decoded_data, 0)
-    except:
-        return None
-
-
-def deflate_and_base64_encode(string_val):
-    """
-    zlib compress a string of characters and base64 encoded them
-    :param string_val: a string or real characters
-    :return: a byte array or the compressed and encoded string_val
-    """
-    # try:
-    zlibbed_str = zlib.compress(string_val)
-    return base64.urlsafe_b64encode(zlibbed_str)
-    # except:
-    #     return None
+from widgets.ui_utils import str_to_bool
+from dialogs.settings_dialog import SettingsDlg
 
 
 class Config:
@@ -515,80 +404,9 @@ class Config:
         Load and Open the settings dialog. Save the results if needed.
         :return:
         """
-        # ToDo: Another function for loading the widgets, which can also setup a default settings, for use with a default settings button
         # ToDo: show thousands separator for player stats
 
-        @Slot()
-        def setting_restore_defaults():
-            set_dialog(True)
-
-        @Slot()
-        def setting_show_affix_quality_value():
-            dlg.label_AffixQValue.setText(f"{dlg.slider_AffixQuality.value() / 100}")
-
-        @Slot()
-        def setting_set_build_path_tooltip():
-            dlg.lineedit_BuildPath.setToolTip(dlg.lineedit_BuildPath.text())
-
-        @Slot()
-        def setting_directory_dialog():
-            """
-            Open a directory only file dialog for setting the build path
-            :return: Path
-            """
-            print("setting_directory_dialog")
-            directory = QFileDialog.getExistingDirectory(self, caption="Select Build Path")
-            if directory != "":
-                dlg.lineedit_BuildPath.setText(directory)
-
-        @Slot()
-        def set_dialog(default=False):
-            """
-            Set dialog widgets with values.
-            :param default: If True, set widgets with default values
-            :return:
-            """
-            if default:
-                self.reset()
-            # print_a_xml_element(_config)
-            dlg.combo_Protocol.setCurrentIndex(self.connection_protocol)
-            # dlg.combo_Proxy.setCurrentIndex(config.p)
-            # dlg.lineedit_Proxy.setText(config.p)
-            dlg.lineedit_BuildPath.setText(str(self.build_path))
-            dlg.combo_NP_Colours.setCurrentIndex(self.node_power_theme)
-            dlg.check_Beta.setChecked(self.beta_mode)
-            dlg.check_ShowBuildName.setChecked(self.show_titlebar_name)
-            dlg.check_ShowThousandsSeparators.setChecked(self.show_thousands_separators)
-            dlg.lineedit_ThousandsSeparator.setText(self.thousands_separator)
-            dlg.lineedit_DecimalSeparator.setText(self.decimal_separator)
-            dlg.spin_GemQuality.setValue(self.default_gem_quality)
-            dlg.spin_Level.setValue(self.default_char_level)
-            dlg.slider_AffixQuality.setValue(int(self.default_item_affix_quality * 100))
-            dlg.check_BuildWarnings.setChecked(self.show_warnings)
-            dlg.check_Tooltips.setChecked(self.slot_only_tooltips)
-
-        dlg = self.loader.load(Path(self.exe_dir, "../Assets/ui_files/dlgConfig.ui"), self.win)
-        # Force discard to close the dialog
-        discard = dlg.btnBox.button(QDialogButtonBox.Discard)
-        discard.clicked.connect(dlg.reject)
-        discard.setToolTip("Abandon these setting. Change nothing.")
-
-        restore_defaults = dlg.btnBox.button(QDialogButtonBox.RestoreDefaults)
-        restore_defaults.clicked.connect(setting_restore_defaults)
-        restore_defaults.setToolTip("Load the original default settings.")
-        # For some reason this button comes up as default. Stop it
-        restore_defaults.setAutoDefault(False)
-
-        save = dlg.btnBox.button(QDialogButtonBox.Save)
-        save.setDefault(True)
-        save.setToolTip("Save the setting to current use and the settings file.")
-
-        dlg.btn_BuildPath.clicked.connect(setting_directory_dialog)
-        dlg.slider_AffixQuality.valueChanged.connect(setting_show_affix_quality_value)
-        dlg.lineedit_BuildPath.textChanged.connect(setting_set_build_path_tooltip)
-        # fill the fields
-        set_dialog()
-
+        dlg = SettingsDlg(self)
         # 0 is discard, 1 is save
         _return = dlg.exec()
         if _return:
@@ -606,8 +424,9 @@ class Config:
             self.default_item_affix_quality = dlg.slider_AffixQuality.value() / 100
             self.show_warnings = dlg.check_BuildWarnings.isChecked()
             self.slot_only_tooltips = dlg.check_Tooltips.isChecked()
+            proxy_text = dlg.lineedit_Proxy.text()
+            self.proxy_url = proxy_text
+            if proxy_text != "":
+                self.proxy_url = f"{dlg.combo_Proxy.currentText()}://{proxy_text}"
             self.write()
-        else:
-            """discard a changes"""
-            self.read()
         del dlg

@@ -10,7 +10,7 @@ QWidget {
     background: rgba( qss_background );
     color: rgba( qss_selection_bckgrd );
     selection-color: rgba( qss_selection_bckgrd );
-    selection-background-color: rgba( qss_selection_bckgrd_colour );
+    selection-background-color: rgba( qss_selection_backgrd_colour );
     border-radius: 4px;
 }
 
@@ -86,6 +86,10 @@ QMenu::item {
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
+QMenuBar::item:selected {
+    padding: 4px;
+    background: rgba( qss_tab_selected_borders, 0.188 );
+}
 QMenu::item:selected, QMenu > .QLabel::Hover {
     background: rgba(qss_tab_selected_borders, 0.188);
 }
@@ -124,7 +128,6 @@ QTabBar::tab:!selected {
 
 
 QComboBox,
-QLineEdit,
 QPushButton {
     border: 1px solid rgba( qss_box_borders );
     padding: 4px 8px;
@@ -140,19 +143,26 @@ QListView {
     border: 1px solid rgba( qss_box_borders );
     /* background-color: rgba( qss_background ); */
     selection-color: rgba( qss_selection_bckgrd );
-    selection-background-color: rgba( qss_selection_bckgrd_colour );
+    selection-background-color: rgba( qss_selection_backgrd_colour );
 }
 
 ListBox,
 QListView,
 QAbstractItemView {
 	alternate-background-color: rgba( qss_alt_background );
+	padding: 0px;
+	margin: 0px;
 }
 
 ListBox::item,
 QListWidget::item {
     /* background-color: rgba( qss_background ); */
     color: rgba( qss_tab_selected_borders, 0.800 );
+}
+QListWidget::item:selected,
+QListWidgetItem:selected {
+	padding: 0px;
+	margin: 0px;
 }
 
 QToolButton, QAction, QWidgetAction,
@@ -162,6 +172,7 @@ QToolTip {
     color: rgba( qss_default_text );
     padding: 2px;
 }
+
 
 /* Spinboxes arrow */
 QAbstractSpinBox::up-arrow {

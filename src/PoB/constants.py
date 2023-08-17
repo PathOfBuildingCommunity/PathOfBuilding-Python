@@ -12,7 +12,7 @@ All values should only be scaled on point of entry, ie: when they are first proc
 global_scale_factor = 2.5
 pob_debug = True
 
-_VERSION_str = "3_19"
+_VERSION_str = "3_22"
 tree_versions = {
     "3_18": "3.18",
     "3_19": "3.19",
@@ -21,9 +21,9 @@ tree_versions = {
     "3_22": "3.22",
 }
 _VERSION = tree_versions[_VERSION_str]
+default_view_mode = "TREE"
 # default_view_mode = "ITEMS"
-default_view_mode = "SKILLS"
-# default_view_mode = "TREE"
+# default_view_mode = "SKILLS"
 
 # Default config incase the settings file doesn't exist
 def_theme = "dark"
@@ -207,6 +207,7 @@ class ColourCodes(enum.Enum):
     BRITTLEBG = "#00122B"
     SAPBG = "#261500"
     SCOURGE = "#FF6E25"
+    CRUCIBLE = "#FFA500"
     GRAY = "#D3D3D3"
     LIGHTGRAY = "#808B96"
     DARKGRAY = "#696969"
@@ -254,33 +255,33 @@ class_backgrounds = {
     PlayerClasses.SCION: {"n": "", "x": 0, "y": 0},
     PlayerClasses.MARAUDER: {
         "n": "BackgroundStr",
-        "x": -3500 / global_scale_factor,
-        "y": 350 / global_scale_factor,
+        "x": -3700 / global_scale_factor,
+        "y": 250 / global_scale_factor,
     },
     PlayerClasses.RANGER: {
         "n": "BackgroundDex",
-        "x": 1850 / global_scale_factor,
+        "x": 1550 / global_scale_factor,
         "y": 250 / global_scale_factor,
     },
     PlayerClasses.WITCH: {
         "n": "BackgroundInt",
         "x": -1200 / global_scale_factor,
-        "y": -3050 / global_scale_factor,
+        "y": -3550 / global_scale_factor,
     },
     PlayerClasses.DUELIST: {
         "n": "BackgroundStrDex",
-        "x": -1400 / global_scale_factor,
+        "x": -1900 / global_scale_factor,
         "y": 1350 / global_scale_factor,
     },
     PlayerClasses.TEMPLAR: {
         "n": "BackgroundStrInt",
-        "x": -2950 / global_scale_factor,
-        "y": -2600 / global_scale_factor,
+        "x": -3250 / global_scale_factor,
+        "y": -2800 / global_scale_factor,
     },
     PlayerClasses.SHADOW: {
         "n": "BackgroundDexInt",
-        "x": 1350 / global_scale_factor,
-        "y": -3050 / global_scale_factor,
+        "x": 1250 / global_scale_factor,
+        "y": -3450 / global_scale_factor,
     },
 }
 

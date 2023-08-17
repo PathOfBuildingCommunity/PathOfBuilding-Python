@@ -6,3 +6,4 @@ cd src
 
 python PathOfBuilding.py 
 cd ..
+pause

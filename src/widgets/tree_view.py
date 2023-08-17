@@ -14,10 +14,11 @@ from PySide6.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
 from PySide6.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
 
 from PoB.constants import ColourCodes, class_backgrounds, Layers, PlayerClasses
-from PoB.pob_config import Config, _debug, print_call_stack
+from PoB.pob_config import Config
 from PoB.build import Build
 from dialogs.popup_dialogs import MasteryPopup
 from widgets.tree_graphics_item import TreeGraphicsItem
+from widgets.ui_utils import _debug, print_call_stack
 
 
 class TreeView(QGraphicsView):
@@ -120,8 +121,14 @@ class TreeView(QGraphicsView):
         if len(items) < 1:
             return
         _item = next((i for i in items if isinstance(i, TreeGraphicsItem)), None)
-        if _item and type(_item) == TreeGraphicsItem and _item.node_id != 0:
-            print(_item.node_id)
+        if (
+            _item
+            and type(_item) == TreeGraphicsItem
+            and _item.node_id != 0
+            and not _item.node_isAscendancyStart
+            and _item.node_classStartIndex < 0
+        ):
+            # print("mouseReleaseEvent", _item.node_id)
             if event.button() == Qt.LeftButton:
                 if _item.node_id in self.build.current_spec.nodes:
                     if _item.node_type == "Mastery":
@@ -131,7 +138,7 @@ class TreeView(QGraphicsView):
                     current_tree_nodes = self.build.current_tree.nodes
                     node = current_tree_nodes[_item.node_id]
                     # Check to see if node is connected to an active node
-                    for node_id in set(node.nodes_out + node.nodes_in):
+                    for node_id in node.nodes_out.union(node.nodes_in):
                         if node_id in self.build.current_spec.nodes:
                             if _item.node_type == "Mastery":
                                 print(
@@ -139,9 +146,11 @@ class TreeView(QGraphicsView):
                                     self.build.current_tree.nodes[_item.node_id],
                                 )
                                 if self.mastery_popup(self.build.current_tree.nodes[_item.node_id]):
-                                    self.build.current_spec.nodes.append(_item.node_id)
+                                    # self.build.current_spec.nodes.append(_item.node_id)
+                                    self.build.current_spec.nodes.add(_item.node_id)
                             else:
-                                self.build.current_spec.nodes.append(_item.node_id)
+                                # self.build.current_spec.nodes.append(_item.node_id)
+                                self.build.current_spec.nodes.add(_item.node_id)
                             break
             elif event.button() == Qt.RightButton:
                 # look for Mastery and popup a dialog
@@ -193,7 +202,7 @@ class TreeView(QGraphicsView):
             self.build.current_spec.set_mastery_effect(node.id, dlg.selected_effect)
         return _return == 1
 
-    def add_picture(self, pixmap, x, y, z=0, selectable=False):
+    def add_picture(self, pixmap, x, y, z=0):
         """
         Add a picture or pixmap
         :param pixmap: string or pixmap to be added
@@ -202,13 +211,12 @@ class TreeView(QGraphicsView):
         :param z: which layer to use:  -2: background, -1: connectors, 0: inactive,
                                         1: sprite overlay
                                         1: active (overwriting its inactive equivalent ???)
-        :param selectable: Can the user select this.
         :return: ptr to the created TreeGraphicsItem
         """
         if pixmap is None or pixmap == "":
-            print(f"tree_view.add_picture called with information. pixmap: {pixmap},  x:{x}, y: {y}")
+            print(f"tree_view.add_picture called with wrong information. pixmap: {pixmap},  x:{x}, y: {y}")
             return None
-        image = TreeGraphicsItem(self.config, pixmap, z, selectable)
+        image = TreeGraphicsItem(self.config, pixmap, None, z, False)
         image.setPos(x, y)
         self._scene.addItem(image)
         return image
@@ -337,7 +345,7 @@ class TreeView(QGraphicsView):
             for line in tree.lines:
                 self._scene.addItem(line)
 
-            # Hack to draw class background art, the position data doesn't seem to be in the tree JSON yet.
+            # Hack to draw class background art, the position data isn't in the tree JSON.
             if self.build.current_class != PlayerClasses.SCION:
                 bkgnd = class_backgrounds[self.build.current_class]
                 self._char_class_bkgnd_image = self.add_picture(
@@ -379,7 +387,7 @@ class TreeView(QGraphicsView):
                 # Draw active lines
                 if node.type not in ("ClassStart", "Mastery"):
                     in_out_nodes = []
-                    for other_node_id in set(node.nodes_out + node.nodes_in) & set(active_nodes):
+                    for other_node_id in node.nodes_out.union(node.nodes_in) & active_nodes:
                         other_node = tree.nodes.get(other_node_id, None)
                         if (
                             other_node is not None

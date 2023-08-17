@@ -5,10 +5,9 @@ A class to encapsulate one item
 import xml.etree.ElementTree as ET
 import re
 
-from PoB.pob_config import _debug, index_exists, str_to_bool, bool_to_str, print_call_stack
 from PoB.constants import slot_map, slot_names, ColourCodes
 from PoB.mod import Mod
-from widgets.ui_utils import html_colour_text
+from widgets.ui_utils import _debug, html_colour_text, index_exists, str_to_bool, bool_to_str, print_call_stack
 
 influence_colours = {
     "Shaper Item": ColourCodes.SHAPER.value,
@@ -60,8 +59,6 @@ class Item:
         self.influences = []
         self.two_hand = False
         self.corrupted = False
-        self.fractured = None
-        self.fracturedMods = None
         self.abyss_jewel = None
         self.synthesised = None
         self.sockets = ""
@@ -72,8 +69,11 @@ class Item:
         # all implicit/explicit mods including all variants
         self.full_implicitMods_list = []
         self.full_explicitMods_list = []
-        self.craftedMods = []
+        # self.craftedMods = []
         self.enchantMods = []
+        self.fracturedMods = []
+        self.crucibleMods = []
+
         # names of the variants
         self.variant_names = []
         # dict of lists of the variant entries (EG: name, influences, etc'
@@ -132,8 +132,8 @@ class Item:
         # Mods
         for mod in _json.get("explicitMods", []):
             self.full_explicitMods_list.append(Mod(mod))
-        for mod in _json.get("craftedMods", []):
-            self.full_explicitMods_list.append(Mod(f"{{crafted}}{mod}"))
+        # for mod in _json.get("craftedMods", []):
+        #     self.full_explicitMods_list.append(Mod(f"{{crafted}}{mod}"))
         self.explicitMods = self.full_explicitMods_list
 
         for mod in _json.get("enchantMods", []):
@@ -149,10 +149,11 @@ class Item:
         self.ilevel = _json.get("ilvl", 0)
         self.corrupted = _json.get("corrupted", False)
         self.abyss_jewel = _json.get("abyssJewel", False)
-        self.fractured = _json.get("fractured", False)
         self.synthesised = _json.get("synthesised", False)
-        if self.fractured:
+        if _json.get("fractured", False):
             self.fracturedMods = _json.get("fracturedMods", None)
+        if _json.get("crucible", False):
+            self.crucibleMods = _json.get("crucibleMods", None)
         if _json.get("requirements", None):
             self.level_req = int(get_property(_json["requirements"], "Level", "0"))
         # Process sockets and their grouping
@@ -421,19 +422,41 @@ class Item:
         # every thing that is left, from explicits_idx, is explicits, and some other stuff
         for idx in range(explicits_idx, len(lines)):
             line = lines.pop(explicits_idx)
+            mod = Mod(line)
             # Corrupted is not a mod, but will get caught in explicits due to crap data design
             if "Corrupted" in line:
                 self.corrupted = True
                 continue
-            mod = Mod(line)
-            self.full_explicitMods_list.append(mod)
-            # check for variants and if it's our variant, add it to the smaller explicit mod list
-            if "variant" in line:
-                m = re.search(r"{variant:([\d,]+)}(.*)", line)
-                if self.curr_variant in m.group(1).split(","):
-                    self.explicitMods.append(mod)
-            else:
-                self.explicitMods.append(mod)
+            match line:
+                # case line if "{crafted}" in line:
+                #     self.craftedMods.append(mod)
+                #     print(line)
+                case line if "{fractured}" in line:
+                    self.fracturedMods.append(mod)
+                case line if "{crucible}" in line:
+                    self.crucibleMods.append(mod)
+                case _:
+                    self.full_explicitMods_list.append(mod)
+                    # check for variants and if it's our variant, add it to the smaller explicit mod list
+                    if "variant" in line:
+                        m = re.search(r"{variant:([\d,]+)}(.*)", line)
+                        if self.curr_variant in m.group(1).split(","):
+                            self.explicitMods.append(mod)
+                    else:
+                        self.explicitMods.append(mod)
+
+            # if "Corrupted" in line:
+            #     self.corrupted = True
+            #     continue
+            # mod = Mod(line)
+            # self.full_explicitMods_list.append(mod)
+            # # check for variants and if it's our variant, add it to the smaller explicit mod list
+            # if "variant" in line:
+            #     m = re.search(r"{variant:([\d,]+)}(.*)", line)
+            #     if self.curr_variant in m.group(1).split(","):
+            #         self.explicitMods.append(mod)
+            # else:
+            #     self.explicitMods.append(mod)
 
         if debug_lines:
             _debug("c", len(lines), lines)
@@ -543,8 +566,23 @@ class Item:
 
         influence_xml = xml.find("Influences")
         if influence_xml is not None:
-            for influence in influence_xml.findall("Variant"):
+            for influence in influence_xml.findall("Influence"):
                 self.influences.append(influence.text)
+        # crafted_xml = xml.find("Crafted")
+        # if crafted_xml is not None:
+        #     for mod_xml in crafted_xml.findall("Mod"):
+        #         mod = Mod(mod_xml.text)
+        #         self.craftedMods.append(mod)
+        fracture_xml = xml.find("Fractured")
+        if fracture_xml is not None:
+            for mod_xml in fracture_xml.findall("Mod"):
+                mod = Mod(mod_xml.text)
+                self.fracturedMods.append(mod)
+        crucible_xml = xml.find("Crucible")
+        if crucible_xml is not None:
+            for mod_xml in crucible_xml.findall("Mod"):
+                mod = Mod(mod_xml.text)
+                self.crucibleMods.append(mod)
 
         imp = xml.find("Implicits")
         for mod_xml in imp.findall("Mod"):
@@ -599,12 +637,16 @@ class Item:
         for requirement in self.requires.keys():
             text += f"Requires {requirement}\n"
         if type(self.properties) == dict:
-            for idx in self.properties.keys():
-                text += f"{idx}: {self.properties[idx]}\n"
+            for prop in self.properties.keys():
+                text += f"{prop}: {self.properties[prop]}\n"
         text += f"Implicits: {len(self.implicitMods)}\n"
         for mod in self.implicitMods:
             text += f"{mod.text_for_xml}\n"
         for mod in self.full_explicitMods_list:
+            text += f"{mod.text_for_xml}\n"
+        for mod in self.crucibleMods:
+            text += f"{mod.text_for_xml}\n"
+        for mod in self.fracturedMods:
             text += f"{mod.text_for_xml}\n"
         if self.corrupted:
             text += "Corrupted"
@@ -702,10 +744,20 @@ class Item:
             xml.append(crafted)
 
         if self.influences:
-            influences = ET.fromstring(f"<Influences></Influences>")
+            influence_xml = ET.fromstring(f"<Influences></Influences>")
             for influence in self.influences:
-                influences.append(ET.fromstring(f"<Influence>{influence}</Influence>"))
-            xml.append(influences)
+                influence_xml.append(ET.fromstring(f"<Influence>{influence}</Influence>"))
+            xml.append(influence_xml)
+        if self.fracturedMods:
+            fracture_xml = ET.fromstring(f"<Fractured></Fractured>")
+            for mod in self.fracturedMods:
+                fracture_xml.append(ET.fromstring(f"<Mod>{mod.text_for_xml}</Mod>"))
+            xml.append(fracture_xml)
+        if self.crucibleMods:
+            crucible_xml = ET.fromstring(f"<Crucible></Crucible>")
+            for mod in self.crucibleMods:
+                crucible_xml.append(ET.fromstring(f"<Mod>{mod.text_for_xml}</Mod>"))
+            xml.append(crucible_xml)
 
         # there are always Implicits and Explicits elements, even if they are empty
         imp = ET.fromstring("<Implicits></Implicits>")
@@ -806,11 +858,22 @@ class Item:
             for mod in self.implicitMods:
                 mods += mod.tooltip
             tip += f'<tr><td>{mods.rstrip("<br/>")}</td></tr>'
+        fractured = ""
+        if len(self.fracturedMods) > 0:
+            mods = ""
+            for mod in self.fracturedMods:
+                fractured += mod.tooltip
+            # tip += f'<tr><td>{fractured.rstrip("<br/>")}</td></tr>'
         if len(self.explicitMods) > 0:
             mods = ""
             for mod in self.explicitMods:
                 if not mod.corrupted:
                     mods += mod.tooltip
+            tip += f'<tr><td>{fractured}{mods.rstrip("<br/>")}</td></tr>'
+        if len(self.crucibleMods) > 0:
+            mods = ""
+            for mod in self.crucibleMods:
+                mods += mod.tooltip
             tip += f'<tr><td>{mods.rstrip("<br/>")}</td></tr>'
 
         if self.corrupted:

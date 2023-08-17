@@ -27,19 +27,19 @@ from PoB.constants import (
     program_title,
     tree_versions,
 )
-from PoB.pob_config import (
-    _debug,
-    Config,
-    str_to_bool,
-    bool_to_str,
-    print_a_xml_element,
-    print_call_stack,
-)
+from PoB.pob_config import Config
 from PoB.tree import Tree
 from PoB.spec import Spec
 from PoB.pob_file import read_xml, write_xml
 from dialogs.popup_dialogs import critical_dialog, yes_no_dialog
-from widgets.ui_utils import set_combo_index_by_data
+from widgets.ui_utils import (
+    _debug,
+    str_to_bool,
+    bool_to_str,
+    print_a_xml_element,
+    print_call_stack,
+    set_combo_index_by_data,
+)
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -637,6 +637,6 @@ class Build:
         """
         self.current_spec.nodes.clear()
         start_node = self.current_tree.classes[self.current_class]["startNodeId"]
-        print("build.reset_tree", start_node)
-        self.current_spec.nodes = [start_node]
+        self.current_spec.nodes.add(start_node)
+        # self.current_spec.nodes = [start_node]
         self.win.gview_Tree.add_tree_images(True)

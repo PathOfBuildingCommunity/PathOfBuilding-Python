@@ -14,7 +14,7 @@ from PoB.constants import (
     _VERSION,
     _VERSION_str,
 )
-from PoB.pob_config import print_call_stack, print_a_xml_element
+from widgets.ui_utils import print_call_stack, print_a_xml_element
 from dialogs.popup_dialogs import ok_dialog
 
 
@@ -43,7 +43,8 @@ class Spec:
         self.masteryEffects = {}
         self.set_mastery_effects_from_string(self.xml_spec.get("masteryEffects", ""))
 
-        self.nodes = []
+        # self.nodes = []
+        self.nodes = set()
         self.ascendancy_nodes = []
         self.extended_hashes = []
         self.set_nodes_from_string(self.xml_spec.get("nodes", "0"))
@@ -72,10 +73,10 @@ class Spec:
         self.xml_spec.set("title", new_title)
 
     @property
-    def classId(self):
+    def classId(self) -> int:
         return PlayerClasses(int(self.xml_spec.get("classId", PlayerClasses.SCION.value)))
 
-    def classId_str(self):
+    def classId_str(self) -> str:
         """Return a string of the current Class"""
         return self.classId.name.title()
 
@@ -91,7 +92,7 @@ class Spec:
             self.xml_spec.set("classId", f"{new_class_id.value}")
 
     @property
-    def ascendClassId(self):
+    def ascendClassId(self) -> int:
         return int(self.xml_spec.get("ascendClassId", 0))
 
     @ascendClassId.setter
@@ -105,10 +106,10 @@ class Spec:
     def ascendClassId_str(self):
         """Return a string of the current Ascendancy"""
         # get a list of ascendancies from the current tree's json
-        _class = self.build.current_tree.classes[self.classId]
-        ascendancies = [_ascendancy["name"] for _ascendancy in _class["ascendancies"]]
+        class_json = self.build.current_tree.classes[self.classId]
+        ascendancies = [_ascendancy["name"] for _ascendancy in class_json["ascendancies"]]
         # insert the class name for when ascendClassId == 0
-        ascendancies.insert(0, self.classId_str())
+        ascendancies.insert(0, "None")
         # Return the current ascendancy's name
         return ascendancies[self.ascendClassId]
 
@@ -170,10 +171,12 @@ class Spec:
         decoded_nodes = decoded_data[start:end]
 
         # now decode the nodes structure to numbers
-        self.nodes = []
+        # self.nodes = []
+        self.nodes = set()
         for i in range(0, len(decoded_nodes), 2):
             print(i, int.from_bytes(decoded_nodes[i : i + 2], endian))
-            self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], endian))
+            # self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], endian))
+            self.nodes.add(int.from_bytes(decoded_nodes[i : i + 2], endian))
         return end
 
     def import_cluster_nodes(self, decoded_data, start, count, endian):
@@ -194,7 +197,8 @@ class Spec:
             for i in range(0, len(decoded_cluster_nodes), 2):
                 # print(''.join('{:02x} '.format(x) for x in cluster_nodes[i:i + 2]))
                 # print(i, int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
-                self.nodes.append(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
+                # self.nodes.append(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
+                self.nodes.add(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
         return end
 
     def import_mastery_nodes(self, decoded_data, start, count, endian):
@@ -225,7 +229,8 @@ class Spec:
                     m_effect = int.from_bytes(decoded_mastery_nodes[i : i + 2], endian)
                 print("id", m_id, "effect", m_effect)
                 self.masteryEffects[m_id] = m_effect
-                self.nodes.append(m_id)
+                self.nodes.add(m_id)
+                # self.nodes.append(m_id)
 
     def import_ascendancy_nodes(self, decoded_data, start, count, endian):
         """
@@ -244,7 +249,8 @@ class Spec:
             for i in range(0, len(decoded_ascendancy_nodes), 2):
                 # print("".join("{:02x} ".format(x) for x in decoded_ascendancy_nodes[i : i + 2]))
                 print(i, self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
-                self.nodes.append(self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
+                # self.nodes.append(self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
+                self.nodes.add(self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
         return end
 
     def set_nodes_from_ggg_url(self):
@@ -296,7 +302,7 @@ class Spec:
                 self.classId = decoded_data[4]
                 self.ascendClassId = version >= 4 and decoded_data[5] or 0
 
-                # Nodes, Ascendancies are in here also
+                # Nodes. Ascendancy nodes are in here also
                 idx = 6
                 nodes_count = self.b_to_i(decoded_data, idx, idx + 1, endian)
                 idx = self.import_regular_nodes(decoded_data, idx + 1, nodes_count, endian)
@@ -470,7 +476,7 @@ class Spec:
         :return: N/A
         """
         if new_nodes:
-            self.nodes = [int(node) for node in new_nodes.split(",")]
+            self.nodes = set([int(node) for node in new_nodes.split(",")])
             # self.nodes = new_nodes.split(",")
 
     def set_extended_hashes_from_string(self, new_nodes):
@@ -479,8 +485,9 @@ class Spec:
         :param new_nodes: str
         :return: N/A
         """
+        print("set_extended_hashes_from_string")
         if new_nodes:
-            self.nodes = new_nodes.split(",")
+            self.nodes = set(new_nodes.split(","))
 
     def save(self):
         """
@@ -514,7 +521,7 @@ class Spec:
         :param json_character: json import of the character information
         :return: N/A
         """
-        self.nodes = json_tree.get("hashes", "0")
+        self.nodes = set(json_tree.get("hashes", "0"))
         self.extended_hashes = json_tree.get("hashes_ex", [])
         # for the json import, this is a list of large ints (https://www.pathofexile.com/developer/docs/reference)
         #   with the modulo remainder being "the string value of the mastery node skill hash"

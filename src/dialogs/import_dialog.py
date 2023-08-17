@@ -12,10 +12,16 @@ from PySide6.QtWidgets import QDialog
 from PySide6.QtCore import Qt, Slot
 
 from PoB.constants import valid_websites, website_list, get_http_headers
-from PoB.pob_config import Config, decode_base64_and_inflate, deflate_and_base64_encode, unique_sorted
+from PoB.pob_config import Config
 from PoB.pob_file import write_json, read_json
 from PoB.build import Build
-from widgets.ui_utils import html_colour_text, set_combo_index_by_text
+from widgets.ui_utils import (
+    decode_base64_and_inflate,
+    deflate_and_base64_encode,
+    html_colour_text,
+    set_combo_index_by_text,
+    unique_sorted,
+)
 
 from ui.dlgBuildImport import Ui_BuildImport
 
@@ -137,6 +143,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
                 and text_json.get("tree", bad_text) != bad_text
             )
         except (KeyError, json.decoder.JSONDecodeError):
+            print("test_import_text_for_poeplanner_json test failed")
             return False
 
     @Slot()
@@ -437,13 +444,16 @@ class ImportDlg(Ui_BuildImport, QDialog):
         try:
             url = f"{realm_code['hostName']}character-window/get-passive-skills"
             response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
-            if response.status_code != 220:
+            print("response.status_code", response.status_code)
+            if response.status_code != 200:
                 self.status = html_colour_text(
                     "RED",
                     f"Error retrieving 'Data': {response.reason} ({response.status_code}).",
                 )
             else:
                 passive_tree = response.json()
+                pprint(passive_tree)
+                write_json(self.config.build_path + "/" + char_name + "_passive_tree.json", passive_tree)
         except requests.RequestException as e:
             print(f"Error retrieving 'Passive Tree': {e}.")
             self.status = html_colour_text(
@@ -459,6 +469,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             url = f"{realm_code['hostName']}character-window/get-items"
             response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
             items = response.json()
+            write_json(self.config.build_path + "/" + char_name + "_items.json", items)
         except requests.RequestException as e:
             print(f"Error retrieving 'Items': {e}.")
             self.status = html_colour_text(
@@ -468,8 +479,10 @@ class ImportDlg(Ui_BuildImport, QDialog):
             print(vars(response))
 
         # lets add the jewels and items together
-        for idx, jewel in enumerate(passive_tree.get("items", [])):
-            items["items"].insert(idx, jewel)
+        if passive_tree:
+            for idx, jewel in enumerate(passive_tree.get("items", [])):
+                items["items"].insert(idx, jewel)
+
         char_info = items.get("character", None)
         self.character_data = {
             "tree": passive_tree,

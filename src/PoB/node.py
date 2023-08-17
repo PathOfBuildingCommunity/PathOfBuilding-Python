@@ -82,8 +82,10 @@ class Node:
         self.sd = _node.get("stats", [])
         self.reminderText = _node.get("reminderText", "")
         self.ascendancyName = _node.get("ascendancyName", "")
-        self.nodes_in = [int(node) for node in _node.get("in", [])]
-        self.nodes_out = [int(node) for node in _node.get("out", [])]
+        self.nodes_in = set(int(node) for node in _node.get("in", []))
+        self.nodes_out = set(int(node) for node in _node.get("out", []))
+        # self.nodes_in = [int(node) for node in _node.get("in", [])]
+        # self.nodes_out = [int(node) for node in _node.get("out", [])]
         self.recipe = _node.get("recipe", [])
         self.classStartIndex = _node.get("classStartIndex", -1)
         self.masteryEffects = _node.get("masteryEffects", {})
