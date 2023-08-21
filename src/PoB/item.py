@@ -315,8 +315,8 @@ class Item:
                             m = re.search(r"(\w+) (\w+)", f"{req}")
                             self.requires["Class"] = m.group(2)
                         else:
-                            m = re.search(r"(\d+) (\w+)", f"{req}")
-                            self.requires[m.group(2)] = int(m.group(1))
+                            m = re.search(r"(\w+) (\d+)", f"{req}")
+                            self.requires[m.group(1)] = int(m.group(2))
 
                         # check for 'Level nnn' or 'nnn Attribute' eg '133 Int'. m.group(2) will always be the number
                         # m = re.search(r"(\w+)? (\d+) (\w+)?", f" {req} ")
@@ -635,7 +635,7 @@ class Item:
         for influence in self.influences:
             text += f"{influence}\n"
         for requirement in self.requires.keys():
-            text += f"Requires {requirement}\n"
+            text += f"Requires {requirement} {self.requires[requirement]}\n"
         if type(self.properties) == dict:
             for prop in self.properties.keys():
                 text += f"{prop}: {self.properties[prop]}\n"
