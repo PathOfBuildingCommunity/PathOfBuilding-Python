@@ -200,8 +200,8 @@ class Tree:
         :param name: string or pixmap to be added
         :param x: it's position in the scene
         :param y: it's position in the scene
-        :param ox: it's position in the scene
-        :param oy: it's position in the scene
+        :param ox: offset to it's position in the scene
+        :param oy: offset to it's position in the scene
         :param _layer: Layers: which layer to use:
         :param node: Node: The associated node, so we can load up TreeGraphicsItem variables
         :return: ptr to the created TreeGraphicsItem
