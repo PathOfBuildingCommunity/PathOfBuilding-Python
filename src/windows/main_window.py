@@ -92,10 +92,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.stats = PlayerStats(self.config, self)
         self.calcs_ui = CalcsUI(self.config, self)
         self.config_ui = ConfigUI(self.config, self.build, self)
-        self.items_ui = ItemsUI(self.config, self)
         self.notes_ui = NotesUI(self.config, self)
         self.skills_ui = SkillsUI(self.config, self.build, self)
         self.tree_ui = TreeUI(self.config, self.build, self.frame_TreeTools, self)
+        self.items_ui = ItemsUI(self.config, self.tree_ui, self)
+        self.tree_ui.items_ui = self.items_ui
 
         # share the goodness
         self.build.gems_by_name_or_id = self.skills_ui.gems_by_name_or_id

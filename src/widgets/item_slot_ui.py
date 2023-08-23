@@ -54,6 +54,8 @@ class ItemSlotUI(QWidget):
         self.itemPbURL = ""
 
         self.label = QLabel(self)
+        self.label.setMinimumSize(QSize(0, 24))
+        self.label.setMaximumSize(QSize(16777215, 24))
         self.label.setText(f"{title}:")
         self.label.setGeometry(1, 5, indent and 105 or 95, 22)
         self.label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)

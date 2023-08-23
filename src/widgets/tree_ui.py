@@ -21,6 +21,8 @@ class TreeUI:
         self.config = _config
         self.tr = self.config.app.tr
         self.win = _win
+        # reference to Items UI to fill it's tree combo
+        self.items_ui = None
         self.build = _build
         self._curr_class = PlayerClasses.SCION
         self.dlg = None  # Is a dialog active
@@ -170,6 +172,7 @@ class TreeUI:
         # let's protect activeSpec as the next part will erase it
         active_spec = self.build.activeSpec
         self.combo_manage_tree.clear()
+        self.win.combo_ItemsManageTree_2.clear()
         self.combo_compare.clear()
         for idx, spec in enumerate(self.build.specs):
             if spec is not None:
@@ -178,6 +181,7 @@ class TreeUI:
                 else:
                     title = spec.title
                 self.combo_manage_tree.addItem(title, idx)
+                self.win.combo_ItemsManageTree_2.addItem(title, idx)
                 self.combo_compare.addItem(title, idx)
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)
