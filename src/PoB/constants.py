@@ -153,8 +153,10 @@ class Layers(enum.IntEnum):
     inactive = 0
     small_overlays = 1
     key_overlays = 2
+    socket_overlays = 2
     active_connectors = 4
     active = 5
+    jewels = 6
 
 
 class ColourCodes(enum.Enum):

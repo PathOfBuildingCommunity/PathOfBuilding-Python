@@ -82,7 +82,9 @@ class Build:
         self.last_league = ""
 
         self.gems_by_name_or_id = None
-        self.nodes_assigned, self.ascnodes_assigned, self.sockets_assigned = 0, 0, 0
+        self.nodes_assigned = 0
+        self.ascnodes_assigned = 0
+        self.sockets_assigned = 0
 
         """Now fill out everything above out with a new build
            This stops the creation of other classes() erroring out because variables are setup
@@ -322,7 +324,6 @@ class Build:
                 xml_spec.set("treeVersion", _VERSION_str)
                 title = xml_spec.get("title", "Default")
                 xml_spec.set("title", f"{title} ({tr('was')} v{v})")
-            pass
         if invalid_spec_versions:
             critical_dialog(
                 self.pob_config.win,
@@ -406,6 +407,15 @@ class Build:
         """
         return True
 
+    def assign_items_to_sockets(self, xml_items):
+        """
+
+        :param xml_items: the list of items
+        :return:
+        """
+        for node_id in self.current_spec.jewels.keys():
+            item_id = self.current_spec.jewels[node_id]
+
     def count_allocated_nodes(self):
         """
         Loop through the current tree's active nodes and split the normal and ascendancy nodes.
@@ -424,6 +434,8 @@ class Build:
                             self.ascnodes_assigned += 1
                     if node.type == "Socket":
                         self.sockets_assigned += 1
+
+        self.nodes_assigned += len(self.current_spec.extended_hashes)
 
     def change_tree(self, tree_id):
         """

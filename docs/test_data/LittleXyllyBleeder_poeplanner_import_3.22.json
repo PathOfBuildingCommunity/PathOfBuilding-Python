@@ -1,0 +1,677 @@
+{
+    "calculatedStats": {
+        "armour": 0,
+        "block": 0,
+        "chaosRes": -52,
+        "coldRes": -57,
+        "dex": 73,
+        "dodge": 0,
+        "energyShield": 0,
+        "evasion": 489,
+        "fireRes": -49,
+        "int": 64,
+        "level": 71,
+        "lightningRes": -57,
+        "maxLife": 2930,
+        "maxMana": 620,
+        "movementSpeed": 0,
+        "requiredDex": 0,
+        "requiredInt": 0,
+        "requiredStr": 0,
+        "reservedLife": 0,
+        "reservedMana": 0,
+        "spellBlock": 0,
+        "spellDodge": 0,
+        "str": 283,
+        "uncappedChaosRes": -52,
+        "uncappedColdRes": -57,
+        "uncappedFireRes": -49,
+        "uncappedLightningRes": -57,
+        "ward": 0
+    },
+    "equipment": {
+        "buildItems": [
+            {
+                "baseName": "Poleaxe",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "+8 to Strength",
+                    "42% increased Physical Damage",
+                    "Adds 2 to 6 Cold Damage",
+                    "6% reduced Enemy Stun Threshold"
+                ],
+                "name": "Damnation Sever",
+                "quality": 0,
+                "rarity": "RARE"
+            },
+            {
+                "baseName": "Carved Wand",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "+1 to Level of Socketed Active Skill Gems per 25 Player Levels",
+                    "Trigger a Socketed Spell when you Attack with this Weapon, with a 0.25 second Cooldown",
+                    "Adds 3 to 5 Physical Damage to Attacks with this Weapon per 3 Player Levels",
+                    "8% increased Attack Speed"
+                ],
+                "implicits": [
+                    "15% increased Spell Damage"
+                ],
+                "name": "The Poet's Pen",
+                "quality": 20,
+                "rarity": "UNIQUE",
+                "uniqueName": "The Poet's Pen"
+            },
+            {
+                "baseName": "Turquoise Amulet",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "+28 to Dexterity",
+                    "Adds 3 to 8 Fire Damage to Attacks",
+                    "10% increased maximum Energy Shield",
+                    "+22% to Cold Resistance",
+                    "Gain 4 Life per Enemy Hit with Attacks"
+                ],
+                "implicits": [
+                    "+21 to Dexterity and Intelligence"
+                ],
+                "name": "Blight Choker",
+                "quality": 0,
+                "rarity": "RARE"
+            },
+            {
+                "baseName": "Gold Ring",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "+30 to maximum Life",
+                    "5% reduced Quantity of Items found",
+                    "4% reduced Rarity of Items found",
+                    "+48% to Fire Resistance",
+                    "+35% to Cold Resistance",
+                    "+49% to Lightning Resistance"
+                ],
+                "implicits": [
+                    "13% increased Rarity of Items found"
+                ],
+                "name": "Ventor's Gamble",
+                "quality": 0,
+                "rarity": "UNIQUE",
+                "uniqueName": "Ventor's Gamble"
+            },
+            {
+                "baseName": "Gladiator Helmet",
+                "baseStatRoll": 0.390084801043705,
+                "explicits": [
+                    "+1 to Level of Socketed AoE Gems",
+                    "+31 to Intelligence",
+                    "26% increased Armour",
+                    "+22 to maximum Life",
+                    "+20% to Cold Resistance",
+                    "+20% to Lightning Resistance",
+                    "10% increased Area of Effect",
+                    "11% increased Stun and Block Recovery"
+                ],
+                "name": "Chimeric Horn",
+                "quality": 20,
+                "rarity": "RARE"
+            },
+            {
+                "baseName": "War Plate",
+                "baseStatRoll": 0.635416666666668,
+                "explicits": [
+                    "+312 to Armour",
+                    "+88 to maximum Life",
+                    "Regenerate 19.5 Life per second",
+                    "+38% to Cold Resistance",
+                    "+28% to Lightning Resistance",
+                    "Reflects 33 Physical Damage to Melee Attackers"
+                ],
+                "name": "Maelstr\u00f6m Curtain",
+                "quality": 20,
+                "rarity": "RARE"
+            },
+            {
+                "baseName": "Quartz Flask",
+                "baseStatRoll": 1,
+                "enchants": [
+                    "Reused at the end of this Flask's effect"
+                ],
+                "explicits": [
+                    "26% increased Charge Recovery",
+                    "9% increased Cast Speed during Effect"
+                ],
+                "quality": 0,
+                "rarity": "MAGIC"
+            },
+            {
+                "baseName": "Leather Belt",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "+35 to maximum Life",
+                    "+20 to maximum Mana",
+                    "+37% to Cold Resistance",
+                    "+37% to Lightning Resistance",
+                    "5% increased Flask Life Recovery rate"
+                ],
+                "implicits": [
+                    "+31 to maximum Life"
+                ],
+                "name": "Armageddon Thread",
+                "quality": 0,
+                "rarity": "RARE"
+            },
+            {
+                "baseName": "Nubuck Boots",
+                "baseStatRoll": 0.474358974358975,
+                "explicits": [
+                    "60% increased Mana Regeneration Rate",
+                    "19% increased Quantity of Items found",
+                    "+49% to Fire Resistance",
+                    "10% increased Movement Speed"
+                ],
+                "name": "Goldwyrm",
+                "quality": 20,
+                "rarity": "UNIQUE",
+                "uniqueName": "Goldwyrm"
+            },
+            {
+                "baseName": "Brass Spirit Shield",
+                "baseStatRoll": 0.666666666666667,
+                "explicits": [
+                    "10% Chance to Block Spell Damage",
+                    "+20 to Intelligence",
+                    "4% increased Quantity of Items found",
+                    "+5% Chance to Block",
+                    "Curse Enemies with Punishment when you Block their Melee Damage, ignoring Curse Limit",
+                    "Curse Enemies with Temporal Chains when you Block their Projectile Attack Damage, ignoring Curse Limit",
+                    "Curse Enemies with Elemental Weakness when you Block their Spell Damage, ignoring Curse Limit"
+                ],
+                "name": "Sentari's Answer",
+                "quality": 20,
+                "rarity": "UNIQUE",
+                "uniqueName": "Sentari's Answer"
+            },
+            {
+                "baseName": "Serpentscale Gauntlets",
+                "baseStatRoll": 0.685185185185186,
+                "enchants": [
+                    "Trigger Edict of the Tempest on Hit"
+                ],
+                "explicits": [
+                    "+25 to Strength",
+                    "25% increased Damage over Time",
+                    "Attacks have 25% chance to cause Bleeding",
+                    "40% increased Attack Damage against Bleeding Enemies",
+                    "Bleeding Enemies you Kill Explode, dealing 5% of\ntheir Maximum Life as Physical Damage",
+                    "25% reduced Bleeding Duration"
+                ],
+                "name": "Haemophilia",
+                "quality": 20,
+                "rarity": "UNIQUE",
+                "uniqueName": "Haemophilia"
+            },
+            {
+                "baseName": "Hallowed Life Flask",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "30% reduced Amount Recovered",
+                    "Instant Recovery when on Low Life",
+                    "Grants Immunity to Bleeding for 6 seconds if used while Bleeding\nGrants Immunity to Corrupted Blood for 6 seconds if used while affected by Corrupted Blood"
+                ],
+                "quality": 0,
+                "rarity": "MAGIC"
+            },
+            {
+                "baseName": "Gold Ring",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "+8 to maximum Life",
+                    "4% increased Quantity of Items found",
+                    "8% reduced Rarity of Items found",
+                    "+50% to Fire Resistance",
+                    "+40% to Cold Resistance",
+                    "+36% to Lightning Resistance"
+                ],
+                "implicits": [
+                    "10% increased Rarity of Items found"
+                ],
+                "name": "Ventor's Gamble",
+                "quality": 0,
+                "rarity": "UNIQUE",
+                "uniqueName": "Ventor's Gamble"
+            },
+            {
+                "baseName": "Quicksilver Flask",
+                "baseStatRoll": 1,
+                "enchants": [
+                    "Used when you become Chilled"
+                ],
+                "explicits": [
+                    "+19 to Maximum Charges",
+                    "47% less Duration",
+                    "Immunity to Freeze and Chill during Effect"
+                ],
+                "quality": 0,
+                "rarity": "MAGIC"
+            },
+            {
+                "baseName": "Hallowed Life Flask",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "30% reduced Amount Recovered",
+                    "Instant Recovery when on Low Life",
+                    "Grants Immunity to Shock for 9 seconds if used while Shocked"
+                ],
+                "quality": 0,
+                "rarity": "MAGIC"
+            },
+            {
+                "baseName": "Large Hybrid Flask",
+                "baseStatRoll": 1,
+                "explicits": [
+                    "11% increased Quantity of Items found during Effect",
+                    "30% increased Rarity of Items found during Effect",
+                    "25% increased Light Radius during Effect",
+                    "+50% to Elemental Resistances during Effect"
+                ],
+                "name": "Divination Distillate",
+                "quality": 0,
+                "rarity": "UNIQUE",
+                "uniqueName": "Divination Distillate"
+            }
+        ],
+        "equippedItems": [
+            {
+                "buildItemIndex": 1,
+                "slot": "WEAPON"
+            },
+            {
+                "buildItemIndex": 9,
+                "slot": "OFFHAND"
+            },
+            {
+                "buildItemIndex": 0,
+                "slot": "WEAPON2"
+            },
+            {
+                "buildItemIndex": 4,
+                "slot": "HELMET"
+            },
+            {
+                "buildItemIndex": 5,
+                "slot": "BODY"
+            },
+            {
+                "buildItemIndex": 10,
+                "slot": "GLOVES"
+            },
+            {
+                "buildItemIndex": 8,
+                "slot": "BOOTS"
+            },
+            {
+                "buildItemIndex": 2,
+                "slot": "AMULET"
+            },
+            {
+                "buildItemIndex": 3,
+                "slot": "RING"
+            },
+            {
+                "buildItemIndex": 12,
+                "slot": "RING2"
+            },
+            {
+                "buildItemIndex": 7,
+                "slot": "BELT"
+            },
+            {
+                "buildItemIndex": 11,
+                "slot": "FLASK"
+            },
+            {
+                "buildItemIndex": 14,
+                "slot": "FLASK2"
+            },
+            {
+                "buildItemIndex": 15,
+                "slot": "FLASK3"
+            },
+            {
+                "buildItemIndex": 6,
+                "slot": "FLASK4"
+            },
+            {
+                "buildItemIndex": 13,
+                "slot": "FLASK5"
+            }
+        ]
+    },
+    "helpedBandit": "None",
+    "skills": {
+        "groups": [
+            {
+                "equipmentSlot": "WEAPON2",
+                "skillGems": [
+                    {
+                        "enabled": false,
+                        "level": 16,
+                        "name": "Corrupting Fever",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": false,
+                        "level": 16,
+                        "name": "Culling Strike Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": false,
+                        "level": 17,
+                        "name": "Lifetap Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            },
+            {
+                "equipmentSlot": "WEAPON",
+                "skillGems": [
+                    {
+                        "enabled": true,
+                        "level": 16,
+                        "name": "Reap",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 16,
+                        "name": "Exsanguinate",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 14,
+                        "name": "Controlled Destruction Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            },
+            {
+                "equipmentSlot": "HELMET",
+                "skillGems": [
+                    {
+                        "enabled": true,
+                        "level": 16,
+                        "name": "Pride",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            },
+            {
+                "equipmentSlot": "HELMET",
+                "skillGems": [
+                    {
+                        "enabled": true,
+                        "level": 14,
+                        "name": "Malevolence",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 17,
+                        "name": "Determination",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            },
+            {
+                "equipmentSlot": "BODY",
+                "skillGems": [
+                    {
+                        "enabled": true,
+                        "level": 17,
+                        "name": "Vulnerability",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 17,
+                        "name": "Lifetap Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            },
+            {
+                "equipmentSlot": "BODY",
+                "skillGems": [
+                    {
+                        "enabled": true,
+                        "level": 17,
+                        "name": "Leap Slam",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            },
+            {
+                "equipmentSlot": "BOOTS",
+                "skillGems": [
+                    {
+                        "enabled": true,
+                        "level": 4,
+                        "name": "Flame Dash",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 11,
+                        "name": "Second Wind Support",
+                        "quality": 10,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 15,
+                        "name": "Faster Attacks Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            },
+            {
+                "equipmentSlot": "OFFHAND",
+                "skillGems": [
+                    {
+                        "enabled": true,
+                        "level": 6,
+                        "name": "Kinetic Blast",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 17,
+                        "name": "Lifetap Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 15,
+                        "name": "Greater Multiple Projectiles Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            },
+            {
+                "equipmentSlot": "GLOVES",
+                "skillGems": [
+                    {
+                        "enabled": true,
+                        "level": 17,
+                        "name": "Corrupting Fever",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 16,
+                        "name": "Swift Affliction Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    },
+                    {
+                        "enabled": true,
+                        "level": 15,
+                        "name": "Brutality Support",
+                        "quality": 0,
+                        "qualityVariant": "Normal"
+                    }
+                ]
+            }
+        ]
+    },
+    "tree": {
+        "ascendancy": "Champion",
+        "ascendancyIndex": 3,
+        "class": "duelist",
+        "classIndex": 4,
+        "jewels": [
+        ],
+        "selectedExtendedNodeHashes": [
+        ],
+        "selectedMasteryEffects": [
+            {
+                "effectHash": 28638,
+                "masteryHash": 64128
+            },
+            {
+                "effectHash": 47642,
+                "masteryHash": 62588
+            },
+            {
+                "effectHash": 64875,
+                "masteryHash": 8732
+            },
+            {
+                "effectHash": 18859,
+                "masteryHash": 52220
+            },
+            {
+                "effectHash": 62782,
+                "masteryHash": 12239
+            }
+        ],
+        "selectedNodeHashes": [
+            30380,
+            59928,
+            34601,
+            48438,
+            9995,
+            25933,
+            33740,
+            6712,
+            33940,
+            47421,
+            16775,
+            34207,
+            34009,
+            3644,
+            55676,
+            1325,
+            5197,
+            29353,
+            36949,
+            26564,
+            12247,
+            30302,
+            11088,
+            43725,
+            4177,
+            65108,
+            39211,
+            48807,
+            27604,
+            50422,
+            50862,
+            55854,
+            58218,
+            5233,
+            32932,
+            5612,
+            26270,
+            14930,
+            60472,
+            64210,
+            18302,
+            6741,
+            19609,
+            31700,
+            6289,
+            63723,
+            7374,
+            55485,
+            34031,
+            23027,
+            35185,
+            35260,
+            1572,
+            7285,
+            12769,
+            18025,
+            50570,
+            2219,
+            34513,
+            24256,
+            45803,
+            48287,
+            31961,
+            51856,
+            15405,
+            44202,
+            48513,
+            41190,
+            476,
+            14056,
+            56359,
+            19103,
+            64587,
+            5743,
+            21974,
+            26481,
+            24865,
+            44967,
+            28878,
+            59306,
+            46910,
+            33287,
+            5935,
+            65034,
+            63282,
+            3533,
+            34906,
+            34400,
+            53118,
+            48822,
+            29933,
+            33718,
+            60508,
+            47389,
+            25831
+        ],
+        "version": "3.22.0"
+    },
+    "version": 1
+}

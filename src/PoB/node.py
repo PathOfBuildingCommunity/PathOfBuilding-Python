@@ -59,7 +59,7 @@ class Node:
         self.sprites = {}
         self.x = 0
         self.y = 0
-        self._type = ""
+        self._type = "Normal"
         self.startArt = ""
         self._reminderText = ""  # Do not use None
         self.masterySprites = {}
@@ -93,7 +93,9 @@ class Node:
         self.isAscendancyStart = _node.get("isAscendancyStart", False)
         self.isMastery = _node.get("isMastery", False)
         self.isJewelSocket = _node.get("isJewelSocket", False)
-        self.expansionJewel = _node.get("expansionJewel", {})
+        # expansionJewel defines a jewel socket on the outside of the tree.
+        # "expansionJewel": { "size": 2, "index": 2, "proxy": "nnnnn" },
+        self.expansionJewel = _node.get("expansionJewel", None)
         self.isProxy = _node.get("isProxy", False)
         self.isKeystone = _node.get("isKeystone", False)
         self.isMultipleChoiceOption = _node.get("isMultipleChoiceOption", False)

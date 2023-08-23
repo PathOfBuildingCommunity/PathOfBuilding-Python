@@ -61,6 +61,7 @@ class Spec:
                 item_id = int(socket.get("itemId", 0))
                 # There are files which have been saved poorly and have empty jewel sockets saved as sockets ...
                 # with itemId zero. This check filters them out to prevent dozens of invalid jewels
+                # if item_id > 0 and node_id in self.nodes:
                 if item_id > 0:
                     self.jewels[node_id] = item_id
 
@@ -491,7 +492,7 @@ class Spec:
 
     def save(self):
         """
-        Save anything that can't be a property, like Nodes,sockets
+        Save anything that can't be a property, like Nodes, sockets
 
         :return:
         """

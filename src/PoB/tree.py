@@ -157,6 +157,10 @@ class Tree:
         self.sockets = {}
         # Should this be a dict of GraphicItems
         self.spriteMap = {}
+        # A List of non cluster jewel sprites
+        self.jewel_sprites = {}
+        # A List of cluster jewel sprites
+        self.cluster_sprites = {}
         self.assets = {}
         # list of images for the ascendancy circles
         self.ascendancy_group_list = []
@@ -190,7 +194,7 @@ class Tree:
         self.json_file_path = Path(self.tree_version_path, "tree.json")
         self.legion_path = Path(self.config.data_dir, "legion")
 
-    def add_picture(self, name, x, y, ox, oy, z=0, node=None):
+    def add_picture(self, name, x, y, ox, oy, _layer=Layers.inactive, node=None):
         """
         Add a picture
         :param name: string or pixmap to be added
@@ -198,14 +202,15 @@ class Tree:
         :param y: it's position in the scene
         :param ox: it's position in the scene
         :param oy: it's position in the scene
-        :param z: Layers: which layer to use:
+        :param _layer: Layers: which layer to use:
         :param node: Node: The associated node, so we can load up TreeGraphicsItem variables
         :return: ptr to the created TreeGraphicsItem
         """
-        image = TreeGraphicsItem(self.config, name, node, z, True)
+        image = TreeGraphicsItem(self.config, name, node, _layer, True)
         image.setPos(x, y)
         image.setOffset(ox, oy)
-        if z not in [Layers.active, Layers.active_effect]:
+        if _layer not in [Layers.active, Layers.active_effect]:
+            # if nonactive:
             self.graphics_items.append(image)
         return image
 
@@ -418,20 +423,22 @@ class Tree:
         :return:
         """
 
-        def add_sprite(_sprite, _layer=Layers.inactive):
+        def add_sprite(_sprite, _node, _layer=Layers.inactive):
             """
             add a sprite to our graphics list
             :param _sprite: the inactive sprite or overlay to be added
             :param _layer: the layer this sprite is to be added in
+            :param _node: the node
             :return: a reference to the tree graphic image added
             """
-            sprite = self.add_picture(_sprite["handle"], node.x, node.y, _sprite["ox"], _sprite["oy"], _layer, node)
-            sprite.node_id = node.id
-            sprite.filename = node.icon
-            sprite.node_sd = node.sd
-            sprite.node_name = node.name
-            sprite.node_type = node.type
-            sprite.node_reminder = node.reminderText
+            sprite = self.add_picture(_sprite["handle"], _node.x, _node.y, _sprite["ox"], _sprite["oy"], _layer, _node)
+            sprite.name = _sprite["name"]
+            sprite.node_id = _node.id
+            sprite.filename = _node.icon
+            sprite.node_sd = _node.sd
+            sprite.node_name = _node.name
+            sprite.node_type = _node.type
+            sprite.node_reminder = _node.reminderText
             # sprite.node_tooltip = node.tooltip
 
             return sprite
@@ -456,15 +463,21 @@ class Tree:
                 # No active image
                 node.sprites = self.spriteMap[node.icon]["mastery"]
                 node.inactive_sprite = node.sprites
+        elif node.type == "Socket":
+            if node.expansionJewel:
+                node.active_sprite = self.spriteMap["JewelSocketAltActive"]
+                node.sprites = self.cluster_sprites
+            else:
+                node.active_sprite = self.spriteMap[f"JewelFrameAllocated"]
+                node.sprites = self.jewel_sprites
+        elif node.type == "ClassStart":
+            # This is the pretty icon over the class start; with the red, blue and green dots.
+            node.inactive_sprite = self.spriteMap[node.startArt]["startNode"]
+            node.active_sprite = self.spriteMap[node.startArt]["startNode"]
         else:
             node.sprites = self.spriteMap[node.icon]
-            if node.type not in ("Socket", "ClassStart"):
-                node.inactive_sprite = node.sprites[f"{node.type.lower()}Inactive"]
-                node.active_sprite = node.sprites[f"{node.type.lower()}Active"]
-            # This is the pretty icon over the class start; with the red, blue and green dots.
-            if node.type == "ClassStart":
-                node.inactive_sprite = self.spriteMap[node.startArt]["startNode"]
-                node.active_sprite = self.spriteMap[node.startArt]["startNode"]
+            node.inactive_sprite = node.sprites[f"{node.type.lower()}Inactive"]
+            node.active_sprite = node.sprites[f"{node.type.lower()}Active"]
 
         # setting this to "if node.sprites is not None:" makes the sprites disappear
         #       if x is not None # which works only on None
@@ -472,7 +485,6 @@ class Tree:
             # No active image
             node.sprites = self.spriteMap["Art/2DArt/SkillIcons/passives/MasteryBlank.png"]["normalInactive"]
             node.inactive_sprite = node.sprites
-            _debug(node.type, node.inactive_sprite)
 
         # Derive the true position of the node
         if node.group:
@@ -496,45 +508,56 @@ class Tree:
                 node.y = ascendancy_positions[_a_name]["y"] - math.cos(node.angle) * orbit_radius
 
             if node.inactive_sprite and node.inactive_sprite.get("handle", None) is not None:
-                node.inactive_image = add_sprite(node.inactive_sprite)
+                node.inactive_image = add_sprite(node.inactive_sprite, node)
             if node.active_sprite and node.active_sprite.get("handle", None) is not None:
-                node.active_image = add_sprite(node.active_sprite, Layers.active)
+                node.active_image = add_sprite(node.active_sprite, node, Layers.active)
             if node.activeEffectImage and node.activeEffectImage.get("handle", None) is not None:
-                node.activeEffectImage = add_sprite(node.activeEffectImage, Layers.active_effect)
+                node.activeEffectImage = add_sprite(node.activeEffectImage, node, Layers.active_effect)
 
             # "ClassStart" might belong in treeView still depending on the size of the active asset
             if node.type == "ClassStart":
                 # No active image
                 node.inactiveOverlay = self.spriteMap["PSStartNodeBackgroundInactive"]["startNode"]
-                add_sprite(node.inactiveOverlay)
+                add_sprite(node.inactiveOverlay, node)
             elif node.type == "AscendClassStart":
                 # No active image
                 node.inactiveOverlay = self.spriteMap["AscendancyMiddle"]["ascendancy"]
-                add_sprite(node.inactiveOverlay)
+                add_sprite(node.inactiveOverlay, node)
             else:
                 node.overlay = nodeOverlay.get(node.type, None)
-                # print(node.type, node.overlay)
                 if node.overlay:
                     node.rsq = node.overlay["rsq"]
                     node.size = node.overlay["size"]
-                    _layer = node.type == "Notable" and Layers.key_overlays or Layers.small_overlays
+                    _layer = node.type in ("Notable", "Socket") and Layers.key_overlays or Layers.small_overlays
 
                     # inactive overlay image
-                    inactive_overlay_name = node.overlay.get(
-                        f"unalloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
-                        "",
-                    )
+                    if node.type == "Socket":
+                        inactive_overlay_name = node.overlay.get(
+                            f"unalloc{node.expansionJewel and 'Alt' or ''}",
+                            "",
+                        )
+                    else:
+                        inactive_overlay_name = node.overlay.get(
+                            f"unalloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
+                            "",
+                        )
                     overlay_type = f"{'Ascendancy' in inactive_overlay_name and 'ascendancy' or 'frame'}"
                     node.inactiveOverlay = self.spriteMap[inactive_overlay_name][overlay_type]
-                    node.inactive_overlay_image = add_sprite(node.inactiveOverlay, _layer)
+                    node.inactive_overlay_image = add_sprite(node.inactiveOverlay, node, _layer)
                     node.inactive_overlay_image.node_isoverlay = True
                     # active overlay image
-                    active_overlay_name = node.overlay.get(
-                        f"alloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
-                        "",
-                    )
+                    if node.type == "Socket":
+                        active_overlay_name = node.overlay.get(
+                            f"alloc{node.expansionJewel and 'Alt' or ''}",
+                            "",
+                        )
+                    else:
+                        active_overlay_name = node.overlay.get(
+                            f"alloc{node.ascendancyName and 'Ascend' or ''}{node.isBlighted and 'Blighted' or ''}",
+                            "",
+                        )
                     node.activeOverlay = self.spriteMap[active_overlay_name][overlay_type]
-                    node.active_overlay_image = add_sprite(node.activeOverlay, Layers.active)
+                    node.active_overlay_image = add_sprite(node.activeOverlay, node, Layers.active)
                     node.active_overlay_image.node_isoverlay = True
         # process_node
 
@@ -546,14 +569,14 @@ class Tree:
         :param class_notables: Dictionary for the Class Notables
         :return:
         """
+        # Default node.type is "Normal", so we are looking for exceptions or nodes that need more processing
         if node.classStartIndex >= 0:
             node.type = "ClassStart"
             node.startArt = f"center{PlayerClasses(node.classStartIndex).name.lower()}"
             _class = self.classes[node.classStartIndex]
             _class["startNodeId"] = node.id
         elif node.isAscendancyStart:
-            # node.type = "AscendClassStart" ??
-            node.type = "Normal"
+            # node.type = "AscendClassStart"  # Can't use this as there is no "ascendclassstartInactive" sprite
             ascend_name_map[node.ascendancyName]["ascendClass"]["startNodeId"] = node.id
             self.ascendancy_start_nodes[node.ascendancyName] = node.id
         elif node.isMastery:
@@ -580,11 +603,8 @@ class Tree:
                 self.notableMap[node.dn.lower()] = node
             elif node.g >= 0:
                 self.notableMap[node.dn.lower()] = node
-        else:
-            node.type = "Normal"
-            # Add all notables in the Scion Ascendancy, by excluding all the little nodes
 
-        # get all the Ascendancy nodes in separate lists, but don't include the ascendancy start node
+        # get all the Ascendancy nodes in separate lists
         if node.ascendancyName != "" and not node.isAscendancyStart:
             if self.ascendancyMap.get(node.ascendancyName, None) is None:
                 self.ascendancyMap[node.ascendancyName] = []
@@ -629,7 +649,18 @@ class Tree:
             painter.end()
             return _result
 
-        # _type will be like normalActive, normalInactive, background
+        def add_jewel_sprite(_name):
+            """
+            add a sprite to our graphics list
+            :param _name: the jewel sprite name
+            :return: a reference to the tree graphic image added
+            """
+            sprite = TreeGraphicsItem(self.config, self.spriteMap[_name]["jewel"]["handle"], None, Layers.active, True)
+            sprite.name = _name
+            return sprite
+
+            # _type will be like normalActive, normalInactive, background
+
         for _type in sprite_list:
             # We don't use a background tile
             if _type == "background":
@@ -668,6 +699,24 @@ class Tree:
                     "ox": -w / 2,
                     "oy": -h / 2,
                 }
+
+        # Basic jewels for all sockets
+        self.jewel_sprites["Viridian Jewel"] = self.spriteMap["JewelSocketActiveGreen"]["jewel"]
+        self.jewel_sprites["Crimson Jewel"] = self.spriteMap["JewelSocketActiveRed"]["jewel"]
+        self.jewel_sprites["Cobalt Jewel"] = self.spriteMap["JewelSocketActiveBlue"]["jewel"]
+        self.jewel_sprites["Prismatic Jewel"] = self.spriteMap["JewelSocketActivePrismatic"]["jewel"]
+        self.jewel_sprites["Timeless Jewel"] = self.spriteMap["JewelSocketActiveLegion"]["jewel"]
+        self.jewel_sprites["Abyss Jewel"] = self.spriteMap["JewelSocketActiveAbyss"]["jewel"]
+
+        self.cluster_sprites["Viridian Jewel"] = self.spriteMap["JewelSocketActiveGreenAlt"]["jewel"]
+        self.cluster_sprites["Crimson Jewel"] = self.spriteMap["JewelSocketActiveRedAlt"]["jewel"]
+        self.cluster_sprites["Cobalt Jewel"] = self.spriteMap["JewelSocketActiveBlueAlt"]["jewel"]
+        self.cluster_sprites["Prismatic Jewel"] = self.spriteMap["JewelSocketActivePrismaticAlt"]["jewel"]
+        self.cluster_sprites["Timeless Jewel"] = self.spriteMap["JewelSocketActiveLegionAlt"]["jewel"]
+        self.cluster_sprites["Abyss Jewel"] = self.spriteMap["JewelSocketActiveAbyssAlt"]["jewel"]
+        self.cluster_sprites["Small Cluster Jewel"] = self.spriteMap["JewelSocketActiveAltRed"]["jewel"]
+        self.cluster_sprites["Medium Cluster Jewel"] = self.spriteMap["JewelSocketActiveAltBlue"]["jewel"]
+        self.cluster_sprites["Large Cluster Jewel"] = self.spriteMap["JewelSocketActiveAltPurple"]["jewel"]
 
         # with open("temp/spriteMap.txt", "a") as f_out:
         #     pprint(self.spriteMap, f_out)

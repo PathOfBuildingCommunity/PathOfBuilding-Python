@@ -16,6 +16,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         super(TreeGraphicsItem, self).__init__()
         self.config = _config
         self.win = self.config.win
+        self.name = ""
         self.filename = ""
         self.data = ""
         self.setPixmap(_image)
@@ -23,7 +24,8 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
             self.filename = str(_image)
         self.width = self.pixmap().size().width()
         self.height = self.pixmap().size().height()
-        self.setZValue(z_value)
+        self._z_value = z_value
+        self.layer = z_value
 
         # ToDo: Do we need selectable ?
         # self.setFlag(QGraphicsItem.ItemIsSelectable, selectable)
@@ -40,7 +42,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         self.node_name = ""
         self.node_type = ""
         self.node_reminder = ""
-        self.node_isoverlay = False
+        self.node_isoverlay = False  # If this is an overlay, then the search ring needs to be bigger
         self.node_classStartIndex = -1
         self.node_isAscendancyStart = False
         if node is not None:
@@ -51,6 +53,15 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
             self.node_reminder = node.reminderText
             self.node_classStartIndex = node.classStartIndex
             self.node_isAscendancyStart = node.isAscendancyStart
+
+    @property
+    def layer(self):
+        return self._z_value
+
+    @layer.setter
+    def layer(self, z_value):
+        self._z_value = z_value
+        self.setZValue(z_value)
 
     # Inherited, don't change definition
     def setScale(self, scale: int = 1):

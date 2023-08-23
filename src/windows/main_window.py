@@ -32,7 +32,7 @@ from PoB.constants import (
 
 from PoB.build import Build
 from PoB.pob_config import Config
-from PoB.pob_file import get_file_info
+from PoB.pob_file import get_file_info, read_json
 from dialogs.browse_file_dialog import BrowseFileDlg
 from dialogs.export_dialog import ExportDlg
 from dialogs.import_dialog import ImportDlg
@@ -148,6 +148,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vlayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gview_Tree)
         # destroy the old object
         self.graphicsView_PlaceHolder.setParent(None)
+        # Copy the jewels list to tree_view so it can show jewels properly.
+        # These two should point to the same pointer, so further updates through items_ui will update both.
+        self.gview_Tree.items_jewels = self.items_ui.jewels
 
         # Add our FlowLayout to Config tab
         self.layout_config = FlowLayout(None, 0)
@@ -770,6 +773,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             3: self.textedit_Notes,
             4: self.tab_main,
             5: self.tab_main,
+            6: self.tab_main,
         }
 
         # Focus a Widget
@@ -790,6 +794,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
+        c = read_json("c:/git/PathOfBuilding-Python/docs/test_data/Mirabel__Sentinal_char.json")
+        t = read_json("c:/git/PathOfBuilding-Python/docs/test_data/Mirabel__Sentinal_tree.json")
+        self.build.import_passive_tree_jewels_ggg_json(t, c)
+        return
         dlg = ImportDlg(self.build, self.config, self)
         dlg.exec()
         if dlg.xml is not None:

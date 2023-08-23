@@ -48,19 +48,28 @@ class ItemsUI:
 
         # set the key_event - handler - self.item_list_keypressed
         self.win.list_Items.key_press_handler = self.item_list_keypressed
+        self.win.list_Items_2.key_press_handler = self.item_list_keypressed
         self.win.list_Items.set_delegate()
+        self.win.list_Items_2.set_delegate()
 
         """Create the ui elements for displaying on the left side of the tab"""
         # list of abyssal ui's for ease of hiding them during itemset changes
         self.abyssal_item_slot_ui_list = []
+        self.abyssal_item_slot_ui_list2 = []
         # dict of all slots
         self.item_slot_ui_list = {}
+        self.item_slot_ui_list2 = {}
         for item_label in slot_names.values():
             self.create_equipped_item_slot_ui(item_label)
+            self.create_equipped_item_slot_ui2(item_label)
         self.item_slot_ui_list["Weapon 1"].other_weapon_slot = self.item_slot_ui_list["Weapon 2"]
         self.item_slot_ui_list["Weapon 1 Swap"].other_weapon_slot = self.item_slot_ui_list["Weapon 2 Swap"]
         self.item_slot_ui_list["Weapon 2"].other_weapon_slot = self.item_slot_ui_list["Weapon 1"]  # Needed ?
         self.item_slot_ui_list["Weapon 2 Swap"].other_weapon_slot = self.item_slot_ui_list["Weapon 1 Swap"]  # Needed ?
+        self.item_slot_ui_list2["Weapon 1"].other_weapon_slot = self.item_slot_ui_list["Weapon 2"]
+        self.item_slot_ui_list2["Weapon 1 Swap"].other_weapon_slot = self.item_slot_ui_list["Weapon 2 Swap"]
+        self.item_slot_ui_list2["Weapon 2"].other_weapon_slot = self.item_slot_ui_list["Weapon 1"]  # Needed ?
+        self.item_slot_ui_list2["Weapon 2 Swap"].other_weapon_slot = self.item_slot_ui_list["Weapon 1 Swap"]  # Needed ?
         for name in (
             "Weapon 1",
             "Weapon 2",
@@ -74,11 +83,16 @@ class ItemsUI:
         self.create_equipped_abyssal_socket_slots("Belt", 2)
         self.hide_equipped_items_slot_ui("Weapon 1 Swap", hidden=True)
         self.hide_equipped_items_slot_ui("Weapon 2 Swap", hidden=True)
-        self.win.groupbox_SocketedJewels.setVisible(False)
+        self.hide_equipped_items_slot_ui2("Weapon 1 Swap", hidden=True)
+        self.hide_equipped_items_slot_ui2("Weapon 2 Swap", hidden=True)
+        # self.win.groupbox_SocketedJewels.setVisible(False)
 
         self.item_types = [""]
         self.uniques_items = []
         self.load_unique_items()
+
+        # A list of jewels that the tree_view can use for showing the correct image
+        self.jewels = {}
 
         self.rare_template_items = []
         self.load_rare_template_items()
@@ -94,11 +108,13 @@ class ItemsUI:
         self.win.combo_ItemsImportSearchSource.currentTextChanged.connect(self.change_import_search_widgets)
         self.win.lineedit_ItemsImportSearch.textChanged.connect(self.change_import_search_widgets)
         self.win.btn_ManageItem.clicked.connect(self.manage_item_button_clicked)
+        self.win.btn_ManageItem_2.clicked.connect(self.manage_item_button_clicked)
 
     def setup_ui(self):
         """Call setupUI on all UI classes that need it"""
         # Delay setting the delegate so not all 1167 rows (Jan2023) are processed multiple times during startup
         self.win.list_ImportItems.set_delegate()
+        self.win.list_ImportItems_2.set_delegate()
 
     @property
     def activeItemSet(self):
@@ -118,11 +134,16 @@ class ItemsUI:
             # Don't re-connect
             return
         self.triggers_connected = True
-        self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
         self.win.btn_WeaponSwap.clicked.connect(self.weapon_swap)
+        self.win.btn_WeaponSwap_2.clicked.connect(self.weapon_swap2)
+        self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
+        self.win.list_Items_2.currentItemChanged.connect(self.on_row_changed)
         self.win.list_Items.itemDoubleClicked.connect(self.item_list_double_clicked)
+        self.win.list_Items_2.itemDoubleClicked.connect(self.item_list_double_clicked)
         self.win.list_ImportItems.itemDoubleClicked.connect(self.import_items_list_double_clicked)
+        self.win.list_ImportItems_2.itemDoubleClicked.connect(self.import_items_list_double_clicked)
         self.win.combo_ItemSet.currentIndexChanged.connect(self.change_itemset)
+        self.win.combo_ItemSet_2.currentIndexChanged.connect(self.change_itemset)
 
     def disconnect_item_triggers(self):
         """disconnect widget triggers that need to be disconnected during loading and other processing"""
@@ -132,16 +153,23 @@ class ItemsUI:
             # Don't disconnect if not connected
             return
         self.triggers_connected = False
-        self.win.list_Items.currentItemChanged.disconnect(self.on_row_changed)
         self.win.btn_WeaponSwap.clicked.disconnect(self.weapon_swap)
+        self.win.btn_WeaponSwap_2.clicked.disconnect(self.weapon_swap2)
+        self.win.list_Items.currentItemChanged.disconnect(self.on_row_changed)
+        self.win.list_Items_2.currentItemChanged.disconnect(self.on_row_changed)
         self.win.list_Items.itemDoubleClicked.disconnect(self.item_list_double_clicked)
+        self.win.list_Items_2.itemDoubleClicked.disconnect(self.item_list_double_clicked)
         self.win.list_ImportItems.itemDoubleClicked.disconnect(self.import_items_list_double_clicked)
+        self.win.list_ImportItems_2.itemDoubleClicked.disconnect(self.import_items_list_double_clicked)
         self.win.combo_ItemSet.currentIndexChanged.disconnect(self.change_itemset)
+        self.win.combo_ItemSet_2.currentIndexChanged.disconnect(self.change_itemset)
 
     def create_equipped_abyssal_socket_slots(self, item_name, number_of_sockets):
         for idx in range(number_of_sockets, 0, -1):
             ui = self.create_equipped_item_slot_ui(f"{item_name} Abyssal Socket {idx}", True, item_name)
             self.abyssal_item_slot_ui_list.append(ui)
+            ui = self.create_equipped_item_slot_ui(f"{item_name} Abyssal Socket {idx}", True, item_name)
+            self.abyssal_item_slot_ui_list2.append(ui)
         # for idx in range(number_of_sockets):
         #     # work out what the preceeding
         #     after = idx == 0 and item_name or f"{item_name} Abyssal Socket {idx}"
@@ -187,11 +215,38 @@ class ItemsUI:
         # self.win.scrollAreaWidgetContents_Items.setFixedHeight(height)
         return slot_ui
 
+    def create_equipped_item_slot_ui2(self, slot_name, hidden=False, insert_after=""):
+        """
+        Create an item_slot_ui with the label being slot_name
+
+        :param slot_name: str: The labels contents
+        :param hidden: bool: Alt weapons are hidden by default
+        :param insert_after: str: The slot_name of the item_slot_ui to insert this item_slot_ui after
+        :return: item_slot_ui:
+        """
+        # Abyssal sockets have the item name in front, so split it out. EG: 'Belt Abyssal Socket 1'
+        if "Abyssal" in slot_name:
+            socket_number = slot_name.split("Socket ")
+            slot_ui = ItemSlotUI(f"Abyssal #{socket_number[1]}", True)
+        else:
+            slot_ui = ItemSlotUI(slot_name, insert_after != "")
+        # Find which list we are adding these to, Items or Sockets
+        layout = "Socket #" in slot_name and self.win.glayout_SocketedJewels2 or self.win.glayout_EquippedItems_2
+        if insert_after != "":
+            index = layout.indexOf(self.item_slot_ui_list2[insert_after]) + 1
+            layout.insertWidget(index, slot_ui)
+        else:
+            layout.addWidget(slot_ui)
+        self.item_slot_ui_list2[slot_name] = slot_ui
+        slot_ui.setHidden(hidden)
+        self.win.groupbox_SocketedJewels_2.setVisible(self.win.vlayout_SocketedJewels.count() > 1)
+
+        return slot_ui
+
     def remove_equipped_items_slot_ui(self, slot_name):
         slot_ui = self.item_slot_ui_list.get(slot_name, None)
         if slot_ui is not None:
             vlayout = "Socket #" in slot_name and self.win.vlayout_SocketedJewels or self.win.vlayout_EquippedItems
-            # vlayout.removeWidget(slot_ui)
             vlayout.takeAt(vlayout.indexOf(slot_ui))
             del self.item_slot_ui_list[slot_name]
         self.win.groupbox_SocketedJewels.setVisible(self.win.vlayout_SocketedJewels.count() > 1)
@@ -201,6 +256,14 @@ class ItemsUI:
         )
         # +40 = to make up for other widgets on the tab
         self.win.scrollAreaWidgetContents_Items.setFixedHeight(height + 40)
+
+    def remove_equipped_items_slot_ui2(self, slot_name):
+        slot_ui = self.item_slot_ui_list.get(slot_name, None)
+        if slot_ui is not None:
+            vlayout = "Socket #" in slot_name and self.win.glayout_SocketedJewels2 or self.win.glayout_EquippedItems_2
+            vlayout.takeAt(vlayout.indexOf(slot_ui))
+            del self.item_slot_ui_list[slot_name]
+        self.win.groupbox_SocketedJewels_2.setVisible(self.win.vlayout_SocketedJewels.count() > 1)
 
     def hide_equipped_items_slot_ui(self, slot_name, hidden):
         """
@@ -213,6 +276,20 @@ class ItemsUI:
         # widget_item = self.item_slot_ui_list[slot_name].my_list_item
         # self.win.list_Slots.setRowHidden(self.win.list_Slots.row(widget_item), hidden)
         slot_ui = self.item_slot_ui_list.get(slot_name, None)
+        if slot_ui is not None:
+            slot_ui.setHidden(hidden)
+
+    def hide_equipped_items_slot_ui2(self, slot_name, hidden):
+        """
+        (un)Hide an slot item.
+
+        :param slot_name: str: Index to item_ui_list
+        :param hidden: bool: Whether to hide or not
+        :return:
+        """
+        # widget_item = self.item_slot_ui_list[slot_name].my_list_item
+        # self.win.list_Slots.setRowHidden(self.win.list_Slots.row(widget_item), hidden)
+        slot_ui = self.item_slot_ui_list2.get(slot_name, None)
         if slot_ui is not None:
             slot_ui.setHidden(hidden)
 
@@ -238,6 +315,8 @@ class ItemsUI:
             try:
                 self.item_slot_ui_list[slot_name].add_item(item)
                 self.item_slot_ui_list[slot_name].set_default_item(item)
+                self.item_slot_ui_list2[slot_name].add_item(item)
+                self.item_slot_ui_list2[slot_name].set_default_item(item)
             except KeyError:
                 pass
 
@@ -250,6 +329,8 @@ class ItemsUI:
         """
         for slot_name in item.slots:
             self.item_slot_ui_list[slot_name].delete_item(item)
+        for slot_name in item.slots:
+            self.item_slot_ui_list2[slot_name].delete_item(item)
 
     def load_unique_items(self):
         item_leagues = [""]
@@ -305,6 +386,11 @@ class ItemsUI:
         lwi.setWhatsThis(_item.name)
         lwi.setData(Qt.UserRole, _item)
         self.win.list_Items.addItem(lwi)
+        lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
+        lwi.setToolTip(_item.tooltip())
+        lwi.setWhatsThis(_item.name)
+        lwi.setData(Qt.UserRole, _item)
+        self.win.list_Items_2.addItem(lwi)
         return _item
 
     def add_item_to_import_item_list_widget(self, _item, idx):
@@ -319,6 +405,10 @@ class ItemsUI:
         lwi.setToolTip(_item.tooltip())
         lwi.setWhatsThis(_item.name)
         self.win.list_ImportItems.addItem(lwi)
+        lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
+        lwi.setToolTip(_item.tooltip())
+        lwi.setWhatsThis(_item.name)
+        self.win.list_ImportItems_2.addItem(lwi)
         return _item
 
     @Slot()
@@ -336,6 +426,20 @@ class ItemsUI:
         self.hide_equipped_items_slot_ui("Weapon 2 Swap", not checked)
 
     @Slot()
+    def weapon_swap2(self, checked):
+        """
+        Switch between active and alternate weapons.
+
+        :param checked: bool: state of the btn_WeaponSwap button. Checked = True means Alt is to be shown.
+        :return: N/A
+        """
+        self.win.btn_WeaponSwap_2.setText(checked and "Show Main Weapons" or "Show Alt Weapons")
+        self.hide_equipped_items_slot_ui2("Weapon 1", checked)
+        self.hide_equipped_items_slot_ui2("Weapon 2", checked)
+        self.hide_equipped_items_slot_ui2("Weapon 1 Swap", not checked)
+        self.hide_equipped_items_slot_ui2("Weapon 2 Swap", not checked)
+
+    @Slot()
     def define_item_labels(self):
         """
         Set item labels based on what set they are in and what set is active
@@ -344,6 +448,7 @@ class ItemsUI:
         return
         # for idx, _item in enumerate(self.itemlist):
         #     label = self.win.list_Items.itemWidget(idx)
+        #     label = self.win.list_Items_2.itemWidget(idx)
         #     label.setText(html_colour_text(_item.rarity, _item.name))
         #     # Do more here based on itemsets, etc
 
@@ -582,6 +687,7 @@ class ItemsUI:
         self.xml_items = _items
         self.clear_controls(True)
         self.win.combo_ItemSet.clear()
+        self.win.combo_ItemSet_2.clear()
         # Remove <Slot /> entries under <Items /> only - deprecated setting
         for _item in self.xml_items.findall("Slot"):
             self.xml_items.remove(_item)
@@ -592,11 +698,16 @@ class ItemsUI:
             new_item.load_from_xml(_item)
             new_item.id = int(_item.get("id", 0))
             self.add_item_to_itemlist_widget(new_item)
+            self.itemlist_by_id[new_item.id] = new_item
+            if "Jewel" in new_item.base_name:
+                self.jewels[new_item.id] = new_item
         self.itemsets = self.xml_items.findall("ItemSet")
         for _item_set in self.itemsets:
             self.win.combo_ItemSet.addItem(_item_set.get("title", "Default"), _item_set)
+            self.win.combo_ItemSet_2.addItem(_item_set.get("title", "Default"), _item_set)
         self.fill_item_slot_uis()
         self.win.combo_ItemSet.setCurrentIndex(0)
+        self.win.combo_ItemSet_2.setCurrentIndex(0)
         self.show_itemset(0, True)
         self.connect_item_triggers()
 
@@ -623,8 +734,12 @@ class ItemsUI:
             new_item.load_from_ggg_json(text_item)
             new_item.id = id_base + idx
             self.add_item_to_itemlist_widget(new_item)
+            self.itemlist_by_id[new_item.id] = new_item
+            if "Jewel" in new_item.base_name:
+                self.jewels[new_item.id] = new_item
         self.fill_item_slot_uis()
         self.win.combo_ItemSet.setCurrentIndex(0)
+        self.win.combo_ItemSet_2.setCurrentIndex(0)
         self.show_itemset(0, True)
         self.connect_item_triggers()
 
@@ -665,9 +780,12 @@ class ItemsUI:
             # new_item.id = id_base + idx
             self.add_item_to_itemlist_widget(new_item)
             self.itemlist_by_id[new_item.id] = new_item
+            if "Jewel" in new_item.base_name:
+                self.jewels[new_item.id] = new_item
 
         self.fill_item_slot_uis()
         self.win.combo_ItemSet.setCurrentIndex(0)
+        self.win.combo_ItemSet_2.setCurrentIndex(0)
         self.show_itemset(0, True)
         self.save()
         self.connect_item_triggers()
@@ -708,6 +826,7 @@ class ItemsUI:
             slot_xml.set("itemPbURL", slot_ui.itemPbURL)
             self.xml_current_itemset.append(slot_xml)
         self.activeItemSet = self.win.combo_ItemSet.currentIndex()
+        self.activeItemSet = self.win.combo_ItemSet_2.currentIndex()
         # Renumber skillsets in case they have been moved, created or deleted.
         for idx, _set in enumerate(self.xml_items.findall("ItemSet"), 1):
             _set.set("id", str(idx))
@@ -722,11 +841,17 @@ class ItemsUI:
         # _debug("clear_controls")
         if loading:
             self.win.list_Items.clear()
+            self.win.list_Items_2.clear()
             self.itemlist_by_id.clear()
         for name in self.item_slot_ui_list:
             slot: ItemSlotUI = self.item_slot_ui_list[name]
             slot.clear()
         for slot in self.abyssal_item_slot_ui_list:
+            slot.setHidden(True)
+        for name in self.item_slot_ui_list2:
+            slot: ItemSlotUI = self.item_slot_ui_list2[name]
+            slot.clear()
+        for slot in self.abyssal_item_slot_ui_list2:
             slot.setHidden(True)
         self.win.groupbox_SocketedJewels.setHidden(True)
 
@@ -789,6 +914,7 @@ class ItemsUI:
         self.itemsets.append(new_set_xml)
         self.xml_items.append(new_set_xml)
         self.win.combo_ItemSet.addItem(itemset_name, new_set_xml)
+        self.win.combo_ItemSet_2.addItem(itemset_name, new_set_xml)
         # Add slot information
         for slot_ui_name in self.item_slot_ui_list:
             slot_ui = self.item_slot_ui_list[slot_ui_name]
@@ -822,6 +948,7 @@ class ItemsUI:
             else:
                 self.xml_current_itemset = self.xml_items[index == 0 and 0 or index - 1]
         self.win.combo_ItemSet.removeItem(index)
+        self.win.combo_ItemSet_2.removeItem(index)
 
     def delete_all_itemsets(self):
         """Delete ALL itemsets"""
@@ -831,6 +958,7 @@ class ItemsUI:
         self.xml_current_itemset = None
         self.itemsets.clear()
         self.win.combo_ItemSet.clear()
+        self.win.combo_ItemSet_2.clear()
 
     def move_itemset(self, start, destination):
         """
@@ -852,12 +980,17 @@ class ItemsUI:
         # Turn off triggers whist moving the combobox to stop unnecessary updates)
         self.disconnect_item_triggers()
         curr_index = self.win.combo_ItemSet.currentIndex()
+        curr_index = self.win.combo_ItemSet_2.currentIndex()
         self.win.combo_ItemSet.removeItem(start)
+        self.win.combo_ItemSet_2.removeItem(start)
         self.win.combo_ItemSet.insertItem(destination, _set.get("title", "Default"), _set)
+        self.win.combo_ItemSet_2.insertItem(destination, _set.get("title", "Default"), _set)
         # set the SkillSet ComboBox dropdown width.
         self.win.combo_ItemSet.view().setMinimumWidth(self.win.combo_ItemSet.minimumSizeHint().width())
+        self.win.combo_ItemSet_2.view().setMinimumWidth(self.win.combo_ItemSet.minimumSizeHint().width())
         if start == curr_index:
             self.win.combo_ItemSet.setCurrentIndex(destination)
+            self.win.combo_ItemSet_2.setCurrentIndex(destination)
         self.connect_item_triggers()
 
     def copy_itemset(self, index, new_name):
@@ -876,6 +1009,7 @@ class ItemsUI:
         self.xml_items.insert(index, new_set)
         self.disconnect_item_triggers()
         self.win.combo_ItemSet.insertItem(index, new_set.get("title", "Default"), new_set)
+        self.win.combo_ItemSet_2.insertItem(index, new_set.get("title", "Default"), new_set)
         self.connect_item_triggers()
         return new_set
 
@@ -923,12 +1057,38 @@ class ItemsUI:
                 self.win.combo_ItemsImportLeague.setHidden(False)
                 self.win.combo_ItemsImportRequirements.setHidden(False)
                 self.win.combo_ItemsImportSource.setHidden(False)
+                self.win.combo_ItemsImportSort_2.setHidden(False)
+                self.win.combo_ItemsImportLeague_2.setHidden(False)
+                self.win.combo_ItemsImportRequirements_2.setHidden(False)
+                self.win.combo_ItemsImportSource_2.setHidden(False)
             case ImportFromType.rares:
                 items = self.rare_template_items
                 self.win.combo_ItemsImportSort.setHidden(True)
                 self.win.combo_ItemsImportLeague.setHidden(True)
                 self.win.combo_ItemsImportRequirements.setHidden(True)
                 self.win.combo_ItemsImportSource.setHidden(True)
+                self.win.combo_ItemsImportSort_2.setHidden(True)
+                self.win.combo_ItemsImportLeague_2.setHidden(True)
+                self.win.combo_ItemsImportRequirements_2.setHidden(True)
+                self.win.combo_ItemsImportSource_2.setHidden(True)
+
+        items = []
+        self.win.list_ImportItems_2.clear()
+        import_from = ImportFromType(self.win.combo_ItemsImportFrom_2.currentIndex())
+        import_slot = self.win.combo_ItemsImportSlot_2.currentText()
+        match import_from:
+            case ImportFromType.uniques:
+                items = self.uniques_items
+                self.win.combo_ItemsImportSort_2.setHidden(False)
+                self.win.combo_ItemsImportLeague_2.setHidden(False)
+                self.win.combo_ItemsImportRequirements_2.setHidden(False)
+                self.win.combo_ItemsImportSource_2.setHidden(False)
+            case ImportFromType.rares:
+                items = self.rare_template_items
+                self.win.combo_ItemsImportSort_2.setHidden(True)
+                self.win.combo_ItemsImportLeague_2.setHidden(True)
+                self.win.combo_ItemsImportRequirements_2.setHidden(True)
+                self.win.combo_ItemsImportSource_2.setHidden(True)
 
         # start trimming the list by league and (sub)type
         import_league = self.win.combo_ItemsImportLeague.currentText()
@@ -1000,8 +1160,10 @@ class ItemsUI:
             match self.win.combo_ItemsImportSort.currentText():
                 case "Sort by Name":
                     self.win.list_ImportItems.sortItems()
+                    self.win.list_ImportItems_2.sortItems()
         else:
             self.win.list_ImportItems.sortItems()
+            self.win.list_ImportItems_2.sortItems()
 
     @Slot()
     def change_import_slot_combo(self, index):
