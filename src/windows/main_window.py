@@ -307,11 +307,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Add this file (either Open or Save As) to the recent menu list. refreshing the menu if the name is a new one.
         :return: N/A
         """
-        if self.config.add_recent_build(self.build.filename):
-            for entry in self.menu_Builds.children():
-                if type(entry) == QWidgetAction:
-                    self.menu_Builds.removeAction(entry)
-            self.set_recent_builds_menu_items(self.config)
+        self.config.add_recent_build(self.build.filename)
+        for entry in self.menu_Builds.children():
+            if type(entry) == QWidgetAction:
+                self.menu_Builds.removeAction(entry)
+        self.set_recent_builds_menu_items(self.config)
 
     def set_recent_builds_menu_items1(self, config: Config):
         """

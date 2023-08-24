@@ -19,7 +19,7 @@ from PySide6.QtUiTools import QUiLoader
 from PoB.pob_file import read_xml, write_xml
 from PoB.constants import pob_debug, def_theme, default_config
 
-from widgets.ui_utils import str_to_bool
+from widgets.ui_utils import str_to_bool, print_a_xml_element
 from dialogs.settings_dialog import SettingsDlg
 
 
@@ -343,6 +343,9 @@ class Config:
             build = ET.Element("build")
             build.text = filename
             _recent.insert(0, build)
+        else:
+            _recent.remove(found[0])
+            _recent.insert(0, found[0])
         return len(found) == 0
 
     @property

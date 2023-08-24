@@ -1884,15 +1884,15 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                 <property name="geometry">
                  <rect>
                   <x>0</x>
-                  <y>0</y>
-                  <width>1163</width>
-                  <height>688</height>
+                  <y>-104</y>
+                  <width>1146</width>
+                  <height>792</height>
                  </rect>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>16777215</width>
-                  <height>1000</height>
+                  <height>900</height>
                  </size>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,2,2">
@@ -2130,8 +2130,8 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>362</width>
-                            <height>540</height>
+                            <width>353</width>
+                            <height>644</height>
                            </rect>
                           </property>
                           <layout class="QVBoxLayout" name="vlayout_SocketedJewels_2">
@@ -2247,7 +2247,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                              <property name="sizeHint" stdset="0">
                               <size>
                                <width>136</width>
-                               <height>487</height>
+                               <height>100</height>
                               </size>
                              </property>
                             </spacer>
@@ -2294,7 +2294,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                       <property name="maximumSize">
                        <size>
                         <width>16777215</width>
-                        <height>875</height>
+                        <height>890</height>
                        </size>
                       </property>
                       <property name="acceptDrops">
@@ -2352,7 +2352,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                       <property name="sizeHint" stdset="0">
                        <size>
                         <width>20</width>
-                        <height>328</height>
+                        <height>10</height>
                        </size>
                       </property>
                      </spacer>
@@ -2717,32 +2717,19 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                       <property name="minimumSize">
                        <size>
                         <width>350</width>
-                        <height>0</height>
+                        <height>450</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>16777215</width>
-                        <height>500</height>
+                        <height>700</height>
                        </size>
                       </property>
                       <property name="sortingEnabled">
                        <bool>false</bool>
                       </property>
                      </widget>
-                    </item>
-                    <item>
-                     <spacer name="verticalSpacer_2">
-                      <property name="orientation">
-                       <enum>Qt::Vertical</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>20</width>
-                        <height>117</height>
-                       </size>
-                      </property>
-                     </spacer>
                     </item>
                    </layout>
                   </widget>
