@@ -4,6 +4,7 @@ Creates .py script from .ui files in the /src/ui/ folder
 
 import os
 import sys
+from colorama import Fore
 from pathlib import Path
 from subprocess import Popen, PIPE
 
@@ -44,16 +45,15 @@ def generate_py_from_ui():
             print(f"skipping {outpath}, exists and no change.")
             pass
         else:
-            print(path, ">>", outpath)
-
             cmd = [os.fspath(exe), "-g", "python", str(path), "-o", str(outpath)]
             proc = Popen(cmd, stderr=PIPE)
             out, err = proc.communicate()
             if err:
                 msg = err.decode("utf-8")
                 command = " ".join(cmd)
-                print(f"Error: {msg}\nwhile executing '{command}'")
+                print(f"{Fore.RED}Error: {msg}{Fore.RESET}\nwhile executing '{command}'")
             else:
+                print(path, ">>", Fore.GREEN, outpath, Fore.RESET)
                 os.utime(outpath, (ui_time, ui_time))
 
 
@@ -66,16 +66,15 @@ def generate_qrc():
         print(f"skipping {outpath}, exists and no change.")
         pass
     else:
-        print(path, ">>", outpath)
-
         cmd = [os.fspath(exe), "-g", "python", str(path), "-o", str(outpath)]
         proc = Popen(cmd, stderr=PIPE)
         out, err = proc.communicate()
         if err:
             msg = err.decode("utf-8")
             command = " ".join(cmd)
-            print(f"Error: {msg}\nwhile executing '{command}'")
+            print(f"{Fore.RED}Error: {msg}{Fore.RESET}\nwhile executing '{command}'")
         else:
+            print(path, ">>", Fore.GREEN, outpath, Fore.RESET)
             os.utime(outpath, (ui_time, ui_time))
 
 

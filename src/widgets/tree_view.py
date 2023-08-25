@@ -123,7 +123,6 @@ class TreeView(QGraphicsView):
         graphic_items = self.items(event.pos())
         if len(graphic_items) < 1:
             return
-        print(graphic_items)
         for i in graphic_items:
             if type(i) is TreeGraphicsItem:
                 print(i.node_id, i.name)
@@ -141,7 +140,7 @@ class TreeView(QGraphicsView):
                     if g_item.node_type == "Mastery":
                         self.build.current_spec.remove_mastery_effect(g_item.node_id)
                     # elif g_item.node_type == "Socket":
-                    #     del self.build.current_spec.jewels[g_item.node_id]
+                    #     del self.build.current_spec.sockets[g_item.node_id]
                     self.build.current_spec.nodes.remove(g_item.node_id)
                 else:
                     current_tree_nodes = self.build.current_tree.nodes
@@ -156,7 +155,7 @@ class TreeView(QGraphicsView):
                             elif g_item.node_type == "Socket":
                                 # ToDo: Do we need a popup to select a jewel ?
                                 self.build.current_spec.nodes.add(g_item.node_id)
-                                # self.build.current_spec.jewels[g_item.node_id] = 0
+                                # self.build.current_spec.sockets[g_item.node_id] = 0
                             else:
                                 self.build.current_spec.nodes.add(g_item.node_id)
                             break
@@ -392,19 +391,24 @@ class TreeView(QGraphicsView):
                     self.active_nodes.append(node.activeEffectImage)
                     self._scene.addItem(node.activeEffectImage)
                 if node.type == "Socket":
-                    jewels = self.build.current_spec.jewels
+                    jewels = self.build.current_spec.sockets
                     image = None
                     if self.items_jewels and node.id in set(jewels.keys()):
                         jewel_node_id = jewels[node.id]
                         if jewel_node_id != 0:
-                            jewel_item = self.items_jewels[jewel_node_id]
+                            jewel_item = self.items_jewels.get(jewel_node_id, None)
                             if jewel_item:
                                 sprite = node.sprites.get(jewel_item.base_name, None)
                                 if sprite is not None:
                                     image = self.add_picture(sprite["handle"], node.x, node.y, Layers.jewels)
                                     image.setOffset(sprite["ox"], sprite["oy"])
-                                    image.name = jewel_item.base_name
+                                    image.name = jewel_item.name
                                     image.node_id = node.id
+                                    image.node_sd = node.sd
+                                    image.filename = node.icon
+                                    image.node_name = node.name
+                                    image.node_type = node.type
+                                    image.node_reminder = node.reminderText
                     if image:
                         self.active_nodes.append(image)
                     self.active_nodes.append(node.active_overlay_image)

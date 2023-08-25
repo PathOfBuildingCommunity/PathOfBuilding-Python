@@ -80,12 +80,13 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
         :return: str: the tooltip
         """
         tool_tip = self.node_name and f"{self.node_name}, {self.node_id}" or f"{self.node_id}"
+        tool_tip += self.name and f", {self.name}" or ""
         tool_tip += self.data and f", {self.data}" or ""
         if self.node_sd != "":
             for line in self.node_sd:
                 tool_tip += f"\n{line}"
         tool_tip += self.node_reminder and f"\n{self.node_reminder}" or ""
-        tool_tip += self.filename and f"\n{self.filename}" or ""
+        # tool_tip += self.filename and f"\n{self.filename}" or ""
         return html_colour_text(self.win.qss_default_text, tool_tip)
 
     # not sure if this is needed

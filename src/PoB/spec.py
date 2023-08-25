@@ -51,7 +51,7 @@ class Spec:
 
         # Table of jewels equipped in this tree
         # Keys are node IDs, values are items
-        self.jewels = {}
+        self.sockets = {}
 
         # if there are no sockets there, we don't mind. We'll create an empty one when saving
         sockets = _spec.find("Sockets")
@@ -63,7 +63,7 @@ class Spec:
                 # with itemId zero. This check filters them out to prevent dozens of invalid jewels
                 # if item_id > 0 and node_id in self.nodes:
                 if item_id > 0:
-                    self.jewels[node_id] = item_id
+                    self.sockets[node_id] = item_id
 
     @property
     def title(self):
@@ -510,9 +510,9 @@ class Spec:
             self.xml_spec.remove(sockets)
         sockets = ET.Element("Sockets")
         self.xml_spec.append(sockets)
-        if len(self.jewels) > 0:
-            for node_id in self.jewels.keys():
-                sockets.append(ET.fromstring(f'<Socket nodeId="{node_id}" itemId="{self.jewels[node_id]}"/>'))
+        if len(self.sockets) > 0:
+            for node_id in self.sockets.keys():
+                sockets.append(ET.fromstring(f'<Socket nodeId="{node_id}" itemId="{self.sockets[node_id]}"/>'))
 
     def load_from_ggg_json(self, json_tree, json_character):
         """

@@ -151,6 +151,7 @@ QTabBar::tab:!selected {
 
 
 QComboBox,
+QLineEdit,
 QPushButton {
     border: 1px solid rgba( qss_box_borders );
     padding: 4px 8px;

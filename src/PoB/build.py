@@ -413,8 +413,8 @@ class Build:
         :param xml_items: the list of items
         :return:
         """
-        for node_id in self.current_spec.jewels.keys():
-            item_id = self.current_spec.jewels[node_id]
+        for node_id in self.current_spec.sockets.keys():
+            item_id = self.current_spec.sockets[node_id]
 
     def count_allocated_nodes(self):
         """

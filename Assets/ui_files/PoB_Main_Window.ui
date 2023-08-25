@@ -1884,9 +1884,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                 <property name="geometry">
                  <rect>
                   <x>0</x>
-                  <y>-104</y>
+                  <y>0</y>
                   <width>1146</width>
-                  <height>792</height>
+                  <height>898</height>
                  </rect>
                 </property>
                 <property name="maximumSize">
@@ -1912,28 +1912,25 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QFrame" name="frame">
+                  <widget class="QFrame" name="frame_Items2">
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_5">
-                    <property name="spacing">
-                     <number>5</number>
-                    </property>
+                   <layout class="QVBoxLayout" name="vlayout_Items2" stretch="1,2,2,0">
                     <property name="leftMargin">
-                     <number>3</number>
+                     <number>0</number>
                     </property>
                     <property name="topMargin">
-                     <number>3</number>
+                     <number>0</number>
                     </property>
                     <property name="rightMargin">
-                     <number>3</number>
+                     <number>0</number>
                     </property>
                     <property name="bottomMargin">
-                     <number>3</number>
+                     <number>0</number>
                     </property>
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1951,13 +1948,13 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                         <property name="minimumSize">
                          <size>
                           <width>65</width>
-                          <height>0</height>
+                          <height>24</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>65</width>
-                          <height>16777215</height>
+                          <height>24</height>
                          </size>
                         </property>
                         <property name="frameShape">
@@ -1970,12 +1967,24 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                         </property>
                         <property name="buddy">
-                         <cstring>combo_ItemSet</cstring>
+                         <cstring>combo_ItemSet_2</cstring>
                         </property>
                        </widget>
                       </item>
                       <item>
                        <widget class="QComboBox" name="combo_ItemSet_2">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>24</height>
+                         </size>
+                        </property>
                         <property name="currentText">
                          <string notr="true"/>
                         </property>
@@ -1991,17 +2000,17 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="btn_ManageItem_2">
+                       <widget class="QPushButton" name="btn_ManageItemSet_2">
                         <property name="minimumSize">
                          <size>
                           <width>85</width>
-                          <height>0</height>
+                          <height>24</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>85</width>
-                          <height>16777215</height>
+                          <height>24</height>
                          </size>
                         </property>
                         <property name="text">
@@ -2015,11 +2024,11 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                      </layout>
                     </item>
                     <item>
-                     <widget class="QFrame" name="frame_Items_2">
+                     <widget class="QFrame" name="frame_EquippedItems_2">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
-                        <height>100</height>
+                        <height>450</height>
                        </size>
                       </property>
                       <property name="maximumSize">
@@ -2028,7 +2037,10 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                         <height>1000</height>
                        </size>
                       </property>
-                      <layout class="QGridLayout" name="glayout_EquippedItems_2">
+                      <layout class="QVBoxLayout" name="layout_EquippedItems_2">
+                       <property name="spacing">
+                        <number>2</number>
+                       </property>
                        <property name="leftMargin">
                         <number>0</number>
                        </property>
@@ -2041,13 +2053,25 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                        <property name="bottomMargin">
                         <number>0</number>
                        </property>
-                       <property name="spacing">
-                        <number>0</number>
-                       </property>
-                       <item row="0" column="0">
+                       <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_6">
+                         <property name="spacing">
+                          <number>6</number>
+                         </property>
                          <item>
                           <widget class="QLabel" name="label_EquippedItems">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>24</height>
+                            </size>
+                           </property>
                            <property name="text">
                             <string>Equipped Items:</string>
                            </property>
@@ -2071,13 +2095,13 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                            <property name="minimumSize">
                             <size>
                              <width>135</width>
-                             <height>0</height>
+                             <height>24</height>
                             </size>
                            </property>
                            <property name="maximumSize">
                             <size>
                              <width>135</width>
-                             <height>16777215</height>
+                             <height>24</height>
                             </size>
                            </property>
                            <property name="text">
@@ -2130,13 +2154,13 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>353</width>
-                            <height>644</height>
+                            <width>362</width>
+                            <height>273</height>
                            </rect>
                           </property>
-                          <layout class="QVBoxLayout" name="vlayout_SocketedJewels_2">
+                          <layout class="QVBoxLayout" name="layout_SocketedJewels_2">
                            <property name="spacing">
-                            <number>0</number>
+                            <number>2</number>
                            </property>
                            <property name="leftMargin">
                             <number>0</number>
@@ -2179,13 +2203,13 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                                <property name="minimumSize">
                                 <size>
                                  <width>0</width>
-                                 <height>0</height>
+                                 <height>24</height>
                                 </size>
                                </property>
                                <property name="maximumSize">
                                 <size>
                                  <width>85</width>
-                                 <height>16777215</height>
+                                 <height>24</height>
                                 </size>
                                </property>
                                <property name="text">
@@ -2194,6 +2218,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                                <property name="alignment">
                                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                                </property>
+                               <property name="buddy">
+                                <cstring>combo_ItemsManageTree_2</cstring>
+                               </property>
                               </widget>
                              </item>
                              <item>
@@ -2201,13 +2228,13 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                                <property name="minimumSize">
                                 <size>
                                  <width>0</width>
-                                 <height>0</height>
+                                 <height>24</height>
                                 </size>
                                </property>
                                <property name="maximumSize">
                                 <size>
                                  <width>16777215</width>
-                                 <height>16777215</height>
+                                 <height>24</height>
                                 </size>
                                </property>
                               </widget>
@@ -2217,13 +2244,13 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                                <property name="minimumSize">
                                 <size>
                                  <width>85</width>
-                                 <height>0</height>
+                                 <height>24</height>
                                 </size>
                                </property>
                                <property name="maximumSize">
                                 <size>
                                  <width>75</width>
-                                 <height>16777215</height>
+                                 <height>24</height>
                                 </size>
                                </property>
                                <property name="text">
@@ -2239,19 +2266,6 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                              </item>
                             </layout>
                            </item>
-                           <item>
-                            <spacer name="verticalSpacer">
-                             <property name="orientation">
-                              <enum>Qt::Vertical</enum>
-                             </property>
-                             <property name="sizeHint" stdset="0">
-                              <size>
-                               <width>136</width>
-                               <height>100</height>
-                              </size>
-                             </property>
-                            </spacer>
-                           </item>
                           </layout>
                          </widget>
                         </widget>
@@ -2259,30 +2273,70 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                       </layout>
                      </widget>
                     </item>
+                    <item>
+                     <spacer name="verticalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>13</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
                    </layout>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QFrame" name="frame_2">
+                  <widget class="QFrame" name="frame_ItemsList_2">
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_4">
+                   <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0">
                     <property name="leftMargin">
-                     <number>3</number>
+                     <number>0</number>
                     </property>
                     <property name="topMargin">
-                     <number>3</number>
+                     <number>2</number>
                     </property>
                     <property name="rightMargin">
-                     <number>3</number>
+                     <number>0</number>
                     </property>
                     <property name="bottomMargin">
-                     <number>3</number>
+                     <number>0</number>
                     </property>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_10">
+                      <item>
+                       <widget class="QLabel" name="label_ItemsSearch_2">
+                        <property name="layoutDirection">
+                         <enum>Qt::LeftToRight</enum>
+                        </property>
+                        <property name="text">
+                         <string>&amp;Search:</string>
+                        </property>
+                        <property name="buddy">
+                         <cstring>lineedit_ItemsSearch_2</cstring>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineedit_ItemsSearch_2">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
                     <item>
                      <widget class="ListBox" name="list_Items_2">
                       <property name="minimumSize">
@@ -2361,7 +2415,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                   </widget>
                  </item>
                  <item>
-                  <widget class="QFrame" name="frame_3">
+                  <widget class="QFrame" name="frame_TemplateItems_2">
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
@@ -2398,7 +2452,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_9">
                       <item>
-                       <widget class="QLabel" name="label_5">
+                       <widget class="QLabel" name="label_ItemsImportFrom_2">
                         <property name="text">
                          <string>Import from:</string>
                         </property>
@@ -2406,7 +2460,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                         </property>
                         <property name="buddy">
-                         <cstring>combo_ItemsImportFrom</cstring>
+                         <cstring>combo_ItemsImportFrom_2</cstring>
                         </property>
                        </widget>
                       </item>
@@ -2671,10 +2725,10 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                          <enum>Qt::LeftToRight</enum>
                         </property>
                         <property name="text">
-                         <string>Search:</string>
+                         <string>Searc&amp;h:</string>
                         </property>
                         <property name="buddy">
-                         <cstring>lineedit_ItemsImportSearch</cstring>
+                         <cstring>lineedit_ItemsImportSearch_2</cstring>
                         </property>
                        </widget>
                       </item>

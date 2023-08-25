@@ -95,7 +95,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.notes_ui = NotesUI(self.config, self)
         self.skills_ui = SkillsUI(self.config, self.build, self)
         self.tree_ui = TreeUI(self.config, self.build, self.frame_TreeTools, self)
-        self.items_ui = ItemsUI(self.config, self.tree_ui, self)
+        self.items_ui = ItemsUI(self.config, self.tree_ui, self.build, self)
         self.tree_ui.items_ui = self.items_ui
 
         # share the goodness
@@ -532,6 +532,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
             self.update_status_bar(f"Loaded: {self.build.name}", 10)
 
+        # This is needed to make the jewels show. Without it, you need to select or deselect a node.
+        self.gview_Tree.add_tree_images(True)
         self.loading = False
 
     @Slot()

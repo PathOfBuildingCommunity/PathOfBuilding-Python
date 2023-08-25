@@ -30,7 +30,7 @@ import_classes = (
 
 
 class ItemsUI:
-    def __init__(self, _config: Config, tree_ui, _win: Ui_MainWindow) -> None:
+    def __init__(self, _config: Config, tree_ui, build, _win: Ui_MainWindow) -> None:
         """
 
         :param _config:
@@ -40,6 +40,7 @@ class ItemsUI:
         self.pob_config = _config
         # reference to Tree UI to trigger the manage tree combo
         self.tree_ui = tree_ui
+        self.build = build
         self.win = _win
         # dictionary of Items() indexed by id. This is the same order in the xml
         self.itemlist_by_id = {}
@@ -64,7 +65,7 @@ class ItemsUI:
         # list of abyssal ui's for ease of hiding them during itemset changes
         self.abyssal_item_slot_ui_list = []
         self.abyssal_item_slot_ui_list2 = []
-        self.jewel_slot_ui_list = []
+        self.jewel_slot_ui_list2 = []
         # dict of all slots
         self.item_slot_ui_list = {}
         self.item_slot_ui_list2 = {}
@@ -100,7 +101,7 @@ class ItemsUI:
         self.uniques_items = []
         self.load_unique_items()
 
-        # A list of jewels that the tree_view can use for showing the correct image
+        # A dictionary list of jewels that the tree_view can use for showing the correct image
         self.jewels = {}
 
         self.rare_template_items = []
@@ -116,8 +117,9 @@ class ItemsUI:
         self.win.combo_ItemsImportSource.currentTextChanged.connect(self.fill_import_items_list)
         self.win.combo_ItemsImportSearchSource.currentTextChanged.connect(self.change_import_search_widgets)
         self.win.lineedit_ItemsImportSearch.textChanged.connect(self.change_import_search_widgets)
-        self.win.btn_ManageItem.clicked.connect(self.manage_item_button_clicked)
-        self.win.btn_ManageItem_2.clicked.connect(self.manage_item_button_clicked)
+        self.win.lineedit_ItemsSearch_2.textChanged.connect(self.filter_items_list)
+        self.win.btn_ManageItem.clicked.connect(self.manage_itemset_button_clicked)
+        self.win.btn_ManageItemSet_2.clicked.connect(self.manage_itemset_button_clicked)
         self.win.btn_ItemsManageTree.clicked.connect(self.tree_ui.open_manage_trees)
         self.win.btn_ItemsManageTree_2.clicked.connect(self.tree_ui.open_manage_trees)
 
@@ -242,7 +244,7 @@ class ItemsUI:
         else:
             slot_ui = ItemSlotUI(slot_name, insert_after != "")
         # Find which list we are adding these to, Items or Sockets
-        layout = "Socket #" in slot_name and self.win.vlayout_SocketedJewels_2 or self.win.glayout_EquippedItems_2
+        layout = "Socket #" in slot_name and self.win.layout_SocketedJewels_2 or self.win.layout_EquippedItems_2
         if insert_after != "":
             index = layout.indexOf(self.item_slot_ui_list2[insert_after]) + 1
             layout.insertWidget(index, slot_ui)
@@ -250,15 +252,28 @@ class ItemsUI:
             layout.addWidget(slot_ui)
         self.item_slot_ui_list2[slot_name] = slot_ui
         slot_ui.setHidden(hidden)
-        self.win.frame_SocketedJewels_2.setVisible(self.win.vlayout_SocketedJewels_2.count() > 2)
-
+        self.show_hide_jewels_frame()
         return slot_ui
+
+    def show_hide_jewels_frame(self):
+        show = self.win.layout_SocketedJewels_2.count() > 3
+        self.win.frame_SocketedJewels_2.setVisible(show)
+        if show:
+            self.win.vlayout_Items2.setStretch(0, 1)
+            self.win.vlayout_Items2.setStretch(1, 2)
+            self.win.vlayout_Items2.setStretch(2, 2)
+            self.win.vlayout_Items2.setStretch(3, 0)
+        else:
+            self.win.vlayout_Items2.setStretch(0, 0)
+            self.win.vlayout_Items2.setStretch(1, 3)
+            self.win.vlayout_Items2.setStretch(2, 0)
+            self.win.vlayout_Items2.setStretch(3, 2)
 
     def remove_equipped_items_slot_ui(self, slot_name):
         slot_ui = self.item_slot_ui_list.get(slot_name, None)
         if slot_ui is not None:
             vlayout = "Socket #" in slot_name and self.win.vlayout_SocketedJewels or self.win.vlayout_EquippedItems
-            vlayout.takeAt(vlayout.indexOf(slot_ui))
+            vlayout.removeWidget(slot_ui)
             del self.item_slot_ui_list[slot_name]
         self.win.groupbox_SocketedJewels.setVisible(self.win.vlayout_SocketedJewels.count() > 1)
         height = (
@@ -271,10 +286,11 @@ class ItemsUI:
     def remove_equipped_items_slot_ui2(self, slot_name):
         slot_ui = self.item_slot_ui_list.get(slot_name, None)
         if slot_ui is not None:
-            vlayout = "Socket #" in slot_name and self.win.vlayout_SocketedJewels_2 or self.win.glayout_EquippedItems_2
+            vlayout = "Socket #" in slot_name and self.win.layout_SocketedJewels_2 or self.win.layout_EquippedItems_2
             vlayout.takeAt(vlayout.indexOf(slot_ui))
             del self.item_slot_ui_list[slot_name]
-        self.win.frame_SocketedJewels_2.setVisible(self.win.vlayout_SocketedJewels_2.count() > 2)
+        self.show_hide_jewels_frame()
+        # self.win.frame_SocketedJewels_2.setVisible(self.win.layout_SocketedJewels_2.count() > 3)
 
     def hide_equipped_items_slot_ui(self, slot_name, hidden):
         """
@@ -318,11 +334,15 @@ class ItemsUI:
         """
         for slot_name in item.slots:
             match slot_name:
+                case "":
+                    pass
                 case "AbyssJewel":
                     for slot in self.abyssal_item_slot_ui_list:
                         slot.add_item(item)
+                    for slot in self.abyssal_item_slot_ui_list2:
+                        slot.add_item(item)
                 case "Jewel":
-                    for slot in self.jewel_slot_ui_list:
+                    for slot in self.jewel_slot_ui_list2:
                         slot.add_item(item)
                 case _:
                     try:
@@ -331,7 +351,7 @@ class ItemsUI:
                         self.item_slot_ui_list2[slot_name].add_item(item)
                         self.item_slot_ui_list2[slot_name].set_default_item(item)
                     except KeyError:
-                        print("KeyError: slot_name", slot_name)
+                        print(f"KeyError: slot_name: '{slot_name}'")
                         pass
 
     def delete_item_from_item_slot_ui(self, item):
@@ -348,12 +368,26 @@ class ItemsUI:
 
     def fill_jewel_slot_uis(self):
         """fill the left hand jewel combos with items"""
-        self.jewel_slot_ui_list.clear()
-        for idx, _id in enumerate(self.jewels, 1):
-            self.jewel_slot_ui_list.append(self.create_equipped_item_slot_ui2(f"Socket #{idx}"))
-        for idx, _id in enumerate(self.jewels, 1):
-            # print(idx, _id, self.jewels[_id].name, ":", self.itemlist_by_id[_id].name)
-            self.add_item_to_item_slot_ui(self.jewels[_id])
+        # Out with the old (ItemSlotUI's) ...
+        for slot_ui in self.jewel_slot_ui_list2:
+            self.win.layout_SocketedJewels_2.removeWidget(slot_ui)
+            del slot_ui
+        self.jewel_slot_ui_list2.clear()
+
+        # ... in with the new.
+        for idx, node_id in enumerate(self.build.current_spec.sockets, 1):
+            slot_ui: ItemSlotUI = self.create_equipped_item_slot_ui2(f"Socket #{idx}")
+            self.jewel_slot_ui_list2.append(slot_ui)
+
+        for j_id in self.jewels:
+            self.add_item_to_item_slot_ui(self.itemlist_by_id[j_id])
+
+        # set the default item as noted per this spec
+        keys = list(self.jewels.keys())
+        for idx, slot_ui in enumerate(self.jewel_slot_ui_list2):
+            j_id = keys[idx]
+            item = self.itemlist_by_id[j_id]
+            slot_ui.set_default_jewel(j_id, item)
 
     def load_unique_items(self):
         item_leagues = [""]
@@ -397,6 +431,8 @@ class ItemsUI:
         :param _item: Item(). The item to be added to the list
         :return: the passed in Item() class object
         """
+        # print("add_item_to_itemlist_widget", _item.name)
+
         # ensure the item has a valid id. Yes, this process will leave unused numbers as items get deleted.
         if _item.id == 0:
             _id = len(self.itemlist_by_id) + 1
@@ -404,16 +440,17 @@ class ItemsUI:
                 _id += 1
             _item.id = _id
         self.itemlist_by_id[_item.id] = _item
-        lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
-        lwi.setToolTip(_item.tooltip())
-        lwi.setWhatsThis(_item.name)
-        lwi.setData(Qt.UserRole, _item)
-        self.win.list_Items.addItem(lwi)
+        # lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
+        # lwi.setToolTip(_item.tooltip())
+        # lwi.setWhatsThis(_item.name)
+        # lwi.setData(Qt.UserRole, _item)
+        # self.win.list_Items.addItem(lwi)
         lwi = QListWidgetItem(html_colour_text(_item.rarity, _item.name))
         lwi.setToolTip(_item.tooltip())
         lwi.setWhatsThis(_item.name)
         lwi.setData(Qt.UserRole, _item)
         self.win.list_Items_2.addItem(lwi)
+
         return _item
 
     def add_item_to_import_item_list_widget(self, _item, idx):
@@ -507,21 +544,21 @@ class ItemsUI:
                 print("item_list_keypressed: Delete pressed")
 
     @Slot()
-    def item_list_double_clicked(self, item: QListWidgetItem):
+    def item_list_double_clicked(self, lwi: QListWidgetItem):
         """Actions for editing an item"""
         dlg = CraftItemsDlg(self.pob_config, self.base_items, False, self.win)
-        dlg.item = item.data(Qt.UserRole)
+        dlg.item = lwi.data(Qt.UserRole)
         _return = dlg.exec()
         if _return:
             print(f"Saved: {dlg.item.name}")
             self.itemlist_by_id[dlg.original_item.id] = dlg.item
-            item.setData(Qt.UserRole, dlg.item)
-            item.setText(html_colour_text(dlg.item.rarity, dlg.item.name))
-            item.setToolTip(dlg.item.tooltip(True))
+            lwi.setData(Qt.UserRole, dlg.item)
+            lwi.setText(html_colour_text(dlg.item.rarity, dlg.item.name))
+            lwi.setToolTip(dlg.item.tooltip(True))
         else:
             print(f"Discarded: {dlg.item.name}")
             self.itemlist_by_id[dlg.original_item.id] = dlg.original_item
-            item.setData(Qt.UserRole, dlg.original_item)
+            lwi.setData(Qt.UserRole, dlg.original_item)
 
     @Slot()
     def import_items_list_double_clicked(self, item: QListWidgetItem):
@@ -974,16 +1011,6 @@ class ItemsUI:
         self.win.combo_ItemSet.removeItem(index)
         self.win.combo_ItemSet_2.removeItem(index)
 
-    def delete_all_itemsets(self):
-        """Delete ALL itemsets"""
-        # print("delete_all_itemsets")
-        for itemset in list(self.xml_items.findall("ItemSet")):
-            self.xml_items.remove(itemset)
-        self.xml_current_itemset = None
-        self.itemsets.clear()
-        self.win.combo_ItemSet.clear()
-        self.win.combo_ItemSet_2.clear()
-
     def move_itemset(self, start, destination):
         """
         Move a set entry. This is called by the manage tree dialog.
@@ -1037,6 +1064,17 @@ class ItemsUI:
         self.connect_item_triggers()
         return new_set
 
+    def delete_all_itemsets(self):
+        """Delete ALL itemsets"""
+        # print("delete_all_itemsets")
+        for itemset in list(self.xml_items.findall("ItemSet")):
+            self.xml_items.remove(itemset)
+        self.xml_current_itemset = None
+        if self.itemsets:
+            self.itemsets.clear()
+        self.win.combo_ItemSet.clear()
+        self.win.combo_ItemSet_2.clear()
+
     def delete_all_items(self):
         """Delete all items"""
         # print("delete_all_items")
@@ -1045,7 +1083,7 @@ class ItemsUI:
         self.clear_controls(True)
 
     @Slot()
-    def manage_item_button_clicked(self):
+    def manage_itemset_button_clicked(self):
         """
         and we need a dialog ...
         :return: N/A
@@ -1055,6 +1093,31 @@ class ItemsUI:
             self.dlg = ManageItemsDlg(self, self.pob_config, self.win)
             self.dlg.exec()
             self.dlg = None
+
+    @Slot()
+    def filter_items_list(self, search_text):
+        """
+        filter the items list widget
+        :param search_text:
+        :return:
+        """
+        # print(f"filter_items_list: {search_text}")
+
+        self.win.list_Items.clear()
+        self.win.list_Items_2.clear()
+        if search_text == "":
+            # Searching complete, put it all back
+            for _id in self.itemlist_by_id:
+                self.add_item_to_itemlist_widget(self.itemlist_by_id[_id])
+        else:
+            # search item's name, type and mods.
+            for _id in self.itemlist_by_id:
+                item = self.itemlist_by_id[_id]
+                # mod_list is just long string to search in (includes variants)
+                mod_list = " ".join(mod.line.lower() for mod in item.full_implicitMods_list)
+                mod_list += "".join(mod.line.lower() for mod in item.full_explicitMods_list)
+                if search_text in item.name.lower() or search_text in mod_list or search_text in item.type:
+                    self.add_item_to_itemlist_widget(item)
 
     @Slot()
     def fill_import_items_list(self, text):
@@ -1125,8 +1188,8 @@ class ItemsUI:
                 temp_list.append(item)
         items = temp_list
 
-        # search item's name and mods. Only iterate through items once so as to avoid duplicates
-        search_text = self.win.lineedit_ItemsImportSearch.text().lower()
+        # search item's name and mods. Only iterate through items once so as to avoid duplicates.
+        search_text = self.win.lineedit_ItemsImportSearch_2.text().lower()
         if search_text != "":
             temp_list = []
             # mod_list = []

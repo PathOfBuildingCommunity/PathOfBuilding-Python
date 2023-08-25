@@ -30,7 +30,7 @@ class TreeUI:
         self.win.action_ManageTrees.triggered.connect(self.open_manage_trees)
 
         """
-        Add Widgets to the QFrame at the bottom of the treeview, using the fixed version of the PySide6 example
+        Add Widgets to the QFrame at the bottom of the TreeView, using the fixed version of the PySide6 example
          Flow Layout. You can set size hints for these widgets, but not setGeometry().
         """
         self.layout_tree_tools = FlowLayout(frame_tree_tools, 2)
@@ -94,7 +94,7 @@ class TreeUI:
         self.btn_show_power_report.setVisible(False)
         self.btn_show_power_report.setEnabled(True)
         self.layout_tree_tools.addWidget(self.btn_show_power_report)
-        """ End Adding Widgets to the QFrame at the bottom of the treeview. """
+        """ End Adding Widgets to the QFrame at the bottom of the TreeView. """
 
         self.lineEdit_Search.textChanged.connect(self.search_text_changed)
         self.lineEdit_Search.returnPressed.connect(self.search_text_return_pressed)

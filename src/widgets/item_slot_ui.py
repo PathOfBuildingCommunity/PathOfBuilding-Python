@@ -57,10 +57,12 @@ class ItemSlotUI(QWidget):
         self.label.setMinimumSize(QSize(0, 24))
         self.label.setMaximumSize(QSize(16777215, 24))
         self.label.setText(f"{title}:")
-        self.label.setGeometry(1, 5, indent and 105 or 95, 22)
+        self.label.setGeometry(1, 5, indent and 105 or 95, 24)
         self.label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.combo_item_list = QComboBox(self)
-        self.combo_item_list.setGeometry(indent and 110 or 100, 3, indent and 320 or 330, 22)
+        self.combo_item_list.setMinimumSize(QSize(0, 24))
+        self.combo_item_list.setMaximumSize(QSize(16777215, 24))
+        self.combo_item_list.setGeometry(indent and 110 or 100, 3, indent and 320 or 330, 24)
         self.combo_item_list.setDuplicatesEnabled(True)
         self.combo_item_list.addItem("None", 0)
         self.combo_item_list.setCurrentIndex(0)
@@ -149,13 +151,30 @@ class ItemSlotUI(QWidget):
 
     def set_active_item_text(self, _text):
         """Set the combo's active item by text"""
-        set_combo_index_by_text(self.combo_item_list, _text)
+        # set_combo_index_by_text(self.combo_item_list, _text)
+        self.combo_item_list.setCurrentText(_text)
 
-    def set_default_item(self, item=None):
+    def set_default_jewel(self, _id, item=None):
+        """
+        Set a default jewel if there is no slot information to set it (for example json download)
+        For slots with more than one entry (eg: Flasks), try to fill out slots with different items.
+
+        :param _id: the item id of associated with the socket
+        :param item: The jewel's Item()
+        :return: N/A
+        """
+        if _id == item.id:
+            # print(f"set_default_jewel: id:{_id}, item.id; {item.id}, item.name, '{item.name}'")
+            self.set_active_item_text(item.name)
+            # print(f"currentText: '{self.combo_item_list.currentText()}'")
+
+    def set_default_item(self, item=None, _id=0):
         """
         Set a default item if there is no slot information to set it (for example json download)
         For slots with more than one entry (eg: Flasks), try to fill out slots with different items.
 
+        :param item: The jewel's Item()
+        :param _id: int: ID for matching jewel's default item
         :return: N/A
         """
         # print("set_default_item", self.title, self.combo_item_list.currentIndex(), self.combo_item_list.count())
@@ -168,21 +187,26 @@ class ItemSlotUI(QWidget):
                     item.slot = self.title
             else:
                 # Split out the number for those titles that have numbers (don't use slot_name)
-                title_parts = self.title.split(" ")
+                title_parts = self.title[-1].split("#")
+                if len(title_parts) == 0:
+                    title_parts = self.title.split(" ")
                 match self.type:
-                    case "Flask" | "Weapon" | "Ring":
+                    case "Flask" | "Weapon" | "Ring" | "AbyssJewel":
                         idx = int(title_parts[-1])
                         if self.combo_item_list.count() > idx:
                             self.combo_item_list.setCurrentIndex(idx)
                         else:
                             self.clear_default_item()
-                    case "AbyssJewel":
-                        title_parts = self.title[-1].split("#")
-                        idx = int(title_parts[-1])
-                        if self.combo_item_list.count() > idx:
-                            self.combo_item_list.setCurrentIndex(idx)
-                        else:
-                            self.clear_default_item()
+                    # case "AbyssJewel":
+                    #     title_parts = self.title[-1].split("#")
+                    #     idx = int(title_parts[-1])
+                    #     if self.combo_item_list.count() > idx:
+                    #         self.combo_item_list.setCurrentIndex(idx)
+                    #     else:
+                    #         self.clear_default_item()
+                    case "Jewel":
+                        # Different rules for jewels
+                        pass
                     case _:
                         if self.combo_item_list.count() > 1:
                             self.combo_item_list.setCurrentIndex(1)
