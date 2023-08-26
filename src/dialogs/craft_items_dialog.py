@@ -36,7 +36,7 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         self.mods = _mods
 
         # duplicate of the item as passed in
-        self._item = Item(_base_items)
+        self._item = Item(self.config, _base_items)
         # save a copy of the item as passed in for recovering if dlg cancelled or reset is used.
         self.original_item = None
         self.setupUi(self)

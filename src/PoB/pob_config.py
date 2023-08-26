@@ -30,6 +30,7 @@ class Config:
         self.app = _app
         self.screen_rect = self.app.primaryScreen().size()
         self.loader = QUiLoader()
+        self.pob_debug = pob_debug
 
         # this is the xml tree representing the xml
         self.root = None

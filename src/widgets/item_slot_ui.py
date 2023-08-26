@@ -52,6 +52,7 @@ class ItemSlotUI(QWidget):
             self.type = title
         self.title = title
         self.itemPbURL = ""
+        self.jewel_node_id = 0  # Only used by tree jewels
 
         self.label = QLabel(self)
         self.label.setMinimumSize(QSize(0, 24))
@@ -66,7 +67,9 @@ class ItemSlotUI(QWidget):
         self.combo_item_list.setDuplicatesEnabled(True)
         self.combo_item_list.addItem("None", 0)
         self.combo_item_list.setCurrentIndex(0)
-        self.combo_item_list.currentIndexChanged.connect(self.combobox_change_text)
+        self.combo_item_list.currentTextChanged.connect(self.combobox_change_text)
+        self.combo_item_list.setInsertPolicy(QComboBox.InsertAlphabetically)
+
         if self.type == "Flask":
             self.cb_active = QCheckBox(self)
             # Flasks are never indented, so no need to mention it.
@@ -138,7 +141,7 @@ class ItemSlotUI(QWidget):
     @Slot()
     def combobox_change_text(self, _text):
         """Set the comboBox's tooltip"""
-        # print("settootip")
+        # print("combobox_change_text", self.slot_name, _text)
         if self.combo_item_list.currentIndex() == 0:
             self.combo_item_list.setToolTip("")
         else:
@@ -149,24 +152,10 @@ class ItemSlotUI(QWidget):
                 if item.two_hand:
                     self.other_weapon_slot.clear_default_item()
 
-    def set_active_item_text(self, _text):
+    def set_default_by_text(self, _text):
         """Set the combo's active item by text"""
-        # set_combo_index_by_text(self.combo_item_list, _text)
+        # print(f"set_default_by_text, slot_name: '{self.slot_name}', text: '{_text}'")
         self.combo_item_list.setCurrentText(_text)
-
-    def set_default_jewel(self, _id, item=None):
-        """
-        Set a default jewel if there is no slot information to set it (for example json download)
-        For slots with more than one entry (eg: Flasks), try to fill out slots with different items.
-
-        :param _id: the item id of associated with the socket
-        :param item: The jewel's Item()
-        :return: N/A
-        """
-        if _id == item.id:
-            # print(f"set_default_jewel: id:{_id}, item.id; {item.id}, item.name, '{item.name}'")
-            self.set_active_item_text(item.name)
-            # print(f"currentText: '{self.combo_item_list.currentText()}'")
 
     def set_default_item(self, item=None, _id=0):
         """
@@ -177,13 +166,16 @@ class ItemSlotUI(QWidget):
         :param _id: int: ID for matching jewel's default item
         :return: N/A
         """
-        # print("set_default_item", self.title, self.combo_item_list.currentIndex(), self.combo_item_list.count())
+        # name = ""
+        # if item is not None:
+        #     name = item.name
+        # print(f"set_default_item, slot name: '{self.slot_name}', id: {id}, item.name: '{name}'")
 
         if self.combo_item_list.currentIndex() == 0 and self.combo_item_list.count() > 0:
             if item is not None:
                 if self.slot_name in item.slots and item.slot is None:
                     self.clear_item_slot()
-                    self.set_active_item_text(item.name)
+                    self.set_default_by_text(item.name)
                     item.slot = self.title
             else:
                 # Split out the number for those titles that have numbers (don't use slot_name)

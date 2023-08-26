@@ -1021,7 +1021,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <string>&amp;Items</string>
             </attribute>
             <attribute name="whatsThis">
-             <string notr="true">ITEMS</string>
+             <string notr="true">ITEMS1</string>
             </attribute>
             <layout class="QHBoxLayout" name="hLayout_tab_Items">
              <property name="leftMargin">
@@ -1859,6 +1859,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
             <attribute name="title">
              <string>Item&amp;2</string>
             </attribute>
+            <attribute name="whatsThis">
+             <string>ITEMS</string>
+            </attribute>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <property name="spacing">
               <number>0</number>
@@ -1886,7 +1889,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                   <x>0</x>
                   <y>0</y>
                   <width>1146</width>
-                  <height>898</height>
+                  <height>792</height>
                  </rect>
                 </property>
                 <property name="maximumSize">
@@ -2128,9 +2131,9 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                         <height>100</height>
                        </size>
                       </property>
-                      <layout class="QVBoxLayout" name="verticalLayout_6">
+                      <layout class="QVBoxLayout" name="verticalLayout_5">
                        <property name="spacing">
-                        <number>0</number>
+                        <number>2</number>
                        </property>
                        <property name="leftMargin">
                         <number>0</number>
@@ -2145,6 +2148,98 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                         <number>0</number>
                        </property>
                        <item>
+                        <widget class="QLabel" name="label_SocketedJewels">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>24</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>24</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>Socketed Jewels:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_14">
+                         <property name="spacing">
+                          <number>5</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="label_ItemsPassiveTree_2">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>85</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>Passive Tree:</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                           </property>
+                           <property name="buddy">
+                            <cstring>combo_ItemsManageTree_2</cstring>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QComboBox" name="combo_ItemsManageTree_2">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="btn_ItemsManageTree_2">
+                           <property name="minimumSize">
+                            <size>
+                             <width>85</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>75</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>Manag&amp;e ...</string>
+                           </property>
+                           <property name="shortcut">
+                            <string>Ctrl+Alt+X</string>
+                           </property>
+                           <property name="checkable">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
                         <widget class="QScrollArea" name="scrollArea_2">
                          <property name="widgetResizable">
                           <bool>true</bool>
@@ -2155,7 +2250,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                             <x>0</x>
                             <y>0</y>
                             <width>362</width>
-                            <height>273</height>
+                            <height>150</height>
                            </rect>
                           </property>
                           <layout class="QVBoxLayout" name="layout_SocketedJewels_2">
@@ -2174,98 +2269,6 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                            <property name="bottomMargin">
                             <number>0</number>
                            </property>
-                           <item>
-                            <widget class="QLabel" name="label_SocketedJewels">
-                             <property name="minimumSize">
-                              <size>
-                               <width>0</width>
-                               <height>24</height>
-                              </size>
-                             </property>
-                             <property name="maximumSize">
-                              <size>
-                               <width>16777215</width>
-                               <height>24</height>
-                              </size>
-                             </property>
-                             <property name="text">
-                              <string>Socketed Jewels:</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <layout class="QHBoxLayout" name="horizontalLayout_14">
-                             <property name="spacing">
-                              <number>5</number>
-                             </property>
-                             <item>
-                              <widget class="QLabel" name="label_ItemsPassiveTree_2">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>0</width>
-                                 <height>24</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>85</width>
-                                 <height>24</height>
-                                </size>
-                               </property>
-                               <property name="text">
-                                <string>Passive Tree:</string>
-                               </property>
-                               <property name="alignment">
-                                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                               </property>
-                               <property name="buddy">
-                                <cstring>combo_ItemsManageTree_2</cstring>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QComboBox" name="combo_ItemsManageTree_2">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>0</width>
-                                 <height>24</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>16777215</width>
-                                 <height>24</height>
-                                </size>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QPushButton" name="btn_ItemsManageTree_2">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>85</width>
-                                 <height>24</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>75</width>
-                                 <height>24</height>
-                                </size>
-                               </property>
-                               <property name="text">
-                                <string>Manag&amp;e ...</string>
-                               </property>
-                               <property name="shortcut">
-                                <string>Ctrl+Alt+X</string>
-                               </property>
-                               <property name="checkable">
-                                <bool>true</bool>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </item>
                           </layout>
                          </widget>
                         </widget>
@@ -2297,12 +2300,12 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0">
+                   <layout class="QVBoxLayout" name="verticalLayout_4">
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
                     <property name="topMargin">
-                     <number>2</number>
+                     <number>0</number>
                     </property>
                     <property name="rightMargin">
                      <number>0</number>
@@ -2310,6 +2313,48 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                     <property name="bottomMargin">
                      <number>0</number>
                     </property>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_15">
+                      <item>
+                       <widget class="QLabel" name="label_AllItems">
+                        <property name="text">
+                         <string>All Items</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_SortItems">
+                        <property name="text">
+                         <string>Sort</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_DeleteAllItems">
+                        <property name="text">
+                         <string>Delete All</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_DeleteItem">
+                        <property name="enabled">
+                         <bool>false</bool>
+                        </property>
+                        <property name="text">
+                         <string>Delete</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_DeleteUnusedItems">
+                        <property name="text">
+                         <string>Delete Unused</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_10">
                       <item>
@@ -2583,7 +2628,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                       <item>
                        <widget class="QComboBox" name="combo_ItemsImportSort_2">
                         <property name="enabled">
-                         <bool>false</bool>
+                         <bool>true</bool>
                         </property>
                         <property name="minimumSize">
                          <size>

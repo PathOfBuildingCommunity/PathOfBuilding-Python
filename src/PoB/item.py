@@ -5,7 +5,7 @@ A class to encapsulate one item
 import xml.etree.ElementTree as ET
 import re
 
-from PoB.constants import slot_map, slot_names, ColourCodes
+from PoB.constants import pob_debug, slot_map, slot_names, ColourCodes
 from PoB.mod import Mod
 from widgets.ui_utils import _debug, html_colour_text, index_exists, str_to_bool, bool_to_str, print_call_stack
 
@@ -25,7 +25,7 @@ influence_colours = {
 
 
 class Item:
-    def __init__(self, _base_items, _slot=None) -> None:
+    def __init__(self, _config, _base_items, _slot=None) -> None:
         """
         Initialise defaults
         :param _base_items: dict: the loaded base_items.json
@@ -34,6 +34,7 @@ class Item:
         self._slot = _slot
         # the dict from json of the all items
         self.base_items = _base_items
+        self.config = _config
         # This item's entry from base_items
         self.base_item = None
         self._base_name = ""
@@ -255,6 +256,8 @@ class Item:
         if xml.get("ver", "1") == "2":
             return self.load_from_xml_v2(xml)
         desc = xml.text
+        self.id = xml.get("id", 0)
+
         # split lines into a list, removing any blank lines, leading & trailing spaces.
         #   stolen from https://stackoverflow.com/questions/7630273/convert-multiline-into-list
         lines = [y for y in (x.strip(" \t\r\n") for x in desc.splitlines()) if y]
@@ -505,6 +508,7 @@ class Item:
                 #     return _m.group(2)
             return _entry
 
+        self.id = xml.get("id", 0)
         self.title = xml.get("title", "")
         self.rarity = xml.get("rarity", default_rarity)
 
@@ -811,7 +815,8 @@ class Item:
             f'<table width="425">'
             f"<tr><th>"
         )
-        tip += html_colour_text(rarity_colour, self.name)
+        item_id = self.config.pob_debug and f"#{self.id}" or ""
+        tip += html_colour_text(rarity_colour, f"{self.name}   {item_id}")
         for influence in self.influences:
             tip += f"<br/>{html_colour_text(influence_colours[influence], influence)}"
         tip += "</th></tr>"

@@ -226,7 +226,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
+        # these two Manage Tree combo's are linked
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
+        self.combo_ItemsManageTree_2.currentTextChanged.connect(self.combo_item_manage_tree_changed)
         self.connect_widget_triggers()
 
         # Start the statusbar self updating
@@ -239,6 +241,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Remove splash screen if we are an executable
         if "NUITKA_ONEFILE_PARENT" in os.environ:
+            self.config.pob_debug = False
             # Use this code to signal the splash screen removal.
             splash_filenames = glob.glob(f"{tempfile.gettempdir()}/onefile_*_splash_feedback.tmp")
             if splash_filenames:
@@ -606,17 +609,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
 
     @Slot()
-    def change_tree(self, tree_id):
+    def combo_item_manage_tree_changed(self, tree_label):
         """
-        Actions required when the combo_manage_tree widget changes.
+        This is the Manage Tree combo on the Items Tab. Tell the Manage Tree combo on the Tree tab to change trees.
+        :param tree_label: the ame of the item just selected
+        :return:
+        """
+        # "" will occur during a combobox clear
+        if not tree_label:
+            return
+        # print("combo_item_manage_tree_changed", tree_label)
+        self.tree_ui.combo_manage_tree.setCurrentText(tree_label)
 
-        :param tree_id: Current text string. We don't use it.
+    @Slot()
+    def change_tree(self, tree_label):
+        """
+        Actions required when either combo_manage_tree widget changes (Tree_UI or Items_UI).
+
+        :param tree_label: the name of the item just selected
                 "" will occur during a combobox clear
         :return: N/A
         """
-        # "" will occur during a combobox clear
-        if not tree_id:
+        # print("change_tree", tree_label)
+        # "" will occur during a combobox clear.
+        if not tree_label:
             return
+
+        self.combo_ItemsManageTree_2.setCurrentText(tree_label)
 
         full_clear = self.build.change_tree(self.tree_ui.combo_manage_tree.currentData())
 
@@ -644,6 +663,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.refresh_tree = True
         self.gview_Tree.add_tree_images(full_clear)
+        self.items_ui.fill_jewel_slot_uis()
 
     @Slot()
     def class_changed(self, selected_class):
