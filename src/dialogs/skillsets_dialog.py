@@ -7,19 +7,26 @@ Open a dialog for importing a character.
 from PySide6.QtWidgets import QDialog, QListWidgetItem
 from PySide6.QtCore import Qt, Slot, QTimer
 
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from dialogs.popup_dialogs import LineEditPopup, yes_no_dialog
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgManageSkills import Ui_ManageSkillSet
 
 
 class ManageSkillsDlg(Ui_ManageSkillSet, QDialog):
     """ManageItems dialog"""
 
-    def __init__(self, _skill_ui, _config: Config, parent=None):
+    def __init__(self, _skill_ui, _settings: Settings, _win: Ui_MainWindow = None):
+        """
+        Export dialog init
+        :param _skill_ui: A pointer to Skills_UI()
+        :param _settings: A pointer to the settings
+        :param parent: A pointer to MainWindowUI()
+        """
         super().__init__(parent)
         self.win = parent
-        self.config = _config
+        self.settings = _settings
         self.skill_ui = _skill_ui
         self.set_to_be_moved = None
         self.set_being_edited = None
@@ -99,7 +106,7 @@ class ManageSkillsDlg(Ui_ManageSkillSet, QDialog):
     @Slot()
     def new_set(self):
         # print("new_set")
-        dlg = LineEditPopup(self.config.app.tr, "New Skill Set Name")
+        dlg = LineEditPopup(self.settings.app.tr, "New Skill Set Name", self.win)
         dlg.placeholder_text = "New Skill Set, Rename Me"
         _return = dlg.exec()
         new_name = dlg.lineedit.text()
@@ -113,7 +120,7 @@ class ManageSkillsDlg(Ui_ManageSkillSet, QDialog):
     @Slot()
     def duplicate_set(self):
         # print("duplicate_set")
-        dlg = LineEditPopup(self.config.app.tr, "New Skill Set Name")
+        dlg = LineEditPopup(self.settings.app.tr, "New Skill Set Name", self.win)
         dlg.placeholder_text = "New Skill Set, Rename Me"
         _return = dlg.exec()
         new_name = dlg.lineedit.text()

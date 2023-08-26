@@ -2,15 +2,22 @@
 This Class manages all the elements and owns some elements of the "CONFIG" tab
 """
 
-from PoB.pob_config import Config
+from PoB.settings import Settings
+from PoB.build import Build
 from widgets.ui_utils import set_combo_index_by_data
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class ConfigUI:
-    def __init__(self, _config: Config, _build, _win: Ui_MainWindow) -> None:
-        self.pob_config = _config
+    def __init__(self, _settings: Settings, _build: Build, _win: Ui_MainWindow) -> None:
+        """
+        Config UI
+        :param _build: A pointer to the currently loaded build
+        :param _settings: A pointer to the settings
+        :param _win: A pointer to MainWindowUI
+        """
+        self.settings = _settings
         self.win = _win
         self.build = _build
 
@@ -39,5 +46,5 @@ class ConfigUI:
 #     print(config_ui)
 
 
-if __name__ == "__main__":
-    test()
+# if __name__ == "__main__":
+#     test()

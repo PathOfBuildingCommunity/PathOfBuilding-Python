@@ -14,12 +14,13 @@ from PoB.constants import (
     _VERSION,
     _VERSION_str,
 )
+from PoB.settings import Settings
 from widgets.ui_utils import print_call_stack, print_a_xml_element
 from dialogs.popup_dialogs import ok_dialog
 
 
 class Spec:
-    def __init__(self, build, _spec=None, version=_VERSION_str) -> None:
+    def __init__(self, build, _spec=None, version=_VERSION_str) -> None:  # Circular reference on Build()
         """
         Represents one Spec in the XML. Most simple settings are properties.
 
@@ -27,7 +28,7 @@ class Spec:
         """
         self.internal_version = 6
         self.build = build
-        self.tr = self.build.pob_config.app.tr
+        self.tr = self.build.settings.app.tr
 
         self.def_spec = ET.fromstring(default_spec)
         if _spec is None:

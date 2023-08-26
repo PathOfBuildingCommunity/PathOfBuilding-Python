@@ -7,7 +7,7 @@ As well as the information from the json file, it will have image data added.
 It is referenced by the Tree class
 """
 from PoB.constants import _VERSION
-from PoB.pob_config import str_to_bool
+from PoB.settings import str_to_bool
 
 """
 Example node data

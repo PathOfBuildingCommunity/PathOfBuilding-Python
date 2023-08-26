@@ -7,15 +7,15 @@ This class represents a graphical instance of one visual element of a Passive Tr
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QGraphicsPixmapItem
 
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from widgets.ui_utils import html_colour_text
 
 
 class TreeGraphicsItem(QGraphicsPixmapItem):
-    def __init__(self, _config: Config, _image: str, node, z_value=0, selectable=False) -> None:
+    def __init__(self, _settings: Settings, _image: str, node, z_value=0, selectable=False) -> None:
         super(TreeGraphicsItem, self).__init__()
-        self.config = _config
-        self.win = self.config.win
+        self.settings = _settings
+        self.win = self.settings.win
         self.name = ""
         self.filename = ""
         self.data = ""

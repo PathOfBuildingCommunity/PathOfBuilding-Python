@@ -23,7 +23,7 @@ from widgets.ui_utils import str_to_bool, print_a_xml_element
 from dialogs.settings_dialog import SettingsDlg
 
 
-class Config:
+class Settings:
     def __init__(self, _win, _app) -> None:
         # To reduce circular references, have the app and main window references here
         self.win = _win
@@ -410,7 +410,7 @@ class Config:
         """
         # ToDo: show thousands separator for player stats
 
-        dlg = SettingsDlg(self)
+        dlg = SettingsDlg(self, self.win)
         # 0 is discard, 1 is save
         _return = dlg.exec()
         if _return:

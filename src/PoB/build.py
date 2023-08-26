@@ -27,7 +27,7 @@ from PoB.constants import (
     program_title,
     tree_versions,
 )
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from PoB.tree import Tree
 from PoB.spec import Spec
 from PoB.pob_file import read_xml, write_xml
@@ -45,9 +45,10 @@ from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class Build:
-    def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
-        self.pob_config = _config
+    def __init__(self, _settings: Settings, _win: Ui_MainWindow) -> None:
+        self.settings = _settings
         self.win = _win
+        self.tr = self.settings.app.tr
         self._name = "Default"
         # self.player = player.Player()
         self.filename = ""
@@ -55,7 +56,7 @@ class Build:
         self.need_saving = True
         # self.current_tab = "TREE"
         # An dict of tree versions used in the build. Load the default tree first.
-        self.trees = {_VERSION_str: Tree(self.pob_config, _VERSION_str)}
+        self.trees = {_VERSION_str: Tree(self.settings, _VERSION_str)}
         self.current_tree = self.trees.get(_VERSION_str)
         # list of xml specs in this build
         self.specs = []
@@ -105,7 +106,7 @@ class Build:
     @name.setter
     def name(self, new_name):
         self._name = new_name
-        self.pob_config.win.setWindowTitle(f"{program_title} - {new_name}")
+        self.win.setWindowTitle(f"{program_title} - {new_name}")
 
     @property
     def current_class(self):
@@ -288,7 +289,6 @@ class Build:
         :param _xml: xml tree object from loading the source XML or the default one
         :return: N/A
         """
-        tr = self.pob_config.app.tr
 
         self.name = "Default"
         self.xml_build = _xml
@@ -323,15 +323,15 @@ class Build:
                 invalid_spec_versions.add(v)
                 xml_spec.set("treeVersion", _VERSION_str)
                 title = xml_spec.get("title", "Default")
-                xml_spec.set("title", f"{title} ({tr('was')} v{v})")
+                xml_spec.set("title", f"{title} ({self.tr('was')} v{v})")
         if invalid_spec_versions:
             critical_dialog(
-                self.pob_config.win,
-                f"{tr('Load build')}: v{self.version}",
-                f"{tr('The build contains the following unsupported Tree versions')}:\n"
+                self.win,
+                f"{self.tr('Load build')}: v{self.version}",
+                f"{self.tr('The build contains the following unsupported Tree versions')}:\n"
                 f"{str(invalid_spec_versions)[1:-1]}\n\n"
-                f"{tr('These will be converted to ')}{_VERSION}\n",
-                tr("Close"),
+                f"{self.tr('These will be converted to ')}{_VERSION}\n",
+                self.tr("Close"),
             )
 
         # Do not use self.new_spec() as this will duplicate the xml information
@@ -450,7 +450,7 @@ class Build:
         different_version = self.current_spec.treeVersion != new_spec.treeVersion
         # Check if this version is loaded
         if self.trees.get(new_spec.treeVersion, None) is None:
-            self.trees[new_spec.treeVersion] = Tree(self.pob_config, new_spec.treeVersion)
+            self.trees[new_spec.treeVersion] = Tree(self.settings, new_spec.treeVersion)
         self.current_tree = self.trees[new_spec.treeVersion]
 
         self.activeSpec = tree_id
@@ -586,12 +586,11 @@ class Build:
         """
         _build_pob = read_xml(filename)
         if _build_pob is None:
-            tr = self.pob_config.app.tr
             critical_dialog(
-                self.pob_config.win,
-                tr("Load Build"),
-                f"{tr('An error occurred to trying load')}:\n{filename}",
-                tr("Close"),
+                self.win,
+                self.tr("Load Build"),
+                f"{self.tr('An error occurred to trying load')}:\n{filename}",
+                self.tr("Close"),
             )
         else:
             # How do we want to deal with corrupt builds

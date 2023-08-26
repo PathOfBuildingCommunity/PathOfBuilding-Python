@@ -8,17 +8,23 @@ from PySide6.QtWidgets import QDialog, QPushButton, QFileDialog, QDialogButtonBo
 
 from widgets.ui_utils import set_combo_index_by_text
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgSettings import Ui_Settings
 
 
 class SettingsDlg(Ui_Settings, QDialog):
     """Settings dialog"""
 
-    def __init__(self, _config, parent=None):
-        super().__init__(parent)
+    def __init__(self, _settings, _win: Ui_MainWindow = None):
+        """
+        Settings dialog init
+        :param _settings: A pointer to the settings
+        :param _win: A pointer to MainWindowUI
+        """
+        super().__init__(_win)
         # Run the .setupUi() method to show the GUI
-        self.config = _config
-        self.tr = self.config.app.tr
+        self.settings = _settings
+        self.tr = self.settings.app.tr
 
         self.setupUi(self)
 
@@ -83,22 +89,21 @@ class SettingsDlg(Ui_Settings, QDialog):
         :return:
         """
         if default:
-            self.config.reset()
-        # print_a_xml_element(_config)
-        self.combo_Protocol.setCurrentIndex(self.config.connection_protocol)
-        self.lineedit_BuildPath.setText(str(self.config.build_path))
-        self.combo_NP_Colours.setCurrentIndex(self.config.node_power_theme)
-        self.check_Beta.setChecked(self.config.beta_mode)
-        self.check_ShowBuildName.setChecked(self.config.show_titlebar_name)
-        self.check_ShowThousandsSeparators.setChecked(self.config.show_thousands_separators)
-        self.lineedit_ThousandsSeparator.setText(self.config.thousands_separator)
-        self.lineedit_DecimalSeparator.setText(self.config.decimal_separator)
-        self.spin_GemQuality.setValue(self.config.default_gem_quality)
-        self.spin_Level.setValue(self.config.default_char_level)
-        self.slider_AffixQuality.setValue(int(self.config.default_item_affix_quality * 100))
-        self.check_BuildWarnings.setChecked(self.config.show_warnings)
-        self.check_Tooltips.setChecked(self.config.slot_only_tooltips)
-        m = re.search(r"^(\w+)://(.*)$", self.config.proxy_url)
+            self.settings.reset()
+        self.combo_Protocol.setCurrentIndex(self.settings.connection_protocol)
+        self.lineedit_BuildPath.setText(str(self.settings.build_path))
+        self.combo_NP_Colours.setCurrentIndex(self.settings.node_power_theme)
+        self.check_Beta.setChecked(self.settings.beta_mode)
+        self.check_ShowBuildName.setChecked(self.settings.show_titlebar_name)
+        self.check_ShowThousandsSeparators.setChecked(self.settings.show_thousands_separators)
+        self.lineedit_ThousandsSeparator.setText(self.settings.thousands_separator)
+        self.lineedit_DecimalSeparator.setText(self.settings.decimal_separator)
+        self.spin_GemQuality.setValue(self.settings.default_gem_quality)
+        self.spin_Level.setValue(self.settings.default_char_level)
+        self.slider_AffixQuality.setValue(int(self.settings.default_item_affix_quality * 100))
+        self.check_BuildWarnings.setChecked(self.settings.show_warnings)
+        self.check_Tooltips.setChecked(self.settings.slot_only_tooltips)
+        m = re.search(r"^(\w+)://(.*)$", self.settings.proxy_url)
         if m:
             set_combo_index_by_text(self.combo_Proxy, m.group(1).upper())
             self.lineedit_Proxy.setText(m.group(2))

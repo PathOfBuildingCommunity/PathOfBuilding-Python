@@ -8,7 +8,7 @@ from PySide6.QtCore import Slot, Qt
 from PySide6.QtGui import QBrush
 
 from PoB.constants import ColourCodes
-from PoB.pob_config import Config
+from PoB.settings import Settings
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -27,8 +27,8 @@ colorEscape = [
 
 
 class NotesUI:
-    def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
-        self.pob_config = _config
+    def __init__(self, _settings: Settings, _win: Ui_MainWindow) -> None:
+        self.settings = _settings
         self.win = _win
         self.modified = False
 

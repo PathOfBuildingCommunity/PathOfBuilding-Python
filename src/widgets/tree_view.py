@@ -13,8 +13,9 @@ from PySide6.QtCore import QLineF, QRectF, Qt
 from PySide6.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
 from PySide6.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from PoB.constants import ColourCodes, class_backgrounds, Layers, PlayerClasses
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from PoB.build import Build
 from dialogs.popup_dialogs import MasteryPopup
 from widgets.tree_graphics_item import TreeGraphicsItem
@@ -22,17 +23,16 @@ from widgets.ui_utils import _debug, print_call_stack
 
 
 class TreeView(QGraphicsView):
-    def __init__(self, _win, _config: Config, _build: Build) -> None:
+    def __init__(self, _settings: Settings, _build: Build, _win: Ui_MainWindow) -> None:
         """
         Initialize Treeview
-
-        :param _win: pointer to MainWindow()
-        :param _config: pointer to Config()
+        :param _settings: pointer to Settings()
         :param _build: pointer to build()
+        :param _win: A pointer to MainWindowUI
         """
         super(TreeView, self).__init__()
         self.win = _win
-        self.config = _config
+        self.settings = _settings
         self.build = _build
 
         self.search_rings = []
@@ -198,10 +198,11 @@ class TreeView(QGraphicsView):
         :return: bool: True if an effect was chosen
         """
         dlg = MasteryPopup(
-            self.config.app.tr,
+            self.settings.app.tr,
             node,
             self.build.current_spec,
             self.build.current_tree.mastery_effects_nodes[node.name],
+            self.win,
         )
         # 0 is discard, 1 is save
         _return = dlg.exec()
@@ -223,7 +224,7 @@ class TreeView(QGraphicsView):
         if pixmap is None or pixmap == "":
             print(f"tree_view.add_picture called with wrong information. pixmap: {pixmap},  x:{x}, y: {y}")
             return None
-        image = TreeGraphicsItem(self.config, pixmap, None, z, False)
+        image = TreeGraphicsItem(self.settings, pixmap, None, z, False)
         image.setPos(x, y)
         self._scene.addItem(image)
         return image

@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 import re
 
 from PoB.constants import pob_debug, slot_map, slot_names, ColourCodes
+from PoB.settings import Settings
 from PoB.mod import Mod
 from widgets.ui_utils import _debug, html_colour_text, index_exists, str_to_bool, bool_to_str, print_call_stack
 
@@ -25,16 +26,17 @@ influence_colours = {
 
 
 class Item:
-    def __init__(self, _config, _base_items, _slot=None) -> None:
+    def __init__(self, _settings: Settings, _base_items, _slot=None) -> None:
         """
         Initialise defaults
+        :param _settings: A pointer to the settings
         :param _base_items: dict: the loaded base_items.json
         :param _slot: where this item is worn/carried.
         """
         self._slot = _slot
         # the dict from json of the all items
         self.base_items = _base_items
-        self.config = _config
+        self.settings = _settings
         # This item's entry from base_items
         self.base_item = None
         self._base_name = ""
@@ -815,7 +817,7 @@ class Item:
             f'<table width="425">'
             f"<tr><th>"
         )
-        item_id = self.config.pob_debug and f"#{self.id}" or ""
+        item_id = self.settings.pob_debug and f"#{self.id}" or ""
         tip += html_colour_text(rarity_colour, f"{self.name}   {item_id}")
         for influence in self.influences:
             tip += f"<br/>{html_colour_text(influence_colours[influence], influence)}"

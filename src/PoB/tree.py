@@ -24,7 +24,7 @@ from PySide6.QtGui import QPixmap, QImage, QPainter, QPen, QColor
 from PySide6.QtWidgets import QGraphicsLineItem
 
 from dialogs.popup_dialogs import critical_dialog
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from PoB.constants import (
     ColourCodes,
     Layers,
@@ -120,9 +120,9 @@ def calc_orbit_angles(nodes_in_orbit):
 
 
 class Tree:
-    def __init__(self, _config: Config, _version: str = _VERSION_str) -> None:
+    def __init__(self, _settings: Settings, _version: str = _VERSION_str) -> None:
         # declare variables that are set in functions
-        self.config = _config
+        self.settings = _settings
         self.version = _version
 
         self.name = "Default"
@@ -190,9 +190,9 @@ class Tree:
     @version.setter
     def version(self, new_vers):
         self._version = new_vers
-        self.tree_version_path = Path(self.config.data_dir, re.sub(r"\.", "_", str(new_vers)))
+        self.tree_version_path = Path(self.settings.data_dir, re.sub(r"\.", "_", str(new_vers)))
         self.json_file_path = Path(self.tree_version_path, "tree.json")
-        self.legion_path = Path(self.config.data_dir, "legion")
+        self.legion_path = Path(self.settings.data_dir, "legion")
 
     def add_picture(self, name, x, y, ox, oy, _layer=Layers.inactive, node=None):
         """
@@ -206,7 +206,7 @@ class Tree:
         :param node: Node: The associated node, so we can load up TreeGraphicsItem variables
         :return: ptr to the created TreeGraphicsItem
         """
-        image = TreeGraphicsItem(self.config, name, node, _layer, True)
+        image = TreeGraphicsItem(self.settings, name, node, _layer, True)
         image.setPos(x, y)
         image.setOffset(ox, oy)
         if _layer not in [Layers.active, Layers.active_effect]:
@@ -245,9 +245,9 @@ class Tree:
         except TypeError:
             json_dict = None
         if json_dict is None:
-            tr = self.config.app.tr
+            tr = self.settings.app.tr
             critical_dialog(
-                self.config.win,
+                self.settings.win,
                 f"{tr('Load Tree')}: v{self.version}",
                 f"{tr('An error occurred to trying load')}:\n{self.json_file_path}",
                 tr("Close"),
@@ -315,10 +315,10 @@ class Tree:
         # legion_sprites = read_json(Path(self.legion_path, "tree-legion.json"))
         # if not legion_sprites:
         #     critical_dialog(
-        #         self.config.win,
-        #         "f{self.config.app.tr('Load File')}",
-        #         "f{self.config.app.tr('An error occurred to trying load')}:\n{self.legion_file_path}",
-        #         self.config.app.tr("Close"),
+        #         self.settings.win,
+        #         "f{self.settings.app.tr('Load File')}",
+        #         "f{self.settings.app.tr('An error occurred to trying load')}:\n{self.legion_file_path}",
+        #         self.settings.app.tr("Close"),
         #     )
         # else:
         #     # Process a sprite map list for loading the image (downloading it too later)
@@ -655,7 +655,7 @@ class Tree:
             :param _name: the jewel sprite name
             :return: a reference to the tree graphic image added
             """
-            sprite = TreeGraphicsItem(self.config, self.spriteMap[_name]["jewel"]["handle"], None, Layers.active, True)
+            sprite = TreeGraphicsItem(self.settings, self.spriteMap[_name]["jewel"]["handle"], None, Layers.active, True)
             sprite.name = _name
             return sprite
 
@@ -842,10 +842,10 @@ class Tree:
     # render_group_background
 
 
-def test(config: Config) -> None:
+def test(config: Settings) -> None:
     tree = Tree(config)
     print(tree.version)
 
 
 if __name__ == "__test__":
-    test(Config(None, None))
+    test(Settings(None, None))

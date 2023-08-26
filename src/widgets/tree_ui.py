@@ -8,7 +8,7 @@ from PySide6.QtCore import Qt, Slot, QSize
 from PySide6.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit, QPushButton, QDialog
 
 from PoB.constants import tree_versions, PlayerClasses, _VERSION_str
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from dialogs.manage_tree_dialog import ManageTreeDlg
 from dialogs.popup_dialogs import yes_no_dialog, ImportTreePopup, ExportTreePopup
 from widgets.flow_layout import FlowLayout
@@ -17,9 +17,16 @@ from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class TreeUI:
-    def __init__(self, _config: Config, _build, frame_tree_tools, _win: Ui_MainWindow) -> None:
-        self.config = _config
-        self.tr = self.config.app.tr
+    def __init__(self, _settings: Settings, _build, frame_tree_tools, _win: Ui_MainWindow) -> None:
+        """
+        Items UI
+        :param _settings: pointer to Settings()
+        :param _build: A pointer to the currently loaded build
+        :param frame_tree_tools: QFrame: Frame at the bottom ofthe UI where extra widgets are loaded.
+        :param _win: pointer to MainWindow()
+        """
+        self.settings = _settings
+        self.tr = self.settings.app.tr
         self.win = _win
         # reference to Items UI to fill it's tree combo
         self.items_ui = None
@@ -215,7 +222,7 @@ class TreeUI:
 
         :return: N/A
         """
-        dlg = ImportTreePopup(self.config.app.tr)
+        dlg = ImportTreePopup(self.settings.app.tr, self.win)
         _return = dlg.exec()
         if _return:
             self.win.import_tree(dlg.lineedit.text())
@@ -224,7 +231,7 @@ class TreeUI:
         """Export the current nodes as a URL"""
         url = self.build.current_spec.export_nodes_to_url()
         self.build.current_spec.URL = url
-        dlg = ExportTreePopup(self.config.app.tr, url, self.win)
+        dlg = ExportTreePopup(self.settings.app.tr, url, self.win)
         # we don't care about how the user exits
         dlg.exec()
 

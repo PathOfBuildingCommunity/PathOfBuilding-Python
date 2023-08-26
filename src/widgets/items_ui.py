@@ -12,7 +12,8 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QListWidgetItem
 
 from ui.PoB_Main_Window import Ui_MainWindow
-from PoB.pob_config import Config
+from PoB.settings import Settings
+from PoB.build import Build
 from PoB.pob_file import read_xml, write_xml, read_json
 from PoB.constants import slot_map, ColourCodes, slot_names
 from PoB.item import Item
@@ -30,17 +31,18 @@ import_classes = (
 
 
 class ItemsUI:
-    def __init__(self, _config: Config, tree_ui, build, _win: Ui_MainWindow) -> None:
+    def __init__(self, _settings: Settings, _build: Build, tree_ui, _win: Ui_MainWindow) -> None:
         """
-
-        :param _config:
+        Items UI
+        :param _settings: pointer to Settings()
+        :param _build: A pointer to the currently loaded build
         :param tree_ui: TreeUI: Reference to win.tree_ui to access ... what exactly
-        :param _win:
+        :param _win: pointer to MainWindow()
         """
-        self.config = _config
+        self.settings = _settings
         # reference to Tree UI to trigger the manage tree combo
         self.tree_ui = tree_ui
-        self.build = build
+        self.build = _build
         self.win = _win
         # dictionary of Items() indexed by id. This is the same order in the xml
         self.itemlist_by_id = {}
@@ -51,8 +53,8 @@ class ItemsUI:
         self.internal_clipboard = None
         self.dlg = None  # Is a dialog active
 
-        self.base_items = read_json(Path(self.config.data_dir, "base_items.json"))
-        self.mods = read_json(Path(self.config.data_dir, "mods.json"))
+        self.base_items = read_json(Path(self.settings.data_dir, "base_items.json"))
+        self.mods = read_json(Path(self.settings.data_dir, "mods.json"))
         # print(self.mods.keys())
 
         # set the key_event - handler - self.item_list_keypressed
@@ -411,10 +413,10 @@ class ItemsUI:
 
     def load_unique_items(self):
         item_leagues = set()
-        u_xml = read_xml(Path(self.config.data_dir, "uniques.xml"))
+        u_xml = read_xml(Path(self.settings.data_dir, "uniques.xml"))
         for xml_item_type in list(u_xml.getroot()):
             for xml_item in xml_item_type.findall("Item"):
-                new_item = Item(self.config, self.base_items)
+                new_item = Item(self.settings, self.base_items)
                 new_item.load_from_xml_v2(xml_item, "UNIQUE")
                 new_item.quality = 20
                 self.uniques_items.append(new_item)
@@ -450,9 +452,9 @@ class ItemsUI:
         )
 
     def load_rare_template_items(self):
-        t_xml = read_xml(Path(self.config.data_dir, "rare_templates.xml"))
+        t_xml = read_xml(Path(self.settings.data_dir, "rare_templates.xml"))
         for xml_item in t_xml.getroot().findall("Item"):
-            new_item = Item(self.config, self.base_items)
+            new_item = Item(self.settings, self.base_items)
             new_item.load_from_xml_v2(xml_item, "RARE")
             self.rare_template_items.append(new_item)
 
@@ -584,7 +586,7 @@ class ItemsUI:
     def item_list_double_clicked(self, lwi: QListWidgetItem):
         """Actions for editing an item"""
         self.win.btn_DeleteItem.setEnabled(True)
-        dlg = CraftItemsDlg(self.config, self.base_items, False, self.win)
+        dlg = CraftItemsDlg(self.settings, self.base_items, False, self.win)
         dlg.item = lwi.data(Qt.UserRole)
         _return = dlg.exec()
         if _return:
@@ -601,7 +603,7 @@ class ItemsUI:
     @Slot()
     def import_items_list_double_clicked(self, item: QListWidgetItem):
         """Actions for editing an item"""
-        dlg = CraftItemsDlg(self.config, self.base_items, True, self.win)
+        dlg = CraftItemsDlg(self.settings, self.base_items, True, self.win)
         dlg.item = self.import_items_list[item.whatsThis()]
         _return = dlg.exec()
         if _return:
@@ -760,8 +762,8 @@ class ItemsUI:
             new_item += f"Corrupted\n"
 
         # print("new_item", new_item)
-        dlg = CraftItemsDlg(self.config, self.base_items, True, self.win)
-        item = Item(self.config, self.base_items)
+        dlg = CraftItemsDlg(self.settings, self.base_items, True, self.win)
+        item = Item(self.settings, self.base_items)
         item.load_from_xml(ET.fromstring(f"<Item>{new_item}</Item>"))
         # dlg.item is a property that triggers internal procedures. Don't set it to an empty Item and expect it work.
         dlg.item = item
@@ -791,7 +793,7 @@ class ItemsUI:
             self.xml_items.remove(_item)
         # add the items to the list box
         for _item in self.xml_items.findall("Item"):
-            new_item = Item(self.config, self.base_items)
+            new_item = Item(self.settings, self.base_items)
             # new_item.curr_variant = _item.get("variant", "")
             new_item.load_from_xml(_item)
             new_item.id = int(_item.get("id", 0))
@@ -874,7 +876,7 @@ class ItemsUI:
         # add the items to the list box
         for idx, text_item in enumerate(json_items["buildItems"]):
             # print(text_item)
-            new_item = Item(self.config, self.base_items)
+            new_item = Item(self.settings, self.base_items)
             new_item.import_from_poep_json(text_item)
             new_item.id = id_base + idx
             self.add_item_to_itemlist_widget(new_item)
@@ -1129,7 +1131,7 @@ class ItemsUI:
         """
         # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another instance.
         if self.dlg is None:
-            self.dlg = ManageItemsDlg(self, self.config, self.win)
+            self.dlg = ManageItemsDlg(self.settings, self, self.win)
             self.dlg.exec()
             self.dlg = None
 

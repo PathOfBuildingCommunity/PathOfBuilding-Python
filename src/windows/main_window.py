@@ -31,7 +31,7 @@ from PoB.constants import (
 )
 
 from PoB.build import Build
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from PoB.pob_file import get_file_info, read_json
 from dialogs.browse_file_dialog import BrowseFileDlg
 from dialogs.export_dialog import ExportDlg
@@ -76,8 +76,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loading = False
 
         self.max_points = 123
-        self.config = Config(self, _app)
-        self.resize(self.config.size)
+        self.settings = Settings(self, _app)
+        self.resize(self.settings.size)
 
         self.setupUi(self)
 
@@ -85,17 +85,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle(program_title)  # Do not translate
 
         # Start with an empty build
-        self.build = Build(self.config, self)
-        self.current_filename = self.config.build_path
+        self.build = Build(self.settings, self)
+        self.current_filename = self.settings.build_path
 
         # Setup UI Classes()
-        self.stats = PlayerStats(self.config, self)
-        self.calcs_ui = CalcsUI(self.config, self)
-        self.config_ui = ConfigUI(self.config, self.build, self)
-        self.notes_ui = NotesUI(self.config, self)
-        self.skills_ui = SkillsUI(self.config, self.build, self)
-        self.tree_ui = TreeUI(self.config, self.build, self.frame_TreeTools, self)
-        self.items_ui = ItemsUI(self.config, self.tree_ui, self.build, self)
+        self.stats = PlayerStats(self.settings, self)
+        self.calcs_ui = CalcsUI(self.settings, self.build, self)
+        self.config_ui = ConfigUI(self.settings, self.build, self)
+        self.notes_ui = NotesUI(self.settings, self)
+        self.skills_ui = SkillsUI(self.settings, self.build, self)
+        self.tree_ui = TreeUI(self.settings, self.build, self.frame_TreeTools, self)
+        self.items_ui = ItemsUI(self.settings, self.build, self.tree_ui, self)
         self.tree_ui.items_ui = self.items_ui
 
         # share the goodness
@@ -145,7 +145,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Dump the placeholder Graphics View and add our own
         # Cannot be set in TreeUI() init due to recursion error.
-        self.gview_Tree = TreeView(self, self.config, self.build)
+        self.gview_Tree = TreeView(self.settings, self.build, self)
         self.vlayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gview_Tree)
         # destroy the old object
         self.graphicsView_PlaceHolder.setParent(None)
@@ -194,7 +194,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.combo_MinorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
 
         self.menu_Builds.addSeparator()
-        self.set_recent_builds_menu_items(self.config)
+        self.set_recent_builds_menu_items(self.settings)
 
         # Collect original tooltip text for Actions (for managing the text color thru qss - switch_theme)
         # Must be before the first call to switch_theme
@@ -209,7 +209,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # with open(file, "r") as fh:
         #     QApplication.instance().setStyleSheet(fh.read())
         self.setup_theme_actions()
-        self.switch_theme(self.config.theme, self.curr_theme)
+        self.switch_theme(self.settings.theme, self.curr_theme)
 
         # Connect our Actions / triggers
         self.tab_main.currentChanged.connect(self.set_tab_focus)
@@ -217,7 +217,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save)
         self.action_SaveAs.triggered.connect(self.build_save_as)
-        self.action_Settings.triggered.connect(self.config.open_settings_dialog)
+        self.action_Settings.triggered.connect(self.settings.open_settings_dialog)
         self.action_Import.triggered.connect(self.open_import_dialog)
         self.action_Export.triggered.connect(self.open_export_dialog)
         self.statusbar_MainWindow.messageChanged.connect(self.update_status_bar)
@@ -241,7 +241,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Remove splash screen if we are an executable
         if "NUITKA_ONEFILE_PARENT" in os.environ:
-            self.config.pob_debug = False
+            self.settings.pob_debug = False
             # Use this code to signal the splash screen removal.
             splash_filenames = glob.glob(f"{tempfile.gettempdir()}/onefile_*_splash_feedback.tmp")
             if splash_filenames:
@@ -275,7 +275,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_classes.currentTextChanged.disconnect(self.class_changed)
         self.combo_ascendancy.currentTextChanged.disconnect(self.ascendancy_changed)
 
-    def set_recent_builds_menu_items(self, config: Config):
+    def set_recent_builds_menu_items(self, config: Settings):
         """
         Setup menu entries for all valid recent builds in the settings file
         Read the config for recent builds and create menu entries for them
@@ -297,7 +297,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         recent_builds = config.recent_builds()
         for idx, full_path in enumerate(recent_builds):
             if full_path is not None and full_path != "":
-                filename = Path(full_path).relative_to(self.config.build_path)
+                filename = Path(full_path).relative_to(self.settings.build_path)
                 text, class_name = get_file_info(self, filename, max_length, 70)
                 ql = QLabel(text)
                 _action = QWidgetAction(self.menu_Builds)
@@ -310,13 +310,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Add this file (either Open or Save As) to the recent menu list. refreshing the menu if the name is a new one.
         :return: N/A
         """
-        self.config.add_recent_build(self.build.filename)
+        self.settings.add_recent_build(self.build.filename)
         for entry in self.menu_Builds.children():
             if type(entry) == QWidgetAction:
                 self.menu_Builds.removeAction(entry)
-        self.set_recent_builds_menu_items(self.config)
+        self.set_recent_builds_menu_items(self.settings)
 
-    def set_recent_builds_menu_items1(self, config: Config):
+    def set_recent_builds_menu_items1(self, config: Settings):
         """
         Setup menu entries for all valid recent builds in the settings file
         Read the config for recent builds and create menu entries for them
@@ -334,13 +334,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             """
             _action.triggered.connect(lambda checked: self._open_previous_build(checked, _idx, _filename))
 
-        os.chdir(self.config.build_path)
+        os.chdir(self.settings.build_path)
         max_length = 60
         recent_builds = config.recent_builds()
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
-                filename = Path(value).relative_to(self.config.build_path)
-                # name = re.sub(r".xml\d?", "", str(Path(value).relative_to(self.config.build_path)))
+                filename = Path(value).relative_to(self.settings.build_path)
+                # name = re.sub(r".xml\d?", "", str(Path(value).relative_to(self.settings.build_path)))
                 text, class_name = get_file_info(self, filename, max_length, 40, False)
                 # print("set_recent_builds_menu_items: text, class_name", text, class_name)
                 _action = self.menu_Builds.addAction(f"&{idx}.  {text}")
@@ -365,14 +365,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             """
             _action.triggered.connect(lambda checked: self.switch_theme(name, _action))
 
-        themes = [os.path.basename(x) for x in glob.glob(f"{self.config.data_dir}/qss/*.colours")]
+        themes = [os.path.basename(x) for x in glob.glob(f"{self.settings.data_dir}/qss/*.colours")]
         # print("setup_theme_actions", themes)
         for value in themes:
             _name = os.path.splitext(value)[0]
             action: QAction = self.menu_Theme.addAction(_name.title())
             action.setCheckable(True)
-            if _name == self.config.theme:
-                # print("Config theme", _name)
+            if _name == self.settings.theme:
+                # print("Settings theme", _name)
                 self.curr_theme = action
                 action.setChecked(True)
             make_connection(_name, action)
@@ -389,12 +389,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
         # print("switch_theme, new_theme, self.curr_theme : ", new_theme, self.curr_theme)
-        file = Path(self.config.data_dir, "qss", f"{new_theme}.colours")
+        file = Path(self.settings.data_dir, "qss", f"{new_theme}.colours")
         new_theme = Path.exists(file) and new_theme or def_theme
         try:
-            with open(Path(self.config.data_dir, "qss", "qss.template"), "r") as template_file:
+            with open(Path(self.settings.data_dir, "qss", "qss.template"), "r") as template_file:
                 template = template_file.read()
-            with open(Path(self.config.data_dir, "qss", f"{new_theme}.colours"), "r") as colour_file:
+            with open(Path(self.settings.data_dir, "qss", f"{new_theme}.colours"), "r") as colour_file:
                 colours = colour_file.read().splitlines()
                 for line in colours:
                     m = re.search(r"^(qss_\w+)~~(.*)$", line)
@@ -411,7 +411,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Uncheck old entry. First time through, this could be None.
             if self.curr_theme is not None:
                 self.curr_theme.setChecked(False)
-            self.config.theme = new_theme
+            self.settings.theme = new_theme
             self.curr_theme = selected_action
             if self.curr_theme is not None:
                 #     self.curr_theme.setChecked(False)
@@ -425,8 +425,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Ensure the build can be saved before exiting if needed.
         Save the configuration to settings.xml. Any other activities that might be needed
         """
-        self.config.size = self.size()
-        self.config.write()
+        self.settings.size = self.size()
+        self.settings.write()
         # Logic for checking we need to save and save if needed, goes here...
         # filePtr = open("edit.html", "w")
         # try:
@@ -468,7 +468,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
-        dlg = BrowseFileDlg(self.build, self.config, "Open", self)
+        dlg = BrowseFileDlg(self.settings, self.build, "Open", self)
         if dlg.exec():
             # Logic for checking we need to save and save if needed, goes here...
             # if build.needs_saving:
@@ -522,7 +522,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # _debug("build_loader")
             if not new:
                 self.add_recent_build_menu_item()
-            # Config needs to be set before the tree, as the change_tree function uses/sets it also.
+            # Config_UI needs to be set before the tree, as the change_tree function uses/sets it also.
             self.config_ui.load(self.build.config)
             self.set_current_tab()
             self.tree_ui.fill_current_tree_combo()
@@ -569,7 +569,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     # .addWidget(cb_)
         # mydialog_.exec()
 
-        dlg = BrowseFileDlg(self.build, self.config, "Save", self)
+        dlg = BrowseFileDlg(self.settings, self.build, "Save", self)
         if dlg.exec():
             # Selected file has been checked for existing and ok'd if it does
             filename = dlg.selected_file
@@ -817,11 +817,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
-        c = read_json("c:/git/PathOfBuilding-Python/docs/test_data/Mirabel__Sentinal_char.json")
-        t = read_json("c:/git/PathOfBuilding-Python/docs/test_data/Mirabel__Sentinal_tree.json")
-        self.build.import_passive_tree_jewels_ggg_json(t, c)
-        return
-        dlg = ImportDlg(self.build, self.config, self)
+        # c = read_json("c:/git/PathOfBuilding-Python/docs/test_data/Mirabel__Sentinal_char.json")
+        # t = read_json("c:/git/PathOfBuilding-Python/docs/test_data/Mirabel__Sentinal_tree.json")
+        # self.build.import_passive_tree_jewels_ggg_json(t, c)
+        # return
+        dlg = ImportDlg(self.settings, self.build, self)
         dlg.exec()
         if dlg.xml is not None:
             self.build_loader(dlg.xml)
@@ -833,7 +833,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def open_export_dialog(self):
         self.build.save_to_xml("1")
-        dlg = ExportDlg(self.build, self.config, self)
+        dlg = ExportDlg(self.settings, self.build, self)
         dlg.exec()
 
     def set_current_tab(self, tab_name=""):

@@ -12,9 +12,9 @@ from PySide6.QtWidgets import QDialog
 from PySide6.QtCore import Qt, Slot
 
 from PoB.constants import valid_websites, website_list, get_http_headers
-from PoB.pob_config import Config
-from PoB.pob_file import write_json, read_json
+from PoB.settings import Settings
 from PoB.build import Build
+from PoB.pob_file import write_json, read_json
 from widgets.ui_utils import (
     decode_base64_and_inflate,
     deflate_and_base64_encode,
@@ -23,6 +23,7 @@ from widgets.ui_utils import (
     unique_sorted,
 )
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgBuildImport import Ui_BuildImport
 
 realm_list = {
@@ -57,17 +58,17 @@ realm_list = {
 class ImportDlg(Ui_BuildImport, QDialog):
     """Import dialog"""
 
-    def __init__(self, _build: Build, _config: Config, parent):
+    def __init__(self, _settings: Settings, _build: Build, _win: Ui_MainWindow = None):
         """
-
+        Import dialog init
+        :param _settings: A pointer to the settings
         :param _build: A pointer to the currently loaded build
-        :param _config: A pointer to the settings
-        :param parent: A pointer to MainWindowUI
+        :param _win: A pointer to MainWindow
         """
-        super().__init__(parent)
+        super().__init__(_win)
+        self.settings = _settings
         self.build = _build
-        self.config = _config
-        self.win = parent
+        self.win = _win
         # validation variable for importing a PoB build
         self.pob_base64_encoded = False
         # validation variable for importing a PoB build via url (type is the result of a re.search)
@@ -131,7 +132,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         :param text: str: text to test
         :return: boolean; True if test passes.
         """
-        bad_text = "P 0 B"
+        bad_text = "py P 0 B"
         try:
             text_json = json.loads(text)
             return (
@@ -299,7 +300,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
     @Slot()
     def change_account_name(self, text):
         """Set Account lineedit based on combo_Account_History"""
-        self.config.last_account_name = text
+        self.settings.last_account_name = text
         self.lineedit_Account.setText(text)
         self.character_data = None
 
@@ -386,8 +387,8 @@ class ImportDlg(Ui_BuildImport, QDialog):
             return
         if self.account_json:
             # add this account to account history
-            self.config.last_account_name = account_name
-            self.config.add_account(account_name)
+            self.settings.last_account_name = account_name
+            self.settings.add_account(account_name)
 
             # turn on controls and fill them
             self.grpbox_CharImport.setVisible(True)
@@ -453,7 +454,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             else:
                 passive_tree = response.json()
                 pprint(passive_tree)
-                write_json(self.config.build_path + "/" + char_name + "_passive_tree.json", passive_tree)
+                write_json(self.settings.build_path + "/" + char_name + "_passive_tree.json", passive_tree)
         except requests.RequestException as e:
             print(f"Error retrieving 'Passive Tree': {e}.")
             self.status = html_colour_text(
@@ -469,7 +470,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
             url = f"{realm_code['hostName']}character-window/get-items"
             response = requests.get(url, params=params, headers=get_http_headers, timeout=6.0)
             items = response.json()
-            write_json(self.config.build_path + "/" + char_name + "_items.json", items)
+            write_json(self.settings.build_path + "/" + char_name + "_items.json", items)
         except requests.RequestException as e:
             print(f"Error retrieving 'Items': {e}.")
             self.status = html_colour_text(
@@ -494,6 +495,6 @@ class ImportDlg(Ui_BuildImport, QDialog):
 
     def fill_character_history(self):
         self.combo_Account_History.clear()
-        self.combo_Account_History.addItems(self.config.accounts())
-        set_combo_index_by_text(self.combo_Account_History, self.config.last_account_name)
-        self.lineedit_Account.setText(self.config.last_account_name)
+        self.combo_Account_History.addItems(self.settings.accounts())
+        set_combo_index_by_text(self.combo_Account_History, self.settings.last_account_name)
+        self.lineedit_Account.setText(self.settings.last_account_name)

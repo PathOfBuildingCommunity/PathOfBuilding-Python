@@ -8,20 +8,29 @@ import urllib3
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QDialog, QListWidgetItem
 
+from PoB.settings import Settings
 from PoB.build import Build, _debug, print_call_stack
 from PoB.constants import _VERSION, _VERSION_str, tree_versions
 from dialogs.popup_dialogs import yes_no_dialog, NewTreePopup
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgManageTree import Ui_ManageTree
 
 
 class ManageTreeDlg(Ui_ManageTree, QDialog):
     """Manage Trees dialog"""
 
-    def __init__(self, _build: Build, parent=None):
-        super().__init__(parent)
+    def __init__(self, _build: Build, _settings: Settings, _win: Ui_MainWindow = None):
+        """
+        ManageItems dialog init
+        :param _build: A pointer to the currently loaded build
+        :param _settings: A pointer to the settings
+        :param _win: A pointer to MainWindow
+        """
+        super().__init__(_win)
         self.build = _build
-        self.win = parent
+        self.settings = _settings
+        self.win = _win
         self.spec_to_be_moved = None
         self.item_being_edited = None
         self.triggers_connected = False
@@ -155,7 +164,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
     def new_spec(self):
         """Add a new empty tree to the list"""
         # print("new_spec")
-        dlg = NewTreePopup(self.build.pob_config.app.tr)
+        dlg = NewTreePopup(self.settings.app.tr, self.win)
         _return = dlg.exec()
         new_name = dlg.lineedit.text()
         version = dlg.combo_tree_version.currentData()

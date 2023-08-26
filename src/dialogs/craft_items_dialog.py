@@ -12,31 +12,32 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QColor, QBrush, QIcon
 
 from PoB.constants import ColourCodes
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from PoB.item import Item
 from widgets.ui_utils import set_combo_index_by_text
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgCraftItems import Ui_CraftItems
 
 
 class CraftItemsDlg(Ui_CraftItems, QDialog):
     """Craft Items dialog"""
 
-    def __init__(self, _config: Config, _base_items, _mods, import_item=False, parent=None):
+    def __init__(self, _settings: Settings, _base_items, _mods, import_item=False, _win: Ui_MainWindow = None):
         """
-
-        :param _config:
-        :param _base_items:
+        Craft Items dialog init
+        :param _settings: A pointer to the settings
+        :param _base_items: dict: the loaded base_items.json
         :param import_item: bool: True if importing an item
-        :param parent:
+        :param _win: A pointer to MainWindow
         """
-        super().__init__(parent)
-        self.config = _config
+        super().__init__(_win)
+        self.settings = _settings
         self.base_items = _base_items
         self.mods = _mods
 
         # duplicate of the item as passed in
-        self._item = Item(self.config, _base_items)
+        self._item = Item(self.settings, _base_items)
         # save a copy of the item as passed in for recovering if dlg cancelled or reset is used.
         self.original_item = None
         self.setupUi(self)

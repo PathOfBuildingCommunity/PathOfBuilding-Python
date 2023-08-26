@@ -10,7 +10,8 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QListWidgetItem
 
 from PoB.constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map
-from PoB.pob_config import Config
+from PoB.settings import Settings
+from PoB.build import Build
 from PoB.pob_file import read_json
 from widgets.ui_utils import (
     _debug,
@@ -55,8 +56,14 @@ DefaultGemLevel_info = {
 class SkillsUI:
     """Functions and variables to drive the interactions on the Skills Tab."""
 
-    def __init__(self, _config: Config, _build, _win: Ui_MainWindow) -> None:
-        self.pob_config = _config
+    def __init__(self, _settings: Settings, _build: Build, _win: Ui_MainWindow) -> None:
+        """
+        Skills UI
+        :param _build: A pointer to the currently loaded build
+        :param _settings: A pointer to the settings
+        :param _win: A pointer to MainWindowUI
+        """
+        self.pob_config = _settings
         self.build = _build
         self.win = _win
         # this is the whole <Skills>...</Skills> tag set

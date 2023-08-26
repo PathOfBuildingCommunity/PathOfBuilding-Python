@@ -26,6 +26,8 @@ from PySide6.QtWidgets import (
 from PoB.constants import ColourCodes, _VERSION_str, get_http_headers, tree_versions
 from widgets.ui_utils import HTMLDelegate, html_colour_text
 
+from ui.PoB_Main_Window import Ui_MainWindow
+
 
 def yes_no_dialog(win, title, text):
     """Return true if the user selects Yes."""
@@ -56,7 +58,7 @@ def critical_dialog(win, title, text, btn_text="Close"):
 
 
 class MasteryPopup(QDialog):
-    def __init__(self, tr, node, current_spec, mastery_effects_nodes):
+    def __init__(self, tr, node, current_spec, mastery_effects_nodes, _win: Ui_MainWindow = None):
         """
         Choose a mastery from the passed in Node.
 
@@ -65,7 +67,7 @@ class MasteryPopup(QDialog):
         :param current_spec: Spec(): the current Spec class for looking up assigned effects
         :param mastery_effects_nodes: list: list of node ids in this mastery group
         """
-        super().__init__()
+        super().__init__(_win)
 
         self.id = node.id
         self.effects = node.masteryEffects
@@ -167,12 +169,12 @@ class MasteryPopup(QDialog):
 
 
 class ImportTreePopup(QDialog):
-    def __init__(self, tr):
+    def __init__(self, tr, _win: Ui_MainWindow = None):
         """
         Initialize
         :param tr: App translate function
         """
-        super().__init__()
+        super().__init__(_win)
         self.label_intro_text = tr("Enter passive tree URL.")
         self.label_seems_legit_text = tr(html_colour_text("GREEN", "Seems valid. Lets go."))
         self.label_not_valid_text = tr(html_colour_text("RED", "Not valid. Try again."))
@@ -234,16 +236,16 @@ class ImportTreePopup(QDialog):
 
 
 class ExportTreePopup(QDialog):
-    def __init__(self, tr, url, win):
+    def __init__(self, tr, url, _win: Ui_MainWindow = None):
         """
         Initialize
         :param tr: App translate function
         :param url: str: the encoded url
-        :param win: MainWindow(): reference for accessing the statusbar
+        :param _win: MainWindow(): reference for accessing the statusbar
         """
         super().__init__()
         self.tr = tr
-        self.win = win
+        self.win = _win
         self.label_intro_text = tr("Passive tree URL.")
         self.shrink_text = f'{tr("Shrink with")} PoEURL'
         self.setWindowTitle(tr("Export tree to URL"))
@@ -309,12 +311,12 @@ class ExportTreePopup(QDialog):
 
 
 class NewTreePopup(QDialog):
-    def __init__(self, tr):
+    def __init__(self, tr, _win: Ui_MainWindow = None):
         """
         Initialize
         :param tr: App translate function
         """
-        super().__init__()
+        super().__init__(_win)
         # self.label_intro_text = tr("New passive tree.")
         self.setWindowTitle(tr("New passive tree"))
         self.setWindowIcon(QIcon(":/Art/Icons/tree--pencil.png"))
@@ -348,12 +350,12 @@ class NewTreePopup(QDialog):
 
 
 class LineEditPopup(QDialog):
-    def __init__(self, tr, title):
+    def __init__(self, tr, title, _win: Ui_MainWindow = None):
         """
         Initialize
         :param tr: App translate function
         """
-        super().__init__()
+        super().__init__(_win)
         # self.label_intro_text = tr(title)
         self.setWindowTitle(tr(title))
         self.setWindowIcon(QIcon(":/Art/Icons/edit-list-order.png"))
