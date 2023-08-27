@@ -54,10 +54,7 @@ from ui.PoB_Main_Window import Ui_MainWindow
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, _app) -> None:
         super(MainWindow, self).__init__()
-        print(
-            f"{datetime.datetime.now()}. {program_title}, running on {platform.system()} {platform.release()};"
-            f" {platform.version()}"
-        )
+        print(f"{datetime.datetime.now()}. {program_title}, running on {platform.system()} {platform.release()};" f" {platform.version()}")
         self.app = _app
         self.tr = self.app.tr
         self._os = platform.system()
@@ -401,9 +398,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         if m.group(1) == "qss_default_text":
                             self.qss_default_text = f"rgba( {m.group(2)} )"
                             for tooltip_text in self.toolbar_buttons.keys():
-                                self.toolbar_buttons[tooltip_text].setToolTip(
-                                    html_colour_text(self.qss_default_text, tooltip_text)
-                                )
+                                self.toolbar_buttons[tooltip_text].setToolTip(html_colour_text(self.qss_default_text, tooltip_text))
                         template = re.sub(r"\b" + m.group(1) + r"\b", m.group(2), template)
 
             QApplication.instance().setStyleSheet(template)
@@ -724,9 +719,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not self.loading:
                 current_nodes = set(self.build.current_spec.nodes)
                 # ascendancy start node is *NOT* in this list.
-                nodes_in_ascendancy = [
-                    x for x in current_tree.ascendancyMap[curr_ascendancy_name] if x in current_nodes
-                ]
+                nodes_in_ascendancy = [x for x in current_tree.ascendancyMap[curr_ascendancy_name] if x in current_nodes]
                 if len(nodes_in_ascendancy) > 1:
                     if not yes_no_dialog(
                         self,
@@ -933,17 +926,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.skills_ui.update_socket_group_labels()
 
     @Slot()
-    def update_status_bar(self, message=None, timeout=2):
+    def update_status_bar(self, message="", timeout=2):
         """
         Update the status bar. Use default text if no message is supplied.
         This triggers when the message is set and when it is cleared after the time out.
-
-        :param message: string: the message.
+        :param message: str: the message.
         :param timeout: int: time for the message to be shown, in secs
         :return: N/A
         """
         # we only care for when the message clears
-        if pob_debug and message is None or message == "":
+        if pob_debug and message == "":
             process = psutil.Process(os.getpid())
             message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
             self.statusbar_MainWindow.showMessage(message, timeout * 1000)

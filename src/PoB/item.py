@@ -50,7 +50,6 @@ class Item:
         self.rarity = "NORMAL"
         self.title = ""
         self.name = ""
-        self.base_name = ""
         self.ilevel = 0
         # needs to be a string as there are entries like "Limited to: 1 Survival"
         self.limited_to = ""
@@ -888,6 +887,10 @@ class Item:
         tip += f"</table>"
         # self.base_tooltip_text = tip
         return tip
+
+    @property
+    def coloured_name(self):
+        return html_colour_text(ColourCodes[self.rarity].value, f"{self.name}")
 
     @property
     def base_name(self):

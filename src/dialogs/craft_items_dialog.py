@@ -14,14 +14,14 @@ For the purposes of processing, the colour comboBox manages the connector to the
 import xml.etree.ElementTree as ET
 import re
 
-from PySide6.QtWidgets import QComboBox, QDialog, QDialogButtonBox
-from PySide6.QtCore import Qt, Slot
+from PySide6.QtWidgets import QComboBox, QDialog, QDialogButtonBox, QMainWindow, QStatusBar
+from PySide6.QtCore import Qt, QTimer, Slot
 from PySide6.QtGui import QColor, QBrush, QIcon
 
 from PoB.constants import ColourCodes
 from PoB.settings import Settings
 from PoB.item import Item
-from widgets.ui_utils import set_combo_index_by_text
+from widgets.ui_utils import html_colour_text, set_combo_index_by_text
 
 from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgCraftItems import Ui_CraftItems
@@ -53,6 +53,12 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         self.curr_socket_state = list()
         # used for rejecting changes and putting previous values back. Only has " " and "-"
         self.curr_connector_state = list()
+
+        # Status bar timer
+        self.sb_timer = QTimer(self)
+        self.sb_timer.setTimerType(Qt.CoarseTimer)
+        self.sb_timer.setSingleShot(True)
+        self.sb_timer.timeout.connect(self.update_status_bar)
 
         self.btnBox.addButton("Discard", QDialogButtonBox.RejectRole)
         if task == "add":
@@ -110,6 +116,7 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         # go via text so we get a unique python object
         self._item.load_from_xml_v2(newitem.save_v2())
         self.fill_widgets()
+        self.update_status_bar(f"Loaded {newitem.coloured_name}")
 
     def fill_widgets(self):
         """Fill the widgets with default values. called when setting self.item"""
@@ -173,6 +180,19 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
             make_checkbox_connection(idx, checkbox)
 
     @Slot()
+    def update_status_bar(self, message="", timeout=10):
+        """
+        Update the status bar. Use default text if no message is supplied.
+        This triggers when the message is set and when it is cleared after the time out.
+        :param message: str: the message.
+        :param timeout: int: time for the message to be shown, in secs
+        :return: N/A
+        """
+        self.label_StatusBar.setText(message)
+        if message != "":
+            self.sb_timer.start(timeout * 1000)
+
+    @Slot()
     def change_socket_combo(self, socket, idx, combo: QComboBox):
         """
         React to a socket combo being changed, and change the color of the text,
@@ -183,21 +203,26 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         :return: N/A
         """
         # print("change_socket_combo", socket, idx, combo)
+        self.update_status_bar("")
         # check if the combo to right of this combo is also 'A' or hidden. If not disallow and revert.
         if idx != 6 and socket == "A" and self.socket_widgets[idx + 1].isVisible() and self.socket_widgets[idx + 1].currentText() != "A":
-            print(
-                f"change_socket_combo. Rejecting Update to {socket}:"
-                f" Right socket is not 'A' ('{self.socket_widgets[idx + 1].currentText()}')"
-            )
             combo.setCurrentText(self.curr_socket_state[idx])
+            self.update_status_bar(
+                html_colour_text(
+                    "RED",
+                    f"Rejecting Update to {socket}: Socket to the right is not 'A' ('{self.socket_widgets[idx + 1].currentText()}')",
+                )
+            )
             return
         # check if the combo to left of this combo is also 'A'. If it is, disallow and revert.
         elif idx != 0 and socket != "A" and self.curr_socket_state[idx] == "A" and self.socket_widgets[idx - 1].currentText() == "A":
-            print(
-                f"change_socket_combo. Rejecting Update to {socket}:"
-                f" Left socket is not 'A' ('{self.socket_widgets[idx + 1].currentText()}'))"
-            )
             combo.setCurrentText(self.curr_socket_state[idx])
+            self.update_status_bar(
+                html_colour_text(
+                    "RED",
+                    f"Rejecting Update to {socket}: Socket to the left is not 'A' ('{self.socket_widgets[idx + 1].currentText()}')",
+                )
+            )
             return
 
         # Colour the edit box with the chosen letter's colour. '{{' is the fstr escape equiv of '\{'
@@ -229,6 +254,7 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         :return:
         """
         # print("change_socket_combo", Qt.CheckState(state), idx)
+        self.update_status_bar("")
         match Qt.CheckState(state):
             case Qt.Checked:
                 self.curr_connector_state[idx] = "-"
@@ -240,9 +266,10 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
     def reset(self):
         """React to the Reset button being pressed. Restore self.item from self.original_item.
         Trigger fill_widgets by setting self.item"""
-        # go via text so we get a unique python object
+        self.update_status_bar("")
         del self._item
         _item = Item(self.settings, self.base_items)
+        # go via text so we get a unique python object
         _item.load_from_xml_v2(self.original_item.save_v2())
         self.item = _item
 
