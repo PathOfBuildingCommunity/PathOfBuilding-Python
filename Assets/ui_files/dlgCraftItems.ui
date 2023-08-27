@@ -43,7 +43,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QWidget" name="widget" native="true">
+     <widget class="QWidget" name="Controls" native="true">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -63,16 +63,22 @@
         <widget class="QComboBox" name="combo_Socket1"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="check_Connector1">
+        <widget class="QCheckBox" name="check_Connector2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>22</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
-           <width>20</width>
+           <width>24</width>
            <height>16</height>
           </size>
          </property>
@@ -92,10 +98,15 @@ border : 2px solid green;
 width : 16px;
 height : 4px;
 }
-</string>
+
+QCheckBox::indicator:indeterminate {
+width : 10px;
+height : 10px;
+image : url(&quot;:/Art/Icons/cross.png&quot;)
+}</string>
          </property>
          <property name="text">
-          <string>-</string>
+          <string/>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -106,16 +117,16 @@ height : 4px;
         <widget class="QComboBox" name="combo_Socket2"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="check_Connector2">
+        <widget class="QCheckBox" name="check_Connector3">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>22</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>20</width>
+           <width>24</width>
            <height>16</height>
           </size>
          </property>
@@ -135,10 +146,15 @@ border : 2px solid green;
 width : 16px;
 height : 4px;
 }
-</string>
+
+QCheckBox::indicator:indeterminate {
+width : 10px;
+height : 10px;
+image : url(&quot;:/Art/Icons/cross.png&quot;)
+}</string>
          </property>
          <property name="text">
-          <string>-</string>
+          <string/>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -149,16 +165,16 @@ height : 4px;
         <widget class="QComboBox" name="combo_Socket3"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="check_Connector3">
+        <widget class="QCheckBox" name="check_Connector4">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>22</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>20</width>
+           <width>24</width>
            <height>16</height>
           </size>
          </property>
@@ -178,10 +194,15 @@ border : 2px solid green;
 width : 16px;
 height : 4px;
 }
-</string>
+
+QCheckBox::indicator:indeterminate {
+width : 10px;
+height : 10px;
+image : url(&quot;:/Art/Icons/cross.png&quot;)
+}</string>
          </property>
          <property name="text">
-          <string>-</string>
+          <string/>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -192,16 +213,16 @@ height : 4px;
         <widget class="QComboBox" name="combo_Socket4"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="check_Connector4">
+        <widget class="QCheckBox" name="check_Connector5">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>22</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>20</width>
+           <width>24</width>
            <height>16</height>
           </size>
          </property>
@@ -221,10 +242,15 @@ border : 2px solid green;
 width : 16px;
 height : 4px;
 }
-</string>
+
+QCheckBox::indicator:indeterminate {
+width : 10px;
+height : 10px;
+image : url(&quot;:/Art/Icons/cross.png&quot;)
+}</string>
          </property>
          <property name="text">
-          <string>-</string>
+          <string/>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -235,16 +261,16 @@ height : 4px;
         <widget class="QComboBox" name="combo_Socket5"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="check_Connector5">
+        <widget class="QCheckBox" name="check_Connector6">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>22</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>20</width>
+           <width>24</width>
            <height>16</height>
           </size>
          </property>
@@ -264,10 +290,15 @@ border : 2px solid green;
 width : 16px;
 height : 4px;
 }
-</string>
+
+QCheckBox::indicator:indeterminate {
+width : 10px;
+height : 10px;
+image : url(&quot;:/Art/Icons/cross.png&quot;)
+}</string>
          </property>
          <property name="text">
-          <string>-</string>
+          <string/>
          </property>
          <property name="checked">
           <bool>true</bool>

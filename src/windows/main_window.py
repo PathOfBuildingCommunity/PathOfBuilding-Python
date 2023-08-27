@@ -285,9 +285,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         def make_connection(_full_path):
             """
             Connect the menu item to _open_previous_build passing in extra information
-            Lambdas in python share the variable scope they're created in
-            so make a function containing just the lambda
-            :param _full_path: full path to the file, to be sent to the
+            Lambdas in python share the variable scope they're created in so make a function containing just the lambda
+            :param _full_path: full path to the file, to be sent to the triggered function.
             :return: N/A
             """
             _action.triggered.connect(lambda checked: self._open_previous_build(checked, _full_path))

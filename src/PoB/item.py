@@ -255,18 +255,19 @@ class Item:
                 _line = lines[0]
             return value
 
+        # debug_lines = True
         if xml.get("ver", "1") == "2":
             return self.load_from_xml_v2(xml)
-        desc = xml.text
+        items_free_text = xml.text
         self.id = xml.get("id", 0)
 
         # split lines into a list, removing any blank lines, leading & trailing spaces.
         #   stolen from https://stackoverflow.com/questions/7630273/convert-multiline-into-list
-        lines = [y for y in (x.strip(" \t\r\n") for x in desc.splitlines()) if y]
+        lines = [y for y in (x.strip(" \t\r\n") for x in items_free_text.splitlines()) if y]
         # The first line has to be rarity !!!!
         line = lines.pop(0)
         if "rarity" not in line.lower():
-            print("Error: Dave, i don't know what to do with this:\n", desc)
+            print("Error: Dave, I don't know what to do with this:\n", items_free_text)
             return False
         m = re.search(r"(.*): (.*)", line)
         self.rarity = m.group(2).upper()
@@ -660,8 +661,7 @@ class Item:
         # if debug_print:
         #     print(f"{text}\n\n")
         return ET.fromstring(f'<Item id="{self.id}">{text}</Item>')
-
-    # save
+        # save
 
     def save_v2(self):
         """

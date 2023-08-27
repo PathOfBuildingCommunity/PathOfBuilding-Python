@@ -33,5 +33,5 @@ multi_line_output = 3
 
 [tool.black]
 # Match pyCharm's width
-line-length = '120'
+line-length = '140'
 force-exclude = '.*/ui/.*|^/src/PoB_rc.py'
