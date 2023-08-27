@@ -889,6 +889,10 @@ class Item:
         return tip
 
     @property
+    def abyssal_sockets(self):
+        return [char for char in " " + self.sockets if char == "A"]
+
+    @property
     def coloured_name(self):
         return html_colour_text(ColourCodes[self.rarity].value, f"{self.name}")
 

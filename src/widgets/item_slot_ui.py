@@ -17,7 +17,7 @@ class ItemSlotUI(QWidget):
     A class to manage one item/jewel on the left hand side of the UI
     """
 
-    def __init__(self, title, indent=False) -> None:
+    def __init__(self, title, parent_notify, indent=False) -> None:
         """
         init
 
@@ -30,6 +30,7 @@ class ItemSlotUI(QWidget):
         # self.setGeometry(0, 0, 320, self.widget_height)
         self.setMinimumHeight(self.widget_height)
         self.other_weapon_slot: ItemSlotUI = None
+        self.parent_notify = parent_notify
 
         # preserve the original name, EG: "Weapon 1 Swap"
         self.slot_name = title
@@ -151,6 +152,7 @@ class ItemSlotUI(QWidget):
                 # Clear the other slot if this is a two-hander
                 if item.two_hand:
                     self.other_weapon_slot.clear_default_item()
+        self.parent_notify(self)
 
     def set_default_by_text(self, _text):
         """Set the combo's active item by text"""
