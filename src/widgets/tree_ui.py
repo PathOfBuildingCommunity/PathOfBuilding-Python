@@ -165,7 +165,7 @@ class TreeUI:
         """
         # Ctrl-M (from MainWindow) won't know if there is another window open, so stop opening another instance.
         if self.dlg is None:
-            self.dlg = ManageTreeDlg(self.build, self.win)
+            self.dlg = ManageTreeDlg(self.build, self.settings, self.win)
             self.dlg.exec()
             self.dlg = None
             self.fill_current_tree_combo()
@@ -179,7 +179,7 @@ class TreeUI:
         # let's protect activeSpec as the next part will erase it
         active_spec = self.build.activeSpec
         self.combo_manage_tree.clear()
-        self.win.combo_ItemsManageTree_2.clear()
+        self.win.combo_ItemsManageTree.clear()
         self.combo_compare.clear()
         for idx, spec in enumerate(self.build.specs):
             if spec is not None:
@@ -188,7 +188,7 @@ class TreeUI:
                 else:
                     title = spec.title
                 self.combo_manage_tree.addItem(title, idx)
-                self.win.combo_ItemsManageTree_2.addItem(title, idx)
+                self.win.combo_ItemsManageTree.addItem(title, idx)
                 self.combo_compare.addItem(title, idx)
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)

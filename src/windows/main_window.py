@@ -179,16 +179,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 html_colour_text("TANGLE", bandit_info.get("tooltip")),
                 Qt.ToolTipRole,
             )
-        self.combo_MajorGods.clear()
+        self.combo_MajorPantheon.clear()
         for idx, god_name in enumerate(pantheon_major_gods.keys()):
             god_info = pantheon_major_gods[god_name]
-            self.combo_MajorGods.addItem(god_info.get("name"), god_name)
-            self.combo_MajorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
-        self.combo_MinorGods.clear()
+            self.combo_MajorPantheon.addItem(god_info.get("name"), god_name)
+            self.combo_MajorPantheon.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
+        self.combo_MinorPantheon.clear()
         for idx, god_name in enumerate(pantheon_minor_gods.keys()):
             god_info = pantheon_minor_gods[god_name]
-            self.combo_MinorGods.addItem(god_info.get("name"), god_name)
-            self.combo_MinorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
+            self.combo_MinorPantheon.addItem(god_info.get("name"), god_name)
+            self.combo_MinorPantheon.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
 
         self.menu_Builds.addSeparator()
         self.set_recent_builds_menu_items(self.settings)
@@ -225,7 +225,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
         # these two Manage Tree combo's are linked
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
-        self.combo_ItemsManageTree_2.currentTextChanged.connect(self.combo_item_manage_tree_changed)
+        self.combo_ItemsManageTree.currentTextChanged.connect(self.combo_item_manage_tree_changed)
         self.connect_widget_triggers()
 
         # Start the statusbar self updating
@@ -243,7 +243,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             splash_filenames = glob.glob(f"{tempfile.gettempdir()}/onefile_*_splash_feedback.tmp")
             if splash_filenames:
                 for filename in splash_filenames:
-                    print("Splash found: ", filename)
+                    if self.settings.pob_debug:
+                        print("Splash found: ", filename)
                     os.unlink(filename)
 
     def setup_ui(self):
@@ -336,12 +337,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
                 filename = Path(value).relative_to(self.settings.build_path)
-                # name = re.sub(r".xml\d?", "", str(Path(value).relative_to(self.settings.build_path)))
                 text, class_name = get_file_info(self, filename, max_length, 40, False)
-                # print("set_recent_builds_menu_items: text, class_name", text, class_name)
                 _action = self.menu_Builds.addAction(f"&{idx}.  {text}")
                 _action.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 10))
-                # _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
 
     def setup_theme_actions(self):
@@ -368,7 +366,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             action: QAction = self.menu_Theme.addAction(_name.title())
             action.setCheckable(True)
             if _name == self.settings.theme:
-                # print("Settings theme", _name)
                 self.curr_theme = action
                 action.setChecked(True)
             make_connection(_name, action)
@@ -629,7 +626,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not tree_label:
             return
 
-        self.combo_ItemsManageTree_2.setCurrentText(tree_label)
+        self.combo_ItemsManageTree.setCurrentText(tree_label)
 
         full_clear = self.build.change_tree(self.tree_ui.combo_manage_tree.currentData())
 
@@ -872,19 +869,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # backup the current index, reload combo with new values and reset to a valid current_index
         # each line is a colon separated of socket group label and gem list
         current_index = self.combo_MainSkill.currentIndex()
-        # print("load_main_skill_combo.current_index 1", current_index)
         for line in _list:
             _label, _gem_list = line.split(":")
             self.combo_MainSkill.addItem(_label, _gem_list)
         self.combo_MainSkill.view().setMinimumWidth(self.combo_MainSkill.minimumSizeHint().width())
         # In case the new list is shorter or empty
         current_index = min(max(0, current_index), len(_list))
-        # print("load_main_skill_combo.current_index 2", current_index)
 
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
 
-        # print("load_main_skill_combo.current_index 3", current_index)
         if current_index >= 0:
             self.combo_MainSkill.setCurrentIndex(current_index)
 

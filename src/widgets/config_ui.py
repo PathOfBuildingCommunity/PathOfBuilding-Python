@@ -28,8 +28,8 @@ class ConfigUI:
         """
         set_combo_index_by_data(self.win.combo_ResPenalty, self.build.resistancePenalty)
         set_combo_index_by_data(self.win.combo_Bandits, self.build.bandit)
-        set_combo_index_by_data(self.win.combo_MajorGods, self.build.pantheonMajorGod)
-        set_combo_index_by_data(self.win.combo_MinorGods, self.build.pantheonMinorGod)
+        set_combo_index_by_data(self.win.combo_MajorPantheon, self.build.pantheonMajorGod)
+        set_combo_index_by_data(self.win.combo_MinorPantheon, self.build.pantheonMinorGod)
 
     def save(self):
         """
@@ -37,8 +37,8 @@ class ConfigUI:
         """
         self.build.resistancePenalty = self.win.combo_ResPenalty.currentData()
         self.build.bandit = self.win.combo_Bandits.currentData()
-        self.build.pantheonMajorGod = self.win.combo_MajorGods.currentData()
-        self.build.pantheonMinorGod = self.win.combo_MinorGods.currentData()
+        self.build.pantheonMajorGod = self.win.combo_MajorPantheon.currentData()
+        self.build.pantheonMinorGod = self.win.combo_MinorPantheon.currentData()
 
 
 # def test() -> None:

@@ -261,7 +261,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>2</number>
+            <number>5</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -1016,7 +1016,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="tab_Items2">
+           <widget class="QWidget" name="tab_Items">
             <attribute name="title">
              <string>&amp;Item</string>
             </attribute>
@@ -1040,11 +1040,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <number>0</number>
              </property>
              <item>
-              <widget class="QScrollArea" name="scrollArea_Items2">
+              <widget class="QScrollArea" name="scrollArea_Items">
                <property name="widgetResizable">
                 <bool>true</bool>
                </property>
-               <widget class="QWidget" name="scrollAreaWidgetContents_Items2">
+               <widget class="QWidget" name="scrollAreaWidgetContents_Items">
                 <property name="geometry">
                  <rect>
                   <x>0</x>
@@ -1076,7 +1076,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QFrame" name="frame_Items2">
+                  <widget class="QFrame" name="frame_Items">
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
@@ -1108,7 +1108,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        <number>0</number>
                       </property>
                       <item>
-                       <widget class="QLabel" name="label_ItemSet_2">
+                       <widget class="QLabel" name="label_ItemSet">
                         <property name="minimumSize">
                          <size>
                           <width>65</width>
@@ -1131,12 +1131,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                         </property>
                         <property name="buddy">
-                         <cstring>combo_ItemSet_2</cstring>
+                         <cstring>combo_ItemSet</cstring>
                         </property>
                        </widget>
                       </item>
                       <item>
-                       <widget class="QComboBox" name="combo_ItemSet_2">
+                       <widget class="QComboBox" name="combo_ItemSet">
                         <property name="minimumSize">
                          <size>
                           <width>0</width>
@@ -1164,7 +1164,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="btn_ManageItemSet_2">
+                       <widget class="QPushButton" name="btn_ManageItemSet">
                         <property name="minimumSize">
                          <size>
                           <width>85</width>
@@ -1188,7 +1188,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </layout>
                     </item>
                     <item>
-                     <widget class="QFrame" name="frame_EquippedItems_2">
+                     <widget class="QFrame" name="frame_EquippedItems">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -1201,7 +1201,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         <height>1000</height>
                        </size>
                       </property>
-                      <layout class="QVBoxLayout" name="layout_EquippedItems_2">
+                      <layout class="QVBoxLayout" name="layout_EquippedItems">
                        <property name="spacing">
                         <number>2</number>
                        </property>
@@ -1218,7 +1218,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         <number>0</number>
                        </property>
                        <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_6">
+                        <layout class="QHBoxLayout" name="hlayout_EquippedItems">
                          <property name="spacing">
                           <number>6</number>
                          </property>
@@ -1255,7 +1255,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                           </spacer>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="btn_WeaponSwap_2">
+                          <widget class="QPushButton" name="btn_WeaponSwap">
                            <property name="minimumSize">
                             <size>
                              <width>135</width>
@@ -1285,7 +1285,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </widget>
                     </item>
                     <item>
-                     <widget class="QFrame" name="frame_SocketedJewels_2">
+                     <widget class="QFrame" name="frame_SocketedJewels">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -1333,7 +1333,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                           <number>5</number>
                          </property>
                          <item>
-                          <widget class="QLabel" name="label_ItemsPassiveTree_2">
+                          <widget class="QLabel" name="label_ItemsPassiveTree">
                            <property name="minimumSize">
                             <size>
                              <width>0</width>
@@ -1353,12 +1353,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                            </property>
                            <property name="buddy">
-                            <cstring>combo_ItemsManageTree_2</cstring>
+                            <cstring>combo_ItemsManageTree</cstring>
                            </property>
                           </widget>
                          </item>
                          <item>
-                          <widget class="QComboBox" name="combo_ItemsManageTree_2">
+                          <widget class="QComboBox" name="combo_ItemsManageTree">
                            <property name="minimumSize">
                             <size>
                              <width>0</width>
@@ -1374,7 +1374,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="btn_ItemsManageTree_2">
+                          <widget class="QPushButton" name="btn_ItemsManageTree">
                            <property name="minimumSize">
                             <size>
                              <width>85</width>
@@ -1401,11 +1401,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
                         </layout>
                        </item>
                        <item>
-                        <widget class="QScrollArea" name="scrollArea_2">
+                        <widget class="QScrollArea" name="scrollArea_SocketedJewels">
                          <property name="widgetResizable">
                           <bool>true</bool>
                          </property>
-                         <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                         <widget class="QWidget" name="scrollAreaWidgetContents_SocketedJewels">
                           <property name="geometry">
                            <rect>
                             <x>0</x>
@@ -1414,7 +1414,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <height>150</height>
                            </rect>
                           </property>
-                          <layout class="QVBoxLayout" name="layout_SocketedJewels_2">
+                          <layout class="QVBoxLayout" name="layout_SocketedJewels">
                            <property name="spacing">
                             <number>2</number>
                            </property>
@@ -1454,7 +1454,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   </widget>
                  </item>
                  <item>
-                  <widget class="QFrame" name="frame_ItemsList_2">
+                  <widget class="QFrame" name="frame_ItemsList">
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
@@ -1519,7 +1519,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_10">
                       <item>
-                       <widget class="QLabel" name="label_ItemsSearch_2">
+                       <widget class="QLabel" name="label_ItemsSearch">
                         <property name="layoutDirection">
                          <enum>Qt::LeftToRight</enum>
                         </property>
@@ -1527,12 +1527,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
                          <string>&amp;Search:</string>
                         </property>
                         <property name="buddy">
-                         <cstring>lineedit_ItemsSearch_2</cstring>
+                         <cstring>lineedit_ItemsSearch</cstring>
                         </property>
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="lineedit_ItemsSearch_2">
+                       <widget class="QLineEdit" name="lineedit_ItemsSearch">
                         <property name="minimumSize">
                          <size>
                           <width>0</width>
@@ -1544,7 +1544,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      </layout>
                     </item>
                     <item>
-                     <widget class="ListBox" name="list_Items_2">
+                     <widget class="ListBox" name="list_Items">
                       <property name="minimumSize">
                        <size>
                         <width>400</width>
@@ -1658,7 +1658,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_9">
                       <item>
-                       <widget class="QLabel" name="label_ItemsImportFrom_2">
+                       <widget class="QLabel" name="label_ItemsImportFrom">
                         <property name="text">
                          <string>Import from:</string>
                         </property>
@@ -1666,12 +1666,12 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                         </property>
                         <property name="buddy">
-                         <cstring>combo_ItemsImportFrom_2</cstring>
+                         <cstring>combo_ItemsImportFrom</cstring>
                         </property>
                        </widget>
                       </item>
                       <item>
-                       <widget class="QComboBox" name="combo_ItemsImportFrom_2">
+                       <widget class="QComboBox" name="combo_ItemsImportFrom">
                         <property name="maxVisibleItems">
                          <number>15</number>
                         </property>
@@ -1692,7 +1692,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_11">
                       <item>
-                       <widget class="QComboBox" name="combo_ItemsImportSlot_2">
+                       <widget class="QComboBox" name="combo_ItemsImportSlot">
                         <property name="minimumSize">
                          <size>
                           <width>150</width>
@@ -1765,7 +1765,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                        </widget>
                       </item>
                       <item>
-                       <widget class="QComboBox" name="combo_ItemsImportType_2">
+                       <widget class="QComboBox" name="combo_ItemsImportType">
                         <property name="minimumSize">
                          <size>
                           <width>150</width>
@@ -1787,7 +1787,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_12">
                       <item>
-                       <widget class="QComboBox" name="combo_ItemsImportSort_2">
+                       <widget class="QComboBox" name="combo_ItemsImportSort">
                         <property name="enabled">
                          <bool>true</bool>
                         </property>
@@ -1808,7 +1808,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                        </widget>
                       </item>
                       <item>
-                       <widget class="QComboBox" name="combo_ItemsImportLeague_2">
+                       <widget class="QComboBox" name="combo_ItemsImportLeague">
                         <property name="minimumSize">
                          <size>
                           <width>150</width>
@@ -1835,7 +1835,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_13">
                       <item>
-                       <widget class="QComboBox" name="combo_ItemsImportRequirements_2">
+                       <widget class="QComboBox" name="combo_ItemsImportRequirements">
                         <property name="enabled">
                          <bool>false</bool>
                         </property>
@@ -1871,7 +1871,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                        </widget>
                       </item>
                       <item>
-                       <widget class="QComboBox" name="combo_ItemsImportSource_2">
+                       <widget class="QComboBox" name="combo_ItemsImportSource">
                         <property name="enabled">
                          <bool>true</bool>
                         </property>
@@ -1926,7 +1926,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_8">
                       <item>
-                       <widget class="QLabel" name="label_ImportItemsSearch_2">
+                       <widget class="QLabel" name="label_ImportItemsSearch">
                         <property name="layoutDirection">
                          <enum>Qt::LeftToRight</enum>
                         </property>
@@ -1934,12 +1934,12 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                          <string>Searc&amp;h:</string>
                         </property>
                         <property name="buddy">
-                         <cstring>lineedit_ItemsImportSearch_2</cstring>
+                         <cstring>lineedit_ItemsImportSearch</cstring>
                         </property>
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="lineedit_ItemsImportSearch_2">
+                       <widget class="QLineEdit" name="lineedit_ItemsImportSearch">
                         <property name="minimumSize">
                          <size>
                           <width>0</width>
@@ -1949,7 +1949,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                        </widget>
                       </item>
                       <item>
-                       <widget class="QComboBox" name="combo_ItemsImportSearchSource_2">
+                       <widget class="QComboBox" name="combo_ItemsImportSearchSource">
                         <property name="maxVisibleItems">
                          <number>15</number>
                         </property>
@@ -1973,7 +1973,7 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                      </layout>
                     </item>
                     <item>
-                     <widget class="ListBox" name="list_ImportItems_2">
+                     <widget class="ListBox" name="list_ImportItems">
                       <property name="minimumSize">
                        <size>
                         <width>350</width>
@@ -2246,7 +2246,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <number>0</number>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_MinorGods">
+                <widget class="QComboBox" name="combo_MinorPantheon">
                  <property name="geometry">
                   <rect>
                    <x>150</x>
@@ -2276,7 +2276,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <string>Make a Selection</string>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_Bandits_2">
+                <widget class="QLabel" name="label_Bandits">
                  <property name="geometry">
                   <rect>
                    <x>5</x>
@@ -2300,7 +2300,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <cstring>combo_Bandits</cstring>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_Pantheon_2">
+                <widget class="QLabel" name="label_MajorPantheon">
                  <property name="geometry">
                   <rect>
                    <x>5</x>
@@ -2327,10 +2327,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                  <property name="buddy">
-                  <cstring>combo_MajorGods</cstring>
+                  <cstring>combo_MajorPantheon</cstring>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_MajorGods">
+                <widget class="QComboBox" name="combo_MajorPantheon">
                  <property name="geometry">
                   <rect>
                    <x>150</x>
@@ -2426,7 +2426,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <number>0</number>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_Pantheon_3">
+                <widget class="QLabel" name="label_MinorPantheon">
                  <property name="geometry">
                   <rect>
                    <x>5</x>
@@ -2453,7 +2453,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                  <property name="buddy">
-                  <cstring>combo_MinorGods</cstring>
+                  <cstring>combo_MinorPantheon</cstring>
                  </property>
                 </widget>
                </widget>
@@ -2821,8 +2821,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>combo_MainSkillActive</tabstop>
   <tabstop>combo_ResPenalty</tabstop>
   <tabstop>combo_Bandits</tabstop>
-  <tabstop>combo_MajorGods</tabstop>
-  <tabstop>combo_MinorGods</tabstop>
+  <tabstop>combo_MajorPantheon</tabstop>
+  <tabstop>combo_MinorPantheon</tabstop>
   <tabstop>textedit_Notes</tabstop>
   <tabstop>combo_Notes_Font</tabstop>
   <tabstop>combo_Notes_Colour</tabstop>

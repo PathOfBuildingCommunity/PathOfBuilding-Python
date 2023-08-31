@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Uniques>
+	<wand>
+		<Item ver="2" title="Relic of the Pact" base_name="variant" league="Ultimatum" source="Drops from unique{The Trialmaster}">
+			<Attribs />
+			<Implicits>
+				<Mod>{variant:1}(15-19)% increased Spell Damage</Mod>
+				<Mod>{variant:2}(17-21)% increased Spell Damage</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>Grants Level 1 Blood Sacrament Skill</Mod>
+				<Mod>Your Critical Strike Chance is Lucky while on Low Life</Mod>
+			</Explicits>
+			<Requires>
+				<Int>119</Int>
+			</Requires>
+			<Variants>
+				<Variant num="1">Pre 3.21.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
+			<VariantEntries>
+				<base_name>Spiraled Wand</base_name>
+				<base_name>Sage Wand</base_name>
+			</VariantEntries>
+		</Item>
+	</wand>
+</Uniques>

@@ -3,7 +3,7 @@
 import enum
 
 program_title = "Path of Building"
-
+bad_text = "oh noes"  # used for dictionary get's
 """global_scale_factor
 this is used to divide all x and y data coming in from the tree.json, but not Height and Width.
 without this, items are too far apart and items are far too small on screen.

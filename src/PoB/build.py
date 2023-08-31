@@ -579,9 +579,9 @@ class Build:
 
     def load_from_file(self, filename):
         """
-        Load a build. Use new() as a common function
+        Load a build. Use new() as a common function.
 
-        :param filename: str() XML file to load
+        :param filename: str: XML file to load.
         :return: N/A
         """
         _build_pob = read_xml(filename)

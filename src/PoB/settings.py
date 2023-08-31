@@ -25,12 +25,14 @@ from dialogs.settings_dialog import SettingsDlg
 
 class Settings:
     def __init__(self, _win, _app) -> None:
+        self.pob_debug = pob_debug
+        # If called from a script, this will be none.
+        if _app is None:
+            return
         # To reduce circular references, have the app and main window references here
         self.win = _win
         self.app = _app
         self.screen_rect = self.app.primaryScreen().size()
-        self.loader = QUiLoader()
-        self.pob_debug = pob_debug
 
         # this is the xml tree representing the xml
         self.root = None

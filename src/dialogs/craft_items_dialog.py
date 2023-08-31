@@ -107,7 +107,7 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         return _sockets
 
     @property
-    def item(self):
+    def item(self) -> Item:
         return self._item
 
     @item.setter
@@ -121,7 +121,6 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
     def fill_widgets(self):
         """Fill the widgets with default values. called when setting self.item"""
         self.setWindowTitle(self.item.name)
-        self.label_Item.setText(self.item.tooltip())
         base_item = self.base_items[self.item.base_name]
 
         # Ensure there is a proper socket setup
@@ -136,8 +135,20 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         if self.max_num_sockets != len(self.socket_widgets):
             for s_idx in range(self.max_num_sockets, len(self.socket_widgets)):
                 self.socket_widgets[s_idx].setHidden(True)
-            for c_idx in range(self.max_num_sockets, len(self.connector_widgets)):
+            for c_idx in range(max(self.max_num_sockets, 1), len(self.connector_widgets)):
                 self.connector_widgets[c_idx].setHidden(True)
+
+        variants = len(self.item.variant_names) != 1
+        self.combo_Variants.setVisible(variants)
+        self.label_Variants.setVisible(variants)
+        # if variants:
+        #     self.combo_Variants.addItems(self.item.variant_names)
+        max_variant = self.item.max_variant
+        if max_variant == 0:
+            max_variant = len(self.item.variant_names)
+        for idx, vname in enumerate(self.item.variant_names):
+            if vname is not None and vname != "" and idx <= max_variant:
+                self.combo_Variants.addItem(vname)
 
         self.connect_triggers()
 
@@ -148,6 +159,11 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
                 match socket:
                     case "R" | "G" | "B" | "W" | "A":
                         set_combo_index_by_text(self.socket_widgets[idx], socket)
+
+        if variants:
+            curr_variant = self.item.curr_variant == 0 and self.combo_Variants.count() or self.item.curr_variant
+            self.combo_Variants.setCurrentIndex(curr_variant - 1)
+        self.label_Item.setText(self.item.tooltip())
 
     def connect_triggers(self):
         def make_combo_connection(_idx, _combo):
@@ -178,6 +194,8 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
             make_combo_connection(idx, combo)
         for idx, checkbox in enumerate(self.connector_widgets):  # Remember self.connector_widgets is a 1 based array
             make_checkbox_connection(idx, checkbox)
+
+        self.combo_Variants.currentIndexChanged.connect(self.change_variant)
 
     @Slot()
     def update_status_bar(self, message="", timeout=10):
@@ -286,3 +304,13 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         """
         self.item.sockets = self.sockets
         self.accept()
+
+    @Slot()
+    def change_variant(self, index):
+        # print("change_variant", index)
+        if index < 0:
+            return
+        base_names = self.item.variant_entries["base_name"]
+        self.item.base_name = base_names[index]
+        self.item.curr_variant = index + 1
+        self.label_Item.setText(self.item.tooltip())
