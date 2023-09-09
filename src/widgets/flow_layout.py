@@ -159,8 +159,8 @@ class FlowLayout(QLayout):
         :param test_only: boolean: processes everything but will not alter the position of widgets.
         :return: integer: The height that the parent should be.
         """
-        x = rect.x()
-        y = rect.y()
+        x = self.margin
+        y = self.margin
         line_height = 0
 
         for item in self.itemList:
