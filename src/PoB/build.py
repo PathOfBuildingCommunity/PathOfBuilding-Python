@@ -125,7 +125,7 @@ class Build:
 
     @property
     def className(self):
-        return self.build.get("className")
+        return self.build.get("className", "Scion")
 
     @className.setter
     def className(self, new_name):
@@ -133,7 +133,7 @@ class Build:
 
     @property
     def ascendClassName(self):
-        return self.build.get("ascendClassName")
+        return self.build.get("ascendClassName", "None")
 
     @ascendClassName.setter
     def ascendClassName(self, new_name):
@@ -330,7 +330,7 @@ class Build:
                 f"{self.tr('Load build')}: v{self.version}",
                 f"{self.tr('The build contains the following unsupported Tree versions')}:\n"
                 f"{str(invalid_spec_versions)[1:-1]}\n\n"
-                f"{self.tr('These will be converted to ')}{_VERSION}\n",
+                + self.tr(f"These will be converted to {_VERSION} and renamed to indicate this.\n"),
                 self.tr("Close"),
             )
 
@@ -342,6 +342,8 @@ class Build:
         # In the xml, activeSpec is 1 based, but python indexes are 0 based, so we subtract 1
         self.activeSpec = int(self.tree.get("activeSpec", 1)) - 1
         self.current_spec = self.specs[self.activeSpec]
+        self.className = self.current_spec.classId_str()
+        self.ascendClassName = self.current_spec.ascendClassId_str()
         # new
 
     def save_to_xml(self, version="2"):
@@ -365,6 +367,9 @@ class Build:
         self.win.config_ui.save()
         for spec in self.specs:
             spec.save()
+        # ensure these get updated to match last tree shown.
+        self.className = self.current_spec.classId_str()
+        self.ascendClassName = self.current_spec.ascendClassId_str()
 
         """Debug Please leave until build is mostly complete"""
         # print("build")

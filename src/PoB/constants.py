@@ -12,7 +12,6 @@ All values should only be scaled on point of entry, ie: when they are first proc
 global_scale_factor = 2.5
 pob_debug = True  # Default setting for now. Will move to settings.xml
 
-_VERSION_str = "3_22"
 tree_versions = {
     "3_18": "3.18",
     "3_19": "3.19",
@@ -20,6 +19,7 @@ tree_versions = {
     "3_21": "3.21",
     "3_22": "3.22",
 }
+_VERSION_str = "3_22"
 _VERSION = tree_versions[_VERSION_str]
 # default_view_mode = "TREE"
 default_view_mode = "ITEMS"

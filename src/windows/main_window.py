@@ -69,8 +69,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.curr_theme: QAction = None
         self.qss_default_text = f"rgba( 255, 255, 255, 0.500 )"
 
-        # Flag to stop some actions happening in triggers during loading
-        self.loading = False
+        # Flag to stop some actions happening in triggers during loading or changing tree Specs
+        self.alerting = True
 
         self.max_points = 123
         self.settings = Settings(self, _app)
@@ -494,7 +494,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param filename_or_xml: ET.ElementTree: the xml of a file that was loaded or downloaded.
         :return: N/A
         """
-        self.loading = True
+        self.alerting = False
         new = True
         self.build.filename = ""
         if type(filename_or_xml) is ET.ElementTree:
@@ -528,7 +528,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # This is needed to make the jewels show. Without it, you need to select or deselect a node.
         self.gview_Tree.add_tree_images(True)
-        self.loading = False
+        self.alerting = True
 
     @Slot()
     def build_save(self):
@@ -590,11 +590,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if poep is not None:
             self.build.current_spec.set_nodes_from_poeplanner_url(url)
         if ggg is not None or poep is not None:
-            self.loading = True
+            self.alerting = False
             self.change_tree("Refresh")
             # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
             # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-            self.loading = False
+            self.alerting = True
         # self.connect_widget_triggers()
         # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
         # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
@@ -603,7 +603,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def combo_item_manage_tree_changed(self, tree_label):
         """
         This is the Manage Tree combo on the Items Tab. Tell the Manage Tree combo on the Tree tab to change trees.
-        :param tree_label: the ame of the item just selected
+        :param tree_label: the name of the item just selected
         :return:
         """
         # "" will occur during a combobox clear
@@ -637,20 +637,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Also stops updating build.current_spec
         self.refresh_tree = False
 
+        # Do Not alert about changing asscendencies when changing trees
+        curr_alerting = self.alerting
+        self.alerting = False
         _current_class = self.combo_classes.currentData()
         if self.build.current_spec.classId == _current_class:
             # update the ascendancy combo in case it's different
             self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-            # return
-
-        # Protect the ascendancy value as it will get clobbered ...
-        _ascendClassId = self.build.current_spec.ascendClassId
-        # .. when this refreshes the Ascendancy combo box ...
-        self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
-        # ... so we need to reset it's index
-        self.combo_ascendancy.setCurrentIndex(_ascendClassId)
+        else:
+            # Protect the ascendancy value as it will get clobbered ...
+            _ascendClassId = self.build.current_spec.ascendClassId
+            # .. when this refreshes the Ascendancy combo box ...
+            self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
+            # ... so we need to reset it's index
+            self.combo_ascendancy.setCurrentIndex(_ascendClassId)
 
         set_combo_index_by_data(self.combo_Bandits, self.build.bandit)
+        self.alerting = curr_alerting
 
         self.refresh_tree = True
         self.gview_Tree.add_tree_images(full_clear)
@@ -665,9 +668,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return:
         """
         new_class = self.combo_classes.currentData()
+        # print(f"class_changed: '{selected_class}'", self.build.current_spec.classId, new_class, self.refresh_tree)
         if self.build.current_spec.classId == new_class and self.refresh_tree:
             return
-        if not self.loading:
+        if self.alerting:
             node_num = self.build.ascendClassName == "None" and 1 or 2
             if len(self.build.current_spec.nodes) > node_num and not yes_no_dialog(
                 self,
@@ -705,7 +709,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "" will occur during a combobox clear.
         :return:
         """
-        # print(f"ascendancy_changed: '{selected_ascendancy}'", self.refresh_tree)
+        # print(f"ascendancy_changed: '{selected_ascendancy}'", self.build.current_spec.ascendClassId_str(), self.refresh_tree)
         if selected_ascendancy == "":
             # "" will occur during a combobox clear (changing class)
             return
@@ -713,33 +717,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         current_spec = self.build.current_spec
         curr_ascendancy_name = current_spec.ascendClassId_str()
         if curr_ascendancy_name != "None":
-            if not self.loading:
-                current_nodes = set(self.build.current_spec.nodes)
-                # ascendancy start node is *NOT* in this list.
-                nodes_in_ascendancy = [x for x in current_tree.ascendancyMap[curr_ascendancy_name] if x in current_nodes]
-                if len(nodes_in_ascendancy) > 1:
-                    if not yes_no_dialog(
-                        self,
-                        self.tr("Resetting your Ascendancy"),
-                        self.tr("Are you sure? It could be dangerous. Your current ascendancy points will be removed."),
-                    ):
-                        # Don't alert on Undoing the class change.
-                        self.loading = True
-                        # Undo the class change.
-                        self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-                        self.loading = False
-                        return
-                    else:
-                        # We do want to reset nodes.
-                        for node_id in nodes_in_ascendancy:
-                            self.build.current_spec.nodes.remove(node_id)
+            current_nodes = set(self.build.current_spec.nodes)
+            # ascendancy start node is *NOT* in this list.
+            nodes_in_ascendancy = [x for x in current_tree.ascendancyMap[curr_ascendancy_name] if x in current_nodes]
+            if len(nodes_in_ascendancy) > 1 and self.alerting:
+                if not yes_no_dialog(
+                    self,
+                    self.tr("Resetting your Ascendancy"),
+                    self.tr("Are you sure? It could be dangerous. Your current ascendancy points will be removed."),
+                ):
+                    # Don't alert on Undoing the class change.
+                    self.alerting = False
+                    # Undo the class change.
+                    self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
+                    self.alerting = True
+                    return
+                else:
+                    # We do want to reset nodes.
+                    for node_id in nodes_in_ascendancy:
+                        self.build.current_spec.nodes.remove(node_id)
 
-                # Remove old start node.
-                self.build.current_spec.nodes.discard(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
+            # Remove old start node.
+            self.build.current_spec.nodes.discard(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
 
             if selected_ascendancy != "None":
                 # add new start node.
-                # self.build.current_spec.nodes.append(current_tree.ascendancy_start_nodes[selected_ascendancy])
                 self.build.current_spec.nodes.add(current_tree.ascendancy_start_nodes[selected_ascendancy])
 
         if self.refresh_tree:

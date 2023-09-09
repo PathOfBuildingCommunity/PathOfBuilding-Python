@@ -78,10 +78,6 @@ class Spec:
     def classId(self) -> int:
         return PlayerClasses(int(self.xml_spec.get("classId", PlayerClasses.SCION.value)))
 
-    def classId_str(self) -> str:
-        """Return a string of the current Class"""
-        return self.classId.name.title()
-
     @classId.setter
     def classId(self, new_class_id):
         """
@@ -92,6 +88,10 @@ class Spec:
             self.xml_spec.set("classId", f"{new_class_id}")
         else:
             self.xml_spec.set("classId", f"{new_class_id.value}")
+
+    def classId_str(self) -> str:
+        """Return a string of the current Class"""
+        return self.classId.name.title()
 
     @property
     def ascendClassId(self) -> int:
@@ -177,7 +177,6 @@ class Spec:
         self.nodes = set()
         for i in range(0, len(decoded_nodes), 2):
             print(i, int.from_bytes(decoded_nodes[i : i + 2], endian))
-            # self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], endian))
             self.nodes.add(int.from_bytes(decoded_nodes[i : i + 2], endian))
         return end
 
@@ -199,7 +198,6 @@ class Spec:
             for i in range(0, len(decoded_cluster_nodes), 2):
                 # print(''.join('{:02x} '.format(x) for x in cluster_nodes[i:i + 2]))
                 # print(i, int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
-                # self.nodes.append(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
                 self.nodes.add(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
         return end
 
@@ -232,7 +230,6 @@ class Spec:
                 print("id", m_id, "effect", m_effect)
                 self.masteryEffects[m_id] = m_effect
                 self.nodes.add(m_id)
-                # self.nodes.append(m_id)
 
     def import_ascendancy_nodes(self, decoded_data, start, count, endian):
         """
@@ -251,7 +248,6 @@ class Spec:
             for i in range(0, len(decoded_ascendancy_nodes), 2):
                 # print("".join("{:02x} ".format(x) for x in decoded_ascendancy_nodes[i : i + 2]))
                 print(i, self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
-                # self.nodes.append(self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
                 self.nodes.add(self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
         return end
 

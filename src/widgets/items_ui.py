@@ -60,7 +60,8 @@ class ItemsUI:
         self.triggers_connected = False
         self.internal_clipboard = None
         self.dlg = None  # Is a dialog active
-        self.loading = True
+        # Flag to stop some actions happening in triggers during loading
+        self.alerting = False
 
         self.base_items = read_json(Path(self.settings.data_dir, "base_items.json"))
         self.mods = read_json(Path(self.settings.data_dir, "mods.json"))
@@ -124,7 +125,7 @@ class ItemsUI:
         self.win.lineedit_ItemsSearch.textChanged.connect(self.filter_items_list)
         self.win.btn_ManageItemSet.clicked.connect(self.manage_itemset_button_clicked)
         self.win.btn_ItemsManageTree.clicked.connect(self.tree_ui.open_manage_trees)
-        self.loading = False
+        self.alerting = True
 
     def setup_ui(self):
         """Call setupUI on all UI classes that need it"""
@@ -408,7 +409,7 @@ class ItemsUI:
             for idx, slot_ui in enumerate(self.abyssal_item_slot_ui_list_by_slotname[slot_name]):
                 slot_ui.setVisible(num_abyssal_sockets != 0 and idx < num_abyssal_sockets)
 
-        if self.loading:
+        if not self.alerting:
             return
 
         # Further functionality that requires a loaded system
@@ -678,7 +679,7 @@ class ItemsUI:
         """
         # print("items_ui.load_from_xml")
         self.disconnect_item_triggers()
-        self.loading = True
+        self.alerting = False
         self.xml_items = _items
         self.clear_controls(True)
         self.win.combo_ItemSet.clear()
@@ -706,7 +707,7 @@ class ItemsUI:
                 active_set_title = _item_set.get("title", "Default")
         self.fill_item_slot_uis()
         self.fill_jewel_slot_uis()
-        self.loading = False
+        self.alerting = True
         self.connect_item_triggers()
         # Trigger showing the correct itemset
         set_combo_index_by_text(self.win.combo_ItemSet, active_set_title)
@@ -722,7 +723,7 @@ class ItemsUI:
         """
         # print("items_ui.load_from_ggg_json")
         self.disconnect_item_triggers()
-        self.loading = True
+        self.alerting = False
         if delete_it_all:
             self.delete_all_items()
             self.delete_all_itemsets()
@@ -741,7 +742,7 @@ class ItemsUI:
         self.fill_item_slot_uis()
         self.win.combo_ItemSet.setCurrentIndex(0)
         self.show_itemset(0, True)
-        self.loading = False
+        self.alerting = True
         self.connect_item_triggers()
 
     def import_from_poep_json(self, json_items, itemset_name):
@@ -763,7 +764,7 @@ class ItemsUI:
 
         """
         self.disconnect_item_triggers()
-        self.loading = True
+        self.alerting = False
         self.delete_all_items()
         self.delete_all_itemsets()
         self.xml_current_itemset = self.new_itemset(itemset_name)
@@ -789,7 +790,7 @@ class ItemsUI:
         self.win.combo_ItemSet.setCurrentIndex(0)
         self.show_itemset(0, True)
         self.save()
-        self.loading = False
+        self.alerting = True
         self.connect_item_triggers()
 
     def save(self, version="2"):

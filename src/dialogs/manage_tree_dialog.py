@@ -86,9 +86,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         """
         self.disconnect_triggers()
         for idx, spec in enumerate(self.build.specs):
-            text = (
-                spec.treeVersion != _VERSION_str and f"[{tree_versions[spec.treeVersion]}] {spec.title}" or spec.title
-            )
+            text = spec.treeVersion != _VERSION_str and f"[{tree_versions[spec.treeVersion]}] {spec.title}" or spec.title
             text += f" ({spec.ascendClassId_str()}, {len(spec.nodes)} points)"
             self.list_Trees.item(idx).setText(text)
         self.connect_triggers()
