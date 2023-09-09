@@ -571,34 +571,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build_save()
                 self.add_recent_build_menu_item()
 
-    def import_tree(self, url):
-        """
-        Import Tree.
-        main_window needs to own this as it has control of the triggers.
-
-        :param url: passive tree URL.
-        :return: N/A
-        """
-        # print("win.import_tree", url)
-        # self.disconnect_widget_triggers()
-        # Which url has been imported
-        ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", url + "==")
-        poep = re.search(r"http.*poeplanner.com/(.*)", url + "==")
-        if ggg is not None:
-            self.build.current_spec.URL = url
-            self.build.current_spec.set_nodes_from_ggg_url()
-        if poep is not None:
-            self.build.current_spec.set_nodes_from_poeplanner_url(url)
-        if ggg is not None or poep is not None:
-            self.alerting = False
-            self.change_tree("Refresh")
-            # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
-            # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-            self.alerting = True
-        # self.connect_widget_triggers()
-        # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
-        # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-
     @Slot()
     def combo_item_manage_tree_changed(self, tree_label):
         """

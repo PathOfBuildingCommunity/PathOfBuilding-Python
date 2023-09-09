@@ -251,23 +251,40 @@ class Spec:
                 self.nodes.add(self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
         return end
 
-    def set_nodes_from_ggg_url(self):
+    def import_tree(self, new_url):
         """
-        This function sets the nodes from the self.URL property. This allows us to set the URL for legacy purposes
-        without actually disturbing the node information we have.
+        Import a passive tree URL.
 
+        :return: N/A
+        """
+        # print("Spec.import_tree", new_url)
+        if new_url is None or new_url == "":
+            return
+        ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", new_url)
+        poep = re.search(r"http.*poeplanner.com/(.*)", new_url)
+        if ggg is not None:
+            self.set_nodes_from_ggg_url(new_url)
+        if poep is not None:
+            self.set_nodes_from_poeplanner_url(new_url)
+
+    def set_nodes_from_ggg_url(self, ggg_url):
+        """
+        This function sets the nodes from GGG url.
+
+        :param ggg_url: str: incoming url.
         :return: N/A
         """
         endian = "big"
 
-        if self.URL is None:
+        if ggg_url is None or ggg_url == "":
             return
-        m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", self.URL)
+        m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", ggg_url)
 
         # check the validity of what was passed in
         # group(1) is None or a version
         # group(2) is always the encoded string, with any variables
         if m is not None:
+            self.URL = ggg_url
             self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             if self.treeVersion not in tree_versions.keys():
                 v = re.sub("_", ".", self.treeVersion)
@@ -275,22 +292,21 @@ class Spec:
                     self.build.win,
                     f"{self.tr('Invalid tree version')}: {v}",
                     f"{self.tr('Valid tree versions are')}:\n{str(list(tree_versions.values()))[1:-1]}\n\n"
-                    f"{self.tr('This will be converted to ')}{_VERSION}\n",
+                    + f"{self.tr('This will be converted to ')}{_VERSION}\n",
                 )
                 self.title = f"{self.title} ({self.tr('was')} v{v})"
                 self.treeVersion = _VERSION_str
 
-            # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
-            output = m.group(2).split("?")
-            decoded_data = base64.urlsafe_b64decode(output[0])
-            # print(type(decoded_data), decoded_data)
-            # print(f"decoded_data: {len(decoded_data)},", "".join("{:02x} ".format(x) for x in decoded_data))
-            # _fn = Path("tree.bin")
-            # try:
-            #     with _fn.open("wb") as f:
-            #         f.write(decoded_data)
-            # except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
-            #     print(f"Unable to write to {_fn}")
+            tmp_output = m.group(2).split("?")
+            encoded_str = tmp_output[0]
+            del tmp_output[0]
+            # a list of variable=value (accountName=xyllywyt&characterName=PrettyXylly) found on the url or an empty list
+            variables = tmp_output
+            decoded_data = base64.urlsafe_b64decode(encoded_str)
+
+            # # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
+            # output = m.group(2).split("?")
+            # decoded_data = base64.urlsafe_b64decode(output[0])
 
             # the decoded_data is 0 based, so every index will be one smaller than the equivalent in lua
             if decoded_data and len(decoded_data) > 7:
@@ -318,6 +334,7 @@ class Spec:
         """
         This function sets the nodes from poeplanner url.
 
+        :param poep_url: str: incoming url.
         :return: N/A
         """
         endian = "little"
@@ -331,16 +348,17 @@ class Spec:
             # fmt: on
             return tree_versions.get(minor, -1)
 
-        if poep_url is None:
+        if poep_url is None or poep_url == "":
             return
-        m = re.search(r"http.*poeplanner.com/(.*)", poep_url)
+        m = re.search(r"http.*poeplanner.com/(.*)?(.*)", poep_url)
         # group(1) is always the encoded string
         if m is not None:
+            print("M", m.groups())
             # Remove any variables at the end (probably not required for poeplanner)
             tmp_output = m.group(1).split("?")
             encoded_str = tmp_output[0]
             del tmp_output[0]
-            variables = tmp_output  # a list of variable=value or an empty list
+            variables = tmp_output  # a list of variable=value found on the url or an empty list
 
             decoded_data = base64.urlsafe_b64decode(encoded_str)
             # print(f"decoded_data: {len(decoded_data)},", "".join("{:02x} ".format(x) for x in decoded_data))
@@ -427,7 +445,8 @@ class Spec:
         # print(string)
 
         encoded_string = base64.urlsafe_b64encode(byte_stream).decode("utf-8")
-        return f"https://www.pathofexile.com/passive-skill-tree/{encoded_string}"
+        self.URL = f"https://www.pathofexile.com/passive-skill-tree/{encoded_string}"
+        return self.URL
 
     def set_mastery_effects_from_string(self, new_effects):
         """

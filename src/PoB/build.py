@@ -508,7 +508,7 @@ class Build:
 
         :param new_title: str
         :param version: float: the version number of this spec. Default to the default Tree version
-        :param xml_spec: ET.elementtree: If specified, the new x,l representation
+        :param xml_spec: ET.elementtree: If specified, the new xml representation
         :param destination: int: If specified, insert the new spec at destination elsewise append to the end
         :return: Spec(): the newly created Spec()
         """
