@@ -256,10 +256,8 @@ class ImportTreePopup(QDialog):
             if ggg is not None:
                 # ggg.group(1) would be the version if present
                 # ggg.group(2) is the encoded string and variables (accountName= & characterName=) if present
-                # url_parts[0] will be the encoded string and the rest will be variable=value
+                # url_parts[0] will be the encoded string and the rest will be variable=value&...
                 url_parts = ggg.group(2).split("?")
-                print("groups", ggg.groups())
-                print("url_parts", url_parts)
                 decoded_bytes = base64.urlsafe_b64decode(url_parts[0] + "==")
                 self.decoded_state = len(decoded_bytes) > 7
                 self.validate_import_button_visibility(self.spec_name)
@@ -267,7 +265,8 @@ class ImportTreePopup(QDialog):
                     self.check_for_character_name_in_url(url_parts)
                     self.label_url.setText(self.seems_legit_text)
             elif poep is not None:
-                # url_parts[0] will be the encoded string and the rest will be variable=value, (probably not required for poeplanner)
+                # ggg.group(1) is the encoded string and variables if present, (probably not required for poeplanner)
+                # url_parts[0] will be the encoded string and the rest will be variable=value&...
                 url_parts = poep.group(1).split("?")
                 decoded_bytes = base64.urlsafe_b64decode(url_parts[0] + "==")
                 self.decoded_state = len(decoded_bytes) > 15

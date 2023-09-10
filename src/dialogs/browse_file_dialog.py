@@ -162,7 +162,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         self.disconnect_triggers()
         if os.path.exists(new_dir):
             os.chdir(new_dir)
-            self.lineEdit_CurrDir.setText(new_dir)
+            self.lineEdit_CurrDir.setText(str(new_dir))
             self.fill_list_box(new_dir)
         self.list_Files.setFocus()
         # Guarantee that currentItem() is never None.

@@ -268,7 +268,7 @@ class Settings:
 
     @build_path.setter
     def build_path(self, new_path):
-        self.misc.set("buildPath", new_path)
+        self.misc.set("buildPath", str(new_path))
 
     @property
     def beta_mode(self):

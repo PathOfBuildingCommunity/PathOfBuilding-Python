@@ -102,9 +102,7 @@ class SkillsUI:
         for idx, entry in enumerate(DefaultGemLevel_info.keys()):
             info = DefaultGemLevel_info[entry]
             self.win.combo_DefaultGemLevel.addItem(tr(info.get("name")), entry)
-            self.win.combo_DefaultGemLevel.setItemData(
-                idx, html_colour_text("TANGLE", tr(info.get("tooltip"))), Qt.ToolTipRole
-            )
+            self.win.combo_DefaultGemLevel.setItemData(idx, html_colour_text("TANGLE", tr(info.get("tooltip"))), Qt.ToolTipRole)
 
         # self.win.combo_DefaultGemLevel.addItem(tr("Normal Maximum"), "normalMaximum")
         # self.win.combo_DefaultGemLevel.addItem(tr("Corrupted Maximum"), "corruptedMaximum")
@@ -119,14 +117,10 @@ class SkillsUI:
 
         self.socket_group_to_be_moved = None
         self.win.list_SocketGroups.model().rowsMoved.connect(self.socket_groups_rows_moved)  # , Qt.QueuedConnection)
-        self.win.list_SocketGroups.model().rowsAboutToBeMoved.connect(
-            self.socket_groups_rows_about_to_be_moved  # , Qt.QueuedConnection
-        )
+        self.win.list_SocketGroups.model().rowsAboutToBeMoved.connect(self.socket_groups_rows_about_to_be_moved)  # , Qt.QueuedConnection
         self.skill_gem_to_be_moved = None
         self.win.list_Skills.model().rowsMoved.connect(self.skill_gem_rows_moved)  # , Qt.QueuedConnection)
-        self.win.list_Skills.model().rowsAboutToBeMoved.connect(
-            self.skill_gem_rows_about_to_be_moved  # , Qt.QueuedConnection
-        )
+        self.win.list_Skills.model().rowsAboutToBeMoved.connect(self.skill_gem_rows_about_to_be_moved)  # , Qt.QueuedConnection
 
         # Do NOT turn on skill triggers here
 
@@ -160,17 +154,9 @@ class SkillsUI:
         self.change_skill_set(-1)
 
         self.win.check_SortByDPS.setChecked(str_to_bool(self.xml_skills.get("sortGemsByDPS", "True")))
-        set_combo_index_by_data(
-            self.win.combo_SortByDPS,
-            self.xml_skills.get("sortGemsByDPSField", "FullDPS"),
-        )
-        self.win.check_ShowGemQualityVariants.setChecked(
-            str_to_bool(self.xml_skills.get("showAltQualityGems", "False"))
-        )
-        set_combo_index_by_data(
-            self.win.combo_ShowSupportGems,
-            self.xml_skills.get("showSupportGemTypes", "ALL"),
-        )
+        set_combo_index_by_data(self.win.combo_SortByDPS, self.xml_skills.get("sortGemsByDPSField", "FullDPS"))
+        self.win.check_ShowGemQualityVariants.setChecked(str_to_bool(self.xml_skills.get("showAltQualityGems", "False")))
+        set_combo_index_by_data(self.win.combo_ShowSupportGems, self.xml_skills.get("showSupportGemTypes", "ALL"))
         quality = self.xml_skills.get("defaultGemQuality", 0)
         if quality == "nil":
             quality = 0
@@ -340,13 +326,12 @@ class SkillsUI:
             # Don't re-connect
             return
         self.triggers_connected = True
-        # update the socket group label when something changes
-        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
-        self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
         self.win.check_SocketGroupEnabled.stateChanged.connect(self.save_socket_group_settings)
         self.win.check_SocketGroup_FullDPS.stateChanged.connect(self.save_socket_group_settings)
-        self.win.lineedit_SkillLabel.textChanged.connect(self.save_socket_group_settings)
+        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
         self.win.combo_SocketedIn.currentIndexChanged.connect(self.save_socket_group_settings)
+        self.win.lineedit_SkillLabel.textChanged.connect(self.save_socket_group_settings)
+        self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
 
     def disconnect_skill_triggers(self):
         """disconnect skill orientated triggers when updating widgets"""
@@ -356,12 +341,16 @@ class SkillsUI:
             # Don't disconnect if not connected
             return
         self.triggers_connected = False
-        self.win.combo_SkillSet.currentIndexChanged.disconnect(self.change_skill_set)
-        self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
-        self.win.check_SocketGroupEnabled.stateChanged.disconnect(self.save_socket_group_settings)
-        self.win.check_SocketGroup_FullDPS.stateChanged.disconnect(self.save_socket_group_settings)
-        self.win.lineedit_SkillLabel.textChanged.disconnect(self.save_socket_group_settings)
-        self.win.combo_SocketedIn.currentIndexChanged.disconnect(self.save_socket_group_settings)
+        try:
+            # During shutdown at least one of these will fail and alert on the command line
+            self.win.check_SocketGroupEnabled.stateChanged.disconnect(self.save_socket_group_settings)
+            self.win.check_SocketGroup_FullDPS.stateChanged.disconnect(self.save_socket_group_settings)
+            self.win.combo_SkillSet.currentIndexChanged.disconnect(self.change_skill_set)
+            self.win.combo_SocketedIn.currentIndexChanged.disconnect(self.save_socket_group_settings)
+            self.win.lineedit_SkillLabel.textChanged.disconnect(self.save_socket_group_settings)
+            self.win.list_SocketGroups.currentRowChanged.disconnect(self.change_socket_group)
+        except RuntimeError:
+            pass
 
     """
     ################################################### SKILL SET ###################################################
@@ -744,12 +733,8 @@ class SkillsUI:
                 self.build.check_socket_group_for_an_active_gem(self.xml_current_socket_group)
                 self.win.lineedit_SkillLabel.setText(self.xml_current_socket_group.get("label"))
                 set_combo_index_by_text(self.win.combo_SocketedIn, self.xml_current_socket_group.get("slot"))
-                self.win.check_SocketGroupEnabled.setChecked(
-                    str_to_bool(self.xml_current_socket_group.get("enabled", "False"))
-                )
-                self.win.check_SocketGroup_FullDPS.setChecked(
-                    str_to_bool(self.xml_current_socket_group.get("includeInFullDPS", "False"))
-                )
+                self.win.check_SocketGroupEnabled.setChecked(str_to_bool(self.xml_current_socket_group.get("enabled", "False")))
+                self.win.check_SocketGroup_FullDPS.setChecked(str_to_bool(self.xml_current_socket_group.get("includeInFullDPS", "False")))
                 for idx, gem in enumerate(self.xml_current_socket_group.findall("Gem")):
                     self.create_gem_ui(idx, gem)
                 # Create an empty gem at the end
@@ -860,11 +845,7 @@ class SkillsUI:
         row = self.win.list_Skills.row(item)
         gem_ui = self.win.list_Skills.itemWidget(item)
         # print("gem_ui_notify", item, row, gem_ui)
-        if (
-            gem_ui.xml_gem is not None
-            and gem_ui.skill_id != ""
-            and gem_ui.xml_gem not in self.xml_current_socket_group.findall("Gem")
-        ):
+        if gem_ui.xml_gem is not None and gem_ui.skill_id != "" and gem_ui.xml_gem not in self.xml_current_socket_group.findall("Gem"):
             self.xml_current_socket_group.append(gem_ui.xml_gem)
             # print(f"gem_ui_notify: {gem_ui.skill_id} not found, adding.")
             # Create an empty gem at the end

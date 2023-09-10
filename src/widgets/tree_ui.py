@@ -46,6 +46,7 @@ class TreeUI:
         self.combo_manage_tree = QComboBox()
         self.combo_manage_tree.setMinimumSize(QSize(180, widget_height))
         self.combo_manage_tree.setMaximumSize(QSize(300, 16777215))
+        self.combo_manage_tree.setSizeAdjustPolicy(QComboBox.AdjustToContents)
         self.layout_tree_tools.addWidget(self.combo_manage_tree)
 
         self.check_Compare = QCheckBox()
@@ -53,14 +54,15 @@ class TreeUI:
         self.check_Compare.setText("Compare Tree")
         self.check_Compare.setLayoutDirection(Qt.RightToLeft)
         self.check_Compare.stateChanged.connect(self.set_combo_compare_visibility)
-        # self.layout_tree_tools.addWidget(self.check_Compare)
+        self.layout_tree_tools.addWidget(self.check_Compare)
 
         self.combo_compare = QComboBox()
         self.combo_compare.setMinimumSize(QSize(180, widget_height))
         self.combo_compare.setMaximumSize(QSize(300, 16777215))
         self.combo_compare.setVisible(False)
+        self.combo_compare.setSizeAdjustPolicy(QComboBox.AdjustToContents)
         self.layout_tree_tools.addWidget(self.combo_compare)
-        # self.combo_compare.currentIndexChanged.connect(self.change_compare_combo)
+        self.combo_compare.currentIndexChanged.connect(self.change_compare_combo)
 
         self.btn_Reset = QPushButton()
         self.btn_Import = QPushButton()
@@ -68,9 +70,9 @@ class TreeUI:
         self.btn_Reset.setText(f'{self.tr("&Reset Tree")} ...')
         self.btn_Import.setText(f'{self.tr("I&mport Tree")} ...')
         self.btn_Export.setText(f'{self.tr("E&xport Tree")} ...')
-        # self.layout_tree_tools.addWidget(self.btn_Reset)
-        # self.layout_tree_tools.addWidget(self.btn_Import)
-        # self.layout_tree_tools.addWidget(self.btn_Export)
+        self.layout_tree_tools.addWidget(self.btn_Reset)
+        self.layout_tree_tools.addWidget(self.btn_Import)
+        self.layout_tree_tools.addWidget(self.btn_Export)
         self.btn_Reset.clicked.connect(self.reset_tree)
         self.btn_Import.clicked.connect(self.import_tree)
         self.btn_Export.clicked.connect(self.export_tree)
@@ -79,10 +81,10 @@ class TreeUI:
         self.label_Search.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.label_Search.setMinimumSize(QSize(50, widget_height))
         self.label_Search.setText("Search:")
-        # self.layout_tree_tools.addWidget(self.label_Search)
+        self.layout_tree_tools.addWidget(self.label_Search)
         self.lineEdit_Search = QLineEdit()
         self.lineEdit_Search.setMinimumSize(QSize(150, widget_height))
-        # self.layout_tree_tools.addWidget(self.lineEdit_Search)
+        self.layout_tree_tools.addWidget(self.lineEdit_Search)
 
         self.check_show_node_power = QCheckBox()
         self.check_show_node_power.setMinimumSize(QSize(140, widget_height))
@@ -90,18 +92,18 @@ class TreeUI:
         self.check_show_node_power.setLayoutDirection(Qt.RightToLeft)
         self.check_show_node_power.stateChanged.connect(self.set_show_node_power_visibility)
         self.check_show_node_power.setEnabled(True)
-        # self.layout_tree_tools.addWidget(self.check_show_node_power)
+        self.layout_tree_tools.addWidget(self.check_show_node_power)
         self.combo_show_node_power = QComboBox()
         self.combo_show_node_power.setMinimumSize(QSize(180, widget_height))
         self.combo_show_node_power.setMaximumSize(QSize(180, 16777215))
         self.combo_show_node_power.setVisible(False)
         self.combo_show_node_power.setEnabled(True)
-        # self.layout_tree_tools.addWidget(self.combo_show_node_power)
+        self.layout_tree_tools.addWidget(self.combo_show_node_power)
         self.btn_show_power_report = QPushButton()
         self.btn_show_power_report.setText(f'{self.tr("Show Power Report")} ...')
         self.btn_show_power_report.setVisible(False)
         self.btn_show_power_report.setEnabled(True)
-        # self.layout_tree_tools.addWidget(self.btn_show_power_report)
+        self.layout_tree_tools.addWidget(self.btn_show_power_report)
         """ End Adding Widgets to the QFrame at the bottom of the TreeView. """
 
         self.lineEdit_Search.textChanged.connect(self.search_text_changed)
@@ -189,14 +191,8 @@ class TreeUI:
                 else:
                     title = spec.title
                 for combo in (self.combo_manage_tree, self.win.combo_ItemsManageTree, self.combo_compare):
-                    curr_visibility = combo.isHidden()
-                    print(combo, curr_visibility)
                     combo.addItem(title, idx)
                     combo.view().setMinimumWidth(combo.minimumSizeHint().width())
-                    combo.view().updateGeometries()
-                    combo.view().reset()
-                    # combo.setHidden(True)
-                    # combo.setHidden(curr_visibility)
 
         # reset activeSpec
         self.combo_manage_tree.setCurrentIndex(active_spec)

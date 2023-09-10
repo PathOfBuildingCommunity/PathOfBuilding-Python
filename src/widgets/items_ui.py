@@ -151,11 +151,11 @@ class ItemsUI:
             return
         self.triggers_connected = True
         self.win.btn_WeaponSwap.clicked.connect(self.weapon_swap2)
+        self.win.combo_ItemSet.currentIndexChanged.connect(self.change_itemset)
+        self.win.list_ImportItems.itemDoubleClicked.connect(self.import_items_list_double_clicked)
         self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
         self.win.list_Items.itemClicked.connect(self.on_row_changed)
         self.win.list_Items.itemDoubleClicked.connect(self.item_list_double_clicked)
-        self.win.list_ImportItems.itemDoubleClicked.connect(self.import_items_list_double_clicked)
-        self.win.combo_ItemSet.currentIndexChanged.connect(self.change_itemset)
 
     def disconnect_item_triggers(self):
         """disconnect widget triggers that need to be disconnected during loading and other processing"""
@@ -165,12 +165,16 @@ class ItemsUI:
             # Don't disconnect if not connected
             return
         self.triggers_connected = False
-        self.win.btn_WeaponSwap.clicked.disconnect(self.weapon_swap2)
-        self.win.list_Items.currentItemChanged.disconnect(self.on_row_changed)
-        self.win.list_Items.itemClicked.disconnect(self.on_row_changed)
-        self.win.list_Items.itemDoubleClicked.disconnect(self.item_list_double_clicked)
-        self.win.list_ImportItems.itemDoubleClicked.disconnect(self.import_items_list_double_clicked)
-        self.win.combo_ItemSet.currentIndexChanged.disconnect(self.change_itemset)
+        try:
+            # During shutdown at least one of these will fail and alert on the command line
+            self.win.btn_WeaponSwap.clicked.disconnect(self.weapon_swap2)
+            self.win.combo_ItemSet.currentIndexChanged.disconnect(self.change_itemset)
+            self.win.list_ImportItems.itemDoubleClicked.disconnect(self.import_items_list_double_clicked)
+            self.win.list_Items.currentItemChanged.disconnect(self.on_row_changed)
+            self.win.list_Items.itemClicked.disconnect(self.on_row_changed)
+            self.win.list_Items.itemDoubleClicked.disconnect(self.item_list_double_clicked)
+        except RuntimeError:
+            pass
 
     def create_equipped_abyssal_socket_slots(self, item_name, number_of_sockets):
         for idx in range(number_of_sockets, 0, -1):

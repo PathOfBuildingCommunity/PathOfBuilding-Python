@@ -261,7 +261,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -1346,11 +1346,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                              <height>24</height>
                             </size>
                            </property>
+                           <property name="layoutDirection">
+                            <enum>Qt::LeftToRight</enum>
+                           </property>
                            <property name="text">
                             <string>Passive Tree:</string>
                            </property>
                            <property name="alignment">
-                            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                            </property>
                            <property name="buddy">
                             <cstring>combo_ItemsManageTree</cstring>
@@ -1370,6 +1373,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                              <width>16777215</width>
                              <height>24</height>
                             </size>
+                           </property>
+                           <property name="sizeAdjustPolicy">
+                            <enum>QComboBox::AdjustToContents</enum>
                            </property>
                           </widget>
                          </item>
@@ -2233,9 +2239,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    <pointsize>8</pointsize>
                   </font>
                  </property>
-                 <property name="sizeAdjustPolicy">
-                  <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-                 </property>
                  <property name="minimumContentsLength">
                   <number>60</number>
                  </property>
@@ -2412,9 +2415,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <font>
                    <pointsize>8</pointsize>
                   </font>
-                 </property>
-                 <property name="sizeAdjustPolicy">
-                  <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
                  </property>
                  <property name="minimumContentsLength">
                   <number>60</number>
