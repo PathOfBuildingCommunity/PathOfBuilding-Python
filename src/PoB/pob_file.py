@@ -1,5 +1,5 @@
 """
-Functions for reading and writing xml
+Functions for reading and writing xml and json
 
 This is a base PoB class. It doesn't import any other PoB classes
 """
@@ -42,7 +42,7 @@ def get_file_info(win, filename, max_length, max_filename_width=40, html=True):
         # The information on the right
         version = xml_build.get("@version", "1")
         level = xml_build.get("@level", "1")
-        class_name = xml_build.get("@className", "1")
+        class_name = xml_build.get("@className", "Scion")
         ascend_class_name = xml_build.get("@ascendClassName", "None")
         _class = ascend_class_name == "None" and class_name or ascend_class_name
         info_text = f" Level {level} {_class} (v{version})"

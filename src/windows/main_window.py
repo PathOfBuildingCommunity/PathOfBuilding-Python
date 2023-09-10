@@ -31,8 +31,8 @@ from PoB.constants import (
 )
 
 from PoB.build import Build
-from PoB.pob_config import Config
-from PoB.pob_file import get_file_info
+from PoB.settings import Settings
+from PoB.pob_file import get_file_info, read_json
 from dialogs.browse_file_dialog import BrowseFileDlg
 from dialogs.export_dialog import ExportDlg
 from dialogs.import_dialog import ImportDlg
@@ -54,10 +54,7 @@ from ui.PoB_Main_Window import Ui_MainWindow
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, _app) -> None:
         super(MainWindow, self).__init__()
-        print(
-            f"{datetime.datetime.now()}. {program_title}, running on {platform.system()} {platform.release()};"
-            f" {platform.version()}"
-        )
+        print(f"{datetime.datetime.now()}. {program_title}, running on {platform.system()} {platform.release()};" f" {platform.version()}")
         self.app = _app
         self.tr = self.app.tr
         self._os = platform.system()
@@ -72,12 +69,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.curr_theme: QAction = None
         self.qss_default_text = f"rgba( 255, 255, 255, 0.500 )"
 
-        # Flag to stop some actions happening in triggers during loading
-        self.loading = False
+        # Flag to stop some actions happening in triggers during loading or changing tree Specs
+        self.alerting = True
 
         self.max_points = 123
-        self.config = Config(self, _app)
-        self.resize(self.config.size)
+        self.settings = Settings(self, _app)
+        self.resize(self.settings.size)
 
         self.setupUi(self)
 
@@ -85,17 +82,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle(program_title)  # Do not translate
 
         # Start with an empty build
-        self.build = Build(self.config, self)
-        self.current_filename = self.config.build_path
+        self.build = Build(self.settings, self)
+        self.current_filename = self.settings.build_path
 
         # Setup UI Classes()
-        self.stats = PlayerStats(self.config, self)
-        self.calcs_ui = CalcsUI(self.config, self)
-        self.config_ui = ConfigUI(self.config, self.build, self)
-        self.items_ui = ItemsUI(self.config, self)
-        self.notes_ui = NotesUI(self.config, self)
-        self.skills_ui = SkillsUI(self.config, self.build, self)
-        self.tree_ui = TreeUI(self.config, self.build, self.frame_TreeTools, self)
+        self.stats = PlayerStats(self.settings, self)
+        self.calcs_ui = CalcsUI(self.settings, self.build, self)
+        self.config_ui = ConfigUI(self.settings, self.build, self)
+        self.notes_ui = NotesUI(self.settings, self)
+        self.skills_ui = SkillsUI(self.settings, self.build, self)
+        self.tree_ui = TreeUI(self.settings, self.build, self.frame_TreeTools, self)
+        self.items_ui = ItemsUI(self.settings, self.build, self.tree_ui, self)
+        self.tree_ui.items_ui = self.items_ui
 
         # share the goodness
         self.build.gems_by_name_or_id = self.skills_ui.gems_by_name_or_id
@@ -144,10 +142,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Dump the placeholder Graphics View and add our own
         # Cannot be set in TreeUI() init due to recursion error.
-        self.gview_Tree = TreeView(self, self.config, self.build)
+        self.gview_Tree = TreeView(self.settings, self.build, self)
         self.vlayout_tabTree.replaceWidget(self.graphicsView_PlaceHolder, self.gview_Tree)
         # destroy the old object
         self.graphicsView_PlaceHolder.setParent(None)
+        # Copy the jewels list to tree_view so it can show jewels properly.
+        # These two should point to the same pointer, so further updates through items_ui will update both.
+        self.gview_Tree.items_jewels = self.items_ui.jewels
 
         # Add our FlowLayout to Config tab
         self.layout_config = FlowLayout(None, 0)
@@ -178,19 +179,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 html_colour_text("TANGLE", bandit_info.get("tooltip")),
                 Qt.ToolTipRole,
             )
-        self.combo_MajorGods.clear()
+        self.combo_MajorPantheon.clear()
         for idx, god_name in enumerate(pantheon_major_gods.keys()):
             god_info = pantheon_major_gods[god_name]
-            self.combo_MajorGods.addItem(god_info.get("name"), god_name)
-            self.combo_MajorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
-        self.combo_MinorGods.clear()
+            self.combo_MajorPantheon.addItem(god_info.get("name"), god_name)
+            self.combo_MajorPantheon.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
+        self.combo_MinorPantheon.clear()
         for idx, god_name in enumerate(pantheon_minor_gods.keys()):
             god_info = pantheon_minor_gods[god_name]
-            self.combo_MinorGods.addItem(god_info.get("name"), god_name)
-            self.combo_MinorGods.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
+            self.combo_MinorPantheon.addItem(god_info.get("name"), god_name)
+            self.combo_MinorPantheon.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
 
         self.menu_Builds.addSeparator()
-        self.set_recent_builds_menu_items(self.config)
+        self.set_recent_builds_menu_items(self.settings)
 
         # Collect original tooltip text for Actions (for managing the text color thru qss - switch_theme)
         # Must be before the first call to switch_theme
@@ -205,7 +206,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # with open(file, "r") as fh:
         #     QApplication.instance().setStyleSheet(fh.read())
         self.setup_theme_actions()
-        self.switch_theme(self.config.theme, self.curr_theme)
+        self.switch_theme(self.settings.theme, self.curr_theme)
 
         # Connect our Actions / triggers
         self.tab_main.currentChanged.connect(self.set_tab_focus)
@@ -213,7 +214,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_Open.triggered.connect(self.build_open)
         self.action_Save.triggered.connect(self.build_save)
         self.action_SaveAs.triggered.connect(self.build_save_as)
-        self.action_Settings.triggered.connect(self.config.open_settings_dialog)
+        self.action_Settings.triggered.connect(self.settings.open_settings_dialog)
         self.action_Import.triggered.connect(self.open_import_dialog)
         self.action_Export.triggered.connect(self.open_export_dialog)
         self.statusbar_MainWindow.messageChanged.connect(self.update_status_bar)
@@ -222,7 +223,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
+        # these two Manage Tree combo's are linked
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
+        self.combo_ItemsManageTree.currentTextChanged.connect(self.combo_item_manage_tree_changed)
         self.connect_widget_triggers()
 
         # Start the statusbar self updating
@@ -235,11 +238,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Remove splash screen if we are an executable
         if "NUITKA_ONEFILE_PARENT" in os.environ:
+            self.settings.pob_debug = False
             # Use this code to signal the splash screen removal.
             splash_filenames = glob.glob(f"{tempfile.gettempdir()}/onefile_*_splash_feedback.tmp")
             if splash_filenames:
                 for filename in splash_filenames:
-                    print("Splash found: ", filename)
+                    if self.settings.pob_debug:
+                        print("Splash found: ", filename)
                     os.unlink(filename)
 
     def setup_ui(self):
@@ -268,7 +273,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_classes.currentTextChanged.disconnect(self.class_changed)
         self.combo_ascendancy.currentTextChanged.disconnect(self.ascendancy_changed)
 
-    def set_recent_builds_menu_items(self, config: Config):
+    def set_recent_builds_menu_items(self, config: Settings):
         """
         Setup menu entries for all valid recent builds in the settings file
         Read the config for recent builds and create menu entries for them
@@ -278,9 +283,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         def make_connection(_full_path):
             """
             Connect the menu item to _open_previous_build passing in extra information
-            Lambdas in python share the variable scope they're created in
-            so make a function containing just the lambda
-            :param _full_path: full path to the file, to be sent to the
+            Lambdas in python share the variable scope they're created in so make a function containing just the lambda
+            :param _full_path: full path to the file, to be sent to the triggered function.
             :return: N/A
             """
             _action.triggered.connect(lambda checked: self._open_previous_build(checked, _full_path))
@@ -290,7 +294,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         recent_builds = config.recent_builds()
         for idx, full_path in enumerate(recent_builds):
             if full_path is not None and full_path != "":
-                filename = Path(full_path).relative_to(self.config.build_path)
+                filename = Path(full_path).relative_to(self.settings.build_path)
                 text, class_name = get_file_info(self, filename, max_length, 70)
                 ql = QLabel(text)
                 _action = QWidgetAction(self.menu_Builds)
@@ -303,13 +307,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Add this file (either Open or Save As) to the recent menu list. refreshing the menu if the name is a new one.
         :return: N/A
         """
-        if self.config.add_recent_build(self.build.filename):
-            for entry in self.menu_Builds.children():
-                if type(entry) == QWidgetAction:
-                    self.menu_Builds.removeAction(entry)
-            self.set_recent_builds_menu_items(self.config)
+        self.settings.add_recent_build(self.build.filename)
+        for entry in self.menu_Builds.children():
+            if type(entry) == QWidgetAction:
+                self.menu_Builds.removeAction(entry)
+        self.set_recent_builds_menu_items(self.settings)
 
-    def set_recent_builds_menu_items1(self, config: Config):
+    def set_recent_builds_menu_items1(self, config: Settings):
         """
         Setup menu entries for all valid recent builds in the settings file
         Read the config for recent builds and create menu entries for them
@@ -327,18 +331,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             """
             _action.triggered.connect(lambda checked: self._open_previous_build(checked, _idx, _filename))
 
-        os.chdir(self.config.build_path)
+        os.chdir(self.settings.build_path)
         max_length = 60
         recent_builds = config.recent_builds()
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
-                filename = Path(value).relative_to(self.config.build_path)
-                # name = re.sub(r".xml\d?", "", str(Path(value).relative_to(self.config.build_path)))
+                filename = Path(value).relative_to(self.settings.build_path)
                 text, class_name = get_file_info(self, filename, max_length, 40, False)
-                # print("set_recent_builds_menu_items: text, class_name", text, class_name)
                 _action = self.menu_Builds.addAction(f"&{idx}.  {text}")
                 _action.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 10))
-                # _action = self.menu_Builds.addAction(f"&{idx}.  {filename}")
                 make_connection(value, idx)
 
     def setup_theme_actions(self):
@@ -358,14 +359,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             """
             _action.triggered.connect(lambda checked: self.switch_theme(name, _action))
 
-        themes = [os.path.basename(x) for x in glob.glob(f"{self.config.data_dir}/qss/*.colours")]
+        themes = [os.path.basename(x) for x in glob.glob(f"{self.settings.data_dir}/qss/*.colours")]
         # print("setup_theme_actions", themes)
         for value in themes:
             _name = os.path.splitext(value)[0]
             action: QAction = self.menu_Theme.addAction(_name.title())
             action.setCheckable(True)
-            if _name == self.config.theme:
-                # print("Config theme", _name)
+            if _name == self.settings.theme:
                 self.curr_theme = action
                 action.setChecked(True)
             make_connection(_name, action)
@@ -382,12 +382,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
         # print("switch_theme, new_theme, self.curr_theme : ", new_theme, self.curr_theme)
-        file = Path(self.config.data_dir, "qss", f"{new_theme}.colours")
+        file = Path(self.settings.data_dir, "qss", f"{new_theme}.colours")
         new_theme = Path.exists(file) and new_theme or def_theme
         try:
-            with open(Path(self.config.data_dir, "qss", "qss.template"), "r") as template_file:
+            with open(Path(self.settings.data_dir, "qss", "qss.template"), "r") as template_file:
                 template = template_file.read()
-            with open(Path(self.config.data_dir, "qss", f"{new_theme}.colours"), "r") as colour_file:
+            with open(Path(self.settings.data_dir, "qss", f"{new_theme}.colours"), "r") as colour_file:
                 colours = colour_file.read().splitlines()
                 for line in colours:
                     m = re.search(r"^(qss_\w+)~~(.*)$", line)
@@ -395,16 +395,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         if m.group(1) == "qss_default_text":
                             self.qss_default_text = f"rgba( {m.group(2)} )"
                             for tooltip_text in self.toolbar_buttons.keys():
-                                self.toolbar_buttons[tooltip_text].setToolTip(
-                                    html_colour_text(self.qss_default_text, tooltip_text)
-                                )
+                                self.toolbar_buttons[tooltip_text].setToolTip(html_colour_text(self.qss_default_text, tooltip_text))
                         template = re.sub(r"\b" + m.group(1) + r"\b", m.group(2), template)
 
             QApplication.instance().setStyleSheet(template)
             # Uncheck old entry. First time through, this could be None.
             if self.curr_theme is not None:
                 self.curr_theme.setChecked(False)
-            self.config.theme = new_theme
+            self.settings.theme = new_theme
             self.curr_theme = selected_action
             if self.curr_theme is not None:
                 #     self.curr_theme.setChecked(False)
@@ -418,8 +416,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Ensure the build can be saved before exiting if needed.
         Save the configuration to settings.xml. Any other activities that might be needed
         """
-        self.config.size = self.size()
-        self.config.write()
+        self.settings.size = self.size()
+        self.settings.write()
         # Logic for checking we need to save and save if needed, goes here...
         # filePtr = open("edit.html", "w")
         # try:
@@ -461,7 +459,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
-        dlg = BrowseFileDlg(self.build, self.config, "Open", self)
+        dlg = BrowseFileDlg(self.settings, self.build, "Open", self)
         if dlg.exec():
             # Logic for checking we need to save and save if needed, goes here...
             # if build.needs_saving:
@@ -496,7 +494,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param filename_or_xml: ET.ElementTree: the xml of a file that was loaded or downloaded.
         :return: N/A
         """
-        self.loading = True
+        self.alerting = False
         new = True
         self.build.filename = ""
         if type(filename_or_xml) is ET.ElementTree:
@@ -515,7 +513,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # _debug("build_loader")
             if not new:
                 self.add_recent_build_menu_item()
-            # Config needs to be set before the tree, as the change_tree function uses/sets it also.
+            # Config_UI needs to be set before the tree, as the change_tree function uses/sets it also.
             self.config_ui.load(self.build.config)
             self.set_current_tab()
             self.tree_ui.fill_current_tree_combo()
@@ -528,7 +526,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
             self.update_status_bar(f"Loaded: {self.build.name}", 10)
 
-        self.loading = False
+        # This is needed to make the jewels show. Without it, you need to select or deselect a node.
+        self.gview_Tree.add_tree_images(True)
+        self.alerting = True
 
     @Slot()
     def build_save(self):
@@ -560,7 +560,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     # .addWidget(cb_)
         # mydialog_.exec()
 
-        dlg = BrowseFileDlg(self.build, self.config, "Save", self)
+        dlg = BrowseFileDlg(self.settings, self.build, "Save", self)
         if dlg.exec():
             # Selected file has been checked for existing and ok'd if it does
             filename = dlg.selected_file
@@ -571,46 +571,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build_save()
                 self.add_recent_build_menu_item()
 
-    def import_tree(self, url):
+    @Slot()
+    def combo_item_manage_tree_changed(self, tree_label):
         """
-        Import Tree.
-        main_window needs to own this as it has control of the triggers.
-
-        :param url: passive tree URL.
-        :return: N/A
+        This is the Manage Tree combo on the Items Tab. Tell the Manage Tree combo on the Tree tab to change trees.
+        :param tree_label: the name of the item just selected
+        :return:
         """
-        # print("win.import_tree", url)
-        # self.disconnect_widget_triggers()
-        # Which url has been imported
-        ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", url + "==")
-        poep = re.search(r"http.*poeplanner.com/(.*)", url + "==")
-        if ggg is not None:
-            self.build.current_spec.URL = url
-            self.build.current_spec.set_nodes_from_ggg_url()
-        if poep is not None:
-            self.build.current_spec.set_nodes_from_poeplanner_url(url)
-        if ggg is not None or poep is not None:
-            self.loading = True
-            self.change_tree("Refresh")
-            # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
-            # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-            self.loading = False
-        # self.connect_widget_triggers()
-        # self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
-        # self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
+        # "" will occur during a combobox clear
+        if not tree_label:
+            return
+        # print("combo_item_manage_tree_changed", tree_label)
+        self.tree_ui.combo_manage_tree.setCurrentText(tree_label)
 
     @Slot()
-    def change_tree(self, tree_id):
+    def change_tree(self, tree_label):
         """
-        Actions required when the combo_manage_tree widget changes.
+        Actions required when either combo_manage_tree widget changes (Tree_UI or Items_UI).
 
-        :param tree_id: Current text string. We don't use it.
+        :param tree_label: the name of the item just selected
                 "" will occur during a combobox clear
         :return: N/A
         """
-        # "" will occur during a combobox clear
-        if not tree_id:
+        # print("change_tree", tree_label)
+        # "" will occur during a combobox clear.
+        if not tree_label:
             return
+
+        self.combo_ItemsManageTree.setCurrentText(tree_label)
 
         full_clear = self.build.change_tree(self.tree_ui.combo_manage_tree.currentData())
 
@@ -621,23 +609,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Also stops updating build.current_spec
         self.refresh_tree = False
 
+        # Do Not alert about changing asscendencies when changing trees
+        curr_alerting = self.alerting
+        self.alerting = False
         _current_class = self.combo_classes.currentData()
         if self.build.current_spec.classId == _current_class:
             # update the ascendancy combo in case it's different
             self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-            # return
-
-        # Protect the ascendancy value as it will get clobbered ...
-        _ascendClassId = self.build.current_spec.ascendClassId
-        # .. when this refreshes the Ascendancy combo box ...
-        self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
-        # ... so we need to reset it's index
-        self.combo_ascendancy.setCurrentIndex(_ascendClassId)
+        else:
+            # Protect the ascendancy value as it will get clobbered ...
+            _ascendClassId = self.build.current_spec.ascendClassId
+            # .. when this refreshes the Ascendancy combo box ...
+            self.combo_classes.setCurrentIndex(self.build.current_spec.classId.value)
+            # ... so we need to reset it's index
+            self.combo_ascendancy.setCurrentIndex(_ascendClassId)
 
         set_combo_index_by_data(self.combo_Bandits, self.build.bandit)
+        self.alerting = curr_alerting
 
         self.refresh_tree = True
         self.gview_Tree.add_tree_images(full_clear)
+        self.items_ui.fill_jewel_slot_uis()
 
     @Slot()
     def class_changed(self, selected_class):
@@ -648,9 +640,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return:
         """
         new_class = self.combo_classes.currentData()
+        # print(f"class_changed: '{selected_class}'", self.build.current_spec.classId, new_class, self.refresh_tree)
         if self.build.current_spec.classId == new_class and self.refresh_tree:
             return
-        if not self.loading:
+        if self.alerting:
             node_num = self.build.ascendClassName == "None" and 1 or 2
             if len(self.build.current_spec.nodes) > node_num and not yes_no_dialog(
                 self,
@@ -688,7 +681,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "" will occur during a combobox clear.
         :return:
         """
-        # print(f"ascendancy_changed: '{selected_ascendancy}'", self.refresh_tree)
+        # print(f"ascendancy_changed: '{selected_ascendancy}'", self.build.current_spec.ascendClassId_str(), self.refresh_tree)
         if selected_ascendancy == "":
             # "" will occur during a combobox clear (changing class)
             return
@@ -696,35 +689,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         current_spec = self.build.current_spec
         curr_ascendancy_name = current_spec.ascendClassId_str()
         if curr_ascendancy_name != "None":
-            if not self.loading:
-                current_nodes = set(self.build.current_spec.nodes)
-                # ascendancy start node is *NOT* in this list.
-                nodes_in_ascendancy = [
-                    x for x in current_tree.ascendancyMap[curr_ascendancy_name] if x in current_nodes
-                ]
-                if len(nodes_in_ascendancy) > 1:
-                    if not yes_no_dialog(
-                        self,
-                        self.tr("Resetting your Ascendancy"),
-                        self.tr("Are you sure? It could be dangerous. Your current ascendancy points will be removed."),
-                    ):
-                        # Don't alert on Undoing the class change.
-                        self.loading = True
-                        # Undo the class change.
-                        self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
-                        self.loading = False
-                        return
-                    else:
-                        # We do want to reset nodes.
-                        for node_id in nodes_in_ascendancy:
-                            self.build.current_spec.nodes.remove(node_id)
+            current_nodes = set(self.build.current_spec.nodes)
+            # ascendancy start node is *NOT* in this list.
+            nodes_in_ascendancy = [x for x in current_tree.ascendancyMap[curr_ascendancy_name] if x in current_nodes]
+            if len(nodes_in_ascendancy) > 1 and self.alerting:
+                if not yes_no_dialog(
+                    self,
+                    self.tr("Resetting your Ascendancy"),
+                    self.tr("Are you sure? It could be dangerous. Your current ascendancy points will be removed."),
+                ):
+                    # Don't alert on Undoing the class change.
+                    self.alerting = False
+                    # Undo the class change.
+                    self.combo_ascendancy.setCurrentIndex(self.build.current_spec.ascendClassId)
+                    self.alerting = True
+                    return
+                else:
+                    # We do want to reset nodes.
+                    for node_id in nodes_in_ascendancy:
+                        self.build.current_spec.nodes.remove(node_id)
 
-                # Remove old start node.
-                self.build.current_spec.nodes.discard(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
+            # Remove old start node.
+            self.build.current_spec.nodes.discard(current_tree.ascendancy_start_nodes[curr_ascendancy_name])
 
             if selected_ascendancy != "None":
                 # add new start node.
-                # self.build.current_spec.nodes.append(current_tree.ascendancy_start_nodes[selected_ascendancy])
                 self.build.current_spec.nodes.add(current_tree.ascendancy_start_nodes[selected_ascendancy])
 
         if self.refresh_tree:
@@ -770,6 +759,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             3: self.textedit_Notes,
             4: self.tab_main,
             5: self.tab_main,
+            6: self.tab_main,
         }
 
         # Focus a Widget
@@ -790,7 +780,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
-        dlg = ImportDlg(self.build, self.config, self)
+        # c = read_json("c:/git/PathOfBuilding-Python/docs/test_data/Mirabel__Sentinal_char.json")
+        # t = read_json("c:/git/PathOfBuilding-Python/docs/test_data/Mirabel__Sentinal_tree.json")
+        # self.build.import_passive_tree_jewels_ggg_json(t, c)
+        # return
+        dlg = ImportDlg(self.settings, self.build, self)
         dlg.exec()
         if dlg.xml is not None:
             self.build_loader(dlg.xml)
@@ -802,7 +796,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def open_export_dialog(self):
         self.build.save_to_xml("1")
-        dlg = ExportDlg(self.build, self.config, self)
+        dlg = ExportDlg(self.settings, self.build, self)
         dlg.exec()
 
     def set_current_tab(self, tab_name=""):
@@ -849,19 +843,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # backup the current index, reload combo with new values and reset to a valid current_index
         # each line is a colon separated of socket group label and gem list
         current_index = self.combo_MainSkill.currentIndex()
-        # print("load_main_skill_combo.current_index 1", current_index)
         for line in _list:
             _label, _gem_list = line.split(":")
             self.combo_MainSkill.addItem(_label, _gem_list)
         self.combo_MainSkill.view().setMinimumWidth(self.combo_MainSkill.minimumSizeHint().width())
         # In case the new list is shorter or empty
         current_index = min(max(0, current_index), len(_list))
-        # print("load_main_skill_combo.current_index 2", current_index)
 
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
 
-        # print("load_main_skill_combo.current_index 3", current_index)
         if current_index >= 0:
             self.combo_MainSkill.setCurrentIndex(current_index)
 
@@ -903,17 +894,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.skills_ui.update_socket_group_labels()
 
     @Slot()
-    def update_status_bar(self, message=None, timeout=2):
+    def update_status_bar(self, message="", timeout=2):
         """
         Update the status bar. Use default text if no message is supplied.
         This triggers when the message is set and when it is cleared after the time out.
-
-        :param message: string: the message.
+        :param message: str: the message.
         :param timeout: int: time for the message to be shown, in secs
         :return: N/A
         """
         # we only care for when the message clears
-        if pob_debug and message is None or message == "":
+        if pob_debug and message == "":
             process = psutil.Process(os.getpid())
             message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
             self.statusbar_MainWindow.showMessage(message, timeout * 1000)

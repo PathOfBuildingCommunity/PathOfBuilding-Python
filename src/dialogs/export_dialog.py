@@ -11,21 +11,28 @@ import pyperclip
 from PySide6.QtWidgets import QDialog
 from PySide6.QtCore import Qt, Slot, QTimer
 
-from PoB.pob_config import Config
-from PoB.build import Build
 from PoB.constants import get_http_headers, post_http_headers, website_list
+from PoB.settings import Settings
+from PoB.build import Build
 from widgets.ui_utils import html_colour_text, deflate_and_base64_encode, print_a_xml_element, set_combo_index_by_text
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgBuildExport import Ui_BuildExport
 
 
 class ExportDlg(Ui_BuildExport, QDialog):
     """Export dialog"""
 
-    def __init__(self, _build: Build, _config: Config, parent=None):
-        super().__init__(parent)
+    def __init__(self, _settings: Settings, _build: Build, _win: Ui_MainWindow = None):
+        """
+        Export dialog init
+        :param _settings: A pointer to the settings
+        :param _build: A pointer to the currently loaded build
+        :param _win: A pointer to MainWindowUI
+        """
+        super().__init__(_win)
+        self.settings = _settings
         self.build = _build
-        self.config = _config
         self.http = urllib3.PoolManager()
         self.build_as_astring = ET.tostring(self.build.root, encoding="utf8")
         self.code = deflate_and_base64_encode(self.build_as_astring).decode("utf8")
@@ -38,8 +45,8 @@ class ExportDlg(Ui_BuildExport, QDialog):
             if website_list[site].get("postUrl", "P0B") != "P0B":
                 self.combo_ShareSite.addItem(site)
 
-        self.lineEdit_DevKey.setText(self.config.pastebin_dev_api_key)
-        self.lineEdit_UserKey.setText(self.config.pastebin_user_api_key)
+        self.lineEdit_DevKey.setText(self.settings.pastebin_dev_api_key)
+        self.lineEdit_UserKey.setText(self.settings.pastebin_user_api_key)
 
         self.btn_Copy.clicked.connect(self.copy_button)
         self.btn_Share.clicked.connect(self.share_button)
@@ -137,9 +144,9 @@ class ExportDlg(Ui_BuildExport, QDialog):
     @Slot()
     def update_DevKey(self, _text):
         """Update config"""
-        self.config.pastebin_dev_api_key = self.lineEdit_DevKey.text()
+        self.settings.pastebin_dev_api_key = self.lineEdit_DevKey.text()
 
     @Slot()
     def update_UserKey(self, _text):
         """Update config"""
-        self.config.pastebin_user_api_key = self.lineEdit_UserKey.text()
+        self.settings.pastebin_user_api_key = self.lineEdit_UserKey.text()

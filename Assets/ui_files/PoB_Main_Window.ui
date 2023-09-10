@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1457</width>
-    <height>801</height>
+    <width>1421</width>
+    <height>798</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -52,8 +52,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1455</width>
-         <height>722</height>
+         <width>1419</width>
+         <height>719</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -294,12 +294,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <property name="spacing">
                 <number>0</number>
                </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
                <item>
                 <widget class="QGraphicsView" name="graphicsView_PlaceHolder"/>
                </item>
@@ -308,6 +302,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
                    <height>30</height>
                   </size>
                  </property>
@@ -430,13 +430,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <x>0</x>
                   <y>480</y>
                   <width>400</width>
-                  <height>160</height>
+                  <height>170</height>
                  </rect>
                 </property>
                 <property name="minimumSize">
                  <size>
                   <width>375</width>
-                  <height>160</height>
+                  <height>170</height>
                  </size>
                 </property>
                 <property name="title">
@@ -885,8 +885,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                      <x>80</x>
                      <y>10</y>
                      <width>400</width>
-                     <height>22</height>
+                     <height>24</height>
                     </rect>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>24</height>
+                    </size>
                    </property>
                   </widget>
                   <widget class="QLabel" name="label_Count">
@@ -1012,12 +1018,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </widget>
            <widget class="QWidget" name="tab_Items">
             <attribute name="title">
-             <string>&amp;Items</string>
+             <string>&amp;Item</string>
             </attribute>
             <attribute name="whatsThis">
-             <string notr="true">ITEMS</string>
+             <string>ITEMS</string>
             </attribute>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -1031,348 +1040,236 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <number>0</number>
              </property>
              <item>
-              <widget class="QFrame" name="frame_Items">
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
+              <widget class="QScrollArea" name="scrollArea_Items">
+               <property name="widgetResizable">
+                <bool>true</bool>
                </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout">
-                <property name="spacing">
-                 <number>0</number>
+               <widget class="QWidget" name="scrollAreaWidgetContents_Items">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>1146</width>
+                  <height>792</height>
+                 </rect>
                 </property>
-                <property name="leftMargin">
-                 <number>0</number>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>900</height>
+                 </size>
                 </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QScrollArea" name="scrollArea_Items">
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="widgetResizable">
-                   <bool>true</bool>
-                  </property>
-                  <widget class="QWidget" name="scrollAreaWidgetContents_Items">
-                   <property name="geometry">
-                    <rect>
-                     <x>0</x>
-                     <y>0</y>
-                     <width>1184</width>
-                     <height>800</height>
-                    </rect>
+                <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,2,2">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QFrame" name="frame_Items">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
                    </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>800</height>
-                    </size>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
                    </property>
-                   <widget class="QLabel" name="label_ItemSet">
-                    <property name="geometry">
-                     <rect>
-                      <x>10</x>
-                      <y>6</y>
-                      <width>71</width>
-                      <height>16</height>
-                     </rect>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="text">
-                     <string>Item Set:</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                    </property>
-                    <property name="buddy">
-                     <cstring>combo_ItemSet</cstring>
-                    </property>
-                   </widget>
-                   <widget class="ListBox" name="list_Items">
-                    <property name="geometry">
-                     <rect>
-                      <x>450</x>
-                      <y>35</y>
-                      <width>370</width>
-                      <height>450</height>
-                     </rect>
-                    </property>
-                    <property name="acceptDrops">
-                     <bool>true</bool>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
-                    </property>
-                    <property name="horizontalScrollBarPolicy">
-                     <enum>Qt::ScrollBarAsNeeded</enum>
-                    </property>
-                    <property name="sizeAdjustPolicy">
-                     <enum>QAbstractScrollArea::AdjustToContents</enum>
-                    </property>
-                    <property name="editTriggers">
-                     <set>QAbstractItemView::DoubleClicked</set>
-                    </property>
-                    <property name="dragEnabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="dragDropMode">
-                     <enum>QAbstractItemView::InternalMove</enum>
-                    </property>
-                    <property name="defaultDropAction">
-                     <enum>Qt::MoveAction</enum>
-                    </property>
-                    <property name="alternatingRowColors">
-                     <bool>false</bool>
-                    </property>
-                    <property name="horizontalScrollMode">
-                     <enum>QAbstractItemView::ScrollPerPixel</enum>
-                    </property>
-                    <property name="movement">
-                     <enum>QListView::Free</enum>
-                    </property>
-                    <property name="resizeMode">
-                     <enum>QListView::Adjust</enum>
-                    </property>
-                    <property name="spacing">
+                   <layout class="QVBoxLayout" name="vlayout_Items2" stretch="1,2,2,0">
+                    <property name="leftMargin">
                      <number>0</number>
                     </property>
-                    <property name="uniformItemSizes">
-                     <bool>true</bool>
+                    <property name="topMargin">
+                     <number>0</number>
                     </property>
-                    <property name="selectionRectVisible">
-                     <bool>true</bool>
+                    <property name="rightMargin">
+                     <number>0</number>
                     </property>
-                   </widget>
-                   <widget class="QWidget" name="widget_Items" native="true">
-                    <property name="geometry">
-                     <rect>
-                      <x>0</x>
-                      <y>30</y>
-                      <width>440</width>
-                      <height>600</height>
-                     </rect>
+                    <property name="bottomMargin">
+                     <number>0</number>
                     </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>400</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <layout class="QVBoxLayout" name="vlayout_WidgetItems">
-                     <property name="sizeConstraint">
-                      <enum>QLayout::SetFixedSize</enum>
-                     </property>
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QGroupBox" name="groupbox_Items">
-                       <property name="minimumSize">
-                        <size>
-                         <width>345</width>
-                         <height>0</height>
-                        </size>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_4">
+                      <property name="spacing">
+                       <number>5</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>3</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="label_ItemSet">
+                        <property name="minimumSize">
+                         <size>
+                          <width>65</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>65</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="text">
+                         <string>Item &amp;Set:</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        </property>
+                        <property name="buddy">
+                         <cstring>combo_ItemSet</cstring>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="combo_ItemSet">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                        <property name="currentText">
+                         <string notr="true"/>
+                        </property>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
+                        </property>
+                        <property name="placeholderText">
+                         <string>&lt;empty&gt;</string>
+                        </property>
+                        <property name="duplicatesEnabled">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_ManageItemSet">
+                        <property name="minimumSize">
+                         <size>
+                          <width>85</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>85</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>&amp;Manage ...</string>
+                        </property>
+                        <property name="shortcut">
+                         <string>Ctrl+M</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="frame_EquippedItems">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>450</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>1000</height>
+                       </size>
+                      </property>
+                      <layout class="QVBoxLayout" name="layout_EquippedItems">
+                       <property name="spacing">
+                        <number>2</number>
                        </property>
-                       <property name="title">
-                        <string>Equipped Items:</string>
+                       <property name="leftMargin">
+                        <number>0</number>
                        </property>
-                       <layout class="QVBoxLayout" name="vlayout_EquippedItems">
-                        <property name="spacing">
-                         <number>1</number>
-                        </property>
-                        <property name="sizeConstraint">
-                         <enum>QLayout::SetFixedSize</enum>
-                        </property>
-                        <property name="leftMargin">
-                         <number>1</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>1</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>1</number>
-                        </property>
-                        <property name="bottomMargin">
-                         <number>4</number>
-                        </property>
-                        <item>
-                         <widget class="QWidget" name="widget_EquippedItems" native="true">
-                          <property name="autoFillBackground">
-                           <bool>true</bool>
-                          </property>
-                          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,0">
-                           <property name="leftMargin">
-                            <number>5</number>
-                           </property>
-                           <property name="topMargin">
-                            <number>3</number>
-                           </property>
-                           <property name="rightMargin">
-                            <number>5</number>
-                           </property>
-                           <property name="bottomMargin">
-                            <number>3</number>
-                           </property>
-                           <item>
-                            <spacer name="hspacer_EquippedItems">
-                             <property name="orientation">
-                              <enum>Qt::Horizontal</enum>
-                             </property>
-                             <property name="sizeHint" stdset="0">
-                              <size>
-                               <width>0</width>
-                               <height>20</height>
-                              </size>
-                             </property>
-                            </spacer>
-                           </item>
-                           <item>
-                            <widget class="QPushButton" name="btn_WeaponSwap">
-                             <property name="text">
-                              <string>Show Alt Weapons</string>
-                             </property>
-                             <property name="shortcut">
-                              <string>Ctrl+Alt+X</string>
-                             </property>
-                             <property name="checkable">
-                              <bool>true</bool>
-                             </property>
-                            </widget>
-                           </item>
-                          </layout>
-                         </widget>
-                        </item>
-                       </layout>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QGroupBox" name="groupbox_SocketedJewels">
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>0</height>
-                        </size>
+                       <property name="topMargin">
+                        <number>0</number>
                        </property>
-                       <property name="title">
-                        <string>Socketed Jewels:</string>
+                       <property name="rightMargin">
+                        <number>0</number>
                        </property>
-                       <layout class="QVBoxLayout" name="vlayout_SocketedJewels">
-                        <property name="spacing">
-                         <number>1</number>
-                        </property>
-                        <property name="sizeConstraint">
-                         <enum>QLayout::SetFixedSize</enum>
-                        </property>
-                        <property name="leftMargin">
-                         <number>1</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>1</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>1</number>
-                        </property>
-                        <property name="bottomMargin">
-                         <number>4</number>
-                        </property>
-                        <item>
-                         <widget class="QWidget" name="widget_SocketedJewels" native="true">
-                          <property name="minimumSize">
-                           <size>
-                            <width>0</width>
-                            <height>30</height>
-                           </size>
-                          </property>
-                          <property name="maximumSize">
-                           <size>
-                            <width>480</width>
-                            <height>16777215</height>
-                           </size>
-                          </property>
-                          <property name="whatsThis">
-                           <string>Needs minSize as there is no layout</string>
-                          </property>
-                          <widget class="QLabel" name="label_ItemsPassiveTree">
-                           <property name="geometry">
-                            <rect>
-                             <x>5</x>
-                             <y>4</y>
-                             <width>81</width>
-                             <height>20</height>
-                            </rect>
-                           </property>
-                           <property name="maximumSize">
-                            <size>
-                             <width>85</width>
-                             <height>16777215</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>Passive Tree:</string>
-                           </property>
-                           <property name="alignment">
-                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                           </property>
-                          </widget>
-                          <widget class="QComboBox" name="combo_ItemsManageTree">
-                           <property name="geometry">
-                            <rect>
-                             <x>94</x>
-                             <y>4</y>
-                             <width>270</width>
-                             <height>22</height>
-                            </rect>
-                           </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <layout class="QHBoxLayout" name="hlayout_EquippedItems">
+                         <property name="spacing">
+                          <number>6</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="label_EquippedItems">
                            <property name="minimumSize">
                             <size>
                              <width>0</width>
-                             <height>0</height>
+                             <height>24</height>
                             </size>
                            </property>
                            <property name="maximumSize">
                             <size>
                              <width>16777215</width>
-                             <height>16777215</height>
-                            </size>
-                           </property>
-                          </widget>
-                          <widget class="QPushButton" name="btn_ItemsManageTree">
-                           <property name="geometry">
-                            <rect>
-                             <x>370</x>
-                             <y>3</y>
-                             <width>75</width>
                              <height>24</height>
-                            </rect>
-                           </property>
-                           <property name="maximumSize">
-                            <size>
-                             <width>75</width>
-                             <height>16777215</height>
                             </size>
                            </property>
                            <property name="text">
-                            <string>Manage</string>
+                            <string>Equipped Items:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <spacer name="horizontalSpacer">
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                           <property name="sizeHint" stdset="0">
+                            <size>
+                             <width>40</width>
+                             <height>20</height>
+                            </size>
+                           </property>
+                          </spacer>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="btn_WeaponSwap">
+                           <property name="minimumSize">
+                            <size>
+                             <width>135</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>135</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>Show Alt Weapons</string>
                            </property>
                            <property name="shortcut">
                             <string>Ctrl+Alt+X</string>
@@ -1381,407 +1278,684 @@ li.checked::marker { content: &quot;\2612&quot;; }
                             <bool>true</bool>
                            </property>
                           </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="frame_SocketedJewels">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>100</height>
+                       </size>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_5">
+                       <property name="spacing">
+                        <number>2</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="label_SocketedJewels">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>24</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>24</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>Socketed Jewels:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_14">
+                         <property name="spacing">
+                          <number>5</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="label_ItemsPassiveTree">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>85</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="layoutDirection">
+                            <enum>Qt::LeftToRight</enum>
+                           </property>
+                           <property name="text">
+                            <string>Passive Tree:</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           </property>
+                           <property name="buddy">
+                            <cstring>combo_ItemsManageTree</cstring>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QComboBox" name="combo_ItemsManageTree">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="sizeAdjustPolicy">
+                            <enum>QComboBox::AdjustToContents</enum>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="btn_ItemsManageTree">
+                           <property name="minimumSize">
+                            <size>
+                             <width>85</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>75</width>
+                             <height>24</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>Manag&amp;e ...</string>
+                           </property>
+                           <property name="shortcut">
+                            <string>Ctrl+Alt+X</string>
+                           </property>
+                           <property name="checkable">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <widget class="QScrollArea" name="scrollArea_SocketedJewels">
+                         <property name="widgetResizable">
+                          <bool>true</bool>
+                         </property>
+                         <widget class="QWidget" name="scrollAreaWidgetContents_SocketedJewels">
+                          <property name="geometry">
+                           <rect>
+                            <x>0</x>
+                            <y>0</y>
+                            <width>362</width>
+                            <height>150</height>
+                           </rect>
+                          </property>
+                          <layout class="QVBoxLayout" name="layout_SocketedJewels">
+                           <property name="spacing">
+                            <number>2</number>
+                           </property>
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                          </layout>
                          </widget>
-                        </item>
-                       </layout>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                   <widget class="QComboBox" name="combo_ItemSet">
-                    <property name="geometry">
-                     <rect>
-                      <x>85</x>
-                      <y>2</y>
-                      <width>270</width>
-                      <height>22</height>
-                     </rect>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>13</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_ItemsList">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_4">
+                    <property name="leftMargin">
+                     <number>0</number>
                     </property>
-                    <property name="currentText">
-                     <string notr="true"/>
+                    <property name="topMargin">
+                     <number>0</number>
                     </property>
-                    <property name="maxVisibleItems">
-                     <number>15</number>
+                    <property name="rightMargin">
+                     <number>0</number>
                     </property>
-                    <property name="placeholderText">
-                     <string>&lt;empty&gt;</string>
+                    <property name="bottomMargin">
+                     <number>0</number>
                     </property>
-                    <property name="duplicatesEnabled">
-                     <bool>true</bool>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_15">
+                      <item>
+                       <widget class="QLabel" name="label_AllItems">
+                        <property name="text">
+                         <string>All Items</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_SortItems">
+                        <property name="text">
+                         <string>Sort</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_DeleteAllItems">
+                        <property name="text">
+                         <string>Delete All</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_DeleteItem">
+                        <property name="enabled">
+                         <bool>false</bool>
+                        </property>
+                        <property name="text">
+                         <string>Delete</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_DeleteUnusedItems">
+                        <property name="text">
+                         <string>Delete Unused</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_10">
+                      <item>
+                       <widget class="QLabel" name="label_ItemsSearch">
+                        <property name="layoutDirection">
+                         <enum>Qt::LeftToRight</enum>
+                        </property>
+                        <property name="text">
+                         <string>&amp;Search:</string>
+                        </property>
+                        <property name="buddy">
+                         <cstring>lineedit_ItemsSearch</cstring>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineedit_ItemsSearch">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="ListBox" name="list_Items">
+                      <property name="minimumSize">
+                       <size>
+                        <width>400</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>890</height>
+                       </size>
+                      </property>
+                      <property name="acceptDrops">
+                       <bool>true</bool>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QListWidget::item:selected{background:#2c3e50;}</string>
+                      </property>
+                      <property name="horizontalScrollBarPolicy">
+                       <enum>Qt::ScrollBarAsNeeded</enum>
+                      </property>
+                      <property name="sizeAdjustPolicy">
+                       <enum>QAbstractScrollArea::AdjustToContents</enum>
+                      </property>
+                      <property name="editTriggers">
+                       <set>QAbstractItemView::DoubleClicked</set>
+                      </property>
+                      <property name="dragEnabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="dragDropMode">
+                       <enum>QAbstractItemView::InternalMove</enum>
+                      </property>
+                      <property name="defaultDropAction">
+                       <enum>Qt::MoveAction</enum>
+                      </property>
+                      <property name="alternatingRowColors">
+                       <bool>false</bool>
+                      </property>
+                      <property name="horizontalScrollMode">
+                       <enum>QAbstractItemView::ScrollPerPixel</enum>
+                      </property>
+                      <property name="movement">
+                       <enum>QListView::Free</enum>
+                      </property>
+                      <property name="resizeMode">
+                       <enum>QListView::Adjust</enum>
+                      </property>
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
+                      <property name="uniformItemSizes">
+                       <bool>true</bool>
+                      </property>
+                      <property name="selectionRectVisible">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>10</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_TemplateItems_2">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_3">
+                    <property name="leftMargin">
+                     <number>3</number>
                     </property>
-                   </widget>
-                   <widget class="QPushButton" name="btn_ManageItem">
-                    <property name="geometry">
-                     <rect>
-                      <x>360</x>
-                      <y>1</y>
-                      <width>75</width>
-                      <height>24</height>
-                     </rect>
+                    <property name="topMargin">
+                     <number>3</number>
                     </property>
-                    <property name="text">
-                     <string>&amp;Manage ...</string>
+                    <property name="rightMargin">
+                     <number>3</number>
                     </property>
-                    <property name="shortcut">
-                     <string>Ctrl+M</string>
+                    <property name="bottomMargin">
+                     <number>3</number>
                     </property>
-                   </widget>
-                   <widget class="QLabel" name="label">
-                    <property name="geometry">
-                     <rect>
-                      <x>850</x>
-                      <y>10</y>
-                      <width>300</width>
-                      <height>191</height>
-                     </rect>
-                    </property>
-                    <property name="text">
-                     <string>Double-click an item from one of the lists, or copy and paste an item from in game (hover over the item and Ctrl+C) to view or edit the item and add it to your build. You can also clone an item within Path of Building by copying and pasting it with Ctrl+C and Ctrl+V.
+                    <item>
+                     <widget class="QLabel" name="label_6">
+                      <property name="text">
+                       <string>Double-click an item from one of the lists, or copy and paste an item from in game (hover over the item and Ctrl+C) to view or edit the item and add it to your build. You can also clone an item within Path of Building by copying and pasting it with Ctrl+C and Ctrl+V.
 
 You can Control + Click an item to equip it, or drag it onto the slot.  This will also add it to your build if it's from the unique/template list.
 
 If there's 2 slots an item can go in, holding Shift will put it in the second.</string>
-                    </property>
-                    <property name="wordWrap">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                   <widget class="QLabel" name="label_2">
-                    <property name="geometry">
-                     <rect>
-                      <x>840</x>
-                      <y>222</y>
-                      <width>71</width>
-                      <height>16</height>
-                     </rect>
-                    </property>
-                    <property name="text">
-                     <string>Import from:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>combo_ItemsImportFrom</cstring>
-                    </property>
-                   </widget>
-                   <widget class="QComboBox" name="combo_ItemsImportFrom">
-                    <property name="geometry">
-                     <rect>
-                      <x>920</x>
-                      <y>220</y>
-                      <width>150</width>
-                      <height>22</height>
-                     </rect>
-                    </property>
-                    <property name="maxVisibleItems">
-                     <number>15</number>
-                    </property>
-                    <item>
-                     <property name="text">
-                      <string>Uniques</string>
-                     </property>
+                      </property>
+                      <property name="wordWrap">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
                     </item>
                     <item>
-                     <property name="text">
-                      <string>Rare Templates</string>
-                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_9">
+                      <item>
+                       <widget class="QLabel" name="label_ItemsImportFrom">
+                        <property name="text">
+                         <string>Import from:</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        </property>
+                        <property name="buddy">
+                         <cstring>combo_ItemsImportFrom</cstring>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="combo_ItemsImportFrom">
+                        <property name="maxVisibleItems">
+                         <number>15</number>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>Uniques</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Rare Templates</string>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                     </layout>
                     </item>
-                   </widget>
-                   <widget class="QWidget" name="widget_ImportItems" native="true">
-                    <property name="geometry">
-                     <rect>
-                      <x>840</x>
-                      <y>250</y>
-                      <width>338</width>
-                      <height>400</height>
-                     </rect>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>400</height>
-                     </size>
-                    </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_2">
-                     <property name="spacing">
-                      <number>2</number>
-                     </property>
-                     <property name="leftMargin">
-                      <number>1</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>1</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>1</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>1</number>
-                     </property>
-                     <item>
-                      <widget class="QWidget" name="widget_ImportItems_Options" native="true">
-                       <property name="minimumSize">
-                        <size>
-                         <width>320</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <layout class="QGridLayout" name="gridLayout">
-                        <property name="leftMargin">
-                         <number>5</number>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_11">
+                      <item>
+                       <widget class="QComboBox" name="combo_ItemsImportSlot">
+                        <property name="minimumSize">
+                         <size>
+                          <width>150</width>
+                          <height>0</height>
+                         </size>
                         </property>
-                        <property name="topMargin">
-                         <number>5</number>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
                         </property>
-                        <property name="rightMargin">
-                         <number>5</number>
+                        <item>
+                         <property name="text">
+                          <string>Any Slot</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Weapon 1</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Weapon 2</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Belt</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Body Armour</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Boots</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Gloves</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Helmet</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Amulet</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Ring</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Jewel</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Flask</string>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="combo_ItemsImportType">
+                        <property name="minimumSize">
+                         <size>
+                          <width>150</width>
+                          <height>0</height>
+                         </size>
                         </property>
-                        <property name="bottomMargin">
-                         <number>5</number>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
                         </property>
-                        <property name="spacing">
-                         <number>5</number>
+                        <item>
+                         <property name="text">
+                          <string>Any Type</string>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_12">
+                      <item>
+                       <widget class="QComboBox" name="combo_ItemsImportSort">
+                        <property name="enabled">
+                         <bool>true</bool>
                         </property>
-                        <item row="0" column="0">
-                         <widget class="QComboBox" name="combo_ItemsImportSlot">
-                          <property name="minimumSize">
-                           <size>
-                            <width>150</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="maxVisibleItems">
-                           <number>15</number>
-                          </property>
-                          <item>
-                           <property name="text">
-                            <string>Any Slot</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Weapon 1</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Weapon 2</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Belt</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Body Armour</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Boots</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Gloves</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Helmet</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Amulet</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Ring</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Jewel</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Flask</string>
-                           </property>
-                          </item>
-                         </widget>
+                        <property name="minimumSize">
+                         <size>
+                          <width>150</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>Sort by Name</string>
+                         </property>
                         </item>
-                        <item row="0" column="1">
-                         <widget class="QComboBox" name="combo_ItemsImportType">
-                          <property name="minimumSize">
-                           <size>
-                            <width>150</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="maxVisibleItems">
-                           <number>15</number>
-                          </property>
-                          <item>
-                           <property name="text">
-                            <string>Any Type</string>
-                           </property>
-                          </item>
-                         </widget>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="combo_ItemsImportLeague">
+                        <property name="minimumSize">
+                         <size>
+                          <width>150</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>Any League</string>
+                         </property>
                         </item>
-                        <item row="1" column="0">
-                         <widget class="QComboBox" name="combo_ItemsImportSort">
-                          <property name="enabled">
-                           <bool>false</bool>
-                          </property>
-                          <property name="minimumSize">
-                           <size>
-                            <width>150</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="maxVisibleItems">
-                           <number>15</number>
-                          </property>
-                          <item>
-                           <property name="text">
-                            <string>Sort by Name</string>
-                           </property>
-                          </item>
-                         </widget>
+                        <item>
+                         <property name="text">
+                          <string>No League</string>
+                         </property>
                         </item>
-                        <item row="1" column="1">
-                         <widget class="QComboBox" name="combo_ItemsImportLeague">
-                          <property name="minimumSize">
-                           <size>
-                            <width>150</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="maxVisibleItems">
-                           <number>15</number>
-                          </property>
-                          <item>
-                           <property name="text">
-                            <string>Any League</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>No League</string>
-                           </property>
-                          </item>
-                         </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_13">
+                      <item>
+                       <widget class="QComboBox" name="combo_ItemsImportRequirements">
+                        <property name="enabled">
+                         <bool>false</bool>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>150</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>Any requirements</string>
+                         </property>
                         </item>
-                        <item row="2" column="0">
-                         <widget class="QComboBox" name="combo_ItemsImportRequirements">
-                          <property name="enabled">
-                           <bool>false</bool>
-                          </property>
-                          <property name="minimumSize">
-                           <size>
-                            <width>150</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="maxVisibleItems">
-                           <number>15</number>
-                          </property>
-                          <item>
-                           <property name="text">
-                            <string>Any requirements</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Current level</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Current attributes</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Current useable</string>
-                           </property>
-                          </item>
-                         </widget>
+                        <item>
+                         <property name="text">
+                          <string>Current level</string>
+                         </property>
                         </item>
-                        <item row="2" column="1">
-                         <widget class="QComboBox" name="combo_ItemsImportSource">
-                          <property name="enabled">
-                           <bool>true</bool>
-                          </property>
-                          <property name="minimumSize">
-                           <size>
-                            <width>150</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="maxVisibleItems">
-                           <number>15</number>
-                          </property>
-                          <item>
-                           <property name="text">
-                            <string>Any Source</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Obtainable</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Unobtainable</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Vendor Recipe</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Upgraded</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Boss Item</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Corruption</string>
-                           </property>
-                          </item>
-                         </widget>
+                        <item>
+                         <property name="text">
+                          <string>Current attributes</string>
+                         </property>
                         </item>
-                       </layout>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QWidget" name="widget_ImportItems_Search" native="true">
-                       <property name="minimumSize">
-                        <size>
-                         <width>320</width>
-                         <height>30</height>
-                        </size>
-                       </property>
+                        <item>
+                         <property name="text">
+                          <string>Current useable</string>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="combo_ItemsImportSource">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>150</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>Any Source</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Obtainable</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Unobtainable</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Vendor Recipe</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Upgraded</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Boss Item</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Corruption</string>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_8">
+                      <item>
+                       <widget class="QLabel" name="label_ImportItemsSearch">
+                        <property name="layoutDirection">
+                         <enum>Qt::LeftToRight</enum>
+                        </property>
+                        <property name="text">
+                         <string>Searc&amp;h:</string>
+                        </property>
+                        <property name="buddy">
+                         <cstring>lineedit_ItemsImportSearch</cstring>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineedit_ItemsImportSearch">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>24</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
                        <widget class="QComboBox" name="combo_ItemsImportSearchSource">
-                        <property name="geometry">
-                         <rect>
-                          <x>240</x>
-                          <y>4</y>
-                          <width>90</width>
-                          <height>22</height>
-                         </rect>
-                        </property>
                         <property name="maxVisibleItems">
                          <number>15</number>
                         </property>
@@ -1801,50 +1975,33 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.</
                          </property>
                         </item>
                        </widget>
-                       <widget class="QLineEdit" name="lineedit_ItemsImportSearch">
-                        <property name="geometry">
-                         <rect>
-                          <x>60</x>
-                          <y>4</y>
-                          <width>165</width>
-                          <height>22</height>
-                         </rect>
-                        </property>
-                       </widget>
-                       <widget class="QLabel" name="label_ImportItemsSearch">
-                        <property name="geometry">
-                         <rect>
-                          <x>10</x>
-                          <y>6</y>
-                          <width>49</width>
-                          <height>16</height>
-                         </rect>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>Search:</string>
-                        </property>
-                        <property name="buddy">
-                         <cstring>lineedit_ItemsImportSearch</cstring>
-                        </property>
-                       </widget>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="ListBox" name="list_ImportItems">
-                       <property name="sortingEnabled">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="ListBox" name="list_ImportItems">
+                      <property name="minimumSize">
+                       <size>
+                        <width>350</width>
+                        <height>450</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>700</height>
+                       </size>
+                      </property>
+                      <property name="sortingEnabled">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
-                 </widget>
-                </item>
-               </layout>
+                 </item>
+                </layout>
+               </widget>
               </widget>
              </item>
             </layout>
@@ -2082,9 +2239,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    <pointsize>8</pointsize>
                   </font>
                  </property>
-                 <property name="sizeAdjustPolicy">
-                  <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-                 </property>
                  <property name="minimumContentsLength">
                   <number>60</number>
                  </property>
@@ -2095,7 +2249,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <number>0</number>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_MinorGods">
+                <widget class="QComboBox" name="combo_MinorPantheon">
                  <property name="geometry">
                   <rect>
                    <x>150</x>
@@ -2125,7 +2279,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <string>Make a Selection</string>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_Bandits_2">
+                <widget class="QLabel" name="label_Bandits">
                  <property name="geometry">
                   <rect>
                    <x>5</x>
@@ -2149,7 +2303,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <cstring>combo_Bandits</cstring>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_Pantheon_2">
+                <widget class="QLabel" name="label_MajorPantheon">
                  <property name="geometry">
                   <rect>
                    <x>5</x>
@@ -2176,10 +2330,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                  <property name="buddy">
-                  <cstring>combo_MajorGods</cstring>
+                  <cstring>combo_MajorPantheon</cstring>
                  </property>
                 </widget>
-                <widget class="QComboBox" name="combo_MajorGods">
+                <widget class="QComboBox" name="combo_MajorPantheon">
                  <property name="geometry">
                   <rect>
                    <x>150</x>
@@ -2262,9 +2416,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    <pointsize>8</pointsize>
                   </font>
                  </property>
-                 <property name="sizeAdjustPolicy">
-                  <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-                 </property>
                  <property name="minimumContentsLength">
                   <number>60</number>
                  </property>
@@ -2275,7 +2426,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <number>0</number>
                  </property>
                 </widget>
-                <widget class="QLabel" name="label_Pantheon_3">
+                <widget class="QLabel" name="label_MinorPantheon">
                  <property name="geometry">
                   <rect>
                    <x>5</x>
@@ -2302,7 +2453,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                  <property name="buddy">
-                  <cstring>combo_MinorGods</cstring>
+                  <cstring>combo_MinorPantheon</cstring>
                  </property>
                 </widget>
                </widget>
@@ -2449,7 +2600,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1457</width>
+     <width>1421</width>
      <height>22</height>
     </rect>
    </property>
@@ -2670,8 +2821,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>combo_MainSkillActive</tabstop>
   <tabstop>combo_ResPenalty</tabstop>
   <tabstop>combo_Bandits</tabstop>
-  <tabstop>combo_MajorGods</tabstop>
-  <tabstop>combo_MinorGods</tabstop>
+  <tabstop>combo_MajorPantheon</tabstop>
+  <tabstop>combo_MinorPantheon</tabstop>
   <tabstop>textedit_Notes</tabstop>
   <tabstop>combo_Notes_Font</tabstop>
   <tabstop>combo_Notes_Colour</tabstop>

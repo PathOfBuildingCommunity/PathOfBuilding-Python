@@ -13,21 +13,29 @@ from PySide6.QtCore import Qt, Slot
 
 from PoB.build import Build
 from dialogs.popup_dialogs import yes_no_dialog
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from PoB.pob_file import get_file_info
 from widgets.ui_utils import html_colour_text
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgBrowseFile import Ui_BrowseFile
 
 
 class BrowseFileDlg(Ui_BrowseFile, QDialog):
     """File dialog"""
 
-    def __init__(self, _build: Build, _config: Config, task, parent=None):
-        super().__init__(parent)
-        self.win = parent
+    def __init__(self, _settings: Settings, _build: Build, task, _win: Ui_MainWindow):
+        """
+        File dialog init
+        :param _build: A pointer to the currently loaded build
+        :param _settings: A pointer to the settings
+        :param task: str: Either "Open" or "Save"
+        :param _win: A pointer to MainWindow
+        """
+        super().__init__(_win)
+        self.win = _win
         self.build = _build
-        self.config = _config
+        self.settings = _settings
         self.selected_file = ""
         self.triggers_connected = False
         self.save = task == "Save"
@@ -49,7 +57,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         self.list_Files_width = self.list_Files.width()
         self.max_filename_width = 100
 
-        self.change_dir(self.config.build_path)  # connects triggers
+        self.change_dir(self.settings.build_path)  # connects triggers
 
     # Overridden function
     def resizeEvent(self, event):
@@ -154,7 +162,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         self.disconnect_triggers()
         if os.path.exists(new_dir):
             os.chdir(new_dir)
-            self.lineEdit_CurrDir.setText(new_dir)
+            self.lineEdit_CurrDir.setText(str(new_dir))
             self.fill_list_box(new_dir)
         self.list_Files.setFocus()
         # Guarantee that currentItem() is never None.

@@ -3,16 +3,15 @@
 import enum
 
 program_title = "Path of Building"
-
+bad_text = "oh noes"  # used for dictionary get's
 """global_scale_factor
 this is used to divide all x and y data coming in from the tree.json, but not Height and Width.
 without this, items are too far apart and items are far too small on screen.
 All values should only be scaled on point of entry, ie: when they are first processed out of the json
 """
 global_scale_factor = 2.5
-pob_debug = True
+pob_debug = True  # Default setting for now. Will move to settings.xml
 
-_VERSION_str = "3_22"
 tree_versions = {
     "3_18": "3.18",
     "3_19": "3.19",
@@ -20,6 +19,7 @@ tree_versions = {
     "3_21": "3.21",
     "3_22": "3.22",
 }
+_VERSION_str = "3_22"
 _VERSION = tree_versions[_VERSION_str]
 default_view_mode = "TREE"
 # default_view_mode = "ITEMS"
@@ -139,8 +139,7 @@ pantheon_minor_gods = {
     },
     "Shakari": {
         "name": "Soul of Shakari",
-        "tooltip": "50% less Duration of Poisons on you\n"
-        "You cannot be Poisoned while there are at least 3 Poisons on you",
+        "tooltip": "50% less Duration of Poisons on you\n" "You cannot be Poisoned while there are at least 3 Poisons on you",
     },
 }
 
@@ -153,90 +152,93 @@ class Layers(enum.IntEnum):
     inactive = 0
     small_overlays = 1
     key_overlays = 2
+    socket_overlays = 2
     active_connectors = 4
     active = 5
+    jewels = 6
 
 
 class ColourCodes(enum.Enum):
     NORMAL = "#F0F0F0"
-    NONE = "#F0F0F0"
+    ADJUDICATOR = "#E9F831"
+    AQUA = "#00FFFF"
+    BASILISK = "#00CB3A"
     BLACK = "#000000"
-    MAGIC = "#8888FF"
-    RARE = "#FFFF77"
-    UNIQUE = "#AF6025"
-    RELIC = "#60C060"
-    GEM = "#1AA29B"
-    PROPHECY = "#B54BFF"
-    CURRENCY = "#AA9E82"
-    CRAFTED = "#B8DAF1"
-    CUSTOM = "#5CF0BB"
-    SOURCE = "#88FFFF"
-    UNSUPPORTED = "#F05050"
-    WARNING = "#FF9922"
-    TIP = "#80A080"
-    FIRE = "#B97123"
-    COLD = "#3F6DB3"
-    LIGHTNING = "#ADAA47"
+    BLUE = "#0000FF"
+    BRITTLEBG = "#00122B"
     CHAOS = "#D02090"
-    POSITIVE = "#33FF77"
+    CHILLBG = "#151E26"
+    CLEANSING = "#F24141"
+    COLD = "#3F6DB3"
+    CRAFTED = "#B8DAF1"
+    CRUCIBLE = "#FFA500"
+    CRUSADER = "#2946FC"
+    CURRENCY = "#AA9E82"
+    CUSTOM = "#5CF0BB"
+    DARKGRAY = "#696969"
+    DEFENCE = "#8080E0"
+    DUELIST = "#E0E070"
+    ELDER = "#AA77CC"
+    EYRIE = "#AAB7B8"
+    FIRE = "#B97123"
+    FRACTURED = "#A29160"
+    FREEZEBG = "#0C262B"
+    GEM = "#1AA29B"
+    GOLD = "#FFD700"
+    GRAY = "#D3D3D3"
+    GREEN = "#00FF00"
+    LIGHTGRAY = "#808B96"
+    LIGHTNING = "#ADAA47"
+    MAGIC = "#8888FF"
+    MAINHAND = "#50FF50"
+    MARAUDER = "#E05030"
     NEGATIVE = "#DD0022"
     OFFENCE = "#E07030"
-    DEFENCE = "#8080E0"
-    SCION = GEM
-    MARAUDER = "#E05030"
-    RANGER = "#70FF70"
-    WITCH = "#7070FF"
-    DUELIST = "#E0E070"
-    TEMPLAR = "#C040FF"
-    SHADOW = "#30C0D0"
-    MAINHAND = "#50FF50"
     OFFHAND = "#B7B7FF"
-    SHAPER = "#55BBFF"
-    ELDER = "#AA77CC"
-    FRACTURED = "#A29160"
-    ADJUDICATOR = "#E9F831"
-    BASILISK = "#00CB3A"
-    CRUSADER = "#2946FC"
-    EYRIE = "#AAB7B8"
-    CLEANSING = "#F24141"
-    TANGLE = "#038C8C"
-    CHILLBG = "#151E26"
-    FREEZEBG = "#0C262B"
-    SHOCKBG = "#191732"
-    SCORCHBG = "#270B00"
-    BRITTLEBG = "#00122B"
+    POSITIVE = "#33FF77"
+    PROPHECY = "#B54BFF"
+    PURPLE = "#FF00FF"
+    RANGER = "#70FF70"
+    RARE = "#FFFF77"
+    RED = "#FF0000"
+    RELIC = "#60C060"
     SAPBG = "#261500"
+    SCION = GEM
+    SCORCHBG = "#270B00"
     SCOURGE = "#FF6E25"
-    CRUCIBLE = "#FFA500"
-    GRAY = "#D3D3D3"
-    LIGHTGRAY = "#808B96"
-    DARKGRAY = "#696969"
-    STRENGTH = MARAUDER
+    SHADOW = "#30C0D0"
+    SHAPER = "#55BBFF"
+    SHOCKBG = "#191732"
+    SILVER = "#C0C0C0"
+    SOURCE = "#88FFFF"
+    TANGLE = "#038C8C"
+    TEMPLAR = "#C040FF"
+    TIP = "#80A080"
+    UNIQUE = "#AF6025"
+    UNSUPPORTED = "#F05050"
+    WARNING = "#FF9922"
+    WHITE = "#FFFFFF"
+    WITCH = "#7070FF"
+    YELLOW = "#FFFF00"
+    A = GOLD
+    B = WITCH
+    DEX = RANGER
     DEXTERITY = RANGER
+    ES = SOURCE
+    EVASION = POSITIVE
+    G = DEXTERITY
+    INT = WITCH
     INTELLIGENCE = WITCH
     LIFE = MARAUDER
     MANA = WITCH
-    ES = SOURCE
-    WARD = RARE
-    EVASION = POSITIVE
-    RAGE = WARNING
+    NONE = NORMAL
     PHYS = NORMAL
-    RED = "#FF0000"
-    GREEN = "#00FF00"
-    BLUE = "#0000FF"
-    YELLOW = "#FFFF00"
-    PURPLE = "#FF00FF"
-    AQUA = "#00FFFF"
-    WHITE = "#FFFFFF"
-    SILVER = "#C0C0C0"
-    R = STRENGTH
-    B = INTELLIGENCE
-    G = DEXTERITY
-    A = "#FFD700"  # Gold
+    R = MARAUDER
+    RAGE = WARNING
+    STR = MARAUDER
+    STRENGTH = MARAUDER
     W = WHITE
-    STR = STRENGTH
-    INT = INTELLIGENCE
-    DEX = DEXTERITY
+    WARD = RARE
 
 
 @enum.unique
@@ -361,21 +363,15 @@ bandits = {
     "None": {"name": "Kill All", "tooltip": "2 Passives Points"},
     "Oak": {
         "name": "Oak (Life Regen, Phys.Dmg. Reduction, Phys.Dmg)",
-        "tooltip": "Regenerate 1% of Life per second\n"
-        "2% additional Physical Damage Reduction\n"
-        "20% increased Physical Damage",
+        "tooltip": "Regenerate 1% of Life per second\n" "2% additional Physical Damage Reduction\n" "20% increased Physical Damage",
     },
     "Kraityn": {
         "name": "Kraityn (Attack/Cast Speed, Avoid Elemental Ailments, Move Speed)",
-        "tooltip": "6% increased Attack and Cast Speed\n"
-        "10% chance to avoid Elemental Ailments\n"
-        "6% increased Movement Speed",
+        "tooltip": "6% increased Attack and Cast Speed\n" "10% chance to avoid Elemental Ailments\n" "6% increased Movement Speed",
     },
     "Alira": {
         "name": "Alira (Mana Regen, Crit Multiplier, Resists)",
-        "tooltip": "Regenerate 5 Mana per second\n"
-        "+20% to Critical Strike Multiplier\n"
-        "+15% to all Elemental Resistances",
+        "tooltip": "Regenerate 5 Mana per second\n" "+20% to Critical Strike Multiplier\n" "+15% to all Elemental Resistances",
     },
 }
 

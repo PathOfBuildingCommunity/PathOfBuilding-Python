@@ -20,9 +20,9 @@ qss_tab_selected_borders~~0, 0, 0
 qss_checkbox_radio_enabled_indicator~~0, 0, 255, 1.000
   #c0c0c0   silver. CheckBox / Radio indicator borders
 qss_checkbox_radio_indicator_borders~~192, 192, 192, 1.000
-  # Spin box up arrow url. Must be relative to self.config.data_dir or in the PoB.qrc
+  # Spin box up arrow url. Must be relative to self.settings.data_dir or in the PoB.qrc
 qss_spin_up_arrow~~ :Qss/qss/up_arrow_dark.png
-  # Spin box down arrow url. Must be relative to self.config.data_dir or in the PoB.qrc
+  # Spin box down arrow url. Must be relative to self.settings.data_dir or in the PoB.qrc
 qss_spin_dn_arrow~~ :Qss/qss/down_arrow_dark.png
   # The custom ListBox / Tooltip has html rendering so the default text doesn't work. Add something appropriate.
 qss_default_text~~0, 0, 0, 0.800

@@ -47,7 +47,6 @@ QFontDatabase.addApplicationFont(":/Font/Font/NotoSansMono-Regular.ttf")
 # system wide font
 QApplication.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 9))
 
-
 window = MainWindow(main_app)
 window.show()
 window.setup_ui()

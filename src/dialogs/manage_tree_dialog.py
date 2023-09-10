@@ -4,29 +4,45 @@ Import dialog
 Open a dialog for importing a character.
 """
 
-import urllib3
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtWidgets import QDialog, QListWidgetItem
+from PySide6.QtWidgets import QDialog, QListWidgetItem, QPushButton
 
-from PoB.build import Build, _debug, print_call_stack
 from PoB.constants import _VERSION, _VERSION_str, tree_versions
-from dialogs.popup_dialogs import yes_no_dialog, NewTreePopup
+from PoB.settings import Settings
+from PoB.build import Build, _debug, print_call_stack
+from dialogs.popup_dialogs import yes_no_dialog, ExportTreePopup, ImportTreePopup, NewTreePopup
+from widgets.ui_utils import html_colour_text
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgManageTree import Ui_ManageTree
 
 
 class ManageTreeDlg(Ui_ManageTree, QDialog):
     """Manage Trees dialog"""
 
-    def __init__(self, _build: Build, parent=None):
-        super().__init__(parent)
+    def __init__(self, _build: Build, _settings: Settings, _win: Ui_MainWindow = None):
+        """
+        ManageItems dialog init
+        :param _build: A pointer to the currently loaded build
+        :param _settings: A pointer to the settings
+        :param _win: A pointer to MainWindow
+        """
+        super().__init__(_win)
         self.build = _build
-        self.win = parent
+        self.settings = _settings
+        self.win = _win
         self.spec_to_be_moved = None
         self.item_being_edited = None
         self.triggers_connected = False
 
         self.setupUi(self)
+        # Turn off export just so we don't lose the code. But I don't think it adds value. (20230909. Tested working)
+        self.btnExport.setVisible(False)
+
+        # add the default text colour to the button tooltips
+        for widget in self.children():
+            if type(widget) == QPushButton and widget.toolTip() != "":
+                widget.setToolTip(html_colour_text(self.win.qss_default_text, widget.toolTip()))
 
         for spec in self.build.specs:
             title = spec.title
@@ -45,6 +61,8 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         self.btnCopy.clicked.connect(self.duplicate_specs)
         self.btnConvert.clicked.connect(self.convert_specs)
         self.btnDelete.clicked.connect(self.delete_specs)
+        # self.btnExport.clicked.connect(self.export_tree)
+        self.btnImport.clicked.connect(self.import_tree)
         self.btnClose.clicked.connect(self.close)
         self.list_Trees.model().rowsMoved.connect(self.specs_rows_moved, Qt.QueuedConnection)
         self.list_Trees.model().rowsAboutToBeMoved.connect(self.specs_rows_about_to_be_moved, Qt.QueuedConnection)
@@ -77,9 +95,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         """
         self.disconnect_triggers()
         for idx, spec in enumerate(self.build.specs):
-            text = (
-                spec.treeVersion != _VERSION_str and f"[{tree_versions[spec.treeVersion]}] {spec.title}" or spec.title
-            )
+            text = spec.treeVersion != _VERSION_str and f"[{tree_versions[spec.treeVersion]}] {spec.title}" or spec.title
             text += f" ({spec.ascendClassId_str()}, {len(spec.nodes)} points)"
             self.list_Trees.item(idx).setText(text)
         self.connect_triggers()
@@ -112,6 +128,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
             event.ignore()
         super(ManageTreeDlg, self).keyPressEvent(event)
 
+    @Slot()
     def duplicate_specs(self):
         """Duplicate selected rows, adding a new one after the selected row"""
         selected_items = sorted(self.list_Trees.selectedItems())
@@ -123,6 +140,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
             self.list_Trees.insertItem(row + 1, spec.title)
         self.add_detail_to_spec_names()
 
+    @Slot()
     def convert_specs(self):
         """Convert selected rows, adding the new one after the selected row"""
         # print("manage.convert_specs")
@@ -137,6 +155,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
                 self.list_Trees.insertItem(row + 1, spec.title)
         self.add_detail_to_spec_names()
 
+    @Slot()
     def delete_specs(self):
         copied_items = self.list_Trees.selectedItems()
         if len(copied_items) <= 0:
@@ -155,17 +174,27 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
     def new_spec(self):
         """Add a new empty tree to the list"""
         # print("new_spec")
-        dlg = NewTreePopup(self.build.pob_config.app.tr)
+        dlg = NewTreePopup(self.settings.app.tr, self.win)
         _return = dlg.exec()
-        new_name = dlg.lineedit.text()
+        new_name = dlg.lineedit_name.text()
         version = dlg.combo_tree_version.currentData()
         if _return and new_name != "":
-            spec = self.build.new_spec(new_name, version)
-            lwi = QListWidgetItem(new_name)
-            lwi.setData(Qt.UserRole, spec)
-            lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
-            self.list_Trees.addItem(lwi)
+            self.add_spec(new_name, version)
             self.add_detail_to_spec_names()
+
+    def add_spec(self, new_name, version=_VERSION_str):
+        """
+        Add a new Spec to the widget and the build. Used by the new and import buttons.
+        :param new_name: str:
+        :param version: str: The version if the new button was pressed.
+        :return: Spec()
+        """
+        new_spec = self.build.new_spec(new_name, version)
+        lwi = QListWidgetItem(new_name)
+        lwi.setData(Qt.UserRole, new_spec)
+        lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
+        self.list_Trees.addItem(lwi)
+        return new_spec
 
     @Slot()
     def list_item_changed(self, lwi):
@@ -199,7 +228,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         :param previous_lwi: QListWidgetItem:
         :return: N/A
         """
-        print("list_current_item_changed", current_lwi, previous_lwi)
+        # print("list_current_item_changed", current_lwi, previous_lwi)
         if self.item_being_edited == previous_lwi:
             self.list_item_changed(previous_lwi)
             self.add_detail_to_spec_names()
@@ -250,3 +279,26 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         """
         # print("specs_rows_about_to_be_moved")
         self.spec_to_be_moved = source_parent
+
+    @Slot()
+    def import_tree(self):
+        """
+        Import a passive tree URL.
+
+        :return: N/A
+        """
+        dlg = ImportTreePopup(self.settings.app.tr, "", self.win)
+        _return = dlg.exec()
+        if _return:
+            new_spec = self.add_spec(dlg.spec_name)
+            new_spec.import_tree(dlg.lineedit_url.text() + "==")
+            self.add_detail_to_spec_names()
+
+    # Turn off export just so we don't lose the code. But I don't think it adds value. (20230909. Tested working)
+    # @Slot()
+    # def export_tree(self):
+    #     """Export the current nodes as a URL"""
+    #     url = self.build.current_spec.export_nodes_to_url()
+    #     dlg = ExportTreePopup(self.settings.app.tr, url, self.win)
+    #     # we don't care about how the user exits
+    #     dlg.exec()

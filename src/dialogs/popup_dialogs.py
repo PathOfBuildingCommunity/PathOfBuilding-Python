@@ -26,6 +26,8 @@ from PySide6.QtWidgets import (
 from PoB.constants import ColourCodes, _VERSION_str, get_http_headers, tree_versions
 from widgets.ui_utils import HTMLDelegate, html_colour_text
 
+from ui.PoB_Main_Window import Ui_MainWindow
+
 
 def yes_no_dialog(win, title, text):
     """Return true if the user selects Yes."""
@@ -56,7 +58,7 @@ def critical_dialog(win, title, text, btn_text="Close"):
 
 
 class MasteryPopup(QDialog):
-    def __init__(self, tr, node, current_spec, mastery_effects_nodes):
+    def __init__(self, tr, node, current_spec, mastery_effects_nodes, _win: Ui_MainWindow = None):
         """
         Choose a mastery from the passed in Node.
 
@@ -65,7 +67,7 @@ class MasteryPopup(QDialog):
         :param current_spec: Spec(): the current Spec class for looking up assigned effects
         :param mastery_effects_nodes: list: list of node ids in this mastery group
         """
-        super().__init__()
+        super().__init__(_win)
 
         self.id = node.id
         self.effects = node.masteryEffects
@@ -167,22 +169,35 @@ class MasteryPopup(QDialog):
 
 
 class ImportTreePopup(QDialog):
-    def __init__(self, tr):
+    def __init__(self, tr, curr_tree_name: str = "", _win: Ui_MainWindow = None):
         """
         Initialize
         :param tr: App translate function
         """
-        super().__init__()
-        self.label_intro_text = tr("Enter passive tree URL.")
-        self.label_seems_legit_text = tr(html_colour_text("GREEN", "Seems valid. Lets go."))
-        self.label_not_valid_text = tr(html_colour_text("RED", "Not valid. Try again."))
-        self.setWindowTitle(tr("Import tree from URL"))
+        super().__init__(_win)
+        self.spec_name = curr_tree_name
+        if curr_tree_name == "":
+            self.setWindowTitle(tr(f"Import tree from URL to a new tree."))
+            self.intro_text = tr(f"Enter passive tree URL.")
+        else:
+            self.setWindowTitle(tr(f'Import tree from URL, overwriting "{self.spec_name}".'))
+            self.intro_text = tr(f'Enter passive tree URL, overwriting "{self.spec_name}".')
+        self.seems_legit_text = tr(html_colour_text("GREEN", "Seems valid. Lets go."))
+        self.not_valid_text = tr(html_colour_text("RED", "Not valid. Try again."))
         self.setWindowIcon(QIcon(":/Art/Icons/paper-plane-return.png"))
+        self.decoded_state: bool = False
 
-        self.label = QLabel(self.label_intro_text)
-        self.lineedit = QLineEdit()
-        self.lineedit.setMinimumWidth(600)
-        self.lineedit.textChanged.connect(self.validate_url)
+        self.label_url = QLabel(self.intro_text)
+        self.lineedit_url = QLineEdit()
+        self.lineedit_url.setMinimumWidth(600)
+        self.lineedit_url.textChanged.connect(self.validate_url)
+
+        self.label_name = QLabel("New tree's name.")
+        self.lineedit_name = QLineEdit()
+        self.lineedit_name.setMinimumWidth(600)
+        self.lineedit_name.textChanged.connect(self.validate_import_button_visibility)
+        self.label_name.setVisible(curr_tree_name == "")
+        self.lineedit_name.setVisible(curr_tree_name == "")
 
         self.btn_import = QPushButton("Import")
         self.btn_import.setEnabled(False)
@@ -193,66 +208,112 @@ class ImportTreePopup(QDialog):
         self.button_box.setCenterButtons(True)
 
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.label)
-        self.layout.addWidget(self.lineedit)
+        self.layout.addWidget(self.label_url)
+        self.layout.addWidget(self.lineedit_url)
+        self.layout.addWidget(self.label_name)
+        self.layout.addWidget(self.lineedit_name)
         self.layout.addWidget(self.button_box)
         self.setLayout(self.layout)
 
+    def check_for_character_name_in_url(self, url_parts):
+        """
+         Check for the following variables in the url: accountName=xyllywyt&characterName=PrettyXylly
+         Update the name linedit if eitehr or both of these are found. Ignore any others.
+        :param url_parts:
+        :return: N/A
+        """
+        # print("check_for_character_name_in_url", len(url_parts))
+        if url_parts and len(url_parts) > 1:
+            account, character = "", ""
+            for var in url_parts[1].split("&"):
+                opts = var.split("=")
+                if opts:
+                    match opts[0]:
+                        case "accountName":
+                            account = opts[1]
+                            self.lineedit_name.setText(account)
+                        case "characterName":
+                            character = opts[1]
+                            self.lineedit_name.setText(character)
+
+            if account and character:
+                self.lineedit_name.setText(f"{character}, imported from {account}")
+
+    @Slot()
     def validate_url(self, text):
         """
-        Validate the lineedit input (url hopefuilly). Turn on/off the import button and change label text as needed.
+        Validate the lineedit input (url hopefully). Turn on/off the import button and change label text as needed.
 
-        :param text: str: the current text of the line edit
+        :param text: str: the current text of the line edit.
         :return: N/A
         """
         if text == "":
-            self.label.setText(self.label_intro_text)
+            self.label_url.setText(self.intro_text)
         else:
             # check the validity of what was passed in
-            ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", text + "==")
-            poep = re.search(r"http.*poeplanner.com/(.*)", text + "==")
+            ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", text)
+            poep = re.search(r"http.*poeplanner.com/(.*)?(.*)", text)
             if ggg is not None:
-                # output[0] will be the encoded string and the rest will variable=value, which we don't care about
-                output = ggg.group(2).split("?")
-                decoded_str = base64.urlsafe_b64decode(output[0])
-                self.btn_import.setEnabled(decoded_str and len(decoded_str) > 7)
-                self.label.setText(self.label_seems_legit_text)
+                # ggg.group(1) would be the version if present
+                # ggg.group(2) is the encoded string and variables (accountName= & characterName=) if present
+                # url_parts[0] will be the encoded string and the rest will be variable=value&...
+                url_parts = ggg.group(2).split("?")
+                decoded_bytes = base64.urlsafe_b64decode(url_parts[0] + "==")
+                self.decoded_state = len(decoded_bytes) > 7
+                self.validate_import_button_visibility(self.spec_name)
+                if self.decoded_state:
+                    self.check_for_character_name_in_url(url_parts)
+                    self.label_url.setText(self.seems_legit_text)
             elif poep is not None:
-                # Remove any variables at the end (probably not required for poeplanner)
-                output = poep.group(1).split("?")
-                decoded_str = base64.urlsafe_b64decode(output[0])
-                self.btn_import.setEnabled(decoded_str and len(decoded_str) > 15)
-                self.label.setText(
-                    self.label_seems_legit_text + " Tree nodes and Bandits info only. Cluster nodes won't show."
-                )
+                # ggg.group(1) is the encoded string and variables if present, (probably not required for poeplanner)
+                # url_parts[0] will be the encoded string and the rest will be variable=value&...
+                url_parts = poep.group(1).split("?")
+                decoded_bytes = base64.urlsafe_b64decode(url_parts[0] + "==")
+                self.decoded_state = len(decoded_bytes) > 15
+                if self.decoded_state:
+                    self.validate_import_button_visibility(self.spec_name)
+                    self.label_url.setText(self.seems_legit_text + " Tree nodes and Bandits info only. Cluster nodes won't show.")
             else:
                 self.btn_import.setEnabled(False)
-                self.label.setText(self.label_not_valid_text)
+                self.label_url.setText(self.not_valid_text)
+
+    @Slot()
+    def validate_import_button_visibility(self, text):
+        """
+        Update the spec name lineedit input. Turn on/off the import button and change label text as needed.
+
+        :param text: str: the current text of the line edit.
+        :return: N/A
+        """
+        print(f"validate_import_button_visibility: text: '{text}' : ", type(text))
+        print(f'validate_import_button_visibility: decoded_state: "{self.decoded_state}" : ', type(self.decoded_state))
+        self.spec_name = text
+        self.btn_import.setEnabled(self.decoded_state and (self.lineedit_name.isHidden() or text != ""))
 
 
 """######## ExportTreePopup. Export a passive Tree URL ########"""
 
 
 class ExportTreePopup(QDialog):
-    def __init__(self, tr, url, win):
+    def __init__(self, tr, url, _win: Ui_MainWindow = None):
         """
         Initialize
         :param tr: App translate function
         :param url: str: the encoded url
-        :param win: MainWindow(): reference for accessing the statusbar
+        :param _win: MainWindow(): reference for accessing the statusbar
         """
         super().__init__()
         self.tr = tr
-        self.win = win
-        self.label_intro_text = tr("Passive tree URL.")
+        self.win = _win
+        self.intro_text = tr("Passive tree URL.")
         self.shrink_text = f'{tr("Shrink with")} PoEURL'
         self.setWindowTitle(tr("Export tree to URL"))
         self.setWindowIcon(QIcon(":/Art/Icons/paper-plane.png"))
 
-        self.label = QLabel(self.label_intro_text)
-        self.lineedit = QLineEdit()
-        self.lineedit.setMinimumWidth(600)
-        self.lineedit.setText(url)
+        self.label_url = QLabel(self.intro_text)
+        self.lineedit_url = QLineEdit()
+        self.lineedit_url.setMinimumWidth(600)
+        self.lineedit_url.setText(url)
 
         self.btn_copy = QPushButton(tr("Copy"))
         self.btn_copy.setAutoDefault(False)
@@ -268,34 +329,34 @@ class ExportTreePopup(QDialog):
         self.button_box.setCenterButtons(True)
 
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.label)
-        self.layout.addWidget(self.lineedit)
+        self.layout.addWidget(self.label_url)
+        self.layout.addWidget(self.lineedit_url)
         self.layout.addWidget(self.button_box)
         self.setLayout(self.layout)
         self.set_lineedit_selection()
 
     def set_lineedit_selection(self):
         """Ensure linedit has focus and the text selected"""
-        self.lineedit.setFocus(Qt.OtherFocusReason)
-        self.lineedit.setSelection(0, len(self.lineedit.text()))
+        self.lineedit_url.setFocus(Qt.OtherFocusReason)
+        self.lineedit_url.setSelection(0, len(self.lineedit_url.text()))
 
     def copy_url(self):
         """Copy the text in the lineedit to the clipboard"""
         clipboard = QGuiApplication.clipboard()
-        clipboard.setText(self.lineedit.text())
+        clipboard.setText(self.lineedit_url.text())
         self.set_lineedit_selection()
 
     def shrink_url(self):
         """Call poeurl and get the url 'shrinked'"""
         self.btn_shrink.setText(f'{self.tr("Shrinking")} ...')
         self.btn_shrink.setEnabled(False)
-        url = f"http://poeurl.com/shrink.php?url={self.lineedit.text()}"
+        url = f"http://poeurl.com/shrink.php?url={self.lineedit_url.text()}"
         response = None
         try:
             response = requests.get(url, headers=get_http_headers, timeout=6.0)
             url = f'http://poeurl.com/{response.content.decode("utf-8")}'
-            self.lineedit.setText(url)
-            self.lineedit.setSelection(0, len(url))
+            self.lineedit_url.setText(url)
+            self.lineedit_url.setSelection(0, len(url))
             self.btn_shrink.setText(self.tr("Done"))
         except requests.RequestException as e:
             self.win.update_status_bar(f"Error retrieving 'Data': {response.reason} ({response.status_code}).")
@@ -309,21 +370,21 @@ class ExportTreePopup(QDialog):
 
 
 class NewTreePopup(QDialog):
-    def __init__(self, tr):
+    def __init__(self, tr, _win: Ui_MainWindow = None):
         """
         Initialize
         :param tr: App translate function
         """
-        super().__init__()
-        # self.label_intro_text = tr("New passive tree.")
+        super().__init__(_win)
+        # self.intro_text = tr("New passive tree.")
         self.setWindowTitle(tr("New passive tree"))
         self.setWindowIcon(QIcon(":/Art/Icons/tree--pencil.png"))
 
-        # self.label = QLabel(self.label_intro_text)
-        self.lineedit = QLineEdit()
-        self.lineedit.setMinimumWidth(400)
-        self.lineedit.setPlaceholderText("New tree, Rename Me")
-        # self.lineedit.textChanged.connect(self.validate_url)
+        # self.label = QLabel(self.intro_text)
+        self.lineedit_name = QLineEdit()
+        self.lineedit_name.setMinimumWidth(400)
+        self.lineedit_name.setPlaceholderText("New tree, Rename Me")
+        # self.lineedit_name.textChanged.connect(self.validate_url)
         self.combo_tree_version = QComboBox()
         for ver in tree_versions.keys():
             self.combo_tree_version.addItem(tree_versions[ver], ver)
@@ -338,7 +399,7 @@ class NewTreePopup(QDialog):
 
         self.hlayout = QHBoxLayout()
         # self.hlayout.addWidget(self.label)
-        self.hlayout.addWidget(self.lineedit)
+        self.hlayout.addWidget(self.lineedit_name)
         self.hlayout.addWidget(self.combo_tree_version)
 
         self.vlayout = QVBoxLayout()
@@ -348,19 +409,19 @@ class NewTreePopup(QDialog):
 
 
 class LineEditPopup(QDialog):
-    def __init__(self, tr, title):
+    def __init__(self, tr, title, _win: Ui_MainWindow = None):
         """
         Initialize
         :param tr: App translate function
         """
-        super().__init__()
-        # self.label_intro_text = tr(title)
+        super().__init__(_win)
+        # self.intro_text = tr(title)
         self.setWindowTitle(tr(title))
         self.setWindowIcon(QIcon(":/Art/Icons/edit-list-order.png"))
 
-        self.lineedit = QLineEdit()
-        self.lineedit.setMinimumWidth(400)
-        self.lineedit.setPlaceholderText("I'm empty, type in me ...")
+        self.lineedit_name = QLineEdit()
+        self.lineedit_name.setMinimumWidth(400)
+        self.lineedit_name.setPlaceholderText("I'm empty, type in me ...")
 
         self.btn_exit = QPushButton("Don't Save")
         self.button_box = QDialogButtonBox(QDialogButtonBox.Save)
@@ -371,7 +432,7 @@ class LineEditPopup(QDialog):
 
         self.hlayout = QHBoxLayout()
         # self.hlayout.addWidget(self.label)
-        self.hlayout.addWidget(self.lineedit)
+        self.hlayout.addWidget(self.lineedit_name)
 
         self.vlayout = QVBoxLayout()
         self.vlayout.addLayout(self.hlayout)
@@ -386,4 +447,4 @@ class LineEditPopup(QDialog):
     @placeholder_text.setter
     def placeholder_text(self, new_text):
         """Do nothing, we just need to declare the property"""
-        self.lineedit.setPlaceholderText(new_text)
+        self.lineedit_name.setPlaceholderText(new_text)

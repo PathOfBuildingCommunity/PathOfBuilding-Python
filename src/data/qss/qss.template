@@ -14,6 +14,29 @@ QWidget {
     border-radius: 4px;
 }
 
+QGroupBox {
+	color: rgba( qss_selection_bckgrd );
+	margin: 5px;
+}
+QGroupBox#groupbox_Items_2,
+QGroupBox#groupbox_SocketedJewels_2 {border:0;}
+/* QGroupBox { */
+    /* color: #828282; */
+    /* font-weight: bold; */
+    /* border:1px solid blue; */
+/* } */
+QGroupBox::title {
+	padding-top: -5px;
+    padding-left: 10px;
+/* } */
+    subcontrol-origin: margin;
+    /* subcontrol-origin: padding; */
+    subcontrol-position: top left;
+    /* padding-right: 10px; */
+    /* padding-top: 10px; */
+    background-color: transparent;
+}
+
 /* Put a box around control */
 ListBox:hover,
 QListWidget:hover,
@@ -128,6 +151,7 @@ QTabBar::tab:!selected {
 
 
 QComboBox,
+QLineEdit,
 QPushButton {
     border: 1px solid rgba( qss_box_borders );
     padding: 4px 8px;

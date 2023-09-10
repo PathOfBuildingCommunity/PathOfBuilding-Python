@@ -2,7 +2,7 @@
 This Class if communicating between the calculation Classes and the UI Classes
 """
 
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from PoB.constants import stats_list, ColourCodes
 from widgets.ui_utils import html_colour_text
 
@@ -10,8 +10,8 @@ from ui.PoB_Main_Window import Ui_MainWindow
 
 
 class PlayerStats:
-    def __init__(self, _config: Config, _win: Ui_MainWindow) -> None:
-        self.config = _config
+    def __init__(self, _settings: Settings, _win: Ui_MainWindow) -> None:
+        self.settings = _settings
         self.win = _win
         self.build = None
 

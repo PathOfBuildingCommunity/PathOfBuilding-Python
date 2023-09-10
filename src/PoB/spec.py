@@ -14,12 +14,13 @@ from PoB.constants import (
     _VERSION,
     _VERSION_str,
 )
+from PoB.settings import Settings
 from widgets.ui_utils import print_call_stack, print_a_xml_element
 from dialogs.popup_dialogs import ok_dialog
 
 
 class Spec:
-    def __init__(self, build, _spec=None, version=_VERSION_str) -> None:
+    def __init__(self, build, _spec=None, version=_VERSION_str) -> None:  # Circular reference on Build()
         """
         Represents one Spec in the XML. Most simple settings are properties.
 
@@ -27,7 +28,7 @@ class Spec:
         """
         self.internal_version = 6
         self.build = build
-        self.tr = self.build.pob_config.app.tr
+        self.tr = self.build.settings.app.tr
 
         self.def_spec = ET.fromstring(default_spec)
         if _spec is None:
@@ -51,7 +52,7 @@ class Spec:
 
         # Table of jewels equipped in this tree
         # Keys are node IDs, values are items
-        self.jewels = {}
+        self.sockets = {}
 
         # if there are no sockets there, we don't mind. We'll create an empty one when saving
         sockets = _spec.find("Sockets")
@@ -61,8 +62,9 @@ class Spec:
                 item_id = int(socket.get("itemId", 0))
                 # There are files which have been saved poorly and have empty jewel sockets saved as sockets ...
                 # with itemId zero. This check filters them out to prevent dozens of invalid jewels
+                # if item_id > 0 and node_id in self.nodes:
                 if item_id > 0:
-                    self.jewels[node_id] = item_id
+                    self.sockets[node_id] = item_id
 
     @property
     def title(self):
@@ -76,10 +78,6 @@ class Spec:
     def classId(self) -> int:
         return PlayerClasses(int(self.xml_spec.get("classId", PlayerClasses.SCION.value)))
 
-    def classId_str(self) -> str:
-        """Return a string of the current Class"""
-        return self.classId.name.title()
-
     @classId.setter
     def classId(self, new_class_id):
         """
@@ -90,6 +88,10 @@ class Spec:
             self.xml_spec.set("classId", f"{new_class_id}")
         else:
             self.xml_spec.set("classId", f"{new_class_id.value}")
+
+    def classId_str(self) -> str:
+        """Return a string of the current Class"""
+        return self.classId.name.title()
 
     @property
     def ascendClassId(self) -> int:
@@ -175,7 +177,6 @@ class Spec:
         self.nodes = set()
         for i in range(0, len(decoded_nodes), 2):
             print(i, int.from_bytes(decoded_nodes[i : i + 2], endian))
-            # self.nodes.append(int.from_bytes(decoded_nodes[i : i + 2], endian))
             self.nodes.add(int.from_bytes(decoded_nodes[i : i + 2], endian))
         return end
 
@@ -197,7 +198,6 @@ class Spec:
             for i in range(0, len(decoded_cluster_nodes), 2):
                 # print(''.join('{:02x} '.format(x) for x in cluster_nodes[i:i + 2]))
                 # print(i, int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
-                # self.nodes.append(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
                 self.nodes.add(int.from_bytes(decoded_cluster_nodes[i : i + 2], endian) + 65536)
         return end
 
@@ -230,7 +230,6 @@ class Spec:
                 print("id", m_id, "effect", m_effect)
                 self.masteryEffects[m_id] = m_effect
                 self.nodes.add(m_id)
-                # self.nodes.append(m_id)
 
     def import_ascendancy_nodes(self, decoded_data, start, count, endian):
         """
@@ -249,27 +248,43 @@ class Spec:
             for i in range(0, len(decoded_ascendancy_nodes), 2):
                 # print("".join("{:02x} ".format(x) for x in decoded_ascendancy_nodes[i : i + 2]))
                 print(i, self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
-                # self.nodes.append(self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
                 self.nodes.add(self.b_to_i(decoded_ascendancy_nodes, i, i + 2, endian))
         return end
 
-    def set_nodes_from_ggg_url(self):
+    def import_tree(self, new_url):
         """
-        This function sets the nodes from the self.URL property. This allows us to set the URL for legacy purposes
-        without actually disturbing the node information we have.
+        Import a passive tree URL.
 
+        :return: N/A
+        """
+        # print("Spec.import_tree", new_url)
+        if new_url is None or new_url == "":
+            return
+        ggg = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", new_url)
+        poep = re.search(r"http.*poeplanner.com/(.*)", new_url)
+        if ggg is not None:
+            self.set_nodes_from_ggg_url(new_url)
+        if poep is not None:
+            self.set_nodes_from_poeplanner_url(new_url)
+
+    def set_nodes_from_ggg_url(self, ggg_url):
+        """
+        This function sets the nodes from GGG url.
+
+        :param ggg_url: str: incoming url.
         :return: N/A
         """
         endian = "big"
 
-        if self.URL is None:
+        if ggg_url is None or ggg_url == "":
             return
-        m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", self.URL)
+        m = re.search(r"http.*passive-skill-tree/(.*/)?(.*)", ggg_url)
 
         # check the validity of what was passed in
         # group(1) is None or a version
         # group(2) is always the encoded string, with any variables
         if m is not None:
+            self.URL = ggg_url
             self.treeVersion = m.group(1) is None and _VERSION_str or m.group(1)
             if self.treeVersion not in tree_versions.keys():
                 v = re.sub("_", ".", self.treeVersion)
@@ -277,22 +292,21 @@ class Spec:
                     self.build.win,
                     f"{self.tr('Invalid tree version')}: {v}",
                     f"{self.tr('Valid tree versions are')}:\n{str(list(tree_versions.values()))[1:-1]}\n\n"
-                    f"{self.tr('This will be converted to ')}{_VERSION}\n",
+                    + f"{self.tr('This will be converted to ')}{_VERSION}\n",
                 )
                 self.title = f"{self.title} ({self.tr('was')} v{v})"
                 self.treeVersion = _VERSION_str
 
-            # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
-            output = m.group(2).split("?")
-            decoded_data = base64.urlsafe_b64decode(output[0])
-            # print(type(decoded_data), decoded_data)
-            # print(f"decoded_data: {len(decoded_data)},", "".join("{:02x} ".format(x) for x in decoded_data))
-            # _fn = Path("tree.bin")
-            # try:
-            #     with _fn.open("wb") as f:
-            #         f.write(decoded_data)
-            # except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
-            #     print(f"Unable to write to {_fn}")
+            tmp_output = m.group(2).split("?")
+            encoded_str = tmp_output[0]
+            del tmp_output[0]
+            # a list of variable=value (accountName=xyllywyt&characterName=PrettyXylly) found on the url or an empty list
+            variables = tmp_output
+            decoded_data = base64.urlsafe_b64decode(encoded_str)
+
+            # # output[0] will be the encoded string and the rest will variable=value, which we don't care about (here)
+            # output = m.group(2).split("?")
+            # decoded_data = base64.urlsafe_b64decode(output[0])
 
             # the decoded_data is 0 based, so every index will be one smaller than the equivalent in lua
             if decoded_data and len(decoded_data) > 7:
@@ -320,6 +334,7 @@ class Spec:
         """
         This function sets the nodes from poeplanner url.
 
+        :param poep_url: str: incoming url.
         :return: N/A
         """
         endian = "little"
@@ -333,16 +348,17 @@ class Spec:
             # fmt: on
             return tree_versions.get(minor, -1)
 
-        if poep_url is None:
+        if poep_url is None or poep_url == "":
             return
-        m = re.search(r"http.*poeplanner.com/(.*)", poep_url)
+        m = re.search(r"http.*poeplanner.com/(.*)?(.*)", poep_url)
         # group(1) is always the encoded string
         if m is not None:
+            print("M", m.groups())
             # Remove any variables at the end (probably not required for poeplanner)
             tmp_output = m.group(1).split("?")
             encoded_str = tmp_output[0]
             del tmp_output[0]
-            variables = tmp_output  # a list of variable=value or an empty list
+            variables = tmp_output  # a list of variable=value found on the url or an empty list
 
             decoded_data = base64.urlsafe_b64decode(encoded_str)
             # print(f"decoded_data: {len(decoded_data)},", "".join("{:02x} ".format(x) for x in decoded_data))
@@ -429,7 +445,8 @@ class Spec:
         # print(string)
 
         encoded_string = base64.urlsafe_b64encode(byte_stream).decode("utf-8")
-        return f"https://www.pathofexile.com/passive-skill-tree/{encoded_string}"
+        self.URL = f"https://www.pathofexile.com/passive-skill-tree/{encoded_string}"
+        return self.URL
 
     def set_mastery_effects_from_string(self, new_effects):
         """
@@ -491,7 +508,7 @@ class Spec:
 
     def save(self):
         """
-        Save anything that can't be a property, like Nodes,sockets
+        Save anything that can't be a property, like Nodes, sockets
 
         :return:
         """
@@ -509,9 +526,9 @@ class Spec:
             self.xml_spec.remove(sockets)
         sockets = ET.Element("Sockets")
         self.xml_spec.append(sockets)
-        if len(self.jewels) > 0:
-            for node_id in self.jewels.keys():
-                sockets.append(ET.fromstring(f'<Socket nodeId="{node_id}" itemId="{self.jewels[node_id]}"/>'))
+        if len(self.sockets) > 0:
+            for node_id in self.sockets.keys():
+                sockets.append(ET.fromstring(f'<Socket nodeId="{node_id}" itemId="{self.sockets[node_id]}"/>'))
 
     def load_from_ggg_json(self, json_tree, json_character):
         """

@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Uniques>
+	<generated>
+		<Item ver="2" title="Precursor's Emblem" base_name="variant" league="Delve" source="Vendor Recipe" comment="https://www.poewiki.net/wiki/Precursor%27s_Emblem" >
+			<Attribs level_req="49" />
+			<Implicits>
+				<Mod>{variant:1}{tags:jewellery_resistance}+(20-30)% to Lightning Resistance</Mod>
+				<Mod>{variant:2}{tags:jewellery_resistance}+(20-30)% to Cold Resistance</Mod>
+				<Mod>{variant:3}{tags:jewellery_resistance}+(20-30)% to Fire Resistance</Mod>
+				<Mod>{variant:4}{tags:jewellery_resistance}+(12-16)% to Cold and Lightning Resistances</Mod>
+				<Mod>{variant:5}{tags:jewellery_resistance}+(12-16)% to Fire and Lightning Resistances</Mod>
+				<Mod>{variant:6}{tags:jewellery_resistance}+(12-16)% to Fire and Cold Resistances</Mod>
+				<Mod>{variant:7}{tags:jewellery_resistance}+(8-10)% to all Elemental Resistances</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{variant:1}{tags:jewellery_attribute}+20 to Intelligence</Mod>
+				<Mod>{variant:2}{tags:jewellery_attribute}+20 to Dexterity</Mod>
+				<Mod>{variant:3}{tags:jewellery_attribute}+20 to Strength</Mod>
+				<Mod>{variant:4}{tags:jewellery_attribute}+20 to Strength and Intelligence</Mod>
+				<Mod>{variant:5}{tags:jewellery_attribute}+20 to Dexterity and Intelligence</Mod>
+				<Mod>{variant:6}{tags:jewellery_attribute}+20 to Strength and Dexterity</Mod>
+				<Mod>{variant:7}{tags:jewellery_attribute}+20 to all Attributes</Mod>
+				<Mod>{tags:jewellery_defense}5% increased maximum Energy Shield</Mod>
+				<Mod>{tags:life}5% increased maximum Life</Mod>
+				<Mod>{variant:8}{range:0}Gain an Endurance Charge every second if you've been Hit Recently</Mod>
+				<Mod>{variant:9}{range:0}You cannot be Stunned while at maximum Endurance Charges</Mod>
+				<Mod>{variant:10}{range:0}You have Vaal Pact while at maximum Endurance Charges</Mod>
+				<Mod>{variant:11}{range:0}+1 to Maximum Endurance Charges</Mod>
+				<Mod>{variant:12}{range:0}Intimidate Enemies for 4 seconds on Hit with Attacks while at maximum Endurance Charges</Mod>
+				<Mod>{variant:13}{range:0}+(4-8)% to Chaos Resistance per Endurance Charge</Mod>
+				<Mod>{variant:14}{range:0}(1-2)% chance to Suppress Spell Damage per Endurance Charge</Mod>
+				<Mod>{variant:15}{range:0}(6-12)% increased Critical Strike Chance per Endurance Charge</Mod>
+				<Mod>{variant:16}{range:0}Regenerate (0.3-0.6)% of Life per second per Endurance Charge</Mod>
+				<Mod>{variant:17}{range:0}(1-2)% Chance to Block Attack Damage per Endurance Charge</Mod>
+				<Mod>{variant:18}{range:0}Gain (1-2)% of Fire Damage as Extra Chaos Damage per Endurance Charge</Mod>
+				<Mod>{variant:19}{range:0}(1-2)% increased Attack and Cast Speed per Endurance Charge</Mod>
+				<Mod>{variant:20}{range:0}(10-30)% chance to gain an Endurance Charge on Kill</Mod>
+				<Mod>{variant:21}{range:0}(7-27) to (13-42) Fire Damage per Endurance Charge</Mod>
+				<Mod>{variant:22}{range:0}(1-3)% increased Movement Speed per Endurance Charge</Mod>
+				<Mod>{variant:23}{range:0}(5-15)% increased Damage per Endurance Charge</Mod>
+				<Mod>{variant:24}{range:0}(6-18)% increased Armour per Endurance Charge</Mod>
+				<Mod>{variant:25}{range:0}(20-120)% increased Endurance Charge Duration</Mod>
+				<Mod>{variant:26}{range:0}(15-45)% chance that if you would gain Endurance Charges, you instead gain up to your maximum number of Endurance Charges</Mod>
+				<Mod>{variant:27}{range:0}(10-10)% chance to gain a Frenzy Charge on Hit</Mod>
+				<Mod>{variant:28}{range:0}Gain Onslaught for 4 seconds on Hit while at maximum Frenzy Charges</Mod>
+				<Mod>{variant:29}{range:0}You have Iron Reflexes while at maximum Frenzy Charges</Mod>
+				<Mod>{variant:30}{range:0}Gain a Flask Charge when you deal a Critical Strike while at maximum Frenzy Charges</Mod>
+				<Mod>{variant:31}{range:0}+1 to Maximum Frenzy Charges</Mod>
+				<Mod>{variant:32}{range:0}(1-2)% increased Attack and Cast Speed per Frenzy Charge</Mod>
+				<Mod>{variant:33}{range:0}Gain (1-2)% of Cold Damage as Extra Chaos Damage per Frenzy Charge</Mod>
+				<Mod>{variant:34}{range:0}(10-20)% increased Accuracy Rating per Frenzy Charge</Mod>
+				<Mod>{variant:35}{range:0}(6-12)% increased Critical Strike Chance per Frenzy Charge</Mod>
+				<Mod>{variant:36}{range:0}(1-2)% Chance to Block Attack Damage per Frenzy Charge</Mod>
+				<Mod>{variant:37}{range:0}Regenerate (0.3-0.6)% of Life per second per Frenzy Charge</Mod>
+				<Mod>{variant:38}{range:0}(1-2)% chance to Suppress Spell Damage per Frenzy Charge</Mod>
+				<Mod>{variant:39}{range:0}(10-30)% chance to gain an Frenzy Charge on Kill</Mod>
+				<Mod>{variant:40}{range:0}(5-15)% increased Damage per Frenzy Charge</Mod>
+				<Mod>{variant:41}{range:0}(1-3)% increased Movement Speed per Frenzy Charge</Mod>
+				<Mod>{variant:42}{range:0}(6-24) to (12-39) Cold Damage per Frenzy Charge</Mod>
+				<Mod>{variant:43}{range:0}(15-45)% chance that if you would gain Frenzy Charges, you instead gain up to your maximum number of Frenzy Charges</Mod>
+				<Mod>{variant:44}{range:0}(20-120)% increased Frenzy Charge Duration</Mod>
+				<Mod>{variant:45}{range:0}(8-24)% increased Evasion Rating per Frenzy Charge</Mod>
+				<Mod>{variant:46}{range:0}+1 to Maximum Power Charges</Mod>
+				<Mod>{variant:47}{range:0}(20-20)% chance to gain a Power Charge on Critical Strike</Mod>
+				<Mod>{variant:48}{range:0}You have Mind over Matter while at maximum Power Charges</Mod>
+				<Mod>{variant:49}{range:0}You can apply an additional Curse while at maximum Power Charges</Mod>
+				<Mod>{variant:50}{range:0}Gain Arcane Surge on Hit with Spells while at maximum Power Charges</Mod>
+				<Mod>{variant:51}{range:0}(1-2)% increased Attack and Cast Speed per Power Charge</Mod>
+				<Mod>{variant:52}{range:0}(1-2)% chance to Suppress Spell Damage per Power Charge</Mod>
+				<Mod>{variant:53}{range:0}+(3-6)% to Critical Strike Multiplier per Power Charge</Mod>
+				<Mod>{variant:54}{range:0}Regenerate (0.3-0.6)% of Life per second per Power Charge</Mod>
+				<Mod>{variant:55}{range:0}Gain (1-2)% of Lightning Damage as Extra Chaos Damage per Power Charge</Mod>
+				<Mod>{variant:56}{range:0}(1-2)% Chance to Block Attack Damage per Power Charge</Mod>
+				<Mod>{variant:57}{range:0}(1-2)% additional Physical Damage Reduction per Power Charge</Mod>
+				<Mod>{variant:58}{range:0}(10-30)% chance to gain an Power Charge on Kill</Mod>
+				<Mod>{variant:59}{range:0}(5-15)% increased Damage per Power Charge</Mod>
+				<Mod>{variant:60}{range:0}(1-3)% increased Movement Speed per Power Charge</Mod>
+				<Mod>{variant:61}{range:0}(20-120)% increased Power Charge Duration</Mod>
+				<Mod>{variant:62}{range:0}(15-45)% chance that if you would gain Power Charges, you instead gain up to your maximum number of Power Charges</Mod>
+				<Mod>{variant:63}{range:0}(1-6) to (18-60) Lightning Damage per Power Charge</Mod>
+				<Mod>{variant:64}{range:0}(3-9)% increased Energy Shield per Power Charge</Mod>
+			</Explicits>
+			<Variants max="7" alt1="0" alt2="0" alt3="0">
+				<Variant num="1">Topaz Ring</Variant>
+				<Variant num="2">Sapphire Ring</Variant>
+				<Variant num="3">Ruby Ring</Variant>
+				<Variant num="4">Two-Stone Ring (Cold/Lightning)</Variant>
+				<Variant num="5">Two-Stone Ring (Fire/Lightning)</Variant>
+				<Variant num="6">Two-Stone Ring (Fire/Cold)</Variant>
+				<Variant num="7">Prismatic Ring</Variant>
+				<Variant num="8">Endurance - Gain every second</Variant>
+				<Variant num="9">Endurance - Cannot be Stunned</Variant>
+				<Variant num="10">Endurance - Vaal Pact</Variant>
+				<Variant num="11">Endurance - +1 Maximum</Variant>
+				<Variant num="12">Endurance - Intimidate</Variant>
+				<Variant num="13">Endurance - Chaos Res</Variant>
+				<Variant num="14">Endurance - Spell Suppression</Variant>
+				<Variant num="15">Endurance - Inc. Critical Strike Chance</Variant>
+				<Variant num="16">Endurance - Regen. Life</Variant>
+				<Variant num="17">Endurance - Block Attacks</Variant>
+				<Variant num="18">Endurance - Fire as Chaos</Variant>
+				<Variant num="19">Endurance - Attack and Cast Speed</Variant>
+				<Variant num="20">Endurance - On Kill</Variant>
+				<Variant num="21">Endurance - Add Fire Damage</Variant>
+				<Variant num="22">Endurance - Movement Speed</Variant>
+				<Variant num="23">Endurance - Inc. Damage</Variant>
+				<Variant num="24">Endurance - Armour</Variant>
+				<Variant num="25">Endurance - Duration</Variant>
+				<Variant num="26">Endurance - Up to Max.</Variant>
+				<Variant num="27">Frenzy - Gain on Hit</Variant>
+				<Variant num="28">Frenzy - Onslaught</Variant>
+				<Variant num="29">Frenzy - Iron Reflexes</Variant>
+				<Variant num="30">Frenzy - Flask Charge on Crit</Variant>
+				<Variant num="31">Frenzy - +1 Maximum</Variant>
+				<Variant num="32">Frenzy - Attack and Cast Speed</Variant>
+				<Variant num="33">Frenzy - Cold as Chaos</Variant>
+				<Variant num="34">Frenzy - Accuracy Rating</Variant>
+				<Variant num="35">Frenzy - Inc. Critical Strike Chance</Variant>
+				<Variant num="36">Frenzy - Block Attacks</Variant>
+				<Variant num="37">Frenzy - Regen. Life</Variant>
+				<Variant num="38">Frenzy - Spell Suppression</Variant>
+				<Variant num="39">Frenzy - On Kill</Variant>
+				<Variant num="40">Frenzy - Inc. Damage</Variant>
+				<Variant num="41">Frenzy - Movement Speed</Variant>
+				<Variant num="42">Frenzy - Add Cold Damage</Variant>
+				<Variant num="43">Frenzy - Up to Max.</Variant>
+				<Variant num="44">Frenzy - Duration</Variant>
+				<Variant num="45">Frenzy - Evasion</Variant>
+				<Variant num="46">Power - +1 Maximum</Variant>
+				<Variant num="47">Power - Gain on Crit</Variant>
+				<Variant num="48">Power - Mind over Matter</Variant>
+				<Variant num="49">Power - Additional Curse</Variant>
+				<Variant num="50">Power - Arcane Surge with Spells</Variant>
+				<Variant num="51">Power - Attack and Cast Speed</Variant>
+				<Variant num="52">Power - Spell Suppression</Variant>
+				<Variant num="53">Power - Crit Strike Multi</Variant>
+				<Variant num="54">Power - Regen. Life</Variant>
+				<Variant num="55">Power - Lightning as Chaos</Variant>
+				<Variant num="56">Power - Block Attacks</Variant>
+				<Variant num="57">Power - Phys. Damage Red.</Variant>
+				<Variant num="58">Power - On Kill</Variant>
+				<Variant num="59">Power - Inc. Damage</Variant>
+				<Variant num="60">Power - Movement Speed</Variant>
+				<Variant num="61">Power - Duration</Variant>
+				<Variant num="62">Power - Up to Max.</Variant>
+				<Variant num="63">Power - Add Lightning Damage</Variant>
+				<Variant num="64">Power - Energy Shield</Variant>
+			</Variants>
+			<VariantEntries>
+				<base_name>Topaz Ring</base_name>
+				<base_name>Sapphire Ring</base_name>
+				<base_name>Ruby Ring</base_name>
+				<base_name>Two-Stone Ring (Cold/Lightning)</base_name>
+				<base_name>Two-Stone Ring (Fire/Lightning)</base_name>
+				<base_name>Two-Stone Ring (Fire/Cold)</base_name>
+				<base_name>Prismatic Ring</base_name>
+			</VariantEntries>
+		</Item>
+	</generated>
+</Uniques>

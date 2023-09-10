@@ -13,8 +13,9 @@ from PySide6.QtCore import QLineF, QRectF, Qt
 from PySide6.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
 from PySide6.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
 
+from ui.PoB_Main_Window import Ui_MainWindow
 from PoB.constants import ColourCodes, class_backgrounds, Layers, PlayerClasses
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from PoB.build import Build
 from dialogs.popup_dialogs import MasteryPopup
 from widgets.tree_graphics_item import TreeGraphicsItem
@@ -22,17 +23,16 @@ from widgets.ui_utils import _debug, print_call_stack
 
 
 class TreeView(QGraphicsView):
-    def __init__(self, _win, _config: Config, _build: Build) -> None:
+    def __init__(self, _settings: Settings, _build: Build, _win: Ui_MainWindow) -> None:
         """
         Initialize Treeview
-
-        :param _win: pointer to MainWindow()
-        :param _config: pointer to Config()
+        :param _settings: pointer to Settings()
         :param _build: pointer to build()
+        :param _win: A pointer to MainWindowUI
         """
         super(TreeView, self).__init__()
         self.win = _win
-        self.config = _config
+        self.settings = _settings
         self.build = _build
 
         self.search_rings = []
@@ -59,8 +59,11 @@ class TreeView(QGraphicsView):
         # Stop the drag icon being the default, which the above line would do
         self.viewport().setCursor(Qt.ArrowCursor)
 
+        # A list of jewels that the tree_view can use for showing the correct image
+        self.items_jewels = {}
         # add_tree_images needs to be before adding a margin
         self.add_tree_images(True)
+
         # add a margin to make panning the view seem more comfortable
         rect = self.sceneRect()
         rect.adjust(-1000.0, -1000.0, 1000.0, 1000.0)
@@ -117,46 +120,50 @@ class TreeView(QGraphicsView):
         self.viewport().setCursor(Qt.ArrowCursor)
         # If compare is on, then the compare circles will be the first item detected (highest in the Z order)
         # Get all items at that pos and find the first TreeGraphicsItem
-        items = self.items(event.pos())
-        if len(items) < 1:
+        graphic_items = self.items(event.pos())
+        if len(graphic_items) < 1:
             return
-        _item = next((i for i in items if isinstance(i, TreeGraphicsItem)), None)
+        for i in graphic_items:
+            if type(i) is TreeGraphicsItem:
+                print(i.node_id, i.name)
+        g_item = next((i for i in graphic_items if isinstance(i, TreeGraphicsItem)), None)
         if (
-            _item
-            and type(_item) == TreeGraphicsItem
-            and _item.node_id != 0
-            and not _item.node_isAscendancyStart
-            and _item.node_classStartIndex < 0
+            g_item
+            and type(g_item) == TreeGraphicsItem
+            and g_item.node_id != 0
+            and not g_item.node_isAscendancyStart
+            and g_item.node_classStartIndex < 0
         ):
-            # print("mouseReleaseEvent", _item.node_id)
+            print("mouseReleaseEvent", g_item.node_id)
             if event.button() == Qt.LeftButton:
-                if _item.node_id in self.build.current_spec.nodes:
-                    if _item.node_type == "Mastery":
-                        self.build.current_spec.remove_mastery_effect(_item.node_id)
-                    self.build.current_spec.nodes.remove(_item.node_id)
+                if g_item.node_id in self.build.current_spec.nodes:
+                    if g_item.node_type == "Mastery":
+                        self.build.current_spec.remove_mastery_effect(g_item.node_id)
+                    # elif g_item.node_type == "Socket":
+                    #     del self.build.current_spec.sockets[g_item.node_id]
+                    self.build.current_spec.nodes.remove(g_item.node_id)
                 else:
                     current_tree_nodes = self.build.current_tree.nodes
-                    node = current_tree_nodes[_item.node_id]
+                    node = current_tree_nodes[g_item.node_id]
                     # Check to see if node is connected to an active node
                     for node_id in node.nodes_out.union(node.nodes_in):
                         if node_id in self.build.current_spec.nodes:
-                            if _item.node_type == "Mastery":
-                                print(
-                                    "mastery_popup",
-                                    self.build.current_tree.nodes[_item.node_id],
-                                )
-                                if self.mastery_popup(self.build.current_tree.nodes[_item.node_id]):
-                                    # self.build.current_spec.nodes.append(_item.node_id)
-                                    self.build.current_spec.nodes.add(_item.node_id)
+                            if g_item.node_type == "Mastery":
+                                print("mastery_popup", self.build.current_tree.nodes[g_item.node_id])
+                                if self.mastery_popup(self.build.current_tree.nodes[g_item.node_id]):
+                                    self.build.current_spec.nodes.add(g_item.node_id)
+                            elif g_item.node_type == "Socket":
+                                # ToDo: Do we need a popup to select a jewel ?
+                                self.build.current_spec.nodes.add(g_item.node_id)
+                                # self.build.current_spec.sockets[g_item.node_id] = 0
                             else:
-                                # self.build.current_spec.nodes.append(_item.node_id)
-                                self.build.current_spec.nodes.add(_item.node_id)
+                                self.build.current_spec.nodes.add(g_item.node_id)
                             break
             elif event.button() == Qt.RightButton:
                 # look for Mastery and popup a dialog
                 # print("RightButton", _item.node_type)
-                if _item.node_type == "Mastery" and _item.node_id in self.build.current_spec.nodes:
-                    self.mastery_popup(self.build.current_tree.nodes[_item.node_id])
+                if g_item.node_type == "Mastery" and g_item.node_id in self.build.current_spec.nodes:
+                    self.mastery_popup(self.build.current_tree.nodes[g_item.node_id])
             self.add_tree_images()
             # count the new nodes ...
             self.build.count_allocated_nodes()
@@ -191,10 +198,11 @@ class TreeView(QGraphicsView):
         :return: bool: True if an effect was chosen
         """
         dlg = MasteryPopup(
-            self.config.app.tr,
+            self.settings.app.tr,
             node,
             self.build.current_spec,
             self.build.current_tree.mastery_effects_nodes[node.name],
+            self.win,
         )
         # 0 is discard, 1 is save
         _return = dlg.exec()
@@ -216,7 +224,7 @@ class TreeView(QGraphicsView):
         if pixmap is None or pixmap == "":
             print(f"tree_view.add_picture called with wrong information. pixmap: {pixmap},  x:{x}, y: {y}")
             return None
-        image = TreeGraphicsItem(self.config, pixmap, None, z, False)
+        image = TreeGraphicsItem(self.settings, pixmap, None, z, False)
         image.setPos(x, y)
         self._scene.addItem(image)
         return image
@@ -335,8 +343,8 @@ class TreeView(QGraphicsView):
         # do not use self.clear as it deletes the graphics assets from memory
         if full_clear:
             # don't delete the images for the nodes as they are owned by the relevant Tree() class.
-            for item in self.items():
-                self._scene.removeItem(item)
+            for g_item in self.items():
+                self._scene.removeItem(g_item)
             # inactive tree assets
             for image in tree.graphics_items:
                 self._scene.addItem(image)
@@ -383,6 +391,29 @@ class TreeView(QGraphicsView):
                 if node.masteryEffects:
                     self.active_nodes.append(node.activeEffectImage)
                     self._scene.addItem(node.activeEffectImage)
+                if node.type == "Socket":
+                    jewels = self.build.current_spec.sockets
+                    image = None
+                    if self.items_jewels and node.id in set(jewels.keys()):
+                        jewel_node_id = jewels[node.id]
+                        if jewel_node_id != 0:
+                            jewel_item = self.items_jewels.get(jewel_node_id, None)
+                            if jewel_item:
+                                sprite = node.sprites.get(jewel_item.base_name, None)
+                                if sprite is not None:
+                                    image = self.add_picture(sprite["handle"], node.x, node.y, Layers.jewels)
+                                    image.setOffset(sprite["ox"], sprite["oy"])
+                                    image.name = jewel_item.name
+                                    image.node_id = node.id
+                                    image.node_sd = node.sd
+                                    image.filename = node.icon
+                                    image.node_name = node.name
+                                    image.node_type = node.type
+                                    image.node_reminder = node.reminderText
+                    if image:
+                        self.active_nodes.append(image)
+                    self.active_nodes.append(node.active_overlay_image)
+                    self._scene.addItem(node.active_overlay_image)
 
                 # Draw active lines
                 if node.type not in ("ClassStart", "Mastery"):

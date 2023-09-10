@@ -7,19 +7,27 @@ Open a dialog for importing a character.
 from PySide6.QtWidgets import QDialog, QListWidgetItem
 from PySide6.QtCore import Qt, Slot, QTimer
 
-from PoB.pob_config import Config
+from PoB.settings import Settings
 from dialogs.popup_dialogs import LineEditPopup, yes_no_dialog
 from widgets.ui_utils import html_colour_text
+
+from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgManageItems import Ui_ManageItemSet
 
 
 class ManageItemsDlg(Ui_ManageItemSet, QDialog):
-    """ManageItems dialog"""
+    """ManageItemSets dialog"""
 
-    def __init__(self, _item_ui, _config: Config, parent=None):
-        super().__init__(parent)
-        self.win = parent
-        self.config = _config
+    def __init__(self, _settings: Settings, _item_ui, _win: Ui_MainWindow = None):
+        """
+        ManageItemSets dialog init
+        :param _settings: A pointer to the settings
+        :param _item_ui: A pointer to Item_UI()
+        :param _win: A pointer to MainWindow
+        """
+        super().__init__(_win)
+        self.win = _win
+        self.settings = _settings
         self.item_ui = _item_ui
         self.set_to_be_moved = None
         self.set_being_edited = None
@@ -100,7 +108,7 @@ class ManageItemsDlg(Ui_ManageItemSet, QDialog):
     @Slot()
     def new_set(self):
         # print("new_set")
-        dlg = LineEditPopup(self.config.app.tr, "New Item Set Name")
+        dlg = LineEditPopup(self.settings.app.tr, "New Item Set Name", self.win)
         dlg.placeholder_text = "New Item Set, Rename Me"
         _return = dlg.exec()
         new_name = dlg.lineedit.text()
@@ -114,7 +122,7 @@ class ManageItemsDlg(Ui_ManageItemSet, QDialog):
     @Slot()
     def duplicate_set(self):
         # print("duplicate_set")
-        dlg = LineEditPopup(self.config.app.tr, "New Item Set Name")
+        dlg = LineEditPopup(self.settings.app.tr, "New Item Set Name", self.win)
         dlg.placeholder_text = "New Item Set, Rename Me"
         _return = dlg.exec()
         new_name = dlg.lineedit.text()
