@@ -261,7 +261,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>2</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="tab_Tree">
             <property name="minimumSize">
@@ -1627,7 +1627,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   </widget>
                  </item>
                  <item>
-                  <widget class="QFrame" name="frame_TemplateItems_2">
+                  <widget class="QFrame" name="frame_TemplateItems">
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>

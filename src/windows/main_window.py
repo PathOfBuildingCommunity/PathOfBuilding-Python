@@ -9,6 +9,7 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction, QFont
 from PySide6.QtWidgets import (
     QApplication,
+    QCheckBox,
     QComboBox,
     QLabel,
     QMainWindow,
@@ -32,7 +33,7 @@ from PoB.constants import (
 
 from PoB.build import Build
 from PoB.settings import Settings
-from PoB.pob_file import get_file_info, read_json
+from PoB.pob_file import get_file_info
 from dialogs.browse_file_dialog import BrowseFileDlg
 from dialogs.export_dialog import ExportDlg
 from dialogs.import_dialog import ImportDlg
@@ -42,11 +43,11 @@ from widgets.config_ui import ConfigUI
 from widgets.flow_layout import FlowLayout
 from widgets.items_ui import ItemsUI
 from widgets.notes_ui import NotesUI
-from widgets.player_stats import PlayerStats
+from PoB.player_stats import PlayerStats
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
 from widgets.tree_view import TreeView
-from widgets.ui_utils import _debug, html_colour_text, print_a_xml_element, print_call_stack, set_combo_index_by_data
+from widgets.ui_utils import html_colour_text, set_combo_index_by_data
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -102,38 +103,45 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Start: Do what the QT Designer cannot yet do 
         """
         # add widgets to the Toolbar
+        widget_height = 24
         widget_spacer = QWidget()  # spacers cannot go into the toolbar, only Widgets
-        widget_spacer.setMinimumSize(10, 0)
+        widget_spacer.setMinimumSize(10, widget_height)
         # self.toolbar_MainWindow.insertWidget(self.action_Theme, widget_spacer)
         # widget_spacer = QWidget()
         # widget_spacer.setMinimumSize(50, 0)
         self.toolbar_MainWindow.addWidget(widget_spacer)
-        self.label_points = QLabel()
-        self.label_points.setMinimumSize(100, 0)
-        self.label_points.setText(" 0 / 123  0 / 8 ")
+        self.label_points = QLabel(" 0 / 123  0 / 8 ")
+        self.label_points.setMinimumSize(120, widget_height)
         self.label_points.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
         self.toolbar_MainWindow.addWidget(self.label_points)
-        label_level = QLabel()
-        label_level.setText("Level: ")
-        self.toolbar_MainWindow.addWidget(label_level)
+        self.label_level = QLabel("Level: ")
+        self.label_level.setMinimumSize(60, widget_height)
+        self.label_level.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.toolbar_MainWindow.addWidget(self.label_level)
         self.spin_level = QSpinBox()
         self.spin_level.setMinimum(1)
         self.spin_level.setMaximum(100)
-        self.spin_level.setMinimumSize(10, 22)
+        self.spin_level.setMinimumSize(10, widget_height)
+        self.spin_level.setEnabled(False)
         self.toolbar_MainWindow.addWidget(self.spin_level)
 
+        self.cb_level_auto_manual = QCheckBox("Manual", checked=False)
+        self.cb_level_auto_manual.setMinimumSize(90, widget_height)
+        self.cb_level_auto_manual.stateChanged.connect(self.cb_level_auto_manual_changed)
+        self.toolbar_MainWindow.addWidget(self.cb_level_auto_manual)
+
         widget_spacer = QWidget()
-        widget_spacer.setMinimumSize(100, 22)
+        widget_spacer.setMinimumSize(100, widget_height)
         self.toolbar_MainWindow.addWidget(widget_spacer)
 
         self.combo_classes = QComboBox()
-        self.combo_classes.setMinimumSize(100, 22)
+        self.combo_classes.setMinimumSize(100, widget_height)
         self.combo_classes.setDuplicatesEnabled(False)
         for idx in PlayerClasses:
             self.combo_classes.addItem(idx.name.title(), idx)
         self.toolbar_MainWindow.addWidget(self.combo_classes)
         self.combo_ascendancy = QComboBox()
-        self.combo_ascendancy.setMinimumSize(125, 22)
+        self.combo_ascendancy.setMinimumSize(125, widget_height)
         self.combo_ascendancy.setDuplicatesEnabled(False)
         self.combo_ascendancy.addItem("None", 0)
         self.combo_ascendancy.addItem("Ascendant", 1)
@@ -223,6 +231,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.combo_MainSkill.currentTextChanged.connect(self.main_skill_text_changed)
         self.combo_MainSkill.currentIndexChanged.connect(self.main_skill_index_changed)
         self.combo_MainSkillActive.currentTextChanged.connect(self.active_skill_changed)
+        # self.
+
         # these two Manage Tree combo's are linked
         self.tree_ui.combo_manage_tree.currentTextChanged.connect(self.change_tree)
         self.combo_ItemsManageTree.currentTextChanged.connect(self.combo_item_manage_tree_changed)
@@ -246,6 +256,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     if self.settings.pob_debug:
                         print("Splash found: ", filename)
                     os.unlink(filename)
+
+    # init
 
     def setup_ui(self):
         """Called after show(). Call setup_ui for all UI classes that need it"""
@@ -370,6 +382,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 action.setChecked(True)
             make_connection(_name, action)
 
+    def exit_handler(self):
+        """
+        Ensure the build can be saved before exiting if needed.
+        Save the configuration to settings.xml. Any other activities that might be needed
+        """
+        self.settings.size = self.size()
+        self.settings.write()
+        # Logic for checking we need to save and save if needed, goes here...
+        # filePtr = open("edit.html", "w")
+        # try:
+        #     filePtr.write(self.textedit_Notes.toHtml())
+        # finally:
+        #     filePtr.close()
+        sys.stdout.close()
+
+    @Slot()
+    def cb_level_auto_manual_changed(self, checked):
+        """
+
+        :param checked: bool:
+        :return: N/A
+        """
+        print("cb_level_auto_manual_changed", checked)
+        self.spin_level.setEnabled(checked)
+        self.estimate_player_progress()
+
     @Slot()
     # Do all actions needed to change between light and dark
     def switch_theme(self, new_theme, selected_action):
@@ -410,21 +448,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # parent of IOError, OSError *and* WindowsError where available
         except (EnvironmentError, FileNotFoundError):
             print(f"Unable to open theme files.")
-
-    def exit_handler(self):
-        """
-        Ensure the build can be saved before exiting if needed.
-        Save the configuration to settings.xml. Any other activities that might be needed
-        """
-        self.settings.size = self.size()
-        self.settings.write()
-        # Logic for checking we need to save and save if needed, goes here...
-        # filePtr = open("edit.html", "w")
-        # try:
-        #     filePtr.write(self.textedit_Notes.toHtml())
-        # finally:
-        #     filePtr.close()
-        sys.stdout.close()
 
     @Slot()
     def close_app(self):
@@ -742,6 +765,59 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             or f"{self.build.ascnodes_assigned}"
         )
         self.label_points.setText(f" {nodes_assigned} / {self.max_points}    {ascnodes_assigned} / 8 ")
+        self.estimate_player_progress()
+
+    def estimate_player_progress(self):
+        """
+        Do some educated guessing of what level it is up to.
+        :return: N/A
+        """
+        acts = {
+            1: {"level": 1, "quest": 0, "bandit_points": 0},
+            2: {"level": 12, "quest": 2, "bandit_points": 0},
+            3: {"level": 22, "quest": 3},
+            4: {"level": 32, "quest": 5},
+            5: {"level": 40, "quest": 6},
+            6: {"level": 44, "quest": 8},
+            7: {"level": 50, "quest": 11},
+            8: {"level": 54, "quest": 14},
+            9: {"level": 60, "quest": 17},
+            10: {"level": 64, "quest": 19},
+            11: {"level": 67, "quest": 22},
+        }
+        num_nodes = self.build.nodes_assigned
+        _bandits = self.build.bandit == "None" and 2 or 0
+        # estimate level
+        level, act = 0, 0
+        for act in acts.keys():
+            _bandits = self.build.bandit == "None" and acts[act].get("bandit_points", 2) or 0
+            level = min(max(num_nodes - acts[act].get("quest", 22) - _bandits + 1, acts[act].get("level")), 100)
+            if act == 11 or level <= acts[act + 1].get("level"):
+                break
+
+        if level < 33:
+            lab_suggest = ""
+        elif level < 55:
+            lab_suggest = "\n  Labyrinth: Normal Lab"
+        elif level < 68:
+            lab_suggest = "\n  Labyrinth: Cruel Lab"
+        elif level < 75:
+            lab_suggest = "\n  Labyrinth: Merciless Lab"
+        elif level < 90:
+            lab_suggest = "\n  Labyrinth: Uber Lab"
+        else:
+            lab_suggest = ""
+
+        act_progress = act == 11 and "Endgame" or f"Act: {act}"
+        tip = (
+            f"<pre>Required Level: {level}\nEstimated Progress:\n  {act_progress}\n  Questpoints: {acts[act].get('quest')}"
+            f"\n  Extra Skillpoints: {_bandits}{lab_suggest}</pre>"
+        )
+        self.label_points.setToolTip(html_colour_text(self.qss_default_text, tip))
+        self.label_level.setToolTip(html_colour_text(self.qss_default_text, tip))
+        self.spin_level.setToolTip(html_colour_text(self.qss_default_text, tip))
+        if self.cb_level_auto_manual.isChecked():
+            self.spin_level.setValue(level)
 
     @Slot()
     def set_tab_focus(self, index):

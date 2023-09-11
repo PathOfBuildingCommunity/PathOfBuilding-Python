@@ -123,9 +123,9 @@ class TreeView(QGraphicsView):
         graphic_items = self.items(event.pos())
         if len(graphic_items) < 1:
             return
-        for i in graphic_items:
-            if type(i) is TreeGraphicsItem:
-                print(i.node_id, i.name)
+        # for i in graphic_items:
+        #     if type(i) is TreeGraphicsItem:
+        #         print(i.node_id, i.name)
         g_item = next((i for i in graphic_items if isinstance(i, TreeGraphicsItem)), None)
         if (
             g_item
@@ -149,13 +149,12 @@ class TreeView(QGraphicsView):
                     for node_id in node.nodes_out.union(node.nodes_in):
                         if node_id in self.build.current_spec.nodes:
                             if g_item.node_type == "Mastery":
-                                print("mastery_popup", self.build.current_tree.nodes[g_item.node_id])
+                                # print("mastery_popup", self.build.current_tree.nodes[g_item.node_id])
                                 if self.mastery_popup(self.build.current_tree.nodes[g_item.node_id]):
                                     self.build.current_spec.nodes.add(g_item.node_id)
                             elif g_item.node_type == "Socket":
                                 # ToDo: Do we need a popup to select a jewel ?
                                 self.build.current_spec.nodes.add(g_item.node_id)
-                                # self.build.current_spec.sockets[g_item.node_id] = 0
                             else:
                                 self.build.current_spec.nodes.add(g_item.node_id)
                             break
