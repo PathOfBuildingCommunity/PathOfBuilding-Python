@@ -18,7 +18,6 @@ External components are the status bar, toolbar (if exists), menus
 Icons by  Yusuke Kamiyamane (https://p.yusukekamiyamane.com/)
 Splashscreen by https://creator.nightcafe.studio
 """
-import os
 import sys
 
 from PySide6.QtGui import QFont, QFontDatabase
@@ -30,6 +29,7 @@ from windows.main_window import MainWindow
 # Start here
 # This is  NUITKA debugging info so folk can understand the diffference between the extracted directory and
 # the directory the Executable was run from:
+# import os
 # print("os.getcwd", os.getcwd())
 # if "NUITKA_ONEFILE_PARENT" in os.environ:
 #     print("TEMP: ", os.environ["TEMP"])

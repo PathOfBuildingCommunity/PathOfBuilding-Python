@@ -328,10 +328,10 @@ class SkillsUI:
         self.triggers_connected = True
         self.win.check_SocketGroupEnabled.stateChanged.connect(self.save_socket_group_settings)
         self.win.check_SocketGroup_FullDPS.stateChanged.connect(self.save_socket_group_settings)
-        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
         self.win.combo_SocketedIn.currentIndexChanged.connect(self.save_socket_group_settings)
         self.win.lineedit_SkillLabel.textChanged.connect(self.save_socket_group_settings)
         self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
+        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
 
     def disconnect_skill_triggers(self):
         """disconnect skill orientated triggers when updating widgets"""
@@ -377,23 +377,22 @@ class SkillsUI:
         self.connect_skill_triggers()
         return new_skillset
 
+    @Slot()
     def change_skill_set(self, new_index):
         """
         This triggers when the user changes skill sets using the combobox. (self.load calls it too)
         Will also activate if user changes skill sets in the manage dialog.
 
         :param new_index: int: index of the current selection
-               -1 will occur during a combobox clear, or some internal calls
+                               -1 will occur during a combobox clear, or some internal calls
         :return: N/A
         """
-        # print("change_skill_set", new_index)
-        self.disconnect_skill_triggers()
+        print("change_skill_set", new_index)
         self.xml_current_socket_group = None
         self.clear_socket_group_settings()
         self.win.list_SocketGroups.clear()
         if 0 <= new_index < len(self.skill_sets_list):
             self.show_skill_set(self.skill_sets_list[new_index])
-        self.connect_skill_triggers()
 
     def show_skill_set(self, xml_set, _index=0):
         """
@@ -755,10 +754,7 @@ class SkillsUI:
             self.xml_current_socket_group.set("slot", self.win.combo_SocketedIn.currentText())
             self.xml_current_socket_group.set("label", self.win.lineedit_SkillLabel.text())
             self.xml_current_socket_group.set("enabled", bool_to_str(self.win.check_SocketGroupEnabled.isChecked()))
-            self.xml_current_socket_group.set(
-                "includeInFullDPS",
-                bool_to_str(self.win.check_SocketGroup_FullDPS.isChecked()),
-            )
+            self.xml_current_socket_group.set("includeInFullDPS", bool_to_str(self.win.check_SocketGroup_FullDPS.isChecked()))
             item = self.win.list_SocketGroups.currentItem()
             # stop a recursion error as save_socket_group_settings is called from define_socket_group_label as well
             if info is not None:

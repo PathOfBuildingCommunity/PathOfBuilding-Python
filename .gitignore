@@ -15,6 +15,9 @@ PoB_Main_Window.py
 dlg*.py
 src/ui/*.py
 
+# ggpk generated python files
+ggpk
+
 # Developer specific
 *.orig
 *.bak

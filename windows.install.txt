@@ -45,6 +45,8 @@ https://aka.ms/vs/17/release/VC_redist.x64.exe
 
 
 
+Git for Windows
+https://git-scm.com/download/win
 
 
 Changing python versions
@@ -54,3 +56,4 @@ Whenever you change dependencies by hand in your pyproject.toml you have to take
     Run poetry lock --no-update afterwards. The reasons for this is, that poetry install takes the poetry.lock as input if can find one and not the pyproject.toml.
 
     If you change the python version, remove the .venv before running poetry install. poetry doesn't change the python version of a venv once it is created, because it uses the python version itself to create the virtualenv.
+

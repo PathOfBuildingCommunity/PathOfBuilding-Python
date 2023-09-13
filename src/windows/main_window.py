@@ -259,6 +259,47 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # init
 
+    # Overridden function
+    def keyReleaseEvent(self, event):
+        """
+        Handle key presses into the general application (outside a widget's focus).
+         Mainly for Ctrl-V for pasting skill groups and items
+
+        :param: QKeyEvent. The event matrix
+        :return: N/A
+        """
+        # print("MainWindow", event)
+        ctrl_pressed = event.keyCombination().keyboardModifiers() == Qt.ControlModifier
+        alt_pressed = event.keyCombination().keyboardModifiers() == Qt.AltModifier
+        shift_pressed = event.keyCombination().keyboardModifiers() == Qt.ShiftModifier
+        success = False
+        match event.key():
+            case Qt.Key_V:
+                if ctrl_pressed:
+                    print("MainWindow: Ctrl-V pressed")
+                    if self.skills_ui.internal_clipboard is not None:
+                        self.set_tab_focus()
+                        success = self.skills_ui.get_item_from_clipboard()
+                    elif self.items_ui.internal_clipboard is not None:
+                        self.set_tab_focus()
+                        success = self.items_ui.get_item_from_clipboard()
+                    else:
+                        # Assume it is going to come from outside the application, ingame or trade site
+                        data = pyperclip.paste()
+                        if data is not None and type(data) == str and "Item Class:" in data:
+                            if "Skill Gems" in data:
+                                success = self.skills_ui.get_item_from_clipboard(data)
+                            else:
+                                success = self.items_ui.get_item_from_clipboard(data)
+                        # match self.build.viewMode:
+                        #     case "SKILLS":
+                        #         self.skills_ui.get_item_from_clipboard()
+                        #     case "ITEMS":
+                        #         self.items_ui.get_item_from_clipboard()
+        if not success:
+            event.ignore()
+        super(MainWindow, self).keyPressEvent(event)
+
     def setup_ui(self):
         """Called after show(). Call setup_ui for all UI classes that need it"""
         self.items_ui.setup_ui()
@@ -404,7 +445,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :param checked: bool:
         :return: N/A
         """
-        print("cb_level_auto_manual_changed", checked)
+        # print("cb_level_auto_manual_changed", checked)
         self.spin_level.setEnabled(checked)
         self.estimate_player_progress()
 
@@ -769,7 +810,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def estimate_player_progress(self):
         """
-        Do some educated guessing of what level it is up to.
+        Do some educated guessing of what level the build is up to.
         :return: N/A
         """
         acts = {
@@ -792,7 +833,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for act in acts.keys():
             _bandits = self.build.bandit == "None" and acts[act].get("bandit_points", 2) or 0
             level = min(max(num_nodes - acts[act].get("quest", 22) - _bandits + 1, acts[act].get("level")), 100)
-            if act == 11 or level <= acts[act + 1].get("level"):
+            # Break loop when we get a level less than the act
+            if level <= acts.get(act + 1, {"level": 100}).get("level"):
                 break
 
         if level < 33:
@@ -983,44 +1025,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             process = psutil.Process(os.getpid())
             message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
             self.statusbar_MainWindow.showMessage(message, timeout * 1000)
-
-    # Overridden function
-    def keyReleaseEvent(self, event):
-        """
-        Handle key presses into the general application (outside a widget's focus).
-         Mainly for Ctrl-V for pasting skill groups and items
-
-        :param: QKeyEvent. The event matrix
-        :return: N/A
-        """
-        # print("MainWindow", event)
-        ctrl_pressed = event.keyCombination().keyboardModifiers() == Qt.ControlModifier
-        alt_pressed = event.keyCombination().keyboardModifiers() == Qt.AltModifier
-        shift_pressed = event.keyCombination().keyboardModifiers() == Qt.ShiftModifier
-        success = False
-        match event.key():
-            case Qt.Key_V:
-                if ctrl_pressed:
-                    print("MainWindow: Ctrl-V pressed")
-                    if self.skills_ui.internal_clipboard is not None:
-                        self.set_tab_focus()
-                        success = self.skills_ui.get_item_from_clipboard()
-                    elif self.items_ui.internal_clipboard is not None:
-                        self.set_tab_focus()
-                        success = self.items_ui.get_item_from_clipboard()
-                    else:
-                        # Assume it is going to come from outside the application, ingame or trade site
-                        data = pyperclip.paste()
-                        if data is not None and type(data) == str and "Item Class:" in data:
-                            if "Skill Gems" in data:
-                                success = self.skills_ui.get_item_from_clipboard(data)
-                            else:
-                                success = self.items_ui.get_item_from_clipboard(data)
-                        # match self.build.viewMode:
-                        #     case "SKILLS":
-                        #         self.skills_ui.get_item_from_clipboard()
-                        #     case "ITEMS":
-                        #         self.items_ui.get_item_from_clipboard()
-        if not success:
-            event.ignore()
-        super(MainWindow, self).keyPressEvent(event)
