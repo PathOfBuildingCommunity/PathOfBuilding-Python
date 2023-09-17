@@ -1,12 +1,14 @@
-#!/bin/bash
-REM Generate UI files to PY files
-python build-ui.py
+#!/bin/sh
+[ "${VIRTUAL_ENV}" ] || pshell="poetry run"
+
+# Generate .ui files to .py files
+$pshell python build-ui.py
 
 [ -e /usr/bin/patchelf ] || { echo 'install patchelf. apt/dnf/yum install patchelf'; exit 1; }
 [ -e /usr/bin/gcc ]      || { echo 'install gcc. apt/dnf/yum install gcc13 gcc13-c++ ccache'; exit 1; }
 [ -e /usr/include/python3.11 ] || { echo 'install python3-dev. openSUSE desired patterns-devel-python-devel_python3'; exit 1; }
-cp -f PathOfBuilding_v2.png PathOfBuilding.png
+cp -f Assets/PathOfBuilding_v2.png Assets/PathOfBuilding.png
 # --disable-console
-python -m nuitka src/PathOfBuilding.py
-ls PathOfBuilding
+$pshell python -m nuitka src/PathOfBuilding.py
+ls -l PathOfBuilding
 

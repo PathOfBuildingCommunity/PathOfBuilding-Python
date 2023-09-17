@@ -1,8 +1,11 @@
-# Generate UI files to PY files
-python build-ui.py
+#!/bin/sh
+[ "${VIRTUAL_ENV}" ] || pshell="poetry run"
+
+# Generate .ui files to .py files
+$pshell python build-ui.py
 
 # Change directories as settings.xml is created in the current directory. TreeData is also referenced from there.
 cd src
 
-python PathOfBuilding.py 
+$pshell python PathOfBuilding.py 
 cd ..

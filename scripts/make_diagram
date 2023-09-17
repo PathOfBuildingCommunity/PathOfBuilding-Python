@@ -1,0 +1,5 @@
+#!/bin/bash
+# Make a class diagram. It's not real good, don't use it.
+[ "${VIRTUAL_ENV}" ] || pshell="poetry run"
+cd src
+$pshell pyreverse -ASkmn -o png --source-roots dialogs,PoB,widgets,windows --colorized -d ../docs .

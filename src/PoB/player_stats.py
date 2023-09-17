@@ -1,5 +1,5 @@
 """
-This Class if communicating between the calculation Classes and the UI Classes
+This Class is communicating between the calculation Classes and the UI Classes
 """
 
 from PoB.settings import Settings

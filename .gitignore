@@ -24,6 +24,8 @@ ggpk
 settings.xml
 #base_items.json
 #mods.json
+*.xml.new
+archive.zip
 
 # C extensions
 *.so

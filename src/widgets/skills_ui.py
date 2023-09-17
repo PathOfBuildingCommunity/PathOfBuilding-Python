@@ -327,10 +327,10 @@ class SkillsUI:
         self.triggers_connected = True
         self.win.check_SocketGroupEnabled.stateChanged.connect(self.save_socket_group_settings)
         self.win.check_SocketGroup_FullDPS.stateChanged.connect(self.save_socket_group_settings)
+        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
         self.win.combo_SocketedIn.currentIndexChanged.connect(self.save_socket_group_settings)
         self.win.lineedit_SkillLabel.textChanged.connect(self.save_socket_group_settings)
         self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
-        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
 
     def disconnect_skill_triggers(self):
         """disconnect skill orientated triggers when updating widgets"""
@@ -377,6 +377,9 @@ class SkillsUI:
         return new_skillset
 
     @Slot()
+    # File "C:\Users\Peter\AppData\Local\Temp\PoB_8880\PySide6\QtCore-postLoad.py", line 12, in patched_connect
+    # TypeError: 'PySide6.QtCore.QObject.connect' called with wrong argument types:
+    #     PySide6.QtCore.QObject.connect(QComboBox, str, compiled_frame, ConnectionType)
     def change_skill_set(self, new_index):
         """
         This triggers when the user changes skill sets using the combobox. (self.load calls it too)
@@ -386,23 +389,25 @@ class SkillsUI:
                                -1 will occur during a combobox clear, or some internal calls
         :return: N/A
         """
-        print("change_skill_set", new_index)
+        # print("change_skill_set", new_index)
         self.xml_current_socket_group = None
         self.clear_socket_group_settings()
         self.win.list_SocketGroups.clear()
         if 0 <= new_index < len(self.skill_sets_list):
-            self.show_skill_set(self.skill_sets_list[new_index])
+            self.show_skill_set(self.skill_sets_list[new_index], new_index, True)
 
-    def show_skill_set(self, xml_set, _index=0):
+    def show_skill_set(self, xml_set, _index=0, trigger=False):
         """
         Show a set of skills.
 
         :param xml_set: ElementTree.Element. This set of skills
-        :param _index: set the current socket group active at the end of the function
+        :param _index: int: set the current socket group active at the end of the function
+        :param trigger: if True, this is called from a trigger, so don't disconnect triggers
         :return: N/A
         """
-        # print("show_skill_set", _index, self.win.combo_SkillSet.currentText())
-        self.disconnect_skill_triggers()
+        # print("show_skill_set", _index, self.win.combo_SkillSet.currentText(), xml_set)
+        if not trigger:
+            self.disconnect_skill_triggers()
 
         self.xml_current_skill_set = xml_set
         # Find all Socket Groups (<Skill> in the xml) and add them to the Socket Group list
@@ -414,7 +419,8 @@ class SkillsUI:
         # Load the left hand socket group (under "Main Skill") widgets
         self.load_main_skill_combo()
 
-        self.connect_skill_triggers()
+        if not trigger:
+            self.connect_skill_triggers()
         # Trigger the filling out of the right hand side UI elements using change_socket_group -> load_socket_group
         self.win.list_SocketGroups.setCurrentRow(0)
         # Use change_socket_group using mainActiveSkill -1

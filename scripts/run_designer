@@ -1,0 +1,12 @@
+#!/bin/sh
+# Run the UI Designer
+
+[ "${VIRTUAL_ENV}" ] || pshell="poetry run"
+dir=$(basename $(realpath $0))
+
+cd "$dir/Assets/ui_files"
+PYSIDE_DESIGNER_PLUGINS="$dir/Assets/QTDesigner.plugin
+$pshell pyside6-designer
+
+cd "$dir"
+$pshell python build-ui.py

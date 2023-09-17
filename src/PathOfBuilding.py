@@ -1,6 +1,6 @@
 # nuitka-project: --onefile
 # nuitka-project: --standalone
-# nuitka-project: --onefile-windows-splash-screen-image=PathOfBuilding.png
+# nuitka-project: --onefile-windows-splash-screen-image=Assets/PathOfBuilding.png
 # nuitka-project: --enable-plugin=pyside6
 # nuitka-project: --include-data-dir=src/data=data
 # nuitka-project: --windows-icon-from-ico=Assets/Icons/PathOfBuilding.ico
@@ -29,17 +29,32 @@ from windows.main_window import MainWindow
 
 #############################################################################################################
 # Start here
-# This is  NUITKA debugging info so folk can understand the diffference between the extracted directory and
+
+# This is  NUITKA debugging info so folk can understand the difference between the extracted directory and
 # the directory the Executable was run from:
 # import os
+#
 # print("os.getcwd", os.getcwd())
 # if "NUITKA_ONEFILE_PARENT" in os.environ:
 #     print("TEMP: ", os.environ["TEMP"])
 #     print("NUITKA_ONEFILE_PARENT: ", os.environ["NUITKA_ONEFILE_PARENT"])
+#     print(os.listdir(os.environ["NUITKA_ONEFILE_PARENT"]))
+
+# This is pyInstaller debugging info so folk can understand the difference between the extracted directory and
+# the directory the Executable was run from:
+import os
+
+print("os.getcwd", os.getcwd())
+if getattr(sys, "_MEIPASS", 0) != 0:
+    print("TEMP: ", os.environ["TEMP"])
+    print("_MEIPASS: ", sys._MEIPASS)
+    os.chdir(sys._MEIPASS)
+    print(os.listdir(sys._MEIPASS))
 
 # Logging to a file, not spam to screen or get lost if no console
 # ToDo: Remove comment when we stop building.
 # sys.stdout = open("PathOfBuilding.log", 'a')
+
 
 QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
 main_app = QApplication(sys.argv)
