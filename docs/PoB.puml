@@ -73,13 +73,13 @@ class "NotesUI" as src.widgets.notes_ui.NotesUI #cadetblue {
 }
 class "Path" as pathlib.Path #grey {
 }
-class "Player" as src.PoB.player.Player #antiquewhite {
+class "Player" as src.PoB.player.Player #white {
 }
 class "PlayerAscendancy" as src.PoB.constants.PlayerAscendancy #antiquewhite {
 }
 class "PlayerClasses" as src.PoB.constants.PlayerClasses #antiquewhite {
 }
-class "PlayerStats" as src.PoB.player_stats.PlayerStats #antiquewhite {
+class "PlayerStats" as src.widgets.player_stats.PlayerStats #antiquewhite {
 }
 class "Settings" as src.PoB.settings.Settings #antiquewhite {
 }
@@ -140,6 +140,7 @@ src.widgets.tree_graphics_item.TreeGraphicsItem <|- src.PoB.tree.Tree
 src.widgets.notes_ui.NotesUI <|-- src.windows.main_window.MainWindow
 src.widgets.calcs_ui.CalcsUI <|-- src.windows.main_window.MainWindow
 src.widgets.config_ui.ConfigUI <|-- src.windows.main_window.MainWindow
+src.widgets.player_stats.PlayerStats <|-- src.windows.main_window.MainWindow
 
 src.PoB.spec.Spec <|-- src.PoB.build.Build
 src.PoB.tree.Tree <|-- src.PoB.build.Build

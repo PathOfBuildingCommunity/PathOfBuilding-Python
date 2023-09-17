@@ -44,12 +44,12 @@ from windows.main_window import MainWindow
 # the directory the Executable was run from:
 import os
 
-print("os.getcwd", os.getcwd())
-if getattr(sys, "_MEIPASS", 0) != 0:
-    print("TEMP: ", os.environ["TEMP"])
-    print("_MEIPASS: ", sys._MEIPASS)
-    os.chdir(sys._MEIPASS)
-    print(os.listdir(sys._MEIPASS))
+# print("os.getcwd", os.getcwd())
+# if getattr(sys, "_MEIPASS", 0) != 0:
+#     print("TEMP: ", os.environ["TEMP"])
+#     print("_MEIPASS: ", sys._MEIPASS)
+#     os.chdir(sys._MEIPASS)
+#     print(os.listdir(sys._MEIPASS))
 
 # Logging to a file, not spam to screen or get lost if no console
 # ToDo: Remove comment when we stop building.
@@ -59,7 +59,7 @@ if getattr(sys, "_MEIPASS", 0) != 0:
 QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
 main_app = QApplication(sys.argv)
 
-# font for stats box. To line things up, we need a Mono font. (could use <pre> now that I know it exists. PSH 20230802)
+# font for stats box. To line things up, we need a Mono font. (could use <pre> html tag now that I know it exists. PSH 20230802)
 QFontDatabase.addApplicationFont(":/Font/Font/NotoSansMono-Regular.ttf")
 # system wide font
 QApplication.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 9))

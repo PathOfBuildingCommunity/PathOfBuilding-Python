@@ -43,7 +43,7 @@ from widgets.config_ui import ConfigUI
 from widgets.flow_layout import FlowLayout
 from widgets.items_ui import ItemsUI
 from widgets.notes_ui import NotesUI
-from PoB.player_stats import PlayerStats
+from widgets.player_stats import PlayerStats
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
 from widgets.tree_view import TreeView
