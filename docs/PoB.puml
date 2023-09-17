@@ -1,0 +1,152 @@
+@startuml classes
+'https://plantuml.com/class-diagram
+' run the following from the src directory
+' pyreverse -ASkmn -o puml --source-roots dialogs,PoB,widgets,windows --colorized .
+' many internal classes get included in this but have been removed as they lend no intelligence to the reader.
+
+set namespaceSeparator none
+class "BrowseFileDlg" as src.dialogs.browse_file_dialog.BrowseFileDlg #aquamarine {
+}
+class "Build" as src.PoB.build.Build #antiquewhite {
+}
+class "CalcsUI" as src.widgets.calcs_ui.CalcsUI #cadetblue {
+}
+class "ColourCodes" as src.PoB.constants.ColourCodes #antiquewhite {
+}
+class "ConfigUI" as src.widgets.config_ui.ConfigUI #cadetblue {
+}
+class "CraftItemsDlg" as src.dialogs.craft_items_dialog.CraftItemsDlg #aquamarine {
+}
+class "Element" as xml.etree.ElementTree.Element #grey {
+}
+class "ElementTree" as xml.etree.ElementTree.ElementTree #grey {
+}
+class "Enum" as enum.Enum #grey {
+}
+class "ExportDlg" as src.dialogs.export_dialog.ExportDlg #aquamarine {
+}
+class "ExportTreePopup" as src.dialogs.popup_dialogs.ExportTreePopup #aquamarine {
+}
+class "FlowLayout" as src.widgets.flow_layout.FlowLayout #cadetblue {
+}
+class "GemUI" as src.widgets.gem_ui.GemUI #cadetblue {
+}
+class "HTMLDelegate" as src.widgets.ui_utils.HTMLDelegate #cadetblue {
+}
+class "ImportDlg" as src.dialogs.import_dialog.ImportDlg #aquamarine {
+}
+class "ImportFromType" as src.widgets.items_ui.ItemsUI.fill_import_items_list.ImportFromType #cadetblue {
+}
+class "ImportTreePopup" as src.dialogs.popup_dialogs.ImportTreePopup #aquamarine {
+}
+class "IntEnum" as enum.IntEnum #grey {
+}
+class "Item" as src.PoB.item.Item #antiquewhite {
+}
+class "ItemSlotUI" as src.widgets.item_slot_ui.ItemSlotUI #cadetblue {
+}
+class "ItemsUI" as src.widgets.items_ui.ItemsUI #cadetblue {
+}
+class "Layers" as src.PoB.constants.Layers #antiquewhite {
+}
+class "LineEditPopup" as src.dialogs.popup_dialogs.LineEditPopup #aquamarine {
+}
+class "ListBox" as src.widgets.listbox.ListBox #cadetblue {
+}
+class "MainWindow" as src.windows.main_window.MainWindow #chartreuse {
+}
+class "ManageItemsDlg" as src.dialogs.itemsets_dialog.ManageItemsDlg #aquamarine {
+}
+class "ManageSkillsDlg" as src.dialogs.skillsets_dialog.ManageSkillsDlg #aquamarine {
+}
+class "ManageTreeDlg" as src.dialogs.manage_tree_dialog.ManageTreeDlg #aquamarine {
+}
+class "MasteryPopup" as src.dialogs.popup_dialogs.MasteryPopup #aquamarine {
+}
+class "Mod" as src.PoB.mod.Mod #antiquewhite {
+}
+class "NewTreePopup" as src.dialogs.popup_dialogs.NewTreePopup #aquamarine {
+}
+class "Node" as src.PoB.node.Node #antiquewhite {
+}
+class "NotesUI" as src.widgets.notes_ui.NotesUI #cadetblue {
+}
+class "Path" as pathlib.Path #grey {
+}
+class "Player" as src.PoB.player.Player #antiquewhite {
+}
+class "PlayerAscendancy" as src.PoB.constants.PlayerAscendancy #antiquewhite {
+}
+class "PlayerClasses" as src.PoB.constants.PlayerClasses #antiquewhite {
+}
+class "PlayerStats" as src.PoB.player_stats.PlayerStats #antiquewhite {
+}
+class "Settings" as src.PoB.settings.Settings #antiquewhite {
+}
+class "SettingsDlg" as src.dialogs.settings_dialog.SettingsDlg #aquamarine {
+}
+class "SkillsUI" as src.widgets.skills_ui.SkillsUI #cadetblue {
+}
+class "Spec" as src.PoB.spec.Spec #antiquewhite {
+}
+class "Tree" as src.PoB.tree.Tree #antiquewhite {
+}
+class "TreeGraphicsItem" as src.widgets.tree_graphics_item.TreeGraphicsItem #cadetblue {
+}
+class "TreeUI" as src.widgets.tree_ui.TreeUI #cadetblue {
+}
+class "TreeView" as src.widgets.tree_view.TreeView #cadetblue {
+}
+enum.IntEnum --|> enum.Enum
+src.PoB.constants.ColourCodes --|> enum.Enum
+src.PoB.constants.Layers --|> enum.IntEnum
+src.PoB.constants.PlayerAscendancy --|> enum.Enum
+src.PoB.constants.PlayerClasses --|> enum.IntEnum
+src.widgets.items_ui.ItemsUI.fill_import_items_list.ImportFromType --|> enum.IntEnum
+pathlib.Path --* src.PoB.settings.Settings : exe_dir
+pathlib.Path --* src.PoB.settings.Settings : data_dir
+pathlib.Path --* src.PoB.settings.Settings : settings_file
+pathlib.Path --* src.PoB.settings.Settings : build_path
+pathlib.Path --* src.PoB.tree.Tree : tree_version_path
+pathlib.Path --* src.PoB.tree.Tree : json_file_path
+pathlib.Path --* src.PoB.tree.Tree : legion_path
+xml.etree.ElementTree.Element --* src.PoB.build.Build : notes_html
+xml.etree.ElementTree.Element --* src.PoB.item.Item : variant_entries_xml
+xml.etree.ElementTree.Element --* src.PoB.settings.Settings : root
+xml.etree.ElementTree.Element --* src.PoB.settings.Settings : misc
+xml.etree.ElementTree.Element --* src.PoB.settings.Settings : pastebin
+xml.etree.ElementTree.Element --* src.PoB.spec.Spec : def_spec
+xml.etree.ElementTree.Element --* src.widgets.gem_ui.GemUI : xml_gem
+xml.etree.ElementTree.Element --* src.widgets.items_ui.ItemsUI : xml_current_itemset
+xml.etree.ElementTree.Element --* src.widgets.skills_ui.SkillsUI : xml_current_skill_set
+xml.etree.ElementTree.Element --* xml.etree.ElementTree.ElementTree : _root
+xml.etree.ElementTree.ElementTree --* src.PoB.settings.Settings : tree
+xml.etree.ElementTree.ElementTree --* src.dialogs.import_dialog.ImportDlg : xml
+xml.etree.ElementTree.Element --o src.PoB.spec.Spec : xml_spec
+' End generated code
+
+src.widgets.items_ui.ItemsUI <|-- src.windows.main_window.MainWindow
+src.widgets.item_slot_ui.ItemSlotUI <|-- src.widgets.items_ui.ItemsUI
+
+src.widgets.skills_ui.SkillsUI <|-- src.windows.main_window.MainWindow
+src.widgets.gem_ui.GemUI <|- src.widgets.skills_ui.SkillsUI
+
+src.widgets.tree_ui.TreeUI <|-- src.windows.main_window.MainWindow
+src.widgets.flow_layout.FlowLayout <|- src.widgets.tree_ui.TreeUI
+src.widgets.tree_view.TreeView <|- src.widgets.tree_ui.TreeUI
+src.widgets.tree_graphics_item.TreeGraphicsItem <|- src.widgets.tree_view.TreeView
+src.widgets.tree_graphics_item.TreeGraphicsItem <|- src.PoB.tree.Tree
+
+src.widgets.notes_ui.NotesUI <|-- src.windows.main_window.MainWindow
+src.widgets.calcs_ui.CalcsUI <|-- src.windows.main_window.MainWindow
+src.widgets.config_ui.ConfigUI <|-- src.windows.main_window.MainWindow
+
+src.PoB.spec.Spec <|-- src.PoB.build.Build
+src.PoB.tree.Tree <|-- src.PoB.build.Build
+src.PoB.node.Node <|- src.PoB.tree.Tree
+
+src.widgets.ui_utils.HTMLDelegate <|-- src.widgets.listbox.ListBox
+
+src.PoB.mod.Mod <|-- src.PoB.item.Item
+
+@enduml

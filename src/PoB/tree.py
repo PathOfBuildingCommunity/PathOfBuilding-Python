@@ -1,14 +1,13 @@
 """
 Tree Class
 
-This class represents an instance of the Passive Tree for **ONE** tree version.
-Multiple versions of Trees can exist in a single Build (at various progress levels;
-at different Jewel/Cluster itemisations, etc.), so there could be multiple instantiations of this class.
+This class represents an instance of the GGG Passive Tree for **ONE** tree version (eg: 3.18).
+Multiple versions of Trees can exist in a single Build, so there could be multiple instantiations of this class.
 
 A Tree() instance is tied to a Version of the Tree as released by GGG (eg: 3.18).
 
 This holds, in memory, a copy of the tree data and doesn't know about any actively selected nodes.
-  That's the Build class' job.
+  That's the Spec class' job.
 
 It is referenced by the TreeView class to display the tree
 """
@@ -793,9 +792,7 @@ class Tree:
 
         # Large background
         elif _group["oo"].get(3, False):
-            sprite = self.spriteMap[is_expansion and "GroupBackgroundLargeHalfAlt" or "PSGroupBackground3"][
-                "groupBackground"
-            ]
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundLargeHalfAlt" or "PSGroupBackground3"]["groupBackground"]
             __image = self.add_picture(
                 sprite["handle"],
                 _group["x"],
@@ -809,9 +806,7 @@ class Tree:
 
         # Medium background
         elif _group["oo"].get(2, False):
-            sprite = self.spriteMap[is_expansion and "GroupBackgroundMediumAlt" or "PSGroupBackground2"][
-                "groupBackground"
-            ]
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundMediumAlt" or "PSGroupBackground2"]["groupBackground"]
             __image = self.add_picture(
                 sprite["handle"],
                 _group["x"],
@@ -825,9 +820,7 @@ class Tree:
 
         # Small background
         elif _group["oo"].get(1, False):
-            sprite = self.spriteMap[is_expansion and "GroupBackgroundSmallAlt" or "PSGroupBackground1"][
-                "groupBackground"
-            ]
+            sprite = self.spriteMap[is_expansion and "GroupBackgroundSmallAlt" or "PSGroupBackground1"]["groupBackground"]
             __image = self.add_picture(
                 sprite["handle"],
                 _group["x"],

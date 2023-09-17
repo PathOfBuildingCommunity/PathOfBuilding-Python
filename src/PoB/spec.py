@@ -1,5 +1,5 @@
 """
-Represents and manages one Spec in the XML.
+Represents and manages one Spec in the XML. It has a list of active nodes.
 """
 import xml.etree.ElementTree as ET
 import base64
@@ -126,7 +126,8 @@ class Spec:
         :param new_version: str
         :return:
         """
-        # ensure it is formatted correctly (n_nn). Remove dots and a trailing subversion
+        # ensure it is formatted correctly (n_nn). Remove dots and a trailing sub-version
+        # Do not remove the leading \. despite what python grammar checkers might say.
         tmp_list = re.split(r"\.|_|/", new_version)
         self.xml_spec.set("treeVersion", f"{tmp_list[0]}_{tmp_list[1]}")
 

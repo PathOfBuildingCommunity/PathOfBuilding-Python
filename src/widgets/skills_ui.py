@@ -321,7 +321,6 @@ class SkillsUI:
     def connect_skill_triggers(self):
         """re-connect triggers"""
         # print("connect_skill_triggers", self.triggers_connected)
-        # print_call_stack(idx=-4)
         if self.triggers_connected:
             # Don't re-connect
             return

@@ -442,7 +442,7 @@ class LineEditPopup(QDialog):
     @property
     def placeholder_text(self):
         """Do nothing, we just need to declare the property"""
-        pass
+        return ""
 
     @placeholder_text.setter
     def placeholder_text(self, new_text):

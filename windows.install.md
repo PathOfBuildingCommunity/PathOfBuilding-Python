@@ -44,24 +44,37 @@ Switch to the virtual environment
 poetry shell
 ```
 
-Run pob2
+Run pyPoB
 ```shell
-run.bat
+devel_run.cmd
+```
+
+or just it without the shell
+```shell
+poetry run devel_run.cmd
 ```
 
 
 # MSVCP140.dll missing
-Microsoft Visual C++ Redistributable for Visual Studio 2022
-Bottom of https://visualstudio.microsoft.com/downloads/
+This is the Microsoft Visual C++ Redistributable for Visual Studio 2022 (or download and install Visual Studio instead)
+Download from the bottom of https://visualstudio.microsoft.com/downloads/
 https://aka.ms/vs/17/release/VC_redist.x64.exe
 
 
+# Creating a Windows executable.
+Nuitka requires a compiler supplied by Visual Studio. Download and install the community version if you don't have a copy already
+https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx 
+```shell
+make_exe.cmd
+or
+poetry run make_exe.cmd
+```
 
 
 
 # Changing python versions
 Whenever you change dependencies by hand in your pyproject.toml you have to take care of these points:
 
--    Run poetry lock --no-update afterwards. The reasons for this is, that "poetry install" takes the poetry.lock as input if can find one and not the pyproject.toml.
+-    Run poetry lock --no-update afterwards. The reasons for this is, that "poetry install" takes the poetry.lock as input if it can find one and not read the pyproject.toml.
 
--    If you change the python version, remove the .venv before running "poetry install". poetry doesn't change the python version of a .venv once it is created, because it uses the python version itself to create the virtualenv.
+-    If you change the python version, remove the .venv before running "poetry install". 'poetry' doesn't change the python version of a .venv once it is created, because it uses the python version itself to create the virtualenv.

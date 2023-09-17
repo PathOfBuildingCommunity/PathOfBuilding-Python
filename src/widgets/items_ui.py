@@ -736,7 +736,7 @@ class ItemsUI:
         id_base = len(self.itemlist_by_id) == 0 and 1 or max(self.itemlist_by_id.keys())
         # add the items to the list box
         for idx, text_item in enumerate(_items["items"]):
-            new_item = Item(self.base_items)
+            new_item = Item(self.settings, self.base_items)
             new_item.load_from_ggg_json(text_item)
             new_item.id = id_base + idx
             self.add_item_to_itemlist_widget(new_item)

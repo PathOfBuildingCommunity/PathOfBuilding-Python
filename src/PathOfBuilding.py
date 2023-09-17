@@ -6,8 +6,9 @@
 # nuitka-project: --windows-icon-from-ico=Assets/Icons/PathOfBuilding.ico
 # nuitka-project: --onefile-tempdir-spec="%TEMP%/PoB_%PID%"
 # nuitka-project: --onefile-no-compression
-# nuitka-project: --quiet
+# nuitka -project: --quiet
 # nuitka-project: --clean-cache=all
+# nuitka- project: --debug
 
 """
 Path of Building main class
@@ -26,6 +27,7 @@ from PySide6.QtCore import QCoreApplication, Qt
 
 from windows.main_window import MainWindow
 
+#############################################################################################################
 # Start here
 # This is  NUITKA debugging info so folk can understand the diffference between the extracted directory and
 # the directory the Executable was run from:
