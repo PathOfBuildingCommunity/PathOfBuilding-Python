@@ -264,9 +264,7 @@ class ImportDlg(Ui_BuildImport, QDialog):
         if self.check_DeleteJewels.isChecked():
             # ToDo: Do something clever to remove jewels
             pass
-        self.build.import_passive_tree_jewels_ggg_json(
-            self.character_data.get("tree"), self.character_data.get("character")
-        )
+        self.build.import_passive_tree_jewels_ggg_json(self.character_data.get("tree"), self.character_data.get("character"))
         self.btn_Close.setFocus()
 
     @Slot()
@@ -453,8 +451,8 @@ class ImportDlg(Ui_BuildImport, QDialog):
                 )
             else:
                 passive_tree = response.json()
-                pprint(passive_tree)
-                write_json(self.settings.build_path + "/" + char_name + "_passive_tree.json", passive_tree)
+                # pprint(passive_tree)
+                # write_json(self.settings.build_path + "/" + char_name + "_passive_tree.json", passive_tree)
         except requests.RequestException as e:
             print(f"Error retrieving 'Passive Tree': {e}.")
             self.status = html_colour_text(

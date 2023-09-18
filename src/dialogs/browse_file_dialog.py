@@ -53,6 +53,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         for idx in range(0, self.hLayout_SaveAs.count()):
             self.hLayout_SaveAs.itemAt(idx).widget().setHidden(not self.save)
 
+        self.lineEdit_SaveAs.setText(_build.filename)
         self.list_Files.set_delegate()
         self.list_Files_width = self.list_Files.width()
         self.max_filename_width = 100

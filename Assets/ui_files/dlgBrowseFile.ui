@@ -32,7 +32,7 @@
        <property name="minimumSize">
         <size>
          <width>520</width>
-         <height>0</height>
+         <height>24</height>
         </size>
        </property>
       </widget>
@@ -121,7 +121,7 @@
        <property name="minimumSize">
         <size>
          <width>520</width>
-         <height>0</height>
+         <height>24</height>
         </size>
        </property>
       </widget>
@@ -131,7 +131,7 @@
        <property name="minimumSize">
         <size>
          <width>40</width>
-         <height>22</height>
+         <height>24</height>
         </size>
        </property>
        <property name="text">
@@ -147,7 +147,7 @@
        <property name="minimumSize">
         <size>
          <width>40</width>
-         <height>22</height>
+         <height>24</height>
         </size>
        </property>
        <property name="text">

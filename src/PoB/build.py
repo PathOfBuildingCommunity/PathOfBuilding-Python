@@ -107,6 +107,8 @@ class Build:
     def name(self, new_name):
         self._name = new_name
         self.win.setWindowTitle(f"{program_title} - {new_name}")
+        if self.filename == "" or self.filename == "Default":
+            self.filename = new_name
 
     @property
     def current_class(self):
