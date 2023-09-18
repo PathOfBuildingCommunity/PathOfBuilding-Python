@@ -931,6 +931,19 @@ class ItemsUI:
         if 0 <= _index < len(self.itemsets):
             self.show_itemset(_index)
 
+    def rename_set(self, row, new_title):
+        """
+        Rename a set in all locations we have it set.
+        :param row: int:
+        :param new_title: str:
+        :return: N/A
+        """
+        xml_set = self.xml_items[row]
+        xml_set.set("title", new_title)
+        _set = self.itemsets[row]
+        _set.set("title", new_title)
+        self.win.combo_ItemSet.setItemText(row, new_title)
+
     def delete_itemset(self, itemset):
         """
         Delete ONE itemset

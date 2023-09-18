@@ -372,7 +372,6 @@ class SkillsUI:
         self.win.combo_SkillSet.addItem(itemset_name, new_skillset)
         # set the SkillSet ComboBox dropdown width.
         self.win.combo_SkillSet.view().setMinimumWidth(self.win.combo_SkillSet.minimumSizeHint().width())
-        # self.win.combo_SkillSet.setCurrentIndex(len(self.skill_sets_list) - 1)
         self.connect_skill_triggers()
         return new_skillset
 

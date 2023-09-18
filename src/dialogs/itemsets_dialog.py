@@ -111,7 +111,7 @@ class ManageItemsDlg(Ui_ManageItemSet, QDialog):
         dlg = LineEditPopup(self.settings.app.tr, "New Item Set Name", self.win)
         dlg.placeholder_text = "New Item Set, Rename Me"
         _return = dlg.exec()
-        new_name = dlg.lineedit.text()
+        new_name = dlg.lineedit_name.text()
         if _return and new_name != "":
             _set = self.item_ui.new_itemset(new_name)
             lwi = QListWidgetItem(new_name)
@@ -125,7 +125,7 @@ class ManageItemsDlg(Ui_ManageItemSet, QDialog):
         dlg = LineEditPopup(self.settings.app.tr, "New Item Set Name", self.win)
         dlg.placeholder_text = "New Item Set, Rename Me"
         _return = dlg.exec()
-        new_name = dlg.lineedit.text()
+        new_name = dlg.lineedit_name.text()
         if _return and new_name != "":
             row = self.list_Items.currentRow()
             new_set = self.item_ui.copy_itemset(row, new_name)
@@ -159,11 +159,7 @@ class ManageItemsDlg(Ui_ManageItemSet, QDialog):
         """
         # print("list_current_text_changed", lwi.text())
         self.set_being_edited = None
-        row = self.list_Items.currentRow()
-        _set = self.item_ui.itemsets[row]
-        _set.set("title", lwi.text())
-        xml_set = self.item_ui.xml_items[row]
-        xml_set.set("title", lwi.text())
+        self.item_ui.rename_set(self.list_Items.currentRow(), lwi.text())
 
     @Slot()
     def list_item_double_clicked(self, lwi):

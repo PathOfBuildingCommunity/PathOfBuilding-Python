@@ -123,7 +123,7 @@ class ManageSkillsDlg(Ui_ManageSkillSet, QDialog):
         dlg = LineEditPopup(self.settings.app.tr, "New Skill Set Name", self.win)
         dlg.placeholder_text = "New Skill Set, Rename Me"
         _return = dlg.exec()
-        new_name = dlg.lineedit.text()
+        new_name = dlg.lineedit_name.text()
         if _return and new_name != "":
             row = self.list_Skills.currentRow()
             new_set = self.skill_ui.copy_skill_set(row, new_name)
