@@ -22,10 +22,10 @@ class ManageSkillsDlg(Ui_ManageSkillSet, QDialog):
         Export dialog init
         :param _skill_ui: A pointer to Skills_UI()
         :param _settings: A pointer to the settings
-        :param parent: A pointer to MainWindowUI()
+        :param _win: A pointer to MainWindowUI()
         """
-        super().__init__(parent)
-        self.win = parent
+        super().__init__(_win)
+        self.win = _win
         self.settings = _settings
         self.skill_ui = _skill_ui
         self.set_to_be_moved = None
@@ -109,7 +109,7 @@ class ManageSkillsDlg(Ui_ManageSkillSet, QDialog):
         dlg = LineEditPopup(self.settings.app.tr, "New Skill Set Name", self.win)
         dlg.placeholder_text = "New Skill Set, Rename Me"
         _return = dlg.exec()
-        new_name = dlg.lineedit.text()
+        new_name = dlg.lineedit_name.text()
         if _return and new_name != "":
             new_set = self.skill_ui.new_skill_set(new_name)
             lwi = QListWidgetItem(new_name)
@@ -158,11 +158,7 @@ class ManageSkillsDlg(Ui_ManageSkillSet, QDialog):
         """
         # print("list_current_text_changed", lwi.text())
         self.set_being_edited = None
-        row = self.list_Skills.currentRow()
-        _set = self.skill_ui.skill_sets_list[row]
-        xml_set = self.skill_ui.xml_skills[row]
-        _set["title"] = lwi.text()
-        xml_set["title"] = lwi.text()
+        self.skill_ui.rename_set(self.list_Skills.currentRow(), lwi.text())
 
     @Slot()
     def list_item_double_clicked(self, lwi):

@@ -10,7 +10,7 @@ QWidget {
     background: rgba( qss_background );
     color: rgba( qss_selection_bckgrd );
     selection-color: rgba( qss_selection_bckgrd );
-    selection-background-color: rgba( qss_selection_backgrd_colour );
+    /* selection-background-color: rgba( qss_selection_backgrd_colour ); */
     border-radius: 4px;
 }
 
@@ -151,15 +151,17 @@ QTabBar::tab:!selected {
 
 
 QComboBox,
-QLineEdit,
 QPushButton {
     border: 1px solid rgba( qss_box_borders );
     padding: 4px 8px;
 }
 
+QLineEdit,
+QTextEdit {
+    selection-background-color: rgba( qss_selection_backgrd_colour );
+}
 
 /* Lists and Boxes */
-QTextEdit,
 QGroupBox,
 ListBox,    /* Custom Widget */
 QListWidget,

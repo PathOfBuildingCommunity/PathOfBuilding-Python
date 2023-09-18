@@ -5,8 +5,8 @@ qss_background~~38, 50, 56, 1.000
 qss_alt_background~~96, 99, 108, 0.300
   #4d5157   Color and selection-color
 qss_selection_bckgrd~~77, 81, 87, 1.000
-  #FFFFFF   selection-background-color
-qss_selection_backgrd_colour~~255, 255, 255, 0.500
+  #aaaf06   light yellow. selection-background-color
+qss_selection_backgrd_colour~~170, 175, 6, 0.400
   #AFBDC4   Hover borders
 qss_hover_borders~~175, 189, 196, 1.000
   #546E7A   teal. Separator

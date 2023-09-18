@@ -372,11 +372,12 @@ class SkillsUI:
         self.win.combo_SkillSet.addItem(itemset_name, new_skillset)
         # set the SkillSet ComboBox dropdown width.
         self.win.combo_SkillSet.view().setMinimumWidth(self.win.combo_SkillSet.minimumSizeHint().width())
-        self.win.combo_SkillSet.setCurrentIndex(len(self.skill_sets_list) - 1)
+        # self.win.combo_SkillSet.setCurrentIndex(len(self.skill_sets_list) - 1)
         self.connect_skill_triggers()
         return new_skillset
 
     @Slot()
+    # NUITKA error:
     # File "C:\Users\Peter\AppData\Local\Temp\PoB_8880\PySide6\QtCore-postLoad.py", line 12, in patched_connect
     # TypeError: 'PySide6.QtCore.QObject.connect' called with wrong argument types:
     #     PySide6.QtCore.QObject.connect(QComboBox, str, compiled_frame, ConnectionType)
@@ -395,6 +396,19 @@ class SkillsUI:
         self.win.list_SocketGroups.clear()
         if 0 <= new_index < len(self.skill_sets_list):
             self.show_skill_set(self.skill_sets_list[new_index], new_index, True)
+
+    def rename_set(self, row, new_title):
+        """
+        Rename a set in all locations we have it set.
+        :param row: int:
+        :param new_title: str:
+        :return: N/A
+        """
+        xml_set = self.xml_skills[row]
+        xml_set.set("title", new_title)
+        _set = self.skill_sets_list[row]
+        _set.set("title", new_title)
+        self.win.combo_SkillSet.setItemText(row, new_title)
 
     def show_skill_set(self, xml_set, _index=0, trigger=False):
         """
