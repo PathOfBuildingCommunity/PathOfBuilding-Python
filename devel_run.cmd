@@ -1,5 +1,5 @@
 REM Update ui files if needed and run pyPoB
-IF "%VIRTUAL_ENV%"=="" set pshell=poetry run
+IF "%VIRTUAL_ENV%"=="" (set pshell=poetry run) else (set pshell=)
 
 REM Generate .ui files to .py files
 %pshell% python build-ui.py

@@ -6,6 +6,7 @@
 # nuitka-project: --windows-icon-from-ico=Assets/Icons/PathOfBuilding.ico
 # nuitka-project: --onefile-tempdir-spec="%TEMP%/PoB_%PID%"
 # nuitka-project: --onefile-no-compression
+# nuitka-project: --include-plugin-directory=src/dialogs
 # nuitka -project: --quiet
 # nuitka-project: --clean-cache=all
 # nuitka- project: --debug
@@ -50,6 +51,9 @@ import os
 #     print("_MEIPASS: ", sys._MEIPASS)
 #     os.chdir(sys._MEIPASS)
 #     print(os.listdir(sys._MEIPASS))
+
+# from time import sleep
+# sleep(60)
 
 # Logging to a file, not spam to screen or get lost if no console
 # ToDo: Remove comment when we stop building.

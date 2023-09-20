@@ -16,6 +16,10 @@
     <height>600</height>
    </size>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../PoB.qrc">
+    <normaloff>:/Art/Icons/PathOfBuilding.ico</normaloff>:/Art/Icons/PathOfBuilding.ico</iconset>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>

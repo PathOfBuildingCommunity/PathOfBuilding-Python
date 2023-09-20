@@ -54,7 +54,20 @@ class Settings:
         if self.build_path == "":
             self.build_path = Path(self.exe_dir, "builds")
         if not Path(self.build_path).exists():
-            Path(self.build_path).mkdir()
+            try:
+                Path(self.build_path).mkdir()
+            except FileNotFoundError:
+                print(f"Error: Failed to create '{self.build_path}' ...")
+                # the path no longer exists or there is corrupting in settings.xml AND we can't create it.
+                self.build_path = Path(self.exe_dir, "builds")
+                print(f"   ... trying to create '{self.build_path}' ...")
+                if not Path(self.build_path).exists():
+                    try:
+                        Path(self.build_path).mkdir()
+                    except FileNotFoundError:
+                        print(f"Error: Failed to create '{self.build_path}' for the second time. Giving up.")
+                        # ignore it and hope for the best, cause there is something really wrong (eg: read-only filesystem)
+                        pass
 
     def reset(self):
         """Reset to default config"""
@@ -296,10 +309,10 @@ class Settings:
         if height < 600:
             height = 600
         if width > self.screen_rect.width():
-            print(f"Width: {width} is bigger than {self.screen_rect}. Correcting ...")
+            print(f"Width: {width} is bigger than {self.screen_rect.width()}. Correcting ...")
             width = self.screen_rect.width()
         if height > self.screen_rect.height():
-            print(f"Height: {height} is bigger than {self.screen_rect}. Correcting ...")
+            print(f"Height: {height} is bigger than {self.screen_rect.height()}. Correcting ...")
             height = self.screen_rect.height()
         self.size = QSize(width, height)
         return QSize(width, height)
