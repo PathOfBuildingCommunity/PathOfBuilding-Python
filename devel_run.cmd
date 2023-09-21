@@ -7,5 +7,5 @@ REM Generate .ui files to .py files
 REM Change directories as settings.xml is created in the current directory. TreeData is also referenced from there.
 cd src
 
-%pshell% python PathOfBuilding.py 
+%pshell% python PathOfBuilding.py
 cd ..

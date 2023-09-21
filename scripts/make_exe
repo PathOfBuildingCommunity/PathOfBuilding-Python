@@ -1,4 +1,7 @@
 #!/bin/sh
+# get parent directory
+cd "$(dirname "$(realpath "$0")")/.."
+
 [ "${VIRTUAL_ENV}" ] || pshell="poetry run"
 
 # Generate .ui files to .py files

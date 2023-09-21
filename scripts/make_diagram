@@ -1,5 +1,9 @@
 #!/bin/bash
 # Make a class diagram. It's not real good, don't use it.
+
+# get parent directory
+cd "$(dirname "$(realpath "$0")")/.."
+
 [ "${VIRTUAL_ENV}" ] || pshell="poetry run"
 cd src
 $pshell pyreverse -ASkmn -o png --source-roots dialogs,PoB,widgets,windows --colorized -d ../docs .
