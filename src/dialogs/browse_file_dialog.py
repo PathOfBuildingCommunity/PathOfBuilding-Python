@@ -119,7 +119,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             # find longest name
             max_length = max([len(s) for s in files_grabbed])
             for filename in files_grabbed:
-                text, class_name = get_file_info(self.win, filename, max_length, self.max_filename_width)
+                text, class_name = get_file_info(self.settings, filename, max_length, self.max_filename_width)
                 if text != "":
                     self.add_path_to_listbox(filename, text, class_name, False)
 
@@ -133,11 +133,11 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         :return: QListWidgetItem: the item added.
         """
         if is_dir:
-            lwi = QListWidgetItem(html_colour_text(self.win.qss_default_text, f"[{_text}]"))
+            lwi = QListWidgetItem(html_colour_text(self.settings.qss_default_text, f"[{_text}]"))
             # If _name is .., then add the parent directory, else the subdirectory
             path = _text == ".." and os.pardir or _text
             _path = os.path.abspath(os.path.join(self.lineEdit_CurrDir.text(), path))
-            lwi.setToolTip(f"<nobr>{html_colour_text(self.win.qss_default_text, _path)}</nobr>")
+            lwi.setToolTip(f"<nobr>{html_colour_text(self.settings.qss_default_text, _path)}</nobr>")
         else:
             lwi = QListWidgetItem(_text)
             _path = os.path.abspath(os.path.join(self.lineEdit_CurrDir.text(), filename))

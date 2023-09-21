@@ -42,7 +42,7 @@ class ManageTreeDlg(Ui_ManageTree, QDialog):
         # add the default text colour to the button tooltips
         for widget in self.children():
             if type(widget) == QPushButton and widget.toolTip() != "":
-                widget.setToolTip(html_colour_text(self.win.qss_default_text, widget.toolTip()))
+                widget.setToolTip(html_colour_text(self.settings.qss_default_text, widget.toolTip()))
 
         for spec in self.build.specs:
             title = spec.title

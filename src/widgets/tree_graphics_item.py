@@ -87,7 +87,7 @@ class TreeGraphicsItem(QGraphicsPixmapItem):
                 tool_tip += f"\n{line}"
         tool_tip += self.node_reminder and f"\n{self.node_reminder}" or ""
         # tool_tip += self.filename and f"\n{self.filename}" or ""
-        return html_colour_text(self.win.qss_default_text, tool_tip)
+        return html_colour_text(self.settings.qss_default_text, tool_tip)
 
     # not sure if this is needed
     # def hoverLeaveEvent(self, event):

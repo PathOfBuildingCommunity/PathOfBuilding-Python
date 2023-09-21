@@ -33,6 +33,7 @@ class Settings:
         self.win = _win
         self.app = _app
         self.screen_rect = self.app.primaryScreen().size()
+        self.qss_default_text = f"rgba( 255, 255, 255, 0.500 )"
 
         # this is the xml tree representing the xml
         self.root = None
@@ -308,12 +309,14 @@ class Settings:
             width = 800
         if height < 600:
             height = 600
-        if width > self.screen_rect.width():
-            print(f"Width: {width} is bigger than {self.screen_rect.width()}. Correcting ...")
-            width = self.screen_rect.width()
-        if height > self.screen_rect.height():
-            print(f"Height: {height} is bigger than {self.screen_rect.height()}. Correcting ...")
-            height = self.screen_rect.height()
+        srw = self.screen_rect.width()
+        if width > srw:
+            print(f"Width: {width} is bigger than {srw}. Correcting ...")
+            width = srw
+        srh = self.screen_rect.height()
+        if height > srh:
+            print(f"Height: {height} is bigger than {srh}. Correcting ...")
+            height = srh
         self.size = QSize(width, height)
         return QSize(width, height)
 

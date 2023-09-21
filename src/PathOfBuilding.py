@@ -1,5 +1,5 @@
-# nuitka-project: --onefile
 # nuitka-project: --standalone
+# nuitka-project: --onefile
 # nuitka-project: --onefile-windows-splash-screen-image=Assets/PathOfBuilding.png
 # nuitka-project: --enable-plugin=pyside6
 # nuitka-project: --include-data-dir=src/data=data
@@ -7,6 +7,7 @@
 # nuitka-project: --onefile-tempdir-spec="%TEMP%/PoB_%PID%"
 # nuitka-project: --onefile-no-compression
 # nuitka-project: --include-plugin-directory=src/dialogs
+# nuitka -project: --python-flag=static_hashes
 # nuitka -project: --quiet
 # nuitka-project: --clean-cache=all
 # nuitka- project: --debug

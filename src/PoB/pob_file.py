@@ -14,12 +14,12 @@ import xml
 from PoB.constants import ColourCodes
 
 
-def get_file_info(win, filename, max_length, max_filename_width=40, html=True):
+def get_file_info(settings, filename, max_length, max_filename_width=40, html=True):
     """
     Open the xml and get the class information, level and version. Format a line for display on the listbox.
     Take into account the maximum width of the listbox and trim names as needed.
 
-    :param win: windows.main_window.MainWindow: pointer to the mainwindow.
+    :param settings: Settings():
     :param filename: name of file in current directory.
     :param max_length: int: of the longest name.
     :param max_filename_width: int: Maximum number of characters of the filename to be shown.
@@ -48,7 +48,7 @@ def get_file_info(win, filename, max_length, max_filename_width=40, html=True):
         info_text = f" Level {level} {_class} (v{version})"
 
         colour = ColourCodes[class_name.upper()].value
-        normal = win.qss_default_text  # Default text's colour
+        normal = settings.qss_default_text  # Default text's colour
         if html:
             return (
                 f'<pre style="color:{normal};">{name}{spacer}<span style="color:{colour};">{info_text}</span></pre>',
@@ -151,6 +151,23 @@ def read_json(filename):
     if _fn.exists():
         try:
             with _fn.open("r") as json_file:
+                _dict = json.load(json_file)
+                return _dict
+        except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
+            print(f"Unable to open {_fn}")
+    return None
+
+
+def read_json16(filename):
+    """
+    Reads a json file
+    :param filename: Name of xml to be read
+    :returns: A dictionary of the contents of the file
+    """
+    _fn = Path(filename)
+    if _fn.exists():
+        try:
+            with _fn.open("r", encoding="utf-16") as json_file:
                 _dict = json.load(json_file)
                 return _dict
         except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available

@@ -68,7 +68,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # The QAction representing the current theme (to turn off the menu's check mark)
         self.curr_theme: QAction = None
-        self.qss_default_text = f"rgba( 255, 255, 255, 0.500 )"
 
         # Flag to stop some actions happening in triggers during loading or changing tree Specs
         self.alerting = True
@@ -348,7 +347,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for idx, full_path in enumerate(recent_builds):
             if full_path is not None and full_path != "":
                 filename = Path(full_path).relative_to(self.settings.build_path)
-                text, class_name = get_file_info(self, filename, max_length, 70)
+                text, class_name = get_file_info(self.settings, filename, max_length, 70)
                 ql = QLabel(text)
                 _action = QWidgetAction(self.menu_Builds)
                 _action.setDefaultWidget(ql)
@@ -390,7 +389,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for idx, value in enumerate(recent_builds):
             if value is not None and value != "":
                 filename = Path(value).relative_to(self.settings.build_path)
-                text, class_name = get_file_info(self, filename, max_length, 40, False)
+                text, class_name = get_file_info(self.settings, filename, max_length, 40, False)
                 _action = self.menu_Builds.addAction(f"&{idx}.  {text}")
                 _action.setFont(QFont(":Font/Font/NotoSans-Regular.ttf", 10))
                 make_connection(value, idx)
@@ -472,9 +471,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     m = re.search(r"^(qss_\w+)~~(.*)$", line)
                     if m:
                         if m.group(1) == "qss_default_text":
-                            self.qss_default_text = f"rgba( {m.group(2)} )"
+                            self.settings.qss_default_text = f"rgba( {m.group(2)} )"
                             for tooltip_text in self.toolbar_buttons.keys():
-                                self.toolbar_buttons[tooltip_text].setToolTip(html_colour_text(self.qss_default_text, tooltip_text))
+                                self.toolbar_buttons[tooltip_text].setToolTip(
+                                    html_colour_text(self.settings.qss_default_text, tooltip_text)
+                                )
                         template = re.sub(r"\b" + m.group(1) + r"\b", m.group(2), template)
 
             QApplication.instance().setStyleSheet(template)
@@ -494,7 +495,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def close_app(self):
         """
         Trigger closing of the app. May not get used anymore as action calls MainWindow.close().
-        Kept here in case it's more sensible to run 'close down' procedures in an App that doesn't think it's closing.
+        Kept here in case it's more sensible to run 'close down' procedures in an App that doesn't yet know it's closing.
             In which case, change the action back to here.
 
         return: N/A
@@ -855,9 +856,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             f"<pre>Required Level: {level}\nEstimated Progress:\n  {act_progress}\n  Questpoints: {acts[act].get('quest')}"
             f"\n  Extra Skillpoints: {_bandits}{lab_suggest}</pre>"
         )
-        self.label_points.setToolTip(html_colour_text(self.qss_default_text, tip))
-        self.label_level.setToolTip(html_colour_text(self.qss_default_text, tip))
-        self.spin_level.setToolTip(html_colour_text(self.qss_default_text, tip))
+        self.label_points.setToolTip(html_colour_text(self.settings.qss_default_text, tip))
+        self.label_level.setToolTip(html_colour_text(self.settings.qss_default_text, tip))
+        self.spin_level.setToolTip(html_colour_text(self.settings.qss_default_text, tip))
         if self.cb_level_auto_manual.isChecked():
             self.spin_level.setValue(level)
 
