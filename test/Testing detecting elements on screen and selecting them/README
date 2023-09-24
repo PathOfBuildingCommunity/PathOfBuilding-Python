@@ -1,0 +1,9 @@
+Experimenting with analyzing the screen. I was hoping the indiviual buttons were available using Windows standard APIs but 
+they don't seem to be. Having a picture of each button seems to be the way. Need to work out how best capture these images.
+
+https://automatetheboringstuff.com/chapter18/#:~:text=You%20can%20also%20perform%20a,around%20these%20two%20function%20calls
+https://learn.microsoft.com/en-us/windows/win32/api/winuser/nc-winuser-propenumprocexa
+
+It may be better to allow a calling mechanism in pyPoB to allow a test module to request pyPoB to select wigets and report on their status (enabled/disabled/visible/hidden/checked, etc)
+
+ 
