@@ -322,14 +322,13 @@ class SkillsUI:
         """re-connect triggers"""
         # print("connect_skill_triggers", self.triggers_connected)
         if self.triggers_connected:
-            # Don't re-connect
-            return
+            return  # Don't re-connect
         self.triggers_connected = True
         self.win.check_SocketGroupEnabled.stateChanged.connect(self.save_socket_group_settings)
         self.win.check_SocketGroup_FullDPS.stateChanged.connect(self.save_socket_group_settings)
-        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
         self.win.combo_SocketedIn.currentIndexChanged.connect(self.save_socket_group_settings)
         self.win.lineedit_SkillLabel.textChanged.connect(self.save_socket_group_settings)
+        self.win.combo_SkillSet.currentIndexChanged.connect(self.change_skill_set)
         self.win.list_SocketGroups.currentRowChanged.connect(self.change_socket_group)
 
     def disconnect_skill_triggers(self):
@@ -711,7 +710,7 @@ class SkillsUI:
         """
         # print("change_socket_group", _new_group)
         # Clean up and save objects. If _index = -1, then this is the only thing emptying these widgets
-        # these routines have the connect and ddisconnect routines
+        # these routines have the connect and disconnect routines
         if index_exists(self.xml_current_skill_set, _new_group):
             self.clear_socket_group_settings()
             self.load_socket_group(_new_group)

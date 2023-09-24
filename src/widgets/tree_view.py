@@ -365,7 +365,8 @@ class TreeView(QGraphicsView):
         else:
             # don't delete the images for the nodes as they are owned by the relevant Tree() class.
             for item in self.active_nodes:
-                self._scene.removeItem(item)
+                if item is not None:
+                    self._scene.removeItem(item)
             for item in self.active_lines:
                 self._scene.removeItem(item)
                 del item
@@ -386,7 +387,8 @@ class TreeView(QGraphicsView):
                     self.active_nodes.append(node.active_image)
                     self.active_nodes.append(node.active_overlay_image)
                     self._scene.addItem(node.active_image)
-                    self._scene.addItem(node.active_overlay_image)
+                    if node.active_overlay_image is not None:
+                        self._scene.addItem(node.active_overlay_image)
                 if node.masteryEffects:
                     self.active_nodes.append(node.activeEffectImage)
                     self._scene.addItem(node.activeEffectImage)

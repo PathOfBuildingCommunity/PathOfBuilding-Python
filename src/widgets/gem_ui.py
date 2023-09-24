@@ -218,9 +218,10 @@ class GemUI(QWidget):
         """
         Triggered when the gem list combo is changed.
 
-        :param item:
+        :param item: str:
         :return: N/A
         """
+        # print(f"combo_gem_list_changed, {item=}")
         if item == "":
             return
         # Set a value. When first run, save will not activate if skill_id is empty
