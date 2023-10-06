@@ -5,9 +5,9 @@ __pycache__/
 *.swp
 
 # Nuitka
-PathOfBuilding.build
-PathOfBuilding.dist
-PathOfBuilding.onefile-build
+*.build
+*.dist
+*.onefile-build
 
 # build generated python files
 PoB_rc.py
