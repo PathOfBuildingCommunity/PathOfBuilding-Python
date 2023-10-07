@@ -132,11 +132,13 @@ class ItemSlotUI(QWidget):
         """clear the combo box"""
         # print("self.combo_item_list.clear")
         # for each item, self.clear_item_slot(_item)
-        while self.combo_item_list.count() > 0:
-            self.clear_item_slot()
-            self.combo_item_list.removeItem(0)
-        # self.combo_item_list.clear()
-        self.combo_item_list.addItem("None", 0)
+        try:
+            while self.combo_item_list.count() > 0:
+                self.clear_item_slot()
+                self.combo_item_list.removeItem(0)
+            self.combo_item_list.addItem("None", 0)
+        except RuntimeError:  # Timing error. During a clear, this is cleaned up before we complete.
+            pass
         self.active = False
 
     @Slot()
@@ -191,13 +193,13 @@ class ItemSlotUI(QWidget):
                             self.combo_item_list.setCurrentIndex(idx)
                         else:
                             self.clear_default_item()
-                    # case "AbyssJewel":
-                    #     title_parts = self.title[-1].split("#")
-                    #     idx = int(title_parts[-1])
-                    #     if self.combo_item_list.count() > idx:
-                    #         self.combo_item_list.setCurrentIndex(idx)
-                    #     else:
-                    #         self.clear_default_item()
+                    case "AbyssJewel":
+                        title_parts = self.title[-1].split("#")
+                        idx = int(title_parts[-1])
+                        if self.combo_item_list.count() > idx:
+                            self.combo_item_list.setCurrentIndex(idx)
+                        else:
+                            self.clear_default_item()
                     case "Jewel":
                         # Different rules for jewels
                         pass

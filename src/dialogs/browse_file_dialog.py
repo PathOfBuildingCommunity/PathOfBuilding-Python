@@ -127,7 +127,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
         """
         Add one directory or file to the listbox.
         :param filename: name of file in current directory, no html tags.
-        :param _text: The name of the file, class name and verions (with colours).
+        :param _text: The name of the file, class name and versions (with colours).
         :param class_name: The class name (for tooltip colour).
         :param is_dir: True if a directory
         :return: QListWidgetItem: the item added.

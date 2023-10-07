@@ -402,7 +402,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         def make_connection(name, _action):
             """
-            Connect the menu item to _open_previous_build passing in extra information.
+            Connect the menu item to switch_theme passing in extra information.
             Lambdas in python share the variable scope they're created in
             so make a function containing just the lambda
             :param name: str; the name of the file but no extension.

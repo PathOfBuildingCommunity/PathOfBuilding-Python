@@ -54,7 +54,7 @@ class NotesUI:
         :return: N/A
         """
         if _notes_html is not None:
-            self.win.btn_ConvertToText.setVisible(False)
+            self.win.btn_ConvertToText.setVisible("^7" in _notes_html)
             self.win.textedit_Notes.setHtml(_notes_html.strip())
         else:
             if _notes is not None:

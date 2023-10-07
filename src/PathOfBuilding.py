@@ -7,10 +7,12 @@
 # nuitka-project: --onefile-tempdir-spec="%TEMP%/PoB_%PID%"
 # nuitka-project: --onefile-no-compression
 # nuitka-project: --include-plugin-directory=src/dialogs
-# nuitka -project: --python-flag=static_hashes
-# nuitka -project: --quiet
 # nuitka-project: --clean-cache=all
+# nuitka-project: --python-flag=static_hashes
+# nuitka -project: --quiet
 # nuitka- project: --debug
+# nuitka- project: --trace
+# nuitka- project: --experimental=disable-freelist-all
 
 """
 Path of Building main class
