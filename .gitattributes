@@ -1,0 +1,6 @@
+# Set the default behaviour
+* text=auto eol=lf
+*.cmd text=auto eol=crlf
+*.png -text
+*.jpg -text
+# Overrides for specific folders are done by adding a .gitattributes to that subfolder
