@@ -19,7 +19,7 @@ from PySide6.QtUiTools import QUiLoader
 from PoB.pob_file import read_xml, write_xml
 from PoB.constants import pob_debug, def_theme, default_config
 
-from widgets.ui_utils import str_to_bool, print_a_xml_element
+from widgets.ui_utils import html_colour_text, str_to_bool, print_a_xml_element
 from dialogs.settings_dialog import SettingsDlg
 
 
@@ -33,7 +33,8 @@ class Settings:
         self.win = _win
         self.app = _app
         self.screen_rect = self.app.primaryScreen().size()
-        self.qss_default_text = f"rgba( 255, 255, 255, 0.500 )"
+        self.qss_background = "32, 33, 36, 1.000"
+        self._qss_default_text = "#FFFFFF"
 
         # this is the xml tree representing the xml
         self.root = None
@@ -105,6 +106,15 @@ class Settings:
     def write(self):
         """Write the settings file"""
         write_xml(self.settings_file, self.tree)
+
+    @property
+    def qss_default_text(self):
+        return self._qss_default_text
+
+    @qss_default_text.setter
+    def qss_default_text(self, new_colour):
+        rgb = new_colour.split(",")
+        self._qss_default_text = f"#{int(rgb[0]):x}{int(rgb[1]):x}{int(rgb[2]):x}"
 
     @property
     def pastebin_dev_api_key(self):

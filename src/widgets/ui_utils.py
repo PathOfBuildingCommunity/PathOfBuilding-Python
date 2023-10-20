@@ -129,11 +129,11 @@ def html_colour_text(colour, text):
     """
     Put text into html span tags.
 
-    :param colour: string: the #colour to be used or ColourCodes name, can also be rgba( n, n, n, n.nnn )
-    :param text: the text to be coloured
-    :return: str:
+    :param colour: string: the #xxxxxx colour to be used or ColourCodes name.
+    :param text: the text to be coloured.
+    :return: str: html colour coded text.
     """
-    if colour[0] == "#" or "rgb" in colour:
+    if colour[0] == "#":
         c = colour
     else:
         c = ColourCodes[colour.upper()].value

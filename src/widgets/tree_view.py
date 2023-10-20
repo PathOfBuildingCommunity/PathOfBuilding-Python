@@ -19,7 +19,7 @@ from PoB.settings import Settings
 from PoB.build import Build
 from dialogs.popup_dialogs import MasteryPopup
 from widgets.tree_graphics_item import TreeGraphicsItem
-from widgets.ui_utils import _debug, print_call_stack
+from widgets.ui_utils import _debug, html_colour_text, print_call_stack
 
 
 class TreeView(QGraphicsView):
@@ -48,7 +48,7 @@ class TreeView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setFrameShape(QFrame.NoFrame)
         self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
-        # set a background of black as this stops the tree looking ugly when 'light' theme is selected.
+        # set a background of black as this stops the tree looking ugly when a non-dark theme is selected.
         # ascendancy-background-3.jpg also has a hard coded black background.
         self.setBackgroundBrush(QBrush(Qt.black, Qt.SolidPattern))
 

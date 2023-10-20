@@ -4,13 +4,15 @@ qss_background~~248, 249, 250, 1.000
   #f0f2f4   very dark grey. alternate row background
 qss_alt_background~~240, 242, 244, 0.800
   #4d5157   dark grey. Color and selection-color
-qss_selection_bckgrd~~77, 81, 87, 1.000
+qss_selection_colour~~77, 81, 87, 1.000
   #aaaf06   light yellow. selection-background-color
 qss_selection_backgrd_colour~~170, 175, 6, 0.400
   #78879b   blue grey. Hover borders
 qss_hover_borders~~120, 135, 155, 1.000
   #546E7A   teal. Separator
 qss_menu_sep~~84, 110, 122, 1.000
+  #808080   grey. disabled
+qss_disabled_colour~~128, 128, 128, 1.000
   #e6e5e5   lighter grey. Box borders
 qss_box_borders~~230, 229, 229, 1.000
   #000000   Tab selected borders. Scrollbar handles / QMenuBar~~item:selected (different shades used)

@@ -12,9 +12,10 @@ import os
 import xml
 
 from PoB.constants import ColourCodes
+from widgets.ui_utils import html_colour_text
 
 
-def get_file_info(settings, filename, max_length, max_filename_width=40, html=True):
+def get_file_info(settings, filename, max_length, max_filename_width=40, html=True, menu=False):
     """
     Open the xml and get the class information, level and version. Format a line for display on the listbox.
     Take into account the maximum width of the listbox and trim names as needed.
@@ -24,6 +25,7 @@ def get_file_info(settings, filename, max_length, max_filename_width=40, html=Tr
     :param max_length: int: of the longest name.
     :param max_filename_width: int: Maximum number of characters of the filename to be shown.
     :param html: bool: If True return the text as html formatted.
+    :param menu: bool: Menu entry text is covered by QSS
     :return: str, str: "", "" if invalid xml, or colourized name and class name.
     """
     try:
@@ -48,12 +50,17 @@ def get_file_info(settings, filename, max_length, max_filename_width=40, html=Tr
         info_text = f" Level {level} {_class} (v{version})"
 
         colour = ColourCodes[class_name.upper()].value
-        normal = settings.qss_default_text  # Default text's colour
         if html:
-            return (
-                f'<pre style="color:{normal};">{name}{spacer}<span style="color:{colour};">{info_text}</span></pre>',
-                class_name,
-            )
+            if menu:
+                return (
+                    f'<pre>{name}{spacer}<span style="color:{colour};">{info_text}</span></pre>',
+                    class_name,
+                )
+            else:
+                return (
+                    f'<pre style="color:{settings.qss_default_text};">{name}{spacer}<span style="color:{colour};">{info_text}</span></pre>',
+                    class_name,
+                )
         else:
             return f"{name}{spacer}{info_text}", class_name
     else:
@@ -89,7 +96,7 @@ def read_xml(filename):
     if _fn.exists():
         try:
             with _fn.open("r") as xml_file:
-                tree = ET.parse(_fn)
+                tree = ET.parse(xml_file)
                 return tree
         # parent of IOError, OSError *and* WindowsError where available
         except (EnvironmentError, FileNotFoundError, ET.ParseError):

@@ -609,129 +609,129 @@ stats_list = [
     {
         "stat": "ManaCost",
         "label": "Mana Cost",
-        "colour": ColourCodes.MANA,
+        "colour": ColourCodes.MANA.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "LifeCost",
         "label": "Life Cost",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "ESCost",
         "label": "Energy Shield Cost",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "RageCost",
         "label": "Rage Cost",
-        "colour": ColourCodes.RAGE,
+        "colour": ColourCodes.RAGE.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "ManaPercentCost",
         "label": "Mana Cost",
-        "colour": ColourCodes.MANA,
+        "colour": ColourCodes.MANA.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "LifePercentCost",
         "label": "Life Cost",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "ManaPerSecondCost",
         "label": "Mana Cost",
-        "colour": ColourCodes.MANA,
+        "colour": ColourCodes.MANA.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "LifePerSecondCost",
         "label": "Life Cost",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "ManaPercentPerSecondCost",
         "label": "Mana Cost",
-        "colour": ColourCodes.MANA,
+        "colour": ColourCodes.MANA.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "LifePercentPerSecondCost",
         "label": "Life Cost",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
         "fmt": "{0:.2f}",
     },
     {
         "stat": "ESPerSecondCost",
         "label": "Energy Shield Cost",
         "fmt": "{:.2f}/s",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
     },
     {
         "stat": "ESPercentPerSecondCost",
         "label": "Energy Shield Cost",
         "fmt": "{:.2f}%/s",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
     },
     {"stat": "blank"},
     {
         "stat": "Str",
         "label": "Strength",
-        "colour": ColourCodes.STRENGTH,
+        "colour": ColourCodes.STRENGTH.value,
         "fmt": "{:d}",
     },
     {
         "stat": "ReqStr",
         "label": "Strength Required",
-        "colour": ColourCodes.STRENGTH,
+        "colour": ColourCodes.STRENGTH.value,
         "fmt": "{:d}",
     },
     {
         "stat": "Dex",
         "label": "Dexterity",
-        "colour": ColourCodes.DEXTERITY,
+        "colour": ColourCodes.DEXTERITY.value,
         "fmt": "{:d}",
     },
     {
         "stat": "ReqDex",
         "label": "Dexterity Required",
-        "colour": ColourCodes.DEXTERITY,
+        "colour": ColourCodes.DEXTERITY.value,
         "fmt": "{:d}",
     },
     {
         "stat": "Int",
         "label": "Intelligence",
-        "colour": ColourCodes.INTELLIGENCE,
+        "colour": ColourCodes.INTELLIGENCE.value,
         "fmt": "{:d}",
     },
     {
         "stat": "ReqInt",
         "label": "Intelligence Required",
-        "colour": ColourCodes.INTELLIGENCE,
+        "colour": ColourCodes.INTELLIGENCE.value,
         "fmt": "{:d}",
     },
     {
         "stat": "Omni",
         "label": "Omniscience",
-        "colour": ColourCodes.RARE,
+        "colour": ColourCodes.RARE.value,
         "fmt": "{:d}",
     },
     {
         "stat": "ReqOmni",
         "label": "Omniscience Required",
-        "colour": ColourCodes.RARE,
+        "colour": ColourCodes.RARE.value,
         "fmt": "{:d}",
     },
     {"stat": "blank"},
     {
         "stat": "Devotion",
         "label": "Devotion",
-        "colour": ColourCodes.RARE,
+        "colour": ColourCodes.RARE.value,
         "fmt": "{:d}",
     },
     {"stat": "blank"},
@@ -750,38 +750,38 @@ stats_list = [
         "stat": "Life",
         "label": "Total Life",
         "fmt": "{:d}",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
     },
     {
         "stat": "Spec:LifeInc",
         "label": "%Inc Life from Tree",
         "fmt": "{:d}%",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
     },
     {
         "stat": "LifeUnreserved",
         "label": "Unreserved Life",
         "fmt": "{:d}",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
     },
     {
         "stat": "LifeUnreservedPercent",
         "label": "Unreserved Life",
         "fmt": "{:d}%",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
     },
-    {"label": "Life Regen", "fmt": "{:.1f}", "colour": ColourCodes.LIFE},
+    {"label": "Life Regen", "fmt": "{:.1f}", "colour": ColourCodes.LIFE.value},
     {
         "stat": "LifeLeechGainRate",
         "label": "Life Leech/On Hit Rate",
         "fmt": "{:.1f}",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
     },
     {
         "stat": "LifeLeechGainPerHit",
         "label": "Life Leech/Gain per Hit",
         "fmt": "{:.1f}",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
     },
     {"stat": "blank"},
     {
@@ -798,61 +798,61 @@ stats_list = [
         "stat": "NetLifeRegen",
         "label": "Net Life Regen",
         "fmt": "+{:.1f}",
-        "colour": ColourCodes.LIFE,
+        "colour": ColourCodes.LIFE.value,
     },
     {
         "stat": "NetManaRegen",
         "label": "Net Mana Regen",
         "fmt": "+{:.1f}",
-        "colour": ColourCodes.MANA,
+        "colour": ColourCodes.MANA.value,
     },
     {
         "stat": "NetEnergyShieldRegen",
         "label": "Net Energy Shield Regen",
         "fmt": "+{:.1f}",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
     },
     {"stat": "blank"},
     {
         "stat": "Ward",
         "label": "Ward",
         "fmt": "{:d}",
-        "colour": ColourCodes.WARD,
+        "colour": ColourCodes.WARD.value,
     },
     {
         "stat": "EnergyShield",
         "label": "Energy Shield",
         "fmt": "{:d}",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
     },
     {
         "stat": "EnergyShieldRecoveryCap",
         "label": "Recoverable ES",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
         "fmt": "{:d}",
     },
     {
         "stat": "Spec:EnergyShieldInc",
         "label": "%Inc ES from Tree",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
         "fmt": "{:d}%",
     },
     {
         "stat": "EnergyShieldRegen",
         "label": "Energy Shield Regen",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
         "fmt": "{:.1f}",
     },
     {
         "stat": "EnergyShieldLeechGainRate",
         "label": "ES Leech/On Hit Rate",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
         "fmt": "{:.1f}",
     },
     {
         "stat": "EnergyShieldLeechGainPerHit",
         "label": "ES Leech/Gain per Hit",
-        "colour": ColourCodes.ES,
+        "colour": ColourCodes.ES.value,
         "fmt": "{:.1f}",
     },
     {"stat": "blank"},
@@ -860,31 +860,31 @@ stats_list = [
         "stat": "stat",
         "label": "Evasion rating",
         "fmt": "{:d}",
-        "colour": ColourCodes.EVASION,
+        "colour": ColourCodes.EVASION.value,
     },
     {
         "stat": "stat",
         "label": "%Inc Evasion from Tree",
-        "colour": ColourCodes.EVASION,
+        "colour": ColourCodes.EVASION.value,
         "fmt": "{:d}%",
     },
     {
         "stat": "EvadeChance",
         "label": "Evade Chance",
         "fmt": "{:d}%",
-        "colour": ColourCodes.EVASION,
+        "colour": ColourCodes.EVASION.value,
     },
     {
         "stat": "MeleeEvadeChance",
         "label": "Melee Evade Chance",
         "fmt": "{:d}%",
-        "colour": ColourCodes.EVASION,
+        "colour": ColourCodes.EVASION.value,
     },
     {
         "stat": "ProjectileEvadeChance",
         "label": "Projectile Evade Chance",
         "fmt": "{:d}%",
-        "colour": ColourCodes.EVASION,
+        "colour": ColourCodes.EVASION.value,
     },
     {"stat": "blank"},
     {
@@ -938,7 +938,7 @@ stats_list = [
         "stat": "FireResist",
         "label": "Fire Resistance",
         "fmt": "{:d}%",
-        "colour": ColourCodes.FIRE,
+        "colour": ColourCodes.FIRE.value,
     },
     {
         "stat": "FireResistOverCap",
@@ -950,7 +950,7 @@ stats_list = [
         "stat": "ColdResist",
         "label": "Cold Resistance",
         "fmt": "{:d}%",
-        "colour": ColourCodes.COLD,
+        "colour": ColourCodes.COLD.value,
     },
     {
         "stat": "ColdResistOverCap",
@@ -962,7 +962,7 @@ stats_list = [
         "stat": "LightningResist",
         "label": "Lightning Resistance",
         "fmt": "{:d}%",
-        "colour": ColourCodes.LIGHTNING,
+        "colour": ColourCodes.LIGHTNING.value,
     },
     {
         "stat": "LightningResistOverCap",
@@ -974,7 +974,7 @@ stats_list = [
         "stat": "ChaosResist",
         "label": "Chaos Resistance",
         "fmt": "{:d}%",
-        "colour": ColourCodes.CHAOS,
+        "colour": ColourCodes.CHAOS.value,
     },
     {
         "stat": "ChaosResistOverCap",
@@ -1085,3 +1085,45 @@ slot_names = {
     "Flask4": "Flask 4",
     "Flask5": "Flask 5",
 }
+
+qss_template = """
+    * {{
+//        padding: 0;
+//        margin: 0;
+        border: none;
+        border-style: none;
+        border-image: unset;
+        outline: none;
+        background: {window_colour};
+        color: {text_colour};
+    }}
+    ListBox,
+    QListView,
+    QAbstractItemView {{
+        alternate-background-color: {alt_colour};
+    }}
+    
+    /* Put a box around control */
+    ListBox:hover,
+    QListWidget:hover,
+    QCheckBox:hover,
+    QRadioButton:hover,
+    QComboBox:hover,
+    QPushButton:hover,
+    QAbstractSpinBox:hover,
+    QLineEdit:hover,
+    QTextEdit:hover,
+    QPlainTextEdit:hover,
+    QAbstractView:hover,
+    QTabBar::tab:hover,
+    QSpinBox::up-button:hover,
+    QSpinBox::down-button:hover
+    {{
+        border: 1px solid {text_colour};
+    }}
+    /* Show disabled as dimmer */
+    *:disabled
+    {{
+        color: grey;
+    }}
+    """

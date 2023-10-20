@@ -6,7 +6,7 @@ from pathlib import Path
 import psutil
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QAction, QFont
+from PySide6.QtGui import QAction, QColor, QFont, QPalette
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -28,6 +28,7 @@ from PoB.constants import (
     pantheon_minor_gods,
     pob_debug,
     program_title,
+    qss_template,
     resistance_penalty,
 )
 
@@ -174,6 +175,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             End: Do what the QT Designer cannot yet do 
         """
 
+        self.toolbar_buttons = {}
+        for widget in self.toolbar_MainWindow.children():
+            # QActions are joined to the toolbar using QToolButtons.
+            if type(widget) == QToolButton:
+                self.toolbar_buttons[widget.toolTip()] = widget
+
+        # Theme loading has to happen before creating more UI elements that use html_colour_text()
+        self.setup_theme_actions()
+        self.switch_theme(self.settings.theme, self.curr_theme)
+
         self.combo_ResPenalty.clear()
         for penalty in resistance_penalty.keys():
             self.combo_ResPenalty.addItem(resistance_penalty[penalty], penalty)
@@ -202,19 +213,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Collect original tooltip text for Actions (for managing the text color thru qss - switch_theme)
         # Must be before the first call to switch_theme
-        self.toolbar_buttons = {}
-        for widget in self.toolbar_MainWindow.children():
-            # QActions are joined to the toolbar using QToolButtons.
-            if type(widget) == QToolButton:
-                self.toolbar_buttons[widget.toolTip()] = widget
-
         # file = "c:/git/PathOfBuilding-Python.sus/src/data/qss/material-blue.qss"
         # file = "c:/git/PathOfBuilding-Python.sus/src/data/qss/test_dark.qss"
         # with open(file, "r") as fh:
         #     QApplication.instance().setStyleSheet(fh.read())
-        self.setup_theme_actions()
-        self.switch_theme(self.settings.theme, self.curr_theme)
-
         # Connect our Actions / triggers
         self.tab_main.currentChanged.connect(self.set_tab_focus)
         self.action_New.triggered.connect(self.build_new)
@@ -347,7 +349,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for idx, full_path in enumerate(recent_builds):
             if full_path is not None and full_path != "":
                 filename = Path(full_path).relative_to(self.settings.build_path)
-                text, class_name = get_file_info(self.settings, filename, max_length, 70)
+                text, class_name = get_file_info(self.settings, filename, max_length, 70, menu=True)
                 ql = QLabel(text)
                 _action = QWidgetAction(self.menu_Builds)
                 _action.setDefaultWidget(ql)
@@ -459,7 +461,56 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
-        # print("switch_theme, new_theme, self.curr_theme : ", new_theme, self.curr_theme)
+
+        def set_colors(window_colour, text_colour):
+            # colours = window_colour, text_colour
+            # Setup the window Palette
+            pal = self.window().palette()
+            pal.setColor(QPalette.Window, QColor(f"#{window_colour}"))
+            pal.setColor(QPalette.WindowText, QColor(text_colour))
+            self.window().setPalette(pal)
+            #
+            # # Put in a small QSS
+            # print(window_colour[0:2], int(window_colour[0:2], 16))
+            # if int(f"0x{window_colour[0:2]}", 16) >= 128:
+            #     print(window_colour, f"{int(window_colour, 16) - int(0x202020):x}")
+            #     alt_colour = f"#{int(window_colour, 16) - int(0x101010):x}"
+            #     hover_colour = f"#{int(text_colour, 16) - int(0x202020):x}"
+            # else:
+            #     print(window_colour, f"{int(window_colour, 16) + int(0x202020):x}")
+            #     alt_colour = f"#{int(window_colour, 16) + int(0x101010):x}"
+            #     hover_colour = f"#{int(text_colour, 16) + int(0x202020):x}"
+            #
+            # # put the # back on so the qss_template.format() doesn't error: KeyError: '404044'
+            # window_colour = f"#{window_colour}"
+            # text_colour = f"#{text_colour}"
+            #
+            # self.settings.qss_default_text = text_colour
+            # qss = qss_template.format(**locals())
+            # # print(qss)
+            # QApplication.instance().setStyleSheet(qss)
+
+        # set_colors
+
+        # print(f"switch_theme, {new_theme=}, {self.curr_theme.text()=}")
+        # if new_theme == "dark":
+        #     set_colors("121218", "d6d6d6")
+        # elif new_theme == "light":
+        #     set_colors("f0f0f0", "404044")
+        # elif new_theme == "blue":
+        #     set_colors("cee7f0", "404044")
+        # elif new_theme == "brown":
+        #     set_colors("9e8965", "404044")
+        # elif new_theme == "orange":
+        #     set_colors("cc8800", "181818")
+        # if self.curr_theme is not None:
+        #     self.curr_theme.setChecked(False)
+        # self.settings.theme = new_theme
+        # self.curr_theme = selected_action
+        # if self.curr_theme is not None:
+        #     #     self.curr_theme.setChecked(False)
+        #     self.curr_theme.setChecked(True)
+        # return
         file = Path(self.settings.data_dir, "qss", f"{new_theme}.colours")
         new_theme = Path.exists(file) and new_theme or def_theme
         try:
@@ -468,15 +519,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             with open(Path(self.settings.data_dir, "qss", f"{new_theme}.colours"), "r") as colour_file:
                 colours = colour_file.read().splitlines()
                 for line in colours:
-                    m = re.search(r"^(qss_\w+)~~(.*)$", line)
-                    if m:
-                        if m.group(1) == "qss_default_text":
-                            self.settings.qss_default_text = f"rgba( {m.group(2)} )"
+                    line = line.split("~~")
+                    if len(line) == 2:
+                        if line[0] == "qss_background":
+                            self.settings.qss_background = line[1]
+                        if line[0] == "qss_default_text":
+                            self.settings.qss_default_text = line[1]
                             for tooltip_text in self.toolbar_buttons.keys():
                                 self.toolbar_buttons[tooltip_text].setToolTip(
                                     html_colour_text(self.settings.qss_default_text, tooltip_text)
                                 )
-                        template = re.sub(r"\b" + m.group(1) + r"\b", m.group(2), template)
+                        template = re.sub(r"\b" + line[0] + r"\b", line[1], template)
 
             QApplication.instance().setStyleSheet(template)
             # Uncheck old entry. First time through, this could be None.
@@ -485,7 +538,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.settings.theme = new_theme
             self.curr_theme = selected_action
             if self.curr_theme is not None:
-                #     self.curr_theme.setChecked(False)
                 self.curr_theme.setChecked(True)
         # parent of IOError, OSError *and* WindowsError where available
         except (EnvironmentError, FileNotFoundError):

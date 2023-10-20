@@ -3,7 +3,7 @@ This Class is communicating between the calculation Classes and the UI Classes
 """
 
 from PoB.settings import Settings
-from PoB.constants import stats_list, ColourCodes
+from PoB.constants import bad_text, stats_list, ColourCodes
 from widgets.ui_utils import html_colour_text
 
 from ui.PoB_Main_Window import Ui_MainWindow
@@ -56,7 +56,7 @@ class PlayerStats:
                             stat_dict = stat_dict[0]
                         _label = stat_dict.get("label", "")
                         _label = "{0:>24}".format(_label)
-                        _colour = stat_dict.get("colour", ColourCodes.NORMAL)
+                        _colour = stat_dict.get("colour", self.settings.qss_default_text_colour)
                         _fmt = stat_dict.get("fmt")
                         # if fmt is an int, force the value to be an int.
                         if "d" in _fmt:
@@ -66,8 +66,9 @@ class PlayerStats:
                         else:
                             _str_value = _fmt.format(_value)
                         # Cannot use html_colour_text() on this
+                        # ToDo: Convert to <pre> like recent builds, and file Open/Save
                         self.win.textedit_Statistics.append(
-                            f'<span style="white-space: pre; color:{_colour.value};">{_label}:</span> {_str_value}'
+                            f'<span style="white-space: pre; color:{_colour};">{_label}:</span> {_str_value}'
                         )
                 except KeyError:
                     # There are entries in the build that are not in our stats_list table

@@ -8,14 +8,14 @@
 }
 QWidget {
     background: rgba( qss_background );
-    color: rgba( qss_selection_bckgrd );
-    selection-color: rgba( qss_selection_bckgrd );
-    /* selection-background-color: rgba( qss_selection_backgrd_colour ); */
+    color: rgba( qss_default_text );
+    selection-color: rgba( qss_selection_colour );
+    selection-background-color: rgba( qss_selection_backgrd_colour ); 
     border-radius: 4px;
 }
 
 QGroupBox {
-	color: rgba( qss_selection_bckgrd );
+	color: rgba( qss_default_text );
 	margin: 5px;
 }
 QGroupBox#groupbox_Items_2,
@@ -59,7 +59,7 @@ QSpinBox::down-button:hover
 /* Show disabled as dimmer */
 *:disabled
 {
-    color: grey;
+    color:  rgba( qss_disabled_colour );
 }
 
 
@@ -168,7 +168,7 @@ QListWidget,
 QListView {
     border: 1px solid rgba( qss_box_borders );
     /* background-color: rgba( qss_background ); */
-    selection-color: rgba( qss_selection_bckgrd );
+    selection-color: rgba( qss_selection_colour );
     selection-background-color: rgba( qss_selection_backgrd_colour );
 }
 

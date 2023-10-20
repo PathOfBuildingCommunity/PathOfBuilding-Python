@@ -1,23 +1,23 @@
 # character is a comment
-  #cee7f0   Background
-qss_background~~206, 231, 240, 1.000
-  #b1d9e7   alternate row background
-qss_alt_background~~177, 217, 231, 0.300
-  #b1d9e7   Color and selection-color
-qss_selection_colour~~177, 217, 231, 1.000
-  #b1d9e7   selection-background-color
-qss_selection_backgrd_colour~~177, 217, 231, 0.400
+  #cc8800   Background
+qss_background~~204, 136, 0, 1.000
+  #e69100   alternate row background
+qss_alt_background~~188, 120, 0, 0.300
+  #e69100   Color and selection-color
+qss_selection_colour~~188, 120, 0, 1.000
+  #aaaf06   selection-background-color
+qss_selection_backgrd_colour~~188, 120, 0, 0.400
   #AFBDC4   Hover borders
 qss_hover_borders~~175, 189, 196, 1.000
   #546E7A   teal. Separator
 qss_menu_sep~~84, 110, 122, 1.000
   #808080   grey. disabled
 qss_disabled_colour~~128, 128, 128, 1.000
-  #b1d9e7   Box borders
-qss_box_borders~~177, 217, 231, 1.000
+  #e69100   Box borders
+qss_box_borders~~188, 120, 0, 1.000
   #000000   Tab selected borders. Scrollbar handles / QMenuBar~~item:selected (different shades used)
   ### Three numbers only
-qss_tab_selected_borders~~0, 0, 0
+qss_tab_selected_borders~~255, 255, 255
   #0000FF   Blue. CheckBox / Radio enabled indicator
 qss_checkbox_radio_enabled_indicator~~0, 0, 255, 1.000
   #c0c0c0   silver. CheckBox / Radio indicator borders
@@ -27,4 +27,4 @@ qss_spin_up_arrow~~:Qss/qss/up_arrow_dark.png
   # Spin box down arrow url. Must be relative to self.settings.data_dir or in the PoB.qrc
 qss_spin_dn_arrow~~:Qss/qss/down_arrow_dark.png
   # The custom ListBox / Tooltip has html rendering so the default text doesn't work. Add something appropriate.
-qss_default_text~~64, 64, 68, 0.800
+qss_default_text~~24, 24, 24, 0.800

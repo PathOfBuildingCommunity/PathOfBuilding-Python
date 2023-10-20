@@ -1,20 +1,20 @@
 # character is a comment
-  #cee7f0   Background
-qss_background~~206, 231, 240, 1.000
-  #b1d9e7   alternate row background
-qss_alt_background~~177, 217, 231, 0.300
-  #b1d9e7   Color and selection-color
-qss_selection_colour~~177, 217, 231, 1.000
-  #b1d9e7   selection-background-color
-qss_selection_backgrd_colour~~177, 217, 231, 0.400
+  #9e8965   Background
+qss_background~~158, 137, 101, 1.000
+  #b09f82   alternate row background
+qss_alt_background~~176, 159, 130, 0.300
+  #b09f82   Color and selection-color
+qss_selection_colour~~176, 159, 130, 1.000
+  #aaaf06   selection-background-color
+qss_selection_backgrd_colour~~170, 175, 6, 0.400
   #AFBDC4   Hover borders
 qss_hover_borders~~175, 189, 196, 1.000
   #546E7A   teal. Separator
 qss_menu_sep~~84, 110, 122, 1.000
   #808080   grey. disabled
 qss_disabled_colour~~128, 128, 128, 1.000
-  #b1d9e7   Box borders
-qss_box_borders~~177, 217, 231, 1.000
+  #b09f82   Box borders
+qss_box_borders~~176, 159, 130, 1.000
   #000000   Tab selected borders. Scrollbar handles / QMenuBar~~item:selected (different shades used)
   ### Three numbers only
 qss_tab_selected_borders~~0, 0, 0
