@@ -3,7 +3,7 @@ This Class is communicating between the calculation Classes and the UI Classes
 """
 
 from PoB.settings import Settings
-from PoB.constants import bad_text, stats_list, ColourCodes
+from PoB.constants import bad_text, player_stats_list, ColourCodes
 from widgets.ui_utils import html_colour_text
 
 from ui.PoB_Main_Window import Ui_MainWindow
@@ -48,15 +48,15 @@ class PlayerStats:
             if _value != 0:
                 try:
                     # Return a dictionary of our stats or a list of dictionaries if there are multiples
-                    # There are entries in the build that are not in our stats_list table, so the list will return empty
-                    stat_dict = [d for d in stats_list if d.get("stat") == _stat]
+                    # There are entries in the build that are not in our player_stats_list table, so the list will return empty
+                    stat_dict = [d for d in player_stats_list if d.get("stat") == _stat]
                     if stat_dict:
                         if type(stat_dict) is list:
                             # ToDo: Need to use the flag attribute to separate
                             stat_dict = stat_dict[0]
                         _label = stat_dict.get("label", "")
                         _label = "{0:>24}".format(_label)
-                        _colour = stat_dict.get("colour", self.settings.qss_default_text_colour)
+                        _colour = stat_dict.get("colour", self.settings.qss_default_text)
                         _fmt = stat_dict.get("fmt")
                         # if fmt is an int, force the value to be an int.
                         if "d" in _fmt:
@@ -71,7 +71,7 @@ class PlayerStats:
                             f'<span style="white-space: pre; color:{_colour};">{_label}:</span> {_str_value}'
                         )
                 except KeyError:
-                    # There are entries in the build that are not in our stats_list table
+                    # There are entries in the build that are not in our player_stats_list table
                     pass
 
     def save(self, _build):
@@ -88,7 +88,7 @@ class PlayerStats:
         """
         Update a stat element with the supplied value.
 
-        :param stat_name: String: Teh string index into the stats dictionary
+        :param stat_name: String: The string index into the stats dictionary
         :param value: The value
         :return: N/A
         """

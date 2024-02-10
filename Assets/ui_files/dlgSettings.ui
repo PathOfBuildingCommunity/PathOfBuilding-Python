@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>500</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,7 +22,7 @@
   <property name="maximumSize">
    <size>
     <width>400</width>
-    <height>500</height>
+    <height>550</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -39,7 +39,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>450</y>
+     <y>510</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -66,7 +66,7 @@
      <x>10</x>
      <y>10</y>
      <width>380</width>
-     <height>171</height>
+     <height>271</height>
     </rect>
    </property>
    <property name="title">
@@ -211,7 +211,7 @@
    <widget class="QComboBox" name="combo_NP_Colours">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>180</x>
       <y>108</y>
       <width>121</width>
       <height>26</height>
@@ -249,14 +249,14 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>140</y>
+      <x>10</x>
+      <y>240</y>
       <width>171</width>
       <height>20</height>
      </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+     <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
      <string>Opt in to weekly test builds:</string>
@@ -285,14 +285,101 @@
      <string>...</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_Pos_Colour">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>152</y>
+      <width>175</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hex colour for Positive values:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="buddy">
+     <cstring>combo_NP_Colours</cstring>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_Neg_Colour">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>182</y>
+      <width>175</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hex colour for Negative values:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="buddy">
+     <cstring>combo_NP_Colours</cstring>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_HL_Colour">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>212</y>
+      <width>175</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hex colour to Highlight nodes:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="buddy">
+     <cstring>combo_NP_Colours</cstring>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineedit_Pos_Colour">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>150</y>
+      <width>155</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineedit_Neg_Colour">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>180</y>
+      <width>155</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineedit_HL_Colour">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>210</y>
+      <width>155</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
+     <y>290</y>
      <width>380</width>
-     <height>261</height>
+     <height>200</height>
     </rect>
    </property>
    <property name="title">
@@ -304,14 +391,14 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>165</x>
+      <x>10</x>
       <y>20</y>
       <width>210</width>
       <height>20</height>
      </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+     <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
      <string>Show build name in window title</string>
@@ -323,82 +410,24 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>165</x>
+      <x>10</x>
       <y>40</y>
       <width>210</width>
       <height>20</height>
      </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+     <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
      <string>Show thousands separators</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineedit_ThousandsSeparator">
-    <property name="geometry">
-     <rect>
-      <x>165</x>
-      <y>65</y>
-      <width>30</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_BuildPath_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>67</y>
-      <width>150</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Thousands separator:</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-    </property>
-    <property name="buddy">
-     <cstring>lineedit_ThousandsSeparator</cstring>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineedit_DecimalSeparator">
-    <property name="geometry">
-     <rect>
-      <x>165</x>
-      <y>95</y>
-      <width>30</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_BuildPath_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>97</y>
-      <width>150</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Decimal separator:</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-    </property>
-    <property name="buddy">
-     <cstring>lineedit_DecimalSeparator</cstring>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_GemQuality">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>127</y>
+      <x>6</x>
+      <y>112</y>
       <width>150</width>
       <height>16</height>
      </rect>
@@ -416,8 +445,8 @@
    <widget class="QLabel" name="label_Level">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>157</y>
+      <x>6</x>
+      <y>142</y>
       <width>150</width>
       <height>16</height>
      </rect>
@@ -438,14 +467,14 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>165</x>
-      <y>230</y>
+      <x>10</x>
+      <y>80</y>
       <width>210</width>
       <height>20</height>
      </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+     <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
      <string>Show tooltips only for affected slots</string>
@@ -457,14 +486,14 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>165</x>
-      <y>210</y>
+      <x>10</x>
+      <y>60</y>
       <width>210</width>
       <height>20</height>
      </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+     <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
      <string>Show build warnings</string>
@@ -473,8 +502,8 @@
    <widget class="QLabel" name="label_AffixQuality">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>187</y>
+      <x>6</x>
+      <y>172</y>
       <width>150</width>
       <height>16</height>
      </rect>
@@ -492,8 +521,8 @@
    <widget class="QSpinBox" name="spin_GemQuality">
     <property name="geometry">
      <rect>
-      <x>165</x>
-      <y>125</y>
+      <x>175</x>
+      <y>110</y>
       <width>42</width>
       <height>22</height>
      </rect>
@@ -505,8 +534,8 @@
    <widget class="QSpinBox" name="spin_Level">
     <property name="geometry">
      <rect>
-      <x>165</x>
-      <y>155</y>
+      <x>175</x>
+      <y>140</y>
       <width>42</width>
       <height>22</height>
      </rect>
@@ -521,9 +550,9 @@
    <widget class="QSlider" name="slider_AffixQuality">
     <property name="geometry">
      <rect>
-      <x>165</x>
-      <y>185</y>
-      <width>160</width>
+      <x>170</x>
+      <y>170</y>
+      <width>161</width>
       <height>22</height>
      </rect>
     </property>
@@ -540,8 +569,8 @@
    <widget class="QLabel" name="label_AffixQValue">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>187</y>
+      <x>340</x>
+      <y>172</y>
       <width>30</width>
       <height>16</height>
      </rect>
@@ -551,6 +580,19 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_ThousandsSeparator">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>40</y>
+      <width>80</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sep</string>
     </property>
    </widget>
   </widget>
@@ -565,8 +607,6 @@
   <tabstop>check_Beta</tabstop>
   <tabstop>check_ShowBuildName</tabstop>
   <tabstop>check_ShowThousandsSeparators</tabstop>
-  <tabstop>lineedit_ThousandsSeparator</tabstop>
-  <tabstop>lineedit_DecimalSeparator</tabstop>
   <tabstop>spin_GemQuality</tabstop>
   <tabstop>spin_Level</tabstop>
   <tabstop>slider_AffixQuality</tabstop>

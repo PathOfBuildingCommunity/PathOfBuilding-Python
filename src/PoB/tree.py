@@ -167,7 +167,8 @@ class Tree:
         self.ascendancy_start_nodes = {}
         # dictionary of a list of nodes in a given mastery group, eg: "Life Mastery"
         self.mastery_effects_nodes = {}
-
+        # 3.23 alternate ascendancy
+        self.alternate_ascendancies = {}
         self.load()
 
     def __repr__(self) -> str:
@@ -269,6 +270,8 @@ class Tree:
             self.assets = self.spriteMap
         self.classes = json_dict["classes"]
         self.constants = json_dict["constants"]
+        # allow for alternate ascendancies in the future
+        self.alternate_ascendancies = json_dict.get("alternate_ascendancies",{})
 
         # add group indexes as int's not string
         groups = json_dict["groups"]
@@ -498,6 +501,8 @@ class Tree:
             if _a_name == "" or _a_name == "Ascendant":
                 node.x = node.group["x"] + math.sin(node.angle) * orbit_radius
                 node.y = node.group["y"] - math.cos(node.angle) * orbit_radius
+            elif _a_name not in ascendancy_positions.keys():
+                pass
             else:
                 # ... all other ascendancies else needs hard coding
                 # Chieftain has two groups (3 and 7) with different start positions
@@ -576,8 +581,9 @@ class Tree:
             _class["startNodeId"] = node.id
         elif node.isAscendancyStart:
             # node.type = "AscendClassStart"  # Can't use this as there is no "ascendclassstartInactive" sprite
-            ascend_name_map[node.ascendancyName]["ascendClass"]["startNodeId"] = node.id
-            self.ascendancy_start_nodes[node.ascendancyName] = node.id
+            if node.ascendancyName in ascendancy_positions.keys():
+                ascend_name_map[node.ascendancyName]["ascendClass"]["startNodeId"] = node.id
+                self.ascendancy_start_nodes[node.ascendancyName] = node.id
         elif node.isMastery:
             node.type = "Mastery"
             if node.masteryEffects:
@@ -764,7 +770,7 @@ class Tree:
             # ToDo: Accommodate a bug that makes Chieftain disappear
             if a_name == "Chieftain":
                 _group["isAscendancyStart"] = True
-            if _group.get("isAscendancyStart", False):
+            if _group.get("isAscendancyStart", False) and a_name in ascendancy_positions.keys():
                 # This is the ascendancy circles around the outside of the tree
                 # Ascendant position in the json is good, everyone else needs hard coding
                 if a_name == "Ascendant":

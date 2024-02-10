@@ -7,6 +7,7 @@ import datetime
 import glob
 import itertools
 import operator
+import re
 import traceback
 import zlib
 import xml.etree.ElementTree as ET
@@ -15,7 +16,7 @@ from PySide6.QtCore import Qt, QMargins, QPoint, QRect, QSize
 from PySide6.QtGui import QAbstractTextDocumentLayout, QPalette, QTextDocument
 from PySide6.QtWidgets import QApplication, QComboBox, QProxyStyle, QStyle, QStyleOptionViewItem, QStyledItemDelegate
 
-from PoB.constants import ColourCodes, pob_debug
+from PoB.constants import ColourCodes, pob_debug, locale
 
 
 def str_to_bool(in_str):
@@ -175,6 +176,25 @@ def set_combo_index_by_text(_combo: QComboBox, _text):
             _combo.setCurrentIndex(i)
             return i
     return -1
+
+
+def format_number(the_number, format_str, settings, pos_neg_colour=False):
+    """
+    Locale aware number formatting
+    :param the_number: int or float.
+    :param format_str: str: A format string : like '%10.2f' or '%d'
+    :param settings: Settings(). So we can access the colours and show_thousands_separators
+    :param pos_neg_colour: bool. Whether to colour the return value
+    :return: str: String represntation of the number, formatted as needed.
+    """
+    # if format is an int, force the value to be an int.
+    if "d" in format_str:
+        the_number = round(the_number)  # locale.format_string will round 99.5 or 99.6 to 99 using a %d format_str (truncates).
+    return_str = locale.format_string(format_str, the_number, grouping=settings.show_thousands_separators)
+    if pos_neg_colour:
+        colour = the_number < 0 and settings.colour_negative or settings.colour_positive
+        return_str = html_colour_text(colour, return_str)
+    return return_str
 
 
 # https://stackoverflow.com/questions/1956542/how-to-make-item-view-render-rich-html-text-in-qt

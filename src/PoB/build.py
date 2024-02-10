@@ -358,15 +358,6 @@ class Build:
         self.import_field.set("lastCharacterHash", self.last_character_hash)
         self.import_field.set("lastRealm", self.last_realm)
         self.import_field.set("lastLeague", self.last_league)
-        match version:
-            case "1":
-                self.notes.text, dummy_var = self.win.notes_ui.save(version)
-            case "2":
-                self.notes.text, self.notes_html.text = self.win.notes_ui.save(version)
-        self.win.stats.save(self.build)
-        self.win.skills_ui.save()
-        self.win.items_ui.save(version)
-        self.win.config_ui.save()
         for spec in self.specs:
             spec.save()
         # ensure these get updated to match last tree shown.

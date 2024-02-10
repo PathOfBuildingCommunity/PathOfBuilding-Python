@@ -1,12 +1,13 @@
 """
 
 """
+
 import re
 
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QDialog, QPushButton, QFileDialog, QDialogButtonBox
 
-from widgets.ui_utils import set_combo_index_by_text
+from widgets.ui_utils import set_combo_index_by_text, format_number
 
 from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgSettings import Ui_Settings
@@ -64,7 +65,7 @@ class SettingsDlg(Ui_Settings, QDialog):
 
     @Slot()
     def setting_show_affix_quality_value(self):
-        self.label_AffixQValue.setText(f"{self.slider_AffixQuality.value() / 100}")
+        self.label_AffixQValue.setText(f"{format_number(self.slider_AffixQuality.value() / 100 ,'%0.2f', self.settings)}")
 
     @Slot()
     def setting_set_build_path_tooltip(self):
@@ -96,13 +97,17 @@ class SettingsDlg(Ui_Settings, QDialog):
         self.check_Beta.setChecked(self.settings.beta_mode)
         self.check_ShowBuildName.setChecked(self.settings.show_titlebar_name)
         self.check_ShowThousandsSeparators.setChecked(self.settings.show_thousands_separators)
-        self.lineedit_ThousandsSeparator.setText(self.settings.thousands_separator)
-        self.lineedit_DecimalSeparator.setText(self.settings.decimal_separator)
+        # self.lineedit_ThousandsSeparator.setText(self.settings.thousands_separator)
+        # self.lineedit_DecimalSeparator.setText(self.settings.decimal_separator)
         self.spin_GemQuality.setValue(self.settings.default_gem_quality)
         self.spin_Level.setValue(self.settings.default_char_level)
         self.slider_AffixQuality.setValue(int(self.settings.default_item_affix_quality * 100))
+        self.setting_show_affix_quality_value()
         self.check_BuildWarnings.setChecked(self.settings.show_warnings)
         self.check_Tooltips.setChecked(self.settings.slot_only_tooltips)
+        self.lineedit_Pos_Colour.setText(str(self.settings.colour_positive))
+        self.lineedit_Neg_Colour.setText(str(self.settings.colour_negative))
+        self.lineedit_HL_Colour.setText(str(self.settings.colour_highlight))
         m = re.search(r"^(\w+)://(.*)$", self.settings.proxy_url)
         if m:
             set_combo_index_by_text(self.combo_Proxy, m.group(1).upper())

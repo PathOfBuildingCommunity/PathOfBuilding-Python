@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QLabel,
     QMainWindow,
+    QPushButton,
     QSpinBox,
     QToolButton,
     QWidget,
@@ -22,10 +23,12 @@ from PySide6.QtWidgets import (
 from PoB.constants import (
     PlayerClasses,
     bandits,
+    bad_text,
     def_theme,
     empty_build,
     pantheon_major_gods,
     pantheon_minor_gods,
+    player_stats_list,
     pob_debug,
     program_title,
     qss_template,
@@ -33,8 +36,9 @@ from PoB.constants import (
 )
 
 from PoB.build import Build
-from PoB.settings import Settings
+from PoB.settings import Settings, locale
 from PoB.pob_file import get_file_info
+from PoB.player import Player
 from dialogs.browse_file_dialog import BrowseFileDlg
 from dialogs.export_dialog import ExportDlg
 from dialogs.import_dialog import ImportDlg
@@ -48,7 +52,7 @@ from widgets.player_stats import PlayerStats
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
 from widgets.tree_view import TreeView
-from widgets.ui_utils import html_colour_text, set_combo_index_by_data
+from widgets.ui_utils import html_colour_text, format_number, set_combo_index_by_data
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -85,9 +89,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Start with an empty build
         self.build = Build(self.settings, self)
         self.current_filename = self.settings.build_path
+        self.player = Player(self.settings, self.build)
 
         # Setup UI Classes()
-        self.stats = PlayerStats(self.settings, self)
+        # self.stats = PlayerStats(self.settings, self)
         self.calcs_ui = CalcsUI(self.settings, self.build, self)
         self.config_ui = ConfigUI(self.settings, self.build, self)
         self.notes_ui = NotesUI(self.settings, self)
@@ -140,12 +145,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for idx in PlayerClasses:
             self.combo_classes.addItem(idx.name.title(), idx)
         self.toolbar_MainWindow.addWidget(self.combo_classes)
+        widget_spacer = QWidget()
+        widget_spacer.setMinimumSize(10, widget_height)
+        self.toolbar_MainWindow.addWidget(widget_spacer)
         self.combo_ascendancy = QComboBox()
         self.combo_ascendancy.setMinimumSize(125, widget_height)
         self.combo_ascendancy.setDuplicatesEnabled(False)
         self.combo_ascendancy.addItem("None", 0)
         self.combo_ascendancy.addItem("Ascendant", 1)
         self.toolbar_MainWindow.addWidget(self.combo_ascendancy)
+
+        widget_spacer = QWidget()
+        widget_spacer.setMinimumSize(100, widget_height)
+        self.toolbar_MainWindow.addWidget(widget_spacer)
+
+        btn_calc = QPushButton("Do Calcs")
+        btn_calc.clicked.connect(self.do_calcs)
+        self.toolbar_MainWindow.addWidget(btn_calc)
+
         # end add widgets to the Toolbar
 
         # Dump the placeholder Graphics View and add our own
@@ -259,6 +276,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     os.unlink(filename)
 
     # init
+
+    @Slot()
+    def do_calcs(self):
+        # Temporary (???) calc button
+        self.player.calc_stats()
+        self.textedit_Statistics.clear()
+        for name in self.player.stats:
+            _value = self.player.stats[name]
+            if _value != 0:
+                stat = player_stats_list.get(name, {})
+                if stat:
+                    # print(stat)
+                    if type(stat) is list:
+                        # ToDo: Need to use the flag attribute to separate
+                        stat = stat[0]
+                    _label = "{0:>24}".format(stat["label"])
+                    _colour = stat.get("colour", self.settings.qss_default_text)
+                    _fmt = stat.get("fmt", "%d")
+                    _str_value = format_number(_value, _fmt, self.settings, True)
+                    # ToDo: Convert to <pre> like recent builds, and file Open/Save
+                    self.textedit_Statistics.append(f'<span style="white-space: pre; color:{_colour};">{_label}:</span> {_str_value}')
+                else:
+                    print(f"I don't know what to do with Player Stat {name}.")
 
     # Overridden function
     def keyReleaseEvent(self, event):
@@ -637,11 +677,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.skills_ui.load(self.build.skills)
             self.items_ui.load_from_xml(self.build.items)
             self.notes_ui.load(self.build.notes_html.text, self.build.notes.text)
-            self.stats.load(self.build.build)
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
             self.update_status_bar(f"Loaded: {self.build.name}", 10)
+            # self.stats.load(self.build.build)
+            self.player.load(self.build.build)
+            self.do_calcs()
 
         # This is needed to make the jewels show. Without it, you need to select or deselect a node.
         self.gview_Tree.add_tree_images(True)
@@ -654,11 +696,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         return: N/A
         """
+        version = self.build.version
         if self.build.filename == "":
-            self.build_save_as()
+            self.build_save_as()  # this will then call build_save() again
         else:
-            print(f"Saving to v{self.build.version} file: {self.build.filename}")
-            self.build.save_to_xml(self.build.version)
+            print(f"Saving to v{version} file: {self.build.filename}")
+            self.build.save_to_xml(version)
+            match version:
+                case "1":
+                    self.build.notes.text, dummy_var = self.notes_ui.save(version)
+                case "2":
+                    self.build.notes.text, self.build.notes_html.text = self.notes_ui.save(version)
+            # self.win.stats.save(self.build)
+            self.player.save(self.build)
+            self.skills_ui.save()
+            self.items_ui.save(version)
+            self.config_ui.save()
             # write the file
             self.build.save_build_to_file(self.build.filename)
 

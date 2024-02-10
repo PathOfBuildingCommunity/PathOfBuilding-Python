@@ -1,6 +1,9 @@
 """Enumeration Data for Path of Exile constants."""
 
 import enum
+import locale
+
+locale.setlocale(locale.LC_ALL, "")
 
 program_title = "Path of Building"
 bad_text = "oh noes"  # used for dictionary get's
@@ -18,8 +21,9 @@ tree_versions = {
     "3_20": "3.20",
     "3_21": "3.21",
     "3_22": "3.22",
+    "3_23": "3.23",
 }
-_VERSION_str = "3_22"
+_VERSION_str = "3_23"
 _VERSION = tree_versions[_VERSION_str]
 default_view_mode = "TREE"
 # default_view_mode = "ITEMS"
@@ -27,11 +31,11 @@ default_view_mode = "TREE"
 
 # Default config incase the settings file doesn't exist
 def_theme = "dark"
-default_config = f"""<PathOfBuilding>
+default_settings = f"""<PathOfBuilding>
 <Misc theme="{def_theme}" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1" 
-nodePowerTheme="0" connectionProtocol="0" thousandsSeparator="" decimalSeparator="" 
+nodePowerTheme="0" connectionProtocol="0" thousandsSeparator="n" decimalSeparator="_" 
 showThousandsSeparators="true" betaTest="false" defaultGemQuality="0" buildSortMode="NAME" 
-proxyURL="" buildPath="" />
+proxyURL="" buildPath=""/>
    <recentBuilds/>
    <size width="800" height="600"/>
 </PathOfBuilding>"""
@@ -287,7 +291,6 @@ class_backgrounds = {
     },
 }
 
-
 # The start point for each class
 # ToDo: The start points need to be fixed
 class_centres = {
@@ -381,608 +384,521 @@ class PlayerAscendancy(enum.Enum):
     NONE = None
 
 
-stats_list = [
-    {
-        "stat": "ActiveMinionLimit",
+# ToDo: Need to use the flag attribute to separate stats like Speed. Should we have a list or dictionary as we have
+player_stats_list = {
+    "ActiveMinionLimit": {
         "label": "Active Minion Limit",
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {"stat": "AverageHit", "label": "Average Damage", "fmt": "{0:.2f}"},
-    {
-        "stat": "AverageDamage",
+    "AverageHit": {"label": "Average Damage", "fmt": "%0.2f"},
+    # "AverageHit": { "label": "Average Damage", "fmt": "%0.2f"},
+    "AverageDamage": {
         "label": "Average Damage",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
         "flag": "attack",
     },
-    {
-        "stat": "ServerTriggerRate",
+    "ServerTriggerRate": {
         "label": "Trigger Rate",
-        "fmt": "{:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "Speed",
-        "label": "Attack Rate",
-        "fmt": "{0:.2f}",
-        "flag": "attack",
+    "Speed": {
+        "attack": {
+            "label": "Attack Rate",
+            "fmt": "%0.2f",
+            "flag": "attack",
+        },
+        "spell": {
+            "label": "Cast Rate",
+            "fmt": "%0.2f",
+            "flag": "spell",
+        },
+        "": {"label": "Effective Trigger Rate", "fmt": "%0.2f"},
     },
-    {"stat": "Speed", "label": "Cast Rate", "fmt": "{0:.2f}", "flag": "spell"},
-    {"stat": "Speed", "label": "Effective Trigger Rate", "fmt": "{:.2f}"},
-    {
-        "stat": "WarcryCastTime",
+    "WarcryCastTime": {
         "label": "Cast Time",
-        "fmt": "{:.2f}s",
+        "fmt": "%0.2fs",
         "flag": "warcry",
     },
-    {"stat": "HitSpeed", "label": "Hit Rate", "fmt": "{:.2f}"},
-    {
-        "stat": "TrapThrowingTime",
+    "HitSpeed": {"label": "Hit Rate", "fmt": "%0.2f"},
+    "TrapThrowingTime": {
         "label": "Trap Throwing Time",
-        "fmt": "{:.2f}s",
+        "fmt": "%0.2fs",
     },
-    {
-        "stat": "TrapCooldown",
+    "TrapCooldown": {
         "label": "Trap Cooldown",
-        "fmt": "{:.2f}s",
+        "fmt": "%0.2fs",
     },
-    {
-        "stat": "MineLayingTime",
+    "MineLayingTime": {
         "label": "Mine Throwing Time",
-        "fmt": "{:.2f}s",
+        "fmt": "%0.2fs",
     },
-    {
-        "stat": "TotemPlacementTime",
+    "TotemPlacementTime": {
         "label": "Totem Placement Time",
-        "fmt": "{:.2f}s",
+        "fmt": "%0.2fs",
     },
-    {
-        "stat": "PreEffectiveCritChance",
+    "PreEffectiveCritChance": {
         "label": "Crit Chance",
-        "fmt": "{0:.2g}%",
+        "fmt": "%0.2g%%",
     },
-    {
-        "stat": "CritChance",
+    "CritChance": {
         "label": "Effective Crit Chance",
-        "fmt": "{0:.2g}%",
+        "fmt": "%0.2g%%",
     },
-    {
-        "stat": "CritMultiplier",
+    "CritMultiplier": {
         "label": "Crit Multiplier",
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "HitChance",
+    "HitChance": {
         "label": "Hit Chance",
-        "fmt": "{:.0f}%",
+        "fmt": "%0.0f%%",
         "flag": "attack",
     },
-    {
-        "stat": "TotalDPS",
-        "label": "Total DPS",
-        "fmt": "{:.1f}",
-        "flag": "notAverage",
+    "TotalDPS": {
+        "notAverage": {
+            "label": "Total DPS",
+            "fmt": "%0.1f",
+            "flag": "notAverage",
+        },
+        "showAverage": {
+            "stat": "TotalDPS",
+            "label": "Total DPS",
+            "fmt": "%0.1f",
+            "flag": "showAverage",
+        },
     },
-    {
-        "stat": "TotalDPS",
-        "label": "Total DPS",
-        "fmt": "{:.1f}",
-        "flag": "showAverage",
-    },
-    {
-        "stat": "TotalDot",
+    "TotalDot": {
         "label": "DoT DPS",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "WithDotDPS",
+    "WithDotDPS": {
         "label": "Total DPS inc. DoT",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
         "flag": "notAverage",
     },
-    {
-        "stat": "BleedDPS",
+    "BleedDPS": {
         "label": "Bleed DPS",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "BleedDamage",
+    "BleedDamage": {
         "label": "Total Damage per Bleed",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
         "flag": "showAverage",
     },
-    {
-        "stat": "WithBleedDPS",
+    "WithBleedDPS": {
         "label": "Total DPS inc. Bleed",
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "IgniteDPS",
+    "IgniteDPS": {
         "label": "Ignite DPS",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "IgniteDamage",
+    "IgniteDamage": {
         "label": "Total Damage per Ignite",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
         "flag": "showAverage",
     },
-    {
-        "stat": "WithIgniteDPS",
+    "WithIgniteDPS": {
         "label": "Total DPS inc. Ignite",
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "WithIgniteAverageDamage",
+    "WithIgniteAverageDamage": {
         "label": "Average Dmg. inc. Ignite",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "PoisonDPS",
+    "PoisonDPS": {
         "label": "Poison DPS",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "PoisonDamage",
+    "PoisonDamage": {
         "label": "Total Damage per Poison",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "WithPoisonDPS",
+    "WithPoisonDPS": {
         "label": "Total DPS inc. Poison",
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "DecayDPS",
+    "DecayDPS": {
         "label": "Decay DPS",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "TotalDotDPS",
+    "TotalDotDPS": {
         "label": "Total DPS inc. DoT",
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "ImpaleDPS",
-        "label": "Impale Damage",
-        "fmt": "{:.1f}",
-        "flag": ["impale", "showAverage"],
+    "ImpaleDPS": {
+        "showAverage": {
+            "label": "Impale Damage",
+            "fmt": "%0.1f",
+            "flag": ["impale", "showAverage"],
+        },
+        "notAverage": {
+            "label": "Impale DPS",
+            "fmt": "%0.1f",
+            "flag": ["impale", "notAverage"],
+        },
     },
-    {
-        "stat": "WithImpaleDPS",
-        "label": "Damage inc. Impale",
-        "fmt": "{:.1f}",
-        "flag": ["impale", "showAverage"],
+    "WithImpaleDPS": {
+        "showAverage": {
+            "label": "Damage inc. Impale",
+            "fmt": "%0.1f",
+            "flag": ["impale", "showAverage"],
+        },
+        "notAverage": {
+            "label": "Total DPS inc. Impale",
+            "fmt": "%0.1f",
+            "flag": ["impale", "notAverage"],
+        },
     },
-    {
-        "stat": "ImpaleDPS",
-        "label": "Impale DPS",
-        "fmt": "{:.1f}",
-        "flag": ["impale", "notAverage"],
-    },
-    {
-        "stat": "WithImpaleDPS",
-        "label": "Total DPS inc. Impale",
-        "fmt": "{:.1f}",
-        "flag": ["impale", "notAverage"],
-    },
-    {"stat": "MirageDPS", "label": "Total Mirage DPS", "fmt": "{:.1f}"},
-    {"stat": "CullingDPS", "label": "Culling DPS", "fmt": "{0:.2f}"},
-    {"stat": "CombinedDPS", "label": "Combined DPS", "fmt": "{0:.2f}"},
-    {
-        "stat": "CombinedAvg",
+    "MirageDPS": {"label": "Total Mirage DPS", "fmt": "%0.1f"},
+    "CullingDPS": {"label": "Culling DPS", "fmt": "%0.2f"},
+    "CombinedDPS": {"label": "Combined DPS", "fmt": "%0.2f"},
+    "CombinedAvg": {
         "label": "Combined Total Damage",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
         "flag": "showAverage",
     },
-    {
-        "stat": "Cooldown",
+    "Cooldown": {
         "label": "Skill Cooldown",
-        "fmt": "{:.2f}s",
+        "fmt": "%0.2fs",
     },
-    {
-        "stat": "SealCooldown",
+    "SealCooldown": {
         "label": "Seal Gain Frequency",
-        "fmt": "{:.2f}s",
+        "fmt": "%0.2fs",
     },
-    {"stat": "SealMax", "label": "Max Number of Seals", "fmt": "{:d}"},
-    {
-        "stat": "TimeMaxSeals",
+    "SealMax": {"label": "Max Number of Seals", "fmt": "%d"},
+    "TimeMaxSeals": {
         "label": "Time to Gain Max Seals",
-        "fmt": "{:.2f}s",
+        "fmt": "%0.2fs",
     },
-    {
-        "stat": "AreaOfEffectRadius",
+    "AreaOfEffectRadius": {
         "label": "AoE Radius",
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "BrandAttachmentRange",
+    "BrandAttachmentRange": {
         "label": "Attachment Range",
-        "fmt": "{:d}",
+        "fmt": "%d",
         "flag": "brand",
     },
-    {
-        "stat": "BrandTicks",
+    "BrandTicks": {
         "label": "Activations per Brand",
-        "fmt": "{:d}",
+        "fmt": "%d",
         "flag": "brand",
     },
-    {
-        "stat": "ManaCost",
+    "ManaCost": {
         "label": "Mana Cost",
         "colour": ColourCodes.MANA.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "LifeCost",
+    "LifeCost": {
         "label": "Life Cost",
         "colour": ColourCodes.LIFE.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "ESCost",
+    "ESCost": {
         "label": "Energy Shield Cost",
         "colour": ColourCodes.ES.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "RageCost",
+    "RageCost": {
         "label": "Rage Cost",
         "colour": ColourCodes.RAGE.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "ManaPercentCost",
+    "ManaPercentCost": {
         "label": "Mana Cost",
         "colour": ColourCodes.MANA.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "LifePercentCost",
+    "LifePercentCost": {
         "label": "Life Cost",
         "colour": ColourCodes.LIFE.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "ManaPerSecondCost",
+    "ManaPerSecondCost": {
         "label": "Mana Cost",
         "colour": ColourCodes.MANA.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "LifePerSecondCost",
+    "LifePerSecondCost": {
         "label": "Life Cost",
         "colour": ColourCodes.LIFE.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "ManaPercentPerSecondCost",
+    "ManaPercentPerSecondCost": {
         "label": "Mana Cost",
         "colour": ColourCodes.MANA.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "LifePercentPerSecondCost",
+    "LifePercentPerSecondCost": {
         "label": "Life Cost",
         "colour": ColourCodes.LIFE.value,
-        "fmt": "{0:.2f}",
+        "fmt": "%0.2f",
     },
-    {
-        "stat": "ESPerSecondCost",
+    "ESPerSecondCost": {
         "label": "Energy Shield Cost",
-        "fmt": "{:.2f}/s",
+        "fmt": "%0.2f/s",
         "colour": ColourCodes.ES.value,
     },
-    {
-        "stat": "ESPercentPerSecondCost",
+    "ESPercentPerSecondCost": {
         "label": "Energy Shield Cost",
-        "fmt": "{:.2f}%/s",
+        "fmt": "%0.2f%%/s",
         "colour": ColourCodes.ES.value,
     },
-    {"stat": "blank"},
-    {
-        "stat": "Str",
+    "blanka": {},
+    "Str": {
         "label": "Strength",
         "colour": ColourCodes.STRENGTH.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "ReqStr",
+    "ReqStr": {
         "label": "Strength Required",
         "colour": ColourCodes.STRENGTH.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "Dex",
+    "Dex": {
         "label": "Dexterity",
         "colour": ColourCodes.DEXTERITY.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "ReqDex",
+    "ReqDex": {
         "label": "Dexterity Required",
         "colour": ColourCodes.DEXTERITY.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "Int",
+    "Int": {
         "label": "Intelligence",
         "colour": ColourCodes.INTELLIGENCE.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "ReqInt",
+    "ReqInt": {
         "label": "Intelligence Required",
         "colour": ColourCodes.INTELLIGENCE.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "Omni",
+    "Omni": {
         "label": "Omniscience",
         "colour": ColourCodes.RARE.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "ReqOmni",
+    "ReqOmni": {
         "label": "Omniscience Required",
         "colour": ColourCodes.RARE.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {"stat": "blank"},
-    {
-        "stat": "Devotion",
+    "blankb": {},
+    "Devotion": {
         "label": "Devotion",
         "colour": ColourCodes.RARE.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {"stat": "blank"},
-    {
-        "stat": "TotalEHP",
+    "blankc": {},
+    "TotalEHP": {
         "label": "Effective Hit Pool",
-        "fmt": "{:.0f}",
+        "fmt": "%0.0f",
     },
-    {
-        "stat": "SecondMinimalMaximumHitTaken",
+    "SecondMinimalMaximumHitTaken": {
         "label": "Eff. Maximum Hit Taken",
-        "fmt": "{:.0f}",
+        "fmt": "%0.0f",
     },
-    {"stat": "blank"},
-    {
-        "stat": "Life",
+    "blankd": {},
+    "Life": {
         "label": "Total Life",
-        "fmt": "{:d}",
+        "fmt": "%d",
         "colour": ColourCodes.LIFE.value,
     },
-    {
-        "stat": "Spec:LifeInc",
+    # "Life": {"label": "Total Life", "fmt": "%d", "colour": ColourCodes.LIFE.value,},
+    "Spec:LifeInc": {
         "label": "%Inc Life from Tree",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.LIFE.value,
     },
-    {
-        "stat": "LifeUnreserved",
+    "LifeUnreserved": {
         "label": "Unreserved Life",
-        "fmt": "{:d}",
+        "fmt": "%d",
         "colour": ColourCodes.LIFE.value,
     },
-    {
-        "stat": "LifeUnreservedPercent",
+    "LifeUnreservedPercent": {
         "label": "Unreserved Life",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.LIFE.value,
     },
-    {"label": "Life Regen", "fmt": "{:.1f}", "colour": ColourCodes.LIFE.value},
-    {
-        "stat": "LifeLeechGainRate",
+    "LifeRegenRecovery": {"label": "Life Regen", "fmt": "%0.1f", "colour": ColourCodes.LIFE.value},
+    "LifeLeechGainRate": {
         "label": "Life Leech/On Hit Rate",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
         "colour": ColourCodes.LIFE.value,
     },
-    {
-        "stat": "LifeLeechGainPerHit",
+    "LifeLeechGainPerHit": {
         "label": "Life Leech/Gain per Hit",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
         "colour": ColourCodes.LIFE.value,
     },
-    {"stat": "blank"},
-    {
-        "stat": "TotalDegen",
+    "blanke": {},
+    "TotalDegen": {
         "label": "Total Degen",
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "TotalNetRegen",
+    "TotalNetRegen": {
         "label": "Total Net Regen",
-        "fmt": "+{:.1f}",
+        "fmt": "+%0.1f",
     },
-    {
-        "stat": "NetLifeRegen",
+    "NetLifeRegen": {
         "label": "Net Life Regen",
-        "fmt": "+{:.1f}",
+        "fmt": "+%0.1f",
         "colour": ColourCodes.LIFE.value,
     },
-    {
-        "stat": "NetManaRegen",
+    "NetManaRegen": {
         "label": "Net Mana Regen",
-        "fmt": "+{:.1f}",
+        "fmt": "+%0.1f",
         "colour": ColourCodes.MANA.value,
     },
-    {
-        "stat": "NetEnergyShieldRegen",
+    "NetEnergyShieldRegen": {
         "label": "Net Energy Shield Regen",
-        "fmt": "+{:.1f}",
+        "fmt": "+%0.1f",
         "colour": ColourCodes.ES.value,
     },
-    {"stat": "blank"},
-    {
-        "stat": "Ward",
+    "blankf": {},
+    "Ward": {
         "label": "Ward",
-        "fmt": "{:d}",
+        "fmt": "%d",
         "colour": ColourCodes.WARD.value,
     },
-    {
-        "stat": "EnergyShield",
+    "EnergyShield": {
         "label": "Energy Shield",
-        "fmt": "{:d}",
+        "fmt": "%d",
         "colour": ColourCodes.ES.value,
     },
-    {
-        "stat": "EnergyShieldRecoveryCap",
+    "EnergyShieldRecoveryCap": {
         "label": "Recoverable ES",
         "colour": ColourCodes.ES.value,
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "Spec:EnergyShieldInc",
+    "Spec:EnergyShieldInc": {
         "label": "%Inc ES from Tree",
         "colour": ColourCodes.ES.value,
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {
-        "stat": "EnergyShieldRegen",
+    "EnergyShieldRegen": {
         "label": "Energy Shield Regen",
         "colour": ColourCodes.ES.value,
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "EnergyShieldLeechGainRate",
+    "EnergyShieldLeechGainRate": {
         "label": "ES Leech/On Hit Rate",
         "colour": ColourCodes.ES.value,
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {
-        "stat": "EnergyShieldLeechGainPerHit",
+    "EnergyShieldLeechGainPerHit": {
         "label": "ES Leech/Gain per Hit",
         "colour": ColourCodes.ES.value,
-        "fmt": "{:.1f}",
+        "fmt": "%0.1f",
     },
-    {"stat": "blank"},
-    {
-        "stat": "stat",
+    "blankg": {},
+    "Evasion": {
         "label": "Evasion rating",
-        "fmt": "{:d}",
+        "fmt": "%d",
         "colour": ColourCodes.EVASION.value,
     },
-    {
-        "stat": "stat",
+    "Spec:EvasionInc": {
         "label": "%Inc Evasion from Tree",
         "colour": ColourCodes.EVASION.value,
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {
-        "stat": "EvadeChance",
+    "EvadeChance": {
         "label": "Evade Chance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.EVASION.value,
     },
-    {
-        "stat": "MeleeEvadeChance",
+    "MeleeEvadeChance": {
         "label": "Melee Evade Chance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.EVASION.value,
     },
-    {
-        "stat": "ProjectileEvadeChance",
+    "ProjectileEvadeChance": {
         "label": "Projectile Evade Chance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.EVASION.value,
     },
-    {"stat": "blank"},
-    {
-        "stat": "Armour",
+    "blankh": {},
+    "Armour": {
         "label": "Armour",
-        "fmt": "{:d}",
+        "fmt": "%d",
     },
-    {
-        "stat": "Spec:ArmourInc",
+    "Spec:ArmourInc": {
         "label": "%Inc Armour from Tree",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {
-        "stat": "PhysicalDamageReduction",
+    "PhysicalDamageReduction": {
         "label": "Phys. Damage Reduction",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {"stat": "blank"},
-    {
-        "stat": "EffectiveMovementSpeedMod",
+    "blanki": {},
+    "EffectiveMovementSpeedMod": {
         "label": "Movement Speed Modifier",
-        "fmt": "{:.1f}%",
+        "fmt": "%0.1f%%",
     },
-    {
-        "stat": "BlockChance",
+    "BlockChance": {
         "label": "Block Chance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {
-        "stat": "SpellBlockChance",
+    "SpellBlockChance": {
         "label": "Spell Block Chance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {
-        "stat": "AttackDodgeChance",
+    "AttackDodgeChance": {
         "label": "Attack Dodge Chance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {
-        "stat": "SpellDodgeChance",
+    "SpellDodgeChance": {
         "label": "Spell Dodge Chance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {
-        "stat": "SpellSuppressionChance",
+    "SpellSuppressionChance": {
         "label": "Spell Suppression Chance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
     },
-    {"stat": "blank"},
-    {
-        "stat": "FireResist",
+    "blankj": {},
+    "FireResist": {
         "label": "Fire Resistance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.FIRE.value,
     },
-    {
-        "stat": "FireResistOverCap",
+    "FireResistOverCap": {
         "label": "Fire Res. Over Max",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "hideStat": "true",
     },
-    {
-        "stat": "ColdResist",
+    "ColdResist": {
         "label": "Cold Resistance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.COLD.value,
     },
-    {
-        "stat": "ColdResistOverCap",
+    "ColdResistOverCap": {
         "label": "Cold Res. Over Max",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "hideStat": "true",
     },
-    {
-        "stat": "LightningResist",
+    "LightningResist": {
         "label": "Lightning Resistance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.LIGHTNING.value,
     },
-    {
-        "stat": "LightningResistOverCap",
+    "LightningResistOverCap": {
         "label": "Lightning Res. Over Max",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "hideStat": "true",
     },
-    {
-        "stat": "ChaosResist",
+    "ChaosResist": {
         "label": "Chaos Resistance",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "colour": ColourCodes.CHAOS.value,
     },
-    {
-        "stat": "ChaosResistOverCap",
+    "ChaosResistOverCap": {
         "label": "Chaos Res. Over Max",
-        "fmt": "{:d}%",
+        "fmt": "%d%%",
         "hideStat": "true",
     },
-]
+}
 
 get_http_headers = {"User-Agent": "Path of Building Community - Python", "Accept": ""}
 post_http_headers = {

@@ -17,7 +17,7 @@ from PySide6.QtWidgets import QFileDialog, QDialogButtonBox
 from PySide6.QtUiTools import QUiLoader
 
 from PoB.pob_file import read_xml, write_xml
-from PoB.constants import pob_debug, def_theme, default_config
+from PoB.constants import ColourCodes, pob_debug, def_theme, default_settings, locale
 
 from widgets.ui_utils import html_colour_text, str_to_bool, print_a_xml_element
 from dialogs.settings_dialog import SettingsDlg
@@ -73,7 +73,7 @@ class Settings:
 
     def reset(self):
         """Reset to default config"""
-        self.tree = ET.ElementTree(ET.fromstring(default_config))
+        self.tree = ET.ElementTree(ET.fromstring(default_settings))
         self.root = self.tree.getroot()
         self.misc = self.root.find("Misc")
         self.pastebin = self.root.find("Misc")
@@ -218,7 +218,7 @@ class Settings:
         # c = self.misc.get("decimalSeparator", "")
         # if c = "":
         # use locale
-        return self.misc.get("decimalSeparator", ".")
+        return self.misc.get("decimalSeparator", "_")
 
     @decimal_separator.setter
     def decimal_separator(self, new_sep):
@@ -230,7 +230,7 @@ class Settings:
         # c = self.misc.get("thousandsSeparator", "")
         # if c = "":
         # use locale
-        return self.misc.get("thousandsSeparator", ",")
+        return self.misc.get("thousandsSeparator", "n")
 
     @thousands_separator.setter
     def thousands_separator(self, new_sep):
@@ -397,6 +397,30 @@ class Settings:
         _accounts = self.root.find("Accounts")
         _accounts.set("lastRealm", new_realm)
 
+    @property
+    def colour_negative(self):
+        return self.misc.get("colour_negative", ColourCodes.NEGATIVE.value)
+
+    @colour_negative.setter
+    def colour_negative(self, new_colour):
+        self.misc.set("colour_negative", new_colour)
+
+    @property
+    def colour_positive(self):
+        return self.misc.get("colour_positive", ColourCodes.POSITIVE.value)
+
+    @colour_positive.setter
+    def colour_positive(self, new_colour):
+        self.misc.set("colour_positive", new_colour)
+
+    @property
+    def colour_highlight(self):
+        return self.misc.get("colour_highlight", ColourCodes.RED.value)
+
+    @colour_highlight.setter
+    def colour_highlight(self, new_colour):
+        self.misc.set("colour_highlight", new_colour)
+
     def accounts(self):
         """
         Recent accounts are a list of accounts that have been opened, to a maximum of 10 entries
@@ -439,6 +463,8 @@ class Settings:
         # ToDo: show thousands separator for player stats
 
         dlg = SettingsDlg(self, self.win)
+        loc = locale.localeconv()
+        dlg.label_ThousandsSeparator.setText(f"{loc['thousands_sep']} {self.app.tr('and')} {loc['decimal_point']}")
         # 0 is discard, 1 is save
         _return = dlg.exec()
         if _return:
@@ -449,13 +475,16 @@ class Settings:
             self.beta_mode = dlg.check_Beta.isChecked()
             self.show_titlebar_name = dlg.check_ShowBuildName.isChecked()
             self.show_thousands_separators = dlg.check_ShowThousandsSeparators.isChecked()
-            self.thousands_separator = dlg.lineedit_ThousandsSeparator.text()
-            self.decimal_separator = dlg.lineedit_DecimalSeparator.text()
+            # self.thousands_separator = dlg.lineedit_ThousandsSeparator.text()
+            # self.decimal_separator = dlg.lineedit_DecimalSeparator.text()
             self.default_gem_quality = dlg.spin_GemQuality.value()
             self.default_char_level = dlg.spin_Level.value()
             self.default_item_affix_quality = dlg.slider_AffixQuality.value() / 100
             self.show_warnings = dlg.check_BuildWarnings.isChecked()
             self.slot_only_tooltips = dlg.check_Tooltips.isChecked()
+            self.colour_positive = dlg.lineedit_Pos_Colour.text()
+            self.colour_negative = dlg.lineedit_Neg_Colour.text()
+            self.colour_highlight = dlg.lineedit_HL_Colour.text()
             proxy_text = dlg.lineedit_Proxy.text()
             self.proxy_url = proxy_text
             if proxy_text != "":

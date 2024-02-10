@@ -1,11 +1,16 @@
 Parts of this install have a depenceny on libraries from Microsoft Visual C++ Redistributable for Visual Studio 2022
 If you get an error "MSVCP140.dll missing",  see bottom of this document for how to source the required files
 
-Download https://www.python.org/ftp/python/3.11.2/python-3.11.2-embed-amd64.zip
+Python 3.11
+Download https://www.python.org/ftp/python/3.11.8/python-3.11.8-embed-amd64.zip
 Extract it somewhere you can find it again. EG: c:\Python311
 
-Add this location to your path, in Win10/11 this has been buried in settings.
-Open Settings, Click on System
+Add this location to your path, in Win10/11 this has been buried in settings, so maybe use powershell (option 1):
+Option 1) Right click on start anda select 'Terminal (Admin)' or 'Powershell (Admin)'. 
+Add two paths. The main python directory and the scripts directory.
+Run
+	$env:Path = 'C:\Python311;C:\Python311\Scripts;' + $env:Path
+Option 2) Open Settings, Click on System
 Scroll down to About.
 On the right hand side, under "Related Settings" (Win11 is "Related Links"), select "Advanced System Settings"
 	This will popup a system properties window, with the "Advanced" tab selected
@@ -17,11 +22,18 @@ EG:
 
 Open a command prompt and change directory to where you cloned PathofBuilding
 
+Python 3.12
+Download https://www.python.org/ftp/python/3.12.2/python-3.12.2-amd64.exe
+Extract it somewhere you can find it again. EG: c:\Python312
+Follow path instructions above substituting the correct directory.
+
 upgrade pip
 -----------
+In a Admin command/Terminal/Powershell prompt, run
 python.exe -m pip install --upgrade pip
 
 - Install poetry and install dependencies.
+Change to the directory you cloned pyPoB
 pip install poetry
 poetry install
 	Creating virtualenv pathofbuilding-python--IwoLpd0E in c:\Users\Peter\AppData\Local\pypoetry\Cache
