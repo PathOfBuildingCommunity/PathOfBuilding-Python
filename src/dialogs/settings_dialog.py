@@ -7,7 +7,7 @@ import re
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QDialog, QPushButton, QFileDialog, QDialogButtonBox
 
-from widgets.ui_utils import set_combo_index_by_text, format_number
+from widgets.ui_utils import set_combo_index_by_text, format_number, html_colour_text
 
 from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgSettings import Ui_Settings
@@ -51,6 +51,9 @@ class SettingsDlg(Ui_Settings, QDialog):
         self.btn_BuildPath.clicked.connect(self.setting_directory_dialog)
         self.slider_AffixQuality.valueChanged.connect(self.setting_show_affix_quality_value)
         self.lineedit_BuildPath.textChanged.connect(self.setting_set_build_path_tooltip)
+        self.lineedit_Pos_Colour.textChanged.connect(self.setting_set_pos_colour_text)
+        self.lineedit_Neg_Colour.textChanged.connect(self.setting_set_neg_colour_text)
+        self.lineedit_HL_Colour.textChanged.connect(self.setting_set_hl_colour_text)
 
         # fill the fields, triggering components.
         self.load_settings(False)
@@ -70,6 +73,27 @@ class SettingsDlg(Ui_Settings, QDialog):
     @Slot()
     def setting_set_build_path_tooltip(self):
         self.lineedit_BuildPath.setToolTip(self.lineedit_BuildPath.text())
+
+    @Slot()
+    def setting_set_pos_colour_text(self, text):
+        if "#" not in text:
+            text = f"#{text}"
+        self.lineedit_Pos_Colour.setText(text.upper())
+        self.lineedit_Pos_Colour.setStyleSheet(f"QLineEdit {{color: {text}}}")
+
+    @Slot()
+    def setting_set_neg_colour_text(self, text):
+        if "#" not in text:
+            text = f"#{text}"
+        self.lineedit_Neg_Colour.setText(text.upper())
+        self.lineedit_Neg_Colour.setStyleSheet(f"QLineEdit {{color: {text}}}")
+
+    @Slot()
+    def setting_set_hl_colour_text(self, text):
+        if "#" not in text:
+            text = f"#{text}"
+        self.lineedit_HL_Colour.setText(text.upper())
+        self.lineedit_HL_Colour.setStyleSheet(f"QLineEdit {{color: {text}}}")
 
     @Slot()
     def setting_directory_dialog(self):

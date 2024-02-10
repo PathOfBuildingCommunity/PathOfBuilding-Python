@@ -132,9 +132,9 @@
    <widget class="QLabel" name="label_NP_Colours">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>112</y>
-      <width>120</width>
+      <width>195</width>
       <height>16</height>
      </rect>
     </property>
@@ -211,7 +211,7 @@
    <widget class="QComboBox" name="combo_NP_Colours">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>210</x>
       <y>108</y>
       <width>121</width>
       <height>26</height>
@@ -249,9 +249,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>240</y>
-      <width>171</width>
+      <x>20</x>
+      <y>230</y>
+      <width>204</width>
       <height>20</height>
      </rect>
     </property>
@@ -288,9 +288,9 @@
    <widget class="QLabel" name="label_Pos_Colour">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>152</y>
-      <width>175</width>
+      <x>10</x>
+      <y>142</y>
+      <width>195</width>
       <height>16</height>
      </rect>
     </property>
@@ -307,9 +307,9 @@
    <widget class="QLabel" name="label_Neg_Colour">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>182</y>
-      <width>175</width>
+      <x>10</x>
+      <y>172</y>
+      <width>195</width>
       <height>16</height>
      </rect>
     </property>
@@ -326,9 +326,9 @@
    <widget class="QLabel" name="label_HL_Colour">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>212</y>
-      <width>175</width>
+      <x>10</x>
+      <y>202</y>
+      <width>195</width>
       <height>16</height>
      </rect>
     </property>
@@ -345,8 +345,8 @@
    <widget class="QLineEdit" name="lineedit_Pos_Colour">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>150</y>
+      <x>210</x>
+      <y>140</y>
       <width>155</width>
       <height>22</height>
      </rect>
@@ -355,8 +355,8 @@
    <widget class="QLineEdit" name="lineedit_Neg_Colour">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>180</y>
+      <x>210</x>
+      <y>170</y>
       <width>155</width>
       <height>22</height>
      </rect>
@@ -365,8 +365,8 @@
    <widget class="QLineEdit" name="lineedit_HL_Colour">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>210</y>
+      <x>210</x>
+      <y>200</y>
       <width>155</width>
       <height>22</height>
      </rect>
@@ -391,9 +391,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>20</y>
-      <width>210</width>
+      <width>245</width>
       <height>20</height>
      </rect>
     </property>
@@ -410,9 +410,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>40</y>
-      <width>210</width>
+      <width>245</width>
       <height>20</height>
      </rect>
     </property>
@@ -426,9 +426,9 @@
    <widget class="QLabel" name="label_GemQuality">
     <property name="geometry">
      <rect>
-      <x>6</x>
+      <x>81</x>
       <y>112</y>
-      <width>150</width>
+      <width>165</width>
       <height>16</height>
      </rect>
     </property>
@@ -445,9 +445,9 @@
    <widget class="QLabel" name="label_Level">
     <property name="geometry">
      <rect>
-      <x>6</x>
+      <x>81</x>
       <y>142</y>
-      <width>150</width>
+      <width>165</width>
       <height>16</height>
      </rect>
     </property>
@@ -467,9 +467,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>80</y>
-      <width>210</width>
+      <width>245</width>
       <height>20</height>
      </rect>
     </property>
@@ -486,9 +486,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>60</y>
-      <width>210</width>
+      <width>245</width>
       <height>20</height>
      </rect>
     </property>
@@ -521,7 +521,7 @@
    <widget class="QSpinBox" name="spin_GemQuality">
     <property name="geometry">
      <rect>
-      <x>175</x>
+      <x>253</x>
       <y>110</y>
       <width>42</width>
       <height>22</height>
@@ -534,7 +534,7 @@
    <widget class="QSpinBox" name="spin_Level">
     <property name="geometry">
      <rect>
-      <x>175</x>
+      <x>253</x>
       <y>140</y>
       <width>42</width>
       <height>22</height>
@@ -585,7 +585,7 @@
    <widget class="QLabel" name="label_ThousandsSeparator">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>285</x>
       <y>40</y>
       <width>80</width>
       <height>16</height>
