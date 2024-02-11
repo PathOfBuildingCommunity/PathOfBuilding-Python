@@ -134,6 +134,7 @@ class ItemsUI:
 
     @property
     def activeItemSet(self):
+        # return: int
         # Use a property to ensure the correct +/- 1
         return max(int(self.xml_items.get("activeItemSet", 1)) - 1, 0)
 
@@ -153,8 +154,8 @@ class ItemsUI:
         self.win.btn_WeaponSwap.clicked.connect(self.weapon_swap2)
         self.win.combo_ItemSet.currentIndexChanged.connect(self.change_itemset)
         self.win.list_ImportItems.itemDoubleClicked.connect(self.import_items_list_double_clicked)
-        self.win.list_Items.currentItemChanged.connect(self.on_row_changed)
-        self.win.list_Items.itemClicked.connect(self.on_row_changed)
+        self.win.list_Items.currentItemChanged.connect(self.item_list_on_row_changed)
+        self.win.list_Items.itemClicked.connect(self.item_list_on_row_changed)
         self.win.list_Items.itemDoubleClicked.connect(self.item_list_double_clicked)
 
     def disconnect_item_triggers(self):
@@ -170,8 +171,8 @@ class ItemsUI:
             self.win.btn_WeaponSwap.clicked.disconnect(self.weapon_swap2)
             self.win.combo_ItemSet.currentIndexChanged.disconnect(self.change_itemset)
             self.win.list_ImportItems.itemDoubleClicked.disconnect(self.import_items_list_double_clicked)
-            self.win.list_Items.currentItemChanged.disconnect(self.on_row_changed)
-            self.win.list_Items.itemClicked.disconnect(self.on_row_changed)
+            self.win.list_Items.currentItemChanged.disconnect(self.item_list_on_row_changed)
+            self.win.list_Items.itemClicked.disconnect(self.item_list_on_row_changed)
             self.win.list_Items.itemDoubleClicked.disconnect(self.item_list_double_clicked)
         except RuntimeError:
             pass
@@ -446,7 +447,7 @@ class ItemsUI:
         #     # Do more here based on itemsets, etc
 
     @Slot()
-    def on_row_changed(self, item):
+    def item_list_on_row_changed(self, item):
         """Are there actions we want to take when the user selects a new item"""
         # lwi = self.win.list_Items.currentItem()
         # if lwi:
@@ -498,6 +499,14 @@ class ItemsUI:
             print(f"Discarded: {dlg.item.name}")
             self.itemlist_by_id[dlg.original_item.id] = dlg.original_item
             lwi.setData(Qt.UserRole, dlg.original_item)
+
+    def item_list_active_items(self):
+        """
+        Return a list() of Item() for items that are currently selected
+        :return: list:
+        """
+        results = [i for i in self.itemlist_by_id.values() if i.active]
+        return results
 
     @Slot()
     def import_items_list_double_clicked(self, item: QListWidgetItem):

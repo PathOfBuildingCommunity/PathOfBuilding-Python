@@ -31,6 +31,7 @@ class ItemSlotUI(QWidget):
         self.setMinimumHeight(self.widget_height)
         self.other_weapon_slot: ItemSlotUI = None
         self.parent_notify = parent_notify
+        self.lastSelectedItem = None
 
         # preserve the original name, EG: "Weapon 1 Swap"
         self.slot_name = title
@@ -144,13 +145,20 @@ class ItemSlotUI(QWidget):
     @Slot()
     def combobox_change_text(self, _text):
         """Set the comboBox's tooltip"""
-        # print("combobox_change_text", self.slot_name, _text)
+        # print(f"combobox_change_text, {self.slot_name=}, {_text=}")
         if self.combo_item_list.currentIndex() == 0:
             self.combo_item_list.setToolTip("")
+            if self.lastSelectedItem:
+                self.lastSelectedItem.active = False
+            self.lastSelectedItem = None
         else:
             item = self.combo_item_list.currentData()
             if type(item) == Item:
                 self.combo_item_list.setToolTip(item.tooltip())
+                if self.lastSelectedItem:
+                    self.lastSelectedItem.active = False
+                item.active = True
+                self.lastSelectedItem = item
                 # Clear the other slot if this is a two-hander
                 if item.two_hand:
                     self.other_weapon_slot.clear_default_item()

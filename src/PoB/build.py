@@ -348,6 +348,27 @@ class Build:
         self.ascendClassName = self.current_spec.ascendClassId_str()
         # new
 
+    def load_from_file(self, filename):
+        """
+        Load a build. Use new() as a common function.
+
+        :param filename: str: XML file to load.
+        :return: N/A
+        """
+        _build_pob = read_xml(filename)
+        if _build_pob is None:
+            # How do we want to deal with corrupt builds
+            critical_dialog(
+                self.win,
+                self.tr("Load Build"),
+                f"{self.tr('An error occurred to trying load')}:\n{filename}",
+                self.tr("Close"),
+            )
+        else:
+            self.filename = filename
+            self.new(_build_pob)
+            self.name = Path(Path(filename).name).stem
+
     def save_to_xml(self, version="2"):
         """
         Save the build to the filename recorded in the build Class
@@ -574,27 +595,6 @@ class Build:
     """
     ################################################### IMPORT ###################################################
     """
-
-    def load_from_file(self, filename):
-        """
-        Load a build. Use new() as a common function.
-
-        :param filename: str: XML file to load.
-        :return: N/A
-        """
-        _build_pob = read_xml(filename)
-        if _build_pob is None:
-            critical_dialog(
-                self.win,
-                self.tr("Load Build"),
-                f"{self.tr('An error occurred to trying load')}:\n{filename}",
-                self.tr("Close"),
-            )
-        else:
-            # How do we want to deal with corrupt builds
-            self.filename = filename
-            self.new(_build_pob)
-            self.name = Path(Path(filename).name).stem
 
     def import_passive_tree_jewels_ggg_json(self, json_tree, json_character):
         """

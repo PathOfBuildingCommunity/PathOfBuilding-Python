@@ -36,7 +36,7 @@ from PoB.constants import (
 )
 
 from PoB.build import Build
-from PoB.settings import Settings, locale
+from PoB.settings import Settings
 from PoB.pob_file import get_file_info
 from PoB.player import Player
 from dialogs.browse_file_dialog import BrowseFileDlg
@@ -52,7 +52,7 @@ from widgets.player_stats import PlayerStats
 from widgets.skills_ui import SkillsUI
 from widgets.tree_ui import TreeUI
 from widgets.tree_view import TreeView
-from widgets.ui_utils import html_colour_text, format_number, set_combo_index_by_data
+from widgets.ui_utils import html_colour_text, format_number, set_combo_index_by_data, print_call_stack, _debug
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -280,25 +280,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def do_calcs(self):
         # Temporary (???) calc button
-        self.player.calc_stats()
+        self.player.calc_stats(self.items_ui.item_list_active_items())
         self.textedit_Statistics.clear()
-        for name in self.player.stats:
-            _value = self.player.stats[name]
-            if _value != 0:
-                stat = player_stats_list.get(name, {})
-                if stat:
-                    # print(stat)
-                    if type(stat) is list:
-                        # ToDo: Need to use the flag attribute to separate
-                        stat = stat[0]
-                    _label = "{0:>24}".format(stat["label"])
-                    _colour = stat.get("colour", self.settings.qss_default_text)
-                    _fmt = stat.get("fmt", "%d")
-                    _str_value = format_number(_value, _fmt, self.settings, True)
-                    # ToDo: Convert to <pre> like recent builds, and file Open/Save
-                    self.textedit_Statistics.append(f'<span style="white-space: pre; color:{_colour};">{_label}:</span> {_str_value}')
-                else:
-                    print(f"I don't know what to do with Player Stat {name}.")
+        just_added_blank = False  # Prevent duplicate blank lines. Faster than investigating the last line added of a QLineEdit.
+        for stat_name in player_stats_list:
+            stat = player_stats_list[stat_name]
+            # print(f"{stat_name=}, {type(stat)=}, {stat.values()=}")
+            if "blank" in stat_name:
+                if not just_added_blank:
+                    self.textedit_Statistics.append("")
+                    just_added_blank = True
+            elif stat.get("label", 0) == 0:
+                # ToDo: Need to use the flag attribute to separate
+                stat = list(stat.values())[0]
+            else:
+                # Do we have this stat in our stats dict
+                stat_value = self.player.stats.get(stat_name, bad_text)
+                if not stat_value == bad_text:
+                    # _value = self.player.stats.get(name, 0)
+                    # print(f"{stat_name=}, {stat_value=}")
+                    if stat_value != 0 and self.player.stat_conditions(stat_name, stat_value):
+                        _label = "{0:>24}".format(stat["label"])
+                        _colour = stat.get("colour", self.settings.qss_default_text)
+                        _fmt = stat.get("fmt", "%d")
+                        _str_value = format_number(stat_value, _fmt, self.settings, True)
+                        # ToDo: Convert to <pre> like recent builds, and file Open/Save
+                        self.textedit_Statistics.append(f'<span style="white-space: pre; color:{_colour};">{_label}:</span> {_str_value}')
+                        just_added_blank = False
 
     # Overridden function
     def keyReleaseEvent(self, event):

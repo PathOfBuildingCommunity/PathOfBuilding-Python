@@ -44,6 +44,7 @@ class Item:
         self._base_name = ""
         self._type = ""  # or item_class - eg weapon
         self.sub_type = ""  # or item_class - eg claw
+        self.active = False  # is this the item currently chosen/shown in the dropdown ?
 
         # this is not always available from the json character download
         self.level_req = 0
@@ -135,17 +136,17 @@ class Item:
 
         # Mods
         for mod in _json.get("explicitMods", []):
-            self.full_explicitMods_list.append(Mod(mod))
+            self.full_explicitMods_list.append(Mod(self.settings, mod))
         # for mod in _json.get("craftedMods", []):
         #     self.full_explicitMods_list.append(Mod(f"{{crafted}}{mod}"))
         self.explicitMods = self.full_explicitMods_list
 
         for mod in _json.get("enchantMods", []):
-            self.implicitMods.append(Mod(f"{{crafted}}{mod}"))
+            self.implicitMods.append(Mod(self.settings, f"{{crafted}}{mod}"))
         for mod in _json.get("scourgeMods", []):
-            self.implicitMods.append(Mod(f"{{crafted}}{mod}"))
+            self.implicitMods.append(Mod(self.settings, f"{{crafted}}{mod}"))
         for mod in _json.get("implicitMods", []):
-            self.implicitMods.append(Mod(mod))
+            self.implicitMods.append(Mod(self.settings, mod))
 
         self.properties = _json.get("properties", {})
         if self.properties:
@@ -215,15 +216,15 @@ class Item:
 
         # Mods
         for mod in _json.get("explicits", []):
-            self.full_explicitMods_list.append(Mod(mod))
+            self.full_explicitMods_list.append(Mod(self.settings, mod))
         self.explicitMods = self.full_explicitMods_list
 
         for mod in _json.get("enchants", []):
-            self.implicitMods.append(Mod(f"{{crafted}}{mod}"))
+            self.implicitMods.append(Mod(self.settings, f"{{crafted}}{mod}"))
         for mod in _json.get("scourgeMods", []):
-            self.implicitMods.append(Mod(f"{{crafted}}{mod}"))
+            self.implicitMods.append(Mod(self.settings, f"{{crafted}}{mod}"))
         for mod in _json.get("implicits", []):
-            self.implicitMods.append(Mod(mod))
+            self.implicitMods.append(Mod(self.settings, mod))
 
         self.tooltip()
         # load_from_ggg_json
@@ -400,7 +401,7 @@ class Item:
                             if debug_lines:
                                 _debug("I", len(lines), lines)
                             line = lines.pop(line_idx)
-                            mod = Mod(line)
+                            mod = Mod(self.settings, line)
                             self.full_implicitMods_list.append(mod)
                             # check for variants and if it's our variant, add it to the smaller implicit mod list
                             # EG: <Mod>{variant:2,3,4}{tags:life}(34-48) Life gained when you Block</Mod>
@@ -440,7 +441,7 @@ class Item:
         # every thing that is left, from explicits_idx, is explicits, and some other stuff
         for idx in range(explicits_idx, len(lines)):
             line = lines.pop(explicits_idx)
-            mod = Mod(line)
+            mod = Mod(self.settings, line)
             # Corrupted is not a mod, but will get caught in explicits due to crap data design.
             if "Corrupted" in line:
                 self.corrupted = True
@@ -469,7 +470,7 @@ class Item:
             # if "Corrupted" in line:
             #     self.corrupted = True
             #     continue
-            # mod = Mod(line)
+            # mod = Mod(self.settings, line)
             # self.full_explicitMods_list.append(mod)
             # # check for variants and if it's our variant, add it to the smaller explicit mod list
             # if "variant" in line:
@@ -603,23 +604,23 @@ class Item:
         # crafted_xml = xml.find("Crafted")
         # if crafted_xml is not None:
         #     for mod_xml in crafted_xml.findall("Mod"):
-        #         mod = Mod(mod_xml.text)
+        #         mod = Mod(self.settings, mod_xml.text)
         #         self.craftedMods.append(mod)
         fracture_xml = xml.find("Fractured")
         if fracture_xml is not None:
             for mod_xml in fracture_xml.findall("Mod"):
-                mod = Mod(mod_xml.text)
+                mod = Mod(self.settings, mod_xml.text)
                 self.fracturedMods.append(mod)
         crucible_xml = xml.find("Crucible")
         if crucible_xml is not None:
             for mod_xml in crucible_xml.findall("Mod"):
-                mod = Mod(mod_xml.text)
+                mod = Mod(self.settings, mod_xml.text)
                 self.crucibleMods.append(mod)
 
         imp = xml.find("Implicits")
         for mod_xml in imp.findall("Mod"):
             line = mod_xml.text
-            mod = Mod(mod_xml.text)
+            mod = Mod(self.settings, mod_xml.text)
             self.full_implicitMods_list.append(mod)
             # check for variants and if it's our variant, add it to the smaller implicit mod list
             if "variant" in line:
@@ -631,7 +632,7 @@ class Item:
         exp = xml.find("Explicits")
         for mod_xml in exp.findall("Mod"):
             line = mod_xml.text
-            mod = Mod(mod_xml.text)
+            mod = Mod(self.settings, mod_xml.text)
             self.full_explicitMods_list.append(mod)
             # check for variants and if it's our variant, add it to the smaller explicit mod list
             if "variant" in line:
