@@ -30,6 +30,8 @@ class ConfigUI:
         set_combo_index_by_data(self.win.combo_Bandits, self.build.bandit)
         set_combo_index_by_data(self.win.combo_MajorPantheon, self.build.pantheonMajorGod)
         set_combo_index_by_data(self.win.combo_MinorPantheon, self.build.pantheonMinorGod)
+        # set_combo_index_by_data(self.win.combo_EHPUnluckyWorstOf, self.build.EHPUnluckyWorstOf)
+        # set_combo_index_by_data(self.win.combo_igniteMode, self.build.igniteMode)
 
     def save(self):
         """
@@ -39,6 +41,8 @@ class ConfigUI:
         self.build.bandit = self.win.combo_Bandits.currentData()
         self.build.pantheonMajorGod = self.win.combo_MajorPantheon.currentData()
         self.build.pantheonMinorGod = self.win.combo_MinorPantheon.currentData()
+        # self.build.EHPUnluckyWorstOf = self.win.combo_EHPUnluckyWorstOf.currentData()
+        # self.build.igniteMode = self.win.combo_igniteMode.currentData()
 
 
 # def test() -> None:

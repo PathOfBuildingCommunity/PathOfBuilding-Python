@@ -278,8 +278,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # init
 
     @Slot()
-    def do_calcs(self):
-        # Temporary (???) calc button
+    def do_calcs(self, test_item=None, test_node=None):
+        """
+        Do and Display Calculations
+        :param: test_item: Item() - future comparison
+        :param: test_node: Node() - future comparison
+        :return:
+        """
+        self.config_ui.save()
         self.player.calc_stats(self.items_ui.item_list_active_items())
         self.textedit_Statistics.clear()
         just_added_blank = False  # Prevent duplicate blank lines. Faster than investigating the last line added of a QLineEdit.
@@ -296,17 +302,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 # Do we have this stat in our stats dict
                 stat_value = self.player.stats.get(stat_name, bad_text)
-                if not stat_value == bad_text:
-                    # _value = self.player.stats.get(name, 0)
-                    # print(f"{stat_name=}, {stat_value=}")
-                    if stat_value != 0 and self.player.stat_conditions(stat_name, stat_value):
-                        _label = "{0:>24}".format(stat["label"])
-                        _colour = stat.get("colour", self.settings.qss_default_text)
-                        _fmt = stat.get("fmt", "%d")
-                        _str_value = format_number(stat_value, _fmt, self.settings, True)
-                        # ToDo: Convert to <pre> like recent builds, and file Open/Save
-                        self.textedit_Statistics.append(f'<span style="white-space: pre; color:{_colour};">{_label}:</span> {_str_value}')
-                        just_added_blank = False
+                if stat_value != bad_text and stat_value != 0 and self.player.stat_conditions(stat_name, stat_value):
+                    # _label = "{0:>24}".format(stat["label"])
+                    # _label = format(f"{stat['label']:>24}")
+                    _colour = stat.get("colour", self.settings.qss_default_text)
+                    _fmt = stat.get("fmt", "%d")
+                    _str_value = format_number(stat_value, _fmt, self.settings, True)
+                    # self.textedit_Statistics.append(f'<span style="white-space: pre; color:{_colour};">{_label}:</span> {_str_value}')
+                    self.textedit_Statistics.append(
+                        f'<span style="white-space: pre; color:{_colour};">{stat["label"]:>24}:</span> {_str_value}'
+                    )
+                    just_added_blank = False
 
     # Overridden function
     def keyReleaseEvent(self, event):
@@ -691,10 +697,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_status_bar(f"Loaded: {self.build.name}", 10)
             # self.stats.load(self.build.build)
             self.player.load(self.build.build)
-            self.do_calcs()
 
         # This is needed to make the jewels show. Without it, you need to select or deselect a node.
         self.gview_Tree.add_tree_images(True)
+        self.do_calcs()
         self.alerting = True
 
     @Slot()
@@ -808,6 +814,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.refresh_tree = True
         self.gview_Tree.add_tree_images(full_clear)
         self.items_ui.fill_jewel_slot_uis()
+        self.do_calcs()
 
     @Slot()
     def class_changed(self, selected_class):
@@ -849,6 +856,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.build.current_class = new_class
             self.build.reset_tree()
             self.gview_Tree.add_tree_images(True)
+
+        self.do_calcs()
 
     @Slot()
     def ascendancy_changed(self, selected_ascendancy):
@@ -898,6 +907,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.build.current_spec.ascendClassId = self.combo_ascendancy.currentData()
             self.build.ascendClassName = selected_ascendancy
             self.gview_Tree.add_tree_images()
+        self.do_calcs()
 
     @Slot()
     def display_number_node_points(self, bandit_id):
@@ -1054,7 +1064,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         :return: N/A
         """
-        pass
+        self.do_calcs()
 
     def load_main_skill_combo(self, _list):
         """

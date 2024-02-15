@@ -69,7 +69,7 @@ empty_build = f"""<PathOfBuilding>
     <NotesHTML/>
     <TreeView searchStr="" zoomY="0" showHeatMap="nil" zoomLevel="3" showStatDifferences="true" zoomX="0"/>
     <Config>
-        <Input name="resistancePenalty" number="0"/>
+        <Input name="resistancePenalty" number="-60"/>
         <Input name="pantheonMinorGod" string="None"/>
         <Input name="enemyIsBoss" string="None"/>
         <Input name="pantheonMajorGod" string="None"/>

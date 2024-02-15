@@ -26,9 +26,11 @@ class Mod:
         )
         # this is the text with the (xx-yy), eg '% increased Duration'.
         # It is to avoid recalculating this value needlessly
-        self.line_without_range = ""
-        self.line_with_range = ""
-        # print(f"\n_line", _line)
+        self.line_unformatted = _line
+        self.line_with_range = _line
+        # print(f"init, {self.line=}")
+        # print(f"init, {self.line_with_range=}")
+        # print(f"init, {self.line_unformatted=}")
         self.corrupted = self.line == "Corrupted"
         if self.corrupted:
             self.tooltip = f'{html_colour_text("STRENGTH",self.line)}<br/>'
@@ -64,7 +66,7 @@ class Mod:
 
         # sort out the range, min, max,value and the tooltip, if applicable
         tooltip = self.line
-        self.line_without_range = self.line
+        self.line_unformatted = self.line
         m1 = re.search(r"{range:([0-9.]+)}(.*)", tooltip)
         if m1:
             # this is now stripped of the {range:n}
@@ -80,7 +82,7 @@ class Mod:
                 case 3:
                     self.min = float(m2.group(1))
                     self.max = float(m2.group(2))
-                    self.line_without_range = re.sub(r"\([0-9.]+-[0-9.]+\)", "{}", self.line)
+                    self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{}", self.line)
                     self.range = float(m1.group(1))  # Trigger setting self.value and self.line_with_range
                 case 6:
                     self.min = float(m2.group(1))
@@ -88,8 +90,8 @@ class Mod:
                     self.range_sep = m2.group(3)
                     self.min2 = float(m2.group(4))
                     self.max2 = float(m2.group(5))
-                    self.line_without_range = re.sub(r"\([0-9.]+-[0-9.]+\)", "{0}", self.line, count=1)
-                    self.line_without_range = re.sub(r"\([0-9.]+-[0-9.]+\)", "{1}", self.line_without_range, count=1)
+                    self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{0}", self.line, count=1)
+                    self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{1}", self.line_unformatted, count=1)
                     self.range = float(m1.group(1))  # Trigger setting self.value and self.line_with_range
 
             # trigger property to update value and tooltip
@@ -124,14 +126,20 @@ class Mod:
         fmt = self.value < 10 and "%0.3g" or "%0.5g"
         # value_str = format_number(self.value, fmt, self.settings)
         # put the crafted colour on the value only
-        value_str = html_colour_text("CRAFTED", format_number(self.value, fmt, self.settings))
+        value_str = format_number(self.value, fmt, self.settings)
+        value_colored_str = html_colour_text("CRAFTED", value_str)
         if self.min2:
             self.value2 = self.min2 + ((self.max2 - self.min2) * self.range)
-            # value_str2 = format_number(self.value2, fmt, self.settings)
-            value_str2 = html_colour_text("CRAFTED", format_number(self.value2, fmt, self.settings))
-            self.line_with_range = self.line_without_range.format(value_str, value_str2)
+            value_str2 = format_number(self.value2, fmt, self.settings)
+            value_colored_str2 = html_colour_text("CRAFTED", value_str2)
+            self.line_with_range = self.line_unformatted.format(value_str, value_str2)
+            self.tooltip = self.line_unformatted.format(value_colored_str, value_colored_str2)
         else:
-            self.line_with_range = self.line_without_range.format(value_str)
-        # tooltip = f'{html_colour_text("CRAFTED",value_str)}{self.line_without_range}'
+            self.line_with_range = self.line_unformatted.format(value_str)
+            self.tooltip = self.line_unformatted.format(value_colored_str)
+        # tooltip = f'{html_colour_text("CRAFTED",value_str)}{self.line_unformatted}'
         # colour the whole tip
-        self.tooltip = f"{html_colour_text(self.tooltip_colour,self.line_with_range)}<br/>"
+        self.tooltip = f"{html_colour_text(self.tooltip_colour,self.tooltip)}<br/>"
+        # print(f"range.setter, {self.line=}")
+        # print(f"range.setter, {self.line_with_range=}")
+        # print(f"range.setter, {self.line_unformatted=}")
