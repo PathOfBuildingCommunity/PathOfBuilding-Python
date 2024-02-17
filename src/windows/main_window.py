@@ -666,6 +666,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
         self.alerting = False
+        self.player.clear()
         new = True
         self.build.filename = ""
         if type(filename_or_xml) is ET.ElementTree:
@@ -700,6 +701,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # This is needed to make the jewels show. Without it, you need to select or deselect a node.
         self.gview_Tree.add_tree_images(True)
+        # Make sure the Main and Alt weapons are active and shown as appropriate
+        self.items_ui.weapon_swap2(self.btn_WeaponSwap.isChecked())
+        # Do calcs. Needs to be near last n this function
         self.do_calcs()
         self.alerting = True
 

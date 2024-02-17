@@ -44,7 +44,7 @@ class Item:
         self._base_name = ""
         self._type = ""  # or item_class - eg weapon
         self.sub_type = ""  # or item_class - eg claw
-        self.active = False  # is this the item currently chosen/shown in the dropdown ?
+        self.active = False  # is this the item that is currently chosen/shown in the dropdown ?
 
         # this is not always available from the json character download
         self.level_req = 0
@@ -74,6 +74,7 @@ class Item:
         self.enchantMods = []
         self.fracturedMods = []
         self.crucibleMods = []
+        self.active_mods = []
 
         # variants are numbered from 1, so 0 is no selection.
         self.curr_variant = 0
@@ -919,6 +920,35 @@ class Item:
         tip += f"</table>"
         # self.base_tooltip_text = tip
         return tip
+
+    def get_active_mods(self):
+        """
+        This is used for calcs.
+        :return: list: List of all mods that canbe used for calcs
+        """
+        if self.active_mods:
+            return self.active_mods
+
+        # https://regex101.com/r/YRTdJY/1
+        # Exclude stats for equipment that has inate mods (eg ES, Armour, Damage)
+        debug = False
+        if debug:
+            print(f"{self.name}=")
+            print(self.implicitMods + self.explicitMods + self.fracturedMods + self.crucibleMods)
+        for mod in self.implicitMods + self.explicitMods + self.fracturedMods + self.crucibleMods:
+            line = mod.line_with_range
+            if debug:
+                print(f"{line}")
+                print(re.search(rf"^(?!Minions).*(to|increased|reduced|more|less).*Energy Shield", line))
+            if self.energy_shield != 0 and re.search(rf"^(?!Minions).*(to|increased|reduced|more|less).*Energy Shield", line):
+                pass
+            elif self.armour != 0 and re.search(rf"^(?!Minions).*(to|increased|reduced|more|less).*Armour", line):
+                pass
+            else:
+                self.active_mods.append(mod.line_with_range)
+        if debug:
+            print(self.active_mods)
+        return self.active_mods
 
     @property
     def abyssal_sockets(self):

@@ -116,8 +116,11 @@ class ItemSlotUI(QWidget):
         """Return a known size. Without this the default row height is about 22"""
         return QSize(self.label.width() + self.combo_item_list.width() + 5, self.widget_height)
 
-    def add_item(self, _item: Item):
-        """add an item to the drop down"""
+    def add_item(self, _item: Item, _active=False):
+        """
+        add an item to the drop down
+        :param: _item: Item(): the item
+        """
         self.combo_item_list.addItem(_item.name, _item)
         self.combo_item_list.view().setMinimumWidth(self.combo_item_list.minimumSizeHint().width() + 50)
 

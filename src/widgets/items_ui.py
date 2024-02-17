@@ -244,6 +244,8 @@ class ItemsUI:
         slot_ui = self.item_slot_ui_list.get(slot_name, None)
         if slot_ui is not None:
             slot_ui.setHidden(hidden)
+            if slot_ui.current_item:
+                slot_ui.current_item.active = not hidden
 
     def add_item_to_item_slot_ui(self, item):
         """
@@ -269,6 +271,7 @@ class ItemsUI:
                     except KeyError:
                         print(f"KeyError: slot_name: '{slot_name}'")
                         pass
+        self.weapon_swap2(self.win.btn_WeaponSwap.isChecked())
 
     def delete_item_from_item_slot_ui(self, item):
         """
@@ -432,6 +435,7 @@ class ItemsUI:
         self.hide_equipped_items_slot_ui("Weapon 2", checked)
         self.hide_equipped_items_slot_ui("Weapon 1 Swap", not checked)
         self.hide_equipped_items_slot_ui("Weapon 2 Swap", not checked)
+        self.win.do_calcs()
 
     @Slot()
     def define_item_labels(self):
