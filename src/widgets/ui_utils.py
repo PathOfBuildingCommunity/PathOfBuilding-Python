@@ -197,6 +197,37 @@ def format_number(the_number, format_str, settings, pos_neg_colour=False):
     return return_str
 
 
+def search_list_for_regex(_list, regex, debug=False) -> list:
+    """
+    Standardise the regex searching of stats.
+    :param _list: list of stats that should match the regex.
+    :param regex: the regex.
+    :param debug: bool: Ease of printing facts for a given specification.
+    :return: list: the list of values that match the regex.
+    """
+    return [line for line in _list if re.search(regex, line)]
+
+
+def search_stats_list_for_regex(stat_list, regex, default_value, debug=False) -> list:
+    """
+    Standardise the regex searching of stats
+    :param stat_list: list of stats that should match the regex.
+    :param regex: the regex.
+    :param default_value: int: A value that suits the calculation if no stats found (EG: 1 for multiplication, 0 for addition).
+    :param debug: bool: Ease of printing facts for a given specification.
+    :return: list: the list of values of the digits. Some results need to be sum'd and others product'd.
+    """
+    value = []
+    for stat in stat_list:
+        m = re.search(regex, stat)
+        # print(f"{stat=}, {regex=}")
+        if m:
+            # if debug:
+            #     print(f"{stat=}, {regex=}, {value=}, {m=}")
+            value.append(int(m.group(1)))
+    return value == [] and [int(default_value)] or value
+
+
 # https://stackoverflow.com/questions/1956542/how-to-make-item-view-render-rich-html-text-in-qt
 class HTMLDelegate(QStyledItemDelegate):
     def __init__(self) -> None:

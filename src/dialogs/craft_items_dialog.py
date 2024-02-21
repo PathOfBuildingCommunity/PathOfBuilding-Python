@@ -21,7 +21,7 @@ from PySide6.QtGui import QColor, QBrush, QIcon
 from PoB.constants import ColourCodes
 from PoB.settings import Settings
 from PoB.item import Item
-from widgets.ui_utils import html_colour_text, set_combo_index_by_text
+from widgets.ui_utils import html_colour_text, set_combo_index_by_text, print_call_stack
 
 from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgCraftItems import Ui_CraftItems
@@ -141,14 +141,8 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
         variants = len(self.item.variant_names) != 1
         self.combo_Variants.setVisible(variants)
         self.label_Variants.setVisible(variants)
-        # if variants:
-        #     self.combo_Variants.addItems(self.item.variant_names)
-        max_variant = self.item.max_variant
-        if max_variant == 0:
-            max_variant = len(self.item.variant_names)
-        for idx, vname in enumerate(self.item.variant_names):
-            if vname is not None and vname != "" and idx <= max_variant:
-                self.combo_Variants.addItem(vname)
+        # skip the leading ""
+        self.combo_Variants.addItems(self.item.variant_names[1:])
 
         self.connect_triggers()
 
@@ -308,9 +302,10 @@ class CraftItemsDlg(Ui_CraftItems, QDialog):
     @Slot()
     def change_variant(self, index):
         # print("change_variant", index)
-        if index < 0:
+        if index <= 0:
             return
-        base_names = self.item.variant_entries["base_name"]
-        self.item.base_name = base_names[index]
-        self.item.curr_variant = index + 1
+        base_names = self.item.variant_entries.get("base_name", "")
+        if base_names:
+            self.item.base_name = base_names[index]
+        self.item.curr_variant = index
         self.label_Item.setText(self.item.tooltip())

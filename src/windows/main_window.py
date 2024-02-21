@@ -283,8 +283,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Do and Display Calculations
         :param: test_item: Item() - future comparison
         :param: test_node: Node() - future comparison
-        :return:
+        :return: N/A
         """
+        if not self.alerting:
+            return
         self.config_ui.save()
         self.player.calc_stats(self.items_ui.item_list_active_items())
         self.textedit_Statistics.clear()
@@ -704,8 +706,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Make sure the Main and Alt weapons are active and shown as appropriate
         self.items_ui.weapon_swap2(self.btn_WeaponSwap.isChecked())
         # Do calcs. Needs to be near last n this function
-        self.do_calcs()
         self.alerting = True
+        self.do_calcs()
 
     @Slot()
     def build_save(self):

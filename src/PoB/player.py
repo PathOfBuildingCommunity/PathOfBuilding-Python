@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 
 from PoB.constants import PlayerClasses, PlayerAscendancy, bad_text, player_stats_list
 from PoB.build import Build
-from widgets.ui_utils import html_colour_text
+from widgets.ui_utils import html_colour_text, search_stats_list_for_regex, print_call_stack
 
 # 2 base accuracy per level.
 # 50 life and gains additional 12 life per level.
@@ -56,9 +56,9 @@ class Player:
         self.json_player_class = None
         self.nodes = set()  # set of active Nodes()
         self.items = []
-        self.item_stats = []
-        self.node_stats = []
-        self.all_stats = []
+        self.item_stats = {}
+        self.node_stats = {}
+        self.all_stats = {}
 
     def __repr__(self) -> str:
         return f"Level {self.level} {self.player_class.name}" f" {self.ascendancy.value}\n" if self.ascendancy.value is not None else "\n"
@@ -71,6 +71,7 @@ class Player:
         :param _build: build xml
         :return: N/A
         """
+        self.clear()
         self.xml_build = _build
         for stat in self.xml_build.findall("PlayerStat"):
             stat_name = stat.get("stat")
@@ -117,10 +118,6 @@ class Player:
         self.player_class = self.build.current_class
         self.json_player_class = self.build.current_tree.classes[self.player_class]
         self.items = active_items
-        # self.build.current_spec.nodes.add(49772)
-        # self.build.current_spec.nodes.add(3723)
-        # self.build.current_spec.nodes.add(27929)
-        # self.build.current_spec.nodes.add(23989)
 
         # Get all nodes that have stat values
         for node_id in self.build.current_spec.nodes:
@@ -130,63 +127,48 @@ class Player:
                 # print(node_id, node.stats)
                 self.nodes.add(node)
                 for stat in node.stats:
-                    self.node_stats.append(f"{stat}::{node.name} ({node_id})")
+                    self.node_stats[f"{stat}::{node.id}::{node.name}"] = {"id": f"{node_id}", "name": f"{node.name}"}
 
         for node_id in self.build.current_spec.masteryEffects:
             node = self.build.current_tree.nodes.get(node_id, None)
             if node:
-                # print(node_id, node.stats)
+                # print(f"{node_id=}, {node.stats=}")
                 self.nodes.add(node)
                 effect_id = self.build.current_spec.get_mastery_effect(node_id)
                 # the output from the list comprehansion is a list (wow), so add [0] to get the dict
                 effect = [effect for effect in node.masteryEffects if effect["effect"] == effect_id][0]
-                self.node_stats.append(f"{effect['stats']}::{node.name} ({node_id})")
+                self.node_stats[f"{effect['stats'][0]}::{node.id}::{node.name}"] = {"id": f"{node_id}", "name": f"{node.name}"}
         # print(f"{len(self.node_stats)=}, {self.node_stats=}")
 
         # Get stats from all active items
         # print(self.items)
         for item in self.items:
-            # print(item.name)
-            for mod in item.get_active_mods():
-                self.item_stats.append(f"{mod}::{item.name}")
+            # print(item.name, item.active_mods)
+            for mod in item.active_mods:
+                self.item_stats[f"{mod}::{item.id}::{item.name}"] = {"id": f"{item.id}", "name": f"{item.name}"}
+                # self.item_stats.append(f"{mod}::{item.name}")
             # for mod in item.implicitMods:
             #     self.item_stats.append(f"{mod.line_with_range}::{item.name}")
             # for mod in item.explicitMods:
             #     self.item_stats.append(f"{mod.line_with_range}::{item.name}")
 
         # print(f"{len(self.item_stats)=}, {self.item_stats=}")
-        self.all_stats = self.node_stats + self.item_stats
-        print(f"{len(self.all_stats)=}, {self.all_stats=}")
+        self.all_stats.update(self.node_stats)
+        self.all_stats.update(self.item_stats)
+        print(f"{len(self.all_stats)=}, {self.all_stats.keys()=}")
 
         self.calc_attribs()
         self.calc_life()
         self.calc_mana()
-        self.calc_es(True)
-
-    def search_stats_for_regex(self, stat_list, regex, default_value, debug=False) -> list:
-        """
-        Standardise the regex searching of stats
-        :param stat_list: list of stats that should match the regex.
-        :param regex: the regex.
-        :param default_value: int: A value that suits the calculation if no stats found (1 for multiplication, 0 for addition).
-        :param debug: bool: Ease of printing facts for a given specification.
-        :return: list: the list of values of the digits. Some results need to be sum'd and others product'd.
-        """
-        value = []
-        for stat in stat_list:
-            m = re.search(regex, stat)
-            # print(f"{stat=}, {regex=}")
-            if m:
-                # if debug:
-                #     print(f"{stat=}, {regex=}, {value=}, {m=}")
-                value.append(int(m.group(1)))
-        return value == [] and [int(default_value)] or value
+        self.calc_es()
+        self.calc_armour()
+        self.calc_evasion()
 
     def get_simple_stat(self, start_value, search_str, spec_str="", default_value=0, debug=False, multiple_returns=False):
         """
         Get a simple "+nn to 'stat'" or "nn% incresed 'stat'". See examples in 'calc_stat'.
         Can't do minion stats as they look similar to regular stats
-              'Minions have 10% increased maximum Life' vs '8% increased maximum Life' (they can use search_stats_for_regex)
+              'Minions have 10% increased maximum Life' vs '8% increased maximum Life' (they can use search_stats_list_for_regex)
         :param start_value: int / float.
         :param search_str: EG: 'Life', 'Strength'
         :param spec_str: If set, sets the self.stats with the vlaue of increases from the tree.
@@ -196,33 +178,33 @@ class Player:
         :return: int: The updated value.
         """
         # find increases and additions. Some objects have things like '+21 to Dexterity and Intelligence', so use .* in regex.
-        adds = sum(self.search_stats_for_regex(self.all_stats, rf"(?!Minions)([-+]?\d+) to .*{search_str}", default_value, debug))
+        adds = sum(search_stats_list_for_regex(self.all_stats, rf"(?!Minions)([-+]?\d+) to .*{search_str}", default_value, debug))
         value = start_value + adds
         if debug:
             print(f"get_simple_stat: {search_str}: {value=}, {start_value=}, {adds=}")
 
         node_multiples = sum(
-            self.search_stats_for_regex(self.node_stats, rf"^(?!Minion)([-+]?\d+)% increased {search_str}", default_value, debug)
+            search_stats_list_for_regex(self.node_stats, rf"^(?!Minion)([-+]?\d+)% increased {search_str}", default_value, debug)
         )
         node_multiples -= sum(
-            self.search_stats_for_regex(self.node_stats, rf"^(?!Minions)([-+]?\d+)% reduced {search_str}", default_value, debug)
+            search_stats_list_for_regex(self.node_stats, rf"^(?!Minions)([-+]?\d+)% reduced {search_str}", default_value, debug)
         )
         if spec_str:
             self.stats[f"{spec_str}"] = node_multiples
 
         item_multiples = sum(
-            self.search_stats_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% increased {search_str}", default_value, debug)
+            search_stats_list_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% increased {search_str}", default_value, debug)
         )
         item_multiples -= sum(
-            self.search_stats_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% reduced {search_str}", default_value, debug)
+            search_stats_list_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% reduced {search_str}", default_value, debug)
         )
         multiples = node_multiples + item_multiples
         value += multiples / 100 * value
         if debug:
             print(f"get_simple_stat: {value=}, {node_multiples=}, {item_multiples=}")
 
-        more = math.prod(self.search_stats_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% more {search_str}", 0, debug))
-        more -= math.prod(self.search_stats_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% less {search_str}", 0, debug))
+        more = math.prod(search_stats_list_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% more {search_str}", 0, debug))
+        more -= math.prod(search_stats_list_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% less {search_str}", 0, debug))
         if debug:
             print(f"get_simple_stat: {value=}, {more=}, {((more  / 100 ) + 1 )=}")
         if more:
@@ -242,7 +224,7 @@ class Player:
         :param debug: bool: Ease of printing facts for a given specification
         :return: N/A
         """
-        all_attribs = sum(self.search_stats_for_regex(self.all_stats, "to all Attributes", 0))
+        all_attribs = sum(search_stats_list_for_regex(self.all_stats, "to all Attributes", 0, debug))
         for attrib in ("Str", "Dex", "Int"):
             # attrib = "Str"
             long_str = player_stats_list[attrib]["label"]
@@ -269,21 +251,10 @@ class Player:
         life = 38 + (12 * self.build.level)
         if debug:
             print(f"calc_life: {life=}, {self.stats['Str']=}, ")
-        life += self.stats["Str"] / 2
+        life += int(self.stats["Str"] / 2)
         if debug:
             print(f"calc_life: {life=}")
         self.stats["Life"] = int(self.get_simple_stat(life, "maximum Life", "Spec:LifeInc", debug=debug))
-        # life += self.search_stats_for_regex(self.all_stats, r"([-+]?\d+) to .* maximum Life", 0, debug)
-        # if debug:
-        #     print(f"{life=}")
-        # node_multiples = self.search_stats_for_regex(self.node_stats, r"([-+]?\d+)% increased maximum Life", 0, debug)
-        # Currently there are no reduced Maximum's on the tree
-        # # node_multiples -= self.stats["Spec:LifeInc"] = self.search_stats_for_regex(self.node_stats, "reduced maximum Life", 0, debug)
-        # self.stats["Spec:LifeInc"] = node_multiples
-        # item_multiples = self.search_stats_for_regex(self.item_stats, r"([-+]?\d+)% increased maximum Life", 0)
-        # item_multiples -= self.search_stats_for_regex(self.item_stats, r"([-+]?\d+)% reduced maximum Life", 0)
-        # life += ((node_multiples + item_multiples) / 100) * life
-        # self.stats["Life"] = life
 
     def calc_mana(self, debug=False):
         """
@@ -295,29 +266,64 @@ class Player:
         mana = 34 + (6 * self.build.level)
         if debug:
             print(f"{mana=}")
-        mana += self.stats["Int"] / 2
+        mana += int(self.stats["Int"] / 2)
         if debug:
             print(f"{mana=}, {self.stats['Int'] / 2}")
         self.stats["Mana"] = self.get_simple_stat(mana, "maximum Mana", "Spec:ManaInc", debug=debug)
-        # mana += self.find_addition_to_stat(self.node_stats + self.item_stats, f" to maximum Mana")
-        # self.stats["Spec:ManaInc"] = self.find_increases_to_stat(self.node_stats, f"increased maximum Mana", 100)
-        # item_mana = self.find_increases_to_stat(self.item_stats, f"increased maximum Mana", 0)
-        # mana *= (self.stats["Spec:ManaInc"] + item_mana) / 100
-        # mana += self.search_stats_for_regex(self.all_stats, r"([-+]?\d+) to .* maximum Mana", 0, debug)
-        # if debug:
-        #     print(f"{mana=}")
-        # node_multiples = self.search_stats_for_regex(self.node_stats, r"([-+]?\d+)% increased maximum Mana", 100, debug)
-        # Currently there are no reduced Maximum's on the tree
-        # node_multiples -= self.stats["Spec:LifeInc"] = self.search_stats_for_regex(self.node_stats, "reduced maximum Mana", 0, debug)
-        # self.stats["Spec:ManaInc"] = node_multiples
-        # item_multiples = self.search_stats_for_regex(self.item_stats, r"([-+]?\d+)% increased maximum Mana", 0)
-        # item_multiples -= self.search_stats_for_regex(self.item_stats, r"([-+]?\d+)% reduced maximum Mana", 0)
-        # mana += ((node_multiples + item_multiples) / 100) * mana
-        # if mana < 1:
-        #     mana = 1
-        # if debug:
-        #     print(f"{mana=}, {node_multiples=}, {item_multiples=}")
-        # self.stats["Mana"] = mana
+
+    def calc_armour(self, debug=False):
+        """
+        Calc. Armour. Needs Int calculated first. https://www.poewiki.net/wiki/Armour
+        :param debug: bool: Ease of printing facts for a given specification
+        :return: N/A
+        """
+        # Setbase value.
+        armour = 0
+        for item in self.items:
+            armour += int(item.armour)
+        if debug:
+            print(f"Armour: from item attribs: {armour=}")
+        adds, multiples, more = self.get_simple_stat(armour, "Armour", "Spec:ArmourInc", 0, debug, True)
+        if debug:
+            print(f"Armour: {adds=}, {multiples=}, {more=}, {self.stats['Int']=}, {self.stats['Int'] / 5=}")
+            print(f"Armour: {armour}, {self.get_simple_stat(armour, 'Armour', 'Spec:ArmourInc', 0, debug)}")
+
+        armour = (armour + adds) * ((multiples / 100) + 1)
+        if debug:
+            print(f"Armour: {armour=}, {((multiples  / 100) + 1)=}")
+        if more:
+            armour = ((more / 100) + 1) * int(armour)
+        self.stats["Armour"] = armour
+
+    def calc_evasion(self, debug=False):
+        """
+        Calc. Evasion. Needs Int calculated first. https://www.poewiki.net/wiki/Evasion
+        Every class starts with 15 evasion, and gains 2% increased maximum energy shield every 10 intelligence.
+        Evasion is rounded up to the nearest 5.
+        :param debug: bool: Ease of printing facts for a given specification
+        :return: N/A
+        """
+        # Setbase value.
+        evasion = 15
+        for item in self.items:
+            evasion += int(item.evasion)
+        if debug:
+            print(f"Evasion: from item attribs: {evasion=}")
+        # We need to account for Dex's max Evasion.
+        adds, multiples, more = self.get_simple_stat(evasion, "Evasion", "Spec:EvasionInc", 0, debug, True)
+        if debug:
+            print(f"Evasion: {adds=}, {multiples=}, {more=}, {self.stats['Dex']=}, {self.stats['Dex'] / 5=}")
+
+        evasion = (evasion + adds) * (((multiples + int(self.stats["Dex"] / 5)) / 100) + 1)
+        if debug:
+            print(f"Evasion: {evasion=}, {(((multiples + (self.stats['Dex'] / 5)) / 100) + 1)=}")
+        if more:
+            evasion = ((more / 100) + 1) * int(evasion)
+        self.stats["Evasion"] = evasion
+        # Round up to nearest 5
+        # self.stats["Evasion"] = math.ceil(evasion / 5.0) * 5
+
+        return
 
     def calc_es(self, debug=False):
         """
@@ -350,6 +356,7 @@ class Player:
         self.nodes.clear()
         self.node_stats.clear()
         self.item_stats.clear()
+        self.all_stats.clear()
 
     def stat_conditions(self, stat_name, stat_value):
         """
@@ -371,64 +378,6 @@ class Player:
                 return self.stats.get("EnergyShield", 0) != 0
             case _:
                 return True
-
-    # def find_addition_to_stat(self, search_list, search_str, regex=r"^([-+]?\d+) to ", debug=False):
-    #     """
-    #     Find stats like '+1 to maximum Life' or '+1 to Summoned Totems'.
-    #     Handles negatives too.
-    #     :param search_list: list: either nodes or items. Stats like "Spec:LifeInc" needs nodes only.
-    #     :param search_str: Something like ' to Strength
-    #     :param regex: str
-    #     :param debug: bool: Ease of printing facts for a given specification
-    #     :return: int: the value of all the addition stats found
-    #     """
-    #     results = []
-    #     # find stats with additions
-    #     results += [n for n in search_list if search_str in n]
-    #     # regex = re.compile(_regex).search
-    #     # results += [m.group(1) for stat in search_list for m in [regex(search_str)] if m]
-    #     # results += [m.group(1) for l in lines for m in [regex.search(l)] if m]
-    #     if debug:
-    #         print(f"{search_str=}, {results=}")
-    #     value = self.search_stats_for_regex(results, regex, 0)
-    #     if debug:
-    #         print(f"find_addition_to_stat, {value=}, {search_str=}")
-    #     return value
-
-    # def find_increases_to_stat(self, search_list, search_str, default_value, regex=r"^([-+]?\d+)% increased", debug=False):
-    #     """
-    #     Find stats like '8% increased Strength'.
-    #     Does not handle Decreased, as there doesn't appear to many (any ?).
-    #     :param search_list: list: either nodes or items. Stats like "Spec:LifeInc" needs nodes only.
-    #     :param search_str: Something like ' increased Strength'
-    #     :param default_value: int: A value that suits the calculation if no stats found
-    #     :param regex: str
-    #     :param debug: bool: Ease of printing facts for a given specification
-    #     :return: int: the value of all the addition stats found
-    #     """
-    #     results = []
-    #     # find stats with increases
-    #     results += [n for n in search_list if search_str in n]
-    #     if debug:
-    #         print(f"{search_str=}, {results=}")
-    #     value = self.search_stats_for_regex(results, regex, default_value)
-    #     if debug:
-    #         print(f"find_increases_to_stat, {value=}, {search_str=}")
-    #     return value
-
-    # def search_stat(self, search_list, regex, default_value, debug=False):
-    #     """
-    #
-    #     :param search_list:
-    #     :param regex:
-    #     :param default_value:
-    #     :param debug:
-    #     :return:
-    #     """
-    #     adds = self.search_stats_for_regex(self.all_stats, regex, 0, debug=True)
-    #     multiples = self.search_stats_for_regex(search_list, regex, 1, debug=True)
-    #     multiples -= self.search_stats_for_regex(search_list, regex, 0, debug=True)
-    #     return adds, multiples
 
 
 def test() -> None:
