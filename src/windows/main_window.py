@@ -89,7 +89,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Start with an empty build
         self.build = Build(self.settings, self)
         self.current_filename = self.settings.build_path
-        self.player = Player(self.settings, self.build)
+        self.player = Player(self.settings, self.build, self)
 
         # Setup UI Classes()
         # self.stats = PlayerStats(self.settings, self)
@@ -184,6 +184,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.layout_config.addItem(self.grpbox_EffectiveDPS)
         self.layout_config.addItem(self.grpbox_5)
         self.layout_config.addItem(self.grpbox_6)
+        print()
+
+        # Configure basic Configuration setup
+        self.config_ui.initial_startup_setup()
 
         # set the ComboBox dropdown width.
         self.combo_Bandits.view().setMinimumWidth(self.combo_Bandits.minimumSizeHint().width())
@@ -224,6 +228,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             god_info = pantheon_minor_gods[god_name]
             self.combo_MinorPantheon.addItem(god_info.get("name"), god_name)
             self.combo_MinorPantheon.setItemData(idx, html_colour_text("TANGLE", god_info.get("tooltip")), Qt.ToolTipRole)
+        self.combo_EHPUnluckyWorstOf.addItem("Average", 1)
+        self.combo_EHPUnluckyWorstOf.addItem("Unlucky", 2)
+        self.combo_EHPUnluckyWorstOf.addItem("Very Unlucky", 4)
+        self.combo_igniteMode.addItem("Average", "AVERAGE")
+        self.combo_igniteMode.addItem("Crits Only", "CRIT")
 
         self.menu_Builds.addSeparator()
         self.set_recent_builds_menu_items(self.settings)
@@ -286,6 +295,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         :return: N/A
         """
         if not self.alerting:
+            # Don't keep calculating as a build is loaded
             return
         self.config_ui.save()
         self.player.calc_stats(self.items_ui.item_list_active_items())
@@ -304,7 +314,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 # Do we have this stat in our stats dict
                 stat_value = self.player.stats.get(stat_name, bad_text)
-                if stat_value != bad_text and stat_value != 0 and self.player.stat_conditions(stat_name, stat_value):
+                if stat_value != bad_text and self.player.stat_conditions(stat_name, stat_value):
                     # _label = "{0:>24}".format(stat["label"])
                     # _label = format(f"{stat['label']:>24}")
                     _colour = stat.get("colour", self.settings.qss_default_text)

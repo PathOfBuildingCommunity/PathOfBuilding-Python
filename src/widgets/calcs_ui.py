@@ -17,14 +17,11 @@ class CalcsUI:
         :param _win: A pointer to MainWindowUI
         """
         self.settings = _settings
+        self.build = _build
         self.win = _win
 
     def __repr__(self) -> str:
-        return (
-            f"Level {self.level} {self.player_class.name}" f" {self.ascendancy.value}\n"
-            if self.ascendancy.value is not None
-            else "\n"
-        )
+        return f"Level {self.level} {self.player_class.name}" f" {self.ascendancy.value}\n" if self.ascendancy.value is not None else "\n"
 
     def load(self):
         """

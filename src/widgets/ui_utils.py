@@ -38,6 +38,18 @@ def bool_to_str(in_bool):
     return in_bool and "true" or "false"
 
 
+is_str_a_boolean = str_to_bool
+
+
+def is_str_a_number(in_str):
+    """
+    Check if this string is a number
+    :param: in_str: String: The setting to be evaluated
+    :returns: True if it looks like it could be afloat or integer
+    """
+    return in_str.startswith("-") and in_str[1:].isdigit() or in_str.isdigit()
+
+
 def index_exists(_list_or_dict, index):
     """
     Test if a list contains a given index
@@ -222,8 +234,8 @@ def search_stats_list_for_regex(stat_list, regex, default_value, debug=False) ->
         m = re.search(regex, stat)
         # print(f"{stat=}, {regex=}")
         if m:
-            # if debug:
-            #     print(f"{stat=}, {regex=}, {value=}, {m=}")
+            if debug:
+                print(f"{stat=}, {regex=}, {value=}, {m=}")
             value.append(int(m.group(1)))
     return value == [] and [int(default_value)] or value
 

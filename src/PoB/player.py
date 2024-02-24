@@ -9,7 +9,7 @@ import re
 import xml.etree.ElementTree as ET
 
 from PoB.constants import PlayerClasses, PlayerAscendancy, bad_text, player_stats_list
-from PoB.build import Build
+from ui.PoB_Main_Window import Ui_MainWindow
 from widgets.ui_utils import html_colour_text, search_stats_list_for_regex, print_call_stack
 
 # 2 base accuracy per level.
@@ -40,10 +40,11 @@ class_stats = {
 
 
 class Player:
-    def __init__(self, settings, build) -> None:
+    def __init__(self, settings, build, _win: Ui_MainWindow) -> None:
+        self.settings = settings
         self.build = build
         self.xml_build = build.build
-        self.settings = settings
+        self.win = _win
         self.player_class = build.current_class
         # self.ascendancy = build.ascendancy
         self.level = build.level
@@ -56,9 +57,12 @@ class Player:
         self.json_player_class = None
         self.nodes = set()  # set of active Nodes()
         self.items = []
-        self.item_stats = {}
-        self.node_stats = {}
-        self.all_stats = {}
+        self.item_player_stats = {}
+        self.node_player_stats = {}
+        self.all_player_stats = {}
+        self.item_minion_stats = {}
+        self.node_minion_stats = {}
+        self.all_minion_stats = {}
 
     def __repr__(self) -> str:
         return f"Level {self.level} {self.player_class.name}" f" {self.ascendancy.value}\n" if self.ascendancy.value is not None else "\n"
@@ -127,7 +131,10 @@ class Player:
                 # print(node_id, node.stats)
                 self.nodes.add(node)
                 for stat in node.stats:
-                    self.node_stats[f"{stat}::{node.id}::{node.name}"] = {"id": f"{node_id}", "name": f"{node.name}"}
+                    if "Minion" in stat:
+                        self.node_minion_stats[f"{stat}::{node.id}::{node.name}"] = {"id": f"{node_id}", "name": f"{node.name}"}
+                    else:
+                        self.node_player_stats[f"{stat}::{node.id}::{node.name}"] = {"id": f"{node_id}", "name": f"{node.name}"}
 
         for node_id in self.build.current_spec.masteryEffects:
             node = self.build.current_tree.nodes.get(node_id, None)
@@ -137,25 +144,35 @@ class Player:
                 effect_id = self.build.current_spec.get_mastery_effect(node_id)
                 # the output from the list comprehansion is a list (wow), so add [0] to get the dict
                 effect = [effect for effect in node.masteryEffects if effect["effect"] == effect_id][0]
-                self.node_stats[f"{effect['stats'][0]}::{node.id}::{node.name}"] = {"id": f"{node_id}", "name": f"{node.name}"}
-        # print(f"{len(self.node_stats)=}, {self.node_stats=}")
+                stat = effect["stats"][0]
+                if "Minion" in stat:
+                    self.node_minion_stats[f"{stat}::{node.id}::{node.name}"] = {"id": f"{node_id}", "name": f"{node.name}"}
+                else:
+                    self.node_player_stats[f"{stat}::{node.id}::{node.name}"] = {"id": f"{node_id}", "name": f"{node.name}"}
+        # print(f"{len(self.node_player_stats)=}, {self.node_player_stats=}")
 
         # Get stats from all active items
         # print(self.items)
         for item in self.items:
             # print(item.name, item.active_mods)
             for mod in item.active_mods:
-                self.item_stats[f"{mod}::{item.id}::{item.name}"] = {"id": f"{item.id}", "name": f"{item.name}"}
-                # self.item_stats.append(f"{mod}::{item.name}")
+                if "Minion" in mod:
+                    self.item_minion_stats[f"{mod}::{item.id}::{item.name}"] = {"id": f"{item.id}", "name": f"{item.name}"}
+                else:
+                    self.item_player_stats[f"{mod}::{item.id}::{item.name}"] = {"id": f"{item.id}", "name": f"{item.name}"}
+                # self.item_player_stats.append(f"{mod}::{item.name}")
             # for mod in item.implicitMods:
-            #     self.item_stats.append(f"{mod.line_with_range}::{item.name}")
+            #     self.item_player_stats.append(f"{mod.line_with_range}::{item.name}")
             # for mod in item.explicitMods:
-            #     self.item_stats.append(f"{mod.line_with_range}::{item.name}")
+            #     self.item_player_stats.append(f"{mod.line_with_range}::{item.name}")
 
-        # print(f"{len(self.item_stats)=}, {self.item_stats=}")
-        self.all_stats.update(self.node_stats)
-        self.all_stats.update(self.item_stats)
-        print(f"{len(self.all_stats)=}, {self.all_stats.keys()=}")
+        # print(f"{len(self.item_player_stats)=}, {self.item_player_stats=}")
+        self.all_player_stats.update(self.node_player_stats)
+        self.all_player_stats.update(self.item_player_stats)
+        self.all_minion_stats.update(self.node_minion_stats)
+        self.all_minion_stats.update(self.item_minion_stats)
+        print(f"{len(self.all_player_stats)=}, {self.all_player_stats.keys()=}")
+        print(f"{len(self.all_minion_stats)=}, {self.all_minion_stats.keys()=}")
 
         self.calc_attribs()
         self.calc_life()
@@ -163,6 +180,7 @@ class Player:
         self.calc_es()
         self.calc_armour()
         self.calc_evasion()
+        self.calc_res(True)
 
     def get_simple_stat(self, start_value, search_str, spec_str="", default_value=0, debug=False, multiple_returns=False):
         """
@@ -178,33 +196,34 @@ class Player:
         :return: int: The updated value.
         """
         # find increases and additions. Some objects have things like '+21 to Dexterity and Intelligence', so use .* in regex.
-        adds = sum(search_stats_list_for_regex(self.all_stats, rf"(?!Minions)([-+]?\d+) to .*{search_str}", default_value, debug))
+        # for resistances % will be used (+30%). Others like life, dex, armour do not.
+        adds = sum(search_stats_list_for_regex(self.all_player_stats, rf"([-+]?\d+)%? to.*{search_str}", default_value, debug))
         value = start_value + adds
         if debug:
             print(f"get_simple_stat: {search_str}: {value=}, {start_value=}, {adds=}")
 
         node_multiples = sum(
-            search_stats_list_for_regex(self.node_stats, rf"^(?!Minion)([-+]?\d+)% increased {search_str}", default_value, debug)
+            search_stats_list_for_regex(self.node_player_stats, rf"([-+]?\d+)% increased {search_str}", default_value, debug)
         )
         node_multiples -= sum(
-            search_stats_list_for_regex(self.node_stats, rf"^(?!Minions)([-+]?\d+)% reduced {search_str}", default_value, debug)
+            search_stats_list_for_regex(self.node_player_stats, rf"([-+]?\d+)% reduced {search_str}", default_value, debug)
         )
         if spec_str:
             self.stats[f"{spec_str}"] = node_multiples
 
         item_multiples = sum(
-            search_stats_list_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% increased {search_str}", default_value, debug)
+            search_stats_list_for_regex(self.item_player_stats, rf"([-+]?\d+)% increased {search_str}", default_value, debug)
         )
         item_multiples -= sum(
-            search_stats_list_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% reduced {search_str}", default_value, debug)
+            search_stats_list_for_regex(self.item_player_stats, rf"([-+]?\d+)% reduced {search_str}", default_value, debug)
         )
         multiples = node_multiples + item_multiples
         value += multiples / 100 * value
         if debug:
             print(f"get_simple_stat: {value=}, {node_multiples=}, {item_multiples=}")
 
-        more = math.prod(search_stats_list_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% more {search_str}", 0, debug))
-        more -= math.prod(search_stats_list_for_regex(self.item_stats, rf"^(?!Minions)([-+]?\d+)% less {search_str}", 0, debug))
+        more = math.prod(search_stats_list_for_regex(self.item_player_stats, rf"^([-+]?\d+)% more {search_str}", 0, debug))
+        more -= math.prod(search_stats_list_for_regex(self.item_player_stats, rf"^([-+]?\d+)% less {search_str}", 0, debug))
         if debug:
             print(f"get_simple_stat: {value=}, {more=}, {((more  / 100 ) + 1 )=}")
         if more:
@@ -224,7 +243,7 @@ class Player:
         :param debug: bool: Ease of printing facts for a given specification
         :return: N/A
         """
-        all_attribs = sum(search_stats_list_for_regex(self.all_stats, "to all Attributes", 0, debug))
+        all_attribs = sum(search_stats_list_for_regex(self.all_player_stats, "to all Attributes", 0, debug))
         for attrib in ("Str", "Dex", "Int"):
             # attrib = "Str"
             long_str = player_stats_list[attrib]["label"]
@@ -251,9 +270,9 @@ class Player:
         life = 38 + (12 * self.build.level)
         if debug:
             print(f"calc_life: {life=}, {self.stats['Str']=}, ")
-        life += int(self.stats["Str"] / 2)
+        life += self.stats["Str"] / 2
         if debug:
-            print(f"calc_life: {life=}")
+            print(f"calc_life: {life=}, {(self.stats['Str'] / 2)}")
         self.stats["Life"] = int(self.get_simple_stat(life, "maximum Life", "Spec:LifeInc", debug=debug))
 
     def calc_mana(self, debug=False):
@@ -266,7 +285,7 @@ class Player:
         mana = 34 + (6 * self.build.level)
         if debug:
             print(f"{mana=}")
-        mana += int(self.stats["Int"] / 2)
+        mana += self.stats["Int"] / 2
         if debug:
             print(f"{mana=}, {self.stats['Int'] / 2}")
         self.stats["Mana"] = self.get_simple_stat(mana, "maximum Mana", "Spec:ManaInc", debug=debug)
@@ -350,20 +369,68 @@ class Player:
             es = ((more / 100) + 1) * int(es)
         self.stats["EnergyShield"] = es
 
+    def calc_res(self, debug=False):
+        """
+        Calc. Resistance. https://www.poewiki.net/wiki/Resistance
+        :param debug: bool: Ease of printing facts for a given specification
+        :return: N/A
+        """
+        # Setbase value.
+        end_chg_res = self.win.check_EnduranceCharges.isChecked() and (self.win.spin_NumEnduranceCharges.value() * 4) or 0
+
+        all_ele_res = end_chg_res + sum(
+            search_stats_list_for_regex(self.all_player_stats, r"^([-+]?\d+)% to all Elemental Resistances", 0, debug)
+        )
+        max_res = 75 + sum(search_stats_list_for_regex(self.all_player_stats, r"^([-+]?\d+)% to all maximum Resistances", 0, debug))
+        for res in ("Fire", "Cold", "Lightning", "Chaos"):
+            if res == "Chaos":
+                # to all Elemental Resistances doesn't affect chaos
+                all_ele_res = 0
+                end_chg_res = 0
+            # Setbase value from resistance penalty dropdoan
+            value = self.win.combo_ResPenalty.currentData()
+            if debug:
+                print(f"calc_res: {res=}, {value=}, {all_ele_res=}, {end_chg_res=}, {max_res=}")
+            total_res = self.get_simple_stat(value, rf"{res}.*Resistance", debug=debug) + all_ele_res
+            self.stats[f"{res}Resist"] = min(total_res, max_res)
+            self.stats[f"{res}ResistOverCap"] = 0
+            if total_res > max_res:
+                self.stats[f"{res}ResistOverCap"] = total_res - max_res
+            if debug:
+                print(f"calc_res: {res=}, {total_res=}, {self.stats[f'{res}Resist']=}, {self.stats[f'{res}ResistOverCap']=}")
+
+            # # Find MaxReq
+            # required = 0
+            # for item in self.items:
+            #     required = max(required, int(item.requires.get(attrib, "0")))
+            # self.stats[f"Req{attrib}"] = required
+
+        # <PlayerStat stat="FireResist" value="65"/>
+        # <PlayerStat stat="FireResistOverCap" value="0"/>
+        # <PlayerStat stat="ColdResist" value="47"/>
+        # <PlayerStat stat="ColdResistOverCap" value="0"/>
+        # <PlayerStat stat="LightningResist" value="51"/>
+        # <PlayerStat stat="LightningResistOverCap" value="0"/>
+        # <PlayerStat stat="ChaosResist" value="-22"/>
+        # <PlayerStat stat="ChaosResistOverCap" value="0"/>
+
     def clear(self):
         """Erase internal variables"""
         self.items.clear()
         self.nodes.clear()
-        self.node_stats.clear()
-        self.item_stats.clear()
-        self.all_stats.clear()
+        self.node_player_stats.clear()
+        self.item_player_stats.clear()
+        self.item_minion_stats.clear()
+        self.node_minion_stats.clear()
+        self.all_player_stats.clear()
+        self.all_minion_stats.clear()
 
-    def stat_conditions(self, stat_name, stat_value):
+    def stat_conditions(self, stat_name, stat_value, max_value=0):
         """
         Check if this stat can be shown.
         :param stat_name: str
         :param stat_value: int or float
-        :return: bool:
+        :return: bool: true if stat_value is not 0
         """
         match stat_name:
             case "ReqStr":
@@ -376,8 +443,10 @@ class Player:
                 return self.stats["Mana"] != 0
             case "Spec:EnergyShieldInc":
                 return self.stats.get("EnergyShield", 0) != 0
+            case "Spec:ArmourInc":
+                return self.stats.get("Armour", 0) != 0
             case _:
-                return True
+                return stat_value != 0
 
 
 def test() -> None:

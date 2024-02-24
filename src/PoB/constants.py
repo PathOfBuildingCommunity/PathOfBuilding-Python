@@ -197,7 +197,7 @@ class ColourCodes(enum.Enum):
     MAGIC = "#8888FF"
     MAINHAND = "#50FF50"
     MARAUDER = "#E05030"
-    NEGATIVE = "#DD0022"
+    NEGATIVE = "#FF0022"  # Better against black
     OFFENCE = "#E07030"
     OFFHAND = "#B7B7FF"
     POSITIVE = "#33FF77"

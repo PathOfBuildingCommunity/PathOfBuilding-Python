@@ -10,6 +10,7 @@ numerous Passive Trees (at various Player Levels, or various Cluster Jewels)
 associated with a Player.
 """
 
+import builtins
 import re
 import xml.etree.ElementTree as ET
 from pprint import pprint
@@ -34,6 +35,8 @@ from PoB.pob_file import read_xml, write_xml
 from dialogs.popup_dialogs import critical_dialog, yes_no_dialog
 from widgets.ui_utils import (
     _debug,
+    is_str_a_boolean,
+    is_str_a_number,
     str_to_bool,
     bool_to_str,
     print_a_xml_element,
@@ -162,20 +165,20 @@ class Build:
 
     @property
     def resistancePenalty(self):
-        return self.get_config_tag_item("Input", "resistancePenalty", "number", "0")
+        return self.get_config_tag_item("Input", "resistancePenalty", -60)
 
     @resistancePenalty.setter
-    def resistancePenalty(self, new_name):
-        self.set_config_tag_item("Input", "resistancePenalty", "number", new_name)
+    def resistancePenalty(self, new_value):
+        self.set_config_tag_item("Input", "resistancePenalty", new_value)
 
     @property
     def bandit(self):
-        return self.get_config_tag_item("Input", "bandit", "string", "None")
+        return self.get_config_tag_item("Input", "bandit", "None")
 
     @bandit.setter
-    def bandit(self, new_name):
-        self.build.set("bandit", new_name)
-        self.set_config_tag_item("Input", "bandit", "string", new_name)
+    def bandit(self, new_bandit):
+        self.build.set("bandit", new_bandit)
+        self.set_config_tag_item("Input", "bandit", new_bandit)
         set_combo_index_by_data(self.win.combo_Bandits, self.bandit)
 
     def set_bandit_by_number(self, new_int):
@@ -184,21 +187,21 @@ class Build:
 
     @property
     def pantheonMajorGod(self):
-        return self.get_config_tag_item("Input", "pantheonMajorGod", "string", "None")
+        return self.get_config_tag_item("Input", "pantheonMajorGod", "None")
 
     @pantheonMajorGod.setter
     def pantheonMajorGod(self, new_name):
         self.build.set("pantheonMajorGod", new_name)
-        self.set_config_tag_item("Input", "pantheonMajorGod", "string", new_name)
+        self.set_config_tag_item("Input", "pantheonMajorGod", new_name)
 
     @property
     def pantheonMinorGod(self):
-        return self.get_config_tag_item("Input", "pantheonMinorGod", "string", "None")
+        return self.get_config_tag_item("Input", "pantheonMinorGod", "None")
 
     @pantheonMinorGod.setter
     def pantheonMinorGod(self, new_name):
         self.build.set("pantheonMinorGod", new_name)
-        self.set_config_tag_item("Input", "pantheonMinorGod", "string", new_name)
+        self.set_config_tag_item("Input", "pantheonMinorGod", new_name)
 
     @property
     def targetVersion(self):
@@ -241,48 +244,89 @@ class Build:
     # def (self, new_name):
     #     self.build[""] = new_name
 
-    def get_config_tag_item(self, key, name, value_type, default=Union[str, int, bool]):
+    def get_config_tag_item(self, key, name, default=Union[str, int, float, bool]):
         """
         Get an item from the <Config> ... </Config> tag set
 
         :param key: string: the key: Input or Placeholder for example
         :param name: string: the value of the 'name' property
-        :param value_type: string: just to be confusing, the name of the 'value' property (string, boolean, number)
         :param default: Union[str, int, bool]): a default value in case the item is not in the xml
         :return: The appropriate value from xml or the default
         """
-        for _input in self.config.findall(key):
-            if _input.get("name") == name:
-                _value = _input.get(value_type, default)
-                match value_type:
+        _input = [element for element in self.config.findall(key) if element.get("name") == name]
+        if _input:
+            _input = _input[0]
+            # Find out what kind of value we have. Assume that XML might have: name="x" number="1" or: number="1" name="x"
+            key = [key for key in _input.keys() if key in ("string", "boolean", "number")]
+            if key:
+                match key[0]:
                     case "string":
-                        return _value
+                        return _input.get("string")
                     case "boolean":
-                        return str_to_bool(_value)
+                        return str_to_bool(_input.get("boolean"))
                     case "number":
-                        return int(_value)
-        return None
+                        _value = _input.get("number")
+                        # is this an int or simple float (1.2) ?
+                        if is_str_a_number(_value):
+                            return int(_input.get("number", f"{default}"))
+                        elif is_str_a_number(_value.replace(".", "")):
+                            return float(_input.get("number", f"{default}"))
+                        else:
+                            print(f"get_config_tag_item: Can't determine if this is a number, returning default: {key}/{name}, {_value}")
+                            return default
+            else:
+                return default
+        else:
+            return default
 
-    def set_config_tag_item(self, key, name, value_type, new_value=Union[str, int, bool]):
+        # for _input in self.config.findall(key):
+        #     if _input.get("name") == name:
+        #         # Find out what kind of value we have. Assume that XML might have name="x" number="1" or number="1" name="x"
+        #         keys = _input.keys()[:]
+        #         keys.remove("name")
+        #         match keys[0]:
+        #             case "string":
+        #                 return _input.get("string", f"{default}")
+        #             case "boolean":
+        #                 return str_to_bool(_input.get("boolean", f"{default}"))
+        #             case "number":
+        #                 _value = _input.get("number", f"{default}")
+        #                 # is this an int or simple float (1.2) ?
+        #                 if is_str_a_number(_value):
+        #                     return int(_input.get("number", f"{default}"))
+        #                 elif is_str_a_number(_value.replace(".", "")):
+        #                     return float(_input.get("number", f"{default}"))
+        #                 else:
+        #                     print(f"get_config_tag_item: Can't determine if this is a number, returning default: {key}/{name}, {_value}")
+        #                     return default
+        # return default
+
+    def set_config_tag_item(self, key, name, new_value=Union[builtins.str, int, float, bool]):
         """
-        Get an item from the <Config> ... </Config> tag set
+        Set an item from the <Config> ... </Config> tag set
 
         :param key: string: the key: Input or Placeholder for example
         :param name: string: the value of the 'name' property
-        :param value_type: string: just to be confusing, the name of the 'value' property (string, boolean, number)
         :param new_value: Union[str, int, bool]): the value to be recorded
         :return: The appropriate value from xml or "default"
         """
-        for _input in self.config.findall(key):
-            if _input.get("name") == name:
-                match value_type:
-                    case "boolean":
-                        new_value = bool_to_str(new_value)
-                    case "number":
-                        new_value = f"{new_value}"
-                return _input.set(value_type, new_value)
-        # if we get here, the key/ name combo was not found, lets make one and add it
-        self.config.append(ET.fromstring(f'<{key} name="{name}" {value_type}="{new_value}" />'))
+        # find element name for output
+        match new_value:
+            # bool() must come before int
+            case bool():
+                value_type = "boolean"
+            case int() | float():
+                value_type = "number"
+            case _:
+                value_type = "string"
+        # Find an existing entry
+        _input = [element for element in self.config.findall(key) if element.get("name") == name]
+        # print(f"set_config_tag_item, {key=}, {name=}, {new_value=}, {value_type=}, {type(new_value), {_input}}")
+        if _input:
+            _input[0].set(value_type, f"{new_value}")
+        else:
+            # The key / name combo was not found, lets make one and add it.
+            self.config.append(ET.fromstring(f'<{key} name="{name}" {value_type}="{new_value}" />'))
 
     def new(self, _xml):
         """
