@@ -29,13 +29,16 @@ default_view_mode = "TREE"
 # default_view_mode = "ITEMS"
 # default_view_mode = "SKILLS"
 
+default_max_charges = 3
+
 # Default config incase the settings file doesn't exist
 def_theme = "dark"
 default_settings = f"""<PathOfBuilding>
 <Misc theme="{def_theme}" slotOnlyTooltips="true" showTitlebarName="true" showWarnings="true" defaultCharLevel="1" 
 nodePowerTheme="0" connectionProtocol="0" thousandsSeparator="n" decimalSeparator="_" 
-showThousandsSeparators="true" betaTest="false" defaultGemQuality="0" buildSortMode="NAME" 
-proxyURL="" buildPath=""/>
+showThousandsSeparators="true" betaTest="false"  defaultGemQuality="0" buildSortMode="NAME" 
+defaultItemAffixQuality="0.5" colour_positive="#33FF77" colour_negative="#FF0022" colour_highlight="#FF0000"
+proxyURL="" buildPath="" open_build=""/>
    <recentBuilds/>
    <size width="800" height="600"/>
 </PathOfBuilding>"""
@@ -45,7 +48,6 @@ treeVersion="{_VERSION_str}"></Spec>"""
 default_skill_set = """<SkillSet id="1" title="Default">
   <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot="" mainActiveSkill="1"></Skill>
 </SkillSet>"""
-
 
 empty_build = f"""<PathOfBuilding>
     <Build version="2" level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"
@@ -570,6 +572,18 @@ player_stats_list = {
     "SkillDPS": {"label": "Skill DPS", "fmt": "%0.1f"},
 }
 # fmt: on
+# Stats that are included in the build xml but not shown on the left hand side of the PoB window.
+extraSaveStats = [
+    "PowerCharges",
+    "PowerChargesMax",
+    "FrenzyCharges",
+    "FrenzyChargesMax",
+    "EnduranceCharges",
+    "EnduranceChargesMax",
+    "ActiveTotemLimit",
+    "ActiveMinionLimit",
+]
+
 
 get_http_headers = {"User-Agent": "Path of Building Community - Python", "Accept": ""}
 post_http_headers = {

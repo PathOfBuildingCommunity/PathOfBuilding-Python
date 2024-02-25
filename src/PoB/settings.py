@@ -295,6 +295,16 @@ class Settings:
         self.misc.set("buildPath", str(new_path))
 
     @property
+    def open_build(self):
+        # If there was a build open whenthe prgram was last closed, which one was it.
+        return self.misc.get("open_build", "")
+
+    @open_build.setter
+    # If there was a build open whenthe prgram was last closed, which one was it.
+    def open_build(self, new_build):
+        self.misc.set("open_build", new_build)
+
+    @property
     def beta_mode(self):
         return str_to_bool(self.misc.get("betaMode", "False"))
 

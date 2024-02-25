@@ -4,6 +4,7 @@ This Class manages all the elements and owns some elements of the "CONFIG" tab
 
 from PySide6.QtWidgets import QGridLayout
 
+from PoB.constants import default_max_charges
 from PoB.settings import Settings
 from PoB.build import Build
 from widgets.ui_utils import set_combo_index_by_data
@@ -38,21 +39,23 @@ class ConfigUI:
 
         # Combat
         self.win.check_PowerCharges.setChecked(self.build.get_config_tag_item("Input", "usePowerCharges", False))
-        self.win.spin_NumPowerCharges.setValue(self.build.get_config_tag_item("Input", "overridePowerCharges", 3))
+        self.win.spin_NumPowerCharges.setValue(self.build.get_config_tag_item("Input", "overridePowerCharges", default_max_charges))
         self.win.check_FrenzyCharges.setChecked(self.build.get_config_tag_item("Input", "useFrenzyCharges", False))
-        self.win.spin_NumFrenzyCharges.setValue(self.build.get_config_tag_item("Input", "overrideFrenzyCharges", 3))
+        self.win.spin_NumFrenzyCharges.setValue(self.build.get_config_tag_item("Input", "overrideFrenzyCharges", default_max_charges))
         self.win.check_EnduranceCharges.setChecked(self.build.get_config_tag_item("Input", "useEnduranceCharges", False))
-        self.win.spin_NumEnduranceCharges.setValue(self.build.get_config_tag_item("Input", "overrideEnduranceCharges", 3))
+        self.win.spin_NumEnduranceCharges.setValue(self.build.get_config_tag_item("Input", "overrideEnduranceCharges", default_max_charges))
         self.win.check_SiphoningCharges.setChecked(self.build.get_config_tag_item("Input", "useSiphoningCharges", False))
-        self.win.spin_NumSiphoningCharges.setValue(self.build.get_config_tag_item("Input", "overrideSiphoningCharges", 3))
+        self.win.spin_NumSiphoningCharges.setValue(self.build.get_config_tag_item("Input", "overrideSiphoningCharges", default_max_charges))
         self.win.check_ChallengerCharges.setChecked(self.build.get_config_tag_item("Input", "useChallengerCharges", False))
-        self.win.spin_NumChallengerCharges.setValue(self.build.get_config_tag_item("Input", "overrideChallengerCharges", 3))
+        self.win.spin_NumChallengerCharges.setValue(
+            self.build.get_config_tag_item("Input", "overrideChallengerCharges", default_max_charges)
+        )
         self.win.check_BlitzCharges.setChecked(self.build.get_config_tag_item("Input", "useBlitzCharges", False))
-        self.win.spin_NumBlitzCharges.setValue(self.build.get_config_tag_item("Input", "overrideBlitzCharges", 3))
+        self.win.spin_NumBlitzCharges.setValue(self.build.get_config_tag_item("Input", "overrideBlitzCharges", default_max_charges))
         # self.win.check_multiplierGaleForce.setChecked(self.build.get_config_tag_item("Input", "multiplierGaleForce", False))
         # self.win.spin_NumInspirationCharges.setValue(self.build.get_config_tag_item("Input", "overrideInspirationCharges", 3))
         self.win.check_GhostCharges.setChecked(self.build.get_config_tag_item("Input", "useGhostCharges", False))
-        self.win.spin_NumGhostCharges.setValue(self.build.get_config_tag_item("Input", "overrideGhostCharges", 3))
+        self.win.spin_NumGhostCharges.setValue(self.build.get_config_tag_item("Input", "overrideGhostCharges", default_max_charges))
         # waitForMaxSeals
 
     def save(self):

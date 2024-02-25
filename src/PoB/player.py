@@ -8,9 +8,11 @@ import math
 import re
 import xml.etree.ElementTree as ET
 
-from PoB.constants import PlayerClasses, PlayerAscendancy, bad_text, player_stats_list
+from PySide6.QtWidgets import QLabel, QSpinBox
+
+from PoB.constants import PlayerClasses, bad_text, default_max_charges, extraSaveStats, player_stats_list
 from ui.PoB_Main_Window import Ui_MainWindow
-from widgets.ui_utils import html_colour_text, search_stats_list_for_regex, print_call_stack
+from widgets.ui_utils import format_number, print_call_stack, search_stats_list_for_regex
 
 # 2 base accuracy per level.
 # 50 life and gains additional 12 life per level.
@@ -40,7 +42,8 @@ class_stats = {
 
 
 class Player:
-    def __init__(self, settings, build, _win: Ui_MainWindow) -> None:
+    def __init__(self, settings, build, _win: Ui_MainWindow, _minion=False) -> None:
+        self.minion = _minion
         self.settings = settings
         self.build = build
         self.xml_build = build.build
@@ -65,10 +68,11 @@ class Player:
         self.all_minion_stats = {}
 
     def __repr__(self) -> str:
-        return f"Level {self.level} {self.player_class.name}" f" {self.ascendancy.value}\n" if self.ascendancy.value is not None else "\n"
+        return f"Level {self.level} {self.player_class.name}"
 
     def load(self, _build):
         """
+        ToDo: Should we load and keep stats - or clear them ???
         Load stats from the build object, even ones we may not be able to deal with (except table entries).
         We keep valid entries that we may not yet support so that we don't destroy another tool's ability
 
@@ -77,16 +81,20 @@ class Player:
         """
         self.clear()
         self.xml_build = _build
-        for stat in self.xml_build.findall("PlayerStat"):
-            stat_name = stat.get("stat")
-            try:
-                # Sometimes there is an entry like '<PlayerStat stat="SkillDPS" value="table: 0x209a50f0" />'
-                stat_value = float(stat.get("value"))
-                self.stats[stat_name] = stat_value
-            except ValueError:
-                print(f"Error in {stat_name}. Value was '{stat.get('value', 'Error Value')}'")
-                self.xml_build.remove(stat)
-                continue
+        # Strip all stats. They are only there for third party tools. We will do our own calcs and save them.
+        stat_name = self.minion and "MinionStat" or "PlayerStat"
+        for stat in self.xml_build.findall(stat_name):
+            del stat
+        # for stat in self.xml_build.findall("PlayerStat"):
+        #     stat_name = stat.get("stat")
+        #     try:
+        #         # Sometimes there is an entry like '<{stat_name} stat="SkillDPS" value="table: 0x209a50f0" />'
+        #         stat_value = float(stat.get("value"))
+        #         self.stats[stat_name] = stat_value
+        #     except ValueError:
+        #         print(f"Error in {stat_name}. Value was '{stat.get('value', 'Error Value')}'")
+        #         self.xml_build.remove(stat)
+        #         continue
 
     def save(self, _build):
         """
@@ -95,11 +103,17 @@ class Player:
         :param _build: build xml
         :return: N/A
         """
+        stat_name = self.minion and "MinionStat" or "PlayerStat"
         # Remove everything and then add ours
-        for stat in self.xml_build.findall("PlayerStat"):
+        for stat in self.xml_build.findall(stat_name):
             self.xml_build.remove(stat)
         for name in self.stats:
-            self.xml_build.append(ET.fromstring(f'<PlayerStat stat="{name}" value="{self.stats[name]}" />'))
+            if self.stats[name]:
+                self.xml_build.append(ET.fromstring(f'<{stat_name} stat="{name}" value="{self.stats[name]}" />'))
+        # Stats that are included in the build xml but not shown on the left hand side of the PoB window.
+        for name in extraSaveStats:
+            if self.stats[name]:
+                self.xml_build.append(ET.fromstring(f'<{stat_name} stat="{name}" value="{self.stats[name]}" />'))
 
     def calc_stats(self, active_items, test_item=None, test_node=None):
         """
@@ -171,8 +185,8 @@ class Player:
         self.all_player_stats.update(self.item_player_stats)
         self.all_minion_stats.update(self.node_minion_stats)
         self.all_minion_stats.update(self.item_minion_stats)
-        print(f"{len(self.all_player_stats)=}, {self.all_player_stats.keys()=}")
-        print(f"{len(self.all_minion_stats)=}, {self.all_minion_stats.keys()=}")
+        # print(f"{len(self.all_player_stats)=}, {self.all_player_stats.keys()=}")
+        # print(f"{len(self.all_minion_stats)=}, {self.all_minion_stats.keys()=}")
 
         self.calc_attribs()
         self.calc_life()
@@ -180,11 +194,12 @@ class Player:
         self.calc_es()
         self.calc_armour()
         self.calc_evasion()
-        self.calc_res(True)
+        self.calc_charges()
+        self.calc_res()
 
     def get_simple_stat(self, start_value, search_str, spec_str="", default_value=0, debug=False, multiple_returns=False):
         """
-        Get a simple "+nn to 'stat'" or "nn% incresed 'stat'". See examples in 'calc_stat'.
+        Get a simple "+nn to 'stat'" or "nn% increased 'stat'". See examples in 'calc_stat'.
         Can't do minion stats as they look similar to regular stats
               'Minions have 10% increased maximum Life' vs '8% increased maximum Life' (they can use search_stats_list_for_regex)
         :param start_value: int / float.
@@ -369,9 +384,32 @@ class Player:
             es = ((more / 100) + 1) * int(es)
         self.stats["EnergyShield"] = es
 
+    def calc_charges(self, debug=False):
+        """
+        Find maximum values for all sorts of charges
+        :param debug: bool: Ease of printing facts for a given specification
+        :return: N/A
+        """
+        for charge_type in ("Power", "Frenzy", "Endurance", "Siphoning", "Challenger", "Blitz"):
+            extra_charges = sum(
+                search_stats_list_for_regex(self.all_player_stats, rf"([-+]?\d+) to Maximum {charge_type} Charges", 0, debug)
+            )
+            if debug:
+                print(f"calc_charges, {charge_type=}, {extra_charges=}")
+            # Get extra charges (which could be negative) and set that value, or 0 if it goes negative.
+            total_charges = extra_charges and max(0, extra_charges + default_max_charges) or default_max_charges
+            self.stats[f"{charge_type}ChargesMax"] = total_charges
+            spin_widget: QSpinBox = self.win.grpbox_Combat.findChild(QSpinBox, f"spin_Num{charge_type}Charges")
+            # Only update if it's at default
+            if spin_widget.value() == default_max_charges:
+                spin_widget.setValue(total_charges)
+            label_spin_widget: QLabel = self.win.grpbox_Combat.findChild(QLabel, f"label_Num{charge_type}Charges")
+            label_spin_widget.setText(format_number(total_charges, f"# of {charge_type} Charges, if not maximum: %d", self.settings))
+
     def calc_res(self, debug=False):
         """
         Calc. Resistance. https://www.poewiki.net/wiki/Resistance
+        Must have Endurance Charges calulated first
         :param debug: bool: Ease of printing facts for a given specification
         :return: N/A
         """
@@ -387,7 +425,7 @@ class Player:
                 # to all Elemental Resistances doesn't affect chaos
                 all_ele_res = 0
                 end_chg_res = 0
-            # Setbase value from resistance penalty dropdoan
+            # Setbase value from resistance penalty dropdown
             value = self.win.combo_ResPenalty.currentData()
             if debug:
                 print(f"calc_res: {res=}, {value=}, {all_ele_res=}, {end_chg_res=}, {max_res=}")
@@ -404,15 +442,6 @@ class Player:
             # for item in self.items:
             #     required = max(required, int(item.requires.get(attrib, "0")))
             # self.stats[f"Req{attrib}"] = required
-
-        # <PlayerStat stat="FireResist" value="65"/>
-        # <PlayerStat stat="FireResistOverCap" value="0"/>
-        # <PlayerStat stat="ColdResist" value="47"/>
-        # <PlayerStat stat="ColdResistOverCap" value="0"/>
-        # <PlayerStat stat="LightningResist" value="51"/>
-        # <PlayerStat stat="LightningResistOverCap" value="0"/>
-        # <PlayerStat stat="ChaosResist" value="-22"/>
-        # <PlayerStat stat="ChaosResistOverCap" value="0"/>
 
     def clear(self):
         """Erase internal variables"""
@@ -445,6 +474,9 @@ class Player:
                 return self.stats.get("EnergyShield", 0) != 0
             case "Spec:ArmourInc":
                 return self.stats.get("Armour", 0) != 0
+            case "FireResistOverCap" | "ColdResistOverCap" | "LightningResistOverCap":
+                # These are shown with the resists
+                return False
             case _:
                 return stat_value != 0
 

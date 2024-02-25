@@ -270,8 +270,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # setup Scion by default, and this will trigger it's correct ascendancy to appear in combo_ascendancy
         # and other ui's to display properly
-        # ToDo: check to see if there is a previous build to load and load it here
+        open_build = self.settings.open_build  # this will get wiped by the next command so keep it
         self.build_loader("Default")
+        # Check to see if there is a previous build to load and load it here
+        if open_build:
+            self.build_loader(open_build)
 
         # Remove splash screen if we are an executable
         if "NUITKA_ONEFILE_PARENT" in os.environ:
@@ -285,46 +288,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     os.unlink(filename)
 
     # init
-
-    @Slot()
-    def do_calcs(self, test_item=None, test_node=None):
-        """
-        Do and Display Calculations
-        :param: test_item: Item() - future comparison
-        :param: test_node: Node() - future comparison
-        :return: N/A
-        """
-        if not self.alerting:
-            # Don't keep calculating as a build is loaded
-            return
-        self.config_ui.save()
-        self.player.calc_stats(self.items_ui.item_list_active_items())
-        self.textedit_Statistics.clear()
-        just_added_blank = False  # Prevent duplicate blank lines. Faster than investigating the last line added of a QLineEdit.
-        for stat_name in player_stats_list:
-            stat = player_stats_list[stat_name]
-            # print(f"{stat_name=}, {type(stat)=}, {stat.values()=}")
-            if "blank" in stat_name:
-                if not just_added_blank:
-                    self.textedit_Statistics.append("")
-                    just_added_blank = True
-            elif stat.get("label", 0) == 0:
-                # ToDo: Need to use the flag attribute to separate
-                stat = list(stat.values())[0]
-            else:
-                # Do we have this stat in our stats dict
-                stat_value = self.player.stats.get(stat_name, bad_text)
-                if stat_value != bad_text and self.player.stat_conditions(stat_name, stat_value):
-                    # _label = "{0:>24}".format(stat["label"])
-                    # _label = format(f"{stat['label']:>24}")
-                    _colour = stat.get("colour", self.settings.qss_default_text)
-                    _fmt = stat.get("fmt", "%d")
-                    _str_value = format_number(stat_value, _fmt, self.settings, True)
-                    # self.textedit_Statistics.append(f'<span style="white-space: pre; color:{_colour};">{_label}:</span> {_str_value}')
-                    self.textedit_Statistics.append(
-                        f'<span style="white-space: pre; color:{_colour};">{stat["label"]:>24}:</span> {_str_value}'
-                    )
-                    just_added_blank = False
 
     # Overridden function
     def keyReleaseEvent(self, event):
@@ -689,8 +652,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # open the file
                 self.build.load_from_file(filename_or_xml)
                 self.build.filename = filename_or_xml
+                self.settings.open_build = self.build.filename
             else:
                 self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
+                self.settings.open_build = ""
 
         # if everything worked, lets update the UI
         if self.build.build is not None:
@@ -1165,3 +1130,59 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             process = psutil.Process(os.getpid())
             message = f"RAM: {'{:.2f}'.format(process.memory_info().rss / 1048576)}MB used:"
             self.statusbar_MainWindow.showMessage(message, timeout * 1000)
+
+    @Slot()
+    def do_calcs(self, test_item=None, test_node=None):
+        """
+        Do and Display Calculations
+        :param: test_item: Item() - future comparison
+        :param: test_node: Node() - future comparison
+        :return: N/A
+        """
+
+        def get_resist_overcap_value(res_type):
+            """
+            Get a resists over cap value andreturn it if it's not 0
+            :param res_type: str: Fire|Cold|Lightning
+            :return: str: formate string for adding to the main Res value
+            """
+            _value = self.player.stats.get(f"{res_type}ResistOverCap", 0)
+            if _value > 0:
+                _value_str = format_number(_value, " (%d%%)", self.settings)
+                return html_colour_text("DARKGRAY", _value_str)
+            else:
+                return ""
+
+        if not self.alerting:
+            # Don't keep calculating as a build is loaded
+            return
+        self.config_ui.save()
+        self.player.calc_stats(self.items_ui.item_list_active_items())
+        self.textedit_Statistics.clear()
+        just_added_blank = False  # Prevent duplicate blank lines. Faster than investigating the last line added of a QLineEdit.
+        for stat_name in player_stats_list:
+            stat = player_stats_list[stat_name]
+            # print(f"{stat_name=}, {type(stat)=}, {stat.values()=}")
+            if "blank" in stat_name:
+                if not just_added_blank:
+                    self.textedit_Statistics.append("")
+                    just_added_blank = True
+            elif stat.get("label", 0) == 0:
+                # ToDo: Need to use the flag attribute to separate
+                stat = list(stat.values())[0]
+            else:
+                # Do we have this stat in our stats dict
+                stat_value = self.player.stats.get(stat_name, bad_text)
+                if stat_value != bad_text and self.player.stat_conditions(stat_name, stat_value):
+                    _colour = stat.get("colour", self.settings.qss_default_text)
+                    _fmt = stat.get("fmt", "%d")
+                    _str_value = format_number(stat_value, _fmt, self.settings, True)
+                    match stat_name:
+                        case "FireResist" | "ColdResist" | "LightningResist":
+                            _extra_value = get_resist_overcap_value(stat_name.replace("Resist", ""))
+                        case _:
+                            _extra_value = ""
+                    self.textedit_Statistics.append(
+                        f'<span style="white-space: pre; color:{_colour};">{stat["label"]:>24}:</span> {_str_value} {_extra_value}'
+                    )
+                    just_added_blank = False
