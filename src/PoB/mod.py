@@ -76,26 +76,29 @@ class Mod:
                 or re.search(r"\(([0-9.]+)-([0-9.]+)\)(.*)", self.line)
                 or re.search(r"([0-9.]+) to ([0-9.]+)", self.line)
             )
-            match len(m2.groups()):
-                case 2:
-                    print(f"2: {m2.groups()=}, {self.line=}")
-                case 3:
-                    self.min = float(m2.group(1))
-                    self.max = float(m2.group(2))
-                    self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{}", self.line)
-                    self.range = float(m1.group(1))  # Trigger setting self.value and self.line_with_range
-                case 6:
-                    self.min = float(m2.group(1))
-                    self.max = float(m2.group(2))
-                    self.range_sep = m2.group(3)
-                    self.min2 = float(m2.group(4))
-                    self.max2 = float(m2.group(5))
-                    self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{0}", self.line, count=1)
-                    self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{1}", self.line_unformatted, count=1)
-                    self.range = float(m1.group(1))  # Trigger setting self.value and self.line_with_range
+            # When bringing uniques over from lua, there are {range:0} entries for entries that have no range
+            #  EG: {range:0}Gain an Endurance Charge every second if you've been Hit Recently
+            if m2:
+                match len(m2.groups()):
+                    case 2:
+                        print(f"2: {m2.groups()=}, {self.line=}")
+                    case 3:
+                        self.min = float(m2.group(1))
+                        self.max = float(m2.group(2))
+                        self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{}", self.line)
+                        self.range = float(m1.group(1))  # Trigger setting self.value and self.line_with_range
+                    case 6:
+                        self.min = float(m2.group(1))
+                        self.max = float(m2.group(2))
+                        self.range_sep = m2.group(3)
+                        self.min2 = float(m2.group(4))
+                        self.max2 = float(m2.group(5))
+                        self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{0}", self.line, count=1)
+                        self.line_unformatted = re.sub(r"\([0-9.]+-[0-9.]+\)", "{1}", self.line_unformatted, count=1)
+                        self.range = float(m1.group(1))  # Trigger setting self.value and self.line_with_range
 
-            # trigger property to update value and tooltip
-            self.range = float(m1.group(1))
+                # trigger property to update value and tooltip
+                self.range = float(m1.group(1))
         # print("self.text", self.text)
 
     @property

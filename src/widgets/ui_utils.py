@@ -202,7 +202,8 @@ def format_number(the_number, format_str, settings, pos_neg_colour=False):
     # if format is an int, force the value to be an int.
     if "d" in format_str:
         the_number = round(the_number)  # locale.format_string will round 99.5 or 99.6 to 99 using a %d format_str (truncates).
-    return_str = locale.format_string(format_str, the_number, grouping=settings.show_thousands_separators)
+    show_thousands_separators = settings is None and False or settings.show_thousands_separators
+    return_str = locale.format_string(format_str, the_number, grouping=show_thousands_separators)
     if pos_neg_colour:
         colour = the_number < 0 and settings.colour_negative or settings.colour_positive
         return_str = html_colour_text(colour, return_str)

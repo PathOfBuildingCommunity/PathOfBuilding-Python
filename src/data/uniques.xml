@@ -93,10 +93,14 @@
 			</Implicits>
 			<Explicits>
 				<Mod>(5-10)% increased Experience Gain of Gems</Mod>
-				<Mod>(10-20)% increased Reservation Efficiency of Skills</Mod>
+				<Mod>{variant:1}(10-20)% increased Reservation Efficiency of Skills</Mod>
 				<Mod>+1 to Level of all Skill Gems</Mod>
 				<Mod>+(20-30)% to Quality of all Skill Gems</Mod>
 			</Explicits>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 		</Item>
 		<Item ver="2" title="Astramentis" base_name="Onyx Amulet">
 			<Attribs level_req="20" />
@@ -346,8 +350,21 @@
 				<Mod>{tags:jewellery_resistance}+(30-40)% to Fire Resistance</Mod>
 				<Mod>{tags:jewellery_resistance}+(30-40)% to Cold Resistance</Mod>
 				<Mod>{tags:speed}10% increased Movement Speed when on Full Life</Mod>
-				<Mod>{tags:attack}+2 to Melee Weapon and Unarmed range</Mod>
+				<Mod>{tags:attack}+0.2 metres to Melee Strike Range</Mod>
 				<Mod>{tags:attack}60% increased Melee Damage when on Full Life</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Defiance of Destiny" base_name="Paua Amulet">
+			<Attribs level_req="49" />
+			<Implicits>
+				<Mod>{tags:mana}(20-30)% increased Mana Regeneration Rate</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:life}+(60-80) to maximum Life</Mod>
+				<Mod>{tags:jewellery_resistance}+(10-40)% to Fire Resistance</Mod>
+				<Mod>{tags:jewellery_resistance}+(10-40)% to Cold Resistance</Mod>
+				<Mod>{tags:jewellery_resistance}+(10-40)% to Lightning Resistance</Mod>
+				<Mod>{tags:life}Gain (25-35)% of Missing Unreserved Life before being Hit by an Enemy</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="The Ephemeral Bond" base_name="Lapis Amulet" league="Heist">
@@ -523,7 +540,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Fury Valve" base_name="Turquoise Amulet" league="Metamorph" source="Drops from unique{Metamorph} in normal{Tane's Laboratory}">
+		<Item ver="2" title="Fury Valve" base_name="Turquoise Amulet">
 			<Attribs level_req="40" />
 			<Implicits>
 				<Mod>{tags:jewellery_attribute}+(16-24) to Dexterity and Intelligence</Mod>
@@ -686,6 +703,19 @@
 				<Mod>{tags:jewellery_resistance}+20% to Fire Resistance</Mod>
 				<Mod>Your Hits can't be Evaded by Blinded Enemies</Mod>
 				<Mod>{tags:jewellery_elemental}Damage Penetrates 10% Fire Resistance against Blinded Enemies</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Ikiaho's Promise" base_name="Coral Amulet">
+			<Attribs level_req="30" />
+			<Implicits>
+				<Mod>{tags:life}Regenerate (2-4) Life per second</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:mana}Regenerate (3-5) Mana per second</Mod>
+				<Mod>{tags:life}(30-40)% increased Life Recovery from Flasks</Mod>
+				<Mod>{tags:mana}(15-30)% increased Mana Recovery from Flasks</Mod>
+				<Mod>Life Flasks used while on Low Life apply Recovery Instantly</Mod>
+				<Mod>Mana Flasks used while on Low Mana apply Recovery Instantly</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="Impresence" base_name="Onyx Amulet" source="Drops from unique{The Elder}">
@@ -921,6 +951,25 @@
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 3.19.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
+		</Item>
+		<Item ver="2" title="Replica Dragonfang's Flight" base_name="Onyx Amulet">
+			<Attribs level_req="56" />
+			<Implicits>
+				<Mod>{tags: jewellery_attribute}+(10-16) to all Attributes</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{variant:1}{tags:jewellery_resistance}+(10-15)% to all Elemental Resistances</Mod>
+				<Mod>{variant:2}{tags:jewellery_resistance}+(5-10)% to all Elemental Resistances</Mod>
+				<Mod>+3 to Level of all Spark Gems</Mod>
+				<Mod>{variant:1}(10-15)% increased Reservation Efficiency of Skills</Mod>
+				<Mod>{variant:2}(5-10)% increased Reservation Efficiency of Skills</Mod>
+				<Mod>{variant:1}Items and Gems have (10-15)% reduced Attribute Requirements</Mod>
+				<Mod>{variant:2}Items and Gems have (5-10)% reduced Attribute Requirements</Mod>
+			</Explicits>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
@@ -2223,6 +2272,24 @@
 				<Mod>Rampage</Mod>
 			</Explicits>
 		</Item>
+		<Item ver="2" title="Bound Fate" base_name="Cloth Belt">
+			<Attribs level_req="16" />
+			<Implicits>
+				<Mod>(15-25)% increased Stun and Block Recovery</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:jewellery_attribute}+(20-30) to Dexterity</Mod>
+				<Mod>{tags:jewellery_attribute}+(20-30) to Intelligence</Mod>
+				<Mod>{tags:life}+(60-80) to Maximum Life</Mod>
+				<Mod>Every 5 seconds, gain one of the following for 5 seconds:</Mod>
+				<Mod>Your Hits are always Critical Strikes</Mod>
+				<Mod>Hits against you are always Critical Strikes</Mod>
+				<Mod>Attacks cannot Hit you</Mod>
+				<Mod>Attacks against you always Hit</Mod>
+				<Mod>Your Damage with Hits is Lucky</Mod>
+				<Mod>Damage of Hits against you is Lucky</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Chains of Emancipation" base_name="Chain Belt" league="Heist">
 			<Attribs level_req="61" />
 			<Implicits>
@@ -2579,6 +2646,17 @@
 				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Kaom's Binding" base_name="Heavy Belt">
+			<Attribs level_req="56" />
+			<Implicits>
+				<Mod>{tags:jewellery_attribute}+(30-40) to Strength</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:jewellery_defense}+(300-500) to Armour</Mod>
+				<Mod>Take no Burning Damage if you've stopped taking Burning Damage Recently</Mod>
+				<Mod>Nearby Enemies Convert 25% of their Physical Damage to Fire</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Leash of Oblation" base_name="Leather Belt">
 			<Attribs level_req="49" />
 			<Implicits>
@@ -2684,7 +2762,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Mother's Embrace" base_name="Heavy Belt" league="Metamorph" source="Drops from unique{Metamorph} in normal{Tane's Laboratory}">
+		<Item ver="2" title="Mother's Embrace" base_name="Heavy Belt">
 			<Attribs level_req="40" />
 			<Implicits>
 				<Mod>{tags:jewellery_attribute}+(25-35) to Strength</Mod>
@@ -3030,7 +3108,7 @@
 				<Mod>{tags:life}(8-12)% increased maximum Life</Mod>
 				<Mod>{tags:life}Regenerate 2% of Life per second</Mod>
 				<Mod>Flasks do not apply to you</Mod>
-				<Mod>Flasks apply to your Raised Zombies and Spectres</Mod>
+				<Mod>Flasks you Use apply to your Raised Zombies and Spectres</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="Wurm's Molt" base_name="Leather Belt">
@@ -3174,7 +3252,7 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Doppelgänger Guise" base_name="Sadist Garb" league="Ritual" source="Drops from unique{The Maven}">
+		<Item ver="2" title="DoppelgÃ¤nger Guise" base_name="Sadist Garb" league="Ritual" source="Drops from unique{The Maven}">
 			<Attribs />
 			<Implicits />
 			<Explicits>
@@ -3328,6 +3406,19 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Utula's Hunger" base_name="Majestic Plate">
+			<Attribs level_req="53" />
+			<Implicits />
+			<Explicits>
+				<Mod>(60-100)% increased Armour</Mod>
+				<Mod>Recover (1-3)% of Life on Kill</Mod>
+				<Mod>(30-40)% Increased Stun and Block Recovery</Mod>
+				<Mod>+(700-1000) to maximum Life if there are no Life Modifiers on other Equipped items</Mod>
+			</Explicits>
+			<Requires>
+				<Str>145</Str>
+			</Requires>
+		</Item>
 		<Item ver="2" title="Ashrend" base_name="Buckskin Tunic">
 			<Attribs />
 			<Implicits />
@@ -3340,7 +3431,7 @@
 				<Mod>{variant:1,2}(10-15)% increased Physical Damage with Ranged Weapons</Mod>
 				<Mod>{variant:3}(75-150)% increased Physical Damage with Ranged Weapons</Mod>
 				<Mod>{variant:1,2}-(5-7) Physical Damage taken from Attack Hits</Mod>
-				<Mod>{variant:3}-(30-60)Physical Damage taken from Attack Hits</Mod>
+				<Mod>{variant:3}-(30-60) Physical Damage taken from Attack Hits</Mod>
 			</Explicits>
 			<Requires>
 				<Dex>53</Dex>
@@ -3644,14 +3735,16 @@
 				<Mod>{variant:2,3}(10-15)% increased Dexterity</Mod>
 				<Mod>{variant:1}(30-50)% increased Evasion Rating</Mod>
 				<Mod>{variant:2}(80-100)% increased Evasion Rating</Mod>
-				<Mod>{variant:3}(150-200)% increased Evasion Rating</Mod>
+				<Mod>{variant:3,4}(150-200)% increased Evasion Rating</Mod>
 				<Mod>{variant:1}+(50-80) to maximum Life</Mod>
 				<Mod>{variant:2,3}+(70-100) to maximum Life</Mod>
 				<Mod>-30% to Cold Resistance</Mod>
 				<Mod>{variant:1}Evasion Rating is increased by Uncapped Cold Resistance</Mod>
 				<Mod>{variant:2,3}Evasion Rating is increased by Overcapped Cold Resistance</Mod>
-				<Mod>Flesh and Stone has no Reservation</Mod>
-				<Mod>Hollow Palm Technique</Mod>
+				<Mod>{variant:3}Flesh and Stone has no Reservation</Mod>
+				<Mod>{variant:3}Hollow Palm Technique</Mod>
+				<Mod>{variant:4}Versatile Combatant</Mod>
+				<Mod>{variant:4}+20% chance to Block Attack Damage</Mod>
 			</Explicits>
 			<Requires>
 				<Dex>197</Dex>
@@ -3659,7 +3752,8 @@
 			<Variants>
 				<Variant num="1">Pre 3.16.0</Variant>
 				<Variant num="2">Pre 3.21.0</Variant>
-				<Variant num="3">Current</Variant>
+				<Variant num="3">Pre 3.23.0</Variant>
+				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" title="Yriel's Fostering" base_name="Exquisite Leather">
@@ -5106,6 +5200,19 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Kahuturoa's Certainty" base_name="Ancient Greaves">
+			<Attribs level_req="46" />
+			<Implicits />
+			<Explicits>
+				<Mod>(100-150)% increased Armour</Mod>
+				<Mod>5% reduced Movement Speed</Mod>
+				<Mod>(100-200)% increased Stun and Block Recovery</Mod>
+				<Mod>Unaffected by Damaging Ailments</Mod>
+			</Explicits>
+			<Requires>
+				<Str>82</Str>
+			</Requires>
+		</Item>
 		<Item ver="2" title="Kaom's Roots" base_name="Titan Greaves">
 			<Attribs level_req="68" />
 			<Implicits />
@@ -5551,12 +5658,18 @@
 				<Mod>+20 to maximum Life</Mod>
 				<Mod>+20 to maximum Mana</Mod>
 				<Mod>(5-15)% increased Movement Speed</Mod>
-				<Mod>Summoned Phantasms have 10% chance to refresh their Duration when they Hit a Unique Enemy</Mod>
-				<Mod>Summoned Raging Spirits have 10% chance to refresh their Duration when they Hit a Unique Enemy</Mod>
+				<Mod>{variant:1}Summoned Phantasms have 10% chance to refresh their Duration when they Hit a Unique Enemy</Mod>
+				<Mod>{variant:2}Summoned Phantasms have 10% chance to refresh their Duration when they Hit a Rare or Unique Enemy</Mod>
+				<Mod>{variant:1}Summoned Raging Spirits have 10% chance to refresh their Duration when they Hit a Unique Enemy</Mod>
+				<Mod>{variant:2}Summoned Raging Spirits have 10% chance to refresh their Duration when they Hit a Rare or Unique Enemy</Mod>
 			</Explicits>
 			<Requires>
 				<Int>42</Int>
 			</Requires>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 		</Item>
 		<Item ver="2" title="Doryani's Delusion" base_name="Sorcerer Boots" league="Delve" source="Drops from unique{The Apex Assembly} in unique{Doryani's Machinarium}">
 			<Attribs level_req="67" />
@@ -5915,7 +6028,8 @@
 				<Mod>30% increased Movement Speed</Mod>
 				<Mod>Cannot be Chilled</Mod>
 				<Mod>Cannot be Frozen</Mod>
-				<Mod>Take 10000 Fire Damage per Second while Flame-Touched</Mod>
+				<Mod>{variant:1}Take 10000 Fire Damage per Second while Flame-Touched</Mod>
+				<Mod>{variant:2}Take 6000 Fire Damage per Second while Flame-Touched</Mod>
 				<Mod>Gain Adrenaline when you become Flame-Touched</Mod>
 				<Mod>Lose Adrenaline when you cease to be Flame-Touched</Mod>
 			</Explicits>
@@ -5923,6 +6037,10 @@
 				<Dex>62</Dex>
 				<Str>62</Str>
 			</Requires>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 		</Item>
 		<Item ver="2" title="Lioneye's Paws" base_name="Bronzescale Boots" league="Legion">
 			<Attribs level_req="30" />
@@ -6112,12 +6230,15 @@
 				<Mod>+(15-25)% to Cold Resistance</Mod>
 				<Mod>+(15-25)% to Chaos Resistance</Mod>
 				<Mod>{variant:1}20% increased Movement Speed</Mod>
-				<Mod>{variant:2}30% increased Movement Speed</Mod>
+				<Mod>{variant:2,3}30% increased Movement Speed</Mod>
 				<Mod>{variant:1}Gain a Frenzy, Endurance, or Power Charge once per second while you are Stationary</Mod>
-				<Mod>Lose all Frenzy, Endurance, and Power Charges when you Move</Mod>
+				<Mod>{variant:1,2}Lose all Frenzy, Endurance, and Power Charges when you Move</Mod>
 				<Mod>{variant:2}Minimum Endurance Charges equal to Maximum while stationary</Mod>
 				<Mod>{variant:2}Minimum Frenzy Charges equal to Maximum while stationary</Mod>
 				<Mod>{variant:2}Minimum Power Charges equal to Maximum while stationary</Mod>
+				<Mod>{variant:3}Count as having maximum number of Endurance Charges</Mod>
+				<Mod>{variant:3}Count as having maximum number of Frenzy Charges</Mod>
+				<Mod>{variant:3}Count as having maximum number of Power Charges</Mod>
 			</Explicits>
 			<Requires>
 				<Int>35</Int>
@@ -6125,7 +6246,8 @@
 			</Requires>
 			<Variants>
 				<Variant num="1">Pre 3.19.0</Variant>
-				<Variant num="2">Current</Variant>
+				<Variant num="2">Pre 3.23.0</Variant>
+				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" title="Wake of Destruction" base_name="Mesh Boots">
@@ -6837,7 +6959,7 @@
 				<Mod>+(350-400) to Accuracy Rating</Mod>
 				<Mod>Cannot Leech Mana</Mod>
 				<Mod>Projectiles from Attacks Fork</Mod>
-				<Mod>Projectiles from Attacks Fork an additional time</Mod>
+				<Mod>Projectiles from Attacks can Fork 1 additional time</Mod>
 			</Explicits>
 			<Requires>
 				<Dex>170</Dex>
@@ -11240,58 +11362,58 @@
 				<Mod>{variant:10}You have Vaal Pact while at maximum Endurance Charges</Mod>
 				<Mod>{variant:11}+1 to Maximum Endurance Charges</Mod>
 				<Mod>{variant:12}Intimidate Enemies for 4 seconds on Hit with Attacks while at maximum Endurance Charges</Mod>
-				<Mod>{variant:13}{range:0.5}+(4-8)% to Chaos Resistance per Endurance Charge</Mod>
-				<Mod>{variant:14}{range:0.5}(1-2)% chance to Suppress Spell Damage per Endurance Charge</Mod>
-				<Mod>{variant:15}{range:0.5}(6-12)% increased Critical Strike Chance per Endurance Charge</Mod>
-				<Mod>{variant:16}{range:0.5}Regenerate (0.3-0.6)% of Life per second per Endurance Charge</Mod>
-				<Mod>{variant:17}{range:0.5}(1-2)% Chance to Block Attack Damage per Endurance Charge</Mod>
-				<Mod>{variant:18}{range:0.5}Gain (1-2)% of Fire Damage as Extra Chaos Damage per Endurance Charge</Mod>
-				<Mod>{variant:19}{range:0.5}(1-2)% increased Attack and Cast Speed per Endurance Charge</Mod>
-				<Mod>{variant:20}{range:0.5}(10-30)% chance to gain an Endurance Charge on Kill</Mod>
-				<Mod>{variant:21}{range:0.5}(7-27) to (13-42) Fire Damage per Endurance Charge</Mod>
-				<Mod>{variant:22}{range:0.5}(1-3)% increased Movement Speed per Endurance Charge</Mod>
-				<Mod>{variant:23}{range:0.5}(5-15)% increased Damage per Endurance Charge</Mod>
-				<Mod>{variant:24}{range:0.5}(6-18)% increased Armour per Endurance Charge</Mod>
-				<Mod>{variant:25}{range:0.5}(20-120)% increased Endurance Charge Duration</Mod>
-				<Mod>{variant:26}{range:0.5}(15-45)% chance that if you would gain Endurance Charges, you instead gain up to your maximum number of Endurance Charges</Mod>
-				<Mod>{variant:27}{range:0.5}(10-10)% chance to gain a Frenzy Charge on Hit</Mod>
+				<Mod>{variant:13}{range:0}+(4-8)% to Chaos Resistance per Endurance Charge</Mod>
+				<Mod>{variant:14}{range:0}(1-2)% chance to Suppress Spell Damage per Endurance Charge</Mod>
+				<Mod>{variant:15}{range:0}(6-12)% increased Critical Strike Chance per Endurance Charge</Mod>
+				<Mod>{variant:16}{range:0}Regenerate (0.3-0.6)% of Life per second per Endurance Charge</Mod>
+				<Mod>{variant:17}{range:0}(1-2)% Chance to Block Attack Damage per Endurance Charge</Mod>
+				<Mod>{variant:18}{range:0}Gain (1-2)% of Fire Damage as Extra Chaos Damage per Endurance Charge</Mod>
+				<Mod>{variant:19}{range:0}(1-2)% increased Attack and Cast Speed per Endurance Charge</Mod>
+				<Mod>{variant:20}{range:0}(10-30)% chance to gain an Endurance Charge on Kill</Mod>
+				<Mod>{variant:21}{range:0}(7-27) to (13-42) Fire Damage per Endurance Charge</Mod>
+				<Mod>{variant:22}{range:0}(1-3)% increased Movement Speed per Endurance Charge</Mod>
+				<Mod>{variant:23}{range:0}(5-15)% increased Damage per Endurance Charge</Mod>
+				<Mod>{variant:24}{range:0}(6-18)% increased Armour per Endurance Charge</Mod>
+				<Mod>{variant:25}{range:0}(20-120)% increased Endurance Charge Duration</Mod>
+				<Mod>{variant:26}{range:0}(15-45)% chance that if you would gain Endurance Charges, you instead gain up to your maximum number of Endurance Charges</Mod>
+				<Mod>{variant:27}{range:0}(10-10)% chance to gain a Frenzy Charge on Hit</Mod>
 				<Mod>{variant:28}Gain Onslaught for 4 seconds on Hit while at maximum Frenzy Charges</Mod>
 				<Mod>{variant:29}You have Iron Reflexes while at maximum Frenzy Charges</Mod>
 				<Mod>{variant:30}Gain a Flask Charge when you deal a Critical Strike while at maximum Frenzy Charges</Mod>
 				<Mod>{variant:31}+1 to Maximum Frenzy Charges</Mod>
-				<Mod>{variant:32}{range:0.5}(1-2)% increased Attack and Cast Speed per Frenzy Charge</Mod>
-				<Mod>{variant:33}{range:0.5}Gain (1-2)% of Cold Damage as Extra Chaos Damage per Frenzy Charge</Mod>
-				<Mod>{variant:34}{range:0.5}(10-20)% increased Accuracy Rating per Frenzy Charge</Mod>
-				<Mod>{variant:35}{range:0.5}(6-12)% increased Critical Strike Chance per Frenzy Charge</Mod>
-				<Mod>{variant:36}{range:0.5}(1-2)% Chance to Block Attack Damage per Frenzy Charge</Mod>
-				<Mod>{variant:37}{range:0.5}Regenerate (0.3-0.6)% of Life per second per Frenzy Charge</Mod>
-				<Mod>{variant:38}{range:0.5}(1-2)% chance to Suppress Spell Damage per Frenzy Charge</Mod>
-				<Mod>{variant:39}{range:0.5}(10-30)% chance to gain an Frenzy Charge on Kill</Mod>
-				<Mod>{variant:40}{range:0.5}(5-15)% increased Damage per Frenzy Charge</Mod>
-				<Mod>{variant:41}{range:0.5}(1-3)% increased Movement Speed per Frenzy Charge</Mod>
-				<Mod>{variant:42}{range:0.5}(6-24) to (12-39) Cold Damage per Frenzy Charge</Mod>
-				<Mod>{variant:43}{range:0.5}(15-45)% chance that if you would gain Frenzy Charges, you instead gain up to your maximum number of Frenzy Charges</Mod>
-				<Mod>{variant:44}{range:0.5}(20-120)% increased Frenzy Charge Duration</Mod>
-				<Mod>{variant:45}{range:0.5}(8-24)% increased Evasion Rating per Frenzy Charge</Mod>
+				<Mod>{variant:32}{range:0}(1-2)% increased Attack and Cast Speed per Frenzy Charge</Mod>
+				<Mod>{variant:33}{range:0}Gain (1-2)% of Cold Damage as Extra Chaos Damage per Frenzy Charge</Mod>
+				<Mod>{variant:34}{range:0}(10-20)% increased Accuracy Rating per Frenzy Charge</Mod>
+				<Mod>{variant:35}{range:0}(6-12)% increased Critical Strike Chance per Frenzy Charge</Mod>
+				<Mod>{variant:36}{range:0}(1-2)% Chance to Block Attack Damage per Frenzy Charge</Mod>
+				<Mod>{variant:37}{range:0}Regenerate (0.3-0.6)% of Life per second per Frenzy Charge</Mod>
+				<Mod>{variant:38}{range:0}(1-2)% chance to Suppress Spell Damage per Frenzy Charge</Mod>
+				<Mod>{variant:39}{range:0}(10-30)% chance to gain an Frenzy Charge on Kill</Mod>
+				<Mod>{variant:40}{range:0}(5-15)% increased Damage per Frenzy Charge</Mod>
+				<Mod>{variant:41}{range:0}(1-3)% increased Movement Speed per Frenzy Charge</Mod>
+				<Mod>{variant:42}{range:0}(6-24) to (12-39) Cold Damage per Frenzy Charge</Mod>
+				<Mod>{variant:43}{range:0}(15-45)% chance that if you would gain Frenzy Charges, you instead gain up to your maximum number of Frenzy Charges</Mod>
+				<Mod>{variant:44}{range:0}(20-120)% increased Frenzy Charge Duration</Mod>
+				<Mod>{variant:45}{range:0}(8-24)% increased Evasion Rating per Frenzy Charge</Mod>
 				<Mod>{variant:46}+1 to Maximum Power Charges</Mod>
-				<Mod>{variant:47}{range:0.5}(20-20)% chance to gain a Power Charge on Critical Strike</Mod>
+				<Mod>{variant:47}{range:0}(20-20)% chance to gain a Power Charge on Critical Strike</Mod>
 				<Mod>{variant:48}You have Mind over Matter while at maximum Power Charges</Mod>
 				<Mod>{variant:49}You can apply an additional Curse while at maximum Power Charges</Mod>
 				<Mod>{variant:50}Gain Arcane Surge on Hit with Spells while at maximum Power Charges</Mod>
-				<Mod>{variant:51}{range:0.5}(1-2)% increased Attack and Cast Speed per Power Charge</Mod>
-				<Mod>{variant:52}{range:0.5}(1-2)% chance to Suppress Spell Damage per Power Charge</Mod>
-				<Mod>{variant:53}{range:0.5}+(3-6)% to Critical Strike Multiplier per Power Charge</Mod>
-				<Mod>{variant:54}{range:0.5}Regenerate (0.3-0.6)% of Life per second per Power Charge</Mod>
-				<Mod>{variant:55}{range:0.5}Gain (1-2)% of Lightning Damage as Extra Chaos Damage per Power Charge</Mod>
-				<Mod>{variant:56}{range:0.5}(1-2)% Chance to Block Attack Damage per Power Charge</Mod>
-				<Mod>{variant:57}{range:0.5}(1-2)% additional Physical Damage Reduction per Power Charge</Mod>
-				<Mod>{variant:58}{range:0.5}(10-30)% chance to gain an Power Charge on Kill</Mod>
-				<Mod>{variant:59}{range:0.5}(5-15)% increased Damage per Power Charge</Mod>
-				<Mod>{variant:60}{range:0.5}(1-3)% increased Movement Speed per Power Charge</Mod>
-				<Mod>{variant:61}{range:0.5}(20-120)% increased Power Charge Duration</Mod>
-				<Mod>{variant:62}{range:0.5}(15-45)% chance that if you would gain Power Charges, you instead gain up to your maximum number of Power Charges</Mod>
-				<Mod>{variant:63}{range:0.5}(1-6) to (18-60) Lightning Damage per Power Charge</Mod>
-				<Mod>{variant:64}{range:0.5}(3-9)% increased Energy Shield per Power Charge</Mod>
+				<Mod>{variant:51}{range:0}(1-2)% increased Attack and Cast Speed per Power Charge</Mod>
+				<Mod>{variant:52}{range:0}(1-2)% chance to Suppress Spell Damage per Power Charge</Mod>
+				<Mod>{variant:53}{range:0}+(3-6)% to Critical Strike Multiplier per Power Charge</Mod>
+				<Mod>{variant:54}{range:0}Regenerate (0.3-0.6)% of Life per second per Power Charge</Mod>
+				<Mod>{variant:55}{range:0}Gain (1-2)% of Lightning Damage as Extra Chaos Damage per Power Charge</Mod>
+				<Mod>{variant:56}{range:0}(1-2)% Chance to Block Attack Damage per Power Charge</Mod>
+				<Mod>{variant:57}{range:0}(1-2)% additional Physical Damage Reduction per Power Charge</Mod>
+				<Mod>{variant:58}{range:0}(10-30)% chance to gain an Power Charge on Kill</Mod>
+				<Mod>{variant:59}{range:0}(5-15)% increased Damage per Power Charge</Mod>
+				<Mod>{variant:60}{range:0}(1-3)% increased Movement Speed per Power Charge</Mod>
+				<Mod>{variant:61}{range:0}(20-120)% increased Power Charge Duration</Mod>
+				<Mod>{variant:62}{range:0}(15-45)% chance that if you would gain Power Charges, you instead gain up to your maximum number of Power Charges</Mod>
+				<Mod>{variant:63}{range:0}(1-6) to (18-60) Lightning Damage per Power Charge</Mod>
+				<Mod>{variant:64}{range:0}(3-9)% increased Energy Shield per Power Charge</Mod>
 			</Explicits>
 			<Variants max="7" alt1="0" alt2="0" alt3="0">
 				<Variant num="1">Topaz Ring</Variant>
@@ -11860,6 +11982,301 @@
 				<Variant num="25">Pierce</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Item Class: Jewels" base_name="Rarity: Unique" league="Affliction">
+			<Attribs limited_to="1" ilevel="86" />
+			<Implicits />
+			<Explicits>
+				<Mod>That Which Was Taken</Mod>
+				<Mod>Crimson Jewel</Mod>
+				<Mod>Requirements:</Mod>
+				<Mod>{variant:2}(14-20)% increased Accuracy Rating if you've dealt a Critical Strike in the past 8 seconds</Mod>
+				<Mod>{variant:3}Adds (8-12) to (18-22) Physical Damage if you've dealt a Critical Strike Recently</Mod>
+				<Mod>{variant:4}+(0.6-1)% Critical Strike Chance while at maximum Power Charges</Mod>
+				<Mod>{variant:5}Skills fire an additional Projectile</Mod>
+				<Mod>{variant:6}All Damage can Ignite</Mod>
+				<Mod>{variant:7}Gain Arcane Surge when you or your Totems Hit an Enemy with a Spell</Mod>
+				<Mod>{variant:8}(8-12)% increased Area of Effect if you've Killed Recently</Mod>
+				<Mod>{variant:9}(5-6)% increased Area of Effect per Endurance Charge</Mod>
+				<Mod>{variant:10}4% increased Area of Effect per Power Charge</Mod>
+				<Mod>{variant:11}+(5-6) to Armour and Evasion Rating per 1% Chance to Block Attack Damage</Mod>
+				<Mod>{variant:12}3% of Armour applies to Fire, Cold and Lightning Damage taken from Hits</Mod>
+				<Mod>{variant:13}(11-20)% chance to Cover Rare or Unique Enemies in Ash for 10 Seconds on Hit</Mod>
+				<Mod>{variant:14}+(5-6)% Chance to Block Attack Damage</Mod>
+				<Mod>{variant:15}Gain (8-12)% increased Attack Speed for 20 seconds when you Kill a Rare or Unique Enemy</Mod>
+				<Mod>{variant:16}(16-25)% chance to Avoid Elemental Ailments while Phasing</Mod>
+				<Mod>{variant:17}Banner Skills have no Reservation</Mod>
+				<Mod>{variant:18}Bleeding Enemies you Kill Explode, dealing (4-5)% of</Mod>
+				<Mod>{variant:18}their Maximum Life as Physical Damage</Mod>
+				<Mod>{variant:19}(11-15)% Global chance to Blind Enemies on hit</Mod>
+				<Mod>{variant:20}Attack Hits against Bleeding Enemies have (20-30)% chance to Blind</Mod>
+				<Mod>{variant:21}If you've Attacked Recently, you and nearby Allies have +(6-8)% Chance to Block Attack Damage</Mod>
+				<Mod>{variant:22}Cannot be Blinded</Mod>
+				<Mod>{variant:23}Hits have (7-10)% chance to deal 50% more Area Damage</Mod>
+				<Mod>{variant:24}(17-23)% chance to gain 25% of Non-Chaos Damage with Hits as Extra Chaos Damage</Mod>
+				<Mod>{variant:25}(9-12)% chance for Energy Shield Recharge to start when you Suppress Spell Damage</Mod>
+				<Mod>{variant:26}Skills that would Summon a Totem have (31-50)% chance to Summon two Totems instead</Mod>
+				<Mod>{variant:27}(4-5)% chance to throw up to 4 additional Traps</Mod>
+				<Mod>{variant:28}Cursed Enemies you or your Minions Kill have a (11-15)% chance to Explode, dealing a quarter of their maximum Life as Chaos Damage</Mod>
+				<Mod>{variant:29}+(4-5)% to Chaos Resistance per Endurance Charge</Mod>
+				<Mod>{variant:30}(61-100)% increased Charge Duration</Mod>
+				<Mod>{variant:31}Chills from your Hits always reduce Action Speed by at least (5-6)%</Mod>
+				<Mod>{variant:32}Consecrated Ground you create applies (7-10)% increased Damage taken to Enemies</Mod>
+				<Mod>{variant:33}Effects of Consecrated Ground you create Linger for 2 seconds</Mod>
+				<Mod>{variant:34}(20-30)% chance to create Consecrated Ground when you Hit a Rare or Unique Enemy, lasting 8 seconds</Mod>
+				<Mod>{variant:35}(9-12)% increased Cooldown Recovery Rate</Mod>
+				<Mod>{variant:36}Nearby corpses Explode when you Warcry, dealing (5-6)% of their Life as Physical Damage</Mod>
+				<Mod>{variant:37}Corpses you Spawn have (11-20)% increased Maximum Life</Mod>
+				<Mod>{variant:38}+(16-25)% to Critical Strike Multiplier against Burning Enemies</Mod>
+				<Mod>{variant:38}(31-50)% increased Critical Strike Chance against Shocked Enemies</Mod>
+				<Mod>{variant:39}(130-160)% increased Critical Strike Chance against Enemies on Full Life</Mod>
+				<Mod>{variant:40}(71-100)% increased Critical Strike Chance if you haven't dealt a Critical Strike Recently</Mod>
+				<Mod>{variant:41}Damage from your Critical Strikes cannot be Reflected</Mod>
+				<Mod>{variant:42}+(4-5)% to Critical Strike Multiplier per Power Charge</Mod>
+				<Mod>{variant:43}Critical Strikes have Culling Strike</Mod>
+				<Mod>{variant:44}(31-40)% increased Effect of non-Damaging Ailments you inflict with Critical Strikes</Mod>
+				<Mod>{variant:45}Culling Strike</Mod>
+				<Mod>{variant:46}(6-8)% increased Effect of your Curses</Mod>
+				<Mod>{variant:47}3% of Damage is taken from Mana before Life</Mod>
+				<Mod>{variant:48}3% of Damage from Hits is taken from your nearest Totem's Life before you</Mod>
+				<Mod>{variant:49}Damage Penetrates (5-6)% of Enemy Elemental Resistances</Mod>
+				<Mod>{variant:50}Cannot take Reflected Elemental Damage</Mod>
+				<Mod>{variant:51}You and nearby Allies have +(15-20)% to Elemental Resistances</Mod>
+				<Mod>{variant:52}(16-25)% increased Elusive Effect</Mod>
+				<Mod>{variant:53}(20-30)% chance to gain an Endurance Charge when you are Hit</Mod>
+				<Mod>{variant:54}(20-30)% chance to gain an Endurance Charge when you Stun an Enemy</Mod>
+				<Mod>{variant:55}Enemies in your Link Beams cannot apply Elemental Ailments</Mod>
+				<Mod>{variant:56}(1.1-2)% of Damage Leeched as Energy Shield</Mod>
+				<Mod>{variant:57}Regenerate (2-3)% of Energy Shield per second</Mod>
+				<Mod>{variant:58}+(3-4) to Evasion Rating per 1 Maximum Energy Shield on Equipped Helmet</Mod>
+				<Mod>{variant:59}(6-9)% increased Evasion Rating per Frenzy Charge</Mod>
+				<Mod>{variant:60}Exposure you inflict applies an extra -(7-6)% to the affected Resistance</Mod>
+				<Mod>{variant:61}Enemies you or your Totems Kill have 1% chance to Explode, dealing 500% of their maximum Life as Fire Damage</Mod>
+				<Mod>{variant:62}Flasks gain a Charge every 3 seconds</Mod>
+				<Mod>{variant:63}Enemies you Kill that are affected by Elemental Ailments</Mod>
+				<Mod>{variant:63}grant (26-40)% increased Flask Charges</Mod>
+				<Mod>{variant:64}Melee Hits have (11-20)% chance to Fortify</Mod>
+				<Mod>{variant:65}(6-8)% chance to gain a Frenzy Charge on Hit</Mod>
+				<Mod>{variant:66}Gain Adrenaline for 4 seconds when you reach Low Life</Mod>
+				<Mod>{variant:67}(21-35)% increased Effect of Buffs granted by your Golems</Mod>
+				<Mod>{variant:68}(31-50)% reduced Ignite Duration on you</Mod>
+				<Mod>{variant:69}(16-25)% chance to Freeze, Shock and Ignite</Mod>
+				<Mod>{variant:70}Your Hexes can affect Hexproof Enemies</Mod>
+				<Mod>{variant:71}Impales you inflict last 1 additional Hit</Mod>
+				<Mod>{variant:72}(16-20)% increased Life Regeneration rate</Mod>
+				<Mod>{variant:73}2% of Attack Damage Leeched as Life and Mana if you've Killed Recently</Mod>
+				<Mod>{variant:74}(6-8)% of Leech is Instant</Mod>
+				<Mod>{variant:75}Recover 2% of Life on Kill</Mod>
+				<Mod>{variant:75}Recover 2% of Energy Shield on Kill</Mod>
+				<Mod>{variant:75}Recover 2% of Mana on Kill</Mod>
+				<Mod>{variant:76}Gain (11-20) Life per Bleeding Enemy Hit</Mod>
+				<Mod>{variant:77}Every 4 seconds, Regenerate 20% of Life over one second</Mod>
+				<Mod>{variant:78}Magic Utility Flasks applied to you have (11-15)% increased Effect</Mod>
+				<Mod>{variant:79}Attack Hits against Blinded Enemies have (20-30)% chance to Maim</Mod>
+				<Mod>{variant:80}(8-12)% increased Mana Reservation Efficiency of Skills</Mod>
+				<Mod>{variant:81}Gain (4-5)% of Maximum Mana as Extra Maximum Energy Shield</Mod>
+				<Mod>{variant:82}(16-25)% increased Effect of your Marks</Mod>
+				<Mod>{variant:83}(21-30)% increased Maximum Recovery per Life Leech</Mod>
+				<Mod>{variant:84}+3% to maximum Chance to Block Attack Damage</Mod>
+				<Mod>{variant:85}+2% to maximum Fire Resistance</Mod>
+				<Mod>{variant:86}+(4-5) to Maximum Rage</Mod>
+				<Mod>{variant:87}(31-50)% increased Effect of Auras from Mines</Mod>
+				<Mod>{variant:88}+1 to Minimum Endurance Charges</Mod>
+				<Mod>{variant:88}+1 to Minimum Power Charges</Mod>
+				<Mod>{variant:89}Minions gain Added Physical Damage equal to (6-10)% of Maximum Energy Shield on your Equipped Helmet</Mod>
+				<Mod>{variant:90}Minions have (9-12)% additional Physical Damage Reduction</Mod>
+				<Mod>{variant:91}Minions have (20-30)% chance to gain Unholy Might for 4 seconds on Kill</Mod>
+				<Mod>{variant:92}(51-100)% increased Mirage Archer Duration</Mod>
+				<Mod>{variant:93}Movement Speed cannot be modified to below base value</Mod>
+				<Mod>{variant:94}2% increased Movement Speed per Frenzy Charge</Mod>
+				<Mod>{variant:95}While there are at least five nearby Allies, you and nearby Allies have Onslaught</Mod>
+				<Mod>{variant:96}Nearby Enemies are Chilled</Mod>
+				<Mod>{variant:97}Nearby Enemies cannot gain Power, Frenzy or Endurance Charges</Mod>
+				<Mod>{variant:98}Projectile Barrages have no spread</Mod>
+				<Mod>{variant:99}You take no Extra Damage from Critical Strikes while Elusive</Mod>
+				<Mod>{variant:100}Non-Damaging Ailments have (31-40)% reduced Effect on you while you have Arcane Surge</Mod>
+				<Mod>{variant:101}Your Offerings have (21-30)% increased Effect on you</Mod>
+				<Mod>{variant:102}(26-40)% increased Effect of Onslaught on you</Mod>
+				<Mod>{variant:103}(16-25)% chance to gain Onslaught for 4 seconds on Kill</Mod>
+				<Mod>{variant:104}(8-12)% of Overkill Damage is Leeched as Life</Mod>
+				<Mod>{variant:105}Hits ignore Enemy Monster Physical Damage Reduction if you've Blocked in the past 20 seconds</Mod>
+				<Mod>{variant:106}(16-25)% chance to gain Phasing for 4 seconds on Kill</Mod>
+				<Mod>{variant:107}Gain (9-12)% of Physical Damage as Extra Damage of a random Element</Mod>
+				<Mod>{variant:108}Cannot take Reflected Physical Damage</Mod>
+				<Mod>{variant:109}3% increased Poison Duration for each Poison you have inflicted Recently, up to a maximum of 100%</Mod>
+				<Mod>{variant:110}(16-25)% chance to gain a Power Charge on Critical Strike</Mod>
+				<Mod>{variant:111}Projectiles have (14-20)% chance to be able to Chain when colliding with terrain</Mod>
+				<Mod>{variant:112}Projectiles gain Damage as they travel farther, dealing up</Mod>
+				<Mod>{variant:112}to (41-60)% increased Damage with Hits to targets</Mod>
+				<Mod>{variant:113}(7-10)% chance to Recover 10% of Mana when you use a Skill</Mod>
+				<Mod>{variant:114}When you create a Banner, it gains (16-25)% of the Stages of your placed Banner</Mod>
+				<Mod>{variant:115}Recover (4-5)% of Life when you use a Flask</Mod>
+				<Mod>{variant:116}Regenerate (4-5)% of Energy Shield over 2 seconds when you Consume a corpse</Mod>
+				<Mod>{variant:117}Regenerate (4-5)% of Mana over 2 seconds when you Consume a corpse</Mod>
+				<Mod>{variant:118}Removes Bleeding when you use a Flask</Mod>
+				<Mod>{variant:119}Every 4 seconds, remove Curses and Elemental Ailments from you</Mod>
+				<Mod>{variant:120}Grants Armour equal to (5-6)% of your Reserved Mana to you and nearby Allies</Mod>
+				<Mod>{variant:121}Shocks from your Hits always increase Damage taken by at least (8-10)%</Mod>
+				<Mod>{variant:122}If you've Cast a Spell Recently, you and nearby Allies have +(6-8)% Chance to Block Spell Damage</Mod>
+				<Mod>{variant:123}Prevent +(5-6)% of Suppressed Spell Damage while on Full Energy Shield</Mod>
+				<Mod>{variant:124}(20-30)% chance to Hinder Enemies on Hit with Spells</Mod>
+				<Mod>{variant:125}+(10-15)% chance to Suppress Spell Damage</Mod>
+				<Mod>{variant:126}+(31-40) to Strength and Intelligence</Mod>
+				<Mod>{variant:127}(6-8)% increased Strength</Mod>
+				<Mod>{variant:128}Cannot be Stunned by Hits you Block</Mod>
+				<Mod>{variant:129}Cannot be Stunned while Fortified</Mod>
+				<Mod>{variant:130}Cannot be Stunned while Leeching</Mod>
+				<Mod>{variant:131}Cannot be Stunned while you have at least 25 Rage</Mod>
+				<Mod>{variant:132}(7-10)% chance to take 50% less Area Damage from Hits</Mod>
+				<Mod>{variant:133}(20-30)% chance to Taunt on Hit</Mod>
+				<Mod>{variant:134}Recoup (8-12)% of Damage Taken by your Totems as Life</Mod>
+				<Mod>{variant:135}Totems Taunt Enemies around them for 2 seconds when Summoned</Mod>
+				<Mod>{variant:136}You are Unaffected by Bleeding while Leeching</Mod>
+				<Mod>{variant:137}Warcries grant (4-5) Rage per 5 Power if you have less than 25 Rage</Mod>
+				<Mod>{variant:138}(14-20)% increased Effect of Withered</Mod>
+				<Mod>{variant:139}(11-15)% chance to inflict Withered for 2 seconds on Hit</Mod>
+			</Explicits>
+			<Variants alt1="104" alt2="106" alt3="125">
+				<Variant num="1">None</Variant>
+				<Variant num="2">Accuracy If Crit In Last 8 Seconds</Variant>
+				<Variant num="3">Added Phys Damage If Crit Recently</Variant>
+				<Variant num="4">Additional Crit Strike Chance At Maximum Power Charges</Variant>
+				<Variant num="5">Additional Projectiles</Variant>
+				<Variant num="6">All Damage Can Ignite</Variant>
+				<Variant num="7">Arcane Surge On Hit</Variant>
+				<Variant num="8">Area Of Effect If Killed Recently</Variant>
+				<Variant num="9">Area Of Effect Per Endurance Charge</Variant>
+				<Variant num="10">Areaof Effect Per Power Charge</Variant>
+				<Variant num="11">Armour And Evasion Per Block</Variant>
+				<Variant num="12">Armour Applies To Ele Damage</Variant>
+				<Variant num="13">Ash On Hitting Rare Unique Enemy</Variant>
+				<Variant num="14">Attack Block</Variant>
+				<Variant num="15">Attack Speed On Killing Rare Unique</Variant>
+				<Variant num="16">Avoid Ele Ailments Chance While Phasing</Variant>
+				<Variant num="17">Banners No Reservation</Variant>
+				<Variant num="18">Bleed Explode</Variant>
+				<Variant num="19">Blind On Hit Chance</Variant>
+				<Variant num="20">Blind On Hit Vs Bleeding Enemies</Variant>
+				<Variant num="21">Block Chance If Attacked Recently</Variant>
+				<Variant num="22">Cannot Be Blinded</Variant>
+				<Variant num="23">Chance For 150% Area Damage</Variant>
+				<Variant num="24">Chance For 25% Non Chaos To Add As Chaos Damage</Variant>
+				<Variant num="25">Chance For ES Recharge On Suppress</Variant>
+				<Variant num="26">Chance To Summon Two Totems</Variant>
+				<Variant num="27">Chance To Throw 4 Additional Traps</Variant>
+				<Variant num="28">Chaos Explode</Variant>
+				<Variant num="29">Chaos Resistance Per Endurance Charge</Variant>
+				<Variant num="30">Charge Duration</Variant>
+				<Variant num="31">Chill Minimum Slow</Variant>
+				<Variant num="32">Consecrated Ground Damage Taken</Variant>
+				<Variant num="33">Consecrated Ground Linger Duration</Variant>
+				<Variant num="34">Consecrated Ground Vs Rare Unique</Variant>
+				<Variant num="35">Cooldown Recovery Rate</Variant>
+				<Variant num="36">Corpse Explode On Warcry</Variant>
+				<Variant num="37">Corpse Life</Variant>
+				<Variant num="38">Crit Vs Burning And Shocked Enemies</Variant>
+				<Variant num="39">Crit Strike Chance Against Full Life Enemies</Variant>
+				<Variant num="40">Crit Strike Chance If Not Crit Recently</Variant>
+				<Variant num="41">Crit Strike Damage Cannot Be Reflected</Variant>
+				<Variant num="42">Crit Strike Mult Per Power Charge</Variant>
+				<Variant num="43">Crit Strikes Have Culling Strike</Variant>
+				<Variant num="44">Crit Strikes Non Damaging Ailment Effect</Variant>
+				<Variant num="45">Culling Strike</Variant>
+				<Variant num="46">Curse Effect</Variant>
+				<Variant num="47">Damage Removed From Mana Before Life</Variant>
+				<Variant num="48">Damage Removed From Totem Life Before Self</Variant>
+				<Variant num="49">Ele Penetration</Variant>
+				<Variant num="50">Ele Reflect Immune</Variant>
+				<Variant num="51">Ele Resistances For Aura Affected Allies</Variant>
+				<Variant num="52">Elusive Effect</Variant>
+				<Variant num="53">Enchange Charge When Hit</Variant>
+				<Variant num="54">Endurance Charge On Stun</Variant>
+				<Variant num="55">Enemies In Link Beam Cannot Inflict Ele Ailments</Variant>
+				<Variant num="56">ES Leech</Variant>
+				<Variant num="57">ES Regeneration</Variant>
+				<Variant num="58">Evasion Per ES On Helmet</Variant>
+				<Variant num="59">Evasion Rating Per Frenzy Charge</Variant>
+				<Variant num="60">Exposure Extra Resistance</Variant>
+				<Variant num="61">Fire Explode</Variant>
+				<Variant num="62">Flask Charges Every 3 Seconds</Variant>
+				<Variant num="63">Flask Charges Gained From Enemies With Ailments</Variant>
+				<Variant num="64">Fortify On Melee Hit Chance</Variant>
+				<Variant num="65">Frenzy On Hit Chance</Variant>
+				<Variant num="66">Gain Adrenaline On Reaching Low Life</Variant>
+				<Variant num="67">Golem Buff Effect</Variant>
+				<Variant num="68">Ignite Duration On Self</Variant>
+				<Variant num="69">Ignite Freeze Shock Chance</Variant>
+				<Variant num="70">Ignore Hexproof Enemies</Variant>
+				<Variant num="71">Impale Lasts For Extra Hits</Variant>
+				<Variant num="72">Life Regeneration Rate</Variant>
+				<Variant num="73">Leech If Killed Recently</Variant>
+				<Variant num="74">Leech Percent Is Instant</Variant>
+				<Variant num="75">Life Mana ES On Kill</Variant>
+				<Variant num="76">Life On Hit Vs Bleeding Enemies</Variant>
+				<Variant num="77">Life Regeneration For A Second Every 10 Seconds</Variant>
+				<Variant num="78">Magic Utility Flask Effect</Variant>
+				<Variant num="79">Maim On Hit Vs Blinded Enemies</Variant>
+				<Variant num="80">Mana Reservation Efficiency</Variant>
+				<Variant num="81">Mana To Add As Extra ES</Variant>
+				<Variant num="82">Mark Effect</Variant>
+				<Variant num="83">Maximum Amount Per Life Leech</Variant>
+				<Variant num="84">Maximum Block</Variant>
+				<Variant num="85">Maximum Fire Damage Resistance</Variant>
+				<Variant num="86">Maximum Rage</Variant>
+				<Variant num="87">Mine Aura Effect</Variant>
+				<Variant num="88">Minimum Endurance And Power Charges</Variant>
+				<Variant num="89">Minion Phys Damage Based Off Helmet ES</Variant>
+				<Variant num="90">Minion Phys Damage Reduction</Variant>
+				<Variant num="91">Minion Unholy Might Chance</Variant>
+				<Variant num="92">Mirage Archer Duration</Variant>
+				<Variant num="93">Movement Speed Cannot Be Below Base</Variant>
+				<Variant num="94">Movement Speed Per Frenzy Charge</Variant>
+				<Variant num="95">Nearby Allies Have Onslaught If You Have At Least 5 Nearby</Variant>
+				<Variant num="96">Nearby Enemies Are Chilled</Variant>
+				<Variant num="97">Nearby Enemies Cannot Gain Charges</Variant>
+				<Variant num="98">No Barrage Spread</Variant>
+				<Variant num="99">No Extra Damage From Crit Strikes If Elusive</Variant>
+				<Variant num="100">Non Damaging Ailment Effect On Self With Arcane Surge</Variant>
+				<Variant num="101">Offering Effect</Variant>
+				<Variant num="102">Onslaught Effect</Variant>
+				<Variant num="103">Onslaught On Kill Chance</Variant>
+				<Variant num="104">Overkill Leech</Variant>
+				<Variant num="105">Overwhelm If Blockedin Past 20 Seconds</Variant>
+				<Variant num="106">Phasing On Kill Chance</Variant>
+				<Variant num="107">Phys Damage As Random Element</Variant>
+				<Variant num="108">Phys Reflect Immune</Variant>
+				<Variant num="109">Poison Duration Per Poison Applied Recently</Variant>
+				<Variant num="110">Power Charge On Crit Strike</Variant>
+				<Variant num="111">Projectile Chain From Terrain Chance</Variant>
+				<Variant num="112">Projectile Damage With Distance Travelled</Variant>
+				<Variant num="113">Recover 10 Percent Mana On Skill Use Chance</Variant>
+				<Variant num="114">Recover Banner Stages On Placing Banner</Variant>
+				<Variant num="115">Recover Life On Flask Use</Variant>
+				<Variant num="116">Regenerate ES On Consume Corpse</Variant>
+				<Variant num="117">Regenerate Mana On Consume Corpse</Variant>
+				<Variant num="118">Remove Bleed On Flask Use</Variant>
+				<Variant num="119">Remove Curses And Ailments Every 10seconds</Variant>
+				<Variant num="120">Reserved Mana Granted As Armour</Variant>
+				<Variant num="121">Shock Minimum Damage Increase</Variant>
+				<Variant num="122">Spell Block Chance If Cast Spell Recently</Variant>
+				<Variant num="123">Spell Damage Suppressed On Full ES</Variant>
+				<Variant num="124">Spell Hinder On Hit Chance</Variant>
+				<Variant num="125">Spell Suppression Chance</Variant>
+				<Variant num="126">Strength And Intelligence</Variant>
+				<Variant num="127">Strength Percent</Variant>
+				<Variant num="128">Stun Immune Against Blocked Hits</Variant>
+				<Variant num="129">Stun Immune While Fortified</Variant>
+				<Variant num="130">Stun Immune While Leeching</Variant>
+				<Variant num="131">Stun Immune With 25 Rage</Variant>
+				<Variant num="132">Take Half Area Damage Chance</Variant>
+				<Variant num="133">Taunt On Hit Chance</Variant>
+				<Variant num="134">Totem Recoup</Variant>
+				<Variant num="135">Totem Taunt Enemies When Summoned</Variant>
+				<Variant num="136">Unaffectedby Bleeding While Leeching</Variant>
+				<Variant num="137">Warcries Grant Rage</Variant>
+				<Variant num="138">Withered Effect</Variant>
+				<Variant num="139">Withered On Hit Chance</Variant>
+			</Variants>
+		</Item>
 	</generated>
 	<gloves>
 		<Item ver="2" title="Atziri's Acuity" base_name="Vaal Gauntlets" source="Drops from unique{Atziri, Queen of the Vaal} in normal{The Alluring Abyss}">
@@ -11936,11 +12353,16 @@
 				<Mod>+(20-30)% to Fire Resistance</Mod>
 				<Mod>(0.3-0.5)% of Physical Attack Damage Leeched as Life</Mod>
 				<Mod>Life Recovery from Regeneration is not applied</Mod>
-				<Mod>Regenerate 1 Rage per second for every 100 Life Recovery per second from Regeneration</Mod>
+				<Mod>{variant:1}Regenerate 1 Rage per second for every 100 Life Recovery per second from Regeneration</Mod>
+				<Mod>{variant:2}Regenerate 1 Rage per second for every 300 Life Recovery per second from Regeneration</Mod>
 			</Explicits>
 			<Requires>
 				<Str>98</Str>
 			</Requires>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 		</Item>
 		<Item ver="2" title="Doryani's Fist" base_name="Vaal Gauntlets">
 			<Attribs level_req="63" />
@@ -13694,13 +14116,14 @@
 				<Mod>(80-100)% increased Evasion Rating</Mod>
 				<Mod>60% increased Mana Regeneration Rate</Mod>
 				<Mod>{variant:1}-(20-10)% to Fire Resistance</Mod>
-				<Mod>{variant:2,3}+(20-30)% to Fire Resistance</Mod>
+				<Mod>{variant:2,3,4}+(20-30)% to Fire Resistance</Mod>
 				<Mod>{variant:1}-(20-10)% to Cold Resistance</Mod>
-				<Mod>{variant:2,3}+(20-30)% to Cold Resistance</Mod>
+				<Mod>{variant:2,3,4}+(20-30)% to Cold Resistance</Mod>
 				<Mod>{variant:2}(20-30)% increased Cold Damage if you have used a Fire Skill Recently</Mod>
 				<Mod>{variant:2}(20-30)% increased Fire Damage if you have used a Cold Skill Recently</Mod>
-				<Mod>{variant:3}Gain 1% of Cold Damage as Extra Fire Damage per 1% Chill Effect on Enemy</Mod>
+				<Mod>{variant:3,4}Gain 1% of Cold Damage as Extra Fire Damage per 1% Chill Effect on Enemy</Mod>
 				<Mod>{variant:3}Gain 100% of Cold Damage as Extra Fire Damage against Frozen Enemies</Mod>
+				<Mod>{variant:4}Gain 30% of Cold Damage as Extra Fire Damage against Frozen Enemies</Mod>
 			</Explicits>
 			<Requires>
 				<Dex>46</Dex>
@@ -13708,7 +14131,8 @@
 			<Variants>
 				<Variant num="1">Pre 3.0.0</Variant>
 				<Variant num="2">Pre 3.19.0</Variant>
-				<Variant num="3">Current</Variant>
+				<Variant num="3">Pre 3.23.0</Variant>
+				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" title="Frostferno" base_name="Leather Hood" source="No longer obtainable">
@@ -13999,17 +14423,18 @@
 				<Mod>{variant:12}{crafted}(81-140)% increased Duration of Ailments you inflict while Focused</Mod>
 				<Mod>{variant:13}{crafted}(6-9)% chance to Avoid Elemental Damage from Hits during Soul Gain Prevention</Mod>
 				<Mod>{variant:14}(161-180)% increased Duration of Ailments you inflict while Focused</Mod>
-				<Mod>{variant:15}+(16-20)% to Fire and Chaos Resistances</Mod>
-				<Mod>{variant:16}+(16-20)% to Cold and Chaos Resistances</Mod>
-				<Mod>{variant:17}+(16-20)% to Lightning and Chaos Resistances</Mod>
-				<Mod>{variant:18}+(31-35) to Strength and Dexterity</Mod>
-				<Mod>{variant:19}+(31-35) to Dexterity and Intelligence</Mod>
-				<Mod>{variant:20}+(31-35) to Strength and Intelligence</Mod>
-				<Mod>{variant:21}(14-16)% increased Mine Laying Speed</Mod>
-				<Mod>{variant:22}Trigger Socketed Spells when you Focus, with a 0.25 second Cooldown</Mod>
-				<Mod>{variant:22}Focus has (5-8)% increased Cooldown Recovery Rate</Mod>
-				<Mod>{variant:23}(81-90)% increased Duration of Ailments you inflict while Focused</Mod>
-				<Mod>{variant:24}(10-12)% chance to Avoid Elemental Damage from Hits during Soul Gain Prevention</Mod>
+				<Mod>{variant:15}(81-90)% increased Duration of Ailments you inflict while Focused</Mod>
+				<Mod>{variant:16}+(16-20)% to Fire and Chaos Resistances</Mod>
+				<Mod>{variant:17}+(16-20)% to Cold and Chaos Resistances</Mod>
+				<Mod>{variant:18}+(16-20)% to Lightning and Chaos Resistances</Mod>
+				<Mod>{variant:19}+(31-35) to Strength and Dexterity</Mod>
+				<Mod>{variant:20}+(31-35) to Dexterity and Intelligence</Mod>
+				<Mod>{variant:21}+(31-35) to Strength and Intelligence</Mod>
+				<Mod>{variant:22}(14-16)% increased Mine Laying Speed</Mod>
+				<Mod>{variant:23}Trigger Socketed Spells when you Focus, with a 0.25 second Cooldown</Mod>
+				<Mod>{variant:23}Focus has (5-8)% increased Cooldown Recovery Rate</Mod>
+				<Mod>{variant:24}(36-40)% increased Duration of Ailments you inflict while Focused</Mod>
+				<Mod>{variant:25}(10-12)% chance to Avoid Elemental Damage from Hits during Soul Gain Prevention</Mod>
 			</Explicits>
 			<Requires>
 				<Int>112</Int>
@@ -14029,16 +14454,17 @@
 				<Variant num="12">Focus Ailment Duration Pre 3.16.0</Variant>
 				<Variant num="13">Avoid Elemental Damage Pre 3.16.0</Variant>
 				<Variant num="14">Focus Ailment Duration Pre 3.19.0</Variant>
-				<Variant num="15">Fire and Chaos Resistances</Variant>
-				<Variant num="16">Cold and Chaos Resistances</Variant>
-				<Variant num="17">Lightning and Chaos Resistances</Variant>
-				<Variant num="18">Strength and Dexterity</Variant>
-				<Variant num="19">Dexterity and Intelligence</Variant>
-				<Variant num="20">Strength and Intelligence</Variant>
-				<Variant num="21">Mine Laying Speed</Variant>
-				<Variant num="22">Focus Spell Trigger</Variant>
-				<Variant num="23">Focus Ailment Duration</Variant>
-				<Variant num="24">Avoid Elemental Damage</Variant>
+				<Variant num="15">Focus Ailment Duration Pre 3.22.0</Variant>
+				<Variant num="16">Fire and Chaos Resistances</Variant>
+				<Variant num="17">Cold and Chaos Resistances</Variant>
+				<Variant num="18">Lightning and Chaos Resistances</Variant>
+				<Variant num="19">Strength and Dexterity</Variant>
+				<Variant num="20">Dexterity and Intelligence</Variant>
+				<Variant num="21">Strength and Intelligence</Variant>
+				<Variant num="22">Mine Laying Speed</Variant>
+				<Variant num="23">Focus Spell Trigger</Variant>
+				<Variant num="24">Focus Ailment Duration</Variant>
+				<Variant num="25">Avoid Elemental Damage</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" title="Wilma's Requital" base_name="Solaris Circlet">
@@ -15067,6 +15493,20 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Akoya's Gaze" base_name="Regicide Mask">
+			<Attribs level_req="52" />
+			<Implicits />
+			<Explicits>
+				<Mod>+100 Strength Requirement</Mod>
+				<Mod>(20-25)% increased Warcry Speed</Mod>
+				<Mod>Life Leech from Exerted Attacks is instant</Mod>
+				<Mod>Non-Exerted Attacks deal no Damage</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>58</Dex>
+				<Int>58</Int>
+			</Requires>
+		</Item>
 		<Item ver="2" title="Crown of the Pale King" base_name="Regicide Mask" league="Tempest">
 			<Attribs level_req="52" />
 			<Implicits />
@@ -15518,9 +15958,13 @@
 			<Attribs limited_to="1" />
 			<Implicits />
 			<Explicits>
-				<Mod>+1 to maximum number of Golems</Mod>
+				<Mod>{variant:1}+1 to maximum number of Golems</Mod>
 				<Mod>+1 to maximum number of Summoned Golems if you have 3 Primordial Items Socketed or Equipped</Mod>
 			</Explicits>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 		</Item>
 		<Item ver="2" title="Apex Mode" base_name="Cobalt Jewel" league="Heist">
 			<Attribs limited_to="1" level_req="20" />
@@ -15663,7 +16107,7 @@
 				<Mod>5% increased Chaos Damage per 10 Intelligence from Allocated Passives in Radius</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Endless Misery" base_name="Cobalt Jewel" league="Heist" source="Vendor Recipe">
+		<Item ver="2" title="Endless Misery" base_name="Cobalt Jewel" league="Heist" source="No longer obtainable">
 			<Attribs limited_to="1" radius="Medium" />
 			<Implicits />
 			<Explicits>
@@ -15947,7 +16391,7 @@
 			<Implicits />
 			<Explicits>
 				<Mod>{variant:1}(10-15)% increased Area of Effect while Unarmed</Mod>
-				<Mod>{variant:2}+(3-4) to Melee Strike Range while Unarmed</Mod>
+				<Mod>{variant:2}+(0.3-0.4) metres to Melee Strike Range while Unarmed</Mod>
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 3.11.0</Variant>
@@ -16371,6 +16815,13 @@
 				<Variant num="9">Accuracy Rating</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Warrior's Tale" base_name="Crimson Jewel" league="Ancestor" source="No longer obtainable">
+			<Attribs limited_to="1" radius="Medium" />
+			<Implicits />
+			<Explicits>
+				<Mod>100% increased effect of Tattoos in Radius</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Amanamu's Gaze" base_name="Ghastly Eye Jewel">
 			<Attribs />
 			<Implicits />
@@ -16455,19 +16906,21 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Dead Reckoning" base_name="Cobalt Jewel" source="Vendor Recipe">
+		<Item ver="2" title="Dead Reckoning" base_name="Cobalt Jewel">
 			<Attribs limited_to="1" radius="Medium" />
 			<Implicits />
 			<Explicits>
-				<Mod>Minions have +(7-10)% to all Elemental Resistances</Mod>
+				<Mod>{variant:1,2,3}Minions have +(7-10)% to all Elemental Resistances</Mod>
 				<Mod>{variant:1}With at least 40 Intelligence in Radius, can summon up to 3 Skeleton Mages with Summon Skeletons</Mod>
 				<Mod>{variant:2}With at least 40 Intelligence in Radius, can summon up to 5 Skeleton Mages with Summon Skeletons</Mod>
 				<Mod>{variant:3}With at least 40 Intelligence in Radius, can summon up to 15 Skeleton Mages with Summon Skeletons</Mod>
+				<Mod>{variant:4}Skeletons gain Added Chaos Damage equal to (20-30)% of Maximum Energy Shield on your Equipped Shield</Mod>
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 3.0.0</Variant>
 				<Variant num="2">Pre 3.8.0</Variant>
-				<Variant num="3">Current</Variant>
+				<Variant num="3">Pre 3.23.0</Variant>
+				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" title="Fight for Survival" base_name="Viridian Jewel" source="No longer obtainable">
@@ -16686,7 +17139,7 @@
 				<Variant num="2">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Spirit Guards" base_name="Viridian Jewel" source="Vendor Recipe">
+		<Item ver="2" title="Spirit Guards" base_name="Viridian Jewel" source="No longer obtainable">
 			<Attribs limited_to="1" radius="Medium" />
 			<Implicits />
 			<Explicits>
@@ -17187,7 +17640,7 @@
 				<Mod>An additional Curse can be applied to you</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Soul's Wick" base_name="Cobalt Jewel" corrupted="true" source="Use currency{Vaal Orb} on normal{Cobalt Jewel}">
+		<Item ver="2" title="Soul's Wick" base_name="Cobalt Jewel" corrupted="true" source="No longer obtainable">
 			<Attribs limited_to="1" />
 			<Implicits />
 			<Explicits>
@@ -17358,9 +17811,9 @@
 			<Implicits />
 			<Explicits>
 				<Mod>{variant:1}8% increased Attack Damage</Mod>
-				<Mod>{variant:1}+1 Melee Strike Range</Mod>
+				<Mod>{variant:1}+0.1 metres to Melee Strike Range</Mod>
 				<Mod>{variant:2}10% increased Attack Damage</Mod>
-				<Mod>{variant:2}+2 Melee Strike Range</Mod>
+				<Mod>{variant:2}+0.2 metres to Melee Strike Range</Mod>
 			</Explicits>
 			<Variants>
 				<Variant num="1">Pre 3.16.0</Variant>
@@ -17746,7 +18199,7 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Mjölner" base_name="Gavel">
+		<Item ver="2" title="MjÃ¶lner" base_name="Gavel">
 			<Attribs level_req="60" />
 			<Implicits>
 				<Mod>{variant:1,2,3}40% increased Stun Duration on Enemies</Mod>
@@ -17925,7 +18378,8 @@
 				<Mod>22% increased Elemental Damage</Mod>
 			</Implicits>
 			<Explicits>
-				<Mod>Socketed Gems are Supported by Level 1 Elemental Penetration</Mod>
+				<Mod>{variant:1}Socketed Gems are Supported by Level 1 Elemental Penetration</Mod>
+				<Mod>{variant:2}Socketed Gems are Supported by Level 15 Elemental Penetration</Mod>
 				<Mod>Socketed Gems are Supported by Level 15 Immolate</Mod>
 				<Mod>Socketed Gems are Supported by Level 15 Unbound Ailments</Mod>
 				<Mod>Socketed Gems are Supported by Level 15 Ice Bite</Mod>
@@ -17936,6 +18390,10 @@
 				<Int>62</Int>
 				<Str>52</Str>
 			</Requires>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 		</Item>
 		<Item ver="2" title="The Black Cane" base_name="Royal Sceptre">
 			<Attribs level_req="50" />
@@ -18156,6 +18614,21 @@
 			<Requires>
 				<Int>62</Int>
 				<Str>62</Str>
+			</Requires>
+		</Item>
+		<Item ver="2" title="Maata's Teaching" base_name="Karui Sceptre">
+			<Attribs level_req="56" />
+			<Implicits>
+				<Mod>+(30-40) to Intelligence</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>(25-50)% increased Critical Strike Chance</Mod>
+				<Mod>+(1-2) to Level of all Minion Skill Gems</Mod>
+				<Mod>Minions' Base Attack Critical Strike Chance is equal to the Critical Strike Chance of your Main Hand Weapon</Mod>
+			</Explicits>
+			<Requires>
+				<Int>96</Int>
+				<Str>96</Str>
 			</Requires>
 		</Item>
 		<Item ver="2" title="Mon'tregul's Grasp" base_name="Void Sceptre">
@@ -18701,203 +19174,244 @@
 		</Item>
 	</mace>
 	<new>
-		<Item ver="2" title="Ahuana's Bite" base_name="Sharktooth Arrow Quiver" league="Ancestor">
-			<Attribs level_req="56" />
-			<Implicits>
-				<Mod>Gain (6–8) Life per Enemy Hit with Attacks</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>Adds (30–40) to (60–70) Cold Damage to Attacks</Mod>
-				<Mod>+(20–30)% to Cold Resistance</Mod>
-				<Mod>Enemies Chilled by your Hits have Damage taken increased by Chill Effect</Mod>
-				<Mod>Chill Enemies as though dealing (60–100)% more Damage</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Akoya's Gaze" base_name="Regicide Mask" league="Ancestor">
-			<Attribs level_req="52" />
-			<Implicits />
-			<Explicits>
-				<Mod>+100 Strength Requirement</Mod>
-				<Mod>(20–25)% increased Warcry Speed</Mod>
-				<Mod>Life Leech from Exerted Attacks is instant</Mod>
-				<Mod>Non-Exerted Attacks deal no Damage</Mod>
-			</Explicits>
-			<Requires>
-				<Dex>58</Dex>
-				<Int>58</Int>
-			</Requires>
-		</Item>
-		<Item ver="2" title="Bound Fate" base_name="Cloth Belt" league="Ancestor">
-			<Attribs level_req="16" />
-			<Implicits>
-				<Mod>(15-25)% increased Stun and Block Recovery</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>{tags:jewellery_attribute}+(20-30) to Dexterity</Mod>
-				<Mod>{tags:jewellery_attribute}+(20-30) to Intelligence</Mod>
-				<Mod>{tags:life}+(60-80) to Maximum Life</Mod>
-				<Mod>Every 5 seconds, gain one of the following for 5 seconds:</Mod>
-				<Mod>Your Hits are always Critical Strikes</Mod>
-				<Mod>Hits against you always are Critical Strikes</Mod>
-				<Mod>Attacks cannot Hit you</Mod>
-				<Mod>Attacks against you always Hit</Mod>
-				<Mod>Your Damage with Hits is Lucky</Mod>
-				<Mod>Damage of Hits against you is Lucky</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Defiance of Destiny" base_name="Paua Amulet" league="Ancestor">
-			<Attribs level_req="49" />
-			<Implicits>
-				<Mod>{tags:mana}(20–30)% increased Mana Regeneration Rate</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>{tags:life}+(60–80) to maximum Life</Mod>
-				<Mod>{tags:jewellery_resistance}+(10–40)% to Fire Resistance</Mod>
-				<Mod>{tags:jewellery_resistance}+(10–40)% to Cold Resistance</Mod>
-				<Mod>{tags:jewellery_resistance}+(10–40)% to Lightning Resistance</Mod>
-				<Mod>{tags:life}Gain (25–35)% of Missing Unreserved Life before being Hit by an Enemy</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Honoured Alliance" base_name="Coral Ring" league="Ancestor">
-			<Attribs level_req="49" />
-			<Implicits>
-				<Mod>{tags:life}+(20–30) to maximum Life</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>10% chance to Trigger Summon Spirit of Akoya on Kill</Mod>
-				<Mod>{tags:jewellery_attribute}+(10–20) to all Attributes</Mod>
-				<Mod>{tags:mana}(30–50)% increased Mana Regeneration Rate</Mod>
-				<Mod>{tags:life}(10–15)% of Damage taken Recouped as Life</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Ikiaho's Promise" base_name="Coral Amulet" league="Ancestor">
-			<Attribs level_req="30" />
-			<Implicits>
-				<Mod>{tags:life}Regenerate (2–4) Life per second</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>{tags:mana}Regenerate (3–5) Mana per second</Mod>
-				<Mod>{tags:life}(30–40)% increased Life Recovery from Flasks</Mod>
-				<Mod>{tags:mana}(15–30)% increased Mana Recovery from Flasks</Mod>
-				<Mod>Life Flasks used while on Low Life apply Recovery Instantly</Mod>
-				<Mod>Mana Flasks used while on Low Mana apply Recovery Instantly</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Kahuturoa's Certainty" base_name="Ancient Greaves" league="Ancestor">
-			<Attribs level_req="46" />
-			<Implicits />
-			<Explicits>
-				<Mod>(100–150)% increased Armour</Mod>
-				<Mod>5% reduced Movement Speed</Mod>
-				<Mod>(100–200)% increased Stun and Block Recovery</Mod>
-				<Mod>Unaffected by Damaging Ailments</Mod>
-			</Explicits>
-			<Requires>
-				<Str>82</Str>
-			</Requires>
-		</Item>
-		<Item ver="2" title="Kaom's Binding" base_name="Heavy Belt" league="Ancestor">
-			<Attribs level_req="56" />
-			<Implicits>
-				<Mod>{tags:jewellery_attribute}+(30–40) to Strength</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>{tags:jewellery_defense}+(300–500) to Armour</Mod>
-				<Mod>Take no Burning Damage if you've stopped taking Burning Damage Recently</Mod>
-				<Mod>Nearby Enemies Convert 25% of their Physical Damage to Fire</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Kiloava's Bluster" base_name="Ironwood Buckler" league="Ancestor">
-			<Attribs level_req="57" />
-			<Implicits>
-				<Mod>3% increased Movement Speed</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>(100–150)% increased Evasion Rating</Mod>
-				<Mod>(15–25)% chance to Avoid Elemental Ailments</Mod>
-				<Mod>+(3–8)% Chance to Block</Mod>
-				<Mod>(30–40)% chance for Elemental Resistances to count as being 90% against Enemy Hits</Mod>
-			</Explicits>
-			<Requires>
-				<Dex>137</Dex>
-			</Requires>
-		</Item>
-		<Item ver="2" title="Maata's Teaching" base_name="Karui Sceptre" league="Ancestor">
-			<Attribs level_req="56" />
-			<Implicits>
-				<Mod>+(30-40) to Intelligence</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>(25-50)% increased Critical Strike Chance</Mod>
-				<Mod>+(1-2) to Level of all Minion Skill Gems</Mod>
-				<Mod>Minions' Base Attack Critical Strike Chance is equal to the Critical Strike Chance of your Main Hand Weapon</Mod>
-			</Explicits>
-			<Requires>
-				<Int>96</Int>
-				<Str>96</Str>
-			</Requires>
-		</Item>
-		<Item ver="2" title="Rakiata's Dance" base_name="Engraved Greatsword" league="Ancestor">
-			<Attribs level_req="48" />
-			<Implicits>
-				<Mod>60% increased Global Accuracy Rating</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>Adds (150–200) to (300–350) Cold Damage</Mod>
-				<Mod>Adds 1 to (550–600) Lightning Damage</Mod>
-				<Mod>(15–20)% increased Attack Speed</Mod>
-				<Mod>Treats Enemy Monster Elemental Resistance values as inverted</Mod>
-			</Explicits>
-			<Requires>
-				<Dex>76</Dex>
-				<Str>91</Str>
-			</Requires>
-		</Item>
-		<Item ver="2" title="Replica Dragonfang's Flight" base_name="Onyx Amulet">
-			<Attribs level_req="56" />
-			<Implicits>
-				<Mod>+(10–16) to all Attributes</Mod>
-			</Implicits>
-			<Explicits>
-				<Mod>+(10–15)% to all Elemental Resistances</Mod>
-				<Mod>+3 to Level of all Spark Gems</Mod>
-				<Mod>(10–15)% increased Reservation Efficiency of Skills</Mod>
-				<Mod>Items and Gems have (10–15)% reduced Attribute Requirements</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Tawhanuku's Timing" base_name="Moonstone Ring" league="Ancestor">
+		<Item ver="2" title="Replica Covenant" base_name="Spidersilk Robe" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
 			<Attribs />
 			<Implicits />
 			<Explicits>
-				<Mod>{tags:jewellery_defense}+(15–25) to maximum Energy Shield</Mod>
-				<Mod>{tags:caster}(30–40)% increased Spell Damage</Mod>
-				<Mod>{tags:mana}+(60–80) to maximum Mana</Mod>
-				<Mod>(5–10)% chance to Freeze, Shock and Ignite</Mod>
-				<Mod>{tags:jewellery_defense,caster}Spells cause you to gain Energy Shield equal to their Upfront Cost every fifth time you Pay it</Mod>
-			</Explicits>
-		</Item>
-		<Item ver="2" title="Utula's Hunger" base_name="Majestic Plate" league="Ancestor">
-			<Attribs level_req="53" />
-			<Implicits />
-			<Explicits>
-				<Mod>(60-100)% increased Armour</Mod>
-				<Mod>Recover (1-3)% of Life on Kill</Mod>
-				<Mod>(30-40)% Increased Stun and Block Recovery</Mod>
-				<Mod>+(700-1000) to maximum Life if there are no Life Modifiers on other Equipped items</Mod>
+				<Mod>Socketed Gems are Supported by Level 29 Added Cold Damage</Mod>
+				<Mod>+(20-30) to Intelligence</Mod>
+				<Mod>(210-250)% increased Energy Shield</Mod>
+				<Mod>10% increased maximum Life</Mod>
+				<Mod>Skills gain a Base Energy Shield Cost equal to 200% of Base Mana Cost</Mod>
 			</Explicits>
 			<Requires>
-				<Str>145</Str>
+				<Int>134</Int>
 			</Requires>
 		</Item>
-		<Item ver="2" title="Warrior's Tale" base_name="Crimson Jewel" league="Ancestor">
-			<Attribs limited_to="1" radius="Medium" />
+		<Item ver="2" title="Replica Badge of the Brotherhood" base_name="Turquoise Amulet" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+			<Attribs />
+			<Implicits>
+				<Mod>{tags:jewellery_attribute}+(16-24) to Dexterity and Intelligence</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>Your Maximum Endurance Charges is equal to your Maximum Frenzy Charges</Mod>
+				<Mod>(20-25)% chance to lose a Frenzy Charge when you use a Travel Skill</Mod>
+				<Mod>(7-10)% increased Cooldown Recovery of Travel Skills per Frenzy Charge</Mod>
+				<Mod>+1 to Maximum Fortification per Endurance Charge</Mod>
+				<Mod>(20-25)% chance to lose an Endurance Charge when you gain Fortification</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Ixchel's Temptation" base_name="Gold Ring" corrupted="true" league="Affliction">
+			<Attribs level_req="20" />
+			<Implicits>
+				<Mod>(6-15)% increased Rarity of Items found</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:jewellery_attribute}+(10-15) to all Attributes</Mod>
+				<Mod>{tags:attack,chaos_damage}Adds (7-10) to (15-18) Chaos Damage to Attacks</Mod>
+				<Mod>{tags:caster,jewellery_elemental}Adds (9-12) to (19-22) Fire Damage to Spells</Mod>
+				<Mod>{tags:jewellery_defense}+(80-100) to Armour</Mod>
+				<Mod>{tags:jewellery_defense}+(80-100) to Evasion Rating</Mod>
+				<Mod>{tags:jewellery_defense}+(30-35) to maximum Energy Shield</Mod>
+				<Mod>{tags:life}+(25-30) to maximum Life</Mod>
+				<Mod>{tags:critical}+(15-20)% to Global Critical Strike Multiplier</Mod>
+				<Mod>{tags:mana}+(20-25) to maximum Mana</Mod>
+				<Mod>{tags:jewellery_resistance}+(8-10)% to all Elemental Resistances</Mod>
+				<Mod>{tags:attack,caster,speed}(6-8)% increased Attack and Cast Speed</Mod>
+				<Mod>Maximum Quality is 200%</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Gamblesprint" base_name="Hydrascale Boots" league="Affliction">
+			<Attribs level_req="59" />
 			<Implicits />
 			<Explicits>
-				<Mod>100% increased effect of Tattoos in Radius</Mod>
+				<Mod>+(30-40) to Dexterity</Mod>
+				<Mod>(100-150)% increased Armour and Evasion</Mod>
+				<Mod>+(20-40)% to Lightning Resistance</Mod>
+				<Mod>When Hit, gain a random Movement Speed modifier from 40% reduced to 100% increased until Hit again</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>56</Dex>
+				<Str>56</Str>
+			</Requires>
+		</Item>
+		<Item ver="2" title="Pragmatism" base_name="Colosseum Plate" league="Affliction">
+			<Attribs level_req="49" />
+			<Implicits />
+			<Explicits>
+				<Mod>+12 to Level of Socketed Skill Gems</Mod>
+				<Mod>(80-120)% increased Armour</Mod>
+				<Mod>+(60-100) to maximum Mana</Mod>
+				<Mod>-2 to Level of Socketed Skill Gems per Socketed Gem</Mod>
+			</Explicits>
+			<Requires>
+				<Str>134</Str>
+			</Requires>
+		</Item>
+		<Item ver="2" title="The Untouched Soul" base_name="Gold Amulet" league="Affliction">
+			<Attribs level_req="48" />
+			<Implicits>
+				<Mod>(12-20)% increased Rarity of Items found</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>{tags:life}+40 to maximum Life for each Empty Red Socket on any Equipped Item</Mod>
+				<Mod>{tags:attack}+225 to Accuracy Rating for each Empty Green Socket on any Equipped Item</Mod>
+				<Mod>{tags:mana}+40 to maximum Mana for each Empty Blue Socket on any Equipped Item</Mod>
+				<Mod>{tags:jewellery_resistance}+18% to all Elemental Resistances for each Empty White Socket on any Equipped Item</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="The Trickster's Smile" base_name="Visored Sallet" league="Affliction">
+			<Attribs level_req="23" />
+			<Implicits />
+			<Explicits>
+				<Mod>(60-100)% increased Armour and Evasion</Mod>
+				<Mod>Reflects 100 Cold Damage to Melee Attackers</Mod>
+				<Mod>Reflects 100 Fire Damage to Melee Attackers</Mod>
+				<Mod>Reflects 100 Lightning Damage to Melee Attackers</Mod>
+				<Mod>When an Enemy Hit deals Elemental Damage to you, their Resistance to those Elements becomes zero for 4 seconds</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>28</Dex>
+				<Str>28</Str>
+			</Requires>
+		</Item>
+		<Item ver="2" title="Nametaker" base_name="Graceful Sword" league="Affliction">
+			<Attribs level_req="50" />
+			<Implicits>
+				<Mod>+350 to Accuracy Rating</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>(20-40)% increased Critical Strike Chance</Mod>
+				<Mod>2% of Physical Attack Damage Leeched as Life</Mod>
+				<Mod>2% of Physical Attack Damage Leeched as Mana</Mod>
+				<Mod>Hits with this Weapon have +10% to Critical Strike Multiplier per Enemy Power</Mod>
+				<Mod>5% of Leech from Hits with this Weapon is Instant per Enemy Power</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>94</Dex>
+				<Str>78</Str>
+			</Requires>
+		</Item>
+		<Item ver="2" title="The Burden of Shadows" base_name="Primordial Staff" league="Affliction">
+			<Attribs level_req="58" />
+			<Implicits>
+				<Mod>+18% Chance to Block Attack Damage while wielding a Staff</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>Socketed Gems are Supported by Level 1 Lifetap</Mod>
+				<Mod>(20-30)% increased Cast Speed</Mod>
+				<Mod>Lose 500 Life per second</Mod>
+				<Mod>Spells deal added Chaos Damage equal to (15-20)% of your maximum Life</Mod>
+			</Explicits>
+			<Requires>
+				<Int>99</Int>
+				<Str>99</Str>
+			</Requires>
+		</Item>
+		<Item ver="2" title="The Flawed Refuge" base_name="Maple Round Shield" league="Affliction">
+			<Attribs level_req="39" />
+			<Implicits>
+				<Mod>180% increased Block Recovery</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>(100â€“150)% increased Armour and Evasion</Mod>
+				<Mod>+15% Chance to Block</Mod>
+				<Mod>You take 100% of Elemental Damage from Blocked Hits</Mod>
+				<Mod>40% of Elemental Damage from Hits taken as Physical Damage</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>52</Dex>
+				<Str>52</Str>
+			</Requires>
+		</Item>
+		<Item ver="2" title="The Adorned" base_name="Crimson Jewel" corrupted="true" league="Affliction">
+			<Attribs />
+			<Implicits />
+			<Explicits />
+		</Item>
+		<Item ver="2" title="Replica Fragility" base_name="Crimson Jewel" corrupted="true" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>Lose an Endurance Charge each second</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Replica Pacifism" base_name="Viridian Jewel" corrupted="true" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>Lose a Frenzy Charge each second</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Replica Powerlessness" base_name="Cobalt Jewel" corrupted="true" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>Lose a Power Charge each second</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Replica Heatshiver" base_name="Leather Hood" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>(80â€“100)% increased Evasion Rating</Mod>
+				<Mod>60% increased Mana Regeneration Rate</Mod>
+				<Mod>+(20â€“30)% to Cold Resistance</Mod>
+				<Mod>+(20â€“30)% to Lightning Resistance</Mod>
+				<Mod>Gain 1% of Lightning Damage as Extra Cold Damage per 2% Shock Effect on Enemy</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>46</Dex>
+			</Requires>
+		</Item>
+		<Item ver="2" title="Replica Hinekora's Sight" base_name="Onyx Amulet" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>{tags:jewellery_attribute}+(10â€“16) to all Attributes</Mod>
+				<Mod>{tags:attack}+(600â€“1000) to Accuracy Rating</Mod>
+				<Mod>{tags:jewellery_defense}+(600â€“1000) to Armour</Mod>
+				<Mod>{tags:jewellery_resistance}+1% to all maximum Elemental Resistances</Mod>
+				<Mod>You cannot be Maimed</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Replica Hyrri's Ire" base_name="Zodiac Leather" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>+30% chance to Suppress Spell Damage</Mod>
+				<Mod>+(40â€“50) to Dexterity</Mod>
+				<Mod>(140â€“220)% increased Evasion Rating</Mod>
+				<Mod>25% increased Shock Duration on Enemies</Mod>
+				<Mod>(12â€“18) to (231â€“347) Added Lightning Damage with Wand Attacks</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>197</Dex>
+			</Requires>
+		</Item>
+		<Item ver="2" title="Replica Witchfire Brew" base_name="Stibnite Flask" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>Creates a Smoke Cloud on Use</Mod>
+				<Mod>(-10â€“10)% reduced Charges per use</Mod>
+				<Mod>Grants Level 21 Vulnerability Curse Aura during Effect</Mod>
 			</Explicits>
 		</Item>
 	</new>
 	<quiver>
+		<Item ver="2" title="Ahuana's Bite" base_name="Sharktooth Arrow Quiver">
+			<Attribs level_req="56" />
+			<Implicits>
+				<Mod>Gain (6-8) Life per Enemy Hit with Attacks</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>Adds (30-40) to (60-70) Cold Damage to Attacks</Mod>
+				<Mod>+(20-30)% to Cold Resistance</Mod>
+				<Mod>Enemies Chilled by your Hits have Damage taken increased by Chill Effect</Mod>
+				<Mod>Chill Enemies as though dealing (60-100)% more Damage</Mod>
+			</Explicits>
+		</Item>
 		<Item ver="2" title="Asphyxia's Wrath" base_name="variant">
 			<Attribs />
 			<Implicits>
@@ -19560,7 +20074,7 @@
 				<Mod>{tags:jewellery_resistance}-20% to all Elemental Resistances</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Astral Projector" base_name="Topaz Ring" league="Metamorph" source="Drops from unique{Metamorph} in normal{Tane's Laboratory}">
+		<Item ver="2" title="Astral Projector" base_name="Topaz Ring">
 			<Attribs level_req="40" />
 			<Implicits>
 				<Mod>{tags:jewellery_resistance}+(20-30)% to Lightning Resistance</Mod>
@@ -19912,7 +20426,7 @@
 			<Explicits>
 				<Mod>{variant:1,2}{tags:attack}+(300-350) to Accuracy Rating</Mod>
 				<Mod>{variant:1}{tags:jewellery_defense}+(60-80) to Armour</Mod>
-				<Mod>{variant:2}{tags:jewellery_defense}}+(260-300) to Armour</Mod>
+				<Mod>{variant:2}{tags:jewellery_defense}+(260-300) to Armour</Mod>
 				<Mod>{variant:2}{tags:life}+(40-50) to maximum Life</Mod>
 				<Mod>{variant:1,2}{tags:jewellery_resistance}+(15-20)% to Chaos Resistance</Mod>
 				<Mod>{variant:1,2}{tags:attack,life}(0.6-0.8)% of Physical Attack Damage Leeched as Life</Mod>
@@ -20135,6 +20649,18 @@
 				<Variant num="1">Pre 3.19.0</Variant>
 				<Variant num="2">Current</Variant>
 			</Variants>
+		</Item>
+		<Item ver="2" title="Honoured Alliance" base_name="Coral Ring" league="Ancestor" source="No longer obtainable">
+			<Attribs level_req="49" />
+			<Implicits>
+				<Mod>{tags:life}+(20-30) to maximum Life</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>10% chance to Trigger Summon Spirit of Akoya on Kill</Mod>
+				<Mod>{tags:jewellery_attribute}+(10-20) to all Attributes</Mod>
+				<Mod>{tags:mana}(30-50)% increased Mana Regeneration Rate</Mod>
+				<Mod>{tags:life}(10-15)% of Damage taken Recouped as Life</Mod>
+			</Explicits>
 		</Item>
 		<Item ver="2" title="The Hungry Loop" base_name="Unset Ring" sockets="W">
 			<Attribs level_req="45" />
@@ -20739,7 +21265,7 @@
 				<Mod>{tags:jewellery_elemental}(20-30)% increased Lightning Damage</Mod>
 				<Mod>(10-15)% chance to Shock</Mod>
 				<Mod>Herald of Thunder also creates a storm when you Shock an Enemy</Mod>
-				<Mod>Herald of Thunder's Storms Hit Enemies with (30-50)% increased Frequency</Mod>
+				<Mod>Storms Hit Enemies with (30-50)% increased Frequency</Mod>
 				<Mod>{tags:jewellery_elemental}Take 250 Lightning Damage when Herald of Thunder Hits an Enemy</Mod>
 			</Explicits>
 		</Item>
@@ -20797,6 +21323,17 @@
 				<Mod>Your Cold Damage cannot Freeze</Mod>
 				<Mod>Immune to Chill</Mod>
 				<Mod>{tags:jewellery_elemental}Adds 60 to 80 Cold Damage against Chilled Enemies</Mod>
+			</Explicits>
+		</Item>
+		<Item ver="2" title="Tawhanuku's Timing" base_name="Moonstone Ring">
+			<Attribs />
+			<Implicits />
+			<Explicits>
+				<Mod>{tags:jewellery_defense}+(15-25) to maximum Energy Shield</Mod>
+				<Mod>{tags:caster}(30-40)% increased Spell Damage</Mod>
+				<Mod>{tags:mana}+(60-80) to maximum Mana</Mod>
+				<Mod>(5-10)% chance to Freeze, Shock and Ignite</Mod>
+				<Mod>{tags:jewellery_defense,caster}Spells cause you to gain Energy Shield equal to their Upfront Cost every fifth time you Pay it</Mod>
 			</Explicits>
 		</Item>
 		<Item ver="2" title="Thief's Torment" base_name="Prismatic Ring">
@@ -21107,7 +21644,7 @@
 				<Mod>15% chance to gain a Frenzy Charge when you Stun an Enemy</Mod>
 			</Explicits>
 		</Item>
-		<Item ver="2" title="Warrior's Legacy" base_name="Ruby Ring" league="Metamorph" source="Drops from unique{Metamorph} in normal{Tane's Laboratory}">
+		<Item ver="2" title="Warrior's Legacy" base_name="Ruby Ring">
 			<Attribs level_req="16" />
 			<Implicits>
 				<Mod>{tags:jewellery_resistance}+(20-30)% to Fire Resistance</Mod>
@@ -21620,6 +22157,21 @@
 				<Variant num="3">Current</Variant>
 			</Variants>
 		</Item>
+		<Item ver="2" title="Kiloava's Bluster" base_name="Ironwood Buckler">
+			<Attribs level_req="57" />
+			<Implicits>
+				<Mod>3% increased Movement Speed</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>(100-150)% increased Evasion Rating</Mod>
+				<Mod>(15-25)% chance to Avoid Elemental Ailments</Mod>
+				<Mod>+(3-8)% Chance to Block</Mod>
+				<Mod>(30-40)% chance for Elemental Resistances to count as being 90% against Enemy Hits</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>137</Dex>
+			</Requires>
+		</Item>
 		<Item ver="2" title="Mistwall" base_name="Lacquered Buckler">
 			<Attribs />
 			<Implicits>
@@ -21646,13 +22198,18 @@
 				<Mod>(120-150)% increased Evasion Rating</Mod>
 				<Mod>10% increased Movement Speed</Mod>
 				<Mod>+(10-20)% to Fire and Cold Resistances</Mod>
-				<Mod>+75% Chance to Block Spell Damage if you have not Blocked Recently</Mod>
+				<Mod>{variant:1}+75% Chance to Block Spell Damage if you have not Blocked Recently</Mod>
+				<Mod>{variant:2}You are at Maximum Chance to Block Spell Damage if you have not Blocked Recently</Mod>
 				<Mod>+(8-15)% chance to Avoid Physical Damage from Hits while Phasing</Mod>
 				<Mod>You have Phasing if you have Blocked Recently</Mod>
 			</Explicits>
 			<Requires>
 				<Dex>154</Dex>
 			</Requires>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 		</Item>
 		<Item ver="2" title="Mutewind Pennant" base_name="Enameled Buckler" league="Warbands">
 			<Attribs />
@@ -23044,7 +23601,7 @@
 				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Duskdawn" base_name="Maelström Staff" source="Vendor Recipe">
+		<Item ver="2" title="Duskdawn" base_name="MaelstrÃ¶m Staff" source="Vendor Recipe">
 			<Attribs level_req="64" />
 			<Implicits>
 				<Mod>{variant:1}+18% Chance to Block Attack Damage while wielding a Staff</Mod>
@@ -23062,8 +23619,8 @@
 				<Mod>{variant:3,4}(120-150)% increased Spell Damage if you've dealt a Critical Strike Recently</Mod>
 			</Explicits>
 			<Requires>
-				<Int>113</Int>
 				<Str>113</Str>
+				<Int>113</Int>
 			</Requires>
 			<Variants>
 				<Variant num="1">Pre 2.6.0</Variant>
@@ -23072,7 +23629,7 @@
 				<Variant num="4">Current</Variant>
 			</Variants>
 		</Item>
-		<Item ver="2" title="Replica Duskdawn" base_name="Maelström Staff" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
+		<Item ver="2" title="Replica Duskdawn" base_name="MaelstrÃ¶m Staff" league="Heist" source="Steal from a unique{Curio Display} during a Grand Heist">
 			<Attribs level_req="64" />
 			<Implicits>
 				<Mod>+25% Chance to Block Attack Damage while wielding a Staff</Mod>
@@ -23086,8 +23643,8 @@
 				<Mod>(120-150)% increased Elemental Damage if you've dealt a Critical Strike Recently</Mod>
 			</Explicits>
 			<Requires>
-				<Int>113</Int>
 				<Str>113</Str>
+				<Int>113</Int>
 			</Requires>
 		</Item>
 		<Item ver="2" title="Dying Breath" base_name="variant">
@@ -23554,7 +24111,7 @@
 				<Str>51</Str>
 			</Requires>
 		</Item>
-		<Item ver="2" title="Taryn's Shiver" base_name="Maelström Staff">
+		<Item ver="2" title="Taryn's Shiver" base_name="MaelstrÃ¶m Staff">
 			<Attribs level_req="64" />
 			<Implicits>
 				<Mod>{variant:1,2}+18% Chance to Block Attack Damage while wielding a Staff</Mod>
@@ -23572,8 +24129,8 @@
 				<Mod>Enemies Frozen by you take 20% increased Damage</Mod>
 			</Explicits>
 			<Requires>
-				<Int>113</Int>
 				<Str>113</Str>
+				<Int>113</Int>
 			</Requires>
 			<Variants>
 				<Variant num="1">Pre 2.0.0</Variant>
@@ -23779,19 +24336,20 @@
 			<Attribs />
 			<Implicits>
 				<Mod>{variant:1,2}18% increased Global Accuracy Rating</Mod>
-				<Mod>{variant:3,4}40% increased Global Accuracy Rating</Mod>
+				<Mod>{variant:3,4,5}40% increased Global Accuracy Rating</Mod>
 			</Implicits>
 			<Explicits>
 				<Mod>+10 to Intelligence</Mod>
 				<Mod>{variant:1}100% increased Physical Damage</Mod>
 				<Mod>{variant:2,3}150% increased Physical Damage</Mod>
-				<Mod>{variant:4}Adds 1 to 75 Lightning Damage</Mod>
+				<Mod>{variant:4,5}Adds 1 to 75 Lightning Damage</Mod>
 				<Mod>50% increased Global Critical Strike Chance</Mod>
 				<Mod>(40-50)% increased maximum Energy Shield</Mod>
 				<Mod>{variant:1,2,3}10% reduced maximum Life</Mod>
-				<Mod>{variant:4}25% reduced maximum Life</Mod>
+				<Mod>{variant:4,5}25% reduced maximum Life</Mod>
 				<Mod>{variant:1,2,3}(0.6-1)% of Physical Attack Damage Leeched as Mana</Mod>
 				<Mod>{variant:4}Attacks with this Weapon have Added Maximum Lightning Damage equal to 20% of your Maximum Energy Shield</Mod>
+				<Mod>{variant:5}Attacks with this Weapon have Added Maximum Lightning Damage equal to 20% of player Maximum Energy Shield</Mod>
 			</Explicits>
 			<Requires>
 				<Dex>57</Dex>
@@ -23801,7 +24359,8 @@
 				<Variant num="1">Pre 2.0.0</Variant>
 				<Variant num="2">Pre 2.6.0</Variant>
 				<Variant num="3">Pre 3.19.0</Variant>
-				<Variant num="4">Current</Variant>
+				<Variant num="4">Pre 3.23.0</Variant>
+				<Variant num="5">Current</Variant>
 			</Variants>
 		</Item>
 		<Item ver="2" title="The Goddess Scorned" base_name="Elegant Sword" source="Vendor Recipe">
@@ -24073,7 +24632,7 @@
 				<Mod>25% increased Global Physical Damage with Weapons per Red Socket</Mod>
 				<Mod>12% increased Global Attack Speed per Green Socket</Mod>
 				<Mod>0.4% of Physical Attack Damage Leeched as Mana per Blue Socket</Mod>
-				<Mod>+2 to Melee Strike Range per White Socket</Mod>
+				<Mod>+0.2 metres to Melee Strike Range per White Socket</Mod>
 			</Explicits>
 			<Requires>
 				<Dex>91</Dex>
@@ -24863,16 +25422,21 @@
 				<Mod>No Physical Damage</Mod>
 				<Mod>Adds (385-440) to (490-545) Cold Damage</Mod>
 				<Mod>(10-15)% increased Attack Speed</Mod>
-				<Mod>1% of Damage against Frozen Enemies Leeched as Life</Mod>
+				<Mod>{variant:1}1% of Damage against Frozen Enemies Leeched as Life</Mod>
 				<Mod>20% chance to Freeze</Mod>
 				<Mod>10% increased Physical Damage taken</Mod>
 				<Mod>10% increased Cold Damage taken</Mod>
 				<Mod>Gain an Endurance Charge if an Attack Freezes an Enemy</Mod>
+				<Mod>{variant:2}Culling Strike against Frozen Enemies</Mod>
 			</Explicits>
 			<Requires>
 				<Dex>113</Dex>
 				<Str>113</Str>
 			</Requires>
+			<Variants>
+				<Variant num="1">Pre 3.23.0</Variant>
+				<Variant num="2">Current</Variant>
+			</Variants>
 		</Item>
 		<Item ver="2" title="Echoforge" base_name="Infernal Sword" source="Drops from unique{The Maven} (Uber)">
 			<Attribs />
@@ -24947,6 +25511,22 @@
 				<Variant num="2">Pre 3.8.0</Variant>
 				<Variant num="3">Current</Variant>
 			</Variants>
+		</Item>
+		<Item ver="2" title="Rakiata's Dance" base_name="Engraved Greatsword">
+			<Attribs level_req="48" />
+			<Implicits>
+				<Mod>60% increased Global Accuracy Rating</Mod>
+			</Implicits>
+			<Explicits>
+				<Mod>Adds (150-200) to (300-350) Cold Damage</Mod>
+				<Mod>Adds 1 to (550-600) Lightning Damage</Mod>
+				<Mod>(15-20)% increased Attack Speed</Mod>
+				<Mod>Treats Enemy Monster Elemental Resistance values as inverted</Mod>
+			</Explicits>
+			<Requires>
+				<Dex>76</Dex>
+				<Str>91</Str>
+			</Requires>
 		</Item>
 		<Item ver="2" title="Rigwald's Charge" base_name="Highland Blade">
 			<Attribs />

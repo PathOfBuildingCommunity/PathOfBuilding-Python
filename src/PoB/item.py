@@ -478,7 +478,7 @@ class Item:
                     self.full_explicitMods_list.append(mod)
                     # check for variants and if it's our variant, add it to the smaller explicit mod list
                     if "variant" in line:
-                        v = re.search(r"{variant:([\d,]+)}(.*)", line)
+                        v = re.search(r"{variant: ?([\d,]+)}(.*)", line)
                         variant_numbers = v.group(1).split(",")
                         for var in variant_numbers:
                             self.variant_entries.setdefault(var, []).append(v.group(2))
@@ -660,7 +660,7 @@ class Item:
             self.full_explicitMods_list.append(mod)
             # check for variants and if it's our variant, add it to the smaller explicit mod list
             if "variant" in line:
-                m = re.search(r"{variant:([\d,]+)}(.*)", line)
+                m = re.search(r"{variant: ?([\d,]+)}(.*)", line)
                 if str(self.curr_variant) in m.group(1).split(","):
                     self.explicitMods.append(mod)
             else:
@@ -867,13 +867,8 @@ class Item:
         ]
         if self.quality:
             if self._armour:
-                # adds, multiples, more = self.get_stat(0, "Armour", 0)
-                # value = float(self._armour) * (100 - multiples + more + self.quality) / 100
-                # print(f"Armour: {self.name}, {self.base_armour=}, {value=}, {adds=}, {multiples=}, {more=}, {self.quality=}")
-                # multiples = 100 + (multiples + more + self.quality)
-                # self.base_armour = int(self._armour / multiples * 100) - adds
                 self.base_armour = int(self._armour * (1 - (self.quality / 100)))
-                print(f"{self.base_armour=}")
+                # print(f"{self.base_armour=}")
 
             if self._evasion:
                 # adds, multiples, more = self.get_stat(0, "Evasion", 0)
@@ -881,7 +876,7 @@ class Item:
                 # multiples = 100 + (multiples + more + self.quality)
                 # self.base_evasion = int(self._evasion / multiples * 100) - adds
                 self.base_evasion = int(self._evasion / (1 - (self.quality / 100)) * 100)
-                print(f"{self.base_evasion=}")
+                # print(f"{self.base_evasion=}")
 
             if self._energy_shield:
                 # adds, multiples, more = self.get_stat(0, "Energy Shield", 0)
@@ -889,7 +884,7 @@ class Item:
                 # multiples = 100 + (multiples + more + self.quality)
                 # self.base_energy_shield = int(self._energy_shield / multiples * 100) - adds
                 self.base_energy_shield = int(self._energy_shield / (1 - (self.quality / 100)) * 100)
-                print(f"{self.base_energy_shield=}")
+                # print(f"{self.base_energy_shield=}")
         else:
             self.base_armour = self._armour
             self.base_evasion = self._evasion
@@ -930,7 +925,6 @@ class Item:
             value = ((more / 100) + 1) * int(value)
         if debug:
             print(f"get_simple_stat: {value=}")
-            # print(f"get_simple_stat: total=, ", (start_value + adds) * (1 + node_multiples + item_multiples) * (1 + (more / 100)))
         return adds, multiples, more
 
     def tooltip(self, force=False):
