@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QGridLayout
 from PoB.constants import default_max_charges
 from PoB.settings import Settings
 from PoB.build import Build
-from widgets.ui_utils import set_combo_index_by_data
+from widgets.ui_utils import set_combo_index_by_data, print_a_xml_element
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -21,14 +21,15 @@ class ConfigUI:
         :param _win: A pointer to MainWindowUI
         """
         self.settings = _settings
-        self.win = _win
         self.build = _build
+        self.win = _win
 
     def load(self, _config):
         """
         Load internal structures from the build object
         :param _config: Reference to the xml <Config> tag set
         """
+        # print("config.load", self.build.version, self.build.className, print_a_xml_element(_config))
         # General
         set_combo_index_by_data(self.win.combo_ResPenalty, self.build.resistancePenalty)
         set_combo_index_by_data(self.win.combo_Bandits, self.build.bandit)
@@ -58,10 +59,20 @@ class ConfigUI:
         self.win.spin_NumGhostCharges.setValue(self.build.get_config_tag_item("Input", "overrideGhostCharges", default_max_charges))
         # waitForMaxSeals
 
+        if self.build.version_int == 1:
+            custom_mods = self.build.get_config_tag_item("Input", "customMods", "")
+            if custom_mods:
+                self.win.textedit_CustomModifiers.setPlainText(custom_mods)
+        else:
+            custom_mods = self.build.get_config_tag_item("Input", "customMods", "")
+            if custom_mods:
+                self.win.textedit_CustomModifiers.setPlainText(custom_mods.replace("~^", "\n"))
+
     def save(self):
         """
         Save internal structures back to the build object
         """
+        self.build.delete_config_all_tag_item("Input")
         # General
         self.build.resistancePenalty = self.win.combo_ResPenalty.currentData()
         self.build.bandit = self.win.combo_Bandits.currentData()
@@ -94,8 +105,17 @@ class ConfigUI:
             self.build.set_config_tag_item("Input", "overrideGhostCharges", self.win.spin_NumGhostCharges.isChecked())
         # waitForMaxSeals
 
+        if self.build.version_int == 2:
+            custom_mods = self.win.textedit_CustomModifiers.toPlainText().splitlines()
+            if custom_mods:
+                self.build.set_config_tag_item("Input", "customMods", "~^".join(custom_mods))
+        # else:
+        #     # Ensure it is removed from the xml
+        #     self.build.delete_config_tag_item("Input", "customMods")
+
     def initial_startup_setup(self):
         """Configure configuration tab widgets on startup"""
+        # print("initial_startup_setup")
         self.win.label_NumPowerCharges.setVisible(False)
         self.win.spin_NumPowerCharges.setVisible(False)
         self.win.label_NumFrenzyCharges.setVisible(False)
@@ -127,6 +147,8 @@ class ConfigUI:
         combat_layout: QGridLayout = self.win.label_PowerCharges.parent().layout()
         combat_layout.setColumnMinimumWidth(1, 50)
         combat_layout.setContentsMargins(0, 9, 3, 3)
+
+        self.win.textedit_CustomModifiers.clear()
 
 
 # def test() -> None:

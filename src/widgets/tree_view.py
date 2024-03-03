@@ -9,6 +9,7 @@ A Tree instance is tied to a Version of the Tree as released by GGG and thus old
 need to be supported for backwards compatibility reason.
 
 """
+
 from PySide6.QtCore import QLineF, QRectF, Qt
 from PySide6.QtGui import QBrush, QColor, QPen, QPainter, QPixmap
 from PySide6.QtWidgets import QFrame, QGraphicsEllipseItem, QGraphicsScene, QGraphicsView, QDialogButtonBox
@@ -332,9 +333,7 @@ class TreeView(QGraphicsView):
 
         # leave the print in till we have everything working.
         # It is what tells us how often the assets are being redrawn.
-        _debug(
-            f"add_tree_images, full_clear={full_clear}",
-        )
+        # _debug(f"add_tree_images, full_clear={full_clear}")
         if self.build.current_tree is None:
             return
 

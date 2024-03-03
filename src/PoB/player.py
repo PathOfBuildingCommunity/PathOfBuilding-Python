@@ -112,7 +112,7 @@ class Player:
                 self.xml_build.append(ET.fromstring(f'<{stat_name} stat="{name}" value="{self.stats[name]}" />'))
         # Stats that are included in the build xml but not shown on the left hand side of the PoB window.
         for name in extraSaveStats:
-            if self.stats[name]:
+            if self.stats.get(name, None):
                 self.xml_build.append(ET.fromstring(f'<{stat_name} stat="{name}" value="{self.stats[name]}" />'))
 
     def calc_stats(self, active_items, test_item=None, test_node=None):
@@ -129,6 +129,7 @@ class Player:
         :param: test_node: Node() - future comparison
         :return:
         """
+        # ToDo: use  re.compile()
         print("Calc_Stats")
         # self.stats["WithPoisonDPS"] = 123.70
 
@@ -479,12 +480,3 @@ class Player:
                 return False
             case _:
                 return stat_value != 0
-
-
-def test() -> None:
-    player = Player()
-    print(player)
-
-
-if __name__ == "__main__":
-    test()

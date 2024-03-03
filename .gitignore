@@ -22,7 +22,7 @@ ggpk
 *.orig
 *.bak
 settings.xml
-#base_items.json
+scripts/*.json
 #mods.json
 *.xml.new
 archive.zip

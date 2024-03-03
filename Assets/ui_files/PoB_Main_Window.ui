@@ -1059,8 +1059,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>1146</width>
-                  <height>792</height>
+                  <width>1010</width>
+                  <height>808</height>
                  </rect>
                 </property>
                 <property name="maximumSize">
@@ -1426,8 +1426,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>362</width>
-                            <height>150</height>
+                            <width>98</width>
+                            <height>28</height>
                            </rect>
                           </property>
                           <layout class="QVBoxLayout" name="layout_SocketedJewels">
@@ -3092,7 +3092,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  <string>For Effective DPS</string>
                 </property>
                </widget>
-               <widget class="QGroupBox" name="grpbox_6">
+               <widget class="QGroupBox" name="grpbox_CustomModifiers">
                 <property name="geometry">
                  <rect>
                   <x>614</x>
@@ -3114,8 +3114,28 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  </size>
                 </property>
                 <property name="title">
-                 <string>GroupBox</string>
+                 <string>Custom Modifiers</string>
                 </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>9</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QPlainTextEdit" name="textedit_CustomModifiers"/>
+                 </item>
+                </layout>
                </widget>
               </widget>
              </item>

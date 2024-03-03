@@ -183,7 +183,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.layout_config.addItem(self.grpbox_SkillOptions)
         self.layout_config.addItem(self.grpbox_EffectiveDPS)
         self.layout_config.addItem(self.grpbox_5)
-        self.layout_config.addItem(self.grpbox_6)
+        self.layout_config.addItem(self.grpbox_CustomModifiers)
         print()
 
         # Configure basic Configuration setup
@@ -642,6 +642,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         self.alerting = False
         self.player.clear()
+        self.config_ui.initial_startup_setup()
         new = True
         self.build.filename = ""
         if type(filename_or_xml) is ET.ElementTree:
@@ -735,6 +736,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build.filename = filename
                 self.build_save()
                 self.add_recent_build_menu_item()
+                self.settings.open_build = self.build.filename
 
     @Slot()
     def combo_item_manage_tree_changed(self, tree_label):

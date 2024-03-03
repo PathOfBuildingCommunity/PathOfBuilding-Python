@@ -9,6 +9,7 @@ from PySide6.QtGui import QColor, QBrush, QIcon
 from PySide6.QtWidgets import QCheckBox, QComboBox, QPushButton, QSpinBox, QWidget
 
 from PoB.constants import ColourCodes, empty_gem
+from PoB.gem import Gem
 from widgets.ui_utils import (
     _debug,
     str_to_bool,
@@ -255,7 +256,7 @@ class GemUI(QWidget):
                     add_colour(self.combo_gem_list.count() - 1)
         else:
             for g in gem_list:
-                display_name = gem_list[g]["base_item"]["display_name"]
+                display_name = gem_list[g]["grantedEffect"]["name"]
                 if show_support_gems == "Normal" and "Awakened" in display_name:
                     continue
                 self.combo_gem_list.addItem(display_name, g)

@@ -31,7 +31,7 @@ from PoB.constants import (
 from PoB.settings import Settings
 from PoB.tree import Tree
 from PoB.spec import Spec
-from PoB.pob_file import read_xml, write_xml
+from PoB.pob_file import read_v1_custom_mods, read_xml, write_xml
 from dialogs.popup_dialogs import critical_dialog, yes_no_dialog
 from widgets.ui_utils import (
     _debug,
@@ -212,8 +212,12 @@ class Build:
         self.build.set("targetVersion", new_name)
 
     @property
+    def version_int(self):
+        return int(self.build.get("version", "1"))
+
+    @property
     def version(self):
-        return self.build.get("version", "2")
+        return self.build.get("version", "1")
 
     @version.setter
     def version(self, curr_ver):
@@ -328,6 +332,29 @@ class Build:
             # The key / name combo was not found, lets make one and add it.
             self.config.append(ET.fromstring(f'<{key} name="{name}" {value_type}="{new_value}" />'))
 
+    def delete_config_tag_item(self, key, name):
+        """
+        Delete an item from the <Config> ... </Config> tag set
+        :param key: string: the key: Input or Placeholder for example
+        :param name: string: the value of the 'name' property
+        :return: The appropriate value from xml or "default"
+        """
+        # Find an existing entry
+        _input = [element for element in self.config.findall(key) if element.get("name") == name]
+        if _input:
+            del _input[0]
+
+    def delete_config_all_tag_item(self, key):
+        """
+        Delete an item from the <Config> ... </Config> tag set
+        :param key: string: the key: Input or Placeholder for example
+        :param name: string: the value of the 'name' property
+        :return: The appropriate value from xml or "default"
+        """
+        # Find an existing entry
+        for _input in self.config.findall(key):
+            del _input
+
     def new(self, _xml):
         """
         common function to load internal variables from the dictionary
@@ -358,6 +385,7 @@ class Build:
         self.tree_view = self.root.find("TreeView")
         self.items = self.root.find("Items")
         self.config = self.root.find("Config")
+        # print("build.new", print_a_xml_element(self.config))
 
         self.specs.clear()
         # Find invalid trees, alert and convert to latest
@@ -399,7 +427,7 @@ class Build:
         :param filename: str: XML file to load.
         :return: N/A
         """
-        _build_pob = read_xml(filename)
+        _build_pob = read_xml(filename, True)
         if _build_pob is None:
             # How do we want to deal with corrupt builds
             critical_dialog(
@@ -412,6 +440,12 @@ class Build:
             self.filename = filename
             self.new(_build_pob)
             self.name = Path(Path(filename).name).stem
+            if self.version_int == 1:
+                # Custom Mods has newlines in it, but python XML turns them into a space.
+                custom_mods = read_v1_custom_mods(filename)
+                if custom_mods:
+                    # add in a str of custom mods
+                    self.set_config_tag_item("Input", "customMods", custom_mods)
 
     def save_to_xml(self, version="2"):
         """
@@ -419,6 +453,7 @@ class Build:
         :param:version: str. 1 for version 1 xml data,  2 for updated.
         :return: N/A
         """
+        self.version = version
         self.import_field.set("lastAccountHash", self.last_account_hash)
         self.import_field.set("lastCharacterHash", self.last_character_hash)
         self.import_field.set("lastRealm", self.last_realm)
@@ -460,6 +495,7 @@ class Build:
         :return:
         """
         write_xml(filename, self.xml_build)
+        self.name = Path(Path(filename).name).stem
 
     def ask_for_save_if_modified(self):
         """

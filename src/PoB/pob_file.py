@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 import xmltodict
 import json
 import os
+import re
 import xml
 
 from PoB.constants import ColourCodes
@@ -86,12 +87,40 @@ def read_xml_as_dict(filename):
     return None
 
 
+def read_v1_custom_mods(filename):
+    """
+    Read the v1 xml customMods. These are line separated and will be lost when read from XML
+    :param filename: Name of xml to be read
+    :return: str: with \n encoded in it.
+    """
+    custom_mods = []
+    _fn = Path(filename)
+    if _fn.exists():
+        try:
+            with _fn.open("r") as xml_file:
+                string = xml_file.read()
+                m = re.findall(r'<Input (.*?)"/>', string, re.DOTALL | re.MULTILINE | re.IGNORECASE)
+                if m:
+                    inputs = [element for element in m if "customMods" in element]
+                    # 'inputs' will be a list of one line or an empty list
+                    if inputs:
+                        # EG:
+                        #   ['name="customMods" string="+1 to Maximum Endurance Charges\n+14% increased maximum Life\n']
+                        # Get rid of unwanted bits
+                        return inputs[0].replace('string="', "").replace('name="customMods"', "").strip()
+
+        except (EnvironmentError, FileNotFoundError, ET.ParseError):
+            print(f"Unable to open {_fn}")
+    return ""
+
+
 def read_xml(filename):
     """
     Reads a XML file
     :param filename: Name of xml to be read
     :returns: A xml tree of the contents of the file
     """
+
     _fn = Path(filename)
     if _fn.exists():
         try:
@@ -192,7 +221,7 @@ def write_json(filename, _dict):
     _fn = Path(filename)
     try:
         with _fn.open("w") as json_file:
-            json.dump(_dict, json_file)
+            json.dump(_dict, json_file, indent=2)
     except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
         print(f"Unable to write to {_fn}")
 

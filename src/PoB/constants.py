@@ -49,7 +49,8 @@ default_skill_set = """<SkillSet id="1" title="Default">
   <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot="" mainActiveSkill="1"></Skill>
 </SkillSet>"""
 
-empty_build = f"""<PathOfBuilding>
+empty_build = f"""
+<PathOfBuilding>
     <Build version="2" level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">
             <PlayerStat stat="AverageHit" value="0"/>

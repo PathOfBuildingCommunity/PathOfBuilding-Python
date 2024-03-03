@@ -9,10 +9,11 @@ import re
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QListWidgetItem
 
-from PoB.constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map
+from PoB.constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map, bad_text
 from PoB.settings import Settings
 from PoB.build import Build
 from PoB.pob_file import read_json
+from PoB.gem import Gem
 from widgets.ui_utils import (
     _debug,
     bool_to_str,
@@ -25,8 +26,8 @@ from widgets.ui_utils import (
     str_to_bool,
 )
 from dialogs.popup_dialogs import yes_no_dialog
-from widgets.gem_ui import GemUI
 from dialogs.skillsets_dialog import ManageSkillsDlg
+from widgets.gem_ui import GemUI
 
 from ui.PoB_Main_Window import Ui_MainWindow
 
@@ -64,6 +65,7 @@ class SkillsUI:
         :param _win: A pointer to MainWindowUI
         """
         self.pob_config = _settings
+        self.settings = _settings
         self.build = _build
         self.win = _win
         # this is the whole <Skills>...</Skills> tag set
@@ -243,6 +245,42 @@ class SkillsUI:
         return self.xml_skills
 
     def load_gems_json(self):
+        """
+        Load gems.json and remove bad entries, like [Unused] and not released
+        :return: dictionary of valid entries
+        """
+
+        def get_coloured_text(colour):
+            """
+            Define the coloured_text for this gem instance.
+
+            :param colour: int:
+            :return: N/A
+            """
+
+        # read in all gems but remove all invalid/unreleased ones
+        # "Afflictions" will be removed by this (no display_name), so maybe a different list for them
+        gems = read_json(Path(self.pob_config.data_dir, "base_gems.json"))
+        if gems is None:
+            return None
+        # make a list by name and skill_id. Index supports using the full name (Faster Attacks Support)
+        #  and the display name (Faster Attacks)
+        for g in gems.keys():
+            _gem = gems[g]
+            name = _gem["grantedEffect"]["name"]
+            # _gem.load_from_gems_json()
+
+            self.gems_by_name_or_id[g] = _gem  # g = "AddedChaosDamageSupport"
+            self.gems_by_name_or_id[name] = _gem  # name = "Added Chaos Damage"
+            self.gems_by_name_or_id[_gem["skillId"]] = _gem  # skillId = "Metadata/Items/Gems/SkillGemAddedChaosDamageSupport"
+            # add supports using the full name
+            if _gem["grantedEffect"].get("support", False):
+                self.gems_by_name_or_id[f"{name} Support"] = _gem  # name = "Added Chaos Damage" + " Support"
+
+        return gems
+        # load_gems_json
+
+    def load_gems_json_v1(self):
         """
         Load gems.json and remove bad entries, like [Unused] and not released
         :return: dictionary of valid entries

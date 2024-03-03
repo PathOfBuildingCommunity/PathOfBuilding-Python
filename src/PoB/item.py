@@ -357,9 +357,9 @@ class Item:
                             r = re.search(r"(\w+) (\w+)", f"{req}")
                             self.requires["Class"] = r.group(2)
                         else:
-                            # nnn Str, etc
-                            r = re.search(r"(\d+) (\w+)", f"{req}")
-                            self.requires[r.group(2)] = int(r.group(1))
+                            # Str nnn, etc
+                            r = re.search(r"(\w+) (\d+)", f"{req}")
+                            self.requires[r.group(1)] = int(r.group(2))
                     lines.pop(line_idx)
                 else:
                     # skip this line
