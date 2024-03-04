@@ -24,7 +24,7 @@ from ui.dlgBrowseFile import Ui_BrowseFile
 class BrowseFileDlg(Ui_BrowseFile, QDialog):
     """File dialog"""
 
-    def __init__(self, task, _win = None):
+    def __init__(self, task, _win=None):
         """
         File dialog init
         :param _build: A pointer to the currently loaded build
@@ -119,7 +119,7 @@ class BrowseFileDlg(Ui_BrowseFile, QDialog):
             for filename in files_grabbed:
                 # text, class_name = get_file_info(self.settings, filename, max_length, self.max_filename_width)
                 # if text != "":
-                text, class_name =  "", ""
+                text, class_name = "", ""
                 self.add_path_to_listbox(filename, text, class_name, False)
 
     def add_path_to_listbox(self, filename, _text, class_name, is_dir):

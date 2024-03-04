@@ -9,7 +9,7 @@ import re
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QListWidgetItem
 
-from PoB.constants import ColourCodes, default_skill_set, empty_socket_group, empty_gem, slot_map, bad_text
+from PoB.constants import ColourCodes, default_skill_set_xml, empty_socket_group, empty_gem, slot_map, bad_text
 from PoB.settings import Settings
 from PoB.build import Build
 from PoB.pob_file import read_json
@@ -400,7 +400,7 @@ class SkillsUI:
         :return: XML: The new Itemset
         """
         self.disconnect_skill_triggers()
-        new_skillset = ET.fromstring(default_skill_set)
+        new_skillset = ET.fromstring(default_skill_set_xml)
         new_skillset.set("title", itemset_name)
         new_skillset.set("id", str(len(self.skill_sets_list) + 1))
         self.skill_sets_list.append(new_skillset)

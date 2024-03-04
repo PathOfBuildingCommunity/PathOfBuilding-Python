@@ -208,7 +208,7 @@ class HTMLDelegate(QStyledItemDelegate):
 
     def sizeHint(self, option, index):
         """Inherited function to return the max width of all text items"""
-        if type(index) == int:
+        if type(index) is int:
             # print("HTMLDelegate.sizeHint", self._list.objectName(), index)
             self.doc.setHtml(self._list.item(index).text())
         else:

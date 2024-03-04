@@ -3,7 +3,10 @@ Import dialog
 
 Open a dialog for importing a character.
 """
-import json, re, requests
+
+import json
+import re
+import requests
 from hashlib import sha1
 import xml.etree.ElementTree as ET
 from pprint import pprint

@@ -5,7 +5,9 @@ Abyssal sockets are precreated and are made visble or hidden based on what is in
 """
 
 from pathlib import Path
-import re, enum, time
+import enum
+import re
+import time
 import xml.etree.ElementTree as ET
 
 from PySide6.QtCore import Qt, Slot

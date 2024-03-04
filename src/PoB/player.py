@@ -46,7 +46,7 @@ class Player:
         self.minion = _minion
         self.settings = settings
         self.build = build
-        self.xml_build = build.build
+        self.xml_build = build.xml_build
         self.win = _win
         self.player_class = build.current_class
         # self.ascendancy = build.ascendancy
@@ -458,8 +458,10 @@ class Player:
     def stat_conditions(self, stat_name, stat_value, max_value=0):
         """
         Check if this stat can be shown.
+        :param max_value:
         :param stat_name: str
         :param stat_value: int or float
+        :param max_value: int
         :return: bool: true if stat_value is not 0
         """
         match stat_name:

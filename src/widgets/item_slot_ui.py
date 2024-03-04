@@ -29,7 +29,7 @@ class ItemSlotUI(QWidget):
         self.widget_height = 26
         # self.setGeometry(0, 0, 320, self.widget_height)
         self.setMinimumHeight(self.widget_height)
-        self.other_weapon_slot: ItemSlotUI = None
+        self.other_weapon_slot = None
         self.parent_notify = parent_notify
         self.lastSelectedItem = None
 
@@ -156,7 +156,7 @@ class ItemSlotUI(QWidget):
             self.lastSelectedItem = None
         else:
             item = self.combo_item_list.currentData()
-            if type(item) == Item:
+            if type(item) is Item:
                 self.combo_item_list.setToolTip(item.tooltip())
                 if self.lastSelectedItem:
                     self.lastSelectedItem.active = False

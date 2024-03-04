@@ -29,7 +29,7 @@ from dialogs.browse_file_dialog import BrowseFileDlg
 
 class MainWindow(QMainWindow):
     def __init__(self):
-        super().__init__()
+        super().__init__(self)
 
         self.setWindowTitle("My App")
         self.setFixedSize(QSize(600, 600))

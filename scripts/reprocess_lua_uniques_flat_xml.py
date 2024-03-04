@@ -4,7 +4,7 @@ import sys
 reprocess a version one uniques xml from lua, into v2 - suitable for pyPoB.
 
 to get uniques_flat.xml do the following in luaPoB
-    open Modules\main.lua
+    open Modules/main.lua
     paste the following 12 lines at line 26, just before the line '--[[if launch.devMode then'
         local my_itemTypes = {"amulet","axe", "belt", "body", "boots", "bow", "claw", "dagger", "fishing", "flask", "generated", "gloves", "helmet", "jewel", "mace", "new", "quiver", "race", "ring", "shield", "staff", "sword", "wand",}
         local f = io.open('uniques_flat.xml', 'w')

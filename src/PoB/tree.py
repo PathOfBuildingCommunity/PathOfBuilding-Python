@@ -271,7 +271,7 @@ class Tree:
         self.classes = json_dict["classes"]
         self.constants = json_dict["constants"]
         # allow for alternate ascendancies in the future
-        self.alternate_ascendancies = json_dict.get("alternate_ascendancies",{})
+        self.alternate_ascendancies = json_dict.get("alternate_ascendancies", {})
 
         # add group indexes as int's not string
         groups = json_dict["groups"]

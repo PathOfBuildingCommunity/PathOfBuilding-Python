@@ -4,7 +4,7 @@ Functions for reading and writing xml and json
 This is a base PoB class. It doesn't import any other PoB classes
 """
 
-from pathlib import Path
+from pathlib import Path, WindowsPath
 import xml.etree.ElementTree as ET
 import xmltodict
 import json
@@ -29,24 +29,34 @@ def get_file_info(settings, filename, max_length, max_filename_width=40, html=Tr
     :param menu: bool: Menu entry text is covered by QSS
     :return: str, str: "", "" if invalid xml, or colourized name and class name.
     """
-    try:
-        xml_file = read_xml_as_dict(filename)
-    except xml.parsers.expat.ExpatError:  # Corrupt file
-        return "", ""
+    if type(filename) is Path or type(filename) is WindowsPath:
+        filename = filename.name
+    if "json" in filename:
+        try:
+            _file = read_json(filename)
+            pre = ""
+        except (json.JSONDecodeError, json.decoder.JSONDecodeError):  # Corrupt file
+            return "", ""
+    else:
+        try:
+            _file = read_xml_as_dict(filename)
+            pre = "@"
+        except xml.parsers.expat.ExpatError:  # Corrupt file
+            return "", ""
 
-    xml_build = xml_file.get("PathOfBuilding", {}).get("Build", {})
-    if xml_build != {}:
+    build = _file.get("PathOfBuilding", {}).get("Build", {})
+    if build != {}:
         name = os.path.splitext(filename)[0]
         # Get the maximum length of a name, trimming it if need be
         name = len(name) > max_filename_width and (name[:max_filename_width] + "..") or name
         # Create a spacer string of the correct length to right justify the class info
         spacer = (min(max_length, max_filename_width) - len(name) + 4) * " "
 
-        # The information on the right
-        version = xml_build.get("@version", "1")
-        level = xml_build.get("@level", "1")
-        class_name = xml_build.get("@className", "Scion")
-        ascend_class_name = xml_build.get("@ascendClassName", "None")
+        # The information on the right. pre is @ for xml's ("@level") and "level" for json's
+        version = build.get(f"{pre}version", "1")
+        level = build.get(f"{pre}level", "1")
+        class_name = build.get(f"{pre}className", "Scion")
+        ascend_class_name = build.get(f"{pre}ascendClassName", "None")
         _class = ascend_class_name == "None" and class_name or ascend_class_name
         info_text = f" Level {level} {_class} (v{version})"
 
@@ -189,7 +199,8 @@ def read_json(filename):
             with _fn.open("r") as json_file:
                 _dict = json.load(json_file)
                 return _dict
-        except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
+        # parent of IOError, OSError *and* WindowsError where available
+        except EnvironmentError:
             print(f"Unable to open {_fn}")
     return None
 

@@ -1,6 +1,7 @@
 """
 Represents and manages one Spec in the XML. It has a list of active nodes.
 """
+
 import xml.etree.ElementTree as ET
 import base64
 import re
@@ -8,7 +9,7 @@ from pathlib import Path
 
 from PoB.constants import (
     bandits,
-    default_spec,
+    default_spec_xml,
     tree_versions,
     PlayerClasses,
     _VERSION,
@@ -30,7 +31,7 @@ class Spec:
         self.build = build
         self.tr = self.build.settings.app.tr
 
-        self.def_spec = ET.fromstring(default_spec)
+        self.def_spec = ET.fromstring(default_spec_xml)
         if _spec is None:
             _spec = self.def_spec
             _spec.set("treeVersion", version)
@@ -84,7 +85,7 @@ class Spec:
         :param new_class_id: PlayerClasses or int: importing from json sets using an int
         :return: N/A
         """
-        if type(new_class_id) == int:
+        if type(new_class_id) is int:
             self.xml_spec.set("classId", f"{new_class_id}")
         else:
             self.xml_spec.set("classId", f"{new_class_id.value}")

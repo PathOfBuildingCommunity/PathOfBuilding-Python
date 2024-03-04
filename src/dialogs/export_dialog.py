@@ -4,7 +4,9 @@ Import dialog
 Open a dialog for importing a character.
 """
 
-import urllib3, re, requests
+import re
+import requests
+import urllib3
 import xml.etree.ElementTree as ET
 import pyperclip
 

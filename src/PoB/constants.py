@@ -43,13 +43,13 @@ proxyURL="" buildPath="" open_build=""/>
    <size width="800" height="600"/>
 </PathOfBuilding>"""
 
-default_spec = f"""<Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" 
+default_spec_xml = f"""<Spec title="Default" classId="0" ascendClassId="0" masteryEffects="" nodes="58833" 
 treeVersion="{_VERSION_str}"></Spec>"""
-default_skill_set = """<SkillSet id="1" title="Default">
+default_skill_set_xml = """<SkillSet id="1" title="Default">
   <Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" enabled="true" slot="" mainActiveSkill="1"></Skill>
 </SkillSet>"""
 
-empty_build = f"""
+empty_build_xml = f"""
 <PathOfBuilding>
     <Build version="2" level="1" targetVersion="3_0" bandit="None" className="Scion" ascendClassName="None"
      mainSocketGroup="1" viewMode="{default_view_mode}" pantheonMajorGod="None" pantheonMinorGod="None">
@@ -60,13 +60,13 @@ empty_build = f"""
     <Skills sortGemsByDPSField="CombinedDPS" matchGemLevelToCharacterLevel="false" activeSkillSet="1" 
         sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL" 
         showAltQualityGems="false">
-        {default_skill_set}
+        {default_skill_set_xml}
     </Skills>
     <Items activeItemSet="1">
         <ItemSet useSecondWeaponSet="false" id="1"/>
     </Items>
     <Tree activeSpec="1">
-        {default_spec}
+        {default_spec_xml}
     </Tree>
     <Notes/>
     <NotesHTML/>
@@ -79,6 +79,69 @@ empty_build = f"""
         <Input name="bandit" string="None"/>
     </Config>
 </PathOfBuilding>"""
+
+empty_build = {
+    "PathOfBuilding": {
+        "Build": {
+            "level": 1,
+            "version": 2,
+            "targetVersion": "3_0",
+            "pantheonMajorGod": "None",
+            "bandit": "None",
+            "className": "Scion",
+            "ascendClassName": "None",
+            "characterLevelAutoMode": True,
+            "mainSocketGroup": 1,
+            "viewMode": default_view_mode,
+            "pantheonMinorGod": "None",
+        },
+        "Calcs": {"Input": {"misc_buffMode": "EFFECTIVE", "skill_number": 1}, "Section": {}},
+        "Import": {"exportParty": False, "lastAccountHash": "", "lastCharacterHash": "", "lastRealm": "", "lastLeague": ""},
+        "Items": {"activeItemSet": 1, "useSecondWeaponSet": False, "ItemSet": {}},
+        "Party": {"destination": "All", "ShowAdvanceTools": False, "append": False},
+        "Notes": None,
+        "Skills": {
+            "sortGemsByDPSField": "CombinedDPS",
+            "activeSkillSet": 1,
+            "sortGemsByDPS": True,
+            "defaultGemQuality": 0,
+            "defaultGemLevel": "normalMaximum",
+            "showSupportGemTypes": "ALL",
+            "showAltQualityGems": False,
+            "SkillSet": {},
+        },
+        "TreeView": {"searchStr": "", "zoomY": 0, "zoomLevel": 3, "showStatDifferences": True, "zoomX": 0},
+        "Config": {
+            "Input": {
+                "useEnduranceCharges": True,
+                "customMods": "+1 to Maximum Endurance Charges\n+14% increased maximum Life",
+                "bandit": "None",
+                "resistancePenalty": -60,
+                "pantheonMajorGod": "None",
+                "pantheonMinorGod": "None",
+                "igniteMode": "AVERAGE",
+                "EHPUnluckyWorstOf": 1,
+                "usePowerCharges": False,
+                "overridePowerCharges": 3,
+                "useFrenzyCharges": False,
+                "overrideFrenzyCharges": 3,
+                "overrideEnduranceCharges": 5,
+            },
+            "Placeholder": {
+                "enemySpeed": 700,
+                "enemyCritChance": 5,
+                "enemyArmour": 44591,
+                "enemyCritDamage": 30,
+                "sigilOfPowerStages": 1,
+                "multiplierWitheredStackCountSelf": 15,
+                "enemyDamageRollRange": 70,
+                "enemyEvasion": 8388,
+                "enemyPhysicalDamage": 1294,
+            },
+        },
+        "NotesHTML": None,
+    },
+}
 
 empty_socket_group = """<Skill mainActiveSkillCalcs="1" includeInFullDPS="false" label="" 
 enabled="true" slot="" mainActiveSkill="1"/>"""
@@ -444,9 +507,8 @@ player_stats_list = {
     "TotalDotDPS": {"label": "Total DoT DPS", "fmt": "%0.2f"},
     "ImpaleDPS": {
         "showAverage": {"label": "Impale Damage", "fmt": "%0.1f", "flag": ["impale", "showAverage"]},
-        "notAverage": {"label": "Impale DPS", "fmt": "%0.1f", "flag": ["impale", "notAverage"],
+        "notAverage": {"label": "Impale DPS", "fmt": "%0.1f", "flag": ["impale", "notAverage"]},
         },
-    },
     "WithImpaleDPS": {
         "showAverage": {"label": "Damage inc. Impale", "fmt": "%0.1f", "flag": ["impale", "showAverage"]},
         "notAverage": {"label": "Total DPS inc. Impale", "fmt": "%0.1f", "flag": ["impale", "notAverage"]},
@@ -497,7 +559,6 @@ player_stats_list = {
     "LightningMaximumHitTaken": {"label": "Elemental Max Hit", "fmt": "%0.0f"},
     "FireMaximumHitTaken": {"label": "Fire Max Hit", "fmt": "%0.0f"},
     "ColdMaximumHitTaken": {"label": "Cold Max Hit", "fmt": "%0.0f"},
-    "LightningMaximumHitTaken": {"label": "Lightning Max Hit", "fmt": "%0.0f"},
     "ChaosMaximumHitTaken": {"label": "Chaos Max Hit", "fmt": "%0.0f"},
     "blankd": {},
     # "MainHand": {"label": "Total Life", "childStat": "Accuracy", "fmt": "%d", "colour": ColourCodes.LIFE.value},

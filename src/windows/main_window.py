@@ -1,4 +1,12 @@
-import atexit, datetime, glob, os, platform, pyperclip, re, sys, tempfile
+import atexit
+import datetime
+import glob
+import os
+import platform
+import pyperclip
+import re
+import sys
+import tempfile
 
 from typing import Union
 import xml.etree.ElementTree as ET
@@ -26,6 +34,7 @@ from PoB.constants import (
     bad_text,
     def_theme,
     empty_build,
+    empty_build_xml,
     pantheon_major_gods,
     pantheon_minor_gods,
     player_stats_list,
@@ -72,7 +81,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.triggers_connected = False
 
         # The QAction representing the current theme (to turn off the menu's check mark)
-        self.curr_theme: QAction = None
+        self.curr_theme = None
 
         # Flag to stop some actions happening in triggers during loading or changing tree Specs
         self.alerting = True
@@ -199,7 +208,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toolbar_buttons = {}
         for widget in self.toolbar_MainWindow.children():
             # QActions are joined to the toolbar using QToolButtons.
-            if type(widget) == QToolButton:
+            if type(widget) is QToolButton:
                 self.toolbar_buttons[widget.toolTip()] = widget
 
         # Theme loading has to happen before creating more UI elements that use html_colour_text()
@@ -316,7 +325,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     else:
                         # Assume it is going to come from outside the application, ingame or trade site
                         data = pyperclip.paste()
-                        if data is not None and type(data) == str and "Item Class:" in data:
+                        if data is not None and type(data) is str and "Item Class:" in data:
                             if "Skill Gems" in data:
                                 success = self.skills_ui.get_item_from_clipboard(data)
                             else:
@@ -392,7 +401,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         self.settings.add_recent_build(self.build.filename)
         for entry in self.menu_Builds.children():
-            if type(entry) == QWidgetAction:
+            if type(entry) is QWidgetAction:
                 self.menu_Builds.removeAction(entry)
         self.set_recent_builds_menu_items(self.settings)
 
@@ -655,27 +664,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.build.filename = filename_or_xml
                 self.settings.open_build = self.build.filename
             else:
-                self.build.new(ET.ElementTree(ET.fromstring(empty_build)))
+                self.build.new(ET.ElementTree(ET.fromstring(empty_build_xml)))
                 self.settings.open_build = ""
 
         # if everything worked, lets update the UI
-        if self.build.build is not None:
+        if self.build.xml_build is not None:
             # _debug("build_loader")
             if not new:
                 self.add_recent_build_menu_item()
             # Config_UI needs to be set before the tree, as the change_tree function uses/sets it also.
-            self.config_ui.load(self.build.config)
+            self.config_ui.load(self.build.xml_config)
             self.set_current_tab()
             self.tree_ui.fill_current_tree_combo()
-            self.skills_ui.load(self.build.skills)
-            self.items_ui.load_from_xml(self.build.items)
-            self.notes_ui.load(self.build.notes_html.text, self.build.notes.text)
+            self.skills_ui.load(self.build.xml_skills)
+            self.items_ui.load_from_xml(self.build.xml_items)
+            self.notes_ui.load(self.build.xml_notes_html.text, self.build.xml_notes.text)
             self.spin_level.setValue(self.build.level)
             self.combo_classes.setCurrentText(self.build.className)
             self.combo_ascendancy.setCurrentText(self.build.ascendClassName)
             self.update_status_bar(f"Loaded: {self.build.name}", 10)
             # self.stats.load(self.build.build)
-            self.player.load(self.build.build)
+            self.player.load(self.build.xml_build)
 
         # This is needed to make the jewels show. Without it, you need to select or deselect a node.
         self.gview_Tree.add_tree_images(True)
@@ -700,9 +709,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.build.save_to_xml(version)
             match version:
                 case "1":
-                    self.build.notes.text, dummy_var = self.notes_ui.save(version)
+                    self.build.xml_notes.text, dummy_var = self.notes_ui.save(version)
                 case "2":
-                    self.build.notes.text, self.build.notes_html.text = self.notes_ui.save(version)
+                    self.build.xml_notes.text, self.build.xml_notes_html.text = self.notes_ui.save(version)
             # self.win.stats.save(self.build)
             self.player.save(self.build)
             self.skills_ui.save()

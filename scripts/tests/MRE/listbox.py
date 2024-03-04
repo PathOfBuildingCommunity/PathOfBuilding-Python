@@ -64,18 +64,18 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("My App")
 
         self.setFixedSize(QSize(400, 300))
-        list = QListWidget()
+        _list = QListWidget()
         for idx in range(0, 15):
             lwi = QListWidgetItem(f"Item {idx}")
             lwi.setFlags(lwi.flags() | Qt.ItemIsEditable)
             # lwi.setSizeHint(QSize(-1, 40))
             # print(lwi.sizeHint())
-            list.addItem(lwi)
-        list.setAlternatingRowColors(True)
-        list.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed)
+            _list.addItem(lwi)
+        _list.setAlternatingRowColors(True)
+        _list.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed)
 
         # Set the central widget of the Window.
-        self.setCentralWidget(list)
+        self.setCentralWidget(_list)
 
 
 app = QApplication(sys.argv)

@@ -85,6 +85,7 @@ class Item:
         self.crucibleMods = []
         self.active_mods = []
         self.all_stats = []
+        self.slots = []
 
         # variants are numbered from 1, so 0 is no selection.
         self.curr_variant = 0
@@ -696,7 +697,7 @@ class Item:
             text += f"{influence}\n"
         for requirement in self.requires.keys():
             text += f"Requires {requirement} {self.requires[requirement]}\n"
-        if type(self.properties) == dict:
+        if type(self.properties) is dict:
             for prop in self.properties.keys():
                 text += f"{prop}: {self.properties[prop]}\n"
         text += f"Implicits: {len(self.implicitMods)}\n"
@@ -732,10 +733,10 @@ class Item:
             :param value:
             :return: N/A
             """
-            if type(value) == str:
+            if type(value) is str:
                 if value:
                     _xml.set(tag, value)
-            elif type(value) == bool:
+            elif type(value) is bool:
                 if value:
                     _xml.set(tag, bool_to_str(value))
             else:
@@ -1023,13 +1024,12 @@ class Item:
         # self.base_tooltip_text = tip
         return tip
 
-    def get_active_mods(self) -> dict:
+    def get_active_mods(self) -> None:
         """
         Account for mods that have updated the implicit values of items (like dmg, ES, armour, etc)
         Also find base stat value (EG base_armour = armour - quality) to enable quality to be edited.
         This is mainly used for calcs.
         Updates self.active_mods: dict: List of all mods that can be used for calcs
-        :param debug: bool: Ease of printing facts for a given specification
         :return: N/A
         """
         if self.active_mods:

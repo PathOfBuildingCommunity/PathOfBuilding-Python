@@ -27,6 +27,7 @@ from ui.PoB_Main_Window import Ui_MainWindow
 from ui.dlgCraftItems import Ui_CraftItems
 
 
+# noinspection PyArgumentList
 class CraftItemsDlg(Ui_CraftItems, QDialog):
     """Craft Items dialog"""
 

@@ -34,9 +34,9 @@ QListWidget:hover {
 
 QListView,
 QAbstractItemView {
-	alternate-background-color: rgba( 96, 99, 108, 0.300 );
-	padding: 0px;
-	margin: 0px;
+    alternate-background-color: rgba( 96, 99, 108, 0.300 );
+    padding: 0px;
+    margin: 0px;
 }
 
 QListWidget::item {

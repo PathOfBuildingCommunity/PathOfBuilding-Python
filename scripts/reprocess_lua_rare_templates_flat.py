@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 from pathlib import Path
-import sys, re
+import re
+import sys
 
 from item import Item
 from pob_file import read_xml, write_xml, read_json

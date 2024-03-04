@@ -130,7 +130,7 @@ class TreeView(QGraphicsView):
         g_item = next((i for i in graphic_items if isinstance(i, TreeGraphicsItem)), None)
         if (
             g_item
-            and type(g_item) == TreeGraphicsItem
+            and type(g_item) is TreeGraphicsItem
             and g_item.node_id != 0
             and not g_item.node_isAscendancyStart
             and g_item.node_classStartIndex < 0
